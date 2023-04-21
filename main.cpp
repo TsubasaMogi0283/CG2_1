@@ -322,6 +322,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 
+
 	////メインループ
 	//ウィンドウの✕ボタンが押されるまでループ
 	while (msg.message != WM_QUIT) {

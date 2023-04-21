@@ -95,6 +95,32 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		nullptr,				//メニューハンドル
 		wc.hInstance,			//インスタンスハンドル
 		nullptr);				//オプション
+	
+
+	////エラー放置ダメ、ゼッタイ
+	////DebugLayer
+	//デバッグレイヤー・・・警告やエラーの出す機構のこと。色々な情報を収集する。
+	//						今までは違法な状態で動いていた。
+	//CreateWindowの直後で行う
+	// 
+	//DirectX12
+	//DXGI
+	//Debug Layer
+	//Graphics Driver
+	//GPU
+
+	#ifdef _DEBUG
+	ID3D12Debug1* debugController = nullptr;
+	if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugController)))) {
+		//デバッグレイヤーを有効化する
+		debugController->EnableDebugLayer();
+		//さらにGPU側でもチェックを行うようにする
+		debugController->SetEnableGPUBasedValidation(TRUE);
+	
+	}
+
+	
+	#endif
 
 
 	//ウィンドウを表示する

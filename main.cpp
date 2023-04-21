@@ -266,6 +266,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		SIZE_T ptr;
 	}; D3D12_CPU_DESCRIPTOR_HANDLE;
 
+	////Descriptorの位置を決める
+	rtvHandles[0] = rtvStartHandle;
+
+	///////
+	rtvHandles[1].ptr = rtvHandles[0].ptr + device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+	///////
+
+
+
 	////メインループ
 	//ウィンドウの✕ボタンが押されるまでループ
 	while (msg.message != WM_QUIT) {

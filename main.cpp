@@ -46,8 +46,6 @@ void Log(const std::string& message) {
 	OutputDebugStringA(message.c_str());
 }
 
-//仮の変数
-char wstringValue = 1;
 
 
 //Winodwsアプリでもエントリーポイント(main関数)
@@ -178,6 +176,61 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	//ここまで↑↑↑
 	////DirectX初期化
+
+
+	////GPUに作業させよう
+	//コマンドキューを生成する
+	ID3D12CommandQueue* commandQueue = nullptr;
+	D3D12_COMMAND_QUEUE_DESC commandQueueDesc{};
+	hr = device->CreateCommandQueue(&commandQueueDesc, IID_PPV_ARGS(&commandQueue));
+	//コマンドキューの生成が上手くいかなかったので起動できない
+	assert(SUCCEEDED(hr));
+
+	//コマンドアロケータを生成する
+	ID3D12CommandAllocator* commandAllocator = nullptr;
+	hr = device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&commandAllocator));
+	//コマンドアロケータの生成が上手くいかなかったので起動できない
+	assert(SUCCEEDED(hr));
+
+	//コマンドリストを生成する
+	ID3D12GraphicsCommandList* commandList = nullptr;
+	hr = device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, commandAllocator, nullptr,
+		IID_PPV_ARGS(&commandList));
+
+	//コマンドリストの生成が上手くいかなかったので起動できない
+	assert(SUCCEEDED(hr));
+
+	//スワップチェーンを生成する
+	//60fpsそのまま映すと大変なので2枚用意して
+	//描画(フロントバッファ)と表示(バックバッファ、プライマリバッファ)に分ける。
+	//このことをダブルバッファリングという。
+	IDXGISwapChain4* swapChain = nullptr;
+	DXGI_SWAP_CHAIN_DESC1 swapChainDesc{};
+	swapChainDesc.Width = kClientWidth;							//画面の幅。ウィンドウのクライアント領域を同じものにしておく
+	swapChainDesc.Height = kClientHeight;						//画面の高さ。ウィンドウのクライアント領域を同じものにしておく
+	swapChainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;			//色の形式
+	swapChainDesc.SampleDesc.Count = 1;							//マルチサンプルしない
+	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;//描画のターゲットとして利用する
+	swapChainDesc.BufferCount = 2;								//ダブルバッファ
+	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;	//モニタにうつしたら中身を破棄
+
+	//コマンドキュー、ウィンドウハンドル、設定を渡して生成する
+	hr = dxgiFactory->CreateSwapChainForHwnd(commandQueue, hwnd, &swapChainDesc, nullptr, nullptr, reinterpret_cast<IDXGISwapChain1**>(&swapChain));
+	assert(SUCCEEDED(hr));
+
+	//Resource...DirectX12が管理しているGPU上のメモリであり、このデータのこと
+	//View...Resourceに対してどのような処理を行うのか手順をまとめたもの
+	
+	//k
+
+	//Descriptor...view(作業方法)の情報を格納している場所
+	//DescriptorHeap...Descriptorを束ねたもの
+	
+
+
+
+
+
 
 
 	////メインループ

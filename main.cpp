@@ -261,6 +261,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	device->CreateRenderTargetView(swapChainResources[1], &rtvDesc, rtvHandles[1]);
 
 
+	////DescriptorHandleとDescriptorHeap
+	typedef struct D3D12_CPU_DESCRIPTOR_HANDLE {
+		SIZE_T ptr;
+	}; D3D12_CPU_DESCRIPTOR_HANDLE;
+
 	////メインループ
 	//ウィンドウの✕ボタンが押されるまでループ
 	while (msg.message != WM_QUIT) {

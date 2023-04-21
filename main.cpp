@@ -227,11 +227,21 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//DescriptorHeap...Descriptorを束ねたもの
 	
 
+	////DescriptorHeapを生成する
+	//ディスクリプタヒープの生成
+	ID3D12DescriptorHeap* rtvDescriptorHeap = nullptr;
+	D3D12_DESCRIPTOR_HEAP_DESC rtvDescriptorHeapDesc{};
+	rtvDescriptorHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;	//レンダーターゲットビュー用
+	rtvDescriptorHeapDesc.NumDescriptors = 2;						//ダブルバッファ用に２つ。多くてもOK
+	hr = device->CreateDescriptorHeap(&rtvDescriptorHeapDesc, IID_PPV_ARGS(&rtvDescriptorHeap));
+	//ディスクリプタヒープが作れなかったので起動できない
+	assert(SUCCEEDED(hr));
 
 
-
-
-
+	////SwapChainからResourceを引っ張ってくる
+	ID3D12Resource* swapChainResources[2] = { nullptr };
+	hr = swapChain->GetBuffer(1, IID_PPV_ARGS(&swapChainResources[1]));
+	assert(SUCCEEDED(hr));
 
 	////メインループ
 	//ウィンドウの✕ボタンが押されるまでループ

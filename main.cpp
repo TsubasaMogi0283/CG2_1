@@ -273,6 +273,30 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	rtvHandles[1].ptr = rtvHandles[0].ptr + device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 	///////
 
+	////コマンドをキックする
+	//コマンドを積む・・・CommandListに処理を追加していくこと
+	//キックする・・・CommandQueueCommandListを渡してGPUの実行を開始すること
+	//画面をクリアするためのコマンドを積み、キックし、メインループを完成させる
+	 
+	//処理の内容
+	//1.BackBufferを決定する
+	//2.書き込む作業(画面のクリア)をしたいのでRTVを設定する
+	//3.画面のクリアを行う
+	//4.CommandListを閉じる
+	//5.CommandListの実行(キック)
+	//6.画面のスワップ(BackBufferとFrontBufferを入れ替える)
+	//7.次のフレーム用にCommandListを再準備
+
+
+	////コマンドを積みこんで確定させる
+	//これから書き込むバックバッファのインデックスを取得
+	UINT backBufferIndex = swapChain->GetCurrentBackBufferIndex();
+	//描画先のRTVを設定する
+	commandList->OMSetRenderTargets(1, &rtvHandles[backBufferIndex], false, nullptr);
+	//指定した色で画面全体をクリアする
+	float clearColor[] = { 0.1f,0.25f,0.5f,1.0f };	//青っぽい色,RGBA
+	commandList->ClearRenderTargetView(rtvHandles[backBufferIndex], clearColor, 0, nullptr);
+	//コマンド
 
 
 	////メインループ

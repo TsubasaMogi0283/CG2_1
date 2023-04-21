@@ -261,7 +261,58 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	device->CreateRenderTargetView(swapChainResources[1], &rtvDesc, rtvHandles[1]);
 
 
+	////DescriptorHandleとDescriptorHeap
+	typedef struct D3D12_CPU_DESCRIPTOR_HANDLE {
+		SIZE_T ptr;
+	}D3D12_CPU_DESCRIPTOR_HANDLE;
 	
+	//////Descriptorの位置を決める
+	//rtvHandles[0] = rtvStartHandle;
+	//
+	/////////
+	//rtvHandles[1].ptr = rtvHandles[0].ptr + device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+	/////////
+	//
+	//////コマンドをキックする
+	////コマンドを積む・・・CommandListに処理を追加していくこと
+	////キックする・・・CommandQueueCommandListを渡してGPUの実行を開始すること
+	////画面をクリアするためのコマンドを積み、キックし、メインループを完成させる
+	// 
+	////処理の内容
+	////1.BackBufferを決定する
+	////2.書き込む作業(画面のクリア)をしたいのでRTVを設定する
+	////3.画面のクリアを行う
+	////4.CommandListを閉じる
+	////5.CommandListの実行(キック)
+	////6.画面のスワップ(BackBufferとFrontBufferを入れ替える)
+	////7.次のフレーム用にCommandListを再準備
+	//
+	//
+	//////コマンドを積みこんで確定させる
+	////これから書き込むバックバッファのインデックスを取得
+	//UINT backBufferIndex = swapChain->GetCurrentBackBufferIndex();
+	////描画先のRTVを設定する
+	//commandList->OMSetRenderTargets(1, &rtvHandles[backBufferIndex], false, nullptr);
+	////指定した色で画面全体をクリアする
+	//float clearColor[] = { 0.1f,0.25f,0.5f,1.0f };	//青っぽい色,RGBA
+	//commandList->ClearRenderTargetView(rtvHandles[backBufferIndex], clearColor, 0, nullptr);
+	////コマンドリストの内容を確定させる。全てのコマンドを積んでからCloseすること
+	//hr = commandList->Close();
+	//assert(SUCCEEDED(hr));
+	//
+	////コマンドをキックする
+	////GPUにコマンドリストの実行を行わせる
+	//ID3D12CommandList* commandLists[] = { commandList };
+	//commandQueue->ExecuteCommandLists(1, commandLists);
+	////GPUとOSに画面の交換を行うよう通知する
+	//swapChain->Present(1, 0);
+	////次のフレーム用のコマンドリストを準備
+	//hr = commandAllocator->Reset();
+	//assert(SUCCEEDED(hr));
+	//hr = commandList->Reset(commandAllocator, nullptr);
+	//assert(SUCCEEDED(hr));
+
+
 
 	////メインループ
 	//ウィンドウの✕ボタンが押されるまでループ

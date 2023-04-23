@@ -409,7 +409,31 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	commandList->ResourceBarrier(1, &barrier);
 
 
+	////キックしただけ
+	//ExcuteCommandList・・・GPUに命令をキックして、GPU処理を開始させたもの
+	//						 つまりコマンドを投げただけ
+	//GPUが動いている時にメモリは解放しないでねということ
+	//GPU処理の処理が終わってからResetしてね
 
+	////FenceとEvent
+	//Fence・・・CPUとGPUの同期を取るために利用するオブジェクト。
+	//			 GPUで値を書き込み、CPUで値を読み取ったりWindowsにメッセージ(Event)を送ったりできる
+	//			 理想を実現するためのもの
+	//Event・・・Windowsへのメッセージなどのこと
+
+	//初期位置0でフェンスを作る
+	//EventはWindowsのものである
+	ID3D12Fence* fence = nullptr;
+	uint64_t fenceValue = 0;
+	hr = device->CreateFence(fenceValue, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence));
+	assert(SUCCEEDED(hr));
+
+	//FenceのSignalを夏ためのイベントを作成する
+	HANDLE fenceEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
+	assert(fenceEvent != nullptr);
+
+
+	
 
 	//コマンドリストの内容を確定させる。全てのコマンドを積んでからCloseすること
 	hr = commandList->Close();
@@ -421,6 +445,35 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	commandQueue->ExecuteCommandLists(1, commandLists);
 	//GPUとOSに画面の交換を行うよう通知する
 	swapChain->Present(1, 0);
+
+	////GPUにSignalを送る
+	//GPUの実行完了が目的
+	//1.GPUに実行が完了したタイミングでFEnceに指定した値を書き込んでもらう
+	//  GPUに対してSignalを発行する
+	//	Signal・・・GPUの指定の場所までたどり着いたら、指定の値を書き込んでもらうお願いのこと
+	//2.CPUではFenceに指定した値が書き込まれているかを確認する
+	//3.指定した値が書き込まれていない場合は、書き込まれるまで待つ
+
+
+	//Fenceの値を更新
+	fenceValue++;
+	//GPUがここまでたどりついた時に、Fenceの値を代入するようSignalを送る
+	commandQueue->Signal(fence, fenceValue);
+
+
+
+
+
+	//Fenceの値が指定したSignal値にたどりついているか確認する
+	//GetCompletedValueの初期値はFence作成時に渡した初期値
+	if (fence->GetCompletedValue() < fenceValue) {
+		//指定したSignalにたどりついていないので、たどり着くまで待つようにイベントを設定する
+		fence->SetEventOnCompletion(fenceValue, fenceEvent);
+		//イベントを待つ
+		WaitForSingleObject(fenceEvent, INFINITE);
+	}
+
+
 	//次のフレーム用のコマンドリストを準備
 	hr = commandAllocator->Reset();
 	assert(SUCCEEDED(hr));

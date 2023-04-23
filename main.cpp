@@ -40,9 +40,6 @@ std::string ConvertString(const std::wstring& str);
 
 
 
-
-
-
 void Log(const std::string& message) {
 	OutputDebugStringA(message.c_str());
 }

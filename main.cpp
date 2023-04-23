@@ -3,15 +3,16 @@
 #include <cstdint>
 #include <string>
 #include <format>
-
-#include <d3d12.h>
-#include <dxgi1_6.h>
 #include <cassert>
 
 
+#include <d3d12.h>
+#include <dxgi1_6.h>
+#include <dxgidebug.h>
+
 #pragma comment(lib,"d3d12.lib")
 #pragma comment(lib,"dxgi.lib")
-
+#pragma comment(lib,"dxguid.lib")
 
 //Window Procedure(関数)
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg,
@@ -500,6 +501,18 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 
+	}
+
+
+	////ReportLiveObjects
+	//DirectX12より低レベルのDXGIに問い合わせをする
+	//リソースリークチェック
+	IDXGIDebug1* debug;
+	if (SUCCEEDED(DXGIGetDebugInterface1(0, IID_PPV_ARGS(&debug)))) {
+		debug->ReportLiveObjects(DXGI_DEBUG_ALL, DXGI_DEBUG_RLO_ALL);
+		debug->ReportLiveObjects(DXGI_DEBUG_APP, DXGI_DEBUG_RLO_ALL);
+		debug->ReportLiveObjects(DXGI_DEBUG_D3D12, DXGI_DEBUG_RLO_ALL);
+		debug->Release();
 	}
 
 

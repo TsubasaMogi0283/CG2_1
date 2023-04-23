@@ -523,7 +523,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	CloseWindow(hwnd);
 
 
-
+	
 
 	////ReportLiveObjects
 	//DirectX12より低レベルのDXGIに問い合わせをする

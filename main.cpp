@@ -9,10 +9,12 @@
 #include <d3d12.h>
 #include <dxgi1_6.h>
 #include <dxgidebug.h>
+#include <dxcapi.h>
 
 #pragma comment(lib,"d3d12.lib")
 #pragma comment(lib,"dxgi.lib")
 #pragma comment(lib,"dxguid.lib")
+#pragma comment(lib,"dxcompiler.lib")
 
 //Window Procedure(関数)
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg,
@@ -31,13 +33,16 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg,
 //string->wstring
 std::wstring ConvertString(const std::string& str);
 
-
-
-
 //wstring->string
 std::string ConvertString(const std::wstring& str);
 
-
+//CompilerShader関数
+IDxcBlob* compilerShader(
+	const std::wstring& filepath,
+	const wchar_t* profile,
+	IDxcUtils* dxcUtils,
+	IDxcCompiler3* dxcCompiler,
+	IDxcIncludeHandler* includeHandler);
 
 
 void Log(const std::string& message) {
@@ -429,11 +434,33 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	hr = device->CreateFence(fenceValue, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence));
 	assert(SUCCEEDED(hr));
 
-	//FenceのSignalを夏ためのイベントを作成する
+	//FenceのSignalを待つためのイベントを作成する
 	HANDLE fenceEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
 	assert(fenceEvent != nullptr);
 
 
+	////ShaderCompile
+	//ShaderはHLSLによって記述されているが、GPUが解釈できる形ではない
+	//一度DXIL(DirectX Intermediate Language)というドライバ用の形式に変換され、
+	//ドライバがGPU用のバイナリに変更しやっと実行されるよ。手間だね。
+	// 
+	// DXC(DirectX Shader Compiler)がHLSLからDXILにするCompilerである
+	//
+	 
+	////DXCの初期化
+	//dxcCompilerを初期化
+	IDxcUtils* dxcUtils = nullptr;
+	IDxcCompiler3* dxcCompiler = nullptr;
+	hr = DxcCreateInstance(CLSID_DxcUtils, IID_PPV_ARGS(&dxcUtils));
+	assert(SUCCEEDED(hr));
+	hr = DxcCreateInstance(CLSID_DxcCompiler, IID_PPV_ARGS(&dxcCompiler));
+	assert(SUCCEEDED(hr));
+
+
+	//現時点でincludeはしないが、includeに対応するための設定を行っておく
+	IDxcIncludeHandler* includeHandler = nullptr;
+	hr = dxcUtils->CreateDefaultIncludeHandler(&includeHandler);
+	assert(SUCCEEDED(hr));
 	
 
 	//コマンドリストの内容を確定させる。全てのコマンドを積んでからCloseすること
@@ -578,3 +605,15 @@ std::string ConvertString(const std::wstring& str) {
 	return result;
 }
 
+//CompilerShader関数
+IDxcBlob* compilerShader(
+	//CompilerするShaderファイルへのパス
+	const std::wstring& filepath,
+	//Compilerに使用するProfile
+	const wchar_t* profile,
+	//初期化で生成したものを３つ
+	IDxcUtils* dxcUtils,
+	IDxcCompiler3* dxcCompiler,
+	IDxcIncludeHandler* includeHandler) {
+
+}

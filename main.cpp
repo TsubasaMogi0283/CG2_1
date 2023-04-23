@@ -38,7 +38,7 @@ std::string ConvertString(const std::wstring& str);
 
 //CompilerShader関数
 IDxcBlob* compilerShader(
-	const std::wstring& filepath,
+	const std::wstring& filePath,
 	const wchar_t* profile,
 	IDxcUtils* dxcUtils,
 	IDxcCompiler3* dxcCompiler,
@@ -608,12 +608,28 @@ std::string ConvertString(const std::wstring& str) {
 //CompilerShader関数
 IDxcBlob* compilerShader(
 	//CompilerするShaderファイルへのパス
-	const std::wstring& filepath,
+	const std::wstring& filePath,
 	//Compilerに使用するProfile
 	const wchar_t* profile,
 	//初期化で生成したものを３つ
 	IDxcUtils* dxcUtils,
 	IDxcCompiler3* dxcCompiler,
 	IDxcIncludeHandler* includeHandler) {
+
+	////1.htslファイルを読む
+	//これからシェーダーをコンパイルする旨をログに出す
+	Log(ConvertString(std::format(L"Begin CompileShader,path:{},profile:{}\n", filePath, profile)));
+	//hlslファイルを読む
+	IDxcBlobEncoding* shaderSource = nullptr;
+	HRESULT hr = dxcUtils->LoadFile(filePath.c_str(), nullptr, &shaderSource);
+	//読めなかったら止める
+	assert(SUCCEEDED(hr));
+	//読み込んだファイルの内容を設定する
+	DxcBuffer shaderSourceBuffer;
+	shaderSourceBuffer.Ptr = shaderSource->GetBufferPointer();
+	shaderSourceBuffer.Size = shaderSource->GetBufferSize();
+	//UTF-8の文字コードであることを追加
+	shaderSourceBuffer.Encoding = DXC_CP_UTF8;
+
 
 }

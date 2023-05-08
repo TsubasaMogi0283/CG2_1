@@ -1,64 +1,6 @@
-#include <Windows.h>
+#include "HeaderCpp/Function/Function.h"
 
-#include <cstdint>
-#include <string>
-#include <format>
-#include <cassert>
-
-
-#include <d3d12.h>
-#include <dxgi1_6.h>
-#include <dxgidebug.h>
-#include <dxcapi.h>
-
-#pragma comment(lib,"d3d12.lib")
-#pragma comment(lib,"dxgi.lib")
-#pragma comment(lib,"dxguid.lib")
-#pragma comment(lib,"dxcompiler.lib")
-
-//Window Procedure(関数)
-LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg,
-	WPARAM wparam, LPARAM lparam) {
-	switch (msg) {
-		//ウィンドウが破棄された
-	case WM_DESTROY:
-		//OSに対してアプリの終了を伝える
-		PostQuitMessage(0);
-		return 0;
-	}
-
-	return DefWindowProc(hwnd, msg, wparam, lparam);
-}
-
-//string->wstring
-std::wstring ConvertString(const std::string& str);
-
-//wstring->string
-std::string ConvertString(const std::wstring& str);
-
-//CompilerShader関数
-IDxcBlob* CompileShader(
-	//CompilerするShaderファイルへのパス
-	const std::wstring& filePath,
-	//Compilerに使用するProfile
-	const wchar_t* profile,
-	//初期化で生成したものを３つ
-	IDxcUtils* dxcUtils,
-	IDxcCompiler3* dxcCompiler,
-	IDxcIncludeHandler* includeHandler);
-
-void Log(const std::string& message) {
-	OutputDebugStringA(message.c_str());
-}
-
-struct Vector4 {
-	float x;
-	float y;
-	float z;
-	float w;
-
-};
-
+//includeなどは全部Function.hに入っているよ！
 
 //Winodwsアプリでもエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
@@ -107,7 +49,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		nullptr,				//メニューハンドル
 		wc.hInstance,			//インスタンスハンドル
 		nullptr);				//オプション
-	
+
 
 	////エラー放置ダメ、ゼッタイ
 	////DebugLayer
@@ -121,18 +63,18 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//Graphics Driver
 	//GPU
 
-	#ifdef _DEBUG
+#ifdef _DEBUG
 	ID3D12Debug1* debugController = nullptr;
 	if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugController)))) {
 		//デバッグレイヤーを有効化する
 		debugController->EnableDebugLayer();
 		//さらにGPU側でもチェックを行うようにする
 		debugController->SetEnableGPUBasedValidation(TRUE);
-	
+
 	}
 
-	
-	#endif
+
+#endif
 
 
 	//ウィンドウを表示する
@@ -212,7 +154,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 	////エラー・警告、即ち停止
-	#ifdef _DEBUG
+#ifdef _DEBUG
 	ID3D12InfoQueue* infoQueue = nullptr;
 	if (SUCCEEDED(device->QueryInterface(IID_PPV_ARGS(&infoQueue)))) {
 		//ヤバいエラー時に止まる
@@ -230,7 +172,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		////エラーと警告の抑制
 		//Windowsの不具合だと解消できない
 		//その時に停止させないよう特定のエラーや警告を無視するしかない
-		
+
 		//抑制するメッセージのID 		
 		D3D12_MESSAGE_ID denyIds[] = {
 			//Windows11でのDXGデバッグれーやーとDX12デバッグレイヤーの相互作用バグによるエラーメッセージ
@@ -251,7 +193,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	}
 
-	#endif 
+#endif 
 
 
 	//ここまで↑↑↑
@@ -274,7 +216,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	//コマンドリストを生成する
 	ID3D12GraphicsCommandList* commandList = nullptr;
-	hr = device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, commandAllocator, nullptr,IID_PPV_ARGS(&commandList));
+	hr = device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, commandAllocator, nullptr, IID_PPV_ARGS(&commandList));
 
 	//コマンドリストの生成が上手くいかなかったので起動できない
 	assert(SUCCEEDED(hr));
@@ -299,12 +241,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	//Resource...DirectX12が管理しているGPU上のメモリであり、このデータのこと
 	//View...Resourceに対してどのような処理を行うのか手順をまとめたもの
-	
-	
+
+
 
 	//Descriptor...view(作業方法)の情報を格納している場所
 	//DescriptorHeap...Descriptorを束ねたもの
-	
+
 
 	//流れ
 	//1.DescriptorHeapを生成する
@@ -359,19 +301,19 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	typedef struct D3D12_CPU_DESCRIPTOR_HANDLE {
 		SIZE_T ptr;
 	}D3D12_CPU_DESCRIPTOR_HANDLE;
-	
+
 	////Descriptorの位置を決める
 	rtvHandles[0] = rtvStartHandle;
-	
+
 	///////
 	rtvHandles[1].ptr = rtvHandles[0].ptr + device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 	///////
-	
+
 	////コマンドをキックする
 	//コマンドを積む・・・CommandListに処理を追加していくこと
 	//キックする・・・CommandQueueCommandListを渡してGPUの実行を開始すること
 	//画面をクリアするためのコマンドを積み、キックし、メインループを完成させる
-	 
+
 	//処理の内容
 	//1.BackBufferを決定する
 	//2.書き込む作業(画面のクリア)をしたいのでRTVを設定する
@@ -380,8 +322,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//5.CommandListの実行(キック)
 	//6.画面のスワップ(BackBufferとFrontBufferを入れ替える)
 	//7.次のフレーム用にCommandListを再準備
-	
-	
+
+
 	////コマンドを積みこんで確定させる
 	//これから書き込むバックバッファのインデックスを取得
 	UINT backBufferIndex = swapChain->GetCurrentBackBufferIndex();
@@ -405,7 +347,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//TransitionBarrierを張る
 	commandList->ResourceBarrier(1, &barrier);
 
-	
+
 
 
 	////DXCの初期化
@@ -422,7 +364,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	hr = dxcUtils->CreateDefaultIncludeHandler(&includeHandler);
 	assert(SUCCEEDED(hr));
 
-	
+
 
 
 
@@ -663,20 +605,20 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	// 
 	// DXC(DirectX Shader Compiler)がHLSLからDXILにするCompilerである
 	//
-	 
-	
+
+
 
 	//コマンドリストの内容を確定させる。全てのコマンドを積んでからCloseすること
 	hr = commandList->Close();
 	assert(SUCCEEDED(hr));
-	
-
-	
 
 
 
 
-	
+
+
+
+
 
 
 	//コマンドをキックする
@@ -701,7 +643,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	commandQueue->Signal(fence, fenceValue);
 
 
-	
+
 
 
 
@@ -724,7 +666,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	hr = commandList->Reset(commandAllocator, nullptr);
 	assert(SUCCEEDED(hr));
 
-	
+
 
 
 	////メインループ
@@ -746,7 +688,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	}
 
-	
+
 
 	////解放処理
 	vertexResource->Release();
@@ -775,14 +717,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	device->Release();
 	useAdapter->Release();
 	dxgiFactory->Release();
-	#ifdef _DEBUG
+#ifdef _DEBUG
 	debugController->Release();
 
-	#endif
+#endif
 	CloseWindow(hwnd);
 
 
-	
+
 
 	////ReportLiveObjects
 	//DirectX12より低レベルのDXGIに問い合わせをする
@@ -799,108 +741,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 
-	
+
 
 	return 0;
 }
 
 
-//プロトタイプ宣言
-
-//>string->wstring
-std::wstring ConvertString(const std::string& str) {
-	if (str.empty())
-	{
-		return std::wstring();
-	}
-
-	auto sizeNeeded = MultiByteToWideChar(CP_UTF8, 0, reinterpret_cast<const char*>(&str[0]), static_cast<int>(str.size()), NULL, 0);
-	if (sizeNeeded == 0)
-	{
-		return std::wstring();
-	}
-	std::wstring result(sizeNeeded, 0);
-	MultiByteToWideChar(CP_UTF8, 0, reinterpret_cast<const char*>(&str[0]), static_cast<int>(str.size()), &result[0], sizeNeeded);
-	return result;
-}
-
-//wstring->string
-std::string ConvertString(const std::wstring& str) {
-	if (str.empty())
-	{
-		return std::string();
-	}
-
-	auto sizeNeeded = WideCharToMultiByte(CP_UTF8, 0, str.data(), static_cast<int>(str.size()), NULL, 0, NULL, NULL);
-	if (sizeNeeded == 0)
-	{
-		return std::string();
-	}
-	std::string result(sizeNeeded, 0);
-	WideCharToMultiByte(CP_UTF8, 0, str.data(), static_cast<int>(str.size()), result.data(), sizeNeeded, NULL, NULL);
-	return result;
-}
-
-
-////CompileShader関数
-IDxcBlob* CompileShader(
-	const std::wstring& filePath, 
-	const wchar_t* profile, 
-	IDxcUtils* dxcUtils, 
-	IDxcCompiler3* dxcCompiler, 
-	IDxcIncludeHandler* includeHandler) {
-	//1.hlslファイルを読む
-	Log(ConvertString(std::format(L"Begin CompileShader,path:{},profile:{}\n", filePath, profile)));
-	//hlslファイルを読む
-	IDxcBlobEncoding* shaderSource = nullptr;
-	HRESULT hr = dxcUtils->LoadFile(filePath.c_str(), nullptr, &shaderSource);
-	//読めなかったら止める
-	assert(SUCCEEDED(hr));
-	//読み込んだファイルの内容を設定する
-	DxcBuffer shaderSourceBuffer;
-	shaderSourceBuffer.Ptr = shaderSource->GetBufferPointer();
-	shaderSourceBuffer.Size = shaderSource->GetBufferSize();
-	shaderSourceBuffer.Encoding = DXC_CP_UTF8;
-	
-	//2.Compileする
-	LPCWSTR arguments[] = {
-		filePath.c_str(),
-		L"-E",L"main",
-		L"-T",profile,
-		L"-Zi",L"-Qembed_debug",
-		L"-Od",
-		L"-Zpr",
-	};
-
-	//実際にShaderをコンパイルする
-	IDxcResult* shaderResult = nullptr;
-	hr = dxcCompiler->Compile(&shaderSourceBuffer, arguments, _countof(arguments), includeHandler, IID_PPV_ARGS(&shaderResult));
-	//コンパイルエラーではなくdxcが起動出来ないなど致命的な状況
-	assert(SUCCEEDED(hr));
-
-
-	//3.警告・エラーが出ていないかを確認する
-	//警告・エラーが出てたらログに出して止める
-	IDxcBlobUtf8* shaderError = nullptr;
-	shaderResult->GetOutput(DXC_OUT_ERRORS, IID_PPV_ARGS(&shaderError), nullptr);
-	if (shaderError != nullptr && shaderError->GetStringLength() != 0) {
-		Log(shaderError->GetStringPointer());
-		assert(false);
-	}
-
-
-	//4.Compile結果を受け取って返す
-	//BLOB・・・BinaryLargeOBject
-	IDxcBlob* shaderBlob = nullptr;
-	hr = shaderResult->GetOutput(DXC_OUT_OBJECT, IID_PPV_ARGS(&shaderBlob), nullptr);
-	assert(SUCCEEDED(hr));
-	//成功したログを出す
-	Log(ConvertString(std::format(L"Compile Succeeded,path:{},profile:{}\n", filePath, profile)));
-	//もう使わないリソースを解放
-	shaderSource->Release();
-	shaderResult->Release();
-	//実行用のバイナリを返却
-	return shaderBlob;
-
-
-}

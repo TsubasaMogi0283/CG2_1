@@ -7,9 +7,13 @@
 //Winodwsアプリでもエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
-	WindowsInitialization* window1= new WindowsInitialization(L"l", 1280,720);
+	const int32_t kClientWidth = 1280;
+	const int32_t kClientHeight = 720;
 
 
+	WindowsInitialization* window1= new WindowsInitialization(L"l", kClientWidth,kClientHeight);
+
+	window1->WindowInitialize();
 
 	//出力ウィンドウへの文字出力
 	OutputDebugStringA("Hello,DirectX!\n");
@@ -32,18 +36,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	
 
 
-#ifdef _DEBUG
-	ID3D12Debug1* debugController = nullptr;
-	if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugController)))) {
-		//デバッグレイヤーを有効化する
-		debugController->EnableDebugLayer();
-		//さらにGPU側でもチェックを行うようにする
-		debugController->SetEnableGPUBasedValidation(TRUE);
-
-	}
-
-
-#endif
 
 
 
@@ -682,10 +674,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	device->Release();
 	useAdapter->Release();
 	dxgiFactory->Release();
-#ifdef _DEBUG
-	debugController->Release();
-
-#endif
+//#ifdef _DEBUG
+//	debugController->Release();
+//
+//#endif
 	CloseWindow(window1->GetHwnd());
 
 

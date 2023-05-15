@@ -40,4 +40,3 @@ public:
 	int32_t kClientHeight_;
 
 };
-

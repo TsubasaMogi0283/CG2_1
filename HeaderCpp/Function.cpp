@@ -3,6 +3,9 @@
 
 //プロトタイプ宣言
 
+//使い方はこんな感じ
+	//出力にちゃんと「WSTRING」が出る
+	//Log(ConvertString(std::format(L"wstring\n", wstringValue)));
 
 void Log(const std::string& message) {
 	OutputDebugStringA(message.c_str());

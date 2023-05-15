@@ -24,7 +24,7 @@
     <ClCompile Include="HeaderCpp\WindowsInitialization.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="HeaderCpp\DirectXInitialize.cpp">
+    <ClCompile Include="HeaderCpp\DirectXInitialization.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -39,7 +39,7 @@
     <ClInclude Include="HeaderCpp\WindowsInitialization.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="HeaderCpp\DirectXInitialize.h">
+    <ClInclude Include="HeaderCpp\DirectXInitialization.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

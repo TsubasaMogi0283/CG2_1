@@ -1,19 +1,8 @@
-#include "HeaderCpp/Function/Function.h"
+#include "HeaderCpp/Function.h"
 
 //includeなどは全部Function.hに入っているよ！
 
-//Window Procedure
-LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam){
-	switch (msg) {
-		//ウィンドウが破棄された
-	case WM_DESTROY:
-		//OSに対してアプリの終了を伝える
-		PostQuitMessage(0);
-		return 0;
-	}
 
-	return DefWindowProc(hwnd, msg, wparam, lparam);
-}
 
 //Winodwsアプリでもエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
@@ -93,7 +82,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//ウィンドウを表示する
 	ShowWindow(hwnd, SW_SHOW);
 
-	MSG msg{};
 
 
 	//使い方はこんな感じ
@@ -680,7 +668,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	assert(SUCCEEDED(hr));
 
 
-
+	MSG msg{};
 
 	////メインループ
 	//ウィンドウの✕ボタンが押されるまでループ

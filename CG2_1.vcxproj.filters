@@ -18,10 +18,10 @@
     <ClCompile Include="main.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="HeaderCpp\Function\Function.cpp">
+    <ClCompile Include="HeaderCpp\Function.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="HeaderCpp\WindowsInitialization\WindowsInitialization.cpp">
+    <ClCompile Include="HeaderCpp\WindowsInitialization.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -30,10 +30,10 @@
     <FxCompile Include="Object3d.PS.hlsl" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="HeaderCpp\Function\Function.h">
+    <ClInclude Include="HeaderCpp\Function.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="HeaderCpp\WindowsInitialization\WindowsInitialization.h">
+    <ClInclude Include="HeaderCpp\WindowsInitialization.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

@@ -88,6 +88,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="HeaderCpp\DirectXInitialize.cpp" />
     <ClCompile Include="HeaderCpp\Function.cpp" />
     <ClCompile Include="HeaderCpp\WindowsInitialization.cpp" />
     <ClCompile Include="main.cpp" />
@@ -107,6 +108,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="HeaderCpp\DirectXInitialize.h" />
     <ClInclude Include="HeaderCpp\Function.h" />
     <ClInclude Include="HeaderCpp\WindowsInitialization.h" />
   </ItemGroup>

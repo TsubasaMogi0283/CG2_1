@@ -6,8 +6,9 @@
 class WindowsInitialization {
 public:
 
-
-	WindowsInitialization();
+	static LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
+	
+	WindowsInitialization(const wchar_t* title, const int32_t kClientWidth, const int32_t kClientHeight);
 
 	void WindowRegister();
 
@@ -15,7 +16,7 @@ public:
 
 	void WindowProdece();
 
-	void WindowInitialize();
+	void WindowInitialize(const wchar_t* title, const int32_t kClientWidth, const int32_t kClientHeight);
 
 	
 
@@ -31,17 +32,18 @@ public:
 		return hwnd_;
 	}
 
-private:
+public:
 
 	////ウィンドウクラスを登録する
-	WNDCLASS wc_{};
+	WNDCLASS wc_;
 
-	RECT wrc_{};
+	RECT wrc_;
 
-	HWND hwnd_{};
+	HWND hwnd_=nullptr;
 
-	const int32_t kClientWidth_= 1280;
-	const int32_t kClientHeight_=720;
+	const wchar_t* title_;
+	int32_t kClientWidth_;
+	int32_t kClientHeight_;
 
 };
 

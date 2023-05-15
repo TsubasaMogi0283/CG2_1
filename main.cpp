@@ -1,5 +1,4 @@
 #include "HeaderCpp/Function.h"
-
 #include "HeaderCpp/WindowsInitialization.h"
 //includeなどは全部Function.hに入っているよ！
 
@@ -8,9 +7,30 @@
 //Winodwsアプリでもエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
-	WindowsInitialization* window1= new WindowsInitialization();
+	WindowsInitialization* window1= new WindowsInitialization(L"l", 1280,720);
 
-	window1->WindowInitialize();
+
+
+	//出力ウィンドウへの文字出力
+	OutputDebugStringA("Hello,DirectX!\n");
+
+	
+
+
+	////エラー放置ダメ、ゼッタイ
+	////DebugLayer
+	//デバッグレイヤー・・・警告やエラーの出す機構のこと。色々な情報を収集する。
+	//						今までは違法な状態で動いていた。
+	//CreateWindowの直後で行う
+	// 
+	//DirectX12
+	//DXGI
+	//Debug Layer
+	//Graphics Driver
+	//GPU
+
+	
+
 
 #ifdef _DEBUG
 	ID3D12Debug1* debugController = nullptr;
@@ -32,7 +52,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//出力にちゃんと「WSTRING」が出る
 	//Log(ConvertString(std::format(L"wstring\n", wstringValue)));
 
-	////DirectX初期化
+#pragma region DirectX初期化
 	//ここから↓↓↓
 
 	///////////////
@@ -142,7 +162,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 	//ここまで↑↑↑
-	////DirectX初期化
+#pragma endregion 
 
 
 	////GPUに作業させよう
@@ -180,6 +200,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	swapChainDesc.BufferCount = 2;								//ダブルバッファ
 	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;	//モニタにうつしたら中身を破棄
 
+
 	//コマンドキュー、ウィンドウハンドル、設定を渡して生成する
 	hr = dxgiFactory->CreateSwapChainForHwnd(commandQueue, window1->GetHwnd(), &swapChainDesc, nullptr, nullptr, reinterpret_cast<IDXGISwapChain1**>(&swapChain));
 	assert(SUCCEEDED(hr));
@@ -208,7 +229,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//ディスクリプタヒープが作れなかったので起動できない
 	assert(SUCCEEDED(hr));
 
-
 	////SwapChainからResourceを引っ張ってくる
 	ID3D12Resource* swapChainResources[2] = { nullptr };
 	hr = swapChain->GetBuffer(0, IID_PPV_ARGS(&swapChainResources[0]));
@@ -226,7 +246,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//ディスクリプタの先頭を取得する
 	D3D12_CPU_DESCRIPTOR_HANDLE rtvStartHandle = rtvDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
 	//RTVを２つ作るのでディスクリプタを２つ用意
-	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandles[2];
+	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandles[2] = {};
 	//まず1つ目を作る。１つ目は最初の所に作る。作る場所をこちらで指定してあげる必要がある
 	rtvHandles[0] = rtvStartHandle;
 	device->CreateRenderTargetView(swapChainResources[0], &rtvDesc, rtvHandles[0]);
@@ -477,8 +497,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//ビューポート
 	D3D12_VIEWPORT viewport{};
 	//クライアント領域のサイズと一緒にして画面全体に表示
-	viewport.Width = 1280;
-	viewport.Height = 720;
+	viewport.Width = float(window1->GetClientWidth());
+	viewport.Height = float(window1->GetClientHeight());
 	viewport.TopLeftX = 0;
 	viewport.TopLeftY = 0;
 	viewport.MinDepth = 0.0f;
@@ -686,7 +706,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 
-
+	delete window1;
 
 	return 0;
 }

@@ -40,9 +40,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 
-	//使い方はこんな感じ
-	//出力にちゃんと「WSTRING」が出る
-	//Log(ConvertString(std::format(L"wstring\n", wstringValue)));
+	
 
 #pragma region DirectX初期化
 	//ここから↓↓↓

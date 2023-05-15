@@ -19,8 +19,7 @@
 #pragma comment(lib,"dxcompiler.lib")
 
 
-//Window Procedure(関数)
-LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
+
 
 //string->wstring
 std::wstring ConvertString(const std::string& str);

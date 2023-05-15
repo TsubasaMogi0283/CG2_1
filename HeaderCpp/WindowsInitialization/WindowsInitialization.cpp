@@ -1,6 +1,27 @@
+
 #include "WindowsInitialization.h"
 
-void WindowsInitialization::Initialize() {
+//Window Procedure(関数)
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg,
+	WPARAM wparam, LPARAM lparam) {
+	switch (msg) {
+		//ウィンドウが破棄された
+	case WM_DESTROY:
+		//OSに対してアプリの終了を伝える
+		PostQuitMessage(0);
+		return 0;
+	}
+
+	return DefWindowProc(hwnd, msg, wparam, lparam);
+}
+
+void Log(const std::string& message) {
+	OutputDebugStringA(message.c_str());
+}
+
+
+
+void WindowsInitialization::WindowInitialize() {
 	//出力ウィンドウへの文字出力
 	OutputDebugStringA("Hello,DirectX!\n");
 
@@ -78,10 +99,4 @@ void WindowsInitialization::Initialize() {
 	ShowWindow(hwnd, SW_SHOW);
 
 	MSG msg{};
-
-
-	//使い方はこんな感じ
-	//出力にちゃんと「WSTRING」が出る
-	//Log(ConvertString(std::format(L"wstring\n", wstringValue)));
-
 }

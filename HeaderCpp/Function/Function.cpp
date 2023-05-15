@@ -2,23 +2,6 @@
 
 
 //プロトタイプ宣言
-//Window Procedure(関数)
-LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg,
-	WPARAM wparam, LPARAM lparam) {
-	switch (msg) {
-		//ウィンドウが破棄された
-	case WM_DESTROY:
-		//OSに対してアプリの終了を伝える
-		PostQuitMessage(0);
-		return 0;
-	}
-
-	return DefWindowProc(hwnd, msg, wparam, lparam);
-}
-
-void Log(const std::string& message) {
-	OutputDebugStringA(message.c_str());
-}
 
 
 //>string->wstring

@@ -1,7 +1,9 @@
 
 #include "WindowsInitialization.h"
 
+WindowsInitialization::WindowsInitialization() {
 
+}
  
 void WindowsInitialization::WindowRegister() {
 
@@ -25,12 +27,11 @@ void WindowsInitialization::WindowSizeDeside() {
 	//int 32_tを使うためにcstdintをインクルード
 	//クライアント領域のサイズ
 	//クライアント領域・・・ゲーム画面が映る領域のこと
-	const int32_t kClientWidth = 1280;
-	const int32_t kClientHeight = 720;
+	
 
 
 	//ウィンドウサイズを表す構造体にクライアント領域を入れる
-	RECT wrc_ = { 0,0,kClientWidth ,kClientHeight };
+	RECT wrc_ = { 0,0,kClientWidth_ ,kClientHeight_ };
 
 	//クライアント領域を元に実際のサイズにwrcを変更してもらう
 	AdjustWindowRect(&wrc_, WS_OVERLAPPEDWINDOW, false);

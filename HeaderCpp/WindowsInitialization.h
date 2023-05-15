@@ -7,7 +7,7 @@ class WindowsInitialization {
 public:
 
 
-	
+	WindowsInitialization();
 
 	void WindowRegister();
 
@@ -19,6 +19,18 @@ public:
 
 	
 
+
+	int GetClientWidth() {
+		return kClientWidth_;
+	}
+	int GetClientHeight() {
+		return kClientHeight_;
+	}
+
+	HWND GetHwnd() {
+		return hwnd_;
+	}
+
 private:
 
 	////ウィンドウクラスを登録する
@@ -27,5 +39,9 @@ private:
 	RECT wrc_{};
 
 	HWND hwnd_{};
+
+	const int32_t kClientWidth_= 1280;
+	const int32_t kClientHeight_=720;
+
 };
 

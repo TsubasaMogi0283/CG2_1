@@ -28,16 +28,16 @@ WindowsInitialization::WindowsInitialization(const wchar_t* title, const int32_t
 //	//WindowRegister();
 //
 //	//ウィンドウプロシージャ
-//	wc_.lpfnWndProc = WindowProc;
+//	wc.lpfnWndProc = WindowProc;
 //	//ウィンドウクラス名
-//	wc_.lpszClassName = L"CG2WindowClass";
+//	wc.lpszClassName = L"CG2WindowClass";
 //	//インスタンスハンドル
-//	wc_.hInstance = GetModuleHandle(nullptr);
+//	wc.hInstance = GetModuleHandle(nullptr);
 //	//カーソル
-//	wc_.hCursor = LoadCursor(nullptr, IDC_ARROW);
+//	wc.hCursor = LoadCursor(nullptr, IDC_ARROW);
 //
 //	//ウィンドウクラスを登録する
-//	RegisterClass(&wc_);
+//	RegisterClass(&wc);
 //
 //	//出力ウィンドウへの文字出力
 //	OutputDebugStringA("Hello,DirectX!\n");
@@ -53,7 +53,7 @@ WindowsInitialization::WindowsInitialization(const wchar_t* title, const int32_t
 //	//WindowProdece();
 //
 //	//ウィンドウの生成
-//	HWND hwnd_ = CreateWindow(wc_.lpszClassName,L"CG2",					
+//	HWND hwnd_ = CreateWindow(wc.lpszClassName,L"CG2",					
 //		WS_OVERLAPPEDWINDOW,	
 //		CW_USEDEFAULT,			
 //		CW_USEDEFAULT,			
@@ -61,7 +61,7 @@ WindowsInitialization::WindowsInitialization(const wchar_t* title, const int32_t
 //		wrc_.bottom - wrc_.top,	
 //		nullptr,				
 //		nullptr,				
-//		wc_.hInstance,			
+//		wc.hInstance,			
 //		nullptr);	
 //
 //
@@ -102,15 +102,15 @@ WindowsInitialization::WindowsInitialization(const wchar_t* title, const int32_t
 
 void  WindowsInitialization::WindowInitialize() {
 	//ウィンドウプロシャージャ
-	wc_.lpfnWndProc = WindowProc;
+	wc.lpfnWndProc = WindowProc;
 	// ウィンドウクラス名
-	wc_.lpszClassName = L"%s",title_;
+	wc.lpszClassName = L"%s",title_;
 	//インスタンドハンドル
-	wc_.hInstance = GetModuleHandle(nullptr);
+	wc.hInstance = GetModuleHandle(nullptr);
 	//　カーソル
-	wc_.hCursor = LoadCursor(nullptr, IDC_ARROW);
+	wc.hCursor = LoadCursor(nullptr, IDC_ARROW);
 	//ウィンドウクラス登録
-	RegisterClass(&wc_);
+	RegisterClass(&wc);
 	// クライアント領域サイズ
 	
 	//  ウィンドウサイズを表す構造体にクライアント領域を入れる
@@ -119,7 +119,7 @@ void  WindowsInitialization::WindowInitialize() {
 	AdjustWindowRect(&wrc_, WS_OVERLAPPEDWINDOW, false);
 	// ウィンドウ生成
 		hwnd_ = CreateWindow(
-			wc_.lpszClassName,//　クラス名
+			wc.lpszClassName,//　クラス名
 			title_,                //　タイトルバーの文字
 			WS_OVERLAPPEDWINDOW,  //　標準的なウィンドウスタイル
 			CW_USEDEFAULT,        //　標準X座標
@@ -128,7 +128,7 @@ void  WindowsInitialization::WindowInitialize() {
 			wrc_.bottom - wrc_.top, //　縦幅ti
 			nullptr,              //　親ハンドル
 			nullptr,              //　メニューハンドル
-			wc_.hInstance,         //　インスタンスハンドル
+			wc.hInstance,         //　インスタンスハンドル
 			nullptr               //　オプション
 		);
 

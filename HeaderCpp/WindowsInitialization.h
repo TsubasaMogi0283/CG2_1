@@ -30,7 +30,7 @@ public:
 public:
 
 	////ウィンドウクラスを登録する
-	WNDCLASS wc_;
+	WNDCLASS wc;
 
 
 	HWND hwnd_;

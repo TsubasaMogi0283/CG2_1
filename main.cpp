@@ -671,6 +671,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 
+
 	////ReportLiveObjects
 	//DirectX12より低レベルのDXGIに問い合わせをする
 	//リソースリークチェック

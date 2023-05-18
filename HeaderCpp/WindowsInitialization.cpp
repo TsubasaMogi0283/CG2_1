@@ -101,6 +101,7 @@ WindowsInitialization::WindowsInitialization(const wchar_t* title, const int32_t
 
 
 void  WindowsInitialization::WindowInitialize() {
+	WNDCLASS wc{};
 	//ウィンドウプロシャージャ
 	wc.lpfnWndProc = WindowProc;
 	// ウィンドウクラス名
@@ -134,12 +135,12 @@ void  WindowsInitialization::WindowInitialize() {
 
 		
 #ifdef _DEBUG
-	ID3D12Debug1* debugController = nullptr;
-	if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugController)))) {
+	//ID3D12Debug1* debugController = nullptr;
+	if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugController_)))) {
 		//デバッグレイヤーを有効化する
-		debugController->EnableDebugLayer();
+		debugController_->EnableDebugLayer();
 		//さらにGPU側でもチェックを行うようにする
-		debugController->SetEnableGPUBasedValidation(TRUE);
+		debugController_->SetEnableGPUBasedValidation(TRUE);
 
 	}
 
@@ -150,3 +151,11 @@ void  WindowsInitialization::WindowInitialize() {
 	ShowWindow(hwnd_, SW_SHOW);
 }
 
+
+
+void WindowsInitialization::WindowReset() {
+#ifdef _DEBUG
+	debugController_->Release();
+
+#endif
+}

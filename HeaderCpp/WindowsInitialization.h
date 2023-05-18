@@ -14,6 +14,8 @@ public:
 
 	void WindowInitialize();
 
+	void WindowReset();
+
 
 
 	int GetClientWidth() {
@@ -30,8 +32,9 @@ public:
 public:
 
 	////ウィンドウクラスを登録する
-	WNDCLASS wc;
+	
 
+	ID3D12Debug1* debugController_ = nullptr;
 
 	HWND hwnd_;
 

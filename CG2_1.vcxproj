@@ -89,6 +89,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="HeaderCpp\DirectXInitialization.cpp" />
+    <ClCompile Include="HeaderCpp\DXGIRelease.cpp" />
     <ClCompile Include="HeaderCpp\Function.cpp" />
     <ClCompile Include="HeaderCpp\WindowsInitialization.cpp" />
     <ClCompile Include="main.cpp" />
@@ -109,6 +110,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HeaderCpp\DirectXInitialization.h" />
+    <ClInclude Include="HeaderCpp\DXGIRelease.h" />
     <ClInclude Include="HeaderCpp\Function.h" />
     <ClInclude Include="HeaderCpp\WindowsInitialization.h" />
   </ItemGroup>

@@ -91,6 +91,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="HeaderCpp\DirectXInitialization.cpp" />
     <ClCompile Include="HeaderCpp\DXGIRelease.cpp" />
     <ClCompile Include="HeaderCpp\Function.cpp" />
+    <ClCompile Include="HeaderCpp\SettingTriangle.cpp" />
     <ClCompile Include="HeaderCpp\WindowsInitialization.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -112,6 +113,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="HeaderCpp\DirectXInitialization.h" />
     <ClInclude Include="HeaderCpp\DXGIRelease.h" />
     <ClInclude Include="HeaderCpp\Function.h" />
+    <ClInclude Include="HeaderCpp\SettingTriangle.h" />
     <ClInclude Include="HeaderCpp\WindowsInitialization.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

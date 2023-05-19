@@ -1,17 +1,43 @@
 #pragma once
 
 #include "Function.h"
+#include "WindowsInitialization.h"
  
 
 class DirectXInitialization {
 public:
-	void DirectXInitialize(int32_t windowsizeWidth,int32_t windowsizeHeight,HWND hwnd);
 	
+
+	
+	
+	void SelectAdapter();
+
+	//
+	//void MakeD3D12Device();
+	//
+	//void StopError();
+	//
+	//void MakeCommandQueue();
+	////CommandListを生成する
+	//void MakeCommandList();
+	//void MakeSwapChain();
+	//
+
+	void DirectXInitialize(int32_t windowsizeWidth, int32_t windowsizeHeight,HWND hwnd_);
+
+
 	void DirectXRelease();
 
 private:
+	int32_t windowsizeWidth_; 
+	int32_t windowsizeHeight_; 
 	
+	HRESULT hr_;
+
+	HWND hwnd_;
+
 	ID3D12Resource* vertexResource_ = nullptr;
+	ID3D12Resource* vertexResource1_ = nullptr;
 
 	ID3D12PipelineState* graphicsPipelineState_ = nullptr;
 

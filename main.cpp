@@ -4,8 +4,6 @@
 #include "HeaderCpp/DXGIRelease.h"
 //includeなどは全部Function.hに入っているよ！
 
-
-
 //Winodwsアプリでもエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
@@ -13,7 +11,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	const int32_t kClientHeight = 720;
 
 
-	WindowsInitialization* window1= new WindowsInitialization(L"l", kClientWidth,kClientHeight);
+	WindowsInitialization* window1= new WindowsInitialization(L"DirectX", kClientWidth,kClientHeight);
 	DirectXInitialization* directX = new DirectXInitialization();
 	DXGIRelease* releaseCheck = new DXGIRelease();
 
@@ -23,7 +21,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//出力ウィンドウへの文字出力
 	OutputDebugStringA("Hello,DirectX!\n");
 
-	directX->DirectXInitialize(window1->GetClientWidth(), window1->GetClientHeight(), window1->GetHwnd());
+	directX->DirectXInitialize(window1->GetClientWidth(),window1->GetClientHeight(),window1->hwnd_);
 	
 
 	MSG msg{};

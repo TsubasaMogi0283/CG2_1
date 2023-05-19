@@ -1,19 +1,8 @@
 #include "DirectXInitialization.h"
 #include "Function.h"
 
-void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t windowsizeHeight,HWND hwnd) {
-	
-	///////////////
-	//IDXGIFactory7* dxgiFactory_ = nullptr;
-	//関数が成功したかSUCCEEDEDでマクロで判定できる
-	HRESULT hr = CreateDXGIFactory(IID_PPV_ARGS(&dxgiFactory_));
-	//初期でエラーが発生した場合どうにもできないのでassert
-	assert(SUCCEEDED(hr));
 
-	////////////
-
-
-
+void DirectXInitialization::SelectAdapter() {
 	//仕様するアダプタ用の変数、最初にnullptrを入れておく
 	//IDXGIAdapter4* useAdapter_ = nullptr;
 	//良い順でアダプタを頼む
@@ -23,8 +12,8 @@ void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t wi
 
 		//アダプターの情報を取得する
 		DXGI_ADAPTER_DESC3 adapterDesc{};
-		hr = useAdapter_->GetDesc3(&adapterDesc);
-		assert(SUCCEEDED(hr));
+		hr_ = useAdapter_->GetDesc3(&adapterDesc);
+		assert(SUCCEEDED(hr_));
 
 		//ソフトウェアアダプタでなければ採用
 		if (!(adapterDesc.Flags & DXGI_ADAPTER_FLAG3_SOFTWARE)) {
@@ -39,6 +28,21 @@ void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t wi
 	}
 	//適切なアダプタが見つからなかったので起動できない
 	assert(useAdapter_ != nullptr);
+}
+
+void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t windowsizeHeight,HWND hwnd_) {
+	///////////////
+	//IDXGIFactory7* dxgiFactory_ = nullptr;
+	//関数が成功したかSUCCEEDEDでマクロで判定できる
+	hr_ = CreateDXGIFactory(IID_PPV_ARGS(&dxgiFactory_));
+	//初期でエラーが発生した場合どうにもできないのでassert
+	assert(SUCCEEDED(hr_));
+
+	////////////
+
+
+	SelectAdapter();
+	
 
 	//ID3D12Device* device_ = nullptr;
 	//機能レベルとログ出力用の文字
@@ -52,9 +56,9 @@ void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t wi
 	//高い順に生成出来るか試していく
 	for (size_t i = 0; i < _countof(featureLevels); ++i) {
 		//採用したアダプターでデバイスが生成
-		hr = D3D12CreateDevice(useAdapter_, featureLevels[i], IID_PPV_ARGS(&device_));
+		hr_ = D3D12CreateDevice(useAdapter_, featureLevels[i], IID_PPV_ARGS(&device_));
 		//指定した機能レベルでデバイスが生成できたか確認
-		if (SUCCEEDED(hr)) {
+		if (SUCCEEDED(hr_)) {
 			//生成できたのでログ出力を行ってループを抜ける
 			Log(std::format("FeatureLevel : {}\n", featureLevelStrings[i]));
 			break;
@@ -114,22 +118,22 @@ void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t wi
 	//コマンドキューを生成する
 	//ID3D12CommandQueue* commandQueue_ = nullptr;
 	D3D12_COMMAND_QUEUE_DESC commandQueueDesc{};
-	hr = device_->CreateCommandQueue(&commandQueueDesc, IID_PPV_ARGS(&commandQueue_));
+	hr_ = device_->CreateCommandQueue(&commandQueueDesc, IID_PPV_ARGS(&commandQueue_));
 	//コマンドキューの生成が上手くいかなかったので起動できない
-	assert(SUCCEEDED(hr));
+	assert(SUCCEEDED(hr_));
 
 	//コマンドアロケータを生成する
 	//ID3D12CommandAllocator* commandAllocator_ = nullptr;
-	hr = device_->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&commandAllocator_));
+	hr_ = device_->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&commandAllocator_));
 	//コマンドアロケータの生成が上手くいかなかったので起動できない
-	assert(SUCCEEDED(hr));
+	assert(SUCCEEDED(hr_));
 
 	//コマンドリストを生成する
 	//ID3D12GraphicsCommandList* commandList_ = nullptr;
-	hr = device_->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, commandAllocator_, nullptr, IID_PPV_ARGS(&commandList_));
+	hr_ = device_->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, commandAllocator_, nullptr, IID_PPV_ARGS(&commandList_));
 
 	//コマンドリストの生成が上手くいかなかったので起動できない
-	assert(SUCCEEDED(hr));
+	assert(SUCCEEDED(hr_));
 
 	//スワップチェーンを生成する
 	//60fpsそのまま映すと大変なので2枚用意して
@@ -147,8 +151,8 @@ void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t wi
 
 
 	//コマンドキュー、ウィンドウハンドル、設定を渡して生成する
-	hr = dxgiFactory_->CreateSwapChainForHwnd(commandQueue_,hwnd, &swapChainDesc, nullptr, nullptr, reinterpret_cast<IDXGISwapChain1**>(&swapChain_));
-	assert(SUCCEEDED(hr));
+	hr_ = dxgiFactory_->CreateSwapChainForHwnd(commandQueue_,hwnd_, &swapChainDesc, nullptr, nullptr, reinterpret_cast<IDXGISwapChain1**>(&swapChain_));
+	assert(SUCCEEDED(hr_));
 
 	//Resource...DirectX12が管理しているGPU上のメモリであり、このデータのこと
 	//View...Resourceに対してどのような処理を行うのか手順をまとめたもの
@@ -170,17 +174,17 @@ void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t wi
 	D3D12_DESCRIPTOR_HEAP_DESC rtvDescriptorHeapDesc{};
 	rtvDescriptorHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;	//レンダーターゲットビュー用
 	rtvDescriptorHeapDesc.NumDescriptors = 2;						//ダブルバッファ用に２つ。多くてもOK
-	hr = device_->CreateDescriptorHeap(&rtvDescriptorHeapDesc, IID_PPV_ARGS(&rtvDescriptorHeap_));
+	hr_ = device_->CreateDescriptorHeap(&rtvDescriptorHeapDesc, IID_PPV_ARGS(&rtvDescriptorHeap_));
 	//ディスクリプタヒープが作れなかったので起動できない
-	assert(SUCCEEDED(hr));
+	assert(SUCCEEDED(hr_));
 
 	////SwapChainからResourceを引っ張ってくる
 	//ID3D12Resource* swapChainResources_[2] = { nullptr };
-	hr = swapChain_->GetBuffer(0, IID_PPV_ARGS(&swapChainResources_[0]));
+	hr_ = swapChain_->GetBuffer(0, IID_PPV_ARGS(&swapChainResources_[0]));
 	//上手く取得できなければ起動できない
-	assert(SUCCEEDED(hr));
-	hr = swapChain_->GetBuffer(1, IID_PPV_ARGS(&swapChainResources_[1]));
-	assert(SUCCEEDED(hr));
+	assert(SUCCEEDED(hr_));
+	hr_ = swapChain_->GetBuffer(1, IID_PPV_ARGS(&swapChainResources_[1]));
+	assert(SUCCEEDED(hr_));
 
 
 	////RTVを作る
@@ -264,15 +268,15 @@ void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t wi
 	//dxcCompilerを初期化
 	IDxcUtils* dxcUtils = nullptr;
 	IDxcCompiler3* dxcCompiler = nullptr;
-	hr = DxcCreateInstance(CLSID_DxcUtils, IID_PPV_ARGS(&dxcUtils));
-	assert(SUCCEEDED(hr));
-	hr = DxcCreateInstance(CLSID_DxcCompiler, IID_PPV_ARGS(&dxcCompiler));
-	assert(SUCCEEDED(hr));
+	hr_ = DxcCreateInstance(CLSID_DxcUtils, IID_PPV_ARGS(&dxcUtils));
+	assert(SUCCEEDED(hr_));
+	hr_ = DxcCreateInstance(CLSID_DxcCompiler, IID_PPV_ARGS(&dxcCompiler));
+	assert(SUCCEEDED(hr_));
 
 	//現時点でincludeはしないが、includeに対応
 	IDxcIncludeHandler* includeHandler = nullptr;
-	hr = dxcUtils->CreateDefaultIncludeHandler(&includeHandler);
-	assert(SUCCEEDED(hr));
+	hr_ = dxcUtils->CreateDefaultIncludeHandler(&includeHandler);
+	assert(SUCCEEDED(hr_));
 
 
 
@@ -296,17 +300,17 @@ void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t wi
 	//シリアライズしてバイナリにする
 	//ID3DBlob* signatureBlob_ = nullptr;
 	//ID3DBlob* errorBlob_ = nullptr;
-	hr = D3D12SerializeRootSignature(&descriptionRootSignature,
+	hr_ = D3D12SerializeRootSignature(&descriptionRootSignature,
 		D3D_ROOT_SIGNATURE_VERSION_1, &signatureBlob_, &errorBlob_);
-	if (FAILED(hr)) {
+	if (FAILED(hr_)) {
 		Log(reinterpret_cast<char*>(errorBlob_->GetBufferPointer()));
 		assert(false);
 	}
 	//バイナリを元に生成
 	//ID3D12RootSignature* rootSignature_ = nullptr;
-	hr = device_->CreateRootSignature(0, signatureBlob_->GetBufferPointer(),
+	hr_ = device_->CreateRootSignature(0, signatureBlob_->GetBufferPointer(),
 		signatureBlob_->GetBufferSize(), IID_PPV_ARGS(&rootSignature_));
-	assert(SUCCEEDED(hr));
+	assert(SUCCEEDED(hr_));
 
 
 
@@ -376,9 +380,9 @@ void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t wi
 	graphicsPipelineStateDesc.SampleMask = D3D12_DEFAULT_SAMPLE_MASK;
 	//実際に生成
 	//ID3D12PipelineState* graphicsPipelineState_ = nullptr;
-	hr = device_->CreateGraphicsPipelineState(&graphicsPipelineStateDesc,
+	hr_ = device_->CreateGraphicsPipelineState(&graphicsPipelineStateDesc,
 		IID_PPV_ARGS(&graphicsPipelineState_));
-	assert(SUCCEEDED(hr));
+	assert(SUCCEEDED(hr_));
 
 
 
@@ -405,13 +409,13 @@ void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t wi
 	//実際に頂点リソースを作る
 	//ID3D12Resource* vertexResource_ = nullptr;
 
-	hr = device_->CreateCommittedResource(
+	hr_ = device_->CreateCommittedResource(
 		&uploadHeapProperties,
 		D3D12_HEAP_FLAG_NONE,
 		&vertexResourceDesc,
 		D3D12_RESOURCE_STATE_GENERIC_READ,
 		nullptr, IID_PPV_ARGS(&vertexResource_));
-	assert(SUCCEEDED(hr));
+	assert(SUCCEEDED(hr_));
 
 
 
@@ -426,9 +430,14 @@ void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t wi
 	vertexBufferView.StrideInBytes = sizeof(Vector4);
 
 
+	
+
 
 	//Resourceにデータを書き込む
 	Vector4* vertexData = nullptr;
+
+	Vector4* vertexData1 = nullptr;
+
 
 
 	//書き込むためのアドレスを取得
@@ -440,6 +449,19 @@ void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t wi
 	//右下
 	vertexData[2] = { 0.5f,-0.5f,0.0f,1.0f };
 	//範囲外は危険だよ！！
+
+
+	////2個目
+	//vertexResource1_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData1));
+	////左下
+	//vertexData1[0] = { -1.0f,-0.5f,0.0f,1.0f };
+	////上
+	//vertexData1[1] = { -0.75f,0.0f,0.0f,1.0f };
+	////右下
+	//vertexData1[2] = { 0.5f,-0.5f,0.0f,1.0f };
+
+
+
 
 
 	////ViewportとScissor
@@ -504,8 +526,8 @@ void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t wi
 	//EventはWindowsのものである
 	//ID3D12Fence* fence_ = nullptr;
 	uint64_t fenceValue = 0;
-	hr = device_->CreateFence(fenceValue, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence_));
-	assert(SUCCEEDED(hr));
+	hr_ = device_->CreateFence(fenceValue, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence_));
+	assert(SUCCEEDED(hr_));
 
 	//FenceのSignalを待つためのイベントを作成する
 	fenceEvent_ = CreateEvent(NULL, FALSE, FALSE, NULL);
@@ -523,8 +545,8 @@ void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t wi
 
 
 	//コマンドリストの内容を確定させる。全てのコマンドを積んでからCloseすること
-	hr = commandList_->Close();
-	assert(SUCCEEDED(hr));
+	hr_ = commandList_->Close();
+	assert(SUCCEEDED(hr_));
 
 
 
@@ -575,42 +597,16 @@ void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t wi
 
 
 	//次のフレーム用のコマンドリストを準備
-	hr = commandAllocator_->Reset();
-	assert(SUCCEEDED(hr));
-	hr = commandList_->Reset(commandAllocator_, nullptr);
-	assert(SUCCEEDED(hr));
+	hr_ = commandAllocator_->Reset();
+	assert(SUCCEEDED(hr_));
+	hr_ = commandList_->Reset(commandAllocator_, nullptr);
+	assert(SUCCEEDED(hr_));
 
 
 
 
 
-	////解放処理
-	//vertexResource_->Release();
-	//graphicsPipelineState_->Release();
-	//signatureBlob_->Release();
-	//if (errorBlob_) {
-	//	errorBlob_->Release();
-	//}
-	//rootSignature_->Release();
-	//pixelShaderBlob_->Release();
-	//vertexShaderBlob_->Release();
 
-
-
-
-	////解放処理
-	//CloseHandle(fenceEvent_);
-	//fence_->Release();
-	//rtvDescriptorHeap_->Release();
-	//swapChainResources_[0]->Release();
-	//swapChainResources_[1]->Release();
-	//swapChain_->Release();
-	//commandList_->Release();
-	//commandAllocator_->Release();
-	//commandQueue_->Release();
-	//device_->Release();
-	//useAdapter_->Release();
-	//dxgiFactory_->Release();
 }
 
 void DirectXInitialization::DirectXRelease() {

@@ -30,6 +30,10 @@ void DirectXInitialization::SelectAdapter() {
 	assert(useAdapter_ != nullptr);
 }
 
+
+
+
+
 void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t windowsizeHeight,HWND hwnd_) {
 	///////////////
 	//IDXGIFactory7* dxgiFactory_ = nullptr;

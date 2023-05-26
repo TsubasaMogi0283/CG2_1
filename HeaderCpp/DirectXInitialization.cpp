@@ -208,9 +208,85 @@ void DirectXInitialization::MakeRTV() {
 
 }
 
+void DirectXInitialization::DecideDescriptorPoisition() {
+	rtvHandles_[0] = rtvStartHandle_;
+
+	rtvHandles_[1].ptr = rtvHandles_[0].ptr + device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+	
+}
+
+void DirectXInitialization::LoadCommand() {
+
+}
+
+void DirectXInitialization::KickCommand() {
+	
+	//GPUにコマンドリストの実行を行わせる
+	ID3D12CommandList* commandLists[] = { commandList_ };
+	commandQueue_->ExecuteCommandLists(1, commandLists);
+	//GPUとOSに画面の交換を行うよう通知する
+	swapChain_->Present(1, 0);
+
+}
+
+void DirectXInitialization::StretchTransitionBarrier() {
+	
+	//今回のバリアはTransition
+	barrier_.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+	//Noneにする
+	barrier_.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+	//バリアを張る対象のリソース。現在のバックバッファに対して行う
+	barrier_.Transition.pResource = swapChainResources_[backBufferIndex_];
+	//遷移前(現在)のResourceState
+	barrier_.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT;
+	//遷移後のResourceState
+	barrier_.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
+	//TransitionBarrierを張る
+	commandList_->ResourceBarrier(1, &barrier_);
+
+}
 
 
+void DirectXInitialization::GenerateFenceEvent() {
+	//初期位置0でフェンスを作る
+	//EventはWindowsのものである
+	
+	hr_ = device_->CreateFence(fenceValue_, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence_));
+	assert(SUCCEEDED(hr_));
 
+	//FenceのSignalを待つためのイベントを作成する
+	fenceEvent_ = CreateEvent(NULL, FALSE, FALSE, NULL);
+	assert(fenceEvent_ != nullptr);
+
+
+}
+
+void DirectXInitialization::SendSignalToGPU() {
+	//Fenceの値を更新
+	fenceValue_++;
+	//GPUがここまでたどりついた時に、Fenceの値を代入するようSignalを送る
+	commandQueue_->Signal(fence_, fenceValue_);
+
+}
+
+void DirectXInitialization::CheckFence() {
+	
+	//GetCompletedValueの初期値はFence作成時に渡した初期値
+	if (fence_->GetCompletedValue() < fenceValue_) {
+		//指定したSignalにたどりついていないので、たどり着くまで待つようにイベントを設定する
+		fence_->SetEventOnCompletion(fenceValue_, fenceEvent_);
+		//イベントを待つ
+		WaitForSingleObject(fenceEvent_, INFINITE);
+	}
+}
+
+void DirectXInitialization::ReadyForNextCommandList() {
+	hr_ = commandAllocator_->Reset();
+	assert(SUCCEEDED(hr_));
+	hr_ = commandList_->Reset(commandAllocator_, nullptr);
+	assert(SUCCEEDED(hr_));
+
+}
 
 void DirectXInitialization::DXCInitialize() {
 	////DXCの初期化
@@ -301,11 +377,7 @@ void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t wi
 	
 
 	////Descriptorの位置を決める
-	rtvHandles_[0] = rtvStartHandle_;
-
-	///////
-	rtvHandles_[1].ptr = rtvHandles_[0].ptr + device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
-	///////
+	DecideDescriptorPoisition();
 
 	////コマンドをキックする
 	//コマンドを積む・・・CommandListに処理を追加していくこと
@@ -322,44 +394,47 @@ void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t wi
 	//7.次のフレーム用にCommandListを再準備
 
 
+
+
+
+
 	////コマンドを積みこんで確定させる
+	//LoadCommand()
 	//これから書き込むバックバッファのインデックスを取得
-	UINT backBufferIndex = swapChain_->GetCurrentBackBufferIndex();
+	backBufferIndex_ = swapChain_->GetCurrentBackBufferIndex();
 
 	////TransitionBarrierを張るコード
 	//現在のResourceStateを設定する必要がある → ResorceがどんなStateなのかを追跡する必要がある
 	//追跡する仕組みはStateTrackingという
 	//
 	//TransitionBarrierの設定
-	D3D12_RESOURCE_BARRIER barrier{};
-	//今回のバリアはTransition
-	barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-	//Noneにする
-	barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-	//バリアを張る対象のリソース。現在のバックバッファに対して行う
-	barrier.Transition.pResource = swapChainResources_[backBufferIndex];
-	//遷移前(現在)のResourceState
-	barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT;
-	//遷移後のResourceState
-	barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
-	//TransitionBarrierを張る
-	commandList_->ResourceBarrier(1, &barrier);
+	StretchTransitionBarrier();
 
 
 
 
 
-
-
+	//DXCの初期化
+	////ShaderCompile
+	//ShaderはHLSLによって記述されているが、GPUが解釈できる形ではない
+	//一度DXIL(DirectX Intermediate Language)というドライバ用の形式に変換され、
+	//ドライバがGPU用のバイナリに変更しやっと実行されるよ。手間だね。
+	// 
+	// DXC(DirectX Shader Compiler)がHLSLからDXILにするCompilerである
+	//
 	DXCInitialize();
 
 
 
 	//描画先のRTVを設定する
-	commandList_->OMSetRenderTargets(1, &rtvHandles_[backBufferIndex], false, nullptr);
+	commandList_->OMSetRenderTargets(1, &rtvHandles_[backBufferIndex_], false, nullptr);
 	//指定した色で画面全体をクリアする
 	float clearColor[] = { 0.1f,0.25f,0.5f,1.0f };	//青っぽい色,RGBA
-	commandList_->ClearRenderTargetView(rtvHandles_[backBufferIndex], clearColor, 0, nullptr);
+	commandList_->ClearRenderTargetView(rtvHandles_[backBufferIndex_], clearColor, 0, nullptr);
+
+
+
+
 
 
 	//////////PSO
@@ -459,15 +534,6 @@ void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t wi
 
 
 
-
-
-
-
-
-
-
-
-
 	////VertexResourceを生成
 	//頂点リソース用のヒープを設定
 	D3D12_HEAP_PROPERTIES uploadHeapProperties{};
@@ -498,7 +564,8 @@ void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t wi
 		nullptr, IID_PPV_ARGS(&vertexResource_));
 	assert(SUCCEEDED(hr_));
 
-
+	
+	
 
 	////VertexBufferViewを作成
 	//頂点バッファビューを作成する
@@ -516,7 +583,6 @@ void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t wi
 	//Resourceにデータを書き込む
 	Vector4* vertexData = nullptr;
 
-	Vector4* vertexData1 = nullptr;
 
 
 
@@ -577,17 +643,25 @@ void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t wi
 	commandList_->IASetVertexBuffers(0, 1, &vertexBufferView);
 	//形状を設定。PSOに設定しているものとはまた別。同じものを設定すると考えよう
 	commandList_->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	//描画(DrawCall)３兆点で１つのインスタンス。
+	//描画(DrawCall)３頂点で１つのインスタンス。
 	commandList_->DrawInstanced(3, 1, 0, 0);
 
 
 	////画面表示出来るようにする
 	//画面に描く処理は全て終わり、画面に映すので、状態を遷移
 	//今回はRenderTargetからPresentにする
-	barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
-	barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;
+	barrier_.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
+	barrier_.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;
 	//TransitionBarrierを張る
-	commandList_->ResourceBarrier(1, &barrier);
+	commandList_->ResourceBarrier(1, &barrier_);
+
+
+
+
+
+
+
+
 
 
 	////キックしただけ
@@ -601,26 +675,8 @@ void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t wi
 	//			 GPUで値を書き込み、CPUで値を読み取ったりWindowsにメッセージ(Event)を送ったりできる
 	//			 理想を実現するためのもの
 	//Event・・・Windowsへのメッセージなどのこと
+	GenerateFenceEvent();
 
-	//初期位置0でフェンスを作る
-	//EventはWindowsのものである
-	//ID3D12Fence* fence_ = nullptr;
-	uint64_t fenceValue = 0;
-	hr_ = device_->CreateFence(fenceValue, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence_));
-	assert(SUCCEEDED(hr_));
-
-	//FenceのSignalを待つためのイベントを作成する
-	fenceEvent_ = CreateEvent(NULL, FALSE, FALSE, NULL);
-	assert(fenceEvent_ != nullptr);
-
-
-	////ShaderCompile
-	//ShaderはHLSLによって記述されているが、GPUが解釈できる形ではない
-	//一度DXIL(DirectX Intermediate Language)というドライバ用の形式に変換され、
-	//ドライバがGPU用のバイナリに変更しやっと実行されるよ。手間だね。
-	// 
-	// DXC(DirectX Shader Compiler)がHLSLからDXILにするCompilerである
-	//
 
 
 
@@ -629,20 +685,10 @@ void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t wi
 	assert(SUCCEEDED(hr_));
 
 
-
-
-
-
-
-
-
-
 	//コマンドをキックする
-	//GPUにコマンドリストの実行を行わせる
-	ID3D12CommandList* commandLists[] = { commandList_ };
-	commandQueue_->ExecuteCommandLists(1, commandLists);
-	//GPUとOSに画面の交換を行うよう通知する
-	swapChain_->Present(1, 0);
+	KickCommand();
+
+	
 
 	////GPUにSignalを送る
 	//GPUの実行完了が目的
@@ -652,39 +698,15 @@ void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t wi
 	//2.CPUではFenceに指定した値が書き込まれているかを確認する
 	//3.指定した値が書き込まれていない場合は、書き込まれるまで待つ
 
-
-	//Fenceの値を更新
-	fenceValue++;
-	//GPUがここまでたどりついた時に、Fenceの値を代入するようSignalを送る
-	commandQueue_->Signal(fence_, fenceValue);
-
-
-
-
-
-
-
+	SendSignalToGPU();
+	
 
 	//Fenceの値が指定したSignal値にたどりついているか確認する
-	//GetCompletedValueの初期値はFence作成時に渡した初期値
-	if (fence_->GetCompletedValue() < fenceValue) {
-		//指定したSignalにたどりついていないので、たどり着くまで待つようにイベントを設定する
-		fence_->SetEventOnCompletion(fenceValue, fenceEvent_);
-		//イベントを待つ
-		WaitForSingleObject(fenceEvent_, INFINITE);
-	}
-
-
+	CheckFence();
+	
 
 	//次のフレーム用のコマンドリストを準備
-	hr_ = commandAllocator_->Reset();
-	assert(SUCCEEDED(hr_));
-	hr_ = commandList_->Reset(commandAllocator_, nullptr);
-	assert(SUCCEEDED(hr_));
-
-
-
-
+	ReadyForNextCommandList();
 
 
 }
@@ -692,6 +714,7 @@ void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t wi
 
 
 void DirectXInitialization::DirectXRelease() {
+
 	//////解放処理
 	vertexResource_->Release();
 	graphicsPipelineState_->Release();
@@ -702,10 +725,11 @@ void DirectXInitialization::DirectXRelease() {
 	rootSignature_->Release();
 	pixelShaderBlob_->Release();
 	vertexShaderBlob_->Release();
-	//
-	//
-	//
-	//
+
+
+
+
+
 	//////解放処理
 	CloseHandle(fenceEvent_);
 	fence_->Release();

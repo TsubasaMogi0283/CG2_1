@@ -28,6 +28,24 @@ public:
 
 	void MakeRTV();
 
+	void DecideDescriptorPoisition();
+
+	void LoadCommand();
+
+	void KickCommand();
+
+	void ReadyForNextCommandList();
+
+	void StretchTransitionBarrier();
+
+	void GenerateFenceEvent();
+
+	void SendSignalToGPU();
+
+	void CheckFence();
+
+
+
 
 
 
@@ -68,7 +86,6 @@ private:
 
 	HANDLE fenceEvent_ = nullptr;
 
-	ID3D12Fence* fence_ = nullptr;
 
 	
 
@@ -95,6 +112,8 @@ private:
 
 	ID3D12CommandAllocator* commandAllocator_ = nullptr;
 
+	UINT backBufferIndex_;
+
 	ID3D12GraphicsCommandList* commandList_ = nullptr;
 
 	IDXGISwapChain4* swapChain_ = nullptr;
@@ -112,8 +131,17 @@ private:
 	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandles_[2] = {};
 
 	typedef struct D3D12_CPU_DESCRIPTOR_HANDLE {
-		SIZE_T ptr;
+		SIZE_T ptr_;
 	}D3D12_CPU_DESCRIPTOR_HANDLE;
+
+	D3D12_RESOURCE_BARRIER barrier_{};
+
+	ID3D12Fence* fence_ = nullptr;
+
+	uint64_t fenceValue_ = 0;
+
+
+
 
 #pragma region DXCの初期化について
 	IDxcUtils* dxcUtils_ = nullptr;

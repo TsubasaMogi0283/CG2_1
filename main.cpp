@@ -39,11 +39,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 
+
 		}
 
 	}
 
-
+	
 
 	//解放処理
 	window1->WindowReset();

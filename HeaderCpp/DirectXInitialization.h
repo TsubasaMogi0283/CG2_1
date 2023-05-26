@@ -52,10 +52,12 @@ public:
 
 	void DXCInitialize();
 
+
+
 	void DirectXInitialize(int32_t windowsizeWidth, int32_t windowsizeHeight,HWND hwnd_);
 
 	
-	
+	void ReadyNextFrame();
 
 	
 

@@ -12,7 +12,9 @@ public:
 	
 	void SelectAdapter();
 
-	void MakeD3D12Device();
+	void GenerateD3D12Device();
+
+	void StopErrorWarning();
 
 	void MakeCommandQueue();
 	
@@ -20,7 +22,11 @@ public:
 	
 	void MakeSwapChain(int32_t windowsizeWidth, int32_t windowsizeHeight,HWND hwnd_);
 
-	void StopErrorWarning();
+	void MakeDescriptorHeap();
+
+	void PullResourcesFromSwapChain();
+
+	void MakeRTV();
 
 
 
@@ -64,9 +70,7 @@ private:
 
 	ID3D12Fence* fence_ = nullptr;
 
-	ID3D12DescriptorHeap* rtvDescriptorHeap_ = nullptr;
-
-	ID3D12Resource* swapChainResources_[2] = { nullptr };
+	
 
 	
 
@@ -95,7 +99,21 @@ private:
 
 	IDXGISwapChain4* swapChain_ = nullptr;
 	
+	ID3D12Resource* swapChainResources_[2] = { nullptr };
 
+	ID3D12DescriptorHeap* rtvDescriptorHeap_ = nullptr;
+
+	D3D12_DESCRIPTOR_HEAP_DESC rtvDescriptorHeapDesc_{};
+
+
+
+	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc_{};
+	D3D12_CPU_DESCRIPTOR_HANDLE rtvStartHandle_;
+	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandles_[2] = {};
+
+	typedef struct D3D12_CPU_DESCRIPTOR_HANDLE {
+		SIZE_T ptr;
+	}D3D12_CPU_DESCRIPTOR_HANDLE;
 
 #pragma region DXCの初期化について
 	IDxcUtils* dxcUtils_ = nullptr;

@@ -40,7 +40,7 @@ void DirectXInitialization::SelectAdapter() {
 	assert(useAdapter_ != nullptr);
 }
 
-void DirectXInitialization::MakeD3D12Device() {
+void DirectXInitialization::GenerateD3D12Device() {
 	//機能レベルとログ出力用の文字
 	D3D_FEATURE_LEVEL featureLevels[] = {
 		D3D_FEATURE_LEVEL_12_2,
@@ -67,6 +67,54 @@ void DirectXInitialization::MakeD3D12Device() {
 
 
 }
+
+void DirectXInitialization::StopErrorWarning() {
+		////エラー・警告、即ち停止
+#ifdef _DEBUG
+	//ID3D12InfoQueue* infoQueue_ = nullptr;
+	if (SUCCEEDED(device_->QueryInterface(IID_PPV_ARGS(&infoQueue_)))) {
+		//ヤバいエラー時に止まる
+		infoQueue_->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_CORRUPTION, true);
+		//エラー時に止まる
+		infoQueue_->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_ERROR, true);
+		//警告時に止まる
+		////全ての情報を出す
+		//以下をコメントアウト
+		//大丈夫だった場合元に戻してあげる
+		infoQueue_->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_WARNING, true);
+		
+		////エラーと警告の抑制
+		//Windowsの不具合だと解消できない
+		//その時に停止させないよう特定のエラーや警告を無視するしかない
+
+		//抑制するメッセージのID 		
+		D3D12_MESSAGE_ID denyIds[] = {
+			//Windows11でのDXGデバッグれーやーとDX12デバッグレイヤーの相互作用バグによるエラーメッセージ
+			D3D12_MESSAGE_ID_RESOURCE_BARRIER_MISMATCHING_COMMAND_LIST_TYPE
+		};
+
+		//抑制する
+		D3D12_MESSAGE_SEVERITY severities[] = { D3D12_MESSAGE_SEVERITY_INFO };
+		D3D12_INFO_QUEUE_FILTER filter{};
+		filter.DenyList.NumIDs = _countof(denyIds);
+		filter.DenyList.pIDList = denyIds;
+		filter.DenyList.NumSeverities = _countof(severities);
+		filter.DenyList.pSeverityList = severities;
+		//指定したメッセージの表示を抑制する
+		infoQueue_->PushStorageFilter(&filter);
+		
+		//解放
+		infoQueue_->Release();
+
+		
+
+
+
+	}
+
+#endif 
+}
+
 
 void DirectXInitialization::MakeCommandQueue() {
 	
@@ -121,53 +169,44 @@ void DirectXInitialization::MakeSwapChain(int32_t windowsizeWidth, int32_t windo
 
 }
 
-void DirectXInitialization::StopErrorWarning() {
-		////エラー・警告、即ち停止
-#ifdef _DEBUG
-	//ID3D12InfoQueue* infoQueue_ = nullptr;
-	if (SUCCEEDED(device_->QueryInterface(IID_PPV_ARGS(&infoQueue_)))) {
-		//ヤバいエラー時に止まる
-		infoQueue_->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_CORRUPTION, true);
-		//エラー時に止まる
-		infoQueue_->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_ERROR, true);
-		//警告時に止まる
-		////全ての情報を出す
-		//以下をコメントアウト
-		//大丈夫だった場合元に戻してあげる
-		infoQueue_->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_WARNING, true);
-		
-		////エラーと警告の抑制
-		//Windowsの不具合だと解消できない
-		//その時に停止させないよう特定のエラーや警告を無視するしかない
-
-		//抑制するメッセージのID 		
-		D3D12_MESSAGE_ID denyIds[] = {
-			//Windows11でのDXGデバッグれーやーとDX12デバッグレイヤーの相互作用バグによるエラーメッセージ
-			D3D12_MESSAGE_ID_RESOURCE_BARRIER_MISMATCHING_COMMAND_LIST_TYPE
-		};
-
-		//抑制する
-		D3D12_MESSAGE_SEVERITY severities[] = { D3D12_MESSAGE_SEVERITY_INFO };
-		D3D12_INFO_QUEUE_FILTER filter{};
-		filter.DenyList.NumIDs = _countof(denyIds);
-		filter.DenyList.pIDList = denyIds;
-		filter.DenyList.NumSeverities = _countof(severities);
-		filter.DenyList.pSeverityList = severities;
-		//指定したメッセージの表示を抑制する
-		infoQueue_->PushStorageFilter(&filter);
-		
-		//解放
-		infoQueue_->Release();
-
-		
-
-
-
-	}
-
-#endif 
+void DirectXInitialization::MakeDescriptorHeap() {
+	//ID3D12DescriptorHeap* rtvDescriptorHeap_ = nullptr;
+	
+	rtvDescriptorHeapDesc_.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;	//レンダーターゲットビュー用
+	rtvDescriptorHeapDesc_.NumDescriptors = 2;						//ダブルバッファ用に２つ。多くてもOK
+	hr_ = device_->CreateDescriptorHeap(&rtvDescriptorHeapDesc_, IID_PPV_ARGS(&rtvDescriptorHeap_));
+	//ディスクリプタヒープが作れなかったので起動できない
+	assert(SUCCEEDED(hr_));
 }
 
+void DirectXInitialization::PullResourcesFromSwapChain() {
+	//ID3D12Resource* swapChainResources_[2] = { nullptr };
+	hr_ = swapChain_->GetBuffer(0, IID_PPV_ARGS(&swapChainResources_[0]));
+	//上手く取得できなければ起動できない
+	assert(SUCCEEDED(hr_));
+	hr_ = swapChain_->GetBuffer(1, IID_PPV_ARGS(&swapChainResources_[1]));
+	assert(SUCCEEDED(hr_));
+
+}
+
+void DirectXInitialization::MakeRTV() {
+	//RTVの設定
+	//D3D12_RENDER_TARGET_VIEW_DESC rtvDesc{};
+	rtvDesc_.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;				//出力結果をSRGBに変換して書き込む
+	rtvDesc_.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;			//2dテクスチャとして書き込む
+	//ディスクリプタの先頭を取得する
+	rtvStartHandle_ = rtvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart();
+	//RTVを２つ作るのでディスクリプタを２つ用意
+	//D3D12_CPU_DESCRIPTOR_HANDLE rtvHandles[2] = {};
+	//まず1つ目を作る。１つ目は最初の所に作る。作る場所をこちらで指定してあげる必要がある
+	rtvHandles_[0] = rtvStartHandle_;
+	device_->CreateRenderTargetView(swapChainResources_[0], &rtvDesc_, rtvHandles_[0]);
+	//２つ目のディスクリプタハンドルを得る(自力で)
+	rtvHandles_[1].ptr = rtvHandles_[0].ptr + device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+	//２つ目を作る
+	device_->CreateRenderTargetView(swapChainResources_[1], &rtvDesc_, rtvHandles_[1]);
+
+}
 
 
 
@@ -205,55 +244,10 @@ void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t wi
 	SelectAdapter();
 	
 	//D3D12Deviceの生成
-	MakeD3D12Device();
+	GenerateD3D12Device();
 
 
-	
-//	////エラー・警告、即ち停止
-//#ifdef _DEBUG
-//	//ID3D12InfoQueue* infoQueue_ = nullptr;
-//	if (SUCCEEDED(device_->QueryInterface(IID_PPV_ARGS(&infoQueue_)))) {
-//		//ヤバいエラー時に止まる
-//		infoQueue_->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_CORRUPTION, true);
-//		//エラー時に止まる
-//		infoQueue_->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_ERROR, true);
-//		//警告時に止まる
-//		////全ての情報を出す
-//		//以下をコメントアウト
-//		//大丈夫だった場合元に戻してあげる
-//		infoQueue_->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_WARNING, true);
-//		
-//		////エラーと警告の抑制
-//		//Windowsの不具合だと解消できない
-//		//その時に停止させないよう特定のエラーや警告を無視するしかない
-//
-//		//抑制するメッセージのID 		
-//		D3D12_MESSAGE_ID denyIds[] = {
-//			//Windows11でのDXGデバッグれーやーとDX12デバッグレイヤーの相互作用バグによるエラーメッセージ
-//			D3D12_MESSAGE_ID_RESOURCE_BARRIER_MISMATCHING_COMMAND_LIST_TYPE
-//		};
-//
-//		//抑制する
-//		D3D12_MESSAGE_SEVERITY severities[] = { D3D12_MESSAGE_SEVERITY_INFO };
-//		D3D12_INFO_QUEUE_FILTER filter{};
-//		filter.DenyList.NumIDs = _countof(denyIds);
-//		filter.DenyList.pIDList = denyIds;
-//		filter.DenyList.NumSeverities = _countof(severities);
-//		filter.DenyList.pSeverityList = severities;
-//		//指定したメッセージの表示を抑制する
-//		infoQueue_->PushStorageFilter(&filter);
-//		
-//		//解放
-//		infoQueue_->Release();
-//
-//		
-//
-//
-//
-//	}
-//
-//#endif 
-
+	////エラー・警告、即ち停止
 	StopErrorWarning();
 
 	//ここまで↑↑↑
@@ -268,10 +262,12 @@ void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t wi
 	MakeSwapChain(windowsizeWidth_, windowsizeHeight_, hwnd_);
 	
 
+
+
+
+
 	//Resource...DirectX12が管理しているGPU上のメモリであり、このデータのこと
 	//View...Resourceに対してどのような処理を行うのか手順をまとめたもの
-
-
 
 	//Descriptor...view(作業方法)の情報を格納している場所
 	//DescriptorHeap...Descriptorを束ねたもの
@@ -284,40 +280,16 @@ void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t wi
 
 	////DescriptorHeap(RTV用)を生成する
 	//ディスクリプタヒープの生成
-	//ID3D12DescriptorHeap* rtvDescriptorHeap_ = nullptr;
-	D3D12_DESCRIPTOR_HEAP_DESC rtvDescriptorHeapDesc{};
-	rtvDescriptorHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;	//レンダーターゲットビュー用
-	rtvDescriptorHeapDesc.NumDescriptors = 2;						//ダブルバッファ用に２つ。多くてもOK
-	hr_ = device_->CreateDescriptorHeap(&rtvDescriptorHeapDesc, IID_PPV_ARGS(&rtvDescriptorHeap_));
-	//ディスクリプタヒープが作れなかったので起動できない
-	assert(SUCCEEDED(hr_));
+	MakeDescriptorHeap();
+
 
 	////SwapChainからResourceを引っ張ってくる
-	//ID3D12Resource* swapChainResources_[2] = { nullptr };
-	hr_ = swapChain_->GetBuffer(0, IID_PPV_ARGS(&swapChainResources_[0]));
-	//上手く取得できなければ起動できない
-	assert(SUCCEEDED(hr_));
-	hr_ = swapChain_->GetBuffer(1, IID_PPV_ARGS(&swapChainResources_[1]));
-	assert(SUCCEEDED(hr_));
+	PullResourcesFromSwapChain();
+
 
 
 	////RTVを作る
-	//RTVの設定
-	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc{};
-	rtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;				//出力結果をSRGBに変換して書き込む
-	rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;			//2dテクスチャとして書き込む
-	//ディスクリプタの先頭を取得する
-	D3D12_CPU_DESCRIPTOR_HANDLE rtvStartHandle = rtvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart();
-	//RTVを２つ作るのでディスクリプタを２つ用意
-	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandles[2] = {};
-	//まず1つ目を作る。１つ目は最初の所に作る。作る場所をこちらで指定してあげる必要がある
-	rtvHandles[0] = rtvStartHandle;
-	device_->CreateRenderTargetView(swapChainResources_[0], &rtvDesc, rtvHandles[0]);
-	//２つ目のディスクリプタハンドルを得る(自力で)
-	rtvHandles[1].ptr = rtvHandles[0].ptr + device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
-	//２つ目を作る
-	device_->CreateRenderTargetView(swapChainResources_[1], &rtvDesc, rtvHandles[1]);
-
+	MakeRTV();
 
 
 
@@ -326,15 +298,13 @@ void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t wi
 
 
 	////DescriptorHandleとDescriptorHeap
-	typedef struct D3D12_CPU_DESCRIPTOR_HANDLE {
-		SIZE_T ptr;
-	}D3D12_CPU_DESCRIPTOR_HANDLE;
+	
 
 	////Descriptorの位置を決める
-	rtvHandles[0] = rtvStartHandle;
+	rtvHandles_[0] = rtvStartHandle_;
 
 	///////
-	rtvHandles[1].ptr = rtvHandles[0].ptr + device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+	rtvHandles_[1].ptr = rtvHandles_[0].ptr + device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 	///////
 
 	////コマンドをキックする
@@ -386,10 +356,10 @@ void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t wi
 
 
 	//描画先のRTVを設定する
-	commandList_->OMSetRenderTargets(1, &rtvHandles[backBufferIndex], false, nullptr);
+	commandList_->OMSetRenderTargets(1, &rtvHandles_[backBufferIndex], false, nullptr);
 	//指定した色で画面全体をクリアする
 	float clearColor[] = { 0.1f,0.25f,0.5f,1.0f };	//青っぽい色,RGBA
-	commandList_->ClearRenderTargetView(rtvHandles[backBufferIndex], clearColor, 0, nullptr);
+	commandList_->ClearRenderTargetView(rtvHandles_[backBufferIndex], clearColor, 0, nullptr);
 
 
 	//////////PSO

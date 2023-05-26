@@ -2,6 +2,16 @@
 #include "Function.h"
 
 
+void DirectXInitialization::MakeDXGIFactory() {
+	//DXGIファクトリーの生成
+	//IDXGIFactory7* dxgiFactory_ = nullptr;
+	//関数が成功したかSUCCEEDEDでマクロで判定できる
+	hr_ = CreateDXGIFactory(IID_PPV_ARGS(&dxgiFactory_));
+	//初期でエラーが発生した場合どうにもできないのでassert
+	assert(SUCCEEDED(hr_));
+
+}
+
 void DirectXInitialization::SelectAdapter() {
 	//仕様するアダプタ用の変数、最初にnullptrを入れておく
 	//IDXGIAdapter4* useAdapter_ = nullptr;
@@ -30,25 +40,7 @@ void DirectXInitialization::SelectAdapter() {
 	assert(useAdapter_ != nullptr);
 }
 
-
-
-
-
-void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t windowsizeHeight,HWND hwnd_) {
-	///////////////
-	//IDXGIFactory7* dxgiFactory_ = nullptr;
-	//関数が成功したかSUCCEEDEDでマクロで判定できる
-	hr_ = CreateDXGIFactory(IID_PPV_ARGS(&dxgiFactory_));
-	//初期でエラーが発生した場合どうにもできないのでassert
-	assert(SUCCEEDED(hr_));
-
-	////////////
-
-
-	SelectAdapter();
-	
-
-	//ID3D12Device* device_ = nullptr;
+void DirectXInitialization::MakeD3D12Device() {
 	//機能レベルとログ出力用の文字
 	D3D_FEATURE_LEVEL featureLevels[] = {
 		D3D_FEATURE_LEVEL_12_2,
@@ -74,7 +66,63 @@ void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t wi
 	Log("Complete create D3D12Device!!!\n");
 
 
-	////エラー・警告、即ち停止
+}
+
+void DirectXInitialization::MakeCommandQueue() {
+	
+	////GPUに作業させよう
+	//コマンドキューを生成する
+	hr_ = device_->CreateCommandQueue(&commandQueueDesc_, IID_PPV_ARGS(&commandQueue_));
+	//コマンドキューの生成が上手くいかなかったので起動できない
+	assert(SUCCEEDED(hr_));
+
+}
+
+
+void DirectXInitialization::MakeCommandList() {
+	//CommandListを生成する
+	//コマンドアロケータを生成する
+	//ID3D12CommandAllocator* commandAllocator_ = nullptr;
+	hr_ = device_->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&commandAllocator_));
+	//コマンドアロケータの生成が上手くいかなかったので起動できない
+	assert(SUCCEEDED(hr_));
+
+	//コマンドリストを生成する
+	//ID3D12GraphicsCommandList* commandList_ = nullptr;
+	hr_ = device_->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, commandAllocator_, nullptr, IID_PPV_ARGS(&commandList_));
+
+	//コマンドリストの生成が上手くいかなかったので起動できない
+	assert(SUCCEEDED(hr_));
+
+
+}
+
+
+void DirectXInitialization::MakeSwapChain(int32_t windowsizeWidth, int32_t windowsizeHeight,HWND hwnd_) {
+	
+	//60fpsそのまま映すと大変なので2枚用意して
+	//描画(フロントバッファ)と表示(バックバッファ、プライマリバッファ)に分ける。
+	//このことをダブルバッファリングという。
+	//IDXGISwapChain4* swapChain_ = nullptr;
+	DXGI_SWAP_CHAIN_DESC1 swapChainDesc{};
+	swapChainDesc.Width = windowsizeWidth;							//画面の幅。ウィンドウのクライアント領域を同じものにしておく
+	swapChainDesc.Height = windowsizeHeight;						//画面の高さ。ウィンドウのクライアント領域を同じものにしておく
+	swapChainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;			//色の形式
+	swapChainDesc.SampleDesc.Count = 1;							//マルチサンプルしない
+	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;//描画のターゲットとして利用する
+	swapChainDesc.BufferCount = 2;								//ダブルバッファ
+	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;	//モニタにうつしたら中身を破棄
+
+
+	//コマンドキュー、ウィンドウハンドル、設定を渡して生成する
+	hr_ = dxgiFactory_->CreateSwapChainForHwnd(commandQueue_,hwnd_, &swapChainDesc, nullptr, nullptr, reinterpret_cast<IDXGISwapChain1**>(&swapChain_));
+	assert(SUCCEEDED(hr_));
+
+
+}
+
+void DirectXInitialization::StopErrorWarning() {
+		////エラー・警告、即ち停止
 #ifdef _DEBUG
 	//ID3D12InfoQueue* infoQueue_ = nullptr;
 	if (SUCCEEDED(device_->QueryInterface(IID_PPV_ARGS(&infoQueue_)))) {
@@ -87,9 +135,7 @@ void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t wi
 		//以下をコメントアウト
 		//大丈夫だった場合元に戻してあげる
 		infoQueue_->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_WARNING, true);
-		//解放
-		infoQueue_->Release();
-
+		
 		////エラーと警告の抑制
 		//Windowsの不具合だと解消できない
 		//その時に停止させないよう特定のエラーや警告を無視するしかない
@@ -109,54 +155,118 @@ void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t wi
 		filter.DenyList.pSeverityList = severities;
 		//指定したメッセージの表示を抑制する
 		infoQueue_->PushStorageFilter(&filter);
+		
+		//解放
+		infoQueue_->Release();
+
+		
 
 
 
 	}
 
 #endif 
+}
 
+
+
+
+
+
+void DirectXInitialization::DXCInitialize() {
+	////DXCの初期化
+	//dxcCompilerを初期化
+	//IDxcUtils* dxcUtils_ = nullptr;
+	//IDxcCompiler3* dxcCompiler_ = nullptr;
+	hr_ = DxcCreateInstance(CLSID_DxcUtils, IID_PPV_ARGS(&dxcUtils_));
+	assert(SUCCEEDED(hr_));
+	hr_ = DxcCreateInstance(CLSID_DxcCompiler, IID_PPV_ARGS(&dxcCompiler_));
+	assert(SUCCEEDED(hr_));
+
+	//現時点でincludeはしないが、includeに対応
+	//IDxcIncludeHandler* includeHandler_ = nullptr;
+	hr_ = dxcUtils_->CreateDefaultIncludeHandler(&includeHandler_);
+	assert(SUCCEEDED(hr_));
+
+
+
+	//dxcUtils
+	//dxcCompiler
+	//includeHandler
+
+}
+
+
+void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t windowsizeHeight,HWND hwnd_) {
+	//DXGIファクトリーの生成
+	MakeDXGIFactory();
+
+	//使用するアダプターを決める
+	SelectAdapter();
+	
+	//D3D12Deviceの生成
+	MakeD3D12Device();
+
+
+	
+//	////エラー・警告、即ち停止
+//#ifdef _DEBUG
+//	//ID3D12InfoQueue* infoQueue_ = nullptr;
+//	if (SUCCEEDED(device_->QueryInterface(IID_PPV_ARGS(&infoQueue_)))) {
+//		//ヤバいエラー時に止まる
+//		infoQueue_->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_CORRUPTION, true);
+//		//エラー時に止まる
+//		infoQueue_->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_ERROR, true);
+//		//警告時に止まる
+//		////全ての情報を出す
+//		//以下をコメントアウト
+//		//大丈夫だった場合元に戻してあげる
+//		infoQueue_->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_WARNING, true);
+//		
+//		////エラーと警告の抑制
+//		//Windowsの不具合だと解消できない
+//		//その時に停止させないよう特定のエラーや警告を無視するしかない
+//
+//		//抑制するメッセージのID 		
+//		D3D12_MESSAGE_ID denyIds[] = {
+//			//Windows11でのDXGデバッグれーやーとDX12デバッグレイヤーの相互作用バグによるエラーメッセージ
+//			D3D12_MESSAGE_ID_RESOURCE_BARRIER_MISMATCHING_COMMAND_LIST_TYPE
+//		};
+//
+//		//抑制する
+//		D3D12_MESSAGE_SEVERITY severities[] = { D3D12_MESSAGE_SEVERITY_INFO };
+//		D3D12_INFO_QUEUE_FILTER filter{};
+//		filter.DenyList.NumIDs = _countof(denyIds);
+//		filter.DenyList.pIDList = denyIds;
+//		filter.DenyList.NumSeverities = _countof(severities);
+//		filter.DenyList.pSeverityList = severities;
+//		//指定したメッセージの表示を抑制する
+//		infoQueue_->PushStorageFilter(&filter);
+//		
+//		//解放
+//		infoQueue_->Release();
+//
+//		
+//
+//
+//
+//	}
+//
+//#endif 
+
+	StopErrorWarning();
 
 	//ここまで↑↑↑
-	////GPUに作業させよう
-	//コマンドキューを生成する
-	//ID3D12CommandQueue* commandQueue_ = nullptr;
-	D3D12_COMMAND_QUEUE_DESC commandQueueDesc{};
-	hr_ = device_->CreateCommandQueue(&commandQueueDesc, IID_PPV_ARGS(&commandQueue_));
-	//コマンドキューの生成が上手くいかなかったので起動できない
-	assert(SUCCEEDED(hr_));
+	
+	//CommandQueueを生成する
+	MakeCommandQueue();
 
-	//コマンドアロケータを生成する
-	//ID3D12CommandAllocator* commandAllocator_ = nullptr;
-	hr_ = device_->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&commandAllocator_));
-	//コマンドアロケータの生成が上手くいかなかったので起動できない
-	assert(SUCCEEDED(hr_));
-
-	//コマンドリストを生成する
-	//ID3D12GraphicsCommandList* commandList_ = nullptr;
-	hr_ = device_->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, commandAllocator_, nullptr, IID_PPV_ARGS(&commandList_));
-
-	//コマンドリストの生成が上手くいかなかったので起動できない
-	assert(SUCCEEDED(hr_));
+	//CommandListを生成する
+	MakeCommandList();
 
 	//スワップチェーンを生成する
-	//60fpsそのまま映すと大変なので2枚用意して
-	//描画(フロントバッファ)と表示(バックバッファ、プライマリバッファ)に分ける。
-	//このことをダブルバッファリングという。
-	//IDXGISwapChain4* swapChain_ = nullptr;
-	DXGI_SWAP_CHAIN_DESC1 swapChainDesc{};
-	swapChainDesc.Width = windowsizeWidth;							//画面の幅。ウィンドウのクライアント領域を同じものにしておく
-	swapChainDesc.Height = windowsizeHeight;						//画面の高さ。ウィンドウのクライアント領域を同じものにしておく
-	swapChainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;			//色の形式
-	swapChainDesc.SampleDesc.Count = 1;							//マルチサンプルしない
-	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;//描画のターゲットとして利用する
-	swapChainDesc.BufferCount = 2;								//ダブルバッファ
-	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;	//モニタにうつしたら中身を破棄
-
-
-	//コマンドキュー、ウィンドウハンドル、設定を渡して生成する
-	hr_ = dxgiFactory_->CreateSwapChainForHwnd(commandQueue_,hwnd_, &swapChainDesc, nullptr, nullptr, reinterpret_cast<IDXGISwapChain1**>(&swapChain_));
-	assert(SUCCEEDED(hr_));
+	MakeSwapChain(windowsizeWidth_, windowsizeHeight_, hwnd_);
+	
 
 	//Resource...DirectX12が管理しているGPU上のメモリであり、このデータのこと
 	//View...Resourceに対してどのような処理を行うのか手順をまとめたもの
@@ -268,21 +378,10 @@ void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t wi
 
 
 
-	////DXCの初期化
-	//dxcCompilerを初期化
-	IDxcUtils* dxcUtils = nullptr;
-	IDxcCompiler3* dxcCompiler = nullptr;
-	hr_ = DxcCreateInstance(CLSID_DxcUtils, IID_PPV_ARGS(&dxcUtils));
-	assert(SUCCEEDED(hr_));
-	hr_ = DxcCreateInstance(CLSID_DxcCompiler, IID_PPV_ARGS(&dxcCompiler));
-	assert(SUCCEEDED(hr_));
-
-	//現時点でincludeはしないが、includeに対応
-	IDxcIncludeHandler* includeHandler = nullptr;
-	hr_ = dxcUtils->CreateDefaultIncludeHandler(&includeHandler);
-	assert(SUCCEEDED(hr_));
 
 
+
+	DXCInitialize();
 
 
 
@@ -355,10 +454,10 @@ void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t wi
 
 
 	//ShaderをCompileする
-	vertexShaderBlob_ = CompileShader(L"Object3d.VS.hlsl", L"vs_6_0", dxcUtils, dxcCompiler, includeHandler);
+	vertexShaderBlob_ = CompileShader(L"Object3d.VS.hlsl", L"vs_6_0", dxcUtils_, dxcCompiler_, includeHandler_);
 	assert(vertexShaderBlob_ != nullptr);
 
-	pixelShaderBlob_ = CompileShader(L"Object3d.PS.hlsl", L"ps_6_0", dxcUtils, dxcCompiler, includeHandler);
+	pixelShaderBlob_ = CompileShader(L"Object3d.PS.hlsl", L"ps_6_0", dxcUtils_, dxcCompiler_, includeHandler_);
 	assert(pixelShaderBlob_ != nullptr);
 
 
@@ -387,6 +486,14 @@ void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t wi
 	hr_ = device_->CreateGraphicsPipelineState(&graphicsPipelineStateDesc,
 		IID_PPV_ARGS(&graphicsPipelineState_));
 	assert(SUCCEEDED(hr_));
+
+
+
+
+
+
+
+
 
 
 
@@ -434,7 +541,6 @@ void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t wi
 	vertexBufferView.StrideInBytes = sizeof(Vector4);
 
 
-	
 
 
 	//Resourceにデータを書き込む
@@ -612,6 +718,8 @@ void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t wi
 
 
 }
+
+
 
 void DirectXInitialization::DirectXRelease() {
 	//////解放処理

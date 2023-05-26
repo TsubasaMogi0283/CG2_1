@@ -75,6 +75,8 @@ private:
 	ID3D12Resource* vertexResource1_ = nullptr;
 
 	ID3D12PipelineState* graphicsPipelineState_ = nullptr;
+	ID3D12PipelineState* graphicsPipelineState2_ = nullptr;
+
 
 	ID3DBlob* signatureBlob_ = nullptr;
 

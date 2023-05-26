@@ -314,6 +314,8 @@ void DirectXInitialization::DXCInitialize() {
 
 
 void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t windowsizeHeight,HWND hwnd_) {
+
+
 	//DXGIファクトリーの生成
 	MakeDXGIFactory();
 
@@ -407,17 +409,9 @@ void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t wi
 	////TransitionBarrierを張るコード
 	//現在のResourceStateを設定する必要がある → ResorceがどんなStateなのかを追跡する必要がある
 	//追跡する仕組みはStateTrackingという
-	
-
+	//
 	//TransitionBarrierの設定
 	StretchTransitionBarrier();
-
-
-	//描画先のRTVを設定する
-	commandList_->OMSetRenderTargets(1, &rtvHandles_[backBufferIndex_], false, nullptr);
-	//指定した色で画面全体をクリアする
-	float clearColor[] = { 0.1f,0.25f,0.5f,1.0f };	//青っぽい色,RGBA
-	commandList_->ClearRenderTargetView(rtvHandles_[backBufferIndex_], clearColor, 0, nullptr);
 
 
 
@@ -429,9 +423,20 @@ void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t wi
 	//一度DXIL(DirectX Intermediate Language)というドライバ用の形式に変換され、
 	//ドライバがGPU用のバイナリに変更しやっと実行されるよ。手間だね。
 	// 
-	//DXC(DirectX Shader Compiler)がHLSLからDXILにするCompilerである
-	
+	// DXC(DirectX Shader Compiler)がHLSLからDXILにするCompilerである
+	//
 	DXCInitialize();
+
+
+
+	//描画先のRTVを設定する
+	commandList_->OMSetRenderTargets(1, &rtvHandles_[backBufferIndex_], false, nullptr);
+	//指定した色で画面全体をクリアする
+	float clearColor[] = { 0.1f,0.25f,0.5f,1.0f };	//青っぽい色,RGBA
+	commandList_->ClearRenderTargetView(rtvHandles_[backBufferIndex_], clearColor, 0, nullptr);
+
+
+
 
 
 
@@ -658,54 +663,55 @@ void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t wi
 
 
 
-	//////キックしただけ
-	////ExcuteCommandList・・・GPUに命令をキックして、GPU処理を開始させたもの
-	////						 つまりコマンドを投げただけ
-	////GPUが動いている時にメモリは解放しないでねということ
-	////GPU処理の処理が終わってからResetしてね
-
-	//////FenceとEvent
-	////Fence・・・CPUとGPUの同期を取るために利用するオブジェクト。
-	////			 GPUで値を書き込み、CPUで値を読み取ったりWindowsにメッセージ(Event)を送ったりできる
-	////			 理想を実現するためのもの
-	////Event・・・Windowsへのメッセージなどのこと
-	//GenerateFenceEvent();
 
 
 
 
-	////コマンドリストの内容を確定させる。全てのコマンドを積んでからCloseすること
-	//hr_ = commandList_->Close();
-	//assert(SUCCEEDED(hr_));
+	////キックしただけ
+	//ExcuteCommandList・・・GPUに命令をキックして、GPU処理を開始させたもの
+	//						 つまりコマンドを投げただけ
+	//GPUが動いている時にメモリは解放しないでねということ
+	//GPU処理の処理が終わってからResetしてね
 
-
-	////コマンドをキックする
-	//KickCommand();
-
-	//
-
-	//////GPUにSignalを送る
-	////GPUの実行完了が目的
-	////1.GPUに実行が完了したタイミングでFEnceに指定した値を書き込んでもらう
-	////  GPUに対してSignalを発行する
-	////	Signal・・・GPUの指定の場所までたどり着いたら、指定の値を書き込んでもらうお願いのこと
-	////2.CPUではFenceに指定した値が書き込まれているかを確認する
-	////3.指定した値が書き込まれていない場合は、書き込まれるまで待つ
-
-	//SendSignalToGPU();
-	//
-
-	////Fenceの値が指定したSignal値にたどりついているか確認する
-	//CheckFence();
-	//
-
-	////次のフレーム用のコマンドリストを準備
-	//ReadyForNextCommandList();
+	////FenceとEvent
+	//Fence・・・CPUとGPUの同期を取るために利用するオブジェクト。
+	//			 GPUで値を書き込み、CPUで値を読み取ったりWindowsにメッセージ(Event)を送ったりできる
+	//			 理想を実現するためのもの
+	//Event・・・Windowsへのメッセージなどのこと
+	GenerateFenceEvent();
 
 
 
+
+	//コマンドリストの内容を確定させる。全てのコマンドを積んでからCloseすること
+	hr_ = commandList_->Close();
+	assert(SUCCEEDED(hr_));
+
+
+	//コマンドをキックする
+	KickCommand();
 
 	
+
+	////GPUにSignalを送る
+	//GPUの実行完了が目的
+	//1.GPUに実行が完了したタイミングでFEnceに指定した値を書き込んでもらう
+	//  GPUに対してSignalを発行する
+	//	Signal・・・GPUの指定の場所までたどり着いたら、指定の値を書き込んでもらうお願いのこと
+	//2.CPUではFenceに指定した値が書き込まれているかを確認する
+	//3.指定した値が書き込まれていない場合は、書き込まれるまで待つ
+
+	SendSignalToGPU();
+	
+
+	//Fenceの値が指定したSignal値にたどりついているか確認する
+	CheckFence();
+	
+
+	//次のフレーム用のコマンドリストを準備
+	ReadyForNextCommandList();
+
+
 
 }
 

@@ -1,4 +1,4 @@
-#include "HeaderCpp/CG_Class/Adapter.h"
+#include"Adapter.h"
 #define Triangle_Property_MAX 15
 
 struct  TriangleProperty

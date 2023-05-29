@@ -116,18 +116,16 @@ void DirectXInitialization::StopErrorWarning() {
 }
 
 
-void DirectXInitialization::MakeCommandQueue() {
-	
+
+
+
+void DirectXInitialization::MakeCommandList() {
 	////GPUに作業させよう
 	//コマンドキューを生成する
 	hr_ = device_->CreateCommandQueue(&commandQueueDesc_, IID_PPV_ARGS(&commandQueue_));
 	//コマンドキューの生成が上手くいかなかったので起動できない
 	assert(SUCCEEDED(hr_));
 
-}
-
-
-void DirectXInitialization::MakeCommandList() {
 	//CommandListを生成する
 	//コマンドアロケータを生成する
 	//ID3D12CommandAllocator* commandAllocator_ = nullptr;
@@ -208,45 +206,6 @@ void DirectXInitialization::MakeRTV() {
 
 }
 
-void DirectXInitialization::DecideDescriptorPoisition() {
-	rtvHandles_[0] = rtvStartHandle_;
-
-	rtvHandles_[1].ptr = rtvHandles_[0].ptr + device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
-	
-}
-
-void DirectXInitialization::LoadCommand() {
-
-}
-
-void DirectXInitialization::KickCommand() {
-	
-	//GPUにコマンドリストの実行を行わせる
-	ID3D12CommandList* commandLists[] = { commandList_ };
-	commandQueue_->ExecuteCommandLists(1, commandLists);
-	//GPUとOSに画面の交換を行うよう通知する
-	swapChain_->Present(1, 0);
-
-}
-
-void DirectXInitialization::StretchTransitionBarrier() {
-	
-	//今回のバリアはTransition
-	barrier_.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-	//Noneにする
-	barrier_.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-	//バリアを張る対象のリソース。現在のバックバッファに対して行う
-	barrier_.Transition.pResource = swapChainResources_[backBufferIndex_];
-	//遷移前(現在)のResourceState
-	barrier_.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT;
-
-	//遷移後のResourceState
-	barrier_.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
-	//TransitionBarrierを張る
-	commandList_->ResourceBarrier(1, &barrier_);
-
-}
-
 
 void DirectXInitialization::GenerateFenceEvent() {
 	//初期位置0でフェンスを作る
@@ -261,6 +220,30 @@ void DirectXInitialization::GenerateFenceEvent() {
 
 
 }
+
+
+
+void DirectXInitialization::DecideDescriptorPoisition() {
+	rtvHandles_[0] = rtvStartHandle_;
+
+	rtvHandles_[1].ptr = rtvHandles_[0].ptr + device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+	
+}
+
+
+
+void DirectXInitialization::KickCommand() {
+	
+	//GPUにコマンドリストの実行を行わせる
+	ID3D12CommandList* commandLists[] = { commandList_ };
+	commandQueue_->ExecuteCommandLists(1, commandLists);
+	//GPUとOSに画面の交換を行うよう通知する
+	swapChain_->Present(1, 0);
+
+}
+
+
+
 
 void DirectXInitialization::SendSignalToGPU() {
 	//Fenceの値を更新
@@ -299,12 +282,8 @@ void DirectXInitialization::DXCInitialize() {
 	hr_ = DxcCreateInstance(CLSID_DxcCompiler, IID_PPV_ARGS(&dxcCompiler_));
 	assert(SUCCEEDED(hr_));
 
-	//現時点でincludeはしないが、includeに対応
-	//IDxcIncludeHandler* includeHandler_ = nullptr;
-	hr_ = dxcUtils_->CreateDefaultIncludeHandler(&includeHandler_);
-	assert(SUCCEEDED(hr_));
-
-
+	
+	
 
 	//dxcUtils
 	//dxcCompiler
@@ -312,134 +291,11 @@ void DirectXInitialization::DXCInitialize() {
 
 }
 
-
-void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t windowsizeHeight,HWND hwnd_) {
-
-
-	//DXGIファクトリーの生成
-	MakeDXGIFactory();
-
-	//使用するアダプターを決める
-	SelectAdapter();
-	
-	//D3D12Deviceの生成
-	GenerateD3D12Device();
-
-
-	////エラー・警告、即ち停止
-	StopErrorWarning();
-
-	//ここまで↑↑↑
-	
-	//CommandQueueを生成する
-	MakeCommandQueue();
-
-	//CommandListを生成する
-	MakeCommandList();
-
-	//スワップチェーンを生成する
-	MakeSwapChain(windowsizeWidth_, windowsizeHeight_, hwnd_);
-	
-
-
-
-
-
-	//Resource...DirectX12が管理しているGPU上のメモリであり、このデータのこと
-	//View...Resourceに対してどのような処理を行うのか手順をまとめたもの
-
-	//Descriptor...view(作業方法)の情報を格納している場所
-	//DescriptorHeap...Descriptorを束ねたもの
-
-
-	//流れ
-	//1.DescriptorHeapを生成する
-	//2.swapChainからResourceを引っ張ってくる
-	//3.引っ張ってきたResourceに対してDescriptor上にRTVを作る
-
-	////DescriptorHeap(RTV用)を生成する
-	//ディスクリプタヒープの生成
-	MakeDescriptorHeap();
-
-
-	////SwapChainからResourceを引っ張ってくる
-	PullResourcesFromSwapChain();
-
-
-
-	////RTVを作る
-	MakeRTV();
-
-
-
-
-	////DescriptorHandleとDescriptorHeap
-	
-
-	////Descriptorの位置を決める
-	DecideDescriptorPoisition();
-
-	////コマンドをキックする
-	//コマンドを積む・・・CommandListに処理を追加していくこと
-	//キックする・・・CommandQueueCommandListを渡してGPUの実行を開始すること
-	//画面をクリアするためのコマンドを積み、キックし、メインループを完成させる
-
-	//処理の内容
-	//1.BackBufferを決定する
-	//2.書き込む作業(画面のクリア)をしたいのでRTVを設定する
-	//3.画面のクリアを行う
-	//4.CommandListを閉じる
-	//5.CommandListの実行(キック)
-	//6.画面のスワップ(BackBufferとFrontBufferを入れ替える)
-	//7.次のフレーム用にCommandListを再準備
-
-
-
-
-
-
-	////コマンドを積みこんで確定させる
-	//LoadCommand()
-	//これから書き込むバックバッファのインデックスを取得
-	backBufferIndex_ = swapChain_->GetCurrentBackBufferIndex();
-
-	////TransitionBarrierを張るコード
-	//現在のResourceStateを設定する必要がある → ResorceがどんなStateなのかを追跡する必要がある
-	//追跡する仕組みはStateTrackingという
-	//
-	//TransitionBarrierの設定
-	StretchTransitionBarrier();
-
-
-
-
-
-	//DXCの初期化
-	////ShaderCompile
-	//ShaderはHLSLによって記述されているが、GPUが解釈できる形ではない
-	//一度DXIL(DirectX Intermediate Language)というドライバ用の形式に変換され、
-	//ドライバがGPU用のバイナリに変更しやっと実行されるよ。手間だね。
-	// 
-	// DXC(DirectX Shader Compiler)がHLSLからDXILにするCompilerである
-	//
-	DXCInitialize();
-
-
-
-
-
-
-
-	//描画先のRTVを設定する
-	commandList_->OMSetRenderTargets(1, &rtvHandles_[backBufferIndex_], false, nullptr);
-	//指定した色で画面全体をクリアする
-	float clearColor[] = { 0.1f,0.25f,0.5f,1.0f };	//青っぽい色,RGBA
-	commandList_->ClearRenderTargetView(rtvHandles_[backBufferIndex_], clearColor, 0, nullptr);
-
-
-
-
-
+void DirectXInitialization::MakePSO() {
+	//現時点でincludeはしないが、includeに対応
+	//IDxcIncludeHandler* includeHandler_ = nullptr;
+	hr_ = dxcUtils_->CreateDefaultIncludeHandler(&includeHandler_);
+	assert(SUCCEEDED(hr_));
 
 	//////////PSO
 
@@ -542,17 +398,197 @@ void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t wi
 	assert(SUCCEEDED(hr_));
 
 
-
-
-
-	
-	vertexResource_->Release();
-	
+	vertexShaderBlob_->Release();	
 	pixelShaderBlob_->Release();
 
+}
+
+
+void DirectXInitialization::BeginFlame(const int32_t kClientWidth, const int32_t kClientHeight) {
+	///////
+	////コマンドを積みこんで確定させる
+	//LoadCommand()
+	//これから書き込むバックバッファのインデックスを取得
+	backBufferIndex_ = swapChain_->GetCurrentBackBufferIndex();
+
+	////TransitionBarrierを張るコード
+	//現在のResourceStateを設定する必要がある → ResorceがどんなStateなのかを追跡する必要がある
+	//追跡する仕組みはStateTrackingという
+	//
+	//TransitionBarrierの設定
+	//今回のバリアはTransition
+	barrier_.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+	//Noneにする
+	barrier_.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+	//バリアを張る対象のリソース。現在のバックバッファに対して行う
+	barrier_.Transition.pResource = swapChainResources_[backBufferIndex_];
+	//遷移前(現在)のResourceState
+	barrier_.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT;
+
+	//遷移後のResourceState
+	barrier_.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
+	//TransitionBarrierを張る
+	commandList_->ResourceBarrier(1, &barrier_);
 
 
 
+
+	
+
+
+	
+
+
+
+
+	//描画先のRTVを設定する
+	commandList_->OMSetRenderTargets(1, &rtvHandles_[backBufferIndex_], false, nullptr);
+	//指定した色で画面全体をクリアする
+	float clearColor[] = { 0.1f,0.25f,0.5f,1.0f };	//青っぽい色,RGBA
+	commandList_->ClearRenderTargetView(rtvHandles_[backBufferIndex_], clearColor, 0, nullptr);
+
+
+
+
+	////ViewportとScissor
+	//ビューポート
+	D3D12_VIEWPORT viewport{};
+	//クライアント領域のサイズと一緒にして画面全体に表示
+	viewport.Width = float(kClientWidth);
+	viewport.Height = float(kClientHeight);
+	viewport.TopLeftX = 0;
+	viewport.TopLeftY = 0;
+	viewport.MinDepth = 0.0f;
+	viewport.MaxDepth = 1.0f;
+
+	//シザー矩形 
+	D3D12_RECT scissorRect{};
+	//基本的にビューポートと同じ矩形が構成されるようにする
+	scissorRect.left = 0;
+	scissorRect.right = kClientWidth;
+	scissorRect.top = 0;
+	scissorRect.bottom = kClientHeight;
+
+
+
+	////コマンドを積む
+	commandList_->RSSetViewports(1, &viewport);
+	commandList_->RSSetScissorRects(1, &scissorRect);
+
+
+
+}
+
+
+
+void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t windowsizeHeight,HWND hwnd_) {
+
+
+	//DXGIファクトリーの生成
+	MakeDXGIFactory();
+
+	//使用するアダプターを決める
+	SelectAdapter();
+	
+	//D3D12Deviceの生成
+	GenerateD3D12Device();
+
+
+	////エラー・警告、即ち停止
+	StopErrorWarning();
+
+	//ここまで↑↑↑
+	
+	//CommandQueueを生成する
+	//CommandListを生成する
+	MakeCommandList();
+
+	//スワップチェーンを生成する
+	MakeSwapChain(windowsizeWidth_, windowsizeHeight_, hwnd_);
+	
+
+
+
+
+
+	//Resource...DirectX12が管理しているGPU上のメモリであり、このデータのこと
+	//View...Resourceに対してどのような処理を行うのか手順をまとめたもの
+
+	//Descriptor...view(作業方法)の情報を格納している場所
+	//DescriptorHeap...Descriptorを束ねたもの
+
+
+	//流れ
+	//1.DescriptorHeapを生成する
+	//2.swapChainからResourceを引っ張ってくる
+	//3.引っ張ってきたResourceに対してDescriptor上にRTVを作る
+
+	////DescriptorHeap(RTV用)を生成する
+	//ディスクリプタヒープの生成
+	MakeDescriptorHeap();
+
+
+	////SwapChainからResourceを引っ張ってくる
+	PullResourcesFromSwapChain();
+
+
+
+	////RTVを作る
+	MakeRTV();
+
+
+
+	//DXCの初期化
+	////ShaderCompile
+	//ShaderはHLSLによって記述されているが、GPUが解釈できる形ではない
+	//一度DXIL(DirectX Intermediate Language)というドライバ用の形式に変換され、
+	//ドライバがGPU用のバイナリに変更しやっと実行されるよ。手間だね。
+	// 
+	// DXC(DirectX Shader Compiler)がHLSLからDXILにするCompilerである
+	//
+	DXCInitialize();
+
+
+	
+	MakePSO();
+
+	////DescriptorHandleとDescriptorHeap
+	
+
+	////Descriptorの位置を決める
+	DecideDescriptorPoisition();
+
+	////コマンドをキックする
+	//コマンドを積む・・・CommandListに処理を追加していくこと
+	//キックする・・・CommandQueueCommandListを渡してGPUの実行を開始すること
+	//画面をクリアするためのコマンドを積み、キックし、メインループを完成させる
+
+	//処理の内容
+	//1.BackBufferを決定する
+	//2.書き込む作業(画面のクリア)をしたいのでRTVを設定する
+	//3.画面のクリアを行う
+	//4.CommandListを閉じる
+	//5.CommandListの実行(キック)
+	//6.画面のスワップ(BackBufferとFrontBufferを入れ替える)
+	//7.次のフレーム用にCommandListを再準備
+
+
+
+
+
+
+	BeginFlame(windowsizeWidth_,windowsizeHeight_);
+
+
+	
+
+
+
+
+
+
+
+	
 
 
 
@@ -633,33 +669,18 @@ void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t wi
 
 
 
-	////ViewportとScissor
-	//ビューポート
-	D3D12_VIEWPORT viewport{};
-	//クライアント領域のサイズと一緒にして画面全体に表示
-	viewport.Width = float(windowsizeWidth);
-	viewport.Height = float(windowsizeHeight);
-	viewport.TopLeftX = 0;
-	viewport.TopLeftY = 0;
-	viewport.MinDepth = 0.0f;
-	viewport.MaxDepth = 1.0f;
-
-	//シザー矩形 
-	D3D12_RECT scissorRect{};
-	//基本的にビューポートと同じ矩形が構成されるようにする
-	scissorRect.left = 0;
-	scissorRect.right = windowsizeWidth;
-	scissorRect.top = 0;
-	scissorRect.bottom = windowsizeHeight;
 
 
 
 
 
 
-	////コマンドを積む
-	commandList_->RSSetViewports(1, &viewport);
-	commandList_->RSSetScissorRects(1, &scissorRect);
+	
+
+
+
+
+	
 	//RootSignatureを設定。PSOに設定しているけど別途設定が必要
 	commandList_->SetGraphicsRootSignature(rootSignature_);
 	commandList_->SetPipelineState(graphicsPipelineState_);
@@ -753,8 +774,8 @@ void DirectXInitialization::DirectXRelease() {
 	if (errorBlob_) {
 		errorBlob_->Release();
 	}
+	vertexResource_->Release();
 	rootSignature_->Release();
-	vertexShaderBlob_->Release();
 
 
 

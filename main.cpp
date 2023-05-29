@@ -162,6 +162,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
+
+			
+
 		}
 		else {
 			//ゲームの処理
@@ -170,16 +173,26 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 		}
+		directX->BeginFlame(kClientWidth, kClientHeight);
 
+
+		for (int i = 0; i < TRIANGLE_AMOUNT_MAX; i++) {
+			//描画処理
+		}
+
+		directX->EndFlame();
 	}
 
 	
+
+
+
 
 	//解放処理
 	window1->WindowReset();
 	directX->DirectXRelease();
 
-	CloseWindow(window1->GetHwnd());
+	//CloseWindow(window1->GetHwnd());
 
 
 

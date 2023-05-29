@@ -16,7 +16,6 @@ public:
 
 	void StopErrorWarning();
 
-	void MakeCommandQueue();
 	
 	void MakeCommandList();
 	
@@ -36,13 +35,14 @@ public:
 
 	void ReadyForNextCommandList();
 
-	void StretchTransitionBarrier();
 
 	void GenerateFenceEvent();
 
 	void SendSignalToGPU();
 
 	void CheckFence();
+
+	void MakePSO();
 
 
 
@@ -149,7 +149,7 @@ private:
 
 
 
-	Commands commands;
+	//Commands commands;
 
 
 

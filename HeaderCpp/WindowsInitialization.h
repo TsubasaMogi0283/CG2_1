@@ -8,14 +8,15 @@ public:
 
 	static LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 	
-	WindowsInitialization(const wchar_t* title, const int32_t kClientWidth, const int32_t kClientHeight);
+	WindowsInitialization();
 
 
 
-	void WindowInitialize();
+	void WindowInitialize(const wchar_t* title, const int32_t kClientWidth, const int32_t kClientHeight);
 
 	void WindowReset();
 
+	void Close();
 
 
 	int GetClientWidth() {
@@ -37,6 +38,8 @@ public:
 	ID3D12Debug1* debugController_ = nullptr;
 
 	HWND hwnd_;
+
+	WNDCLASS wc_{};
 
 	const wchar_t* title_;
 	int32_t kClientWidth_;

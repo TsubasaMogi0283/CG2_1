@@ -29,18 +29,7 @@ public:
 
 	void DecideDescriptorPoisition();
 
-	void LoadCommand();
 
-	void KickCommand();
-
-	void ReadyForNextCommandList();
-
-
-	void GenerateFenceEvent();
-
-	void SendSignalToGPU();
-
-	void CheckFence();
 
 	void MakePSO();
 
@@ -48,12 +37,14 @@ public:
 
 	void BeginFlame(const int32_t kClientWidth, const int32_t kClientHeight);
 
+	void MakeVertexResource();
+
 	void EndFlame();
 
 
+	void Draw(Vector4 top, Vector4 left, Vector4 right);
 
-
-
+	void EndFlame();
 
 	void DXCInitialize();
 
@@ -62,7 +53,6 @@ public:
 	void DirectXInitialize(int32_t windowsizeWidth, int32_t windowsizeHeight,HWND hwnd_);
 
 	
-	void ReadyNextFrame();
 
 	
 
@@ -162,11 +152,7 @@ private:
 #pragma endregion
 
 
-#pragma region PSOについて
-
-
-
-#pragma endregion
+	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_{};
 
 
 };

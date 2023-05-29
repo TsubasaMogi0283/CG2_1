@@ -115,10 +115,6 @@ void DirectXInitialization::StopErrorWarning() {
 #endif 
 }
 
-
-
-
-
 void DirectXInitialization::MakeCommandList() {
 	////GPUに作業させよう
 	//コマンドキューを生成する
@@ -207,19 +203,6 @@ void DirectXInitialization::MakeRTV() {
 }
 
 
-void DirectXInitialization::GenerateFenceEvent() {
-	//初期位置0でフェンスを作る
-	//EventはWindowsのものである
-	
-	hr_ = device_->CreateFence(fenceValue_, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence_));
-	assert(SUCCEEDED(hr_));
-
-	//FenceのSignalを待つためのイベントを作成する
-	fenceEvent_ = CreateEvent(NULL, FALSE, FALSE, NULL);
-	assert(fenceEvent_ != nullptr);
-
-
-}
 
 
 
@@ -232,45 +215,10 @@ void DirectXInitialization::DecideDescriptorPoisition() {
 
 
 
-void DirectXInitialization::KickCommand() {
-	
-	//GPUにコマンドリストの実行を行わせる
-	ID3D12CommandList* commandLists[] = { commandList_ };
-	commandQueue_->ExecuteCommandLists(1, commandLists);
-	//GPUとOSに画面の交換を行うよう通知する
-	swapChain_->Present(1, 0);
-
-}
 
 
 
 
-void DirectXInitialization::SendSignalToGPU() {
-	//Fenceの値を更新
-	fenceValue_++;
-	//GPUがここまでたどりついた時に、Fenceの値を代入するようSignalを送る
-	commandQueue_->Signal(fence_, fenceValue_);
-
-}
-
-void DirectXInitialization::CheckFence() {
-	
-	//GetCompletedValueの初期値はFence作成時に渡した初期値
-	if (fence_->GetCompletedValue() < fenceValue_) {
-		//指定したSignalにたどりついていないので、たどり着くまで待つようにイベントを設定する
-		fence_->SetEventOnCompletion(fenceValue_, fenceEvent_);
-		//イベントを待つ
-		WaitForSingleObject(fenceEvent_, INFINITE);
-	}
-}
-
-void DirectXInitialization::ReadyForNextCommandList() {
-	hr_ = commandAllocator_->Reset();
-	assert(SUCCEEDED(hr_));
-	hr_ = commandList_->Reset(commandAllocator_, nullptr);
-	assert(SUCCEEDED(hr_));
-
-}
 
 void DirectXInitialization::DXCInitialize() {
 	////DXCの初期化
@@ -480,10 +428,146 @@ void DirectXInitialization::BeginFlame(const int32_t kClientWidth, const int32_t
 }
 
 
+void DirectXInitialization::MakeVertexResource() {
+	////VertexResourceを生成
+	//頂点リソース用のヒープを設定
+	D3D12_HEAP_PROPERTIES uploadHeapProperties{};
+	uploadHeapProperties.Type = D3D12_HEAP_TYPE_UPLOAD;
+	//頂点リソースの設定
+	D3D12_RESOURCE_DESC vertexResourceDesc{};
+	//バッファリソース。テクスチャの場合はまた別の設定をする
+	vertexResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
+	vertexResourceDesc.Width = sizeof(Vector4) * 3;
+	//バッファの場合はこれらは1にする決まり
+	vertexResourceDesc.Height = 1;
+	vertexResourceDesc.DepthOrArraySize = 1;
+	vertexResourceDesc.MipLevels = 1;
+	vertexResourceDesc.SampleDesc.Count = 1;
+	//バッファの場合はこれにする決まり
+	vertexResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
+
+
+
+	//実際に頂点リソースを作る
+	//ID3D12Resource* vertexResource_ = nullptr;
+
+	hr_ = device_->CreateCommittedResource(
+		&uploadHeapProperties,
+		D3D12_HEAP_FLAG_NONE,
+		&vertexResourceDesc,
+		D3D12_RESOURCE_STATE_GENERIC_READ,
+		nullptr, IID_PPV_ARGS(&vertexResource_));
+	assert(SUCCEEDED(hr_));
+
+	
+	
+
+	////VertexBufferViewを作成
+	//頂点バッファビューを作成する
+	
+	//リソースの先頭のアドレスから使う
+	vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
+	//使用するリソースのサイズは頂点３つ分のサイズ
+	vertexBufferView_.SizeInBytes = sizeof(Vector4) * 3;
+	//１頂点あたりのサイズ
+	vertexBufferView_.StrideInBytes = sizeof(Vector4);
+
+}
+
+void DirectXInitialization::Draw(Vector4 top, Vector4 left, Vector4 right) {
+	//Resourceにデータを書き込む
+	Vector4* vertexData = nullptr;
+
+	//書き込むためのアドレスを取得
+	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));
+	//左下
+	vertexData[0] = { top};
+	//上
+	vertexData[1] = { left };
+	//右下
+	vertexData[2] = { right };
+	//範囲外は危険だよ！！
+
+
+	////2個目
+	//vertexResource1_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData1));
+	////左下
+	//vertexData1[0] = { -1.0f,-0.5f,0.0f,1.0f };
+	////上
+	//vertexData1[1] = { -0.75f,0.0f,0.0f,1.0f };
+	////右下
+	//vertexData1[2] = { 0.5f,-0.5f,0.0f,1.0f };
+
+
+
+
+	
+	//RootSignatureを設定。PSOに設定しているけど別途設定が必要
+	commandList_->SetGraphicsRootSignature(rootSignature_);
+	commandList_->SetPipelineState(graphicsPipelineState_);
+	commandList_->IASetVertexBuffers(0, 1, &vertexBufferView_);
+	//形状を設定。PSOに設定しているものとはまた別。同じものを設定すると考えよう
+	commandList_->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	//描画(DrawCall)３頂点で１つのインスタンス。
+	commandList_->DrawInstanced(3, 1, 0, 0);
+
+
+}
+
+void DirectXInitialization::EndFlame() {
+	////画面表示出来るようにする
+	//ここがflameの最後
+	//画面に描く処理は「全て終わり」、画面に映すので、状態を遷移
+	//今回はRenderTargetからPresentにする
+	barrier_.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
+	barrier_.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;
+	//TransitionBarrierを張る
+	commandList_->ResourceBarrier(1, &barrier_);
+
+	//コマンドリストの内容を確定させる。全てのコマンドを積んでからCloseすること
+	hr_ = commandList_->Close();
+	assert(SUCCEEDED(hr_));
+
+
+	//コマンドをキックする
+	//GPUにコマンドリストの実行を行わせる
+	ID3D12CommandList* commandLists[] = { commandList_ };
+	commandQueue_->ExecuteCommandLists(1, commandLists);
+	//GPUとOSに画面の交換を行うよう通知する
+	swapChain_->Present(0, 1);
+	
+
+	////GPUにSignalを送る
+	//GPUの実行完了が目的
+	//1.GPUに実行が完了したタイミングでFEnceに指定した値を書き込んでもらう
+	//  GPUに対してSignalを発行する
+	//	Signal・・・GPUの指定の場所までたどり着いたら、指定の値を書き込んでもらうお願いのこと
+	//2.CPUではFenceに指定した値が書き込まれているかを確認する
+	//3.指定した値が書き込まれていない場合は、書き込まれるまで待つ
+	//Fenceの値を更新
+	fenceValue_++;
+	//GPUがここまでたどりついた時に、Fenceの値を代入するようSignalを送る
+	commandQueue_->Signal(fence_, fenceValue_);
+	
+
+	//Fenceの値が指定したSignal値にたどりついているか確認する
+	//GetCompletedValueの初期値はFence作成時に渡した初期値
+	if (fence_->GetCompletedValue() < fenceValue_) {
+		//指定したSignalにたどりついていないので、たどり着くまで待つようにイベントを設定する
+		fence_->SetEventOnCompletion(fenceValue_, fenceEvent_);
+		//イベントを待つ
+		WaitForSingleObject(fenceEvent_, INFINITE);
+	}
+
+	swapChain_->Present(1, 0);
+
+	hr_ = commandAllocator_->Reset();
+	assert(SUCCEEDED(hr_));
+	hr_ = commandList_->Reset(commandAllocator_, nullptr);
+	assert(SUCCEEDED(hr_));
+}
 
 void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t windowsizeHeight,HWND hwnd_) {
-
-
 	//DXGIファクトリーの生成
 	MakeDXGIFactory();
 
@@ -577,132 +661,16 @@ void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t wi
 
 
 
-	BeginFlame(windowsizeWidth_,windowsizeHeight_);
+	//BeginFlame(windowsizeWidth_,windowsizeHeight_);
 
 
 	
 
 
 
-
-
-
-
-	
-
-
-
-
-
-
-	////VertexResourceを生成
-	//頂点リソース用のヒープを設定
-	D3D12_HEAP_PROPERTIES uploadHeapProperties{};
-	uploadHeapProperties.Type = D3D12_HEAP_TYPE_UPLOAD;
-	//頂点リソースの設定
-	D3D12_RESOURCE_DESC vertexResourceDesc{};
-	//バッファリソース。テクスチャの場合はまた別の設定をする
-	vertexResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-	vertexResourceDesc.Width = sizeof(Vector4) * 3;
-	//バッファの場合はこれらは1にする決まり
-	vertexResourceDesc.Height = 1;
-	vertexResourceDesc.DepthOrArraySize = 1;
-	vertexResourceDesc.MipLevels = 1;
-	vertexResourceDesc.SampleDesc.Count = 1;
-	//バッファの場合はこれにする決まり
-	vertexResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
-
-
-
-	//実際に頂点リソースを作る
-	//ID3D12Resource* vertexResource_ = nullptr;
-
-	hr_ = device_->CreateCommittedResource(
-		&uploadHeapProperties,
-		D3D12_HEAP_FLAG_NONE,
-		&vertexResourceDesc,
-		D3D12_RESOURCE_STATE_GENERIC_READ,
-		nullptr, IID_PPV_ARGS(&vertexResource_));
-	assert(SUCCEEDED(hr_));
-
+	EndFlame();
 	
 	
-
-	////VertexBufferViewを作成
-	//頂点バッファビューを作成する
-	D3D12_VERTEX_BUFFER_VIEW vertexBufferView{};
-	//リソースの先頭のアドレスから使う
-	vertexBufferView.BufferLocation = vertexResource_->GetGPUVirtualAddress();
-	//使用するリソースのサイズは頂点３つ分のサイズ
-	vertexBufferView.SizeInBytes = sizeof(Vector4) * 3;
-	//１頂点あたりのサイズ
-	vertexBufferView.StrideInBytes = sizeof(Vector4);
-
-
-
-
-	//Resourceにデータを書き込む
-	Vector4* vertexData = nullptr;
-	Vector4* vertexData1 = nullptr;
-
-	//書き込むためのアドレスを取得
-	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));
-	//左下
-	vertexData[0] = { -0.5f,-0.5f,0.0f,1.0f };
-	//上
-	vertexData[1] = { 0.0f,0.5f,0.0f,1.0f };
-	//右下
-	vertexData[2] = { 0.5f,-0.5f,0.0f,1.0f };
-	//範囲外は危険だよ！！
-
-
-	////2個目
-	//vertexResource1_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData1));
-	////左下
-	//vertexData1[0] = { -1.0f,-0.5f,0.0f,1.0f };
-	////上
-	//vertexData1[1] = { -0.75f,0.0f,0.0f,1.0f };
-	////右下
-	//vertexData1[2] = { 0.5f,-0.5f,0.0f,1.0f };
-
-
-
-
-
-
-
-
-
-
-
-	
-
-
-
-
-	
-	//RootSignatureを設定。PSOに設定しているけど別途設定が必要
-	commandList_->SetGraphicsRootSignature(rootSignature_);
-	commandList_->SetPipelineState(graphicsPipelineState_);
-	commandList_->IASetVertexBuffers(0, 1, &vertexBufferView);
-	//形状を設定。PSOに設定しているものとはまた別。同じものを設定すると考えよう
-	commandList_->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	//描画(DrawCall)３頂点で１つのインスタンス。
-	commandList_->DrawInstanced(3, 1, 0, 0);
-
-
-	////画面表示出来るようにする
-	//画面に描く処理は全て終わり、画面に映すので、状態を遷移
-	//今回はRenderTargetからPresentにする
-	barrier_.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
-	barrier_.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;
-	//TransitionBarrierを張る
-	commandList_->ResourceBarrier(1, &barrier_);
-
-
-
-
-
 
 
 
@@ -719,44 +687,16 @@ void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t wi
 	//			 GPUで値を書き込み、CPUで値を読み取ったりWindowsにメッセージ(Event)を送ったりできる
 	//			 理想を実現するためのもの
 	//Event・・・Windowsへのメッセージなどのこと
-	GenerateFenceEvent();
-
-
-
-
-	//コマンドリストの内容を確定させる。全てのコマンドを積んでからCloseすること
-	hr_ = commandList_->Close();
+	//初期位置0でフェンスを作る
+	//EventはWindowsのものである
+	
+	hr_ = device_->CreateFence(fenceValue_, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence_));
 	assert(SUCCEEDED(hr_));
 
+	//FenceのSignalを待つためのイベントを作成する
+	fenceEvent_ = CreateEvent(NULL, FALSE, FALSE, NULL);
+	assert(fenceEvent_ != nullptr);
 
-	//コマンドをキックする
-	KickCommand();
-
-	
-
-	////GPUにSignalを送る
-	//GPUの実行完了が目的
-	//1.GPUに実行が完了したタイミングでFEnceに指定した値を書き込んでもらう
-	//  GPUに対してSignalを発行する
-	//	Signal・・・GPUの指定の場所までたどり着いたら、指定の値を書き込んでもらうお願いのこと
-	//2.CPUではFenceに指定した値が書き込まれているかを確認する
-	//3.指定した値が書き込まれていない場合は、書き込まれるまで待つ
-
-	SendSignalToGPU();
-	
-
-	//Fenceの値が指定したSignal値にたどりついているか確認する
-	CheckFence();
-	
-
-	//次のフレーム用のコマンドリストを準備
-	ReadyForNextCommandList();
-
-
-
-}
-
-void BeginFlame(const int32_t kClientWidth, const int32_t kClientHeight) {
 
 
 
@@ -785,12 +725,15 @@ void DirectXInitialization::DirectXRelease() {
 	CloseHandle(fenceEvent_);
 	fence_->Release();
 	rtvDescriptorHeap_->Release();
+
 	swapChainResources_[0]->Release();
 	swapChainResources_[1]->Release();
 	swapChain_->Release();
+
 	commandList_->Release();
 	commandAllocator_->Release();
 	commandQueue_->Release();
+
 	device_->Release();
 	useAdapter_->Release();
 	dxgiFactory_->Release();

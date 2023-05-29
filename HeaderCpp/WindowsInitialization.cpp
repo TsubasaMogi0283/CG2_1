@@ -11,40 +11,37 @@ LRESULT CALLBACK  WindowsInitialization::WindowProc(HWND hwnd, UINT msg, WPARAM 
 	}
 
 	return DefWindowProc(hwnd, msg, wparam, lparam);
+
 }
 
-WindowsInitialization::WindowsInitialization(const wchar_t* title, const int32_t kClientWidth, const int32_t kClientHeight) {
-	this->title_= title;
-	this->kClientWidth_ = kClientWidth;
-	this->kClientHeight_ = kClientHeight;
-
-	this->hwnd_ = nullptr;
-}
-
-
-
-
-void  WindowsInitialization::WindowInitialize() {
-	WNDCLASS wc{};
-	//ウィンドウプロシャージャ
-	wc.lpfnWndProc = WindowProc;
-	// ウィンドウクラス名
-	wc.lpszClassName = L"%s",title_;
-	//インスタンドハンドル
-	wc.hInstance = GetModuleHandle(nullptr);
-	//　カーソル
-	wc.hCursor = LoadCursor(nullptr, IDC_ARROW);
-	//ウィンドウクラス登録
-	RegisterClass(&wc);
-	// クライアント領域サイズ
+WindowsInitialization::WindowsInitialization() {
 	
-	//  ウィンドウサイズを表す構造体にクライアント領域を入れる
+}
+
+
+
+
+void  WindowsInitialization::WindowInitialize(const wchar_t* title, const int32_t kClientWidth, const int32_t kClientHeight) {
+	
+	//ウィンドウプロシャージャ
+	wc_.lpfnWndProc = WindowProc;
+	//ウィンドウクラス名
+	wc_.lpszClassName = L"%s",title_;
+	//インスタンドハンドル
+	wc_.hInstance = GetModuleHandle(nullptr);
+	//カーソル
+	wc_.hCursor = LoadCursor(nullptr, IDC_ARROW);
+	//ウィンドウクラス登録
+	RegisterClass(&wc_);
+
+	//クライアント領域サイズ
+	//ウィンドウサイズを表す構造体にクライアント領域を入れる
 	RECT wrc_ = { 0,0,kClientWidth_ ,kClientHeight_ };
 	// クライアント領域を元に実際のサイズにwrcを変更
 	AdjustWindowRect(&wrc_, WS_OVERLAPPEDWINDOW, false);
 	// ウィンドウ生成
 		hwnd_ = CreateWindow(
-			wc.lpszClassName,//　クラス名
+			wc_.lpszClassName,//　クラス名
 			title_,                //　タイトルバーの文字
 			WS_OVERLAPPEDWINDOW,  //　標準的なウィンドウスタイル
 			CW_USEDEFAULT,        //　標準X座標
@@ -53,7 +50,7 @@ void  WindowsInitialization::WindowInitialize() {
 			wrc_.bottom - wrc_.top, //　縦幅ti
 			nullptr,              //　親ハンドル
 			nullptr,              //　メニューハンドル
-			wc.hInstance,         //　インスタンスハンドル
+			wc_.hInstance,         //　インスタンスハンドル
 			nullptr               //　オプション
 		);
 
@@ -76,6 +73,10 @@ void  WindowsInitialization::WindowInitialize() {
 }
 
 
+void WindowsInitialization::Close() {
+	
+	CloseWindow(hwnd_);
+}
 
 void WindowsInitialization::WindowReset() {
 #ifdef _DEBUG

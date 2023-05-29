@@ -6,18 +6,21 @@
 
 
 
+
 //Winodwsアプリでもエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	const int32_t kClientWidth = 1280;
 	const int32_t kClientHeight = 720;
 
+	
 	struct  TriangleProperty{
-		Vecor4 top;
-		Vecor4 left;
-		Vecor4 right;
+		Vector4 top;
+		Vector4 left;
+		Vector4 right;
 	};
 
+	const int32_t TRIANGLE_AMOUNT_MAX = 15;
 
 	WindowsInitialization* window1= new WindowsInitialization(L"DirectX", kClientWidth,kClientHeight);
 	DirectXInitialization* directX = new DirectXInitialization();
@@ -33,7 +36,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	
 
 
-	TriangleProperty TriangleProperty_[Triangle_Property_MAX];
+	TriangleProperty TriangleProperty_[TRIANGLE_AMOUNT_MAX];
 	{
 		TriangleProperty_[0] =
 		{

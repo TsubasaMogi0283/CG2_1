@@ -516,9 +516,11 @@ void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t wi
 	pixelShaderBlob_->GetBufferSize();
 	graphicsPipelineStateDesc.BlendState = blendDesc;
 	graphicsPipelineStateDesc.RasterizerState = rasterizerDesc;
+
 	//書き込むRTVの情報
 	graphicsPipelineStateDesc.NumRenderTargets = 1;
 	graphicsPipelineStateDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+
 	//利用するトポロジ(形状)のタイプ三角形
 	graphicsPipelineStateDesc.PrimitiveTopologyType =
 		D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
@@ -534,6 +536,22 @@ void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t wi
 	hr_ = device_->CreateGraphicsPipelineState(&graphicsPipelineStateDesc,
 		IID_PPV_ARGS(&graphicsPipelineState_));
 	assert(SUCCEEDED(hr_));
+
+
+
+
+
+	
+	vertexResource_->Release();
+	
+	pixelShaderBlob_->Release();
+
+
+
+
+
+
+
 
 
 
@@ -713,30 +731,25 @@ void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t wi
 
 }
 
+void BeginFlame(const int32_t kClientWidth, const int32_t kClientHeight) {
 
 
-void DirectXInitialization::ReadyNextFrame() {
-	
-	
-	
-	
-	
 
 }
+
+
 
 
 
 void DirectXInitialization::DirectXRelease() {
 
 	//////解放処理
-	vertexResource_->Release();
 	graphicsPipelineState_->Release();
 	signatureBlob_->Release();
 	if (errorBlob_) {
 		errorBlob_->Release();
 	}
 	rootSignature_->Release();
-	pixelShaderBlob_->Release();
 	vertexShaderBlob_->Release();
 
 

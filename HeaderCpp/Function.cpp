@@ -7,6 +7,8 @@
 	//出力にちゃんと「WSTRING」が出る
 	//Log(ConvertString(std::format(L"wstring\n", wstringValue)));
 
+
+
 void Log(const std::string& message) {
 	OutputDebugStringA(message.c_str());
 }

@@ -24,6 +24,122 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	directX->DirectXInitialize(window1->GetClientWidth(),window1->GetClientHeight(),window1->hwnd_);
 	
 
+
+	TriangleProperty TriangleProperty_[Triangle_Property_MAX];
+	{
+		TriangleProperty_[0] =
+		{
+
+			{-0.8f,1.0f,0.0f,1.0f },
+			{-1.0f,0.5f,0.0f,1.0f },
+			{-0.6f,0.5f,0.0f,1.0f }
+		};
+		TriangleProperty_[1] =
+		{
+
+			{-0.4f,1.0f,0.0f,1.0f },
+			{-0.6f,0.5f,0.0f,1.0f },
+			{-0.2f,0.5f,0.0f,1.0f }
+		};
+		TriangleProperty_[2] =
+		{
+
+			{0.0f,1.0f,0.0f,1.0f },
+			{-0.2f,0.5f,0.0f,1.0f },
+			{0.2f,0.5f,0.0f,1.0f }
+		};
+		TriangleProperty_[3] =
+		{
+
+			{0.4f,1.0f,0.0f,1.0f },
+			{0.2f,0.5f,0.0f,1.0f },
+			{0.6f,0.5f,0.0f,1.0f }
+		};
+		TriangleProperty_[4] =
+		{
+
+			{0.8f,1.0f,0.0f,1.0f },
+			{0.6f,0.5f,0.0f,1.0f },
+			{1.0f,0.5f,0.0f,1.0f }
+		};
+
+		TriangleProperty_[5] =
+		{
+
+			{-0.8f,0.5f,0.0f,1.0f },
+			{-1.0f,0.0f,0.0f,1.0f },
+			{-0.6f,0.0f,0.0f,1.0f }
+		};
+		TriangleProperty_[6] =
+		{
+
+			{-0.4f,0.5f,0.0f,1.0f },
+			{-0.6f,0.0f,0.0f,1.0f },
+			{-0.2f,0.0f,0.0f,1.0f }
+		};
+		TriangleProperty_[7] =
+		{
+
+			{0.0f,0.5f,0.0f,1.0f },
+			{-0.2f,0.0f,0.0f,1.0f },
+			{0.2f,0.0f,0.0f,1.0f }
+		};
+		TriangleProperty_[8] =
+		{
+
+			{0.4f,0.5f,0.0f,1.0f },
+			{0.2f,0.0f,0.0f,1.0f },
+			{0.6f,0.0f,0.0f,1.0f }
+		};
+		TriangleProperty_[9] =
+		{
+
+			{0.8f,0.5f,0.0f,1.0f },
+			{0.6f,0.0f,0.0f,1.0f },
+			{1.0f,0.0f,0.0f,1.0f }
+		};
+
+		TriangleProperty_[10] =
+		{
+
+			{-0.8f,0.0f,0.0f,1.0f },
+			{-1.0f,-0.5f,0.0f,1.0f },
+			{-0.6f,-0.5f,0.0f,1.0f }
+		};
+		TriangleProperty_[11] =
+		{
+
+			{-0.4f,0.0f,0.0f,1.0f },
+			{-0.6f,-0.5f,0.0f,1.0f },
+			{-0.2f,-0.5f,0.0f,1.0f }
+		};
+		TriangleProperty_[12] =
+		{
+
+			{0.0f,0.0f,0.0f,1.0f },
+			{-0.2f,-0.5f,0.0f,1.0f },
+			{0.2f,-0.5f,0.0f,1.0f }
+		};
+		TriangleProperty_[13] =
+		{
+
+			{0.4f,0.0f,0.0f,1.0f },
+			{0.2f,-0.5f,0.0f,1.0f },
+			{0.6f,-0.5f,0.0f,1.0f }
+		};
+		TriangleProperty_[14] =
+		{
+
+			{0.8f,0.0f,0.0f,1.0f },
+			{0.6f,-0.5f,0.0f,1.0f },
+			{1.0f,-0.5f,0.0f,1.0f }
+		};
+
+	}
+
+
+
+
 	MSG msg{};
 
 	////メインループ

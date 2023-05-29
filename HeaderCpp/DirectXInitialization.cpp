@@ -373,9 +373,6 @@ void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t wi
 
 
 
-
-
-
 	////DescriptorHandleとDescriptorHeap
 	
 
@@ -529,6 +526,9 @@ void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t wi
 	//どのように画面に色を打ち込むのか設定
 	graphicsPipelineStateDesc.SampleDesc.Count = 1;
 	graphicsPipelineStateDesc.SampleMask = D3D12_DEFAULT_SAMPLE_MASK;
+
+
+
 	//実際に生成
 	//ID3D12PipelineState* graphicsPipelineState_ = nullptr;
 	hr_ = device_->CreateGraphicsPipelineState(&graphicsPipelineStateDesc,
@@ -585,9 +585,7 @@ void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t wi
 
 	//Resourceにデータを書き込む
 	Vector4* vertexData = nullptr;
-
-
-
+	Vector4* vertexData1 = nullptr;
 
 	//書き込むためのアドレスを取得
 	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));

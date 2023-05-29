@@ -149,6 +149,9 @@ private:
 
 
 
+	Commands commands;
+
+
 
 #pragma region DXCの初期化について
 	IDxcUtils* dxcUtils_ = nullptr;

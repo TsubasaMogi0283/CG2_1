@@ -14,13 +14,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	const int32_t kClientHeight = 720;
 
 	
+	//三角形の情報
+	const int32_t TRIANGLE_AMOUNT_MAX = 15;
 	struct  TriangleProperty{
 		Vector4 top;
 		Vector4 left;
 		Vector4 right;
 	};
 
-	const int32_t TRIANGLE_AMOUNT_MAX = 15;
+	
 
 	WindowsInitialization* window1= new WindowsInitialization(L"DirectX", kClientWidth,kClientHeight);
 	DirectXInitialization* directX = new DirectXInitialization();

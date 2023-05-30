@@ -88,10 +88,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="HeaderCpp\DirectXInitialization.cpp" />
-    <ClCompile Include="HeaderCpp\Function.cpp" />
-    <ClCompile Include="HeaderCpp\Triangle.cpp" />
-    <ClCompile Include="HeaderCpp\WindowsInitialization.cpp" />
+    <ClCompile Include="HeaderCpp\DirectX.cpp" />
+    <ClCompile Include="HeaderCpp\DrawEngine.cpp" />
+    <ClCompile Include="HeaderCpp\Log.cpp" />
+    <ClCompile Include="HeaderCpp\WinApp.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -109,10 +109,11 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="HeaderCpp\DirectXInitialization.h" />
-    <ClInclude Include="HeaderCpp\Function.h" />
-    <ClInclude Include="HeaderCpp\Triangle.h" />
-    <ClInclude Include="HeaderCpp\WindowsInitialization.h" />
+    <ClInclude Include="HeaderCpp\DirectX.h" />
+    <ClInclude Include="HeaderCpp\DrawEngine.h" />
+    <ClInclude Include="HeaderCpp\Log.h" />
+    <ClInclude Include="HeaderCpp\Vector4.h" />
+    <ClInclude Include="HeaderCpp\WinApp.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

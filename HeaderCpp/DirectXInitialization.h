@@ -3,60 +3,73 @@
 #include "Function.h"
 #include "WindowsInitialization.h"
  
-
+//メンバ変数関数いつか整理したい・・・
+//ごちゃごちゃしてる
 class DirectXInitialization {
 public:
 	
+	//まとめたのが下の「Initialize」
+#pragma region 初期化について
+	//初期化へ
 
-	void MakeDXGIFactory();
-	
+	void GenerateDXGIFactory();
 	void SelectAdapter();
 
+
 	void GenerateD3D12Device();
+
 
 	void StopErrorWarning();
 
 	
-	void MakeCommandList();
+	void GenerateCommandList();
 	
-	void MakeSwapChain(int32_t windowsizeWidth, int32_t windowsizeHeight,HWND hwnd_);
+
+	void GenerateSwapChain(int32_t windowsizeWidth, int32_t windowsizeHeight,HWND hwnd_);
 
 	void MakeDescriptorHeap();
 
 	void PullResourcesFromSwapChain();
 
-	void MakeRTV();
+	//void DecideDescriptorPoisition();
+	void SetRTV();
 
-	void DecideDescriptorPoisition();
-
-
+	void InitializeDXC();
 
 	void MakePSO();
 
+#pragma endregion
+	
+	void Initialize(int32_t windowsizeWidth, int32_t windowsizeHeight,HWND hwnd_);
 
 
-	void BeginFlame(const int32_t kClientWidth, const int32_t kClientHeight);
+	
+
+
+
+
+
+	
+
 
 	void MakeVertexResource();
 
+
+
+
+	//whileの中身
+	void BeginFlame(const int32_t kClientWidth, const int32_t kClientHeight);
+
+	void DrawTriangle(Vector4 top, Vector4 left, Vector4 right);
+
 	void EndFlame();
-
-
-	void Draw(Vector4 top, Vector4 left, Vector4 right);
-
-	void EndFlame();
-
-	void DXCInitialize();
-
-
-
-	void DirectXInitialize(int32_t windowsizeWidth, int32_t windowsizeHeight,HWND hwnd_);
 
 	
 
-	
 
-	void DirectXRelease();
+	//解放
+	void Release();
+
 
 private:
 	int32_t windowsizeWidth_; 
@@ -138,8 +151,7 @@ private:
 	uint64_t fenceValue_ = 0;
 
 
-
-	//Commands commands;
+	ID3D12Debug1* debugController_ = nullptr;
 
 
 
@@ -154,5 +166,8 @@ private:
 
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_{};
 
+
+
+	
 
 };

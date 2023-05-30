@@ -2,8 +2,21 @@
 #include "Function.h"
 
 
-void DirectXInitialization::MakeDXGIFactory() {
+void DirectXInitialization::GenerateDXGIFactory() {
 	//DXGIファクトリーの生成
+#ifdef _DEBUG
+	//ID3D12Debug1* debugController = nullptr;
+	if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugController_)))) {
+		//デバッグレイヤーを有効化する
+		debugController_->EnableDebugLayer();
+		//さらにGPU側でもチェックを行うようにする
+		debugController_->SetEnableGPUBasedValidation(TRUE);
+
+	}
+
+
+#endif 
+	
 	//IDXGIFactory7* dxgiFactory_ = nullptr;
 	//関数が成功したかSUCCEEDEDでマクロで判定できる
 	hr_ = CreateDXGIFactory(IID_PPV_ARGS(&dxgiFactory_));
@@ -11,7 +24,6 @@ void DirectXInitialization::MakeDXGIFactory() {
 	assert(SUCCEEDED(hr_));
 
 }
-
 void DirectXInitialization::SelectAdapter() {
 	//仕様するアダプタ用の変数、最初にnullptrを入れておく
 	//IDXGIAdapter4* useAdapter_ = nullptr;
@@ -40,6 +52,15 @@ void DirectXInitialization::SelectAdapter() {
 	assert(useAdapter_ != nullptr);
 }
 
+
+
+
+
+
+
+
+
+
 void DirectXInitialization::GenerateD3D12Device() {
 	//機能レベルとログ出力用の文字
 	D3D_FEATURE_LEVEL featureLevels[] = {
@@ -47,7 +68,7 @@ void DirectXInitialization::GenerateD3D12Device() {
 		D3D_FEATURE_LEVEL_12_1,
 		D3D_FEATURE_LEVEL_12_0
 	};
-
+	
 	const char* featureLevelStrings[] = { "12.2","12.1","12.0" };
 	//高い順に生成出来るか試していく
 	for (size_t i = 0; i < _countof(featureLevels); ++i) {
@@ -67,6 +88,11 @@ void DirectXInitialization::GenerateD3D12Device() {
 
 
 }
+
+
+
+
+
 
 void DirectXInitialization::StopErrorWarning() {
 		////エラー・警告、即ち停止
@@ -96,6 +122,7 @@ void DirectXInitialization::StopErrorWarning() {
 		//抑制する
 		D3D12_MESSAGE_SEVERITY severities[] = { D3D12_MESSAGE_SEVERITY_INFO };
 		D3D12_INFO_QUEUE_FILTER filter{};
+
 		filter.DenyList.NumIDs = _countof(denyIds);
 		filter.DenyList.pIDList = denyIds;
 		filter.DenyList.NumSeverities = _countof(severities);
@@ -106,16 +133,24 @@ void DirectXInitialization::StopErrorWarning() {
 		//解放
 		infoQueue_->Release();
 
-		
-
-
-
 	}
 
 #endif 
 }
 
-void DirectXInitialization::MakeCommandList() {
+
+
+
+
+
+
+
+
+
+
+
+
+void DirectXInitialization::GenerateCommandList() {
 	////GPUに作業させよう
 	//コマンドキューを生成する
 	hr_ = device_->CreateCommandQueue(&commandQueueDesc_, IID_PPV_ARGS(&commandQueue_));
@@ -131,7 +166,11 @@ void DirectXInitialization::MakeCommandList() {
 
 	//コマンドリストを生成する
 	//ID3D12GraphicsCommandList* commandList_ = nullptr;
-	hr_ = device_->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, commandAllocator_, nullptr, IID_PPV_ARGS(&commandList_));
+	hr_ = device_->CreateCommandList(
+		0, 
+		D3D12_COMMAND_LIST_TYPE_DIRECT, 
+		commandAllocator_, nullptr, 
+		IID_PPV_ARGS(&commandList_));
 
 	//コマンドリストの生成が上手くいかなかったので起動できない
 	assert(SUCCEEDED(hr_));
@@ -140,7 +179,12 @@ void DirectXInitialization::MakeCommandList() {
 }
 
 
-void DirectXInitialization::MakeSwapChain(int32_t windowsizeWidth, int32_t windowsizeHeight,HWND hwnd_) {
+
+
+
+
+
+void DirectXInitialization::GenerateSwapChain(int32_t windowsizeWidth, int32_t windowsizeHeight,HWND hwnd_) {
 	
 	//60fpsそのまま映すと大変なので2枚用意して
 	//描画(フロントバッファ)と表示(バックバッファ、プライマリバッファ)に分ける。
@@ -157,21 +201,40 @@ void DirectXInitialization::MakeSwapChain(int32_t windowsizeWidth, int32_t windo
 
 
 	//コマンドキュー、ウィンドウハンドル、設定を渡して生成する
-	hr_ = dxgiFactory_->CreateSwapChainForHwnd(commandQueue_,hwnd_, &swapChainDesc, nullptr, nullptr, reinterpret_cast<IDXGISwapChain1**>(&swapChain_));
+	hr_ = dxgiFactory_->CreateSwapChainForHwnd(
+		commandQueue_,hwnd_, 
+		&swapChainDesc, 
+		nullptr, nullptr, 
+		reinterpret_cast<IDXGISwapChain1**>(&swapChain_));
 	assert(SUCCEEDED(hr_));
 
 
 }
+
+
+
+
+
+
+
+
+
 
 void DirectXInitialization::MakeDescriptorHeap() {
 	//ID3D12DescriptorHeap* rtvDescriptorHeap_ = nullptr;
 	
 	rtvDescriptorHeapDesc_.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;	//レンダーターゲットビュー用
 	rtvDescriptorHeapDesc_.NumDescriptors = 2;						//ダブルバッファ用に２つ。多くてもOK
+
 	hr_ = device_->CreateDescriptorHeap(&rtvDescriptorHeapDesc_, IID_PPV_ARGS(&rtvDescriptorHeap_));
 	//ディスクリプタヒープが作れなかったので起動できない
 	assert(SUCCEEDED(hr_));
 }
+
+
+
+
+
 
 void DirectXInitialization::PullResourcesFromSwapChain() {
 	//ID3D12Resource* swapChainResources_[2] = { nullptr };
@@ -183,13 +246,25 @@ void DirectXInitialization::PullResourcesFromSwapChain() {
 
 }
 
-void DirectXInitialization::MakeRTV() {
+
+
+
+//void DirectXInitialization::DecideDescriptorPoisition() {
+//	rtvHandles_[0] = rtvStartHandle_;
+//
+//	rtvHandles_[1].ptr = rtvHandles_[0].ptr + device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+//	
+//}
+
+void DirectXInitialization::SetRTV() {
 	//RTVの設定
 	//D3D12_RENDER_TARGET_VIEW_DESC rtvDesc{};
 	rtvDesc_.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;				//出力結果をSRGBに変換して書き込む
 	rtvDesc_.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;			//2dテクスチャとして書き込む
 	//ディスクリプタの先頭を取得する
 	rtvStartHandle_ = rtvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart();
+
+
 	//RTVを２つ作るのでディスクリプタを２つ用意
 	//D3D12_CPU_DESCRIPTOR_HANDLE rtvHandles[2] = {};
 	//まず1つ目を作る。１つ目は最初の所に作る。作る場所をこちらで指定してあげる必要がある
@@ -200,42 +275,46 @@ void DirectXInitialization::MakeRTV() {
 	//２つ目を作る
 	device_->CreateRenderTargetView(swapChainResources_[1], &rtvDesc_, rtvHandles_[1]);
 
-}
 
 
-
-
-
-void DirectXInitialization::DecideDescriptorPoisition() {
-	rtvHandles_[0] = rtvStartHandle_;
-
-	rtvHandles_[1].ptr = rtvHandles_[0].ptr + device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+	////FenceとEvent
+	//Fence・・・CPUとGPUの同期を取るために利用するオブジェクト。
+	//			 GPUで値を書き込み、CPUで値を読み取ったりWindowsにメッセージ(Event)を送ったりできる
+	//			 理想を実現するためのもの
+	//Event・・・Windowsへのメッセージなどのこと
+	//初期位置0でフェンスを作る
+	//EventはWindowsのものである
 	
+	hr_ = device_->CreateFence(fenceValue_, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence_));
+	assert(SUCCEEDED(hr_));
+
+	//FenceのSignalを待つためのイベントを作成する
+	fenceEvent_ = CreateEvent(NULL, FALSE, FALSE, NULL);
+	assert(fenceEvent_ != nullptr);
+
+
+
+
+
+
 }
 
 
 
 
-
-
-
-
-void DirectXInitialization::DXCInitialize() {
+void DirectXInitialization::InitializeDXC() {
 	////DXCの初期化
 	//dxcCompilerを初期化
 	//IDxcUtils* dxcUtils_ = nullptr;
 	//IDxcCompiler3* dxcCompiler_ = nullptr;
 	hr_ = DxcCreateInstance(CLSID_DxcUtils, IID_PPV_ARGS(&dxcUtils_));
 	assert(SUCCEEDED(hr_));
+
 	hr_ = DxcCreateInstance(CLSID_DxcCompiler, IID_PPV_ARGS(&dxcCompiler_));
 	assert(SUCCEEDED(hr_));
 
 	
 	
-
-	//dxcUtils
-	//dxcCompiler
-	//includeHandler
 
 }
 
@@ -352,7 +431,111 @@ void DirectXInitialization::MakePSO() {
 }
 
 
+
+
+
+
+
+
+void DirectXInitialization::Initialize(int32_t windowsizeWidth, int32_t windowsizeHeight,HWND hwnd_) {
+
+	//出力ウィンドウへの文字出力
+	OutputDebugStringA("Hello,DirectX!\n");
+
+	//DXGIFactoryを生成
+	GenerateDXGIFactory();
+	//最適なアダプターを選択
+	SelectAdapter();
+
+
+	//デバイスを生成
+	GenerateD3D12Device();
+
+	////エラー・警告、即ち停止
+	StopErrorWarning();
+
+	////GPUに作業させよう
+	//コマンドリストを作ろう
+	GenerateCommandList();
+
+
+	//スワップチェーンを生成する
+	GenerateSwapChain(windowsizeWidth, windowsizeHeight, hwnd_);
+
+
+
+	//Resource...DirectX12が管理しているGPU上のメモリであり、このデータのこと
+	//View...Resourceに対してどのような処理を行うのか手順をまとめたもの
+
+	//Descriptor...view(作業方法)の情報を格納している場所
+	//DescriptorHeap...Descriptorを束ねたもの
+
+
+	//流れ
+	//1.DescriptorHeapを生成する
+	//2.swapChainからResourceを引っ張ってくる
+	//3.引っ張ってきたResourceに対してDescriptor上にRTVを作る
+
+	////DescriptorHeap(RTV用)を生成する
+	MakeDescriptorHeap();
+
+	//スワップチェーンを引っ張ってくる
+	PullResourcesFromSwapChain();
+
+	//RenderTargetViewの設定
+	SetRTV();
+
+
+	//DXCの初期化
+	////ShaderCompile
+	//ShaderはHLSLによって記述されているが、GPUが解釈できる形ではない
+	//一度DXIL(DirectX Intermediate Language)というドライバ用の形式に変換され、
+	//ドライバがGPU用のバイナリに変更しやっと実行されるよ。手間だね。
+	// 
+	// DXC(DirectX Shader Compiler)がHLSLからDXILにするCompilerである
+	//
+	InitializeDXC();
+
+
+
+
+
+
+
+	//PSOの生成
+	MakePSO();
+
+
+
+
+
+
+
+}
+
+
+
+
 void DirectXInitialization::BeginFlame(const int32_t kClientWidth, const int32_t kClientHeight) {
+
+
+	////コマンドをキックする
+	//コマンドを積む・・・CommandListに処理を追加していくこと
+	//キックする・・・CommandQueueCommandListを渡してGPUの実行を開始すること
+	//画面をクリアするためのコマンドを積み、キックし、メインループを完成させる
+
+	//処理の内容
+	//1.BackBufferを決定する
+	//2.書き込む作業(画面のクリア)をしたいのでRTVを設定する
+	//3.画面のクリアを行う
+	//4.CommandListを閉じる
+	//5.CommandListの実行(キック)
+	//6.画面のスワップ(BackBufferとFrontBufferを入れ替える)
+	//7.次のフレーム用にCommandListを再準備
+
+
+
+
 	///////
 	////コマンドを積みこんで確定させる
 	//LoadCommand()
@@ -377,15 +560,6 @@ void DirectXInitialization::BeginFlame(const int32_t kClientWidth, const int32_t
 	barrier_.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
 	//TransitionBarrierを張る
 	commandList_->ResourceBarrier(1, &barrier_);
-
-
-
-
-	
-
-
-	
-
 
 
 
@@ -428,6 +602,9 @@ void DirectXInitialization::BeginFlame(const int32_t kClientWidth, const int32_t
 }
 
 
+
+
+//三角形
 void DirectXInitialization::MakeVertexResource() {
 	////VertexResourceを生成
 	//頂点リソース用のヒープを設定
@@ -474,31 +651,26 @@ void DirectXInitialization::MakeVertexResource() {
 
 }
 
-void DirectXInitialization::Draw(Vector4 top, Vector4 left, Vector4 right) {
+void DirectXInitialization::DrawTriangle(Vector4 top, Vector4 left, Vector4 right) {
+	//VertexResourceを生成
+	MakeVertexResource();
+
+
 	//Resourceにデータを書き込む
 	Vector4* vertexData = nullptr;
 
 	//書き込むためのアドレスを取得
 	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));
 	//左下
-	vertexData[0] = { top};
+	vertexData[0] = left;
 	//上
-	vertexData[1] = { left };
+	vertexData[1] =  top ;
 	//右下
-	vertexData[2] = { right };
+	vertexData[2] =  right ;
 	//範囲外は危険だよ！！
 
 
-	////2個目
-	//vertexResource1_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData1));
-	////左下
-	//vertexData1[0] = { -1.0f,-0.5f,0.0f,1.0f };
-	////上
-	//vertexData1[1] = { -0.75f,0.0f,0.0f,1.0f };
-	////右下
-	//vertexData1[2] = { 0.5f,-0.5f,0.0f,1.0f };
-
-
+	
 
 
 	
@@ -527,6 +699,7 @@ void DirectXInitialization::EndFlame() {
 	//コマンドリストの内容を確定させる。全てのコマンドを積んでからCloseすること
 	hr_ = commandList_->Close();
 	assert(SUCCEEDED(hr_));
+
 
 
 	//コマンドをキックする
@@ -563,167 +736,33 @@ void DirectXInitialization::EndFlame() {
 
 	hr_ = commandAllocator_->Reset();
 	assert(SUCCEEDED(hr_));
+
 	hr_ = commandList_->Reset(commandAllocator_, nullptr);
 	assert(SUCCEEDED(hr_));
 }
 
-void DirectXInitialization::DirectXInitialize(int32_t windowsizeWidth,int32_t windowsizeHeight,HWND hwnd_) {
-	//DXGIファクトリーの生成
-	MakeDXGIFactory();
-
-	//使用するアダプターを決める
-	SelectAdapter();
-	
-	//D3D12Deviceの生成
-	GenerateD3D12Device();
-
-
-	////エラー・警告、即ち停止
-	StopErrorWarning();
-
-	//ここまで↑↑↑
-	
-	//CommandQueueを生成する
-	//CommandListを生成する
-	MakeCommandList();
-
-	//スワップチェーンを生成する
-	MakeSwapChain(windowsizeWidth_, windowsizeHeight_, hwnd_);
-	
 
 
 
 
-
-	//Resource...DirectX12が管理しているGPU上のメモリであり、このデータのこと
-	//View...Resourceに対してどのような処理を行うのか手順をまとめたもの
-
-	//Descriptor...view(作業方法)の情報を格納している場所
-	//DescriptorHeap...Descriptorを束ねたもの
-
-
-	//流れ
-	//1.DescriptorHeapを生成する
-	//2.swapChainからResourceを引っ張ってくる
-	//3.引っ張ってきたResourceに対してDescriptor上にRTVを作る
-
-	////DescriptorHeap(RTV用)を生成する
-	//ディスクリプタヒープの生成
-	MakeDescriptorHeap();
-
-
-	////SwapChainからResourceを引っ張ってくる
-	PullResourcesFromSwapChain();
-
-
-
-	////RTVを作る
-	MakeRTV();
-
-
-
-	//DXCの初期化
-	////ShaderCompile
-	//ShaderはHLSLによって記述されているが、GPUが解釈できる形ではない
-	//一度DXIL(DirectX Intermediate Language)というドライバ用の形式に変換され、
-	//ドライバがGPU用のバイナリに変更しやっと実行されるよ。手間だね。
-	// 
-	// DXC(DirectX Shader Compiler)がHLSLからDXILにするCompilerである
-	//
-	DXCInitialize();
-
-
-	
-	MakePSO();
-
-	////DescriptorHandleとDescriptorHeap
-	
-
-	////Descriptorの位置を決める
-	DecideDescriptorPoisition();
-
-	////コマンドをキックする
-	//コマンドを積む・・・CommandListに処理を追加していくこと
-	//キックする・・・CommandQueueCommandListを渡してGPUの実行を開始すること
-	//画面をクリアするためのコマンドを積み、キックし、メインループを完成させる
-
-	//処理の内容
-	//1.BackBufferを決定する
-	//2.書き込む作業(画面のクリア)をしたいのでRTVを設定する
-	//3.画面のクリアを行う
-	//4.CommandListを閉じる
-	//5.CommandListの実行(キック)
-	//6.画面のスワップ(BackBufferとFrontBufferを入れ替える)
-	//7.次のフレーム用にCommandListを再準備
-
-
-
-
-
-
-	//BeginFlame(windowsizeWidth_,windowsizeHeight_);
-
-
-	
-
-
-
-	EndFlame();
-	
-	
-
-
-
-
-
-	////キックしただけ
-	//ExcuteCommandList・・・GPUに命令をキックして、GPU処理を開始させたもの
-	//						 つまりコマンドを投げただけ
-	//GPUが動いている時にメモリは解放しないでねということ
-	//GPU処理の処理が終わってからResetしてね
-
-	////FenceとEvent
-	//Fence・・・CPUとGPUの同期を取るために利用するオブジェクト。
-	//			 GPUで値を書き込み、CPUで値を読み取ったりWindowsにメッセージ(Event)を送ったりできる
-	//			 理想を実現するためのもの
-	//Event・・・Windowsへのメッセージなどのこと
-	//初期位置0でフェンスを作る
-	//EventはWindowsのものである
-	
-	hr_ = device_->CreateFence(fenceValue_, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence_));
-	assert(SUCCEEDED(hr_));
-
-	//FenceのSignalを待つためのイベントを作成する
-	fenceEvent_ = CreateEvent(NULL, FALSE, FALSE, NULL);
-	assert(fenceEvent_ != nullptr);
-
-
-
-
-}
-
-
-
-
-
-void DirectXInitialization::DirectXRelease() {
+void DirectXInitialization::Release() {
 
 	//////解放処理
+	vertexResource_->Release();
 	graphicsPipelineState_->Release();
 	signatureBlob_->Release();
 	if (errorBlob_) {
 		errorBlob_->Release();
 	}
-	vertexResource_->Release();
+	
 	rootSignature_->Release();
 
-
-
-
+	
 
 	//////解放処理
 	CloseHandle(fenceEvent_);
 	fence_->Release();
+
 	rtvDescriptorHeap_->Release();
 
 	swapChainResources_[0]->Release();
@@ -737,4 +776,19 @@ void DirectXInitialization::DirectXRelease() {
 	device_->Release();
 	useAdapter_->Release();
 	dxgiFactory_->Release();
+
+
+	
+
+
+
+#ifdef _DEBUG
+	debugController_->Release();
+
+#endif
+
+	
+
+
+
 }

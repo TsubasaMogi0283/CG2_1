@@ -1,27 +1,25 @@
 #include "WindowsInitialization.h"
 
 
-LRESULT CALLBACK  WindowsInitialization::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam){
-	switch (msg) {
-		//ウィンドウが破棄された
-	case WM_DESTROY:
-		//OSに対してアプリの終了を伝える
-		PostQuitMessage(0);
-		return 0;
-	}
 
-	return DefWindowProc(hwnd, msg, wparam, lparam);
+
+
+
+
+WindowsInitialization::WindowsInitialization(const wchar_t* title, const int32_t WindowSizeWidth, const int32_t WindowSizeHeight) {
+	this->title_ = title;
+	this->kClientWidth_ = WindowSizeWidth;
+	this->kClientHeight_=WindowSizeHeight;
 
 }
 
-WindowsInitialization::WindowsInitialization() {
+
+
+
+void  WindowsInitialization::RegisterWindowsClass() {
 	
-}
 
 
-
-
-void  WindowsInitialization::WindowInitialize(const wchar_t* title, const int32_t kClientWidth, const int32_t kClientHeight) {
 	
 	//ウィンドウプロシャージャ
 	wc_.lpfnWndProc = WindowProc;
@@ -40,37 +38,50 @@ void  WindowsInitialization::WindowInitialize(const wchar_t* title, const int32_
 	// クライアント領域を元に実際のサイズにwrcを変更
 	AdjustWindowRect(&wrc_, WS_OVERLAPPEDWINDOW, false);
 	// ウィンドウ生成
-		hwnd_ = CreateWindow(
-			wc_.lpszClassName,//　クラス名
-			title_,                //　タイトルバーの文字
-			WS_OVERLAPPEDWINDOW,  //　標準的なウィンドウスタイル
-			CW_USEDEFAULT,        //　標準X座標
-			CW_USEDEFAULT,        //　標準Y座標
-			wrc_.right - wrc_.left, //　横幅
-			wrc_.bottom - wrc_.top, //　縦幅ti
-			nullptr,              //　親ハンドル
-			nullptr,              //　メニューハンドル
-			wc_.hInstance,         //　インスタンスハンドル
-			nullptr               //　オプション
-		);
+	hwnd_ = CreateWindow(
+		wc_.lpszClassName,//　クラス名
+		title_,                //　タイトルバーの文字
+		WS_OVERLAPPEDWINDOW,  //　標準的なウィンドウスタイル
+		CW_USEDEFAULT,        //　標準X座標
+		CW_USEDEFAULT,        //　標準Y座標
+		wrc_.right - wrc_.left, //　横幅
+		wrc_.bottom - wrc_.top, //　縦幅ti
+		nullptr,              //　親ハンドル
+		nullptr,              //　メニューハンドル
+		wc_.hInstance,         //　インスタンスハンドル
+		nullptr               //　オプション
+	);
 
 		
-#ifdef _DEBUG
-	//ID3D12Debug1* debugController = nullptr;
-	if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugController_)))) {
-		//デバッグレイヤーを有効化する
-		debugController_->EnableDebugLayer();
-		//さらにGPU側でもチェックを行うようにする
-		debugController_->SetEnableGPUBasedValidation(TRUE);
-
-	}
 
 
-#endif
+	
+}
 
+
+void WindowsInitialization::DisplayWindow() {
 	//ウィンドウを表示
 	ShowWindow(hwnd_, SW_SHOW);
 }
+
+void WindowsInitialization::Initialize() {
+	//ウィンドウクラスを登録
+	RegisterWindowsClass();
+
+	//ウィンドウを表示
+	DisplayWindow();
+}
+
+
+
+
+
+
+void WindowsInitialization::WindowsMSG(MSG& msg) {
+	TranslateMessage(&msg);
+	DispatchMessage(&msg);
+}
+
 
 
 void WindowsInitialization::Close() {
@@ -78,9 +89,3 @@ void WindowsInitialization::Close() {
 	CloseWindow(hwnd_);
 }
 
-void WindowsInitialization::WindowReset() {
-#ifdef _DEBUG
-	debugController_->Release();
-
-#endif
-}

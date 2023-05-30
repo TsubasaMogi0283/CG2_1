@@ -6,19 +6,31 @@
 class WindowsInitialization {
 public:
 
-	static LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
+	//コンストラクタ
+	WindowsInitialization(const wchar_t* title, const int32_t WindowSizeWidth, const int32_t WindowSizeHeight);
+
 	
-	WindowsInitialization();
+
+	//ウィンドウクラスを登録
+	void RegisterWindowsClass();
+
+	//WINodwを表示
+	void DisplayWindow();
+
+
+	void Initialize();
 
 
 
-	void WindowInitialize(const wchar_t* title, const int32_t kClientWidth, const int32_t kClientHeight);
 
-	void WindowReset();
+
+	void WindowsMSG(MSG& msg);
+
 
 	void Close();
 
 
+	//Getter
 	int GetClientWidth() {
 		return kClientWidth_;
 	}
@@ -33,17 +45,17 @@ public:
 public:
 
 	////ウィンドウクラスを登録する
-	
+	const wchar_t* title_;
+	int32_t kClientWidth_;
+	int32_t kClientHeight_;
 
-	ID3D12Debug1* debugController_ = nullptr;
+	
 
 	HWND hwnd_;
 
 	WNDCLASS wc_{};
 
-	const wchar_t* title_;
-	int32_t kClientWidth_;
-	int32_t kClientHeight_;
+	
 
 };
 

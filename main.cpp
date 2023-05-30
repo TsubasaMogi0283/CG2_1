@@ -1,7 +1,6 @@
 #include "HeaderCpp/Function.h"
 #include "HeaderCpp/WindowsInitialization.h"
 #include "HeaderCpp/DirectXInitialization.h"
-#include "HeaderCpp/DXGIRelease.h"
 //includeなどは全部Function.hに入っているよ！
 
 
@@ -10,9 +9,15 @@
 //Winodwsアプリでもエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
-	const int32_t kClientWidth = 1280;
-	const int32_t kClientHeight = 720;
 
+	const int32_t WINDOW_SIZE_WIDTH = 1280;
+	const int32_t WINDOW_SIZE_HEIGHT = 720;
+
+
+	//コンストラクタ
+	WindowsInitialization* winSetup = new WindowsInitialization(L"DirectX",WINDOW_SIZE_WIDTH,WINDOW_SIZE_HEIGHT);
+	DirectXInitialization* directXSetup = new DirectXInitialization();
+	
 	
 	//三角形の情報
 	const int32_t TRIANGLE_AMOUNT_MAX = 15;
@@ -23,52 +28,38 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	};
 
 	
-
-	WindowsInitialization* window1= new WindowsInitialization(L"DirectX", kClientWidth,kClientHeight);
-	DirectXInitialization* directX = new DirectXInitialization();
-	DXGIRelease* releaseCheck = new DXGIRelease();
-
-	window1->WindowInitialize();
 	
-
-	//出力ウィンドウへの文字出力
-	OutputDebugStringA("Hello,DirectX!\n");
-
-	directX->DirectXInitialize(window1->GetClientWidth(),window1->GetClientHeight(),window1->hwnd_);
-	
-
-
-	TriangleProperty TriangleProperty_[TRIANGLE_AMOUNT_MAX];
+	TriangleProperty TriangleCoodinate_[TRIANGLE_AMOUNT_MAX];
 	{
-		TriangleProperty_[0] =
+		TriangleCoodinate_[0] =
 		{
 
 			{-0.8f,1.0f,0.0f,1.0f },
 			{-1.0f,0.5f,0.0f,1.0f },
 			{-0.6f,0.5f,0.0f,1.0f }
 		};
-		TriangleProperty_[1] =
+		TriangleCoodinate_[1] =
 		{
 
 			{-0.4f,1.0f,0.0f,1.0f },
 			{-0.6f,0.5f,0.0f,1.0f },
 			{-0.2f,0.5f,0.0f,1.0f }
 		};
-		TriangleProperty_[2] =
+		TriangleCoodinate_[2] =
 		{
 
 			{0.0f,1.0f,0.0f,1.0f },
 			{-0.2f,0.5f,0.0f,1.0f },
 			{0.2f,0.5f,0.0f,1.0f }
 		};
-		TriangleProperty_[3] =
+		TriangleCoodinate_[3] =
 		{
 
 			{0.4f,1.0f,0.0f,1.0f },
 			{0.2f,0.5f,0.0f,1.0f },
 			{0.6f,0.5f,0.0f,1.0f }
 		};
-		TriangleProperty_[4] =
+		TriangleCoodinate_[4] =
 		{
 
 			{0.8f,1.0f,0.0f,1.0f },
@@ -76,35 +67,35 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			{1.0f,0.5f,0.0f,1.0f }
 		};
 
-		TriangleProperty_[5] =
+		TriangleCoodinate_[5] =
 		{
 
 			{-0.8f,0.5f,0.0f,1.0f },
 			{-1.0f,0.0f,0.0f,1.0f },
 			{-0.6f,0.0f,0.0f,1.0f }
 		};
-		TriangleProperty_[6] =
+		TriangleCoodinate_[6] =
 		{
 
 			{-0.4f,0.5f,0.0f,1.0f },
 			{-0.6f,0.0f,0.0f,1.0f },
 			{-0.2f,0.0f,0.0f,1.0f }
 		};
-		TriangleProperty_[7] =
+		TriangleCoodinate_[7] =
 		{
 
 			{0.0f,0.5f,0.0f,1.0f },
 			{-0.2f,0.0f,0.0f,1.0f },
 			{0.2f,0.0f,0.0f,1.0f }
 		};
-		TriangleProperty_[8] =
+		TriangleCoodinate_[8] =
 		{
 
 			{0.4f,0.5f,0.0f,1.0f },
 			{0.2f,0.0f,0.0f,1.0f },
 			{0.6f,0.0f,0.0f,1.0f }
 		};
-		TriangleProperty_[9] =
+		TriangleCoodinate_[9] =
 		{
 
 			{0.8f,0.5f,0.0f,1.0f },
@@ -112,35 +103,35 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			{1.0f,0.0f,0.0f,1.0f }
 		};
 
-		TriangleProperty_[10] =
+		TriangleCoodinate_[10] =
 		{
 
 			{-0.8f,0.0f,0.0f,1.0f },
 			{-1.0f,-0.5f,0.0f,1.0f },
 			{-0.6f,-0.5f,0.0f,1.0f }
 		};
-		TriangleProperty_[11] =
+		TriangleCoodinate_[11] =
 		{
 
 			{-0.4f,0.0f,0.0f,1.0f },
 			{-0.6f,-0.5f,0.0f,1.0f },
 			{-0.2f,-0.5f,0.0f,1.0f }
 		};
-		TriangleProperty_[12] =
+		TriangleCoodinate_[12] =
 		{
 
 			{0.0f,0.0f,0.0f,1.0f },
 			{-0.2f,-0.5f,0.0f,1.0f },
 			{0.2f,-0.5f,0.0f,1.0f }
 		};
-		TriangleProperty_[13] =
+		TriangleCoodinate_[13] =
 		{
 
 			{0.4f,0.0f,0.0f,1.0f },
 			{0.2f,-0.5f,0.0f,1.0f },
 			{0.6f,-0.5f,0.0f,1.0f }
 		};
-		TriangleProperty_[14] =
+		TriangleCoodinate_[14] =
 		{
 
 			{0.8f,0.0f,0.0f,1.0f },
@@ -153,6 +144,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 
+	//初期化
+	winSetup->Initialize();
+	directXSetup->Initialize(winSetup->GetClientWidth(),winSetup->GetClientHeight(),winSetup->GetHwnd());
+
+
+
 	MSG msg{};
 
 	////メインループ
@@ -160,10 +157,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	while (msg.message != WM_QUIT) {
 		//Windowにメッセージが来てたら最優先で処理させる
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
-
 			
+			//common_->WinMSG(msg);
+			winSetup->WindowsMSG(msg);
 
 		}
 		else {
@@ -173,14 +169,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 		}
-		directX->BeginFlame(kClientWidth, kClientHeight);
+		directXSetup->BeginFlame(winSetup->GetClientWidth(), winSetup->GetClientHeight());
 
 
 		for (int i = 0; i < TRIANGLE_AMOUNT_MAX; i++) {
 			//描画処理
+			directXSetup->DrawTriangle(TriangleCoodinate_[i].top, TriangleCoodinate_[i].left, TriangleCoodinate_[i].right);
 		}
 
-		directX->EndFlame();
+		directXSetup->EndFlame();
 	}
 
 	
@@ -188,21 +185,34 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 
+	
+	
+
+
 	//解放処理
-	window1->WindowReset();
-	directX->DirectXRelease();
+	directXSetup->Release();
+	winSetup->Close();
 
-	//CloseWindow(window1->GetHwnd());
+	delete directXSetup;
+	delete winSetup;
+
+	////ReportLiveObjects
+	//DirectX12より低レベルのDXGIに問い合わせをする
+	//リソースリークチェック
+	IDXGIDebug1* debug_;
+	if (SUCCEEDED(DXGIGetDebugInterface1(0, IID_PPV_ARGS(&debug_)))) {
+		debug_->ReportLiveObjects(DXGI_DEBUG_ALL, DXGI_DEBUG_RLO_ALL);
+		debug_->ReportLiveObjects(DXGI_DEBUG_APP, DXGI_DEBUG_RLO_ALL);
+		debug_->ReportLiveObjects(DXGI_DEBUG_D3D12, DXGI_DEBUG_RLO_ALL);
+		debug_->Release();
+	}
+
+	
+	
 
 
-
-	releaseCheck->ReleaseCheck();
-
-
-
-	delete window1;
-	delete directX;
-	delete releaseCheck;
+	
+	
 
 	return 0;
 }

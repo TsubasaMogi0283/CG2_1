@@ -508,7 +508,7 @@ void DirectXInitialization::Initialize(int32_t windowsizeWidth, int32_t windowsi
 
 
 	//VertexResourceを生成
-	MakeVertexResource();
+	//MakeVertexResource();
 
 
 
@@ -606,21 +606,24 @@ void DirectXInitialization::BeginFlame(const int32_t kClientWidth, const int32_t
 
 
 //三角形
-void DirectXInitialization::MakeVertexResource() {
+void DirectXInitialization::MakeVertexResource(TriangleVertex& vertex) {
 	////VertexResourceを生成
 	//頂点リソース用のヒープを設定
 	D3D12_HEAP_PROPERTIES uploadHeapProperties{};
 	uploadHeapProperties.Type = D3D12_HEAP_TYPE_UPLOAD;
+
 	//頂点リソースの設定
 	D3D12_RESOURCE_DESC vertexResourceDesc{};
 	//バッファリソース。テクスチャの場合はまた別の設定をする
 	vertexResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
 	vertexResourceDesc.Width = sizeof(Vector4) * 3;
+
 	//バッファの場合はこれらは1にする決まり
 	vertexResourceDesc.Height = 1;
 	vertexResourceDesc.DepthOrArraySize = 1;
 	vertexResourceDesc.MipLevels = 1;
 	vertexResourceDesc.SampleDesc.Count = 1;
+
 	//バッファの場合はこれにする決まり
 	vertexResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
 
@@ -644,29 +647,31 @@ void DirectXInitialization::MakeVertexResource() {
 	//頂点バッファビューを作成する
 	
 	//リソースの先頭のアドレスから使う
-	vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
+	vertexBufferView.BufferLocation = vertexResource_->GetGPUVirtualAddress();
 	//使用するリソースのサイズは頂点３つ分のサイズ
-	vertexBufferView_.SizeInBytes = sizeof(Vector4) * 3;
+	vertexBufferView.SizeInBytes = sizeof(Vector4) * 3;
 	//１頂点あたりのサイズ
-	vertexBufferView_.StrideInBytes = sizeof(Vector4);
+	vertexBufferView.StrideInBytes = sizeof(Vector4);
 
 }
 
-void DirectXInitialization::DrawTriangle(Vector4 top, Vector4 left, Vector4 right) {
+
+
+void DirectXInitialization::DrawTriangle(Vector4 top, Vector4 left, Vector4 right,D3D12_VERTEX_BUFFER_VIEW vertexBufferView) {
+	////VertexResourceを生成
+	//MakeVertexResource();
+
+
 	
 
-
-	//Resourceにデータを書き込む
-	Vector4* vertexData = nullptr;
-
 	//書き込むためのアドレスを取得
-	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));
+	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
 	//左下
-	vertexData[0] = left;
+	vertexData_[0] = left;
 	//上
-	vertexData[1] =  top ;
+	vertexData_[1] =  top ;
 	//右下
-	vertexData[2] =  right ;
+	vertexData_[2] =  right ;
 	//範囲外は危険だよ！！
 
 
@@ -677,7 +682,7 @@ void DirectXInitialization::DrawTriangle(Vector4 top, Vector4 left, Vector4 righ
 	//RootSignatureを設定。PSOに設定しているけど別途設定が必要
 	commandList_->SetGraphicsRootSignature(rootSignature_);
 	commandList_->SetPipelineState(graphicsPipelineState_);
-	commandList_->IASetVertexBuffers(0, 1, &vertexBufferView_);
+	commandList_->IASetVertexBuffers(0, 1, &vertexBufferView);
 	//形状を設定。PSOに設定しているものとはまた別。同じものを設定すると考えよう
 	commandList_->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	//描画(DrawCall)３頂点で１つのインスタンス。

@@ -104,8 +104,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   <ItemGroup>
     <ClCompile Include="HeaderCpp\CG_Class\Adapter.cpp" />
     <ClCompile Include="HeaderCpp\CG_Class\DirectXSetup.cpp" />
-    <ClCompile Include="HeaderCpp\CG_Class\main.cpp" />
     <ClCompile Include="HeaderCpp\CG_Class\WinSetup.cpp" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HeaderCpp\CG_Class\Adapter.h" />

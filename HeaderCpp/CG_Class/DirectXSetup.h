@@ -17,7 +17,11 @@ struct  Vec4
 {
 	float x, y, z, w;
 };
-
+struct  VertexProperty
+{
+	D3D12_VERTEX_BUFFER_VIEW vertex;
+	ID3D12Resource* resouce;
+};
 
 struct Commands
 {
@@ -78,39 +82,89 @@ public:
 		IDxcCompiler3* dxcCompiler,
 		IDxcIncludeHandler* includeHandler);
 
-
+	/// <summary>
+	/// DXGIファクトリーの生成
+	/// </summary>
 	void CreateDXGiFactory();
 
+	/// <summary>
+	/// デバイスの生成
+	/// </summary>
 	void CreateDevice();
 
+	/// <summary>
+	/// windows11でのDXGIデバッグレイヤーとDX12デバッグレイヤーの相互バグによるエラーチェック
+	/// </summary>
 	void DebugErrorInfoQueue();
 
+	/// <summary>
+	/// コマンドリストの生成
+	/// </summary>
+	/// 
 	void CreateCommands();
-
+	/// <summary>
+	/// スワップチェーンの設定
+	/// </summary>
 	void CreateSwapChain(const int32_t Width, const int32_t Height,	HWND hwnd_);
 
+	
 	void CreatertvDescritorHeap();
 
+	/// <summary>
+	///  スワップチェーンの生成
+	/// </summary>
 	void CreateSwapChainResorce();
 
+	/// <summary>
+	/// RTVの生成
+	/// </summary>
 	void SettingandCreateRTV();
 
+	/// <summary>
+	/// フェンスの生成
+	/// </summary>
+	void CreateFence();
+
+	/// <summary>
+	/// DXCの初期化
+	/// </summary>
 	void DXCInitialize();
 
+	/// <summary>
+	/// PSOの生成
+	/// </summary>
 	void CreatePSO();
 
-	void CreateVecrtexResource();
+	/// <summary>
+	/// 三角形の頂点の生成
+	/// </summary>
+	void SetCreateVecrtexResource(VertexProperty &vertex);
 
 
-
+	/// <summary>
+	/// ループの一番最初に行う処理
+	/// </summary>
 	void BeginFlame(const int32_t kClientWidth, const int32_t kClientHeight);
 
-	void Draw(Vec4 top, Vec4 left, Vec4 right);
+	/// <summary>
+	/// 三角形の描画
+	/// </summary>
+	void Draw(Vec4 top, Vec4 left, Vec4 right, VertexProperty vertex);
 
+	/// <summary>
+	/// ループの最後の処理
+	/// </summary>
 	void EndFlame();
 	
+	/// <summary>
+	/// Release処理
+	/// </summary>
 	void Deleate();
 
+	/// <summary>
+	/// しっかりリリース処理されているかチェック
+	/// </summary>
+	void ChackRelease();
 
 private:
 
@@ -130,7 +184,7 @@ private:
 	ID3D12PipelineState* graphicsPipelineState = nullptr;
 	
 	ID3D12RootSignature* rootSignature = nullptr;
-	ID3D12Resource* vertexResource = nullptr;
+	
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView{};
 
 	HRESULT hr ;
@@ -149,6 +203,8 @@ private:
 
 	ID3D12Debug1 *debugController = nullptr;
 
+	//頂点リソース用のヒープの設定
+	D3D12_HEAP_PROPERTIES uploadHeapProperties{};
 
 
 };

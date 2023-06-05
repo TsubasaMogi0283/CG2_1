@@ -28,13 +28,12 @@ void Adapter::Initialize(const int32_t Width, const int32_t Height)
 	DXSetup_->CreateSwapChainResorce();
 	//RTVの設定と作成
 	DXSetup_->SettingandCreateRTV();
+	//フェンスの生成
+	DXSetup_->CreateFence();
 	//DXCの初期化
 	DXSetup_->DXCInitialize();
-	//PSOの生成
+	//PSOの生成能
 	DXSetup_->CreatePSO();
-
-
-
 	//終了
 
 }
@@ -48,7 +47,6 @@ void Adapter::WinMSG(MSG &msg)
 
 void Adapter::BeginFlame(const int32_t kClientWidth, const int32_t kClientHeight)
 {
-	
 	DXSetup_->BeginFlame(kClientWidth,kClientHeight);
 }
 
@@ -57,16 +55,26 @@ void Adapter::EndFlame()
 	DXSetup_->EndFlame();
 }
 
-void Adapter::TriangleDraw(Vec4 top, Vec4 left, Vec4 right)
+void Adapter::VertexCreate(VertexProperty&vertex)
 {
-	DXSetup_->CreateVecrtexResource();
-	DXSetup_->Draw(top, left, right);
+	
+	DXSetup_->SetCreateVecrtexResource(vertex);
+
+	
+}
+
+void Adapter::TriangleDraw(Vec4 top, Vec4 left, Vec4 right, VertexProperty vertex)
+{
+	//DXSetup_->CreateVecrtexResource();
+	DXSetup_->Draw(top, left, right,vertex);
 }
 
 void Adapter::Deleate()
 {
+
 	DXSetup_->Deleate();
 	WinSetup_->Deleate();
+	DXSetup_->ChackRelease();
 }
 
 Adapter::Adapter()

@@ -606,7 +606,7 @@ void DirectXInitialization::BeginFlame(const int32_t kClientWidth, const int32_t
 
 
 //三角形
-void DirectXInitialization::MakeVertexResource(TriangleVertex& vertex) {
+void DirectXInitialization::MakeVertexResource() {
 	////VertexResourceを生成
 	//頂点リソース用のヒープを設定
 	D3D12_HEAP_PROPERTIES uploadHeapProperties{};
@@ -643,15 +643,16 @@ void DirectXInitialization::MakeVertexResource(TriangleVertex& vertex) {
 	
 	
 
+
 	////VertexBufferViewを作成
 	//頂点バッファビューを作成する
 	
 	//リソースの先頭のアドレスから使う
-	vertexBufferView.BufferLocation = vertexResource_->GetGPUVirtualAddress();
+	vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
 	//使用するリソースのサイズは頂点３つ分のサイズ
-	vertexBufferView.SizeInBytes = sizeof(Vector4) * 3;
+	vertexBufferView_.SizeInBytes = sizeof(Vector4) * 3;
 	//１頂点あたりのサイズ
-	vertexBufferView.StrideInBytes = sizeof(Vector4);
+	vertexBufferView_.StrideInBytes = sizeof(Vector4);
 
 }
 
@@ -675,10 +676,6 @@ void DirectXInitialization::DrawTriangle(Vector4 top, Vector4 left, Vector4 righ
 	//範囲外は危険だよ！！
 
 
-	
-
-
-	
 	//RootSignatureを設定。PSOに設定しているけど別途設定が必要
 	commandList_->SetGraphicsRootSignature(rootSignature_);
 	commandList_->SetPipelineState(graphicsPipelineState_);
@@ -745,10 +742,6 @@ void DirectXInitialization::EndFlame() {
 	hr_ = commandList_->Reset(commandAllocator_, nullptr);
 	assert(SUCCEEDED(hr_));
 }
-
-
-
-
 
 void DirectXInitialization::Release() {
 

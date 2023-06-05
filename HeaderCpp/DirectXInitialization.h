@@ -62,7 +62,7 @@ public:
 	
 
 
-	void MakeVertexResource(TriangleVertex& vertex);
+	void MakeVertexResource();
 
 
 

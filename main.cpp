@@ -21,45 +21,50 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	
 	//三角形の情報
 	const int32_t TRIANGLE_AMOUNT_MAX = 15;
-	struct  TriangleProperty{
+
+
+	struct  TriangleProperty {
 		Vector4 top;
 		Vector4 left;
 		Vector4 right;
+		TriangleVertex vertex;
+
 	};
 
 	
 	
-	TriangleProperty TriangleCoodinate_[TRIANGLE_AMOUNT_MAX];
+	
+	TriangleProperty TriangleCoodinate[TRIANGLE_AMOUNT_MAX];
 	{
-		TriangleCoodinate_[0] =
+		TriangleCoodinate[0] =
 		{
 
 			{-0.8f,1.0f,0.0f,1.0f },
 			{-1.0f,0.5f,0.0f,1.0f },
 			{-0.6f,0.5f,0.0f,1.0f }
 		};
-		TriangleCoodinate_[1] =
+		TriangleCoodinate[1] =
 		{
 
 			{-0.4f,1.0f,0.0f,1.0f },
 			{-0.6f,0.5f,0.0f,1.0f },
 			{-0.2f,0.5f,0.0f,1.0f }
 		};
-		TriangleCoodinate_[2] =
+		TriangleCoodinate[2] =
 		{
 
 			{0.0f,1.0f,0.0f,1.0f },
 			{-0.2f,0.5f,0.0f,1.0f },
 			{0.2f,0.5f,0.0f,1.0f }
 		};
-		TriangleCoodinate_[3] =
+		TriangleCoodinate[3] =
 		{
 
 			{0.4f,1.0f,0.0f,1.0f },
 			{0.2f,0.5f,0.0f,1.0f },
 			{0.6f,0.5f,0.0f,1.0f }
 		};
-		TriangleCoodinate_[4] =
+		TriangleCoodinate[4] =
 		{
 
 			{0.8f,1.0f,0.0f,1.0f },
@@ -67,35 +72,35 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			{1.0f,0.5f,0.0f,1.0f }
 		};
 
-		TriangleCoodinate_[5] =
+		TriangleCoodinate[5] =
 		{
 
 			{-0.8f,0.5f,0.0f,1.0f },
 			{-1.0f,0.0f,0.0f,1.0f },
 			{-0.6f,0.0f,0.0f,1.0f }
 		};
-		TriangleCoodinate_[6] =
+		TriangleCoodinate[6] =
 		{
 
 			{-0.4f,0.5f,0.0f,1.0f },
 			{-0.6f,0.0f,0.0f,1.0f },
 			{-0.2f,0.0f,0.0f,1.0f }
 		};
-		TriangleCoodinate_[7] =
+		TriangleCoodinate[7] =
 		{
 
 			{0.0f,0.5f,0.0f,1.0f },
 			{-0.2f,0.0f,0.0f,1.0f },
 			{0.2f,0.0f,0.0f,1.0f }
 		};
-		TriangleCoodinate_[8] =
+		TriangleCoodinate[8] =
 		{
 
 			{0.4f,0.5f,0.0f,1.0f },
 			{0.2f,0.0f,0.0f,1.0f },
 			{0.6f,0.0f,0.0f,1.0f }
 		};
-		TriangleCoodinate_[9] =
+		TriangleCoodinate[9] =
 		{
 
 			{0.8f,0.5f,0.0f,1.0f },
@@ -103,35 +108,35 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			{1.0f,0.0f,0.0f,1.0f }
 		};
 
-		TriangleCoodinate_[10] =
+		TriangleCoodinate[10] =
 		{
 
 			{-0.8f,0.0f,0.0f,1.0f },
 			{-1.0f,-0.5f,0.0f,1.0f },
 			{-0.6f,-0.5f,0.0f,1.0f }
 		};
-		TriangleCoodinate_[11] =
+		TriangleCoodinate[11] =
 		{
 
 			{-0.4f,0.0f,0.0f,1.0f },
 			{-0.6f,-0.5f,0.0f,1.0f },
 			{-0.2f,-0.5f,0.0f,1.0f }
 		};
-		TriangleCoodinate_[12] =
+		TriangleCoodinate[12] =
 		{
 
 			{0.0f,0.0f,0.0f,1.0f },
 			{-0.2f,-0.5f,0.0f,1.0f },
 			{0.2f,-0.5f,0.0f,1.0f }
 		};
-		TriangleCoodinate_[13] =
+		TriangleCoodinate[13] =
 		{
 
 			{0.4f,0.0f,0.0f,1.0f },
 			{0.2f,-0.5f,0.0f,1.0f },
 			{0.6f,-0.5f,0.0f,1.0f }
 		};
-		TriangleCoodinate_[14] =
+		TriangleCoodinate[14] =
 		{
 
 			{0.8f,0.0f,0.0f,1.0f },
@@ -148,6 +153,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	winSetup->Initialize();
 	directXSetup->Initialize(winSetup->GetClientWidth(),winSetup->GetClientHeight(),winSetup->GetHwnd());
 
+
+	//三角形について
+	for (int i = 0; i < TRIANGLE_AMOUNT_MAX; i++) {
+		directXSetup->MakeVertexResource(TriangleCoodinate[i].vertex);
+	}
 
 
 	MSG msg{};
@@ -174,7 +184,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		for (int i = 0; i < TRIANGLE_AMOUNT_MAX; i++) {
 			//描画処理
-			directXSetup->DrawTriangle(TriangleCoodinate_[i].top, TriangleCoodinate_[i].left, TriangleCoodinate_[i].right);
+			directXSetup->DrawTriangle(
+				TriangleCoodinate[i].top, 
+				TriangleCoodinate[i].left, 
+				TriangleCoodinate[i].right,
+				TriangleCoodinate[i].vertex);
 		}
 
 		directXSetup->EndFlame();

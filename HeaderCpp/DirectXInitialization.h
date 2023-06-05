@@ -3,6 +3,16 @@
 #include "Function.h"
 #include "WindowsInitialization.h"
  
+
+struct TriangleVertex {
+	D3D12_VERTEX_BUFFER_VIEW vertexBuffer;
+	ID3D12Resource* resouce;
+};
+
+
+
+
+
 //メンバ変数関数いつか整理したい・・・
 //ごちゃごちゃしてる
 class DirectXInitialization {
@@ -52,7 +62,7 @@ public:
 	
 
 
-	void MakeVertexResource();
+	void MakeVertexResource(TriangleVertex& vertex);
 
 
 
@@ -60,7 +70,7 @@ public:
 	//whileの中身
 	void BeginFlame(const int32_t kClientWidth, const int32_t kClientHeight);
 
-	void DrawTriangle(Vector4 top, Vector4 left, Vector4 right);
+	void DrawTriangle(Vector4 top, Vector4 left, Vector4 right,D3D12_VERTEX_BUFFER_VIEW vertexBufferView);
 
 	void EndFlame();
 
@@ -80,7 +90,6 @@ private:
 	HWND hwnd_;
 
 	ID3D12Resource* vertexResource_ = nullptr;
-	ID3D12Resource* vertexResource1_ = nullptr;
 
 	ID3D12PipelineState* graphicsPipelineState_ = nullptr;
 
@@ -166,7 +175,8 @@ private:
 
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_{};
 
-
+	//Resourceにデータを書き込む
+	Vector4* vertexData_ = nullptr;
 
 	
 

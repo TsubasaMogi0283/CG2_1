@@ -507,7 +507,8 @@ void DirectXInitialization::Initialize(int32_t windowsizeWidth, int32_t windowsi
 
 
 
-
+	//VertexResourceを生成
+	MakeVertexResource();
 
 
 
@@ -652,8 +653,7 @@ void DirectXInitialization::MakeVertexResource() {
 }
 
 void DirectXInitialization::DrawTriangle(Vector4 top, Vector4 left, Vector4 right) {
-	//VertexResourceを生成
-	MakeVertexResource();
+	
 
 
 	//Resourceにデータを書き込む

@@ -89,3 +89,6 @@ void WindowsInitialization::Close() {
 	CloseWindow(hwnd_);
 }
 
+WindowsInitialization::~WindowsInitialization() {
+
+}

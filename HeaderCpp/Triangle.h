@@ -3,7 +3,9 @@
 
 class Triangle {
 public:
+	Triangle();
 
+	~Triangle();
 
 
 	void Release();

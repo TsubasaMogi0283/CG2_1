@@ -42,6 +42,9 @@ public:
 		return hwnd_;
 	}
 
+
+	~WindowsInitialization();
+
 public:
 
 	////ウィンドウクラスを登録する

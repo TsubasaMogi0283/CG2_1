@@ -18,6 +18,8 @@ struct TriangleVertex {
 class DirectXInitialization {
 public:
 	
+	DirectXInitialization();
+
 	//まとめたのが下の「Initialize」
 #pragma region 初期化について
 	//初期化へ
@@ -62,7 +64,7 @@ public:
 	
 
 
-	void MakeVertexResource();
+	void MakeVertexResource(TriangleVertex& vertexBuffer);
 
 
 
@@ -70,7 +72,7 @@ public:
 	//whileの中身
 	void BeginFlame(const int32_t kClientWidth, const int32_t kClientHeight);
 
-	void DrawTriangle(Vector4 top, Vector4 left, Vector4 right,D3D12_VERTEX_BUFFER_VIEW vertexBufferView);
+	void DrawTriangle(Vector4 top, Vector4 left, Vector4 right,TriangleVertex vertexBuffer);
 
 	void EndFlame();
 
@@ -79,6 +81,10 @@ public:
 
 	//解放
 	void Release();
+
+	void CheckRelease();
+
+	~DirectXInitialization();
 
 
 private:
@@ -178,6 +184,6 @@ private:
 	//Resourceにデータを書き込む
 	Vector4* vertexData_ = nullptr;
 
-	
+	IDXGIDebug1* debug_;
 
 };

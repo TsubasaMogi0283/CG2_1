@@ -4,7 +4,13 @@
 //includeなどは全部Function.hに入っているよ！
 
 
+struct  TriangleProperty {
+		Vector4 top;
+		Vector4 left;
+		Vector4 right;
+		TriangleVertex vertex;
 
+	};
 
 //Winodwsアプリでもエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
@@ -23,13 +29,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	const int32_t TRIANGLE_AMOUNT_MAX = 15;
 
 
-	struct  TriangleProperty {
-		Vector4 top;
-		Vector4 left;
-		Vector4 right;
-		TriangleVertex vertex;
-
-	};
+	
 
 	
 	
@@ -194,32 +194,23 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		directXSetup->EndFlame();
 	}
 
-	
 
-
-
-
-	
+	for (int i = 0; i < TRIANGLE_AMOUNT_MAX; i++) {
+		TriangleCoodinate[i].vertex.resouce->Release();
+	}
 	
 
 
 	//解放処理
 	directXSetup->Release();
 	winSetup->Close();
+	directXSetup->CheckRelease();
+	
 
-	delete directXSetup;
-	delete winSetup;
+	directXSetup->~DirectXInitialization();
+	winSetup->~WindowsInitialization();;
 
-	////ReportLiveObjects
-	//DirectX12より低レベルのDXGIに問い合わせをする
-	//リソースリークチェック
-	IDXGIDebug1* debug_;
-	if (SUCCEEDED(DXGIGetDebugInterface1(0, IID_PPV_ARGS(&debug_)))) {
-		debug_->ReportLiveObjects(DXGI_DEBUG_ALL, DXGI_DEBUG_RLO_ALL);
-		debug_->ReportLiveObjects(DXGI_DEBUG_APP, DXGI_DEBUG_RLO_ALL);
-		debug_->ReportLiveObjects(DXGI_DEBUG_D3D12, DXGI_DEBUG_RLO_ALL);
-		debug_->Release();
-	}
+	
 
 	
 	

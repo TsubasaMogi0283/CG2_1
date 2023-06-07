@@ -2,6 +2,10 @@
 #include "Function.h"
 
 
+DirectXInitialization::DirectXInitialization() {
+
+}
+
 void DirectXInitialization::GenerateDXGIFactory() {
 	//DXGIファクトリーの生成
 #ifdef _DEBUG
@@ -55,12 +59,6 @@ void DirectXInitialization::SelectAdapter() {
 
 
 
-
-
-
-
-
-
 void DirectXInitialization::GenerateD3D12Device() {
 	//機能レベルとログ出力用の文字
 	D3D_FEATURE_LEVEL featureLevels[] = {
@@ -88,8 +86,6 @@ void DirectXInitialization::GenerateD3D12Device() {
 
 
 }
-
-
 
 
 
@@ -137,14 +133,6 @@ void DirectXInitialization::StopErrorWarning() {
 
 #endif 
 }
-
-
-
-
-
-
-
-
 
 
 
@@ -298,9 +286,6 @@ void DirectXInitialization::SetRTV() {
 
 
 }
-
-
-
 
 void DirectXInitialization::InitializeDXC() {
 	////DXCの初期化
@@ -525,6 +510,8 @@ void DirectXInitialization::BeginFlame(const int32_t kClientWidth, const int32_t
 	//キックする・・・CommandQueueCommandListを渡してGPUの実行を開始すること
 	//画面をクリアするためのコマンドを積み、キックし、メインループを完成させる
 
+
+
 	//処理の内容
 	//1.BackBufferを決定する
 	//2.書き込む作業(画面のクリア)をしたいのでRTVを設定する
@@ -593,7 +580,6 @@ void DirectXInitialization::BeginFlame(const int32_t kClientWidth, const int32_t
 	scissorRect.bottom = kClientHeight;
 
 
-
 	////コマンドを積む
 	commandList_->RSSetViewports(1, &viewport);
 	commandList_->RSSetScissorRects(1, &scissorRect);
@@ -606,7 +592,7 @@ void DirectXInitialization::BeginFlame(const int32_t kClientWidth, const int32_t
 
 
 //三角形
-void DirectXInitialization::MakeVertexResource() {
+void DirectXInitialization::MakeVertexResource(TriangleVertex& vertexBuffer) {
 	////VertexResourceを生成
 	//頂点リソース用のヒープを設定
 	D3D12_HEAP_PROPERTIES uploadHeapProperties{};
@@ -637,7 +623,7 @@ void DirectXInitialization::MakeVertexResource() {
 		D3D12_HEAP_FLAG_NONE,
 		&vertexResourceDesc,
 		D3D12_RESOURCE_STATE_GENERIC_READ,
-		nullptr, IID_PPV_ARGS(&vertexResource_));
+		nullptr, IID_PPV_ARGS(&vertexBuffer.resouce));
 	assert(SUCCEEDED(hr_));
 
 	
@@ -648,17 +634,17 @@ void DirectXInitialization::MakeVertexResource() {
 	//頂点バッファビューを作成する
 	
 	//リソースの先頭のアドレスから使う
-	vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
+	vertexBuffer.vertexBuffer.BufferLocation = vertexBuffer.resouce->GetGPUVirtualAddress();
 	//使用するリソースのサイズは頂点３つ分のサイズ
-	vertexBufferView_.SizeInBytes = sizeof(Vector4) * 3;
+	vertexBuffer.vertexBuffer.SizeInBytes = sizeof(Vector4) * 3;
 	//１頂点あたりのサイズ
-	vertexBufferView_.StrideInBytes = sizeof(Vector4);
+	vertexBuffer.vertexBuffer.StrideInBytes = sizeof(Vector4);
 
 }
 
 
 
-void DirectXInitialization::DrawTriangle(Vector4 top, Vector4 left, Vector4 right,D3D12_VERTEX_BUFFER_VIEW vertexBufferView) {
+void DirectXInitialization::DrawTriangle(Vector4 top, Vector4 left, Vector4 right,TriangleVertex vertexBuffer) {
 	////VertexResourceを生成
 	//MakeVertexResource();
 
@@ -666,7 +652,7 @@ void DirectXInitialization::DrawTriangle(Vector4 top, Vector4 left, Vector4 righ
 	
 
 	//書き込むためのアドレスを取得
-	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
+	vertexBuffer.resouce->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
 	//左下
 	vertexData_[0] = left;
 	//上
@@ -679,7 +665,7 @@ void DirectXInitialization::DrawTriangle(Vector4 top, Vector4 left, Vector4 righ
 	//RootSignatureを設定。PSOに設定しているけど別途設定が必要
 	commandList_->SetGraphicsRootSignature(rootSignature_);
 	commandList_->SetPipelineState(graphicsPipelineState_);
-	commandList_->IASetVertexBuffers(0, 1, &vertexBufferView);
+	commandList_->IASetVertexBuffers(0, 1, &vertexBuffer.vertexBuffer);
 	//形状を設定。PSOに設定しているものとはまた別。同じものを設定すると考えよう
 	commandList_->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	//描画(DrawCall)３頂点で１つのインスタンス。
@@ -745,16 +731,7 @@ void DirectXInitialization::EndFlame() {
 
 void DirectXInitialization::Release() {
 
-	//////解放処理
-	vertexResource_->Release();
-	graphicsPipelineState_->Release();
-	signatureBlob_->Release();
-	if (errorBlob_) {
-		errorBlob_->Release();
-	}
 	
-	rootSignature_->Release();
-
 	
 
 	//////解放処理
@@ -775,6 +752,17 @@ void DirectXInitialization::Release() {
 	useAdapter_->Release();
 	dxgiFactory_->Release();
 
+	//////解放処理
+	//vertexResource_->Release();
+
+
+	graphicsPipelineState_->Release();
+	signatureBlob_->Release();
+	if (errorBlob_) {
+		errorBlob_->Release();
+	}
+	
+	rootSignature_->Release();
 
 	
 
@@ -788,5 +776,23 @@ void DirectXInitialization::Release() {
 	
 
 
+
+}
+
+
+void DirectXInitialization::CheckRelease() {
+	////ReportLiveObjects
+	//DirectX12より低レベルのDXGIに問い合わせをする
+	//リソースリークチェック
+	
+	if (SUCCEEDED(DXGIGetDebugInterface1(0, IID_PPV_ARGS(&debug_)))) {
+		debug_->ReportLiveObjects(DXGI_DEBUG_ALL, DXGI_DEBUG_RLO_ALL);
+		debug_->ReportLiveObjects(DXGI_DEBUG_APP, DXGI_DEBUG_RLO_ALL);
+		debug_->ReportLiveObjects(DXGI_DEBUG_D3D12, DXGI_DEBUG_RLO_ALL);
+		debug_->Release();
+	}
+}
+
+DirectXInitialization::~DirectXInitialization(){
 
 }

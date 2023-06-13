@@ -224,7 +224,9 @@ void DirectX::MakeCommandQueue()
 void DirectX::MakeCommandAllocator()
 {
 	//コマンドアロケータを作成
-	hr = device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&commandAllocator));
+	hr = device->CreateCommandAllocator(
+		D3D12_COMMAND_LIST_TYPE_DIRECT, 
+		IID_PPV_ARGS(&commandAllocator));
 	//コマンドアロケータの生成ができないので起動できない
 	assert(SUCCEEDED(hr));
 }
@@ -232,7 +234,10 @@ void DirectX::MakeCommandAllocator()
 void DirectX::MakeCommandList()
 {
 	//コマンドリストを作成
-	hr = device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, commandAllocator, nullptr, IID_PPV_ARGS(&commandList));
+	hr = device->CreateCommandList(
+		0, 
+		D3D12_COMMAND_LIST_TYPE_DIRECT, 
+		commandAllocator, nullptr, IID_PPV_ARGS(&commandList));
 	//コマンドリストの生成ができないので起動できない
 	assert(SUCCEEDED(hr));
 }
@@ -263,6 +268,7 @@ void DirectX::MakeDescriptorHeap()
 	hr = device->CreateDescriptorHeap(&rtvDescriptorHeapDesc, IID_PPV_ARGS(&rtvDescriptorHeap));
 	//ディスクリプタヒープの生成ができないので起動できない
 	assert(SUCCEEDED(hr));
+	
 	//SwapChainからResourceを持ってくる
 	hr = swapChain->GetBuffer(0, IID_PPV_ARGS(&swapChainResources[0]));
 	//リソースの取得ができないので起動できない
@@ -270,6 +276,7 @@ void DirectX::MakeDescriptorHeap()
 	hr = swapChain->GetBuffer(1, IID_PPV_ARGS(&swapChainResources[1]));
 	//リソースの取得ができないので起動できない
 	assert(SUCCEEDED(hr));
+	
 	//RTVの設定
 	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc{};
 	rtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;

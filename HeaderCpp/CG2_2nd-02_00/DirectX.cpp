@@ -1,172 +1,5 @@
 #include"DirectX.h"
 
-
-
-void DirectX::Initialize(WinApp* winApp,int32_t kClientWidth, int32_t kClientHeight)
-{
-	winApp_ = winApp;
-	kClientWidth_ = kClientWidth;
-	kClientHeight_ = kClientHeight;
-#ifdef _DEBUG
-	if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugController)))) {
-		//デバッグレイヤ―を有効化
-		debugController->EnableDebugLayer();
-		//GPU側のチェック
-		debugController->SetEnableGPUBasedValidation(TRUE);
-	}
-#endif
-	
-	MakeDXGIFactory();
-
-	MakeD3D12Device();
-#ifdef _DEBUG
-	ID3D12InfoQueue* infoQueue = nullptr;
-	if (SUCCEEDED(device->QueryInterface(IID_PPV_ARGS(&infoQueue)))) {
-		//やばいエラー
-		infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_CORRUPTION, true);
-		//エラー
-		infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_ERROR, true);
-		//警告
-		infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_WARNING, true);
-		//リリース
-		infoQueue->Release();
-		//エラーの抑制
-		D3D12_MESSAGE_ID denyIds[] = {
-			D3D12_MESSAGE_ID_RESOURCE_BARRIER_MISMATCHING_COMMAND_LIST_TYPE
-		};
-		//抑制レベル
-		D3D12_MESSAGE_SEVERITY severities[] = { D3D12_MESSAGE_SEVERITY_INFO };
-		D3D12_INFO_QUEUE_FILTER filter{};
-		filter.DenyList.NumIDs = _countof(denyIds);
-		filter.DenyList.pIDList = denyIds;
-		filter.DenyList.NumSeverities = _countof(severities);
-		filter.DenyList.pSeverityList = severities;
-		infoQueue->PushStorageFilter(&filter);
-	}
-#endif
-	MakeCommandQueue();
-
-	MakeCommandAllocator();
-
-	MakeCommandList();
-
-	MakeSwapChain();
-	
-	MakeDescriptorHeap();
-
-	MakeFence();
-
-	MakeDXC();
-
-	MakeRootSignature();
-
-	MakeInputLayOut();
-
-	MakeBlendState();
-
-	MakeRasterizarState();
-
-	MakeShaderCompile();
-
-	MakePipelineStateObject();
-
-	MakeViewport();
-
-	MakeScissor();
-}
-
-void DirectX::PreView()
-{
-	//コマンドを積む
-	//バックバッファのインデックス取得
-	UINT backBufferIndex = swapChain->GetCurrentBackBufferIndex();
-	//今回のバリアはTransition
-	barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-	//noneにしておく
-	barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-	//バリアを貼る対象のリソース
-	barrier.Transition.pResource = swapChainResources[backBufferIndex];
-	barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT;
-	barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
-	//TransitionBarrierを張る
-	commandList->ResourceBarrier(1, &barrier);
-
-	//描画先のRTVの設定
-	commandList->OMSetRenderTargets(1,&rtvHandles[backBufferIndex],false,nullptr);
-	//指定した色で画面全体をクリア
-	float clearColor[] = { 0.1f,0.25f,0.5f,1.0f };//いつもの青っぽいやつ
-	commandList->ClearRenderTargetView(rtvHandles[backBufferIndex], clearColor, 0, nullptr);
-	
-	commandList->RSSetViewports(1, &viewport);
-	commandList->RSSetScissorRects(1, &scissorRect);
-	commandList->SetGraphicsRootSignature(rootSignature);
-	commandList->SetPipelineState(graphicsPipelineState);
-}
-
-void DirectX::PostView()
-{
-	//RenderTargetからPresentにする
-	barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
-	barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;
-	//TransitionBarrierを張る
-	commandList->ResourceBarrier(1, &barrier);
-
-	hr = commandList->Close();
-	assert(SUCCEEDED(hr));
-	//コマンドをキック
-	ID3D12CommandList* commandLists[] = { commandList };
-	commandQueue->ExecuteCommandLists(1, commandLists);
-	swapChain->Present(1, 0);
-	//Fenceの更新
-	fenceValue++;
-	commandQueue->Signal(fence, fenceValue);
-	if (fence->GetCompletedValue() < fenceValue) {
-		fence->SetEventOnCompletion(fenceValue, fenceEvent);
-		WaitForSingleObject(fenceEvent, INFINITE);
-	}
-	hr = commandAllocator->Reset();
-	assert(SUCCEEDED(hr));
-	hr = commandList->Reset(commandAllocator, nullptr);
-	assert(SUCCEEDED(hr));
-
-}
-
-void DirectX::Release()
-{
-	CloseHandle(fenceEvent);
-	fence->Release();
-	rtvDescriptorHeap->Release();
-	swapChainResources[0]->Release();
-	swapChainResources[1]->Release();
-	swapChain->Release();
-	commandList->Release();
-	commandAllocator->Release();
-	commandQueue->Release();
-	device->Release();
-	useAdapter->Release();
-	dxgiFactory->Release();
-#ifdef _DEBUG
-	debugController->Release();
-#endif
-	CloseWindow(winApp_->GetHWND());
-	graphicsPipelineState->Release();
-	signatureBlob->Release();
-	if (errorBlob) {
-		errorBlob->Release();
-	}
-	rootSignature->Release();
-	pixelShaderBlob->Release();
-	vertexShaderBlob->Release();
-	IDXGIDebug1* debug;
-	if (SUCCEEDED(DXGIGetDebugInterface1(0, IID_PPV_ARGS(&debug)))) {
-		debug->ReportLiveObjects(DXGI_DEBUG_ALL, DXGI_DEBUG_RLO_ALL);
-		debug->ReportLiveObjects(DXGI_DEBUG_APP, DXGI_DEBUG_RLO_ALL);
-		debug->ReportLiveObjects(DXGI_DEBUG_D3D12, DXGI_DEBUG_RLO_ALL);
-		debug->Release();
-	}
-}
-
-
 //プライベート関数
 void DirectX::MakeDXGIFactory()
 {
@@ -440,5 +273,177 @@ void DirectX::MakeScissor()
 	scissorRect.top = 0;
 	scissorRect.bottom = kClientHeight_;
 }
+
+void DirectX::Initialize(WinApp* winApp,int32_t kClientWidth, int32_t kClientHeight)
+{
+	winApp_ = winApp;
+	kClientWidth_ = kClientWidth;
+	kClientHeight_ = kClientHeight;
+#ifdef _DEBUG
+	if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugController)))) {
+		//デバッグレイヤ―を有効化
+		debugController->EnableDebugLayer();
+		//GPU側のチェック
+		debugController->SetEnableGPUBasedValidation(TRUE);
+	}
+#endif
+	
+	MakeDXGIFactory();
+
+	MakeD3D12Device();
+#ifdef _DEBUG
+	ID3D12InfoQueue* infoQueue = nullptr;
+	if (SUCCEEDED(device->QueryInterface(IID_PPV_ARGS(&infoQueue)))) {
+		//やばいエラー
+		infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_CORRUPTION, true);
+		//エラー
+		infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_ERROR, true);
+		//警告
+		infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_WARNING, true);
+		//リリース
+		infoQueue->Release();
+		//エラーの抑制
+		D3D12_MESSAGE_ID denyIds[] = {
+			D3D12_MESSAGE_ID_RESOURCE_BARRIER_MISMATCHING_COMMAND_LIST_TYPE
+		};
+		//抑制レベル
+		D3D12_MESSAGE_SEVERITY severities[] = { D3D12_MESSAGE_SEVERITY_INFO };
+		D3D12_INFO_QUEUE_FILTER filter{};
+		filter.DenyList.NumIDs = _countof(denyIds);
+		filter.DenyList.pIDList = denyIds;
+		filter.DenyList.NumSeverities = _countof(severities);
+		filter.DenyList.pSeverityList = severities;
+		infoQueue->PushStorageFilter(&filter);
+	}
+#endif
+	MakeCommandQueue();
+
+	MakeCommandAllocator();
+
+	MakeCommandList();
+
+	MakeSwapChain();
+	
+	MakeDescriptorHeap();
+
+	MakeFence();
+
+	MakeDXC();
+
+	MakeRootSignature();
+
+	MakeInputLayOut();
+
+	MakeBlendState();
+
+	MakeRasterizarState();
+
+	MakeShaderCompile();
+
+	MakePipelineStateObject();
+
+	MakeViewport();
+
+	MakeScissor();
+}
+
+void DirectX::PreView()
+{
+	//コマンドを積む
+	//バックバッファのインデックス取得
+	UINT backBufferIndex = swapChain->GetCurrentBackBufferIndex();
+	//今回のバリアはTransition
+	barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+	//noneにしておく
+	barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+	//バリアを貼る対象のリソース
+	barrier.Transition.pResource = swapChainResources[backBufferIndex];
+	barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT;
+	barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
+	//TransitionBarrierを張る
+	commandList->ResourceBarrier(1, &barrier);
+
+	//描画先のRTVの設定
+	commandList->OMSetRenderTargets(1,&rtvHandles[backBufferIndex],false,nullptr);
+	//指定した色で画面全体をクリア
+	float clearColor[] = { 0.1f,0.25f,0.5f,1.0f };//いつもの青っぽいやつ
+	commandList->ClearRenderTargetView(rtvHandles[backBufferIndex], clearColor, 0, nullptr);
+	
+	commandList->RSSetViewports(1, &viewport);
+	commandList->RSSetScissorRects(1, &scissorRect);
+	commandList->SetGraphicsRootSignature(rootSignature);
+	commandList->SetPipelineState(graphicsPipelineState);
+}
+
+void DirectX::PostView()
+{
+	//RenderTargetからPresentにする
+	barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
+	barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;
+	//TransitionBarrierを張る
+	commandList->ResourceBarrier(1, &barrier);
+
+	hr = commandList->Close();
+	assert(SUCCEEDED(hr));
+	//コマンドをキック
+	ID3D12CommandList* commandLists[] = { commandList };
+	commandQueue->ExecuteCommandLists(1, commandLists);
+	swapChain->Present(1, 0);
+	//Fenceの更新
+	fenceValue++;
+	commandQueue->Signal(fence, fenceValue);
+	if (fence->GetCompletedValue() < fenceValue) {
+		fence->SetEventOnCompletion(fenceValue, fenceEvent);
+		WaitForSingleObject(fenceEvent, INFINITE);
+	}
+	hr = commandAllocator->Reset();
+	assert(SUCCEEDED(hr));
+	hr = commandList->Reset(commandAllocator, nullptr);
+	assert(SUCCEEDED(hr));
+
+}
+
+void DirectX::Release()
+{
+	CloseHandle(fenceEvent);
+	fence->Release();
+
+	rtvDescriptorHeap->Release();
+
+	swapChainResources[0]->Release();
+	swapChainResources[1]->Release();
+	swapChain->Release();
+
+	commandList->Release();
+	commandAllocator->Release();
+	commandQueue->Release();
+
+	device->Release();
+	useAdapter->Release();
+	dxgiFactory->Release();
+#ifdef _DEBUG
+	debugController->Release();
+#endif
+	CloseWindow(winApp_->GetHWND());
+
+	graphicsPipelineState->Release();
+	signatureBlob->Release();
+	if (errorBlob) {
+		errorBlob->Release();
+	}
+	rootSignature->Release();
+	pixelShaderBlob->Release();
+	vertexShaderBlob->Release();
+	IDXGIDebug1* debug;
+	if (SUCCEEDED(DXGIGetDebugInterface1(0, IID_PPV_ARGS(&debug)))) {
+		debug->ReportLiveObjects(DXGI_DEBUG_ALL, DXGI_DEBUG_RLO_ALL);
+		debug->ReportLiveObjects(DXGI_DEBUG_APP, DXGI_DEBUG_RLO_ALL);
+		debug->ReportLiveObjects(DXGI_DEBUG_D3D12, DXGI_DEBUG_RLO_ALL);
+		debug->Release();
+	}
+}
+
+
+
 
 

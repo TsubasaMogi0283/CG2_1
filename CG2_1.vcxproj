@@ -88,10 +88,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="HeaderCpp\DirectX.cpp" />
-    <ClCompile Include="HeaderCpp\DrawEngine.cpp" />
-    <ClCompile Include="HeaderCpp\Log.cpp" />
-    <ClCompile Include="HeaderCpp\WinApp.cpp" />
+    <ClCompile Include="HeaderCpp\CG2_2nd-02_00\DirectX.cpp" />
+    <ClCompile Include="HeaderCpp\CG2_2nd-02_00\DrawEngine.cpp" />
+    <ClCompile Include="HeaderCpp\CG2_2nd-02_00\Log.cpp" />
+    <ClCompile Include="HeaderCpp\CG2_2nd-02_00\WinApp.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -109,11 +109,11 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="HeaderCpp\DirectX.h" />
-    <ClInclude Include="HeaderCpp\DrawEngine.h" />
-    <ClInclude Include="HeaderCpp\Log.h" />
-    <ClInclude Include="HeaderCpp\Vector4.h" />
-    <ClInclude Include="HeaderCpp\WinApp.h" />
+    <ClInclude Include="HeaderCpp\CG2_2nd-02_00\DirectX.h" />
+    <ClInclude Include="HeaderCpp\CG2_2nd-02_00\DrawEngine.h" />
+    <ClInclude Include="HeaderCpp\CG2_2nd-02_00\Log.h" />
+    <ClInclude Include="HeaderCpp\CG2_2nd-02_00\Vector.h" />
+    <ClInclude Include="HeaderCpp\CG2_2nd-02_00\WinApp.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

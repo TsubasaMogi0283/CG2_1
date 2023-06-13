@@ -103,8 +103,6 @@ void DirectX::PreView()
 	commandList->SetPipelineState(graphicsPipelineState);
 }
 
-
-
 void DirectX::PostView()
 {
 	//RenderTargetからPresentにする
@@ -152,18 +150,13 @@ void DirectX::Release()
 #endif
 	CloseWindow(winApp_->GetHWND());
 	graphicsPipelineState->Release();
-	pixelShaderBlob->Release();
-	vertexShaderBlob->Release();
+	signatureBlob->Release();
 	if (errorBlob) {
 		errorBlob->Release();
 	}
-	signatureBlob->Release();
 	rootSignature->Release();
-	includeHandler->Release();
-	shaderError->Release();
-	shaderBlob->Release();
-	dxcCompiler->Release();
-	dxcUtils->Release();
+	pixelShaderBlob->Release();
+	vertexShaderBlob->Release();
 	IDXGIDebug1* debug;
 	if (SUCCEEDED(DXGIGetDebugInterface1(0, IID_PPV_ARGS(&debug)))) {
 		debug->ReportLiveObjects(DXGI_DEBUG_ALL, DXGI_DEBUG_RLO_ALL);

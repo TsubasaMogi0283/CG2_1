@@ -1,6 +1,6 @@
-#include "HeaderCpp/DirectX.h"
-#include "HeaderCpp/WinApp.h"
-#include "HeaderCpp/DrawEngine.h"
+#include "HeaderCpp/CG2_2nd-02_00/WinApp.h"
+#include"HeaderCpp/CG2_2nd-02_00/DirectX.h"
+#include"HeaderCpp/CG2_2nd-02_00/DrawEngine.h"
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//ウィンドウクラス
 	WinApp* winApp = new WinApp();
@@ -11,9 +11,48 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//DirectX
 	DirectX* directX = new DirectX();
 	directX->Initialize(winApp, kClientWidth, kClientHeight);
-	DrawEngine* drawEngine = new DrawEngine();
-	drawEngine->Initialize(directX);
+	DrawEngine* drawEngine[10];
+	for (int i = 0; i < 10; i++) {
+		drawEngine[i] = new DrawEngine();
+		drawEngine[i]->Initialize(directX);
+	}
 	MSG msg{};
+	Vector4 Left[10] = {
+		{-0.1f,0.9f,0.0f,1.0f},
+		{-0.1f,0.8f,0.0f,1.0f},
+		{-0.1f,0.7f,0.0f,1.0f},
+		{-0.1f,0.6f,0.0f,1.0f},
+		{-0.1f,0.5f,0.0f,1.0f},
+		{-0.1f,0.4f,0.0f,1.0f},
+		{-0.1f,0.3f,0.0f,1.0f},
+		{-0.1f,0.2f,0.0f,1.0f},
+		{-0.1f,0.1f,0.0f,1.0f},
+		{-0.1f,0.0f,0.0f,1.0f}
+	};
+	Vector4 Top[10] = {
+		{0.0f,1.0f,0.0f,1.0f},
+		{0.0f,0.9f,0.0f,1.0f},
+		{0.0f,0.8f,0.0f,1.0f},
+		{0.0f,0.7f,0.0f,1.0f},
+		{0.0f,0.6f,0.0f,1.0f},
+		{0.0f,0.5f,0.0f,1.0f},
+		{0.0f,0.4f,0.0f,1.0f},
+		{0.0f,0.3f,0.0f,1.0f},
+		{0.0f,0.2f,0.0f,1.0f},
+		{0.0f,0.1f,0.0f,1.0f}
+	};
+	Vector4 Right[10] = {
+		{0.1f,0.9f,0.0f,1.0f},
+		{0.1f,0.8f,0.0f,1.0f},
+		{0.1f,0.7f,0.0f,1.0f},
+		{0.1f,0.6f,0.0f,1.0f},
+		{0.1f,0.5f,0.0f,1.0f},
+		{0.1f,0.4f,0.0f,1.0f},
+		{0.1f,0.3f,0.0f,1.0f},
+		{0.1f,0.2f,0.0f,1.0f},
+		{0.1f,0.1f,0.0f,1.0f},
+		{0.1f,0.0f,0.0f,1.0f},
+	};
 
 	while (msg.message != WM_QUIT) {
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
@@ -23,20 +62,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		else {
 			//ゲームループ
 			directX->PreView();
-			drawEngine->Draw({-0.1f,0.9f,0.0f,1.0f},{0.0f,1.0f,0.0f,1.0f},{0.1f,0.9f,0.0f,1.0f});
-			drawEngine->Draw({-0.1f,0.8f,0.0f,1.0f},{0.0f,0.9f,0.0f,1.0f},{0.1f,0.8f,0.0f,1.0f});
-			drawEngine->Draw({-0.1f,0.7f,0.0f,1.0f},{0.0f,0.8f,0.0f,1.0f},{0.1f,0.7f,0.0f,1.0f});
-			drawEngine->Draw({-0.1f,0.6f,0.0f,1.0f},{0.0f,0.7f,0.0f,1.0f},{0.1f,0.6f,0.0f,1.0f});
-			drawEngine->Draw({-0.1f,0.5f,0.0f,1.0f},{0.0f,0.6f,0.0f,1.0f},{0.1f,0.5f,0.0f,1.0f});
-			drawEngine->Draw({-0.1f,0.4f,0.0f,1.0f},{0.0f,0.5f,0.0f,1.0f},{0.1f,0.4f,0.0f,1.0f});
-			drawEngine->Draw({-0.1f,0.3f,0.0f,1.0f},{0.0f,0.4f,0.0f,1.0f},{0.1f,0.3f,0.0f,1.0f});
-			drawEngine->Draw({-0.1f,0.2f,0.0f,1.0f},{0.0f,0.3f,0.0f,1.0f},{0.1f,0.2f,0.0f,1.0f});
-			drawEngine->Draw({-0.1f,0.1f,0.0f,1.0f},{0.0f,0.2f,0.0f,1.0f},{0.1f,0.1f,0.0f,1.0f});
-			drawEngine->Draw({-0.1f,0.0f,0.0f,1.0f},{0.0f,0.1f,0.0f,1.0f},{0.1f,0.0f,0.0f,1.0f});
+			for (int i = 0; i < 10; i++) {
+				drawEngine[i]->Draw(Left[i], Top[i], Right[i]);
+			}
 			directX->PostView();
 		}
 	}
-	drawEngine->Release();
+	for (int i = 0; i < 10; i++) {
+		drawEngine[i]->Release();
+	}
+	
 	directX->Release();
 }
-

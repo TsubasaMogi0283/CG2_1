@@ -7,7 +7,7 @@ class WindowsInitialization {
 public:
 
 	//コンストラクタ
-	WindowsInitialization(const wchar_t* title, const int32_t WindowSizeWidth, const int32_t WindowSizeHeight);
+	WindowsInitialization();
 
 	
 
@@ -18,7 +18,7 @@ public:
 	void DisplayWindow();
 
 
-	void Initialize();
+	void Initialize(const wchar_t* title, const int32_t WindowSizeWidth, const int32_t WindowSizeHeight);
 
 
 
@@ -30,7 +30,7 @@ public:
 	void Close();
 
 
-	//Getter
+	////Getter
 	int GetClientWidth() {
 		return kClientWidth_;
 	}
@@ -38,6 +38,7 @@ public:
 		return kClientHeight_;
 	}
 
+	
 	HWND GetHwnd() {
 		return hwnd_;
 	}
@@ -45,7 +46,7 @@ public:
 
 	~WindowsInitialization();
 
-public:
+private:
 
 	////ウィンドウクラスを登録する
 	const wchar_t* title_;

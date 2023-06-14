@@ -6,11 +6,8 @@
 
 
 
-WindowsInitialization::WindowsInitialization(const wchar_t* title, const int32_t WindowSizeWidth, const int32_t WindowSizeHeight) {
-	this->title_ = title;
-	this->kClientWidth_ = WindowSizeWidth;
-	this->kClientHeight_=WindowSizeHeight;
-
+WindowsInitialization::WindowsInitialization() {
+	
 }
 
 
@@ -18,8 +15,6 @@ WindowsInitialization::WindowsInitialization(const wchar_t* title, const int32_t
 
 void  WindowsInitialization::RegisterWindowsClass() {
 	
-
-
 	
 	//ウィンドウプロシャージャ
 	wc_.lpfnWndProc = WindowProc;
@@ -34,7 +29,7 @@ void  WindowsInitialization::RegisterWindowsClass() {
 
 	//クライアント領域サイズ
 	//ウィンドウサイズを表す構造体にクライアント領域を入れる
-	RECT wrc_ = { 0,0,kClientWidth_ ,kClientHeight_ };
+	RECT wrc_ = { 0,0, kClientWidth_,kClientHeight_ };
 	// クライアント領域を元に実際のサイズにwrcを変更
 	AdjustWindowRect(&wrc_, WS_OVERLAPPEDWINDOW, false);
 	// ウィンドウ生成
@@ -64,7 +59,12 @@ void WindowsInitialization::DisplayWindow() {
 	ShowWindow(hwnd_, SW_SHOW);
 }
 
-void WindowsInitialization::Initialize() {
+void WindowsInitialization::Initialize(const wchar_t* title, const int32_t WindowSizeWidth, const int32_t WindowSizeHeight) {
+	this->title_ = title;
+	this->kClientWidth_ = WindowSizeWidth;
+	this->kClientHeight_ = WindowSizeHeight;
+
+	
 	//ウィンドウクラスを登録
 	RegisterWindowsClass();
 
@@ -92,3 +92,5 @@ void WindowsInitialization::Close() {
 WindowsInitialization::~WindowsInitialization() {
 
 }
+
+

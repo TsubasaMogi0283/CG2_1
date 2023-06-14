@@ -1,6 +1,17 @@
 #include "Function.h"
 
 
+
+
+
+
+
+
+
+
+
+
+
 LRESULT CALLBACK  WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam){
 	switch (msg) {
 		//ウィンドウが破棄された

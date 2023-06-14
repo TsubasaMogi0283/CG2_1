@@ -4,17 +4,11 @@
 #include "WindowsInitialization.h"
  
 
-struct TriangleVertex {
-	D3D12_VERTEX_BUFFER_VIEW vertexBuffer;
-	ID3D12Resource* resouce;
-};
 
 
 
 
 
-//メンバ変数関数いつか整理したい・・・
-//ごちゃごちゃしてる
 class DirectXInitialization {
 public:
 	
@@ -34,10 +28,10 @@ public:
 	void StopErrorWarning();
 
 	
-	void GenerateCommandList();
+	void GenerateCommand();
 	
 
-	void GenerateSwapChain(int32_t windowsizeWidth, int32_t windowsizeHeight,HWND hwnd_);
+	void GenerateSwapChain();
 
 	void MakeDescriptorHeap();
 
@@ -50,35 +44,33 @@ public:
 
 	void MakePSO();
 
+	void GenarateViewport();
+	void GenerateScissor();
+
+
 #pragma endregion
 	
 	void Initialize(int32_t windowsizeWidth, int32_t windowsizeHeight,HWND hwnd_);
 
-
 	
 
 
+	//void GenarateVertexResource(TriangleVertex& vertexBuffer);
 
 
 
-	
-
-
-	void MakeVertexResource(TriangleVertex& vertexBuffer);
-
-
-
-
+#pragma region whileの中身
 	//whileの中身
-	void BeginFlame(const int32_t kClientWidth, const int32_t kClientHeight);
+	void BeginFlame();
 
-	void DrawTriangle(Vector4 top, Vector4 left, Vector4 right,TriangleVertex vertexBuffer);
+	//void DrawTriangle(Vector4 top, Vector4 left, Vector4 right,TriangleVertex vertexBuffer);
 
 	void EndFlame();
 
+#pragma endregion
 	
 
-
+#pragma region 解放処理
 	//解放
 	void Release();
 
@@ -86,12 +78,30 @@ public:
 
 	~DirectXInitialization();
 
+#pragma endregion
+	
+
+	HRESULT GetHr_() {
+		return hr_;
+	}
+
+	ID3D12Device* GetDevice() {
+		return device_;
+	}
+	
+	ID3D12GraphicsCommandList* GetCommandList() {
+		return commandList_;
+	}
+
+	
 
 private:
-	int32_t windowsizeWidth_; 
-	int32_t windowsizeHeight_; 
-	
+	int32_t kClientWidth_;
+	int32_t kClientHeight_;
+
 	HRESULT hr_;
+
+
 
 	HWND hwnd_;
 
@@ -128,18 +138,31 @@ private:
 	IDXGIFactory7* dxgiFactory_ = nullptr;
 	//
 	IDXGIAdapter4* useAdapter_ = nullptr;
+
 	//
 	ID3D12Device* device_ = nullptr;
-	//
+
+
+
+
+
+	ID3D12GraphicsCommandList* commandList_ = nullptr;
+	
 	ID3D12CommandQueue* commandQueue_ = nullptr;
-
+	
 	D3D12_COMMAND_QUEUE_DESC commandQueueDesc_{};
-
+	
 	ID3D12CommandAllocator* commandAllocator_ = nullptr;
+
+
+
+
 
 	UINT backBufferIndex_;
 
-	ID3D12GraphicsCommandList* commandList_ = nullptr;
+
+
+	
 
 	IDXGISwapChain4* swapChain_ = nullptr;
 	
@@ -178,10 +201,14 @@ private:
 
 #pragma endregion
 
+	D3D12_VIEWPORT viewport_{};
+	D3D12_RECT scissorRect_{};
+
+
+
 
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_{};
 
-	//Resourceにデータを書き込む
 	Vector4* vertexData_ = nullptr;
 
 	IDXGIDebug1* debug_;

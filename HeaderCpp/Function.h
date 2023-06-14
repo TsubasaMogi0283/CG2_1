@@ -19,6 +19,18 @@
 #pragma comment(lib,"dxcompiler.lib")
 
 
+//struct Commands{
+//	ID3D12GraphicsCommandList* list_ = nullptr;
+//	
+//	ID3D12CommandQueue* queue_ = nullptr;
+//
+//	D3D12_COMMAND_QUEUE_DESC queueDesc_{};
+//
+//	ID3D12CommandAllocator* allocator_ = nullptr;
+//
+//};
+
+
 //Window Procedure
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 //string->wstring

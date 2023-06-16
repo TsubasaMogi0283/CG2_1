@@ -139,17 +139,21 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		for (int i = 0; i < TRIANGLE_AMOUNT_MAX; i++) {
 			//描画処理
-				triangle[i]->Draw(
-					TriangleCoodinateLeft[i], 
-					TriangleCoodinateTop[i],
-					TriangleCoodinateRight[i]
-				);
+			triangle[i]->Draw(
+				TriangleCoodinateLeft[i], 
+				TriangleCoodinateTop[i],
+				TriangleCoodinateRight[i]
+			);
 		}
 
 		directXSetup->EndFlame();
 	}
 
-	
+	for (int i = 0; i < TRIANGLE_AMOUNT_MAX; i++) {
+		//描画処理
+		triangle[i]->Release();
+		
+	}
 
 
 
@@ -165,17 +169,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	delete directXSetup;
 	delete winSetup;
 
-	////ReportLiveObjects
-	//DirectX12より低レベルのDXGIに問い合わせをする
-	//リソースリークチェック
-	IDXGIDebug1* debug_;
-	if (SUCCEEDED(DXGIGetDebugInterface1(0, IID_PPV_ARGS(&debug_)))) {
-		debug_->ReportLiveObjects(DXGI_DEBUG_ALL, DXGI_DEBUG_RLO_ALL);
-		debug_->ReportLiveObjects(DXGI_DEBUG_APP, DXGI_DEBUG_RLO_ALL);
-		debug_->ReportLiveObjects(DXGI_DEBUG_D3D12, DXGI_DEBUG_RLO_ALL);
-		debug_->Release();
-	}
-
+	
 	
 	
 

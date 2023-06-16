@@ -1,6 +1,7 @@
 #include "HeaderCpp/Function.h"
 #include "HeaderCpp/WindowsInitialization.h"
 #include "HeaderCpp/DirectXInitialization.h"
+#include "HeaderCpp/Triangle.h"
 //includeなどは全部Function.hに入っているよ！
 
 
@@ -19,133 +20,83 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	DirectXInitialization* directXSetup = new DirectXInitialization();
 	
 	
+	
+
+	
 	//三角形の情報
 	const int32_t TRIANGLE_AMOUNT_MAX = 15;
 
 
-	struct  TriangleProperty {
-		Vector4 top;
-		Vector4 left;
-		Vector4 right;
-		TriangleVertex vertex;
+	
+	Vector4 TriangleCoodinateLeft[TRIANGLE_AMOUNT_MAX] = {
+		//left
+		//一段目
+		{-1.0f,0.5f,0.0f,1.0f },
+		{-0.6f,0.5f,0.0f,1.0f },
+		{-0.2f,0.5f,0.0f,1.0f },
+		{0.2f,0.5f,0.0f,1.0f },
+		{0.6f,0.5f,0.0f,1.0f },
+		//二段目
+		{-1.0f,0.0f,0.0f,1.0f },
+		{-0.6f,0.0f,0.0f,1.0f },
+		{-0.2f,0.0f,0.0f,1.0f },
+		{0.2f,0.0f,0.0f,1.0f },
+		{0.6f,0.0f,0.0f,1.0f },
+		//三段目
+		{-1.0f,-0.5f,0.0f,1.0f },
+		{-0.6f,-0.5f,0.0f,1.0f },
+		{-0.2f,-0.5f,0.0f,1.0f },
+		{0.2f,-0.5f,0.0f,1.0f },
+		{0.6f,-0.5f,0.0f,1.0f },
 
 	};
 
+	Vector4 TriangleCoodinateTop[TRIANGLE_AMOUNT_MAX] = {
+		
+		//up
+		{-0.8f,1.0f,0.0f,1.0f },
+		{-0.4f,1.0f,0.0f,1.0f },
+		{0.0f,1.0f,0.0f,1.0f },
+		{0.4f,1.0f,0.0f,1.0f },
+		{0.8f,1.0f,0.0f,1.0f },
+
+		//
+		{-0.8f,0.5f,0.0f,1.0f },
+		{-0.4f,0.5f,0.0f,1.0f },
+		{0.0f,0.5f,0.0f,1.0f },
+		{0.4f,0.5f,0.0f,1.0f },
+		{0.8f,0.5f,0.0f,1.0f },
+		//
+		{-0.8f,0.0f,0.0f,1.0f },
+		{-0.4f,0.0f,0.0f,1.0f },
+		{0.0f,0.0f,0.0f,1.0f },
+		{0.4f,0.0f,0.0f,1.0f },
+		{0.8f,0.0f,0.0f,1.0f },
+	};
+
+	Vector4 TriangleCoodinateRight[TRIANGLE_AMOUNT_MAX] = {
+		//right
+		{-0.6f,0.5f,0.0f,1.0f },
+		{-0.2f,0.5f,0.0f,1.0f },
+		{0.2f,0.5f,0.0f,1.0f },
+		{0.6f,0.5f,0.0f,1.0f },
+		{1.0f,0.5f,0.0f,1.0f },
+		
+		{-0.6f,0.0f,0.0f,1.0f },
+		{-0.2f,0.0f,0.0f,1.0f },
+		{0.2f,0.0f,0.0f,1.0f },
+		{0.6f,0.0f,0.0f,1.0f },
+		{1.0f,0.0f,0.0f,1.0f },
+
+		{-0.6f,-0.5f,0.0f,1.0f },
+		{-0.2f,-0.5f,0.0f,1.0f },
+		{0.2f,-0.5f,0.0f,1.0f },
+		{0.6f,-0.5f,0.0f,1.0f },
+		{1.0f,-0.5f,0.0f,1.0f },
+
+	};
 	
 	
-	
-	TriangleProperty TriangleCoodinate[TRIANGLE_AMOUNT_MAX];
-	{
-		TriangleCoodinate[0] =
-		{
-
-			{-0.8f,1.0f,0.0f,1.0f },
-			{-1.0f,0.5f,0.0f,1.0f },
-			{-0.6f,0.5f,0.0f,1.0f }
-		};
-		TriangleCoodinate[1] =
-		{
-
-			{-0.4f,1.0f,0.0f,1.0f },
-			{-0.6f,0.5f,0.0f,1.0f },
-			{-0.2f,0.5f,0.0f,1.0f }
-		};
-		TriangleCoodinate[2] =
-		{
-
-			{0.0f,1.0f,0.0f,1.0f },
-			{-0.2f,0.5f,0.0f,1.0f },
-			{0.2f,0.5f,0.0f,1.0f }
-		};
-		TriangleCoodinate[3] =
-		{
-
-			{0.4f,1.0f,0.0f,1.0f },
-			{0.2f,0.5f,0.0f,1.0f },
-			{0.6f,0.5f,0.0f,1.0f }
-		};
-		TriangleCoodinate[4] =
-		{
-
-			{0.8f,1.0f,0.0f,1.0f },
-			{0.6f,0.5f,0.0f,1.0f },
-			{1.0f,0.5f,0.0f,1.0f }
-		};
-
-		TriangleCoodinate[5] =
-		{
-
-			{-0.8f,0.5f,0.0f,1.0f },
-			{-1.0f,0.0f,0.0f,1.0f },
-			{-0.6f,0.0f,0.0f,1.0f }
-		};
-		TriangleCoodinate[6] =
-		{
-
-			{-0.4f,0.5f,0.0f,1.0f },
-			{-0.6f,0.0f,0.0f,1.0f },
-			{-0.2f,0.0f,0.0f,1.0f }
-		};
-		TriangleCoodinate[7] =
-		{
-
-			{0.0f,0.5f,0.0f,1.0f },
-			{-0.2f,0.0f,0.0f,1.0f },
-			{0.2f,0.0f,0.0f,1.0f }
-		};
-		TriangleCoodinate[8] =
-		{
-
-			{0.4f,0.5f,0.0f,1.0f },
-			{0.2f,0.0f,0.0f,1.0f },
-			{0.6f,0.0f,0.0f,1.0f }
-		};
-		TriangleCoodinate[9] =
-		{
-
-			{0.8f,0.5f,0.0f,1.0f },
-			{0.6f,0.0f,0.0f,1.0f },
-			{1.0f,0.0f,0.0f,1.0f }
-		};
-
-		TriangleCoodinate[10] =
-		{
-
-			{-0.8f,0.0f,0.0f,1.0f },
-			{-1.0f,-0.5f,0.0f,1.0f },
-			{-0.6f,-0.5f,0.0f,1.0f }
-		};
-		TriangleCoodinate[11] =
-		{
-
-			{-0.4f,0.0f,0.0f,1.0f },
-			{-0.6f,-0.5f,0.0f,1.0f },
-			{-0.2f,-0.5f,0.0f,1.0f }
-		};
-		TriangleCoodinate[12] =
-		{
-
-			{0.0f,0.0f,0.0f,1.0f },
-			{-0.2f,-0.5f,0.0f,1.0f },
-			{0.2f,-0.5f,0.0f,1.0f }
-		};
-		TriangleCoodinate[13] =
-		{
-
-			{0.4f,0.0f,0.0f,1.0f },
-			{0.2f,-0.5f,0.0f,1.0f },
-			{0.6f,-0.5f,0.0f,1.0f }
-		};
-		TriangleCoodinate[14] =
-		{
-
-			{0.8f,0.0f,0.0f,1.0f },
-			{0.6f,-0.5f,0.0f,1.0f },
-			{1.0f,-0.5f,0.0f,1.0f }
-		};
-
-	}
-
 
 
 
@@ -153,12 +104,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	winSetup->Initialize();
 	directXSetup->Initialize(winSetup->GetClientWidth(),winSetup->GetClientHeight(),winSetup->GetHwnd());
 
-
-	//三角形について
+	Triangle* triangle[TRIANGLE_AMOUNT_MAX];
+	////三角形について
 	for (int i = 0; i < TRIANGLE_AMOUNT_MAX; i++) {
-		directXSetup->MakeVertexResource(TriangleCoodinate[i].vertex);
+		triangle[i] = new Triangle();
+		triangle[i]->Initialize(directXSetup);
+
+		//triangle[i]->GenarateVertexResource();
 	}
 
+	
 
 	MSG msg{};
 
@@ -179,16 +134,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 		}
-		directXSetup->BeginFlame(winSetup->GetClientWidth(), winSetup->GetClientHeight());
+		directXSetup->BeginFlame();
 
 
 		for (int i = 0; i < TRIANGLE_AMOUNT_MAX; i++) {
 			//描画処理
-			directXSetup->DrawTriangle(
-				TriangleCoodinate[i].top, 
-				TriangleCoodinate[i].left, 
-				TriangleCoodinate[i].right,
-				TriangleCoodinate[i].vertex);
+				triangle[i]->Draw(
+					TriangleCoodinateLeft[i], 
+					TriangleCoodinateTop[i],
+					TriangleCoodinateRight[i]
+				);
 		}
 
 		directXSetup->EndFlame();

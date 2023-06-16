@@ -1,5 +1,13 @@
 #include "DirectXInitialization.h"
 #include "Function.h"
+#include "Triangle.h"
+
+
+DirectXInitialization::DirectXInitialization() {
+
+}
+
+
 
 
 void DirectXInitialization::GenerateDXGIFactory() {
@@ -24,6 +32,7 @@ void DirectXInitialization::GenerateDXGIFactory() {
 	assert(SUCCEEDED(hr_));
 
 }
+
 void DirectXInitialization::SelectAdapter() {
 	//仕様するアダプタ用の変数、最初にnullptrを入れておく
 	//IDXGIAdapter4* useAdapter_ = nullptr;
@@ -51,15 +60,6 @@ void DirectXInitialization::SelectAdapter() {
 	//適切なアダプタが見つからなかったので起動できない
 	assert(useAdapter_ != nullptr);
 }
-
-
-
-
-
-
-
-
-
 
 void DirectXInitialization::GenerateD3D12Device() {
 	//機能レベルとログ出力用の文字
@@ -89,14 +89,8 @@ void DirectXInitialization::GenerateD3D12Device() {
 
 }
 
-
-
-
-
-
 void DirectXInitialization::StopErrorWarning() {
 		////エラー・警告、即ち停止
-#ifdef _DEBUG
 	//ID3D12InfoQueue* infoQueue_ = nullptr;
 	if (SUCCEEDED(device_->QueryInterface(IID_PPV_ARGS(&infoQueue_)))) {
 		//ヤバいエラー時に止まる
@@ -109,6 +103,9 @@ void DirectXInitialization::StopErrorWarning() {
 		//大丈夫だった場合元に戻してあげる
 		infoQueue_->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_WARNING, true);
 		
+		//解放
+		infoQueue_->Release();
+
 		////エラーと警告の抑制
 		//Windowsの不具合だと解消できない
 		//その時に停止させないよう特定のエラーや警告を無視するしかない
@@ -130,34 +127,19 @@ void DirectXInitialization::StopErrorWarning() {
 		//指定したメッセージの表示を抑制する
 		infoQueue_->PushStorageFilter(&filter);
 		
-		//解放
-		infoQueue_->Release();
+		
 
 	}
 
-#endif 
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-void DirectXInitialization::GenerateCommandList() {
+void DirectXInitialization::GenerateCommand() {
 	////GPUに作業させよう
 	//コマンドキューを生成する
 	hr_ = device_->CreateCommandQueue(&commandQueueDesc_, IID_PPV_ARGS(&commandQueue_));
 	//コマンドキューの生成が上手くいかなかったので起動できない
 	assert(SUCCEEDED(hr_));
 
-	//CommandListを生成する
 	//コマンドアロケータを生成する
 	//ID3D12CommandAllocator* commandAllocator_ = nullptr;
 	hr_ = device_->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&commandAllocator_));
@@ -169,7 +151,8 @@ void DirectXInitialization::GenerateCommandList() {
 	hr_ = device_->CreateCommandList(
 		0, 
 		D3D12_COMMAND_LIST_TYPE_DIRECT, 
-		commandAllocator_, nullptr, 
+		commandAllocator_, 
+		nullptr, 
 		IID_PPV_ARGS(&commandList_));
 
 	//コマンドリストの生成が上手くいかなかったので起動できない
@@ -178,21 +161,15 @@ void DirectXInitialization::GenerateCommandList() {
 
 }
 
-
-
-
-
-
-
-void DirectXInitialization::GenerateSwapChain(int32_t windowsizeWidth, int32_t windowsizeHeight,HWND hwnd_) {
+void DirectXInitialization::GenerateSwapChain() {
 	
 	//60fpsそのまま映すと大変なので2枚用意して
 	//描画(フロントバッファ)と表示(バックバッファ、プライマリバッファ)に分ける。
 	//このことをダブルバッファリングという。
 	//IDXGISwapChain4* swapChain_ = nullptr;
 	DXGI_SWAP_CHAIN_DESC1 swapChainDesc{};
-	swapChainDesc.Width = windowsizeWidth;							//画面の幅。ウィンドウのクライアント領域を同じものにしておく
-	swapChainDesc.Height = windowsizeHeight;						//画面の高さ。ウィンドウのクライアント領域を同じものにしておく
+	swapChainDesc.Width = kClientWidth_;							//画面の幅。ウィンドウのクライアント領域を同じものにしておく
+	swapChainDesc.Height = kClientHeight_;						//画面の高さ。ウィンドウのクライアント領域を同じものにしておく
 	swapChainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;			//色の形式
 	swapChainDesc.SampleDesc.Count = 1;							//マルチサンプルしない
 	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;//描画のターゲットとして利用する
@@ -202,23 +179,16 @@ void DirectXInitialization::GenerateSwapChain(int32_t windowsizeWidth, int32_t w
 
 	//コマンドキュー、ウィンドウハンドル、設定を渡して生成する
 	hr_ = dxgiFactory_->CreateSwapChainForHwnd(
-		commandQueue_,hwnd_, 
+		commandQueue_,
+		hwnd_, 
 		&swapChainDesc, 
-		nullptr, nullptr, 
+		nullptr, 
+		nullptr, 
 		reinterpret_cast<IDXGISwapChain1**>(&swapChain_));
 	assert(SUCCEEDED(hr_));
 
 
 }
-
-
-
-
-
-
-
-
-
 
 void DirectXInitialization::MakeDescriptorHeap() {
 	//ID3D12DescriptorHeap* rtvDescriptorHeap_ = nullptr;
@@ -231,11 +201,6 @@ void DirectXInitialization::MakeDescriptorHeap() {
 	assert(SUCCEEDED(hr_));
 }
 
-
-
-
-
-
 void DirectXInitialization::PullResourcesFromSwapChain() {
 	//ID3D12Resource* swapChainResources_[2] = { nullptr };
 	hr_ = swapChain_->GetBuffer(0, IID_PPV_ARGS(&swapChainResources_[0]));
@@ -245,16 +210,6 @@ void DirectXInitialization::PullResourcesFromSwapChain() {
 	assert(SUCCEEDED(hr_));
 
 }
-
-
-
-
-//void DirectXInitialization::DecideDescriptorPoisition() {
-//	rtvHandles_[0] = rtvStartHandle_;
-//
-//	rtvHandles_[1].ptr = rtvHandles_[0].ptr + device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
-//	
-//}
 
 void DirectXInitialization::SetRTV() {
 	//RTVの設定
@@ -299,9 +254,6 @@ void DirectXInitialization::SetRTV() {
 
 }
 
-
-
-
 void DirectXInitialization::InitializeDXC() {
 	////DXCの初期化
 	//dxcCompilerを初期化
@@ -327,15 +279,40 @@ void DirectXInitialization::MakePSO() {
 	//////////PSO
 
 	// 
+	// 
 	////RootSignatureを作成
 	//RootSignature・・ShaderとResourceをどのように間レンズけるかを示したオブジェクトである
-	D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
-	descriptionRootSignature.Flags =
+	
+	descriptionRootSignature_.Flags =
 		D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
+
+	//rootParameter生成。複数設定できるので配列。
+	//今回は結果一つだけなので長さ１の配列
+	D3D12_ROOT_PARAMETER rootParameters[1] = {};
+	//CBVを使う
+	rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	////PixelShaderで使う
+	rootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	//レジスタ番号とバインド
+	//register...Shader上のResource配置情報
+	rootParameters[0].Descriptor.ShaderRegister = 0;
+	//ルートパラメータ配列へのポイント
+	descriptionRootSignature_.pParameters = rootParameters;
+	//配列の長さ
+	descriptionRootSignature_.NumParameters = _countof(rootParameters);
+
+	
+
+
+
+
+
+
+
 	//シリアライズしてバイナリにする
 	//ID3DBlob* signatureBlob_ = nullptr;
 	//ID3DBlob* errorBlob_ = nullptr;
-	hr_ = D3D12SerializeRootSignature(&descriptionRootSignature,
+	hr_ = D3D12SerializeRootSignature(&descriptionRootSignature_,
 		D3D_ROOT_SIGNATURE_VERSION_1, &signatureBlob_, &errorBlob_);
 	if (FAILED(hr_)) {
 		Log(reinterpret_cast<char*>(errorBlob_->GetBufferPointer()));
@@ -368,8 +345,7 @@ void DirectXInitialization::MakePSO() {
 	//BlendStateの設定
 	D3D12_BLEND_DESC blendDesc{};
 	//全ての色要素を書き込む
-	blendDesc.RenderTarget[0].RenderTargetWriteMask =
-		D3D12_COLOR_WRITE_ENABLE_ALL;
+	blendDesc.RenderTarget[0].RenderTargetWriteMask =D3D12_COLOR_WRITE_ENABLE_ALL;
 
 
 	////RasterizerState
@@ -398,9 +374,9 @@ void DirectXInitialization::MakePSO() {
 	graphicsPipelineStateDesc.pRootSignature = rootSignature_;
 	graphicsPipelineStateDesc.InputLayout = inputLayoutDesc;
 	graphicsPipelineStateDesc.VS = { vertexShaderBlob_->GetBufferPointer(),vertexShaderBlob_->GetBufferSize() };
-	vertexShaderBlob_->GetBufferSize();
+	//vertexShaderBlob_->GetBufferSize();
 	graphicsPipelineStateDesc.PS = { pixelShaderBlob_->GetBufferPointer(),pixelShaderBlob_->GetBufferSize() };
-	pixelShaderBlob_->GetBufferSize();
+	//pixelShaderBlob_->GetBufferSize();
 	graphicsPipelineStateDesc.BlendState = blendDesc;
 	graphicsPipelineStateDesc.RasterizerState = rasterizerDesc;
 
@@ -425,19 +401,41 @@ void DirectXInitialization::MakePSO() {
 	assert(SUCCEEDED(hr_));
 
 
-	vertexShaderBlob_->Release();	
-	pixelShaderBlob_->Release();
+	
 
 }
 
+void DirectXInitialization::GenarateViewport() {
+	////ViewportとScissor
+	//ビューポート
+	
+	//クライアント領域のサイズと一緒にして画面全体に表示
+	viewport_.Width = float(kClientWidth_);
+	viewport_.Height = float(kClientHeight_);
+	viewport_.TopLeftX = 0;
+	viewport_.TopLeftY = 0;
+	viewport_.MinDepth = 0.0f;
+	viewport_.MaxDepth = 1.0f;
 
+	
 
+}
 
+void DirectXInitialization::GenerateScissor() {
+	//シザー矩形 
+	
+	//基本的にビューポートと同じ矩形が構成されるようにする
+	scissorRect_.left = 0;
+	scissorRect_.right = kClientWidth_;
+	scissorRect_.top = 0;
+	scissorRect_.bottom = kClientHeight_;
+}
 
+void DirectXInitialization::Initialize(int32_t windowsizeWidth, int32_t windowsizeHeight,HWND hwnd) {
 
-
-
-void DirectXInitialization::Initialize(int32_t windowsizeWidth, int32_t windowsizeHeight,HWND hwnd_) {
+	kClientWidth_ = windowsizeWidth;
+	kClientHeight_ = windowsizeHeight;
+	hwnd_ = hwnd;
 
 	//出力ウィンドウへの文字出力
 	OutputDebugStringA("Hello,DirectX!\n");
@@ -452,15 +450,19 @@ void DirectXInitialization::Initialize(int32_t windowsizeWidth, int32_t windowsi
 	GenerateD3D12Device();
 
 	////エラー・警告、即ち停止
+#ifdef _DEBUG
 	StopErrorWarning();
+
+#endif 
+	
 
 	////GPUに作業させよう
 	//コマンドリストを作ろう
-	GenerateCommandList();
+	GenerateCommand();
 
 
 	//スワップチェーンを生成する
-	GenerateSwapChain(windowsizeWidth, windowsizeHeight, hwnd_);
+	GenerateSwapChain();
 
 
 
@@ -496,19 +498,14 @@ void DirectXInitialization::Initialize(int32_t windowsizeWidth, int32_t windowsi
 	//
 	InitializeDXC();
 
-
-
-
-
-
-
 	//PSOの生成
 	MakePSO();
 
+	//ビューポートの生成
+	GenarateViewport();
 
-
-	//VertexResourceを生成
-	//MakeVertexResource();
+	//シザーを生成
+	GenerateScissor();
 
 
 
@@ -517,13 +514,15 @@ void DirectXInitialization::Initialize(int32_t windowsizeWidth, int32_t windowsi
 
 
 
-void DirectXInitialization::BeginFlame(const int32_t kClientWidth, const int32_t kClientHeight) {
+void DirectXInitialization::BeginFlame() {
 
 
 	////コマンドをキックする
 	//コマンドを積む・・・CommandListに処理を追加していくこと
 	//キックする・・・CommandQueueCommandListを渡してGPUの実行を開始すること
 	//画面をクリアするためのコマンドを積み、キックし、メインループを完成させる
+
+
 
 	//処理の内容
 	//1.BackBufferを決定する
@@ -556,7 +555,6 @@ void DirectXInitialization::BeginFlame(const int32_t kClientWidth, const int32_t
 	barrier_.Transition.pResource = swapChainResources_[backBufferIndex_];
 	//遷移前(現在)のResourceState
 	barrier_.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT;
-
 	//遷移後のResourceState
 	barrier_.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
 	//TransitionBarrierを張る
@@ -570,123 +568,18 @@ void DirectXInitialization::BeginFlame(const int32_t kClientWidth, const int32_t
 	float clearColor[] = { 0.1f,0.25f,0.5f,1.0f };	//青っぽい色,RGBA
 	commandList_->ClearRenderTargetView(rtvHandles_[backBufferIndex_], clearColor, 0, nullptr);
 
-
-
-
-	////ViewportとScissor
-	//ビューポート
-	D3D12_VIEWPORT viewport{};
-	//クライアント領域のサイズと一緒にして画面全体に表示
-	viewport.Width = float(kClientWidth);
-	viewport.Height = float(kClientHeight);
-	viewport.TopLeftX = 0;
-	viewport.TopLeftY = 0;
-	viewport.MinDepth = 0.0f;
-	viewport.MaxDepth = 1.0f;
-
-	//シザー矩形 
-	D3D12_RECT scissorRect{};
-	//基本的にビューポートと同じ矩形が構成されるようにする
-	scissorRect.left = 0;
-	scissorRect.right = kClientWidth;
-	scissorRect.top = 0;
-	scissorRect.bottom = kClientHeight;
-
-
-
 	////コマンドを積む
-	commandList_->RSSetViewports(1, &viewport);
-	commandList_->RSSetScissorRects(1, &scissorRect);
-
-
-
-}
-
-
-
-
-//三角形
-void DirectXInitialization::MakeVertexResource() {
-	////VertexResourceを生成
-	//頂点リソース用のヒープを設定
-	D3D12_HEAP_PROPERTIES uploadHeapProperties{};
-	uploadHeapProperties.Type = D3D12_HEAP_TYPE_UPLOAD;
-
-	//頂点リソースの設定
-	D3D12_RESOURCE_DESC vertexResourceDesc{};
-	//バッファリソース。テクスチャの場合はまた別の設定をする
-	vertexResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-	vertexResourceDesc.Width = sizeof(Vector4) * 3;
-
-	//バッファの場合はこれらは1にする決まり
-	vertexResourceDesc.Height = 1;
-	vertexResourceDesc.DepthOrArraySize = 1;
-	vertexResourceDesc.MipLevels = 1;
-	vertexResourceDesc.SampleDesc.Count = 1;
-
-	//バッファの場合はこれにする決まり
-	vertexResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
-
-
-
-	//実際に頂点リソースを作る
-	//ID3D12Resource* vertexResource_ = nullptr;
-
-	hr_ = device_->CreateCommittedResource(
-		&uploadHeapProperties,
-		D3D12_HEAP_FLAG_NONE,
-		&vertexResourceDesc,
-		D3D12_RESOURCE_STATE_GENERIC_READ,
-		nullptr, IID_PPV_ARGS(&vertexResource_));
-	assert(SUCCEEDED(hr_));
-
-	
-	
-
-
-	////VertexBufferViewを作成
-	//頂点バッファビューを作成する
-	
-	//リソースの先頭のアドレスから使う
-	vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
-	//使用するリソースのサイズは頂点３つ分のサイズ
-	vertexBufferView_.SizeInBytes = sizeof(Vector4) * 3;
-	//１頂点あたりのサイズ
-	vertexBufferView_.StrideInBytes = sizeof(Vector4);
-
-}
-
-
-
-void DirectXInitialization::DrawTriangle(Vector4 top, Vector4 left, Vector4 right,D3D12_VERTEX_BUFFER_VIEW vertexBufferView) {
-	////VertexResourceを生成
-	//MakeVertexResource();
-
-
-	
-
-	//書き込むためのアドレスを取得
-	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
-	//左下
-	vertexData_[0] = left;
-	//上
-	vertexData_[1] =  top ;
-	//右下
-	vertexData_[2] =  right ;
-	//範囲外は危険だよ！！
-
-
-	//RootSignatureを設定。PSOに設定しているけど別途設定が必要
+	commandList_->RSSetViewports(1, &viewport_);
+	commandList_->RSSetScissorRects(1, &scissorRect_);
 	commandList_->SetGraphicsRootSignature(rootSignature_);
 	commandList_->SetPipelineState(graphicsPipelineState_);
-	commandList_->IASetVertexBuffers(0, 1, &vertexBufferView);
-	//形状を設定。PSOに設定しているものとはまた別。同じものを設定すると考えよう
-	commandList_->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	//描画(DrawCall)３頂点で１つのインスタンス。
-	commandList_->DrawInstanced(3, 1, 0, 0);
-
 
 }
+
+
+
+
+
 
 void DirectXInitialization::EndFlame() {
 	////画面表示出来るようにする
@@ -745,16 +638,7 @@ void DirectXInitialization::EndFlame() {
 
 void DirectXInitialization::Release() {
 
-	//////解放処理
-	vertexResource_->Release();
-	graphicsPipelineState_->Release();
-	signatureBlob_->Release();
-	if (errorBlob_) {
-		errorBlob_->Release();
-	}
 	
-	rootSignature_->Release();
-
 	
 
 	//////解放処理
@@ -775,10 +659,11 @@ void DirectXInitialization::Release() {
 	useAdapter_->Release();
 	dxgiFactory_->Release();
 
+	//////解放処理
+	//vertexResource_->Release();
+
 
 	
-
-
 
 #ifdef _DEBUG
 	debugController_->Release();
@@ -786,7 +671,37 @@ void DirectXInitialization::Release() {
 #endif
 
 	
+	graphicsPipelineState_->Release();
+	signatureBlob_->Release();
+	if (errorBlob_) {
+		errorBlob_->Release();
+	}
+	
+	rootSignature_->Release();
+
+	vertexShaderBlob_->Release();	
+	pixelShaderBlob_->Release();
+
 
 
 
 }
+
+
+void DirectXInitialization::CheckRelease() {
+	////ReportLiveObjects
+	//DirectX12より低レベルのDXGIに問い合わせをする
+	//リソースリークチェック
+	
+	if (SUCCEEDED(DXGIGetDebugInterface1(0, IID_PPV_ARGS(&debug_)))) {
+		debug_->ReportLiveObjects(DXGI_DEBUG_ALL, DXGI_DEBUG_RLO_ALL);
+		debug_->ReportLiveObjects(DXGI_DEBUG_APP, DXGI_DEBUG_RLO_ALL);
+		debug_->ReportLiveObjects(DXGI_DEBUG_D3D12, DXGI_DEBUG_RLO_ALL);
+		debug_->Release();
+	}
+}
+
+DirectXInitialization::~DirectXInitialization(){
+
+}
+

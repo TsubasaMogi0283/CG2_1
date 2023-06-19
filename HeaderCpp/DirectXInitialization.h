@@ -21,6 +21,9 @@ public:
 	DirectXInitialization();
 
 	//まとめたのが下の「Initialize」
+	//他の所では使わないからprivateにしても良さそう
+	//アロー演算子を使ったとき邪魔になるから
+private:
 #pragma region 初期化について
 	//初期化へ
 
@@ -56,6 +59,9 @@ public:
 
 #pragma endregion
 	
+
+public:
+
 	void Initialize(int32_t windowsizeWidth, int32_t windowsizeHeight,HWND hwnd_);
 
 	

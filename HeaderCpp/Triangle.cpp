@@ -6,50 +6,54 @@ Triangle::Triangle() {
 
 void Triangle::Initialize(DirectXInitialization* directXSetup) {
 	directXSetup_ = directXSetup;
+
+	//ここでBufferResourceを作る
+	vertexResouce_ = CreateBufferResource(directXSetup_->GetDevice(), sizeof(Vector4) * 3);
 	GenarateVertexResource();
 
 }
 
-//三角形
-void Triangle::GenarateVertexResource() {
+//Resource作成の関数化
+//資料にはにはdeviceって書いてあるけど、InitializeでdirectXを取り入れているから大丈夫かも
+ID3D12Resource* Triangle::CreateBufferResource(ID3D12Device* device, size_t sizeInBytes) {
+	ID3D12Resource* resource = nullptr;
+	
 	////VertexResourceを生成
 	//頂点リソース用のヒープを設定
-	D3D12_HEAP_PROPERTIES uploadHeapProperties{};
-	uploadHeapProperties.Type = D3D12_HEAP_TYPE_UPLOAD;
+	
+	uploadHeapProperties_.Type = D3D12_HEAP_TYPE_UPLOAD;
 
 	//頂点リソースの設定
-	D3D12_RESOURCE_DESC vertexResourceDesc{};
+	
 	//バッファリソース。テクスチャの場合はまた別の設定をする
-	vertexResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-	vertexResourceDesc.Width = sizeof(Vector4) * 3;
+	vertexResourceDesc_.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
+	vertexResourceDesc_.Width = sizeof(Vector4) * 3;
 	//バッファの場合はこれらは1にする決まり
-	vertexResourceDesc.Height = 1;
-	vertexResourceDesc.DepthOrArraySize = 1;
-	vertexResourceDesc.MipLevels = 1;
-	vertexResourceDesc.SampleDesc.Count = 1;
+	vertexResourceDesc_.Height = 1;
+	vertexResourceDesc_.DepthOrArraySize = 1;
+	vertexResourceDesc_.MipLevels = 1;
+	vertexResourceDesc_.SampleDesc.Count = 1;
 
 	//バッファの場合はこれにする決まり
-	vertexResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
-
-
+	vertexResourceDesc_.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
 
 	//実際に頂点リソースを作る
 	//ID3D12Resource* vertexResource_ = nullptr;
 	//hrは調査用
 	hr_ = directXSetup_->GetDevice()->CreateCommittedResource(
-		&uploadHeapProperties,
+		&uploadHeapProperties_,
 		D3D12_HEAP_FLAG_NONE,
-		&vertexResourceDesc,
+		&vertexResourceDesc_,
 		D3D12_RESOURCE_STATE_GENERIC_READ,
 		nullptr, IID_PPV_ARGS(&vertexResouce_));
 	assert(SUCCEEDED(hr_));
 
-	
-	
+	return resource;
+}
 
 
-	////VertexBufferViewを作成
-	//頂点バッファビューを作成する
+//頂点バッファビューを作成する
+void Triangle::GenerateVertexBufferView() {
 	
 	//リソースの先頭のアドレスから使う
 	vertexBufferView_.BufferLocation = vertexResouce_->GetGPUVirtualAddress();
@@ -61,6 +65,68 @@ void Triangle::GenarateVertexResource() {
 	vertexResouce_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
 }
 
+//三角形
+void Triangle::GenarateVertexResource() {
+
+
+#pragma region 02_01で移動する
+
+	////VertexResourceを生成
+	//頂点リソース用のヒープを設定
+	
+	uploadHeapProperties_.Type = D3D12_HEAP_TYPE_UPLOAD;
+
+	//頂点リソースの設定
+	D3D12_RESOURCE_DESC vertexResourceDesc_{};
+	//バッファリソース。テクスチャの場合はまた別の設定をする
+	vertexResourceDesc_.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
+	vertexResourceDesc_.Width = sizeof(Vector4) * 3;
+	//バッファの場合はこれらは1にする決まり
+	vertexResourceDesc_.Height = 1;
+	vertexResourceDesc_.DepthOrArraySize = 1;
+	vertexResourceDesc_.MipLevels = 1;
+	vertexResourceDesc_.SampleDesc.Count = 1;
+
+	//バッファの場合はこれにする決まり
+	vertexResourceDesc_.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
+
+
+
+	//実際に頂点リソースを作る
+	//ID3D12Resource* vertexResource_ = nullptr;
+	//hrは調査用
+	hr_ = directXSetup_->GetDevice()->CreateCommittedResource(
+		&uploadHeapProperties_,
+		D3D12_HEAP_FLAG_NONE,
+		&vertexResourceDesc_,
+		D3D12_RESOURCE_STATE_GENERIC_READ,
+		nullptr, IID_PPV_ARGS(&vertexResouce_));
+	assert(SUCCEEDED(hr_));
+
+#pragma endregion
+
+	//頂点バッファビューを作成する
+	GenerateVertexBufferView();
+	
+}
+
+//Material用のResourceを作る
+void Triangle::GenerateMaterialResource() {
+	//マテリアl用のリソースを作る。今回はcolor1つ分のサイズを用意する
+	materialResource = CreateBufferResource(directXSetup_->GetDevice(), sizeof(Vector4));
+	//マテリアルにデータを書き込む
+	Vector4* materialData = nullptr;
+
+	//書き込むためのアドレスを取得
+	//reinterpret_cast...char* から int* へ、One_class* から Unrelated_class* へなどの変換に使用
+	materialResource->Map(0, nullptr, reinterpret_cast<void**>(&materialData));
+
+	//今回は赤を書き込んでみる
+	*materialData = Vector4(1.0f, 0.0f, 0.0, 1.0f);
+
+	//サイズに注意を払ってね！！！！！
+	//どれだけのサイズが必要なのか考えよう
+}
 
 
 void Triangle::Draw(Vector4 left,Vector4 top,  Vector4 right) {

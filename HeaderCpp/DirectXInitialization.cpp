@@ -8,7 +8,7 @@ DirectXInitialization::DirectXInitialization() {
 }
 
 
-
+#pragma region Initializeの所で使う関数
 
 void DirectXInitialization::GenerateDXGIFactory() {
 	//DXGIファクトリーの生成
@@ -431,6 +431,9 @@ void DirectXInitialization::GenerateScissor() {
 	scissorRect_.bottom = kClientHeight_;
 }
 
+
+#pragma endregion
+
 void DirectXInitialization::Initialize(int32_t windowsizeWidth, int32_t windowsizeHeight,HWND hwnd) {
 
 	kClientWidth_ = windowsizeWidth;
@@ -573,6 +576,8 @@ void DirectXInitialization::BeginFlame() {
 	commandList_->RSSetScissorRects(1, &scissorRect_);
 	commandList_->SetGraphicsRootSignature(rootSignature_);
 	commandList_->SetPipelineState(graphicsPipelineState_);
+
+	
 
 }
 

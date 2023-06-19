@@ -148,6 +148,11 @@ void Triangle::Draw(Vector4 left,Vector4 top,  Vector4 right) {
 	directXSetup_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);
 	//形状を設定。PSOに設定しているものとはまた別。同じものを設定すると考えよう
 	directXSetup_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	//マテリアルCBufferの場所を設定
+	//ここでの[0]はregisterの0ではないよ。rootParameter配列の0番目
+	directXSetup_->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource->GetGPUVirtualAddress());
+
 	//描画(DrawCall)３頂点で１つのインスタンス。
 	directXSetup_->GetCommandList()->DrawInstanced(3, 1, 0, 0);
 
@@ -156,6 +161,7 @@ void Triangle::Draw(Vector4 left,Vector4 top,  Vector4 right) {
 
 void Triangle::Release() {
 	vertexResouce_->Release();
+	materialResource->Release();
 }
 
 Triangle::~Triangle() {

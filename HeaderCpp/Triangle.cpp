@@ -9,13 +9,16 @@ void Triangle::Initialize(DirectXInitialization* directXSetup) {
 
 	//ここでBufferResourceを作る
 	vertexResouce_ = CreateBufferResource(directXSetup_->GetDevice(), sizeof(Vector4) * 3);
-	GenarateVertexResource();
+	materialResource=CreateBufferResource(directXSetup_->GetDevice(), sizeof(Vector4));
+	
+	GenerateVertexBufferView();
+	//GenarateVertexResource();
 
 }
 
 //Resource作成の関数化
-//資料にはにはdeviceって書いてあるけど、InitializeでdirectXを取り入れているから大丈夫かも
 ID3D12Resource* Triangle::CreateBufferResource(ID3D12Device* device, size_t sizeInBytes) {
+	//void返り値も忘れずに
 	ID3D12Resource* resource = nullptr;
 	
 	////VertexResourceを生成
@@ -27,7 +30,7 @@ ID3D12Resource* Triangle::CreateBufferResource(ID3D12Device* device, size_t size
 	
 	//バッファリソース。テクスチャの場合はまた別の設定をする
 	vertexResourceDesc_.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-	vertexResourceDesc_.Width = sizeof(Vector4) * 3;
+	vertexResourceDesc_.Width = sizeInBytes;
 	//バッファの場合はこれらは1にする決まり
 	vertexResourceDesc_.Height = 1;
 	vertexResourceDesc_.DepthOrArraySize = 1;
@@ -112,17 +115,17 @@ void Triangle::GenarateVertexResource() {
 
 //Material用のResourceを作る
 void Triangle::GenerateMaterialResource() {
-	//マテリアl用のリソースを作る。今回はcolor1つ分のサイズを用意する
-	materialResource = CreateBufferResource(directXSetup_->GetDevice(), sizeof(Vector4));
-	//マテリアルにデータを書き込む
-	Vector4* materialData = nullptr;
-
-	//書き込むためのアドレスを取得
-	//reinterpret_cast...char* から int* へ、One_class* から Unrelated_class* へなどの変換に使用
-	materialResource->Map(0, nullptr, reinterpret_cast<void**>(&materialData));
-
-	//今回は赤を書き込んでみる
-	*materialData = Vector4(1.0f, 0.0f, 0.0, 1.0f);
+	////マテリアl用のリソースを作る。今回はcolor1つ分のサイズを用意する
+	//materialResource = CreateBufferResource(directXSetup_->GetDevice(), sizeof(Vector4));
+	////マテリアルにデータを書き込む
+	//Vector4* materialData_ = nullptr;
+	//
+	////書き込むためのアドレスを取得
+	////reinterpret_cast...char* から int* へ、One_class* から Unrelated_class* へなどの変換に使用
+	//materialResource->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
+	//
+	////今回は赤を書き込んでみる
+	//*materialData_ = Vector4(1.0f, 0.0f, 0.0, 1.0f);
 
 	//サイズに注意を払ってね！！！！！
 	//どれだけのサイズが必要なのか考えよう
@@ -143,7 +146,18 @@ void Triangle::Draw(Vector4 left,Vector4 top,  Vector4 right) {
 	vertexData_[2] =  right ;
 	//範囲外は危険だよ！！
 
+	//マテリアルにデータを書き込む
+	
 
+	//書き込むためのアドレスを取得
+	//reinterpret_cast...char* から int* へ、One_class* から Unrelated_class* へなどの変換に使用
+	materialResource->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
+
+	//今回は赤を書き込んでみる
+	*materialData_ = Vector4(1.0f, 0.0f, 0.0, 1.0f);
+
+
+	
 	//RootSignatureを設定。PSOに設定しているけど別途設定が必要
 	directXSetup_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);
 	//形状を設定。PSOに設定しているものとはまた別。同じものを設定すると考えよう
@@ -152,7 +166,6 @@ void Triangle::Draw(Vector4 left,Vector4 top,  Vector4 right) {
 	//マテリアルCBufferの場所を設定
 	//ここでの[0]はregisterの0ではないよ。rootParameter配列の0番目
 	directXSetup_->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource->GetGPUVirtualAddress());
-
 	//描画(DrawCall)３頂点で１つのインスタンス。
 	directXSetup_->GetCommandList()->DrawInstanced(3, 1, 0, 0);
 

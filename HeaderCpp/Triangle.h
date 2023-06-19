@@ -48,6 +48,6 @@ private:
 	
 	//マテリアル用のリソースを作る
 	ID3D12Resource* materialResource = nullptr;
-
+	Vector4* materialData_ = nullptr;
 	
 };

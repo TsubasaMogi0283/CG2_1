@@ -47,3 +47,5 @@ struct Vector4 {
 	float w;
 
 };
+
+Vector4 ColorAdapter(unsigned int color);

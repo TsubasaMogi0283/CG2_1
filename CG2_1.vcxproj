@@ -109,6 +109,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="HeaderCpp\Color.h" />
     <ClInclude Include="HeaderCpp\DirectXInitialization.h" />
     <ClInclude Include="HeaderCpp\Function.h" />
     <ClInclude Include="HeaderCpp\Triangle.h" />

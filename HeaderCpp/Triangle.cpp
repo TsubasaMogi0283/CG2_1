@@ -4,20 +4,26 @@ Triangle::Triangle() {
 	
 }
 
+
+
 void Triangle::Initialize(DirectXInitialization* directXSetup) {
 	directXSetup_ = directXSetup;
 
 	//ここでBufferResourceを作る
-	vertexResouce_ = CreateBufferResource(directXSetup_->GetDevice(), sizeof(Vector4) * 3);
-	materialResource=CreateBufferResource(directXSetup_->GetDevice(), sizeof(Vector4)* 3);
+	vertexResouce_ = CreateBufferResource(sizeof(Vector4) * 3);
+	materialResource=CreateBufferResource(sizeof(Vector4)* 3);
 	
 	GenerateVertexBufferView();
 	//GenarateVertexResource();
 
+
+
 }
 
+
 //Resource作成の関数化
-ID3D12Resource* Triangle::CreateBufferResource(ID3D12Device* device, size_t sizeInBytes) {
+//deviceいるかな？と思ったので消します！
+ID3D12Resource* Triangle::CreateBufferResource(size_t sizeInBytes) {
 	//void返り値も忘れずに
 	ID3D12Resource* resource = nullptr;
 	
@@ -48,11 +54,12 @@ ID3D12Resource* Triangle::CreateBufferResource(ID3D12Device* device, size_t size
 		D3D12_HEAP_FLAG_NONE,
 		&vertexResourceDesc_,
 		D3D12_RESOURCE_STATE_GENERIC_READ,
-		nullptr, IID_PPV_ARGS(&vertexResouce_));
+		nullptr, IID_PPV_ARGS(&resource));
 	assert(SUCCEEDED(hr_));
 
 	return resource;
 }
+
 
 
 //頂点バッファビューを作成する
@@ -67,6 +74,7 @@ void Triangle::GenerateVertexBufferView() {
 	//書き込むためのアドレスを取得
 	vertexResouce_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
 }
+
 
 //三角形
 void Triangle::GenarateVertexResource() {
@@ -112,6 +120,12 @@ void Triangle::GenarateVertexResource() {
 	GenerateVertexBufferView();
 	
 }
+
+
+
+
+
+
 
 //Material用のResourceを作る
 void Triangle::GenerateMaterialResource() {
@@ -172,6 +186,8 @@ void Triangle::Draw(Vector4 left,Vector4 top,  Vector4 right,Vector4 color) {
 
 }
 
+
+
 void Triangle::Release() {
 	vertexResouce_->Release();
 	materialResource->Release();
@@ -179,96 +195,5 @@ void Triangle::Release() {
 
 Triangle::~Triangle() {
 
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-void DrawEngine::Initialize(DirectXInitialization* directX)
-{
-	directX_ = directX;
-	vertexResource = CreateBufferResource(sizeof(Vector4)*3);
-	materialResource = CreateBufferResource(sizeof(Vector4) * 3);
-	MakeVertexBufferView();
-	
-}
-
-void DrawEngine::Draw(Vector4 Leftbottom,Vector4 top,Vector4 Rightbottom,Vector4 color)
-{	
-	//左下
-	vertexData[0] = Leftbottom;
-	//上
-	vertexData[1] = top;
-	//右下
-	vertexData[2] = Rightbottom;
-	//色を書き込むアドレスを取得
-	materialResource->Map(0, nullptr, reinterpret_cast<void**>(&materialData));
-	//色情報を書き込む
-	*materialData = color;
-	directX_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView);
-	directX_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	//色
-	directX_->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource->GetGPUVirtualAddress());
-	directX_->GetCommandList()->DrawInstanced(3, 1, 0, 0);
-}
-
-void DrawEngine::Release()
-{
-	vertexResource->Release();
-	materialResource->Release();
-}
-
-void DrawEngine::MakeVertexResource()
-{
-	D3D12_HEAP_PROPERTIES uploadHeapProperties{};
-	uploadHeapProperties.Type = D3D12_HEAP_TYPE_UPLOAD;
-	D3D12_RESOURCE_DESC vertexResourceDesc{};
-	vertexResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-	vertexResourceDesc.Width = sizeof(Vector4) * 3;
-	vertexResourceDesc.Height = 1;
-	vertexResourceDesc.DepthOrArraySize = 1;
-	vertexResourceDesc.MipLevels = 1;
-	vertexResourceDesc.SampleDesc.Count = 1;
-	vertexResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
-	//頂点リソースを作る
-	hr = directX_->GetDevice()->CreateCommittedResource(&uploadHeapProperties, D3D12_HEAP_FLAG_NONE, &vertexResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&vertexResource));
-	assert(SUCCEEDED(hr));
-}
-
-void DrawEngine::MakeVertexBufferView()
-{
-	vertexBufferView.BufferLocation = vertexResource->GetGPUVirtualAddress();
-	vertexBufferView.SizeInBytes = sizeof(Vector4) * 3;
-	vertexBufferView.StrideInBytes = sizeof(Vector4);
-	vertexResource->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));
-}
-
-ID3D12Resource* DrawEngine::CreateBufferResource(size_t sizeInBytes)
-{
-	ID3D12Resource* Resource = nullptr;
-	D3D12_HEAP_PROPERTIES uploadHeapProperties{};
-	uploadHeapProperties.Type = D3D12_HEAP_TYPE_UPLOAD;
-	D3D12_RESOURCE_DESC vertexResourceDesc{};
-	vertexResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-	vertexResourceDesc.Width = sizeInBytes;
-	vertexResourceDesc.Height = 1;
-	vertexResourceDesc.DepthOrArraySize = 1;
-	vertexResourceDesc.MipLevels = 1;
-	vertexResourceDesc.SampleDesc.Count = 1;
-	vertexResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
-	//頂点リソースを作る
-	hr = directX_->GetDevice()->CreateCommittedResource(&uploadHeapProperties, D3D12_HEAP_FLAG_NONE, &vertexResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&Resource));
-	assert(SUCCEEDED(hr));
-	return Resource;
 }
 

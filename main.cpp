@@ -97,17 +97,28 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	};
 	
 	
-
+	Vector4 Color[TRIANGLE_AMOUNT_MAX] = {
+		{ 1.0f,0.0f,0.0f,1.0f },//RED
+		{ 0.0f,1.0f,0.0f,1.0f },//GREEN
+		{ 0.0f,0.0f,1.0f,1.0f },//BLUE
+		{ 1.0f,0.0f,0.0f,1.0f },
+		{ 0.0f,1.0f,0.0f,1.0f },
+		{ 0.0f,0.0f,1.0f,1.0f },
+		{ 1.0f,0.0f,0.0f,1.0f },
+		{ 0.0f,1.0f,0.0f,1.0f },
+		{ 0.0f,0.0f,1.0f,1.0f },
+		{ 1.0f,0.0f,0.0f,1.0f },
+	};
 
 
 	//初期化
 	winSetup->Initialize();
 	directXSetup->Initialize(winSetup->GetClientWidth(),winSetup->GetClientHeight(),winSetup->GetHwnd());
 
-	Triangle* triangle[TRIANGLE_AMOUNT_MAX];
+	DrawEngine* triangle[TRIANGLE_AMOUNT_MAX];
 	////三角形について
 	for (int i = 0; i < TRIANGLE_AMOUNT_MAX; i++) {
-		triangle[i] = new Triangle();
+		triangle[i] = new DrawEngine();
 		triangle[i]->Initialize(directXSetup);
 
 		//triangle[i]->GenarateVertexResource();
@@ -142,7 +153,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			triangle[i]->Draw(
 				TriangleCoodinateLeft[i], 
 				TriangleCoodinateTop[i],
-				TriangleCoodinateRight[i]
+				TriangleCoodinateRight[i],
+				Color[i]
 			);
 		}
 

@@ -90,7 +90,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   <ItemGroup>
     <ClCompile Include="ColorAdapter.cpp" />
     <ClCompile Include="HeaderCpp\DirectXInitialization.cpp" />
-    <ClCompile Include="HeaderCpp\Function.cpp" />
     <ClCompile Include="HeaderCpp\LogConvert.cpp" />
     <ClCompile Include="HeaderCpp\Triangle.cpp" />
     <ClCompile Include="HeaderCpp\WindowsInitialization.cpp" />
@@ -113,7 +112,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   <ItemGroup>
     <ClInclude Include="HeaderCpp\ColorAdapter.h" />
     <ClInclude Include="HeaderCpp\DirectXInitialization.h" />
-    <ClInclude Include="HeaderCpp\Function.h" />
     <ClInclude Include="HeaderCpp\LogConvert.h" />
     <ClInclude Include="HeaderCpp\Triangle.h" />
     <ClInclude Include="HeaderCpp\Vector4.h" />

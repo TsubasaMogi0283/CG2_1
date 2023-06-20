@@ -1,5 +1,4 @@
 #pragma once
-#include "Function.h"
 #include "DirectXInitialization.h"
 #include "Vector4.h"
 

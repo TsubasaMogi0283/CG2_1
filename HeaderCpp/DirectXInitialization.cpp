@@ -1,5 +1,4 @@
 #include "DirectXInitialization.h"
-#include "Function.h"
 #include "Triangle.h"
 
 

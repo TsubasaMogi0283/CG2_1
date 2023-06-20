@@ -1,5 +1,23 @@
 #include "Matrix/Calculation/Matrix4x4Calculation.h"
 
+
+
+//クロス積
+Vector3 Cross(const Vector3 v1, const Vector3 v2) {
+	Vector3 result = {0.0f,0.0f,0.0f};
+	result.x = v1.y * v2.z - v1.z * v2.y;
+	result.y = v1.z * v2.x - v1.x * v2.z;
+	result.z = v1.x * v2.y - v1.y * v2.x;
+
+	return result;
+}
+
+//コタンジェント
+float Cot(float theta) {
+	return (1.0f / tan(theta));
+}
+
+
 //単位行列を作成する
 //斜めの1が並ぶやつ
 Matrix4x4 MakeIdentity4x4() {
@@ -244,6 +262,38 @@ Matrix4x4 MakeAffineMatrix(const Vector3 scale, const Vector3 rotate, const Vect
 
 
 	result = Multiply(scaleMatrix, Multiply(rotateMatrix, translateMatrix));
+
+	return result;
+}
+
+
+
+
+
+//透視投影行列(正規化する)
+Matrix4x4 MakePerspectiveFovMatrix(float fovY, float aspectRatio, float nearClip, float farClip) {
+	Matrix4x4 result = {};
+	float theta = fovY / 2.0f;
+
+	result.m[0][0] = (1.0f / aspectRatio) * Cot(theta);
+	result.m[0][1] = 0;
+	result.m[0][2] = 0;
+	result.m[0][3] = 0;
+
+	result.m[1][0] = 0;
+	result.m[1][1] = Cot(theta);
+	result.m[1][2] = 0;
+	result.m[1][3] = 0;
+
+	result.m[2][0] = 0;
+	result.m[2][1] = 0;
+	result.m[2][2] = farClip/ (farClip- nearClip);
+	result.m[2][3] = 1;
+
+	result.m[3][0] = 0;
+	result.m[3][1] = 0;
+	result.m[3][2] = ( - nearClip * farClip) / (farClip - nearClip);
+	result.m[3][3] = 0;
 
 	return result;
 }

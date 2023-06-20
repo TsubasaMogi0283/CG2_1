@@ -6,7 +6,7 @@
 #include "HeaderCpp/Vector4.h"
 #include "HeaderCpp/ColorAdapter.h"	
 #include <Vector/Transform.h>
-#include "Ellysia/Ellysia.h"
+#include <GameScene.h>
 
 //Winodwsアプリでもエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
@@ -14,15 +14,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	
 	//ウィンドウのサイズを決める
-	const int32_t WINDOW_SIZE_WIDTH = 1280;
-	const int32_t WINDOW_SIZE_HEIGHT = 720;
+	//const int32_t WINDOW_SIZE_WIDTH = 1280;
+	//const int32_t WINDOW_SIZE_HEIGHT = 720;
 
 
 	//コンストラクタ
-	Ellysia* ellysia = nullptr;
+	//
+	//KAMATA ENGINEみたいにGameSceneでまとめたい
+	GameScene* gamescene = new GameScene();
 
-	WindowsInitialization* winSetup = new WindowsInitialization(L"DirectX",WINDOW_SIZE_WIDTH,WINDOW_SIZE_HEIGHT);
-	DirectXInitialization* directXSetup = new DirectXInitialization();
+	//WindowsInitialization* winSetup = new WindowsInitialization(L"DirectX",WINDOW_SIZE_WIDTH,WINDOW_SIZE_HEIGHT);
+	//DirectXInitialization* directXSetup = new DirectXInitialization();
 	
 	
 	
@@ -36,8 +38,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	winSetup->Initialize();
 	directXSetup->Initialize(winSetup->GetClientWidth(),winSetup->GetClientHeight(),winSetup->GetHwnd());
 
-	Triangle* triangle[TRIANGLE_AMOUNT_MAX];
 	////三角形について
+	Triangle* triangle[TRIANGLE_AMOUNT_MAX];
 	for (int i = 0; i < TRIANGLE_AMOUNT_MAX; i++) {
 		triangle[i] = new Triangle();
 		triangle[i]->Initialize(directXSetup);
@@ -165,6 +167,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	};
 	
+
+	
+	Transform cameraTransform = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,-5.0f} };
+	
+
 
 	MSG msg{};
 

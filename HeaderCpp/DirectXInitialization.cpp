@@ -352,7 +352,9 @@ void DirectXInitialization::MakePSO() {
 
 	//rootParameter生成。複数設定できるので配列。
 	//今回は結果一つだけなので長さ１の配列
-	D3D12_ROOT_PARAMETER rootParameters[1] = {};
+
+	//VSでもCBufferを利用することになったので設定を追加
+	D3D12_ROOT_PARAMETER rootParameters[2] = {};
 	//CBVを使う
 	rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	////PixelShaderで使う
@@ -360,6 +362,16 @@ void DirectXInitialization::MakePSO() {
 	//レジスタ番号とバインド
 	//register...Shader上のResource配置情報
 	rootParameters[0].Descriptor.ShaderRegister = 0;
+	//CBVを使う
+	rootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	//VertwxShaderで使う
+	rootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
+	//register...Shader上のResource配置情報
+	rootParameters[1].Descriptor.ShaderRegister = 0;
+
+	//rootParameterは今後必要あるたびに追加していく
+
+	
 	//ルートパラメータ配列へのポイント
 	descriptionRootSignature_.pParameters = rootParameters;
 	//配列の長さ

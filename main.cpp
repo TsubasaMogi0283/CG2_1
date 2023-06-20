@@ -5,7 +5,6 @@
 #include "HeaderCpp/WindowsInitialization.h"
 #include "HeaderCpp/DirectXInitialization.h"
 #include "HeaderCpp/Triangle.h"
-//includeなどは全部Function.hに入っているよ！
 
 
 #include "HeaderCpp/Vector4.h"
@@ -43,7 +42,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		triangle[i] = new Triangle();
 		triangle[i]->Initialize(directXSetup);
 
-		//triangle[i]->GenarateVertexResource();
 	}
 
 

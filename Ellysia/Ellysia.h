@@ -9,11 +9,12 @@
 //そこにEngine加えても自然だと思う
 class Ellysia {
 public:
+	//コンストラクタ
+	Ellysia();
 
 
-
-
-
+	//デストラクタ
+	~Ellysia();
 
 private:
 

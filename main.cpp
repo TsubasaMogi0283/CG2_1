@@ -217,7 +217,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	}
 
 	
-
+	for (int i = 0; i < TRIANGLE_AMOUNT_MAX; i++) {
+		//描画処理
+		triangle[i]->Release();
+	}
 
 
 

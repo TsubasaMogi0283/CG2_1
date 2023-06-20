@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Function.h"
 #include "LogConvert.h"
 #include "WindowsInitialization.h"
 #include "Vector4.h"
@@ -9,10 +8,12 @@
 #include <cassert>
 #include <d3d12.h>
 #include <dxgi1_6.h>
+#include <dxgidebug.h>
 
 #pragma comment(lib,"d3d12.lib")
 #pragma comment(lib,"dxgi.lib")
-
+#pragma comment(lib,"dxguid.lib")
+#pragma comment(lib,"dxcompiler.lib")
 
 
 
@@ -29,6 +30,18 @@ public:
 	//他の所では使わないからprivateにしても良さそう
 	//アロー演算子を使ったとき邪魔になるから
 private:
+
+	//CompilerShader関数
+	IDxcBlob* CompileShader(
+		//CompilerするShaderファイルへのパス
+		const std::wstring& filePath,
+		//Compilerに使用するProfile
+		const wchar_t* profile,
+		//初期化で生成したものを３つ
+		IDxcUtils* dxcUtils,
+		IDxcCompiler3* dxcCompiler,
+		IDxcIncludeHandler* includeHandler);
+
 #pragma region 初期化について
 	//初期化へ
 
@@ -70,9 +83,6 @@ public:
 	void Initialize(int32_t windowsizeWidth, int32_t windowsizeHeight,HWND hwnd_);
 
 	
-
-
-	//void GenarateVertexResource(TriangleVertex& vertexBuffer);
 
 
 

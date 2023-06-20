@@ -1,7 +1,6 @@
 #include <Windows.h>
 
 
-#include "HeaderCpp/Function.h"
 #include "HeaderCpp/WindowsInitialization.h"
 #include "HeaderCpp/DirectXInitialization.h"
 #include "HeaderCpp/Triangle.h"

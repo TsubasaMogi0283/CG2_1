@@ -1,6 +1,3 @@
-
-
-
 #include "HeaderCpp/WindowsInitialization.h"
 #include "HeaderCpp/DirectXInitialization.h"
 #include "HeaderCpp/Triangle.h"

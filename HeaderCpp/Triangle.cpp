@@ -151,7 +151,7 @@ void Triangle::GenerateMaterialResource() {
 }
 
 //描画
-void Triangle::Draw(Vector4 left,Vector4 top,  Vector4 right,Vector4 color) {
+void Triangle::Draw(Vector4 left,Vector4 top,  Vector4 right,Transform transform,Vector4 color) {
 	
 
 
@@ -176,6 +176,8 @@ void Triangle::Draw(Vector4 left,Vector4 top,  Vector4 right,Vector4 color) {
 
 
 
+	//新しく引数作った方が良いかも
+	Matrix4x4 worldMatrix = MakeAffineMatrix(transform.scale,transform.rotate,transform.translate);
 
 	
 	
@@ -183,9 +185,7 @@ void Triangle::Draw(Vector4 left,Vector4 top,  Vector4 right,Vector4 color) {
 	//書き込む為のアドレスを取得
 	wvpResource_->Map(0, nullptr, reinterpret_cast<void**>(&wvpData_));
 	
-	//新しく引数作った方が良いかも
-	Matrix4x4 worldMatrix = MakeAffineMatrix({ 1.0f,1.0f,1.0f }, { 0.0f,0.0f,0.0f }, {0.0f,0.0f,0.0f});
-
+	
 	
 	//さっき作ったworldMatrixの情報をここに入れる
 	*wvpData_ = worldMatrix;

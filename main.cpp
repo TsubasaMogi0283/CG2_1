@@ -6,6 +6,7 @@
 #include "HeaderCpp/Vector4.h"
 #include "HeaderCpp/ColorAdapter.h"	
 #include <Vector/Transform.h>
+#include "Ellysia/Ellysia.h"
 
 //Winodwsアプリでもエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
@@ -18,6 +19,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 	//コンストラクタ
+	Ellysia* ellysia = nullptr;
+
 	WindowsInitialization* winSetup = new WindowsInitialization(L"DirectX",WINDOW_SIZE_WIDTH,WINDOW_SIZE_HEIGHT);
 	DirectXInitialization* directXSetup = new DirectXInitialization();
 	
@@ -117,6 +120,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Vector3 rotate = { 0.0f,0.0f,0.0f };
 	Vector3 translate={ 0.0f,0.0f,0.0f };
 
+	Transform transform2 = { scale,rotate,translate };
+
 	Transform transform[TRIANGLE_AMOUNT_MAX]{
 		{scale,rotate,translate },
 		{scale,rotate,translate },
@@ -181,12 +186,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			#pragma region 更新処理
 			//
-			//for (int i = 0; i < TRIANGLE_AMOUNT_MAX; i++) {
-			//	//y軸回転
-			//	transform[i].rotate.y += 0.03f;
-			//
-			//}
-
+			for (int i = 0; i < TRIANGLE_AMOUNT_MAX; i++) {
+				//y軸回転
+				//transform[i].rotate.y += 0.03f;
+				transform[i].rotate.y += 0.03f;
+			}
+			
 
 			#pragma endregion
 			
@@ -199,6 +204,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					TriangleCoodinateLeft[i], 
 					TriangleCoodinateTop[i],
 					TriangleCoodinateRight[i],
+					transform[i],
 					Color[i]
 				);
 			}

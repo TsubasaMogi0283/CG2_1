@@ -4,6 +4,7 @@
 #include "Vector4.h"
 #include "Matrix/Matrix/Matrix4x4.h"
 #include "Matrix/Calculation/Matrix4x4Calculation.h"
+#include "Vector/Transform.h"
 
 class Triangle {
 public:
@@ -23,7 +24,7 @@ public:
 	//TransformationMatrix用のResourceを作る
 	void GenerateTransformationMatrixResource();
 
-	void Draw(Vector4 left,Vector4 top,  Vector4 right,Vector4 color);
+	void Draw(Vector4 left,Vector4 top,  Vector4 right,Transform transform,Vector4 color);
 
 
 	//Resource作成の関数化

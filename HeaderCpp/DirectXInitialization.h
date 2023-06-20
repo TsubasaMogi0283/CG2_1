@@ -1,8 +1,17 @@
 #pragma once
 
 #include "Function.h"
+#include "LogConvert.h"
 #include "WindowsInitialization.h"
  
+#include <cassert>
+
+
+
+#include <d3d12.h>
+#include <dxgi1_6.h>
+#pragma comment(lib,"d3d12.lib")
+#pragma comment(lib,"dxgi.lib")
 
 struct TriangleVertex {
 	D3D12_VERTEX_BUFFER_VIEW vertexBuffer;

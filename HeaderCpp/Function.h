@@ -1,4 +1,6 @@
 #pragma once
+#include "LogConvert.h"
+
 
 #include <Windows.h>
 
@@ -21,11 +23,6 @@
 
 //Window Procedure
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
-//string->wstring
-std::wstring ConvertString(const std::string& str);
-
-//wstring->string
-std::string ConvertString(const std::wstring& str);
 
 //CompilerShader関数
 IDxcBlob* CompileShader(
@@ -38,7 +35,7 @@ IDxcBlob* CompileShader(
 	IDxcCompiler3* dxcCompiler,
 	IDxcIncludeHandler* includeHandler);
 
-void Log(const std::string& message);
+
 
 struct Vector4 {
 	float x;

@@ -1,5 +1,4 @@
 #include "DirectXInitialization.h"
-#include "Triangle.h"
 
 
 DirectXInitialization::DirectXInitialization() {

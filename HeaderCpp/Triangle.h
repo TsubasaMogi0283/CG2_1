@@ -1,7 +1,7 @@
 #pragma once
-#include "DirectXInitialization.h"
+#include "DirectX/DirectXInitialization.h"
 
-#include "Vector4.h"
+#include "Vector/Vector4.h"
 #include "Matrix/Matrix/Matrix4x4.h"
 #include "Matrix/Calculation/Matrix4x4Calculation.h"
 #include "Vector/Transform.h"

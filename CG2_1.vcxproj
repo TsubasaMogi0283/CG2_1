@@ -52,7 +52,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalIncludeDirectories>$(ProjectDir)\GameScene;$(ProjectDir)\Math;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\Math;$(ProjectDir)\GameScene;$(ProjectDir)\Common;$(ProjectDir)\ConvertFunction;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -75,7 +75,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <LanguageStandard>stdcpp20</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalIncludeDirectories>$(ProjectDir)\GameScene;$(ProjectDir)\Math;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\Math;$(ProjectDir)\GameScene;$(ProjectDir)\Common;$(ProjectDir)\ConvertFunction;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -90,13 +90,13 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="ColorAdapter.cpp" />
+    <ClCompile Include="Common\DirectX\DirectXInitialization.cpp" />
+    <ClCompile Include="Common\Windows\WindowsInitialization.cpp" />
+    <ClCompile Include="ConvertFunction\ConvertColor\ColorConvert.cpp" />
+    <ClCompile Include="ConvertFunction\ConvertLog\LogConvert.cpp" />
     <ClCompile Include="Ellysia\Ellysia.cpp" />
     <ClCompile Include="GameScene\GameScene.cpp" />
-    <ClCompile Include="HeaderCpp\DirectXInitialization.cpp" />
-    <ClCompile Include="HeaderCpp\LogConvert.cpp" />
     <ClCompile Include="HeaderCpp\Triangle.cpp" />
-    <ClCompile Include="HeaderCpp\WindowsInitialization.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Math\Matrix\Calculation\Matrix4x4Calculation.cpp" />
   </ItemGroup>
@@ -115,19 +115,20 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Common\DirectX\DirectXInitialization.h" />
+    <ClInclude Include="Common\Windows\WindowsInitialization.h" />
+    <ClInclude Include="ConvertFunction\ConvertColor\ColorConvert.h" />
+    <ClInclude Include="ConvertFunction\ConvertLog\LogConvert.h" />
+    <ClInclude Include="ConvertFunction\LogConversion\ConvertLog.h" />
     <ClInclude Include="Ellysia\Ellysia.h" />
     <ClInclude Include="GameScene\GameScene.h" />
-    <ClInclude Include="HeaderCpp\ColorAdapter.h" />
-    <ClInclude Include="HeaderCpp\DirectXInitialization.h" />
-    <ClInclude Include="HeaderCpp\LogConvert.h" />
     <ClInclude Include="HeaderCpp\Triangle.h" />
-    <ClInclude Include="HeaderCpp\Vector4.h" />
-    <ClInclude Include="HeaderCpp\WindowsInitialization.h" />
     <ClInclude Include="Math\Matrix\Calculation\Matrix4x4Calculation.h" />
     <ClInclude Include="Math\Matrix\Matrix\Matrix3x3.h" />
     <ClInclude Include="Math\Matrix\Matrix\Matrix4x4.h" />
     <ClInclude Include="Math\Vector\Transform.h" />
     <ClInclude Include="Math\Vector\Vector3.h" />
+    <ClInclude Include="Math\Vector\Vector4.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

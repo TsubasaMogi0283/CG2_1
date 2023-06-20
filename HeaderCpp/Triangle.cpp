@@ -179,8 +179,8 @@ void Triangle::Draw(Vector4 left,Vector4 top,  Vector4 right,Transform transform
 	//新しく引数作った方が良いかも
 	Matrix4x4 worldMatrix = MakeAffineMatrix(transform.scale,transform.rotate,transform.translate);
 	//遠視投影行列
-	Matrix4x4 projectionMatrix = MakePerspectiveFovMatrix(0.5f, float() / float(WINDOW_SIZE_HEIGHT), 0.1f, 100.0f);
-	Matrix4x4 worldMatrix = MakeAffineMatrix();
+	//Matrix4x4 projectionMatrix = MakePerspectiveFovMatrix(0.5f, float() / float(WINDOW_SIZE_HEIGHT), 0.1f, 100.0f);
+	//Matrix4x4 worldMatrix = MakeAffineMatrix();
 	
 	
 

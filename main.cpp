@@ -1,10 +1,10 @@
-#include "HeaderCpp/WindowsInitialization.h"
-#include "HeaderCpp/DirectXInitialization.h"
+#include "Windows/WindowsInitialization.h"
+#include "DirectX/DirectXInitialization.h"
 #include "HeaderCpp/Triangle.h"
 
 
-#include "HeaderCpp/Vector4.h"
-#include "HeaderCpp/ColorAdapter.h"	
+#include "Vector/Vector4.h"
+#include "ConvertColor/ColorConvert.h"
 #include <Vector/Transform.h>
 #include <GameScene.h>
 
@@ -14,17 +14,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	
 	//ウィンドウのサイズを決める
-	//const int32_t WINDOW_SIZE_WIDTH = 1280;
-	//const int32_t WINDOW_SIZE_HEIGHT = 720;
+	const int32_t WINDOW_SIZE_WIDTH = 1280;
+	const int32_t WINDOW_SIZE_HEIGHT = 720;
 
 
 	//コンストラクタ
 	//
 	//KAMATA ENGINEみたいにGameSceneでまとめたい
-	GameScene* gamescene = new GameScene();
+	//GameScene* gamescene = new GameScene();
 
-	//WindowsInitialization* winSetup = new WindowsInitialization(L"DirectX",WINDOW_SIZE_WIDTH,WINDOW_SIZE_HEIGHT);
-	//DirectXInitialization* directXSetup = new DirectXInitialization();
+	WindowsInitialization* winSetup = new WindowsInitialization(L"DirectX",WINDOW_SIZE_WIDTH,WINDOW_SIZE_HEIGHT);
+	DirectXInitialization* directXSetup = new DirectXInitialization();
 	
 	
 	

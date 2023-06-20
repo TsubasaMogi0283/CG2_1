@@ -1,7 +1,9 @@
 #include "GameScene.h"
 
-GameScene::GameScene() {
 
+GameScene::GameScene() {
+	WindowsInitialization* winSetup = new WindowsInitialization(L"DirectX",WINDOW_SIZE_WIDTH_,WINDOW_SIZE_HEIGHT_);
+	DirectXInitialization* directXSetup = new DirectXInitialization();
 }
 
 void GameScene::UpDate() {

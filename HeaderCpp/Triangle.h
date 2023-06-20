@@ -1,10 +1,10 @@
 #pragma once
-#include "DirectX/DirectXInitialization.h"
+#include "Common/DirectX/DirectXInitialization.h"
 
-#include "Vector/Vector4.h"
-#include "Matrix/Matrix/Matrix4x4.h"
-#include "Matrix/Calculation/Matrix4x4Calculation.h"
-#include "Vector/Transform.h"
+#include "Math/Vector/Vector4.h"
+#include "Math/Matrix/Matrix/Matrix4x4.h"
+#include "Math/Matrix/Calculation/Matrix4x4Calculation.h"
+#include "Math/Vector/Transform.h"
 
 class Triangle {
 public:

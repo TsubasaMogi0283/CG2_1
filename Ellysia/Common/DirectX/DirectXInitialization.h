@@ -1,8 +1,8 @@
 #pragma once
 
-#include "ConvertLog/LogConvert.h"
-#include "Windows/WindowsInitialization.h"
-#include "Vector/Vector4.h"
+#include "ConvertFunction/ConvertLog/LogConvert.h"
+#include "Common/Windows/WindowsInitialization.h"
+#include "Math/Vector/Vector4.h"
 
 
 #include <cassert>

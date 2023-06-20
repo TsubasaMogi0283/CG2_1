@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Vector/Vector4.h"
+#include "Math/Vector/Vector4.h"
 
 // 色指定サンプル
 const unsigned int WHITE =0xFFFFFFFF; // 白

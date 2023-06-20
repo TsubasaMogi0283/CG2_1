@@ -1,12 +1,11 @@
-#include "Windows/WindowsInitialization.h"
-#include "DirectX/DirectXInitialization.h"
+#include "Ellysia/Common/Windows/WindowsInitialization.h"
+#include "Ellysia/Common/DirectX/DirectXInitialization.h"
 #include "HeaderCpp/Triangle.h"
 
 
-#include "Vector/Vector4.h"
-#include "ConvertColor/ColorConvert.h"
-#include <Vector/Transform.h>
-#include <GameScene.h>
+#include "Ellysia/Math/Vector/Vector4.h"
+#include "ConvertFunction/ConvertColor/ColorConvert.h"
+#include "Ellysia/Math/Vector/Transform.h"
 
 //Winodwsアプリでもエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {

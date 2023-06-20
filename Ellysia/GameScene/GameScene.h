@@ -1,7 +1,7 @@
 #pragma once
 #include <cstdint>
-#include "Windows/WindowsInitialization.h"
-#include "DirectX/DirectXInitialization.h"
+#include "Common/Windows/WindowsInitialization.h"
+#include "Common/DirectX/DirectXInitialization.h"
 
 class GameScene {
 public:

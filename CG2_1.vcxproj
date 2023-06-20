@@ -122,7 +122,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="HeaderCpp\Vector4.h" />
     <ClInclude Include="HeaderCpp\WindowsInitialization.h" />
     <ClInclude Include="Math\Matrix\Calculation\Matrix4x4Calculation.h" />
+    <ClInclude Include="Math\Matrix\Matrix\Matrix3x3.h" />
     <ClInclude Include="Math\Matrix\Matrix\Matrix4x4.h" />
+    <ClInclude Include="Math\Vector\Transform.h" />
+    <ClInclude Include="Math\Vector\Vector3.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,4 +1,5 @@
 #include "Triangle.h"
+#include <Vector/Transform.h>
 
 Triangle::Triangle() {
 	
@@ -80,7 +81,7 @@ void Triangle::GenerateVertexBufferView() {
 }
 
 
-//三角形
+//三角形の頂点リソースを生成
 void Triangle::GenarateVertexResource() {
 
 
@@ -149,10 +150,9 @@ void Triangle::GenerateMaterialResource() {
 	//どれだけのサイズが必要なのか考えよう
 }
 
-
-void Triangle::Draw(Vector4 left,Vector4 top,  Vector4 right,Vector4 color) {
-	////VertexResourceを生成
-	//GenarateVertexResource();
+//描画
+void Triangle::Draw(Vector4 left,Vector4 top,  Vector4 right,Transform transform,Vector4 color) {
+	
 
 
 	
@@ -183,9 +183,12 @@ void Triangle::Draw(Vector4 left,Vector4 top,  Vector4 right,Vector4 color) {
 	//書き込む為のアドレスを取得
 	wvpResource_->Map(0, nullptr, reinterpret_cast<void**>(&wvpData_));
 	
+	//新しく引数作った方が良いかも
+	Matrix4x4 worldMatrix = MakeAffineMatrix(transform.scale, transform.rotate, transform.translate);
+
 	
-	//単位行列を書き込んでおく
-	*wvpData_ = MakeIdentity4x4();
+	//さっき作ったworldMatrixの情報をここに入れる
+	*wvpData_ = worldMatrix;
 	
 
 

@@ -5,6 +5,7 @@
 
 #include "HeaderCpp/Vector4.h"
 #include "HeaderCpp/ColorAdapter.h"	
+#include <Vector/Transform.h>
 
 //Winodwsアプリでもエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
@@ -112,8 +113,29 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	};
 	
-	
-	
+	Vector3 scale = { 1.0f,1.0f,1.0f };
+	Vector3 rotate = { 0.0f,0.0f,0.0f };
+	Vector3 translate={ 0.0f,0.0f,0.0f };
+
+	Transform transform[TRIANGLE_AMOUNT_MAX]{
+		{scale,rotate,translate },
+		{scale,rotate,translate },
+		{scale,rotate,translate },
+		{scale,rotate,translate },
+		{scale,rotate,translate },
+		
+		{scale,rotate,translate },
+		{scale,rotate,translate },
+		{scale,rotate,translate },
+		{scale,rotate,translate },
+		{scale,rotate,translate },
+
+		{scale,rotate,translate },
+		{scale,rotate,translate },
+		{scale,rotate,translate },
+		{scale,rotate,translate },
+		{scale,rotate,translate },
+	};
 
 
 	//頂いた関数で色を決めていく
@@ -160,6 +182,21 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 		directXSetup->BeginFlame();
 
+		//ここから
+		//更新処理
+		//
+		for (int i = 0; i < TRIANGLE_AMOUNT_MAX; i++) {
+			//y軸回転
+			transform[i].rotate.y += 0.03f;
+
+		}
+
+
+
+		//
+		//ここまで
+		//更新処理
+
 
 		for (int i = 0; i < TRIANGLE_AMOUNT_MAX; i++) {
 			//描画処理
@@ -167,6 +204,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				TriangleCoodinateLeft[i], 
 				TriangleCoodinateTop[i],
 				TriangleCoodinateRight[i],
+				transform[i],
 				Color[i]
 			);
 		}

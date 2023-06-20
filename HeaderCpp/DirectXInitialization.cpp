@@ -329,26 +329,24 @@ void DirectXInitialization::InitializeDXC() {
 	hr_ = DxcCreateInstance(CLSID_DxcCompiler, IID_PPV_ARGS(&dxcCompiler_));
 	assert(SUCCEEDED(hr_));
 
-	
+	//現時点でincludeはしないが、includeに対応
+	//IDxcIncludeHandler* includeHandler_ = nullptr;
+	hr_ = dxcUtils_->CreateDefaultIncludeHandler(&includeHandler_);
+	assert(SUCCEEDED(hr_));
 	
 
 }
 
 void DirectXInitialization::MakePSO() {
-	//現時点でincludeはしないが、includeに対応
-	//IDxcIncludeHandler* includeHandler_ = nullptr;
-	hr_ = dxcUtils_->CreateDefaultIncludeHandler(&includeHandler_);
-	assert(SUCCEEDED(hr_));
+	
+	//PSO
 
-	//////////PSO
-
-	// 
-	// 
 	////RootSignatureを作成
 	//RootSignature・・ShaderとResourceをどのように間レンズけるかを示したオブジェクトである
 	
 	descriptionRootSignature_.Flags =
 		D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
+
 
 	//rootParameter生成。複数設定できるので配列。
 	//今回は結果一つだけなので長さ１の配列
@@ -381,10 +379,6 @@ void DirectXInitialization::MakePSO() {
 
 
 
-
-
-
-
 	//シリアライズしてバイナリにする
 	//ID3DBlob* signatureBlob_ = nullptr;
 	//ID3DBlob* errorBlob_ = nullptr;
@@ -394,11 +388,20 @@ void DirectXInitialization::MakePSO() {
 		Log(reinterpret_cast<char*>(errorBlob_->GetBufferPointer()));
 		assert(false);
 	}
+
 	//バイナリを元に生成
 	//ID3D12RootSignature* rootSignature_ = nullptr;
 	hr_ = device_->CreateRootSignature(0, signatureBlob_->GetBufferPointer(),
 		signatureBlob_->GetBufferSize(), IID_PPV_ARGS(&rootSignature_));
 	assert(SUCCEEDED(hr_));
+
+
+
+
+
+
+
+
 
 
 
@@ -417,11 +420,16 @@ void DirectXInitialization::MakePSO() {
 
 
 
+
+
+
 	////BlendStateの設定を行う
 	//BlendStateの設定
 	D3D12_BLEND_DESC blendDesc{};
 	//全ての色要素を書き込む
 	blendDesc.RenderTarget[0].RenderTargetWriteMask =D3D12_COLOR_WRITE_ENABLE_ALL;
+
+
 
 
 	////RasterizerState
@@ -437,12 +445,29 @@ void DirectXInitialization::MakePSO() {
 	rasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
 
 
+
 	//ShaderをCompileする
 	vertexShaderBlob_ = CompileShader(L"Object3d.VS.hlsl", L"vs_6_0", dxcUtils_, dxcCompiler_, includeHandler_);
 	assert(vertexShaderBlob_ != nullptr);
 
 	pixelShaderBlob_ = CompileShader(L"Object3d.PS.hlsl", L"ps_6_0", dxcUtils_, dxcCompiler_, includeHandler_);
 	assert(pixelShaderBlob_ != nullptr);
+
+
+
+
+
+
+
+
+
+	
+
+
+
+
+
+	
 
 
 	////PSO生成
@@ -683,8 +708,8 @@ void DirectXInitialization::EndFlame() {
 	ID3D12CommandList* commandLists[] = { commandList_ };
 	commandQueue_->ExecuteCommandLists(1, commandLists);
 	//GPUとOSに画面の交換を行うよう通知する
-	swapChain_->Present(0, 1);
-	
+
+	swapChain_->Present(1, 0);
 
 	////GPUにSignalを送る
 	//GPUの実行完了が目的
@@ -708,7 +733,7 @@ void DirectXInitialization::EndFlame() {
 		WaitForSingleObject(fenceEvent_, INFINITE);
 	}
 
-	swapChain_->Present(1, 0);
+	
 
 	hr_ = commandAllocator_->Reset();
 	assert(SUCCEEDED(hr_));

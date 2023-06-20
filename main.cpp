@@ -175,48 +175,43 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 		else {
 			//ゲームの処理
+			directXSetup->BeginFlame();
+
+			#pragma region 更新処理
+			//
+			//for (int i = 0; i < TRIANGLE_AMOUNT_MAX; i++) {
+			//	//y軸回転
+			//	transform[i].rotate.y += 0.03f;
+			//
+			//}
 
 
+			#pragma endregion
+			
+
+			#pragma region 描画処理
+
+			for (int i = 0; i < TRIANGLE_AMOUNT_MAX; i++) {
+				//描画処理
+				triangle[i]->Draw(
+					TriangleCoodinateLeft[i], 
+					TriangleCoodinateTop[i],
+					TriangleCoodinateRight[i],
+					Color[i]
+				);
+			}
+
+			#pragma endregion
+
+			directXSetup->EndFlame();
 
 
+			
 		}
-		directXSetup->BeginFlame();
-
-		//ここから
-		//更新処理
-		//
-		for (int i = 0; i < TRIANGLE_AMOUNT_MAX; i++) {
-			//y軸回転
-			transform[i].rotate.y += 0.03f;
-
-		}
-
-
-
-		//
-		//ここまで
-		//更新処理
-
-
-		for (int i = 0; i < TRIANGLE_AMOUNT_MAX; i++) {
-			//描画処理
-			triangle[i]->Draw(
-				TriangleCoodinateLeft[i], 
-				TriangleCoodinateTop[i],
-				TriangleCoodinateRight[i],
-				transform[i],
-				Color[i]
-			);
-		}
-
-		directXSetup->EndFlame();
-	}
-
-	for (int i = 0; i < TRIANGLE_AMOUNT_MAX; i++) {
-		//描画処理
-		triangle[i]->Release();
 		
 	}
+
+	
 
 
 

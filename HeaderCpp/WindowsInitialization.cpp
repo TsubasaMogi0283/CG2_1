@@ -13,7 +13,18 @@ WindowsInitialization::WindowsInitialization(const wchar_t* title, const int32_t
 
 }
 
+LRESULT WindowsInitialization::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam){
+	switch (msg) {
+		//ウィンドウが破棄された
+	case WM_DESTROY:
+		//OSに対してアプリの終了を伝える
+		PostQuitMessage(0);
+		return 0;
+	}
 
+	return DefWindowProc(hwnd, msg, wparam, lparam);
+
+}
 
 
 void  WindowsInitialization::RegisterWindowsClass() {

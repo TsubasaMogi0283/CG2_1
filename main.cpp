@@ -1,3 +1,6 @@
+#include <Windows.h>
+
+
 #include "HeaderCpp/Function.h"
 #include "HeaderCpp/WindowsInitialization.h"
 #include "HeaderCpp/DirectXInitialization.h"
@@ -5,24 +8,15 @@
 //includeなどは全部Function.hに入っているよ！
 
 
-
-	
+#include "HeaderCpp/Vector4.h"
+#include "HeaderCpp/ColorAdapter.h"	
 
 //Winodwsアプリでもエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
-	// 色指定サンプル
-	const unsigned int WHITE =0xFFFFFFFF; // 白
-	const unsigned int BLACK =0x000000FF; // 黒
-	const unsigned int RED =0xFF0000FF;   // 赤
-	const unsigned int GREEN =0x00FF0FF;  // 緑
-	const unsigned int BLUE = 0x0000FFFF; // 青
-
-	const unsigned int  YELLOW = 0xFFFF00FF; //黄色
-	const unsigned int PURPLE = 0xFF00FFFF; //紫
-
-
+	
+	//ウィンドウのサイズを決める
 	const int32_t WINDOW_SIZE_WIDTH = 1280;
 	const int32_t WINDOW_SIZE_HEIGHT = 720;
 

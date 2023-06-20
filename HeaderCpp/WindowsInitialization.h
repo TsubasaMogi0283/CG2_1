@@ -10,6 +10,9 @@ public:
 	WindowsInitialization(const wchar_t* title, const int32_t WindowSizeWidth, const int32_t WindowSizeHeight);
 
 	
+	//Window Procedure
+	static LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
+
 
 	//ウィンドウクラスを登録
 	void RegisterWindowsClass();

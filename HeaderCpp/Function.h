@@ -2,7 +2,7 @@
 #include "LogConvert.h"
 
 
-#include <Windows.h>
+
 
 #include <cstdint>
 #include <string>
@@ -21,8 +21,8 @@
 #pragma comment(lib,"dxcompiler.lib")
 
 
-//Window Procedure
-LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
+
+
 
 //CompilerShader関数
 IDxcBlob* CompileShader(
@@ -37,12 +37,5 @@ IDxcBlob* CompileShader(
 
 
 
-struct Vector4 {
-	float x;
-	float y;
-	float z;
-	float w;
 
-};
 
-Vector4 ColorAdapter(unsigned int color);

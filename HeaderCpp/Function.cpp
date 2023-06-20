@@ -1,18 +1,7 @@
 #include "Function.h"
 
 
-LRESULT CALLBACK  WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam){
-	switch (msg) {
-		//ウィンドウが破棄された
-	case WM_DESTROY:
-		//OSに対してアプリの終了を伝える
-		PostQuitMessage(0);
-		return 0;
-	}
 
-	return DefWindowProc(hwnd, msg, wparam, lparam);
-
-}
 
 
 
@@ -86,19 +75,3 @@ IDxcBlob* CompileShader(
 
 
 
-Vector4 ColorAdapter(unsigned int color){
-    Vector4 ResultColor = {
-
-       ((color >> 24) & 0xFF) / 255.0f, // 赤
-
-       ((color >> 16) & 0xFF) / 255.0f, // 緑
-
-       ((color >>8) & 0xFF) / 255.0f,  // 青
-
-       ((color) & 0xFF) / 255.0f //透明度
-
-    };
-
-     return ResultColor;
-
-}

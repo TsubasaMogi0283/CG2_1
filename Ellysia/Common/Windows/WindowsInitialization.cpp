@@ -14,6 +14,10 @@ WindowsInitialization::WindowsInitialization(const wchar_t* title, const int32_t
 }
 
 LRESULT WindowsInitialization::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam){
+	if (ImGui_ImplWin32_WndProcHandler(hwnd, msg, wparam, lparam)) {
+		return true;
+	}
+	
 	switch (msg) {
 		//ウィンドウが破棄された
 	case WM_DESTROY:

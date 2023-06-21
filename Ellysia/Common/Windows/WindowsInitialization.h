@@ -3,6 +3,14 @@
  #include <Windows.h>
 #include <cstdint>
 
+#include "externals/imGui/imgui.h"
+#include "externals/imGui/imgui_impl_dx12.h"
+#include "externals/imGui/imgui_impl_win32.h"
+
+
+//extern...グローバル変数を共有する
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd,UINT msg,WPARAM wParam,LPARAM lParam);
+
 class WindowsInitialization {
 public:
 

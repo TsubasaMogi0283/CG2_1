@@ -73,6 +73,8 @@ void ImGuiManager::EndFrame(DirectXInitialization* directXSetup) {
 void ImGuiManager::Release() {
 	ImGui_ImplDX12_Shutdown();
 	ImGui_ImplWin32_Shutdown();
+	ImGui::DestroyContext();
+
 	//delete winSetup_;
 	//delete directXSetup_;
 }

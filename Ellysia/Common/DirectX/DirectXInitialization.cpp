@@ -70,11 +70,10 @@ IDxcBlob* DirectXInitialization::CompileShader(
 }
 
 //DescriptorHeapの作成関数
-ID3D12DescriptorHeap* GenarateDescriptorHeap(
-	ID3D12Device* device,
-	D3D12_DESCRIPTOR_HEAP_TYPE heapType,
-	UINT numDescriptors,
-	bool shaderVisible) {
+ID3D12DescriptorHeap* DirectXInitialization::GenarateDescriptorHeap(
+		ID3D12Device* device,
+		D3D12_DESCRIPTOR_HEAP_TYPE heapType,
+		UINT numDescriptors, bool shaderVisible) {
 
 	ID3D12DescriptorHeap* descriptorHeap= nullptr;
 	D3D12_DESCRIPTOR_HEAP_DESC descriptorHeapDesc{};
@@ -84,19 +83,6 @@ ID3D12DescriptorHeap* GenarateDescriptorHeap(
 	HRESULT hr = device->CreateDescriptorHeap(&descriptorHeapDesc, IID_PPV_ARGS(&descriptorHeap));
 	assert(SUCCEEDED(hr));
 	return descriptorHeap;
-
-	//void DirectXInitialization::MakeDescriptorHeap() {
-	////ID3D12DescriptorHeap* rtvDescriptorHeap_ = nullptr;
-	//
-	//rtvDescriptorHeapDesc_.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;	//レンダーターゲットビュー用
-	//rtvDescriptorHeapDesc_.NumDescriptors = 2;						//ダブルバッファ用に２つ。多くてもOK
-	//
-	//hr_ = device_->CreateDescriptorHeap(&rtvDescriptorHeapDesc_, IID_PPV_ARGS(&rtvDescriptorHeap_));
-	////ディスクリプタヒープが作れなかったので起動できない
-	//assert(SUCCEEDED(hr_));
-	//}
-
-
 
 }
 
@@ -294,7 +280,8 @@ void DirectXInitialization::MakeDescriptorHeap() {
 	srvDescriptorHeap_ = GenarateDescriptorHeap(device_, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 128, true);
 
 
-#pragma region 今までのやつ。これを関数化したよ
+	#pragma region 
+	
 	//rtvDescriptorHeapDesc_.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;	//レンダーターゲットビュー用
 	//rtvDescriptorHeapDesc_.NumDescriptors = 2;						//ダブルバッファ用に２つ。多くてもOK
 	//
@@ -302,7 +289,7 @@ void DirectXInitialization::MakeDescriptorHeap() {
 	////ディスクリプタヒープが作れなかったので起動できない
 	//assert(SUCCEEDED(hr_));
 
-#pragma endregion
+	#pragma endregion
 	
 
 }
@@ -794,6 +781,7 @@ void DirectXInitialization::Release() {
 	fence_->Release();
 
 	rtvDescriptorHeap_->Release();
+	srvDescriptorHeap_->Release();
 
 	swapChainResources_[0]->Release();
 	swapChainResources_[1]->Release();

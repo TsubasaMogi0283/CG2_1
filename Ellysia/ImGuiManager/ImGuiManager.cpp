@@ -71,6 +71,10 @@ void ImGuiManager::EndFrame(DirectXInitialization* directXSetup) {
 
 //デストラクタ
 void ImGuiManager::Release() {
+
+
+	//資料に無かった
+	//f*****in
 	ImGui_ImplDX12_Shutdown();
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();

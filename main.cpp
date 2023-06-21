@@ -8,13 +8,20 @@
 #include "ConvertFunction/ConvertColor/ColorConvert.h"
 #include "Ellysia/Math/Vector/Transform.h"
 #include "Math/Matrix/Calculation/Matrix4x4Calculation.h"
+#include <TextureManager/TextureManager.h>
 
 
 //Winodwsアプリでもエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
-
-
+	//COMの初期化
+	//COM...ComponentObjectModel、Microsoftの提唱する設計技術の１つ
+	//		DirectX12も簡略化されたCOM(Nano-COM)という設計で作られている
 	
+	//COMを使用して開発されたソフトウェア部品をCOMコンポーネントと呼ぶ
+	//Textureを読むにあたって、COMコンポーネントの１つを利用する
+	CoInitializeEx(0, COINIT_MULTITHREADED);
+
+
 	//ウィンドウのサイズを決める
 	const int32_t WINDOW_SIZE_WIDTH = 1280;
 	const int32_t WINDOW_SIZE_HEIGHT = 720;
@@ -23,12 +30,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//コンストラクタ
 	//
 	//KAMATA ENGINEみたいにGameSceneでまとめたい
+	//いつかやる。とりあえず内容を進めないと・・
 	//GameScene* gamescene = new GameScene();
 
 	WindowsInitialization* winSetup = new WindowsInitialization();
 	DirectXInitialization* directXSetup = new DirectXInitialization();
 	ImGuiManager* imGuiManager = new ImGuiManager();
-	
+	TextureManager* textureManager = new TextureManager();
 	
 	//三角形の情報
 	const int32_t TRIANGLE_AMOUNT_MAX = 15;
@@ -40,6 +48,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	winSetup->Initialize(L"DirectX",WINDOW_SIZE_WIDTH,WINDOW_SIZE_HEIGHT);
 	directXSetup->Initialize(winSetup->GetClientWidth(),winSetup->GetClientHeight(),winSetup->GetHwnd());
 	imGuiManager->Initialize(winSetup, directXSetup);
+	textureManager->Initialize(directXSetup);
+	
 
 
 	////三角形について
@@ -273,6 +283,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	delete winSetup;
 	delete imGuiManager;
 	
+
+	//ゲームの終了字にCOMの終了処理を行う
+	CoUninitialize();
 
 	return 0;
 }

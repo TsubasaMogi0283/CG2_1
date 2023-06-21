@@ -13,8 +13,8 @@ void TextureManager::Initialize(DirectXInitialization* directXSetup) {
 	//Textureを読んで転送する
 	DirectX::ScratchImage mipImages= LoadTexture("Resources/uvChecker.png");
 	const DirectX::TexMetadata& metadata = mipImages.GetMetadata();
-	ID3D12Resource* textureResource = CreateTextureResource(directXSetup->GetDevice(), metadata);
-	UploadTextureData(textureResource, mipImages);
+	textureResource_ = CreateTextureResource(directXSetup->GetDevice(), metadata);
+	UploadTextureData(textureResource_, mipImages);
 
 }
 
@@ -79,17 +79,17 @@ ID3D12Resource* TextureManager::CreateTextureResource(ID3D12Device* device, cons
 	
 
 	//3.Resourceを生成する
-	ID3D12Resource* resource = nullptr;
+	
 	HRESULT hr = directXSetup_->GetDevice()->CreateCommittedResource(
 		&heapProperties,					//Heapの設定
 		D3D12_HEAP_FLAG_NONE,				//Heapの特殊な設定
 		&resourceDesc,						//Resourceの設定
 		D3D12_RESOURCE_STATE_GENERIC_READ,	//初回のResourceState。Textureは基本読むだけ
 		nullptr,							//Clear最適値。使わないのでnullptr
-		IID_PPV_ARGS(&resource));			//作成するResourceポインタへのポインタ
+		IID_PPV_ARGS(&resource_));			//作成するResourceポインタへのポインタ
 	assert(SUCCEEDED(hr));
 
-	return resource;
+	return resource_;
 
 
 }
@@ -123,9 +123,12 @@ void TextureManager::UploadTextureData(ID3D12Resource* texture, const DirectX::S
 
 }
 
+void TextureManager::Release() {
+	textureResource_->Release();
+}
 
 
 //デストラクタ
 TextureManager::~TextureManager() {
-
+	
 }

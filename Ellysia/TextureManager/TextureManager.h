@@ -25,14 +25,17 @@ public:
 	void UploadTextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages);
 
 
+	void Release();
+
+
 	//デストラクタ
 	~TextureManager();
 
 private:
 	DirectXInitialization* directXSetup_ = nullptr;
 
-
-
+	ID3D12Resource* resource_ = nullptr;
+	ID3D12Resource* textureResource_ = nullptr;
 
 
 };

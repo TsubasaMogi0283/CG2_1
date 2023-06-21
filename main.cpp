@@ -278,11 +278,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	directXSetup->Release();
 	winSetup->Close();
 	imGuiManager->Release();
+	textureManager->Release();
 
 	delete directXSetup;
 	delete winSetup;
 	delete imGuiManager;
-	
+	delete textureManager;
 
 	//ゲームの終了字にCOMの終了処理を行う
 	CoUninitialize();

@@ -28,8 +28,8 @@ public:
 	void EndFrame(DirectXInitialization* directXSetup);
 
 
-	//デストラクタ
-	~ImGuiManager();
+	//解放処理
+	void Release();
 
 	
 

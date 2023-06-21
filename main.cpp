@@ -267,7 +267,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//解放処理
 	directXSetup->Release();
 	winSetup->Close();
-	imGuiManager->~ImGuiManager();
+	imGuiManager->Release();
 
 	delete directXSetup;
 	delete winSetup;

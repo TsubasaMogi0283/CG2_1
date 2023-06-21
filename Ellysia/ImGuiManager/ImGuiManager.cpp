@@ -70,9 +70,9 @@ void ImGuiManager::EndFrame(DirectXInitialization* directXSetup) {
 
 
 //デストラクタ
-ImGuiManager::~ImGuiManager() {
-	
-
+void ImGuiManager::Release() {
+	ImGui_ImplDX12_Shutdown();
+	ImGui_ImplWin32_Shutdown();
 	//delete winSetup_;
 	//delete directXSetup_;
 }

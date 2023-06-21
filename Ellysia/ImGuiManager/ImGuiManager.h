@@ -22,10 +22,10 @@ public:
 	void PreDraw();
 
 	//描画
-	void Draw();
+	void Draw(DirectXInitialization* directXSetup);
 
 
-	void EndFrame();
+	void EndFrame(DirectXInitialization* directXSetup);
 
 
 	//デストラクタ
@@ -34,7 +34,8 @@ public:
 	
 
 private:
-	WindowsInitialization* winSetup_ = nullptr;
-	DirectXInitialization* directXSetup_ = nullptr;
+	//WindowsInitialization* winSetup_ = nullptr;
+	//DirectXInitialization* directXSetup_ = nullptr;
 
+	//ID3D12DescriptorHeap* descriptorHeaps_[];
 };

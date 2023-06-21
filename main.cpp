@@ -27,7 +27,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	WindowsInitialization* winSetup = new WindowsInitialization();
 	DirectXInitialization* directXSetup = new DirectXInitialization();
-	ImGuiManager* imguiManager = new ImGuiManager();
+	ImGuiManager* imGuiManager = new ImGuiManager();
 	
 	
 	//三角形の情報
@@ -39,7 +39,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//初期化
 	winSetup->Initialize(L"DirectX",WINDOW_SIZE_WIDTH,WINDOW_SIZE_HEIGHT);
 	directXSetup->Initialize(winSetup->GetClientWidth(),winSetup->GetClientHeight(),winSetup->GetHwnd());
-	imguiManager->Initialize(winSetup, directXSetup);
+	imGuiManager->Initialize(winSetup, directXSetup);
 
 
 	////三角形について
@@ -194,11 +194,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			//フレームの開始
 			directXSetup->BeginFrame();
-			imguiManager->BeginFrame();
+			imGuiManager->BeginFrame();
 
 			#pragma region 更新処理
 
-			imguiManager->UpDate();
+			imGuiManager->UpDate();
 			//
 			for (int i = 0; i < TRIANGLE_AMOUNT_MAX; i++) {
 				//y軸回転
@@ -215,13 +215,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			Matrix4x4 projectionMatrix = MakePerspectiveFovMatrix(0.45f, float(WINDOW_SIZE_WIDTH) / float(WINDOW_SIZE_HEIGHT), 0.1f, 100.0f);
 
 
-			imguiManager->PreDraw();
+			imGuiManager->PreDraw();
 			#pragma endregion
 			
 
 			#pragma region 描画処理
 
-			imguiManager->Draw();
+			imGuiManager->Draw(directXSetup);
 
 			for (int i = 0; i < TRIANGLE_AMOUNT_MAX; i++) {
 				//描画処理
@@ -236,13 +236,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				);
 			}
 
+
+			imGuiManager->EndFrame(directXSetup);
+
 			#pragma endregion
 
 
 
 			//フレームの終わり
 			directXSetup->EndFrame();
-			imguiManager->EndFrame();
+			
 
 
 			
@@ -265,12 +268,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//解放処理
 	directXSetup->Release();
 	winSetup->Close();
-	imguiManager->~ImGuiManager();
+	//imGuiManager->~ImGuiManager();
 
 	delete directXSetup;
 	delete winSetup;
-	delete imguiManager;
-	
+	delete imGuiManager;
 	
 
 	return 0;

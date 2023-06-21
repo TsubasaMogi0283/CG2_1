@@ -2,13 +2,13 @@
 
 
 GameScene::GameScene() {
-	winSetup = new WindowsInitialization(L"DirectX",WINDOW_SIZE_WIDTH_,WINDOW_SIZE_HEIGHT_);
+	winSetup = new WindowsInitialization();
 	directXSetup = new DirectXInitialization();
 }
 
 void GameScene::Initialize() {
 	//初期化
-	winSetup->Initialize();
+	winSetup->Initialize(L"DirectX",WINDOW_SIZE_WIDTH_,WINDOW_SIZE_HEIGHT_);
 	directXSetup->Initialize(WINDOW_SIZE_WIDTH_,WINDOW_SIZE_HEIGHT_,winSetup->GetHwnd());
 
 

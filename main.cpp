@@ -1,13 +1,14 @@
 #include "Ellysia/Common/Windows/WindowsInitialization.h"
 #include "Ellysia/Common/DirectX/DirectXInitialization.h"
 #include "Polygon/Triangle/Triangle.h"
-
+#include <ImGuiManager/ImGuiManager.h>
 
 #include "Ellysia/Math/Vector/Vector4.h"
 #include "Math/Matrix/Matrix/Matrix4x4.h"
 #include "ConvertFunction/ConvertColor/ColorConvert.h"
 #include "Ellysia/Math/Vector/Transform.h"
 #include "Math/Matrix/Calculation/Matrix4x4Calculation.h"
+
 
 //Winodwsアプリでもエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
@@ -26,7 +27,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	WindowsInitialization* winSetup = new WindowsInitialization();
 	DirectXInitialization* directXSetup = new DirectXInitialization();
-	
+	ImGuiManager* imguiManager = new ImGuiManager();
 	
 	
 	//三角形の情報
@@ -38,6 +39,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//初期化
 	winSetup->Initialize(L"DirectX",WINDOW_SIZE_WIDTH,WINDOW_SIZE_HEIGHT);
 	directXSetup->Initialize(winSetup->GetClientWidth(),winSetup->GetClientHeight(),winSetup->GetHwnd());
+	imguiManager->Initialize(winSetup, directXSetup);
+
 
 	////三角形について
 	Triangle* triangle[TRIANGLE_AMOUNT_MAX];
@@ -191,8 +194,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			//フレームの開始
 			directXSetup->BeginFrame();
+			imguiManager->BeginFrame();
 
 			#pragma region 更新処理
+
+			imguiManager->UpDate();
 			//
 			for (int i = 0; i < TRIANGLE_AMOUNT_MAX; i++) {
 				//y軸回転
@@ -208,10 +214,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			//遠視投影行列
 			Matrix4x4 projectionMatrix = MakePerspectiveFovMatrix(0.45f, float(WINDOW_SIZE_WIDTH) / float(WINDOW_SIZE_HEIGHT), 0.1f, 100.0f);
 
+
+			imguiManager->PreDraw();
 			#pragma endregion
 			
 
 			#pragma region 描画処理
+
+			imguiManager->Draw();
 
 			for (int i = 0; i < TRIANGLE_AMOUNT_MAX; i++) {
 				//描画処理
@@ -232,7 +242,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			//フレームの終わり
 			directXSetup->EndFrame();
-
+			imguiManager->EndFrame();
 
 
 			
@@ -255,10 +265,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//解放処理
 	directXSetup->Release();
 	winSetup->Close();
+	imguiManager->~ImGuiManager();
 
 	delete directXSetup;
 	delete winSetup;
-
+	delete imguiManager;
 	
 	
 

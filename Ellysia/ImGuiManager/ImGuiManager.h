@@ -34,6 +34,7 @@ public:
 	
 
 private:
-	
+	WindowsInitialization* winSetup_ = nullptr;
+	DirectXInitialization* directXSetup_ = nullptr;
 
 };

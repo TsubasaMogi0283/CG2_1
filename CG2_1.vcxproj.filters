@@ -16,30 +16,48 @@
     <Filter Include="imgui">
       <UniqueIdentifier>{26a1d75c-68f5-48de-a7b5-c1eb6ab5e24a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Common">
+      <UniqueIdentifier>{07c0a95e-6a93-4df8-8d44-8e73f10e1ea2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Common">
+      <UniqueIdentifier>{489343cf-64f2-4e1a-99e3-9a53fd5598b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\GamaScene">
+      <UniqueIdentifier>{6783ae0e-f5a0-4867-a365-1d65f9d0e07e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\GameScene">
+      <UniqueIdentifier>{d00a8998-a08f-48ce-850f-96c0eddb4980}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Math">
+      <UniqueIdentifier>{06a9a389-3fa9-4add-ab75-e624db9a3dd9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Math">
+      <UniqueIdentifier>{b543a5c7-1ed6-4ca8-ac06-3165a71162a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Math\Vector">
+      <UniqueIdentifier>{aaf74c02-09fc-4fb3-8841-c46e52af7448}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Math\Matrix">
+      <UniqueIdentifier>{979fd626-d0ee-4f17-8e46-8c4d9e8a2bb9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\ImGui">
+      <UniqueIdentifier>{14d4744c-9636-4620-8765-10b4ee6446ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\ImGui">
+      <UniqueIdentifier>{00ad347e-53a6-4856-9344-67a497557e0a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\ConvertFunction">
+      <UniqueIdentifier>{5f4a72fc-e562-4946-a2ac-4329dcdc39c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\ConvertFunction">
+      <UniqueIdentifier>{88525f3c-706e-4397-b214-f9c6099be35f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Ellysia\Common\DirectX\DirectXInitialization.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Ellysia\Common\Windows\WindowsInitialization.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Ellysia\ConvertFunction\ConvertColor\ColorConvert.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Ellysia\ConvertFunction\ConvertLog\LogConvert.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Ellysia\Ellysia.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Ellysia\GameScene\GameScene.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Ellysia\Math\Matrix\Calculation\Matrix4x4Calculation.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Ellysia\Polygon\Triangle\Triangle.cpp">
@@ -66,8 +84,26 @@
     <ClCompile Include="Ellysia\externals\imGui\imgui_widgets.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
+    <ClCompile Include="Ellysia\Common\DirectX\DirectXInitialization.cpp">
+      <Filter>ソース ファイル\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Ellysia\Common\Windows\WindowsInitialization.cpp">
+      <Filter>ソース ファイル\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Ellysia\GameScene\GameScene.cpp">
+      <Filter>ソース ファイル\GamaScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Ellysia\Math\Matrix\Calculation\Matrix4x4Calculation.cpp">
+      <Filter>ソース ファイル\Math</Filter>
+    </ClCompile>
     <ClCompile Include="Ellysia\ImGuiManager\ImGuiManager.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Ellysia\ConvertFunction\ConvertColor\ColorConvert.cpp">
+      <Filter>ソース ファイル\ConvertFunction</Filter>
+    </ClCompile>
+    <ClCompile Include="Ellysia\ConvertFunction\ConvertLog\LogConvert.cpp">
+      <Filter>ソース ファイル\ConvertFunction</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -75,43 +111,10 @@
     <FxCompile Include="Object3d.PS.hlsl" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Ellysia\Common\DirectX\DirectXInitialization.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Ellysia\Common\Windows\WindowsInitialization.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Ellysia\ConvertFunction\ConvertColor\ColorConvert.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Ellysia\ConvertFunction\ConvertLog\LogConvert.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Ellysia\GameScene\GameScene.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Ellysia\Math\Matrix\Calculation\Matrix4x4Calculation.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Ellysia\Math\Matrix\Matrix\Matrix3x3.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Ellysia\Math\Matrix\Matrix\Matrix4x4.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Ellysia\Math\Vector\Transform.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Ellysia\Math\Vector\Vector3.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Ellysia\Math\Vector\Vector4.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Ellysia\Polygon\Triangle\Triangle.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Ellysia\Math\Matrix\Matrix\WorldViewMatrix.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Ellysia\externals\imGui\imconfig.h">
@@ -138,8 +141,41 @@
     <ClInclude Include="Ellysia\externals\imGui\imstb_truetype.h">
       <Filter>imgui</Filter>
     </ClInclude>
+    <ClInclude Include="Ellysia\Common\DirectX\DirectXInitialization.h">
+      <Filter>ヘッダー ファイル\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Common\Windows\WindowsInitialization.h">
+      <Filter>ヘッダー ファイル\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\GameScene\GameScene.h">
+      <Filter>ヘッダー ファイル\GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Math\Vector\Vector3.h">
+      <Filter>ヘッダー ファイル\Math\Vector</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Math\Vector\Vector4.h">
+      <Filter>ヘッダー ファイル\Math\Vector</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Math\Matrix\Matrix\Matrix3x3.h">
+      <Filter>ヘッダー ファイル\Math\Matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Math\Matrix\Matrix\Matrix4x4.h">
+      <Filter>ヘッダー ファイル\Math\Matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Math\Matrix\Calculation\Matrix4x4Calculation.h">
+      <Filter>ヘッダー ファイル\Math\Matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Math\Matrix\Matrix\WorldViewMatrix.h">
+      <Filter>ヘッダー ファイル\Math\Matrix</Filter>
+    </ClInclude>
     <ClInclude Include="Ellysia\ImGuiManager\ImGuiManager.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\ConvertFunction\ConvertColor\ColorConvert.h">
+      <Filter>ヘッダー ファイル\ConvertFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\ConvertFunction\ConvertLog\LogConvert.h">
+      <Filter>ヘッダー ファイル\ConvertFunction</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

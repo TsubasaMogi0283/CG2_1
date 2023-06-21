@@ -42,6 +42,14 @@ private:
 		IDxcCompiler3* dxcCompiler,
 		IDxcIncludeHandler* includeHandler);
 
+	//DescriptorHeapの作成関数
+	ID3D12DescriptorHeap* GenarateDescriptorHeap(
+		ID3D12Device* device,
+		D3D12_DESCRIPTOR_HEAP_TYPE heapType,
+		UINT numDescriptors, bool shaderVisible);
+
+
+
 #pragma region 初期化について
 	//初期化へ
 
@@ -196,6 +204,7 @@ private:
 	ID3D12Resource* swapChainResources_[2] = { nullptr };
 
 	ID3D12DescriptorHeap* rtvDescriptorHeap_ = nullptr;
+	ID3D12DescriptorHeap* srvDescriptorHeap_ = nullptr;
 
 	D3D12_DESCRIPTOR_HEAP_DESC rtvDescriptorHeapDesc_{};
 

@@ -96,11 +96,11 @@ public:
 
 #pragma region whileの中身
 	//whileの中身
-	void BeginFlame();
+	void BeginFrame();
 
 	//void DrawTriangle(Vector4 top, Vector4 left, Vector4 right,TriangleVertex vertexBuffer);
 
-	void EndFlame();
+	void EndFrame();
 
 #pragma endregion
 	

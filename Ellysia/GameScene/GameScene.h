@@ -26,7 +26,7 @@ public:
 
 
 	//フレームの始め
-	void BeginFlame();
+	void BeginFrame();
 
 
 	//更新処理
@@ -38,7 +38,7 @@ public:
 
 
 	//フレーム終わり
-	void EndFlame();
+	void EndFrame();
 
 
 #pragma endregion

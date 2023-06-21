@@ -11,18 +11,21 @@ public:
 	//初期化
 	void Initialize(WindowsInitialization* winSetup,DirectXInitialization* directXSetup);
 
-
+	//ここからフレームが始まる
+	void BeginFrame();
 
 	//更新
 	void UpDate();
 
 
+	//描画前の処理
+	void PreDraw();
 
 	//描画
 	void Draw();
 
 
-
+	void EndFrame();
 
 
 	//デストラクタ

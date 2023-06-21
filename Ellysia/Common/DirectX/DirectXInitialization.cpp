@@ -647,7 +647,7 @@ void DirectXInitialization::Initialize(int32_t windowsizeWidth, int32_t windowsi
 
 
 
-void DirectXInitialization::BeginFlame() {
+void DirectXInitialization::BeginFrame() {
 
 
 	////コマンドをキックする
@@ -716,7 +716,7 @@ void DirectXInitialization::BeginFlame() {
 
 
 
-void DirectXInitialization::EndFlame() {
+void DirectXInitialization::EndFrame() {
 	////画面表示出来るようにする
 	//ここがflameの最後
 	//画面に描く処理は「全て終わり」、画面に映すので、状態を遷移

@@ -34,8 +34,8 @@ void GameScene::WindowMSG(MSG& msg) {
 
 
 //フレームの始め
-void GameScene::BeginFlame() {
-	directXSetup->BeginFlame();
+void GameScene::BeginFrame() {
+	directXSetup->BeginFrame();
 }
 
 void GameScene::UpDate() {
@@ -51,7 +51,7 @@ void GameScene::Draw() {
 
 
 //フレーム終わり
-void GameScene::EndFlame() {
+void GameScene::EndFrame() {
 
 }
 

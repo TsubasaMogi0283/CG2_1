@@ -190,7 +190,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			//ゲームの処理
 
 			//フレームの開始
-			directXSetup->BeginFlame();
+			directXSetup->BeginFrame();
 
 			#pragma region 更新処理
 			//
@@ -231,7 +231,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 			//フレームの終わり
-			directXSetup->EndFlame();
+			directXSetup->EndFrame();
 
 
 

@@ -1,11 +1,13 @@
 #include "Ellysia/Common/Windows/WindowsInitialization.h"
 #include "Ellysia/Common/DirectX/DirectXInitialization.h"
-#include "HeaderCpp/Triangle.h"
+#include "Polygon/Triangle/Triangle.h"
 
 
 #include "Ellysia/Math/Vector/Vector4.h"
+#include "Math/Matrix/Matrix/Matrix4x4.h"
 #include "ConvertFunction/ConvertColor/ColorConvert.h"
 #include "Ellysia/Math/Vector/Transform.h"
+#include "Math/Matrix/Calculation/Matrix4x4Calculation.h"
 
 //Winodwsアプリでもエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
@@ -49,7 +51,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	
 
 	
-	Vector4 TriangleCoodinateLeft[TRIANGLE_AMOUNT_MAX] = {
+	Vector4 triangleCoodinateLeft[TRIANGLE_AMOUNT_MAX] = {
 		//left
 		//一段目
 		{-1.0f,0.5f,0.0f,1.0f },
@@ -72,7 +74,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	};
 
-	Vector4 TriangleCoodinateTop[TRIANGLE_AMOUNT_MAX] = {
+	Vector4 triangleCoodinateTop[TRIANGLE_AMOUNT_MAX] = {
 		
 		//up
 		{-0.8f,1.0f,0.0f,1.0f },
@@ -95,7 +97,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		{0.8f,0.0f,0.0f,1.0f },
 	};
 
-	Vector4 TriangleCoodinateRight[TRIANGLE_AMOUNT_MAX] = {
+	Vector4 triangleCoodinateRight[TRIANGLE_AMOUNT_MAX] = {
 		//right
 		{-0.6f,0.5f,0.0f,1.0f },
 		{-0.2f,0.5f,0.0f,1.0f },
@@ -145,7 +147,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 	//頂いた関数で色を決めていく
-	Vector4 Color[TRIANGLE_AMOUNT_MAX] = {
+	Vector4 color[TRIANGLE_AMOUNT_MAX] = {
 		{ ColorAdapter(RED)},//RED
 		{ 0.0f,1.0f,0.0f,1.0f },//GREEN
 		{ ColorAdapter(BLUE) },//BLUE
@@ -198,6 +200,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				transform[i].rotate.y += 0.03f;
 			}
 			
+			
+			//カメラ行列
+			Matrix4x4 cameraMatrix = MakeAffineMatrix(cameraTransform.scale, cameraTransform.rotate, cameraTransform.translate);
+			Matrix4x4 viewMatrix = Inverse(cameraMatrix);
+
+			//遠視投影行列
+			Matrix4x4 projectionMatrix = MakePerspectiveFovMatrix(0.45f, float(WINDOW_SIZE_WIDTH) / float(WINDOW_SIZE_HEIGHT), 0.1f, 100.0f);
 
 			#pragma endregion
 			
@@ -207,11 +216,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			for (int i = 0; i < TRIANGLE_AMOUNT_MAX; i++) {
 				//描画処理
 				triangle[i]->Draw(
-					TriangleCoodinateLeft[i], 
-					TriangleCoodinateTop[i],
-					TriangleCoodinateRight[i],
+					triangleCoodinateLeft[i], 
+					triangleCoodinateTop[i],
+					triangleCoodinateRight[i],
 					transform[i],
-					Color[i]
+					viewMatrix,
+					projectionMatrix,
+					color[i]
 				);
 			}
 

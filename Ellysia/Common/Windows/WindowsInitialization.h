@@ -45,7 +45,7 @@ public:
 		return hwnd_;
 	}
 
-public:
+private:
 
 	////ウィンドウクラスを登録する
 	const wchar_t* title_;

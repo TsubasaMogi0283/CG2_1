@@ -97,7 +97,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Ellysia\Ellysia.cpp" />
     <ClCompile Include="Ellysia\GameScene\GameScene.cpp" />
     <ClCompile Include="Ellysia\Math\Matrix\Calculation\Matrix4x4Calculation.cpp" />
-    <ClCompile Include="HeaderCpp\Triangle.cpp" />
+    <ClCompile Include="Ellysia\Polygon\Triangle\Triangle.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -123,10 +123,11 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Ellysia\Math\Matrix\Calculation\Matrix4x4Calculation.h" />
     <ClInclude Include="Ellysia\Math\Matrix\Matrix\Matrix3x3.h" />
     <ClInclude Include="Ellysia\Math\Matrix\Matrix\Matrix4x4.h" />
+    <ClInclude Include="Ellysia\Math\Matrix\Matrix\WorldViewMatrix.h" />
     <ClInclude Include="Ellysia\Math\Vector\Transform.h" />
     <ClInclude Include="Ellysia\Math\Vector\Vector3.h" />
     <ClInclude Include="Ellysia\Math\Vector\Vector4.h" />
-    <ClInclude Include="HeaderCpp\Triangle.h" />
+    <ClInclude Include="Ellysia\Polygon\Triangle\Triangle.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

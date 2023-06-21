@@ -47,4 +47,8 @@ Matrix4x4 MakeTranslateMatrix(Vector3 translate);
 //アフィン行列
 Matrix4x4 MakeAffineMatrix(const Vector3 scale, const Vector3 rotate, const Vector3 translate);
 
+//逆行列
+Matrix4x4 Inverse(const Matrix4x4 m);
+
+//遠視投影行列
 Matrix4x4 MakePerspectiveFovMatrix(float fovY, float aspectRatio, float nearClip, float farClip);

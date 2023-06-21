@@ -1,5 +1,6 @@
 #include "Triangle.h"
 #include "Math/Vector/Transform.h"
+#include "Math/Matrix/Matrix/WorldViewMatrix.h"
 
 Triangle::Triangle() {
 	
@@ -151,7 +152,7 @@ void Triangle::GenerateMaterialResource() {
 }
 
 //描画
-void Triangle::Draw(Vector4 left,Vector4 top,  Vector4 right,Transform transform,Vector4 color) {
+void Triangle::Draw(Vector4 left,Vector4 top,  Vector4 right,Transform transform,Matrix4x4 viewMatrix,Matrix4x4 projectionMatrix  ,Vector4 color) {
 	
 
 
@@ -182,7 +183,8 @@ void Triangle::Draw(Vector4 left,Vector4 top,  Vector4 right,Transform transform
 	//Matrix4x4 projectionMatrix = MakePerspectiveFovMatrix(0.5f, float() / float(WINDOW_SIZE_HEIGHT), 0.1f, 100.0f);
 	//Matrix4x4 worldMatrix = MakeAffineMatrix();
 	
-	
+	//WVP行列を作成
+	Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(viewMatrix, projectionMatrix));
 
 	//書き込む為のアドレスを取得
 	wvpResource_->Map(0, nullptr, reinterpret_cast<void**>(&wvpData_));
@@ -190,7 +192,7 @@ void Triangle::Draw(Vector4 left,Vector4 top,  Vector4 right,Transform transform
 	
 	
 	//さっき作ったworldMatrixの情報をここに入れる
-	*wvpData_ = worldMatrix;
+	*wvpData_ = worldViewProjectionMatrix;
 	
 
 

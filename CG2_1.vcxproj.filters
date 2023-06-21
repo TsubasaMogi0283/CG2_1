@@ -18,19 +18,28 @@
     <ClCompile Include="main.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="HeaderCpp\Function.cpp">
+    <ClCompile Include="Ellysia\Common\DirectX\DirectXInitialization.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="HeaderCpp\WindowsInitialization.cpp">
+    <ClCompile Include="Ellysia\Common\Windows\WindowsInitialization.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="HeaderCpp\DirectXInitialization.cpp">
+    <ClCompile Include="Ellysia\ConvertFunction\ConvertColor\ColorConvert.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="HeaderCpp\DXGIRelease.cpp">
+    <ClCompile Include="Ellysia\ConvertFunction\ConvertLog\LogConvert.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="HeaderCpp\Triangle.cpp">
+    <ClCompile Include="Ellysia\Ellysia.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Ellysia\GameScene\GameScene.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Ellysia\Math\Matrix\Calculation\Matrix4x4Calculation.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Ellysia\Polygon\Triangle\Triangle.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -39,19 +48,43 @@
     <FxCompile Include="Object3d.PS.hlsl" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="HeaderCpp\Function.h">
+    <ClInclude Include="Ellysia\Common\DirectX\DirectXInitialization.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="HeaderCpp\WindowsInitialization.h">
+    <ClInclude Include="Ellysia\Common\Windows\WindowsInitialization.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="HeaderCpp\DirectXInitialization.h">
+    <ClInclude Include="Ellysia\ConvertFunction\ConvertColor\ColorConvert.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="HeaderCpp\DXGIRelease.h">
+    <ClInclude Include="Ellysia\ConvertFunction\ConvertLog\LogConvert.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="HeaderCpp\Triangle.h">
+    <ClInclude Include="Ellysia\GameScene\GameScene.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Math\Matrix\Calculation\Matrix4x4Calculation.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Math\Matrix\Matrix\Matrix3x3.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Math\Matrix\Matrix\Matrix4x4.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Math\Vector\Transform.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Math\Vector\Vector3.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Math\Vector\Vector4.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Polygon\Triangle\Triangle.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Math\Matrix\Matrix\WorldViewMatrix.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

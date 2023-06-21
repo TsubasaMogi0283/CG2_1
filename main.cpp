@@ -24,7 +24,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//KAMATA ENGINEみたいにGameSceneでまとめたい
 	//GameScene* gamescene = new GameScene();
 
-	WindowsInitialization* winSetup = new WindowsInitialization(L"DirectX",WINDOW_SIZE_WIDTH,WINDOW_SIZE_HEIGHT);
+	WindowsInitialization* winSetup = new WindowsInitialization();
 	DirectXInitialization* directXSetup = new DirectXInitialization();
 	
 	
@@ -36,7 +36,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	
 
 	//初期化
-	winSetup->Initialize();
+	winSetup->Initialize(L"DirectX",WINDOW_SIZE_WIDTH,WINDOW_SIZE_HEIGHT);
 	directXSetup->Initialize(winSetup->GetClientWidth(),winSetup->GetClientHeight(),winSetup->GetHwnd());
 
 	////三角形について

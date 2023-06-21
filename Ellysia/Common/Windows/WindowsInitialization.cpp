@@ -5,14 +5,13 @@
 
 
 
-
-WindowsInitialization::WindowsInitialization(const wchar_t* title, const int32_t WindowSizeWidth, const int32_t WindowSizeHeight) {
-	this->title_ = title;
-	this->kClientWidth_ = WindowSizeWidth;
-	this->kClientHeight_=WindowSizeHeight;
+//コンストラクタ
+WindowsInitialization::WindowsInitialization() {
+	
 
 }
 
+//
 LRESULT WindowsInitialization::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam){
 	if (ImGui_ImplWin32_WndProcHandler(hwnd, msg, wparam, lparam)) {
 		return true;
@@ -30,11 +29,9 @@ LRESULT WindowsInitialization::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LP
 
 }
 
-
+//ウィンドウに情報を入れる
 void  WindowsInitialization::RegisterWindowsClass() {
 	
-
-
 	
 	//ウィンドウプロシャージャ
 	wc_.lpfnWndProc = WindowProc;
@@ -73,13 +70,21 @@ void  WindowsInitialization::RegisterWindowsClass() {
 	
 }
 
-
+//ウィンドウを表示
 void WindowsInitialization::DisplayWindow() {
 	//ウィンドウを表示
 	ShowWindow(hwnd_, SW_SHOW);
 }
 
-void WindowsInitialization::Initialize() {
+//初期化
+void WindowsInitialization::Initialize(const wchar_t* title, const int32_t WindowSizeWidth, const int32_t WindowSizeHeight) {
+	this->title_ = title;
+	this->kClientWidth_ = WindowSizeWidth;
+	this->kClientHeight_=WindowSizeHeight;
+
+
+
+
 	//ウィンドウクラスを登録
 	RegisterWindowsClass();
 
@@ -91,7 +96,7 @@ void WindowsInitialization::Initialize() {
 
 
 
-
+//メッセージを送る
 void WindowsInitialization::WindowsMSG(MSG& msg) {
 	TranslateMessage(&msg);
 	DispatchMessage(&msg);
@@ -99,6 +104,7 @@ void WindowsInitialization::WindowsMSG(MSG& msg) {
 
 
 
+//ウィンドウを閉じる
 void WindowsInitialization::Close() {
 	
 	CloseWindow(hwnd_);

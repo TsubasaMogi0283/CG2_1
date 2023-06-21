@@ -15,7 +15,7 @@ class WindowsInitialization {
 public:
 
 	//コンストラクタ
-	WindowsInitialization(const wchar_t* title, const int32_t WindowSizeWidth, const int32_t WindowSizeHeight);
+	WindowsInitialization();
 
 	
 	//Window Procedure
@@ -29,7 +29,7 @@ public:
 	void DisplayWindow();
 
 
-	void Initialize();
+	void Initialize(const wchar_t* title, const int32_t WindowSizeWidth, const int32_t WindowSizeHeight);
 
 
 

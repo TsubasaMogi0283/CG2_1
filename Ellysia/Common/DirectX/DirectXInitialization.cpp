@@ -246,21 +246,21 @@ void DirectXInitialization::GenerateSwapChain() {
 	//描画(フロントバッファ)と表示(バックバッファ、プライマリバッファ)に分ける。
 	//このことをダブルバッファリングという。
 	//IDXGISwapChain4* swapChain_ = nullptr;
-	DXGI_SWAP_CHAIN_DESC1 swapChainDesc{};
-	swapChainDesc.Width = kClientWidth_;							//画面の幅。ウィンドウのクライアント領域を同じものにしておく
-	swapChainDesc.Height = kClientHeight_;						//画面の高さ。ウィンドウのクライアント領域を同じものにしておく
-	swapChainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;			//色の形式
-	swapChainDesc.SampleDesc.Count = 1;							//マルチサンプルしない
-	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;//描画のターゲットとして利用する
-	swapChainDesc.BufferCount = 2;								//ダブルバッファ
-	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;	//モニタにうつしたら中身を破棄
+	//DXGI_SWAP_CHAIN_DESC1 swapChainDesc_{};
+	swapChainDesc_.Width = kClientWidth_;							//画面の幅。ウィンドウのクライアント領域を同じものにしておく
+	swapChainDesc_.Height = kClientHeight_;						//画面の高さ。ウィンドウのクライアント領域を同じものにしておく
+	swapChainDesc_.Format = DXGI_FORMAT_R8G8B8A8_UNORM;			//色の形式
+	swapChainDesc_.SampleDesc.Count = 1;							//マルチサンプルしない
+	swapChainDesc_.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;//描画のターゲットとして利用する
+	swapChainDesc_.BufferCount = 2;								//ダブルバッファ
+	swapChainDesc_.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;	//モニタにうつしたら中身を破棄
 
 
 	//コマンドキュー、ウィンドウハンドル、設定を渡して生成する
 	hr_ = dxgiFactory_->CreateSwapChainForHwnd(
 		commandQueue_,
 		hwnd_, 
-		&swapChainDesc, 
+		&swapChainDesc_, 
 		nullptr, 
 		nullptr, 
 		reinterpret_cast<IDXGISwapChain1**>(&swapChain_));

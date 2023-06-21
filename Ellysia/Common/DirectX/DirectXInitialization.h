@@ -116,6 +116,11 @@ public:
 #pragma endregion
 	
 
+
+
+
+#pragma region 他のクラスでも使いたいのでGetter
+
 	HRESULT GetHr_() {
 		return hr_;
 	}
@@ -127,8 +132,23 @@ public:
 	ID3D12GraphicsCommandList* GetCommandList() {
 		return commandList_;
 	}
+	
+
+
+	ID3D12DescriptorHeap* GetSrvDescriptorHeap() {
+		return  srvDescriptorHeap_;
+	}
+
+	D3D12_RENDER_TARGET_VIEW_DESC GetRtvDesc() {
+		return rtvDesc_;
+	}
+	
+	DXGI_SWAP_CHAIN_DESC1 GetswapChainDesc() {
+		return swapChainDesc_;
+	}
 
 	
+#pragma endregion
 
 private:
 	int32_t kClientWidth_;
@@ -196,11 +216,13 @@ private:
 	UINT backBufferIndex_;
 
 
-
-	
+	//ID3D12DescriptorHeap* srvDescriptorHeap_ = nullptr;
+	//D3D12_RENDER_TARGET_VIEW_DESC rtvDesc_{};
+	//DXGI_SWAP_CHAIN_DESC1 swapChainDesc_{};
 
 	IDXGISwapChain4* swapChain_ = nullptr;
-	
+	DXGI_SWAP_CHAIN_DESC1 swapChainDesc_{};
+
 	ID3D12Resource* swapChainResources_[2] = { nullptr };
 
 	ID3D12DescriptorHeap* rtvDescriptorHeap_ = nullptr;
@@ -208,11 +230,14 @@ private:
 
 	D3D12_DESCRIPTOR_HEAP_DESC rtvDescriptorHeapDesc_{};
 
-
+	
 
 	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc_{};
 	D3D12_CPU_DESCRIPTOR_HANDLE rtvStartHandle_;
 	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandles_[2] = {};
+
+
+	
 
 	typedef struct D3D12_CPU_DESCRIPTOR_HANDLE {
 		SIZE_T ptr_;

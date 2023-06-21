@@ -202,7 +202,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			//
 			for (int i = 0; i < TRIANGLE_AMOUNT_MAX; i++) {
 				//y軸回転
-				//transform[i].rotate.y += 0.03f;
 				transform[i].rotate.y += 0.03f;
 			}
 			
@@ -268,7 +267,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//解放処理
 	directXSetup->Release();
 	winSetup->Close();
-	//imGuiManager->~ImGuiManager();
+	imGuiManager->~ImGuiManager();
 
 	delete directXSetup;
 	delete winSetup;

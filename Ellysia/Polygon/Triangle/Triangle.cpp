@@ -12,8 +12,8 @@ void Triangle::Initialize(DirectXInitialization* directXSetup) {
 	directXSetup_ = directXSetup;
 
 	//ここでBufferResourceを作る
-	vertexResouce_ = CreateBufferResource(directXSetup->GetDevice(),sizeof(Vector4) * 3);
-	materialResource=CreateBufferResource(directXSetup->GetDevice(),sizeof(Vector4)* 3);
+	vertexResouce_ = CreateBufferResource(directXSetup->GetDevice(),sizeof(vertexData_->position) * 3);
+	materialResource=CreateBufferResource(directXSetup->GetDevice(),sizeof(vertexData_->texcoord)* 3);
 	//WVP用のリソースを作る。Matrix4x4　1つ分のサイズを用意する
 	wvpResource_ = CreateBufferResource(directXSetup_->GetDevice(), sizeof(Matrix4x4));
 
@@ -74,9 +74,9 @@ void Triangle::GenerateVertexBufferView() {
 	//リソースの先頭のアドレスから使う
 	vertexBufferView_.BufferLocation = vertexResouce_->GetGPUVirtualAddress();
 	//使用するリソースのサイズは頂点３つ分のサイズ
-	vertexBufferView_.SizeInBytes = sizeof(Vector4) * 3;
+	vertexBufferView_.SizeInBytes = sizeof(vertexData_) * 3;
 	//１頂点あたりのサイズ
-	vertexBufferView_.StrideInBytes = sizeof(Vector4);
+	vertexBufferView_.StrideInBytes = sizeof(vertexData_)/3;
 	//書き込むためのアドレスを取得
 	vertexResouce_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
 }
@@ -97,7 +97,7 @@ void Triangle::GenarateVertexResource() {
 	D3D12_RESOURCE_DESC vertexResourceDesc_{};
 	//バッファリソース。テクスチャの場合はまた別の設定をする
 	vertexResourceDesc_.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-	vertexResourceDesc_.Width = sizeof(Vector4) * 3;
+	vertexResourceDesc_.Width = sizeof(vertexData_) * 3;
 	//バッファの場合はこれらは1にする決まり
 	vertexResourceDesc_.Height = 1;
 	vertexResourceDesc_.DepthOrArraySize = 1;
@@ -215,7 +215,7 @@ void Triangle::Draw(Vector4 left,Vector4 top,  Vector4 right,Transform transform
 	//wvp用のCBufferの場所を指定
 	//今回はRootParameter[1]に対してCBVの設定を行っている
 	directXSetup_->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource_->GetGPUVirtualAddress());
-
+	
 	//描画(DrawCall)３頂点で１つのインスタンス。
 	directXSetup_->GetCommandList()->DrawInstanced(3, 1, 0, 0);
 

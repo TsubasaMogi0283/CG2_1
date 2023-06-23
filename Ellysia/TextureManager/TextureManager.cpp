@@ -152,6 +152,8 @@ void TextureManager::UploadTextureData(ID3D12Resource* texture, const DirectX::S
 
 void TextureManager::Release() {
 	textureResource_->Release();
+	
+	resource_->Release();
 }
 
 

@@ -192,6 +192,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	
 
 
+	//{-0.5f,-0.5f,0.0f,1.0f },
+	//{0.0f,0.5f,0.0f,1.0f },
+	//{0.5f,-0.5f,0.0f,1.0f },
+
 	MSG msg{};
 
 	////メインループ
@@ -217,7 +221,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			//
 			for (int i = 0; i < TRIANGLE_AMOUNT_MAX; i++) {
 				//y軸回転
-				transform[0].rotate.y += 0.03f;
+				//transform[0].rotate.y += 0.03f;
 			}
 			
 			

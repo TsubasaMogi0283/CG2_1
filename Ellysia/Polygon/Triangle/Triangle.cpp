@@ -154,15 +154,21 @@ void Triangle::GenerateMaterialResource() {
 //描画
 void Triangle::Draw(Vector4 left,Vector4 top,  Vector4 right,Transform transform,Matrix4x4 viewMatrix,Matrix4x4 projectionMatrix  ,Vector4 color) {
 	
+	//頂点リソースにデータを書き込む
 
-
+	//書き込むためのアドレスを取得
+	vertexResouce_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
 	
 	//左下
-	vertexData_[0] = left;
+	vertexData_[0].position = left;
+	vertexData_[0].texcoord = {0.0f,1.0f};
+
 	//上
-	vertexData_[1] =  top ;
+	vertexData_[1].position =  top ;
+	vertexData_[1].texcoord = {0.5f,0.0f};
 	//右下
-	vertexData_[2] =  right ;
+	vertexData_[2].position =  right ;
+	vertexData_[2].texcoord = {1.0f,1.0f};
 	//範囲外は危険だよ！！
 
 	//マテリアルにデータを書き込む

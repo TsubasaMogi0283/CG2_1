@@ -5,6 +5,7 @@
 #include "Math/Matrix/Matrix/Matrix4x4.h"
 #include "Math/Matrix/Calculation/Matrix4x4Calculation.h"
 #include "Math/Vector/Transform.h"
+#include <Math/Vector/VertexData.h>
 
 class Triangle {
 public:
@@ -53,7 +54,8 @@ private:
 	D3D12_RESOURCE_DESC vertexResourceDesc_{};
 
 	//Resourceにデータを書き込む
-	Vector4* vertexData_ = nullptr;
+	VertexData* vertexData_ = nullptr;
+	//Vector4* vertexData_ = nullptr;
 	
 	
 	//マテリアル用のリソースを作る

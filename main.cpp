@@ -67,7 +67,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Vector4 triangleCoodinateLeft[TRIANGLE_AMOUNT_MAX] = {
 		//left
 		//一段目
-		{-1.0f,0.5f,0.0f,1.0f },
+		{-0.5f,-0.5f,0.0f,1.0f },
+		//{-1.0f,0.5f,0.0f,1.0f },
 		{-0.6f,0.5f,0.0f,1.0f },
 		{-0.2f,0.5f,0.0f,1.0f },
 		{0.2f,0.5f,0.0f,1.0f },
@@ -90,7 +91,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Vector4 triangleCoodinateTop[TRIANGLE_AMOUNT_MAX] = {
 		
 		//up
-		{-0.8f,1.0f,0.0f,1.0f },
+		{0.0f,0.5f,0.0f,1.0f },
+		//{-0.8f,1.0f,0.0f,1.0f },
+
 		{-0.4f,1.0f,0.0f,1.0f },
 		{0.0f,1.0f,0.0f,1.0f },
 		{0.4f,1.0f,0.0f,1.0f },
@@ -112,7 +115,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	Vector4 triangleCoodinateRight[TRIANGLE_AMOUNT_MAX] = {
 		//right
-		{-0.6f,0.5f,0.0f,1.0f },
+		{0.5f,-0.5f,0.0f,1.0f },
+		//{-0.6f,0.5f,0.0f,1.0f },
+
 		{-0.2f,0.5f,0.0f,1.0f },
 		{0.2f,0.5f,0.0f,1.0f },
 		{0.6f,0.5f,0.0f,1.0f },
@@ -212,7 +217,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			//
 			for (int i = 0; i < TRIANGLE_AMOUNT_MAX; i++) {
 				//y軸回転
-				transform[i].rotate.y += 0.03f;
+				transform[0].rotate.y += 0.03f;
 			}
 			
 			
@@ -234,14 +239,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			for (int i = 0; i < TRIANGLE_AMOUNT_MAX; i++) {
 				//描画処理
-				triangle[i]->Draw(
-					triangleCoodinateLeft[i], 
-					triangleCoodinateTop[i],
-					triangleCoodinateRight[i],
-					transform[i],
+				triangle[0]->Draw(
+					triangleCoodinateLeft[0], 
+					triangleCoodinateTop[0],
+					triangleCoodinateRight[0],
+					transform[0],
 					viewMatrix,
 					projectionMatrix,
-					color[i]
+					color[0]
 				);
 			}
 
@@ -265,7 +270,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	
 	for (int i = 0; i < TRIANGLE_AMOUNT_MAX; i++) {
 		//描画処理
-		triangle[i]->Release();
+		triangle[0]->Release();
 	}
 
 

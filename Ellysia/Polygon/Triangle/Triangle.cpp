@@ -76,9 +76,10 @@ void Triangle::GenerateVertexBufferView() {
 	//使用するリソースのサイズは頂点３つ分のサイズ
 	vertexBufferView_.SizeInBytes = sizeof(vertexData_) * 3;
 	//１頂点あたりのサイズ
-	vertexBufferView_.StrideInBytes = sizeof(vertexData_)/3;
+	vertexBufferView_.StrideInBytes = sizeof(vertexData_);
 	//書き込むためのアドレスを取得
 	vertexResouce_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
+
 }
 
 

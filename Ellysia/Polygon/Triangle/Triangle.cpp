@@ -293,7 +293,7 @@ void Triangle::Draw(Vector4 left,Vector4 top,  Vector4 right,Transform transform
 	//U(x)V(y)
 
 	
-	//vertexResouce_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
+	
 	//左下
 	vertexData_[0].position = {-0.5f,-0.5f,0.0f,1.0f};
 	vertexData_[0].texCoord = { 0.0f,1.0f };
@@ -305,7 +305,7 @@ void Triangle::Draw(Vector4 left,Vector4 top,  Vector4 right,Transform transform
 	vertexData_[2].texCoord = { 1.0f,1.0f };
 	//範囲外は危険だよ！！
 
-
+	vertexResouce_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
 	
 
 	//マテリアルにデータを書き込む

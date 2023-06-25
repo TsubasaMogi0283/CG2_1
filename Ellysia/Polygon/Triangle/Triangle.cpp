@@ -357,6 +357,8 @@ void Triangle::Draw(Vector4 left,Vector4 top,  Vector4 right,Transform transform
 	directXSetup_->GetCommandList()->DrawInstanced(3, 1, 0, 0);
 
 
+	//ここで引っかかる
+
 }
 
 

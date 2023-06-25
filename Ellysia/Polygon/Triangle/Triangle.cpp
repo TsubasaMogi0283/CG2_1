@@ -13,7 +13,7 @@ void Triangle::Initialize(DirectXInitialization* directXSetup) {
 	directXSetup_ = directXSetup;
 
 	//ここでBufferResourceを作る
-	vertexResouce_ = CreateBufferResource(directXSetup->GetDevice(),sizeof(Vector4) * 3);
+	vertexResouce_ = CreateBufferResource(directXSetup->GetDevice(),sizeof(vertexData_) * 3);
 	materialResource=CreateBufferResource(directXSetup->GetDevice(),sizeof(Vector4)* 3);
 	//WVP用のリソースを作る。Matrix4x4　1つ分のサイズを用意する
 	wvpResource_ = CreateBufferResource(directXSetup_->GetDevice(), sizeof(Matrix4x4));
@@ -206,9 +206,9 @@ void Triangle::GenerateVertexBufferView() {
 	//リソースの先頭のアドレスから使う
 	vertexBufferView_.BufferLocation = vertexResouce_->GetGPUVirtualAddress();
 	//使用するリソースのサイズは頂点３つ分のサイズ
-	vertexBufferView_.SizeInBytes = sizeof(Vector4) * 3;
+	vertexBufferView_.SizeInBytes = sizeof(&vertexData_) * 3;
 	//１頂点あたりのサイズ
-	vertexBufferView_.StrideInBytes = sizeof(Vector4);
+	vertexBufferView_.StrideInBytes = sizeof(&vertexData_);
 	//書き込むためのアドレスを取得
 	vertexResouce_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
 }
@@ -295,14 +295,14 @@ void Triangle::Draw(Vector4 left,Vector4 top,  Vector4 right,Transform transform
 	
 	//vertexResouce_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
 	//左下
-	vertexData_[0] = {-0.5f,-0.5f,0.0f,1.0f};
-	//vertexData_[0].texCoord = { 0.0f,1.0f };
+	vertexData_[0].position = {-0.5f,-0.5f,0.0f,1.0f};
+	vertexData_[0].texCoord = { 0.0f,1.0f };
 	//上
-	vertexData_[1] = {0.0f,0.5f,0.0f,1.0f};
-	//vertexData_[1].texCoord = { 0.5f,0.0f };
+	vertexData_[1].position = {0.0f,0.5f,0.0f,1.0f};
+	vertexData_[1].texCoord = { 0.5f,0.0f };
 	//右下
-	vertexData_[2] = {0.0f,-0.5f,0.0f,1.0f} ;
-	//vertexData_[2].texCoord = { 1.0f,1.0f };
+	vertexData_[2].position = {0.5f,-0.5f,0.0f,1.0f} ;
+	vertexData_[2].texCoord = { 1.0f,1.0f };
 	//範囲外は危険だよ！！
 
 
@@ -363,7 +363,7 @@ void Triangle::Draw(Vector4 left,Vector4 top,  Vector4 right,Transform transform
 
 void Triangle::Release() {
 	vertexResouce_->Release();
-	
+	textureResource_->Release();
 	materialResource->Release();
 	//Release忘れずに
 	wvpResource_->Release();

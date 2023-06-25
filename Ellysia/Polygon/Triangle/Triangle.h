@@ -82,8 +82,8 @@ private:
 	D3D12_RESOURCE_DESC vertexResourceDesc_{};
 
 	//Resourceにデータを書き込む
-	Vector4* vertexData_ = nullptr;
-	//VertexData* vertexData_;
+	//Vector4* vertexData_ = nullptr;
+	VertexData* vertexData_;
 	
 	//マテリアル用のリソースを作る
 	ID3D12Resource* materialResource = nullptr;

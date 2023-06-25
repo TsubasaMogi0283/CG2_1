@@ -142,8 +142,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Ellysia\Math\Matrix\Matrix\Matrix4x4.h" />
     <ClInclude Include="Ellysia\Math\Matrix\Matrix\WorldViewMatrix.h" />
     <ClInclude Include="Ellysia\Math\Vector\Transform.h" />
+    <ClInclude Include="Ellysia\Math\Vector\Vector2.h" />
     <ClInclude Include="Ellysia\Math\Vector\Vector3.h" />
     <ClInclude Include="Ellysia\Math\Vector\Vector4.h" />
+    <ClInclude Include="Ellysia\Math\Vector\VertexData.h" />
     <ClInclude Include="Ellysia\Polygon\Triangle\Triangle.h" />
   </ItemGroup>
   <ItemGroup>

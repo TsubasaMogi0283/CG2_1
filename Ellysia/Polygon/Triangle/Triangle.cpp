@@ -2,6 +2,7 @@
 #include "Math/Vector/Transform.h"
 #include "Math/Matrix/Matrix/WorldViewMatrix.h"
 
+
 Triangle::Triangle() {
 	
 }
@@ -89,7 +90,7 @@ void Triangle::LoadTexture(const std::string& filePath) {
 	//2Dテクスチャ
 	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
 	srvDesc.Texture2D.MipLevels = UINT(metadata.mipLevels);
-
+	
 	//SRVを作成するDescriptorHeapの場所を決める
 	D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU = directXSetup_->GetSrvDescriptorHeap()->GetCPUDescriptorHandleForHeapStart();
 	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU = directXSetup_->GetSrvDescriptorHeap()->GetGPUDescriptorHandleForHeapStart();
@@ -113,9 +114,7 @@ DirectX::ScratchImage Triangle::LoadTextureData(const std::string& filePath) {
 	std::wstring filePathW = ConvertString(filePath);
 	HRESULT hr = DirectX::LoadFromWICFile(filePathW.c_str(), DirectX::WIC_FLAGS_FORCE_SRGB, nullptr, image);
 	assert(SUCCEEDED(hr));
-
-
-
+	
 	//ミップマップの作成
 	//ミップマップ...元画像より小さなテクスチャ群
 	DirectX::ScratchImage mipImages{};
@@ -287,16 +286,27 @@ void Triangle::GenerateMaterialResource() {
 //描画
 void Triangle::Draw(Vector4 left,Vector4 top,  Vector4 right,Transform transform,Matrix4x4 viewMatrix,Matrix4x4 projectionMatrix  ,Vector4 color) {
 	
+	//TextureCoordinate(テクスチャ座標系)
+	//TexCoord,UV座標系とも呼ばれている
+
+	//左上が(0,0)右下が(1,1)で画像全体を指定することが出来る
+	//U(x)V(y)
+
+	
+	//vertexResouce_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
+	//左下
+	vertexData_[0] = {-0.5f,-0.5f,0.0f,1.0f};
+	//vertexData_[0].texCoord = { 0.0f,1.0f };
+	//上
+	vertexData_[1] = {0.0f,0.5f,0.0f,1.0f};
+	//vertexData_[1].texCoord = { 0.5f,0.0f };
+	//右下
+	vertexData_[2] = {0.0f,-0.5f,0.0f,1.0f} ;
+	//vertexData_[2].texCoord = { 1.0f,1.0f };
+	//範囲外は危険だよ！！
 
 
 	
-	//左下
-	vertexData_[0] = left;
-	//上
-	vertexData_[1] =  top ;
-	//右下
-	vertexData_[2] =  right ;
-	//範囲外は危険だよ！！
 
 	//マテリアルにデータを書き込む
 	
@@ -353,6 +363,7 @@ void Triangle::Draw(Vector4 left,Vector4 top,  Vector4 right,Transform transform
 
 void Triangle::Release() {
 	vertexResouce_->Release();
+	
 	materialResource->Release();
 	//Release忘れずに
 	wvpResource_->Release();

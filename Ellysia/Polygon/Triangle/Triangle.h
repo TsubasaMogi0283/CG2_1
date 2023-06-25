@@ -7,7 +7,7 @@
 #include "Math/Matrix/Matrix/Matrix4x4.h"
 #include "Math/Matrix/Calculation/Matrix4x4Calculation.h"
 #include "Math/Vector/Transform.h"
-
+#include <Math/Vector/VertexData.h>
 
 #include <string>
 
@@ -83,7 +83,7 @@ private:
 
 	//Resourceにデータを書き込む
 	Vector4* vertexData_ = nullptr;
-	
+	//VertexData* vertexData_;
 	
 	//マテリアル用のリソースを作る
 	ID3D12Resource* materialResource = nullptr;

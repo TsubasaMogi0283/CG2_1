@@ -53,7 +53,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	for (int i = 0; i < TRIANGLE_AMOUNT_MAX; i++) {
 		triangle[i] = new Triangle();
 		triangle[i]->Initialize(directXSetup);
-		triangle[i]->LoadTexture("Resources/uvChecker.png");
+		//triangle[i]->LoadTexture("Resources/uvChecker.png");
 	}
 
 
@@ -210,7 +210,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			//
 			for (int i = 0; i < TRIANGLE_AMOUNT_MAX; i++) {
 				//y軸回転
-				//transform[i].rotate.y += 0.03f;
+				transform[i].rotate.y += 0.03f;
 			}
 			
 			

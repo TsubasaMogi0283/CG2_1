@@ -39,6 +39,9 @@ public:
 	//まとめた方がよさそう
 	void LoadTexture(const std::string& filePath);
 	
+
+private:
+
 #pragma region テクスチャの読み込み
 	//Textureデータを読む
 	//1.TextureデータそのものをCPUで読み込む
@@ -53,6 +56,9 @@ public:
 
 #pragma endregion
 
+
+
+public:
 
 	void Release();
 	

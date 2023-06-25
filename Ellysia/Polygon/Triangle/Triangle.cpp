@@ -100,9 +100,9 @@ void Triangle::LoadTexture(const std::string& filePath) {
 	directXSetup_->GetDevice()->CreateShaderResourceView(textureResource_, &srvDesc, textureSrvHandleCPU);
 
 
-
-
 }
+
+
 
 //Textureを読み込むためのLoad関数
 //1.TextureデータそのものをCPUで読み込む
@@ -125,7 +125,6 @@ DirectX::ScratchImage Triangle::LoadTextureData(const std::string& filePath) {
 	//ミップマップ月のデータを返す
 	return mipImages;
 }
-
 
 //2.DirectX12のTextureResourceを作る
 ID3D12Resource* Triangle::CreateTextureResource(ID3D12Device* device, const DirectX::TexMetadata& metadata) {
@@ -174,12 +173,6 @@ ID3D12Resource* Triangle::CreateTextureResource(ID3D12Device* device, const Dire
 
 }
 
-
-
-
-
-
-
 //3.TextureResourceに1で読んだデータを転送する
 void Triangle::UploadTextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages) {
 	//Meta情報を取得
@@ -203,9 +196,9 @@ void Triangle::UploadTextureData(ID3D12Resource* texture, const DirectX::Scratch
 
 }
 
+
 void Triangle::GenerateTransformationMatrixResource() {
 	
-
 }
 
 //頂点バッファビューを作成する

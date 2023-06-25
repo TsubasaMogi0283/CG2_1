@@ -1,4 +1,7 @@
-////PixelShader
+
+//#include "Resources/Shader/object3d.hlsli"
+
+///PixelShader
 //ここからの出力は色で、OutputManagerに送られて
 //ブレンド処理も行い画面に色が打ち込まれる
  

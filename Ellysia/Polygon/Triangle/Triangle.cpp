@@ -13,7 +13,7 @@ void Triangle::Initialize(DirectXInitialization* directXSetup) {
 	directXSetup_ = directXSetup;
 
 	//ここでBufferResourceを作る
-	vertexResouce_ = CreateBufferResource(directXSetup->GetDevice(),sizeof(vertexData_) * 3);
+	vertexResouce_ = CreateBufferResource(directXSetup->GetDevice(),sizeof(VertexData) * 3);
 	materialResource=CreateBufferResource(directXSetup->GetDevice(),sizeof(Vector4)* 3);
 	//WVP用のリソースを作る。Matrix4x4　1つ分のサイズを用意する
 	wvpResource_ = CreateBufferResource(directXSetup_->GetDevice(), sizeof(Matrix4x4));
@@ -196,21 +196,16 @@ void Triangle::UploadTextureData(ID3D12Resource* texture, const DirectX::Scratch
 }
 
 
-void Triangle::GenerateTransformationMatrixResource() {
-	
-}
-
 //頂点バッファビューを作成する
 void Triangle::GenerateVertexBufferView() {
 	
 	//リソースの先頭のアドレスから使う
 	vertexBufferView_.BufferLocation = vertexResouce_->GetGPUVirtualAddress();
 	//使用するリソースのサイズは頂点３つ分のサイズ
-	vertexBufferView_.SizeInBytes = sizeof(&vertexData_) * 3;
+	vertexBufferView_.SizeInBytes = sizeof(VertexData) * 3;
 	//１頂点あたりのサイズ
-	vertexBufferView_.StrideInBytes = sizeof(&vertexData_);
-	//書き込むためのアドレスを取得
-	vertexResouce_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
+	vertexBufferView_.StrideInBytes = sizeof(VertexData);
+	
 }
 
 
@@ -292,7 +287,8 @@ void Triangle::Draw(Vector4 left,Vector4 top,  Vector4 right,Transform transform
 	//左上が(0,0)右下が(1,1)で画像全体を指定することが出来る
 	//U(x)V(y)
 
-	
+	//書き込むためのアドレスを取得
+	vertexResouce_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
 	
 	//左下
 	vertexData_[0].position = {-0.5f,-0.5f,0.0f,1.0f};
@@ -305,7 +301,7 @@ void Triangle::Draw(Vector4 left,Vector4 top,  Vector4 right,Transform transform
 	vertexData_[2].texCoord = { 1.0f,1.0f };
 	//範囲外は危険だよ！！
 
-	vertexResouce_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
+	
 	
 
 	//マテリアルにデータを書き込む

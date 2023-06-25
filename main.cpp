@@ -12,6 +12,12 @@
 
 //Winodwsアプリでもエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
+	//COMの初期化
+	//COM...ComponentObjectModel、Microsoftの提唱する設計技術の１つ
+	//		DirectX12も簡略化されたCOM(Nano-COM)という設計で作られている
+	
+	//COMを使用して開発されたソフトウェア部品をCOMコンポーネントと呼ぶ
+	//Textureを読むにあたって、COMコンポーネントの１つを利用する
 	CoInitializeEx(0, COINIT_MULTITHREADED);
 
 	
@@ -31,7 +37,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	
 	
 	//三角形の情報
-	const int32_t TRIANGLE_AMOUNT_MAX = 15;
+	const int32_t TRIANGLE_AMOUNT_MAX = 1;
 
 	
 	
@@ -57,68 +63,70 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Vector4 triangleCoodinateLeft[TRIANGLE_AMOUNT_MAX] = {
 		//left
 		//一段目
-		{-1.0f,0.5f,0.0f,1.0f },
-		{-0.6f,0.5f,0.0f,1.0f },
-		{-0.2f,0.5f,0.0f,1.0f },
-		{0.2f,0.5f,0.0f,1.0f },
-		{0.6f,0.5f,0.0f,1.0f },
-		//二段目
-		{-1.0f,0.0f,0.0f,1.0f },
-		{-0.6f,0.0f,0.0f,1.0f },
-		{-0.2f,0.0f,0.0f,1.0f },
-		{0.2f,0.0f,0.0f,1.0f },
-		{0.6f,0.0f,0.0f,1.0f },
-		//三段目
-		{-1.0f,-0.5f,0.0f,1.0f },
-		{-0.6f,-0.5f,0.0f,1.0f },
-		{-0.2f,-0.5f,0.0f,1.0f },
-		{0.2f,-0.5f,0.0f,1.0f },
-		{0.6f,-0.5f,0.0f,1.0f },
+		{-0.5f,-0.5f,0.0f,1.0f}
+		//{-1.0f,0.5f,0.0f,1.0f },
+		//{-0.6f,0.5f,0.0f,1.0f },
+		//{-0.2f,0.5f,0.0f,1.0f },
+		//{0.2f,0.5f,0.0f,1.0f },
+		//{0.6f,0.5f,0.0f,1.0f },
+		////二段目
+		//{-1.0f,0.0f,0.0f,1.0f },
+		//{-0.6f,0.0f,0.0f,1.0f },
+		//{-0.2f,0.0f,0.0f,1.0f },
+		//{0.2f,0.0f,0.0f,1.0f },
+		//{0.6f,0.0f,0.0f,1.0f },
+		////三段目
+		//{-1.0f,-0.5f,0.0f,1.0f },
+		//{-0.6f,-0.5f,0.0f,1.0f },
+		//{-0.2f,-0.5f,0.0f,1.0f },
+		//{0.2f,-0.5f,0.0f,1.0f },
+		//{0.6f,-0.5f,0.0f,1.0f },
 
 	};
 
 	Vector4 triangleCoodinateTop[TRIANGLE_AMOUNT_MAX] = {
-		
+		{0.0f,0.5f,0.0f,1.0f}
 		//up
-		{-0.8f,1.0f,0.0f,1.0f },
-		{-0.4f,1.0f,0.0f,1.0f },
-		{0.0f,1.0f,0.0f,1.0f },
-		{0.4f,1.0f,0.0f,1.0f },
-		{0.8f,1.0f,0.0f,1.0f },
-
+		//{-0.8f,1.0f,0.0f,1.0f },
+		//{-0.4f,1.0f,0.0f,1.0f },
+		//{0.0f,1.0f,0.0f,1.0f },
+		//{0.4f,1.0f,0.0f,1.0f },
+		//{0.8f,1.0f,0.0f,1.0f },
 		//
-		{-0.8f,0.5f,0.0f,1.0f },
-		{-0.4f,0.5f,0.0f,1.0f },
-		{0.0f,0.5f,0.0f,1.0f },
-		{0.4f,0.5f,0.0f,1.0f },
-		{0.8f,0.5f,0.0f,1.0f },
-		//
-		{-0.8f,0.0f,0.0f,1.0f },
-		{-0.4f,0.0f,0.0f,1.0f },
-		{0.0f,0.0f,0.0f,1.0f },
-		{0.4f,0.0f,0.0f,1.0f },
-		{0.8f,0.0f,0.0f,1.0f },
+		////
+		//{-0.8f,0.5f,0.0f,1.0f },
+		//{-0.4f,0.5f,0.0f,1.0f },
+		//{0.0f,0.5f,0.0f,1.0f },
+		//{0.4f,0.5f,0.0f,1.0f },
+		//{0.8f,0.5f,0.0f,1.0f },
+		////
+		//{-0.8f,0.0f,0.0f,1.0f },
+		//{-0.4f,0.0f,0.0f,1.0f },
+		//{0.0f,0.0f,0.0f,1.0f },
+		//{0.4f,0.0f,0.0f,1.0f },
+		//{0.8f,0.0f,0.0f,1.0f },
 	};
 
 	Vector4 triangleCoodinateRight[TRIANGLE_AMOUNT_MAX] = {
+		{0.5f,-0.5f,0.0f,1.0f}
 		//right
-		{-0.6f,0.5f,0.0f,1.0f },
-		{-0.2f,0.5f,0.0f,1.0f },
-		{0.2f,0.5f,0.0f,1.0f },
-		{0.6f,0.5f,0.0f,1.0f },
-		{1.0f,0.5f,0.0f,1.0f },
-		
-		{-0.6f,0.0f,0.0f,1.0f },
-		{-0.2f,0.0f,0.0f,1.0f },
-		{0.2f,0.0f,0.0f,1.0f },
-		{0.6f,0.0f,0.0f,1.0f },
-		{1.0f,0.0f,0.0f,1.0f },
-
-		{-0.6f,-0.5f,0.0f,1.0f },
-		{-0.2f,-0.5f,0.0f,1.0f },
-		{0.2f,-0.5f,0.0f,1.0f },
-		{0.6f,-0.5f,0.0f,1.0f },
-		{1.0f,-0.5f,0.0f,1.0f },
+		//{-0.6f,0.5f,0.0f,1.0f },
+		//{-0.2f,0.5f,0.0f,1.0f },
+		//{0.2f,0.5f,0.0f,1.0f },
+		//{0.6f,0.5f,0.0f,1.0f },
+		//{1.0f,0.5f,0.0f,1.0f },
+		//
+		//{-0.6f,0.0f,0.0f,1.0f },
+		//{-0.2f,0.0f,0.0f,1.0f },
+		//{0.2f,0.0f,0.0f,1.0f },
+		//{0.6f,0.0f,0.0f,1.0f },
+		//{1.0f,0.0f,0.0f,1.0f },
+		//
+		//{-0.6f,-0.5f,0.0f,1.0f },
+		//{-0.2f,-0.5f,0.0f,1.0f },
+		//{0.2f,-0.5f,0.0f,1.0f },
+		//{0.6f,-0.5f,0.0f,1.0f },
+		//{1.0f,-0.5f,0.0f,1.0f },
 
 	};
 	
@@ -130,44 +138,44 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	Transform transform[TRIANGLE_AMOUNT_MAX]{
 		{scale,rotate,translate },
-		{scale,rotate,translate },
-		{scale,rotate,translate },
-		{scale,rotate,translate },
-		{scale,rotate,translate },
-		
-		{scale,rotate,translate },
-		{scale,rotate,translate },
-		{scale,rotate,translate },
-		{scale,rotate,translate },
-		{scale,rotate,translate },
-
-		{scale,rotate,translate },
-		{scale,rotate,translate },
-		{scale,rotate,translate },
-		{scale,rotate,translate },
-		{scale,rotate,translate },
+		//{scale,rotate,translate },
+		//{scale,rotate,translate },
+		//{scale,rotate,translate },
+		//{scale,rotate,translate },
+		//
+		//{scale,rotate,translate },
+		//{scale,rotate,translate },
+		//{scale,rotate,translate },
+		//{scale,rotate,translate },
+		//{scale,rotate,translate },
+		//
+		//{scale,rotate,translate },
+		//{scale,rotate,translate },
+		//{scale,rotate,translate },
+		//{scale,rotate,translate },
+		//{scale,rotate,translate },
 	};
 
 
 	//頂いた関数で色を決めていく
 	Vector4 color[TRIANGLE_AMOUNT_MAX] = {
 		{ ColorAdapter(RED)},//RED
-		{ 0.0f,1.0f,0.0f,1.0f },//GREEN
-		{ ColorAdapter(BLUE) },//BLUE
-		{ ColorAdapter(WHITE)  },
-		{ ColorAdapter(PURPLE) },
-
-		{ 0.0f,0.0f,1.0f,1.0f },
-		{ 1.0f,0.0f,0.0f,1.0f },
-		{ ColorAdapter(BLACK) },
-		{ 0.0f,0.0f,1.0f,1.0f },
-		{ 1.0f,0.0f,0.0f,1.0f },
-
-		{0.6f,0.5f,0.0f,1.0f },
-		{ColorAdapter(BLUE) },
-		{0.2f,0.5f,0.0f,1.0f },
-		{0.6f,0.5f,0.0f,1.0f },
-		{ColorAdapter(WHITE)  },
+		//{ 0.0f,1.0f,0.0f,1.0f },//GREEN
+		//{ ColorAdapter(BLUE) },//BLUE
+		//{ ColorAdapter(WHITE)  },
+		//{ ColorAdapter(PURPLE) },
+		//
+		//{ 0.0f,0.0f,1.0f,1.0f },
+		//{ 1.0f,0.0f,0.0f,1.0f },
+		//{ ColorAdapter(BLACK) },
+		//{ 0.0f,0.0f,1.0f,1.0f },
+		//{ 1.0f,0.0f,0.0f,1.0f },
+		//
+		//{0.6f,0.5f,0.0f,1.0f },
+		//{ColorAdapter(BLUE) },
+		//{0.2f,0.5f,0.0f,1.0f },
+		//{0.6f,0.5f,0.0f,1.0f },
+		//{ColorAdapter(WHITE)  },
 
 	};
 	
@@ -202,7 +210,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			//
 			for (int i = 0; i < TRIANGLE_AMOUNT_MAX; i++) {
 				//y軸回転
-				transform[i].rotate.y += 0.03f;
+				//transform[i].rotate.y += 0.03f;
 			}
 			
 			
@@ -273,7 +281,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	delete winSetup;
 	delete imGuiManager;
 	
-
+	//ゲーム終了時にはCOMの終了処理を行っておく
+	CoUninitialize();
 	return 0;
 }
 

@@ -1,10 +1,15 @@
 #pragma once
 #include "Common/DirectX/DirectXInitialization.h"
+#include "ConvertFunction/ConvertLog/LogConvert.h"
+#include "externals/DirectXTex/DirectXTex.h"
 
 #include "Math/Vector/Vector4.h"
 #include "Math/Matrix/Matrix/Matrix4x4.h"
 #include "Math/Matrix/Calculation/Matrix4x4Calculation.h"
 #include "Math/Vector/Transform.h"
+
+
+#include <string>
 
 class Triangle {
 public:
@@ -29,6 +34,24 @@ public:
 
 	//Resource作成の関数化
 	ID3D12Resource* CreateBufferResource(ID3D12Device* device,size_t sizeInBytes);
+
+
+	//まとめた方がよさそう
+	void LoadTexture(const std::string& filePath);
+	
+#pragma region テクスチャの読み込み
+	//Textureデータを読む
+	//1.TextureデータそのものをCPUで読み込む
+	DirectX::ScratchImage LoadTextureData(const std::string& filePath);
+
+	//2.DirectX12のTextureResourceを作る
+	ID3D12Resource* CreateTextureResource(ID3D12Device* device, const DirectX::TexMetadata& metadata);
+
+	//3.TextureResourceに1で読んだデータを転送する
+	void UploadTextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages);
+
+
+#pragma endregion
 
 
 	void Release();
@@ -66,4 +89,8 @@ private:
 	Matrix4x4* wvpData_=nullptr;
 
 	
+	ID3D12Resource* resource_ = nullptr;
+	ID3D12Resource* textureResource_ = nullptr;
+
+
 };

@@ -1,4 +1,4 @@
-#include "Object3d.hlsli"
+//#include "Object3d.hlsli"
 //#include "Resources/Shader/object3d.hlsli"
 
 ///PixelShader

@@ -54,17 +54,14 @@ private:
 	//初期化へ
 
 	void GenerateDXGIFactory();
-	void SelectAdapter();
 
+	void SelectAdapter();
 
 	void GenerateD3D12Device();
 
-
 	void StopErrorWarning();
 
-	
 	void GenerateCommand();
-	
 
 	void GenerateSwapChain();
 
@@ -80,6 +77,7 @@ private:
 	void MakePSO();
 
 	void GenarateViewport();
+
 	void GenerateScissor();
 
 

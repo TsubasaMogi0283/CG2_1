@@ -1,4 +1,6 @@
-#include "Resources/Shader/object3d.hlsli"
+//応急処置で消した
+// //このまま止まっているのは効率が悪い
+//#include "Object3d.hlsli"
 
 
 //座標返還を行うVS
@@ -15,8 +17,19 @@ ConstantBuffer<TransformationMatrix> gTransformationMatrix:register(b0);
 //	float32_t4 position : SV_POSITION;
 //};
 
+
+//struct VertexShaderOutput {
+//	float32_t4 position : SV_POSITION;
+//	float32_t2 texcoord : TEXCOORD0;
+//};
+
 struct VertexShaderInput {
 	float32_t4 position : POSITION0;
+	float32_t2 texcoord : TEXCOORD0;
+};
+
+struct VertexShaderOutput {
+	float32_t4 position : SV_POSITION;
 	float32_t2 texcoord : TEXCOORD0;
 };
 

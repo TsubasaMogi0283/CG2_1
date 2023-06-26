@@ -177,10 +177,19 @@
     <ClInclude Include="Ellysia\ConvertFunction\ConvertLog\LogConvert.h">
       <Filter>ヘッダー ファイル\ConvertFunction</Filter>
     </ClInclude>
+    <ClInclude Include="Ellysia\Math\Vector\Vector2.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Math\Vector\VertexData.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Ellysia\externals\imGui\LICENSE.txt">
       <Filter>imgui</Filter>
     </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Object3d.hlsli" />
   </ItemGroup>
 </Project>

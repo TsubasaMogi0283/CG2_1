@@ -97,4 +97,7 @@ private:
 	ID3D12Resource* textureResource_ = nullptr;
 
 
+	D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU_;
+	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU_;
+
 };

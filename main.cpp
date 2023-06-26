@@ -157,6 +157,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	};
 
 
+
 	//頂いた関数で色を決めていく
 	Vector4 color[TRIANGLE_AMOUNT_MAX] = {
 		{ ColorAdapter(WHITE)},//RED

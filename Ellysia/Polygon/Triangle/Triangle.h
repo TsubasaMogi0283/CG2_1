@@ -31,7 +31,7 @@ public:
 
 
 	//Resource作成の関数化
-	ID3D12Resource* CreateBufferResource(ID3D12Device* device,size_t sizeInBytes);
+	ID3D12Resource* CreateBufferResource(size_t sizeInBytes);
 
 
 	//まとめた方がよさそう

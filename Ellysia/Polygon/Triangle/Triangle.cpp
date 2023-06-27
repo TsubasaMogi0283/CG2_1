@@ -18,10 +18,11 @@ void Triangle::Initialize(DirectXInitialization* directXSetup) {
 	directXSetup_ = directXSetup;
 
 	//ここでBufferResourceを作る
-	vertexResouce_ = CreateBufferResource(directXSetup->GetDevice(),sizeof(VertexData) * 3);
-	materialResource=CreateBufferResource(directXSetup->GetDevice(),sizeof(Vector4)* 3);
+	//頂点を6に増やす
+	vertexResouce_ = CreateBufferResource(sizeof(VertexData) * 6);
+	materialResource=CreateBufferResource(sizeof(Vector4)* 3);
 	//WVP用のリソースを作る。Matrix4x4　1つ分のサイズを用意する
-	wvpResource_ = CreateBufferResource(directXSetup_->GetDevice(), sizeof(Matrix4x4));
+	wvpResource_ = CreateBufferResource(sizeof(Matrix4x4));
 
 	//頂点バッファビューを作成する
 	GenerateVertexBufferView();
@@ -32,7 +33,7 @@ void Triangle::Initialize(DirectXInitialization* directXSetup) {
 
 
 //Resource作成の関数化
-ID3D12Resource* Triangle::CreateBufferResource(ID3D12Device* device,size_t sizeInBytes) {
+ID3D12Resource* Triangle::CreateBufferResource(size_t sizeInBytes) {
 	//void返り値も忘れずに
 	ID3D12Resource* resource = nullptr;
 	
@@ -58,7 +59,7 @@ ID3D12Resource* Triangle::CreateBufferResource(ID3D12Device* device,size_t sizeI
 	//実際に頂点リソースを作る
 	//ID3D12Resource* vertexResource_ = nullptr;
 	//hrは調査用
-	hr_ = device->CreateCommittedResource(
+	hr_ = directXSetup_->GetDevice()->CreateCommittedResource(
 		&uploadHeapProperties_,
 		D3D12_HEAP_FLAG_NONE,
 		&vertexResourceDesc_,
@@ -195,6 +196,9 @@ ID3D12Resource* Triangle::CreateTextureResource(ID3D12Device* device, const Dire
 
 }
 
+
+
+
 //3.TextureResourceに1で読んだデータを転送する
 //書き換え
 [[nodiscard]]
@@ -205,7 +209,7 @@ ID3D12Resource* Triangle::UploadTextureData(
 	std::vector<D3D12_SUBRESOURCE_DATA>subresource;
 	DirectX::PrepareUpload(directXSetup_->GetDevice(), mipImages.GetImages(), mipImages.GetImageCount(), mipImages.GetMetadata(), subresource);
 	uint64_t intermediateSize = GetRequiredIntermediateSize(texture, 0, UINT(subresource.size()));
-	ID3D12Resource* intermediateResource = CreateBufferResource(directXSetup_->GetDevice(), intermediateSize);
+	ID3D12Resource* intermediateResource = CreateBufferResource(intermediateSize);
 	UpdateSubresources(directXSetup_->GetCommandList(), texture, intermediateResource, 0, 0, UINT(subresource.size()), subresource.data());
 	
 	//Textureへの転送後は利用出来るようD3D12_RESOURCE_STATE_COPY_DESTからD3D12_RESOURCE_STATE_GENERIC_READへResourceStateを変更
@@ -258,7 +262,7 @@ void Triangle::GenerateVertexBufferView() {
 	//リソースの先頭のアドレスから使う
 	vertexBufferView_.BufferLocation = vertexResouce_->GetGPUVirtualAddress();
 	//使用するリソースのサイズは頂点３つ分のサイズ
-	vertexBufferView_.SizeInBytes = sizeof(VertexData) * 3;
+	vertexBufferView_.SizeInBytes = sizeof(VertexData) * 6;
 	//１頂点あたりのサイズ
 	vertexBufferView_.StrideInBytes = sizeof(VertexData);
 	
@@ -353,6 +357,17 @@ void Triangle::Draw(Vector4 left,Vector4 top,  Vector4 right,Transform transform
 	vertexData_[2].texCoord = { 1.0f,1.0f };
 	//範囲外は危険だよ！！
 
+
+	//2枚目
+	//左下
+	vertexData_[3].position = {-0.5f,-0.5f,0.5f,1.0f};
+	vertexData_[3].texCoord = { 0.0f,1.0f };
+	//上
+	vertexData_[4].position = {0.0f,0.0f,0.0f,1.0f};
+	vertexData_[4].texCoord = { 0.5f,0.0f };
+	//右下
+	vertexData_[5].position = {0.5f,-0.5f,-0.5f,1.0f} ;
+	vertexData_[5].texCoord = { 1.0f,1.0f };
 	
 	
 
@@ -405,7 +420,7 @@ void Triangle::Draw(Vector4 left,Vector4 top,  Vector4 right,Transform transform
 	
 
 	//描画(DrawCall)３頂点で１つのインスタンス。
-	directXSetup_->GetCommandList()->DrawInstanced(3, 1, 0, 0);
+	directXSetup_->GetCommandList()->DrawInstanced(6, 1, 0, 0);
 
 
 

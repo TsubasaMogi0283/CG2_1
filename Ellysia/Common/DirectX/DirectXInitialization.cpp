@@ -369,7 +369,6 @@ void DirectXInitialization::InitializeDXC() {
 void DirectXInitialization::MakePSO() {
 	
 	//PSO
-
 	////RootSignatureを作成
 	//RootSignature・・ShaderとResourceをどのように間レンズけるかを示したオブジェクトである
 	

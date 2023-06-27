@@ -3,6 +3,11 @@
 #include "Math/Matrix/Matrix/WorldViewMatrix.h"
 
 
+//補助ライブラリ
+#include "externals/DirectXTex/d3dx12.h"
+//動的配列
+#include <vector>
+
 Triangle::Triangle() {
 	
 }
@@ -76,12 +81,15 @@ ID3D12Resource* Triangle::CreateBufferResource(ID3D12Device* device,size_t sizeI
 //void UploadTextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages);
 
 
+//Before
 void Triangle::LoadTexture(const std::string& filePath) {
 	//Textureを読んで転送する
 	DirectX::ScratchImage mipImages = LoadTextureData(filePath);
 	const DirectX::TexMetadata& metadata = mipImages.GetMetadata();
 	textureResource_ = CreateTextureResource(directXSetup_->GetDevice(), metadata);
-	UploadTextureData(textureResource_, mipImages);
+	intermediateResource_ = UploadTextureData(textureResource_, mipImages);
+
+
 
 	//metadataを基にSRVの設定
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
@@ -103,7 +111,14 @@ void Triangle::LoadTexture(const std::string& filePath) {
 
 }
 
-
+//After
+//1.TextureデータそのものをCPUで読み込む
+//2.DirectX12のTextureResourceを作る
+//3.CPUで書き込む用にUploadHeapのResourceを作る(IntermediateResource)
+//4.3に対してCPUでデータを書き込む
+//5.CommandListに3を2に転送するコマンドを積む
+//6.CommandQueueを使って実行する
+//7.6の実行完了を待つ
 
 //Textureを読み込むためのLoad関数
 //1.TextureデータそのものをCPUで読み込む
@@ -148,11 +163,19 @@ ID3D12Resource* Triangle::CreateTextureResource(ID3D12Device* device, const Dire
 	//利用するHeapの設定。非常に特殊な運用。02_04exで一般的なケース版がある
 	D3D12_HEAP_PROPERTIES heapProperties{};
 	//細かい設定を行う
-	heapProperties.Type = D3D12_HEAP_TYPE_CUSTOM;
-	//WriteBackポリシーでCPUアクセス可能
-	heapProperties.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_WRITE_BACK;
-	//プロセッサの近くに配置
-	heapProperties.MemoryPoolPreference = D3D12_MEMORY_POOL_L0;
+	//Defaultに変更してVRAM上に生成する
+	//VRAM...映像出力に特化したタイプのメモリ(RAM)
+	//RAM...CPを制御するためのもの。揮発性。RandomAccessMemory
+	//ROM...ReadOnlyMemory。不揮発性
+	heapProperties.Type = D3D12_HEAP_TYPE_DEFAULT;
+
+
+
+
+	////WriteBackポリシーでCPUアクセス可能
+	//heapProperties.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_WRITE_BACK;
+	////プロセッサの近くに配置
+	//heapProperties.MemoryPoolPreference = D3D12_MEMORY_POOL_L0;
 
 	
 
@@ -162,7 +185,7 @@ ID3D12Resource* Triangle::CreateTextureResource(ID3D12Device* device, const Dire
 		&heapProperties,					//Heapの設定
 		D3D12_HEAP_FLAG_NONE,				//Heapの特殊な設定
 		&resourceDesc,						//Resourceの設定
-		D3D12_RESOURCE_STATE_GENERIC_READ,	//初回のResourceState。Textureは基本読むだけ
+		D3D12_RESOURCE_STATE_COPY_DEST,	//初回のResourceState。データの転送を受け入れられるようにする
 		nullptr,							//Clear最適値。使わないのでnullptr
 		IID_PPV_ARGS(&resource_));			//作成するResourceポインタへのポインタ
 	assert(SUCCEEDED(hr));
@@ -173,27 +196,60 @@ ID3D12Resource* Triangle::CreateTextureResource(ID3D12Device* device, const Dire
 }
 
 //3.TextureResourceに1で読んだデータを転送する
-void Triangle::UploadTextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages) {
-	//Meta情報を取得
-	const DirectX::TexMetadata& metadata = mipImages.GetMetadata();
-	//全MipMapについて
-	for (size_t mipLevel = 0; mipLevel < metadata.mipLevels; ++mipLevel) {
-		//MipMapLevelを指定して各Imageを取得
-		const DirectX::Image* img = mipImages.GetImage(mipLevel, 0, 0);
-		//Textureに転送
-		HRESULT hr = texture->WriteToSubresource(
-			UINT(mipLevel),			
-			nullptr,				//全領域
-			img->pixels,			//元データアドレス
-			UINT(img->rowPitch),	//1ラインサイズ
-			UINT(img->slicePitch));	//1枚サイズ
+//書き換え
+[[nodiscard]]
+ID3D12Resource* Triangle::UploadTextureData(
+	ID3D12Resource* texture, 
+	const DirectX::ScratchImage& mipImages) {
 
-		assert(SUCCEEDED(hr));
-	}
+	std::vector<D3D12_SUBRESOURCE_DATA>subresource;
+	DirectX::PrepareUpload(directXSetup_->GetDevice(), mipImages.GetImages(), mipImages.GetImageCount(), mipImages.GetMetadata(), subresource);
+	uint64_t intermediateSize = GetRequiredIntermediateSize(texture, 0, UINT(subresource.size()));
+	ID3D12Resource* intermediateResource = CreateBufferResource(directXSetup_->GetDevice(), intermediateSize);
+	UpdateSubresources(directXSetup_->GetCommandList(), texture, intermediateResource, 0, 0, UINT(subresource.size()), subresource.data());
 	
+	//Textureへの転送後は利用出来るようD3D12_RESOURCE_STATE_COPY_DESTからD3D12_RESOURCE_STATE_GENERIC_READへResourceStateを変更
+	D3D12_RESOURCE_BARRIER barrier{};
+	barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+	barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+	barrier.Transition.pResource = texture ;
+	barrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
+	barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_COPY_DEST;
+	barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_GENERIC_READ;
+	directXSetup_->GetCommandList()->ResourceBarrier(1, &barrier);
+	return intermediateResource;
 
 
 }
+
+
+
+//void Triangle::UploadTextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages,ID3D12Device* device,ID3D12GraphicsCommandList* commandList) {
+//	//Meta情報を取得
+//	const DirectX::TexMetadata& metadata = mipImages.GetMetadata();
+//	//全MipMapについて
+//	for (size_t mipLevel = 0; mipLevel < metadata.mipLevels; ++mipLevel) {
+//		//MipMapLevelを指定して各Imageを取得
+//		const DirectX::Image* img = mipImages.GetImage(mipLevel, 0, 0);
+//		//Textureに転送
+//		HRESULT hr = texture->WriteToSubresource(
+//			UINT(mipLevel),			
+//			nullptr,				//全領域
+//			img->pixels,			//元データアドレス
+//			UINT(img->rowPitch),	//1ラインサイズ
+//			UINT(img->slicePitch));	//1枚サイズ
+//
+//		assert(SUCCEEDED(hr));
+//	}
+//	
+//
+//
+//}
+
+
+
+
+
 
 
 //頂点バッファビューを作成する
@@ -363,6 +419,7 @@ void Triangle::Release() {
 	materialResource->Release();
 	//Release忘れずに
 	wvpResource_->Release();
+	intermediateResource_->Release();
 }
 
 Triangle::~Triangle() {

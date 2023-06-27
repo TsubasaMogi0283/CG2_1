@@ -28,7 +28,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	//コンストラクタ
 	//
-	//KAMATA ENGINEみたいにGameSceneでまとめたい
+	//いつかKAMATA ENGINEみたいにGameSceneでまとめたい
 	//GameScene* gamescene = new GameScene();
 
 	WindowsInitialization* winSetup = new WindowsInitialization();
@@ -160,7 +160,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	//頂いた関数で色を決めていく
 	Vector4 color[TRIANGLE_AMOUNT_MAX] = {
-		{ ColorAdapter(WHITE)},//RED
+		{ ColorAdapter(WHITE)},//WHITE
 		//{ 0.0f,1.0f,0.0f,1.0f },//GREEN
 		//{ ColorAdapter(BLUE) },//BLUE
 		//{ ColorAdapter(WHITE)  },

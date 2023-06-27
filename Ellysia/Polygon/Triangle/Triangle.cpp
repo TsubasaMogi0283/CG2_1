@@ -71,6 +71,69 @@ ID3D12Resource* Triangle::CreateBufferResource(size_t sizeInBytes) {
 }
 
 
+//Z-Buffer...震度情報を格納したResourceのこと。一般的にはTexture
+//			最も奥が1.0で逆に手前が0.0。正規化しているね
+//DepthStencil...Depth + Stencil
+//Stencil...マスク情報が付随することが多い。Depthに付属しているやつ
+
+//そういえば、映像でもマスクあったね。選択範囲
+
+ID3D12Resource* Triangle::CreateDepthStencilTextureResource(int32_t width, int32_t height) {
+	//Resource/Heapの設定
+	//生成するResourceの設定
+	D3D12_RESOURCE_DESC resourceDesc{};
+	//Textureの幅
+	resourceDesc.Width = width;
+	//Textureの高さ
+	resourceDesc.Height = height;
+	//mipmapの数
+	resourceDesc.MipLevels = 1;
+	//奥行きor配列Textureの配列数
+	resourceDesc.DepthOrArraySize = 1;
+	//DepthStencilとして利用可能なフォーマット
+	resourceDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	//サンプリングカウント。1固定
+	resourceDesc.SampleDesc.Count = 1;
+	//2次元
+	resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
+	//DepthStencilとして使う通知
+	resourceDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
+
+	//利用するHeapの設定
+	D3D12_HEAP_PROPERTIES heapProperties{};
+	//VRAM上に作る
+	heapProperties.Type = D3D12_HEAP_TYPE_DEFAULT;
+
+
+
+	//深度値のクリア最適化設定
+	D3D12_CLEAR_VALUE depthClearValue{};
+	//1.0f(最大値)でクリア
+	depthClearValue.DepthStencil.Depth = 1.0f;
+	//フォーマット。Resourceと合わせる
+	depthClearValue.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+
+
+	//Resourceの生成
+	ID3D12Resource* resource = nullptr;
+	HRESULT hr = directXSetup_->GetDevice()->CreateCommittedResource(
+		//Heapの設定
+		&heapProperties,
+		//Heapの特殊な設定。特になし
+		D3D12_HEAP_FLAG_NONE,
+		//Resourceの設定
+		&resourceDesc,
+		//深度値を書き込む状態にしておく
+		D3D12_RESOURCE_STATE_DEPTH_WRITE,
+		//Clear最適値
+		&depthClearValue,
+		//作成するResourceポインタへのポインタ
+		IID_PPV_ARGS(&resource));
+
+	return resource;
+}
+
+
 //Textureデータを読む
 ////1.TextureデータそのものをCPUで読み込む
 //DirectX::ScratchImage LoadTextureData(const std::string& filePath);
@@ -89,7 +152,7 @@ void Triangle::LoadTexture(const std::string& filePath) {
 	const DirectX::TexMetadata& metadata = mipImages.GetMetadata();
 	textureResource_ = CreateTextureResource(directXSetup_->GetDevice(), metadata);
 	intermediateResource_ = UploadTextureData(textureResource_, mipImages);
-
+	depthStencilResource_ = CreateDepthStencilTextureResource(directXSetup_->GetClientWidth(), directXSetup_->GetClientHeight());
 
 
 	//metadataを基にSRVの設定
@@ -435,6 +498,7 @@ void Triangle::Release() {
 	//Release忘れずに
 	wvpResource_->Release();
 	intermediateResource_->Release();
+	depthStencilResource_->Release();
 }
 
 Triangle::~Triangle() {

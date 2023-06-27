@@ -155,6 +155,7 @@ void Triangle::LoadTexture(const std::string& filePath) {
 	depthStencilResource_ = CreateDepthStencilTextureResource(directXSetup_->GetClientWidth(), directXSetup_->GetClientHeight());
 
 
+	//ShaderResourceView
 	//metadataを基にSRVの設定
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
 	srvDesc.Format = metadata.format;
@@ -171,6 +172,18 @@ void Triangle::LoadTexture(const std::string& filePath) {
 	textureSrvHandleGPU_.ptr += directXSetup_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	//SRVの生成
 	directXSetup_->GetDevice()->CreateShaderResourceView(textureResource_, &srvDesc, textureSrvHandleCPU_);
+
+	//Heap上にDSVを構築する
+	D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc{};
+	//Format。基本的にはResourceに合わせる
+	dsvDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	//2DTexture
+	dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
+	//DSVHeapの先頭にDSVを作る
+	directXSetup_->GetDevice()->CreateDepthStencilView(
+		depthStencilResource_, 
+		&dsvDesc, 
+		directXSetup_->GetDsvDescriptorHeap()->GetCPUDescriptorHandleForHeapStart());
 
 
 }

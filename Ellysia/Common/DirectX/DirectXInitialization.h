@@ -154,6 +154,9 @@ public:
 		return swapChainDesc_;
 	}
 
+	ID3D12DescriptorHeap* GetDsvDescriptorHeap() {
+		return dsvDescriptorHeap_;
+	}
 	
 #pragma endregion
 
@@ -234,6 +237,7 @@ private:
 
 	ID3D12DescriptorHeap* rtvDescriptorHeap_ = nullptr;
 	ID3D12DescriptorHeap* srvDescriptorHeap_ = nullptr;
+	ID3D12DescriptorHeap* dsvDescriptorHeap_ = nullptr;
 
 	D3D12_DESCRIPTOR_HEAP_DESC rtvDescriptorHeapDesc_{};
 

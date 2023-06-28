@@ -282,7 +282,6 @@ private:
 
 
 
-
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_{};
 
 	Vector4* vertexData_ = nullptr;

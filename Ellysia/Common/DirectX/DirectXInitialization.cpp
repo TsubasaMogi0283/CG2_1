@@ -764,15 +764,14 @@ void DirectXInitialization::BeginFrame() {
 	commandList_->SetDescriptorHeaps(1, descriptorHeaps);
 
 	//描画先のRTVとDSVを設定する
-	D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = dsvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart();
-	commandList_->OMSetRenderTargets(1,&rtvHandles_[backBufferIndex_],false,&dsvHandle);
+	//D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = dsvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart();
+	//commandList_->OMSetRenderTargets(1,&rtvHandles_[backBufferIndex_],false,&dsvHandle);
 
 	commandList_->RSSetViewports(1, &viewport_);
 	commandList_->RSSetScissorRects(1, &scissorRect_);
 	commandList_->SetGraphicsRootSignature(rootSignature_);
 	commandList_->SetPipelineState(graphicsPipelineState_);
 	
-
 }
 
 

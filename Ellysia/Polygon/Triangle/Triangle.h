@@ -103,5 +103,4 @@ private:
 
 
 	ID3D12Resource* intermediateResource_ = nullptr;
-	ID3D12Resource* depthStencilResource_ = nullptr;
 };

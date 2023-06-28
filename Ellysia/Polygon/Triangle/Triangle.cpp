@@ -111,18 +111,7 @@ void Triangle::LoadTexture(const std::string& filePath) {
 	//SRVの生成
 	directXSetup_->GetDevice()->CreateShaderResourceView(textureResource_, &srvDesc, textureSrvHandleCPU_);
 
-	//Heap上にDSVを構築する
-	D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc{};
-	//Format。基本的にはResourceに合わせる
-	dsvDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-	//2DTexture
-	dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
-	//DSVHeapの先頭にDSVを作る
-	directXSetup_->GetDevice()->CreateDepthStencilView(
-		depthStencilResource_, 
-		&dsvDesc, 
-		directXSetup_->GetDsvDescriptorHeap()->GetCPUDescriptorHandleForHeapStart());
-
+	
 
 }
 
@@ -178,13 +167,13 @@ ID3D12Resource* Triangle::CreateTextureResource(ID3D12Device* device, const Dire
 	//利用するHeapの設定。非常に特殊な運用。02_04exで一般的なケース版がある
 	D3D12_HEAP_PROPERTIES heapProperties{};
 	//細かい設定を行う
-	//Defaultに変更してVRAM上に生成する
-	//VRAM...映像出力に特化したタイプのメモリ(RAM)
-	//RAM...CPを制御するためのもの。揮発性。RandomAccessMemory
-	//ROM...ReadOnlyMemory。不揮発性
-	heapProperties.Type = D3D12_HEAP_TYPE_DEFAULT;
+	heapProperties.Type = D3D12_HEAP_TYPE_CUSTOM;
+	//WriteBackポリシーでCPUアクセス可能
+	heapProperties.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_WRITE_BACK;
+	//プロセッサの近くに配置
+	heapProperties.MemoryPoolPreference = D3D12_MEMORY_POOL_L0;
 
-
+	
 
 
 	////WriteBackポリシーでCPUアクセス可能
@@ -424,8 +413,6 @@ void Triangle::Draw(Vector4 left,Vector4 top,  Vector4 right,Transform transform
 	//描画(DrawCall)３頂点で１つのインスタンス。
 	directXSetup_->GetCommandList()->DrawInstanced(3, 1, 0, 0);
 
-
-
 }
 
 
@@ -437,7 +424,6 @@ void Triangle::Release() {
 	//Release忘れずに
 	wvpResource_->Release();
 	intermediateResource_->Release();
-	depthStencilResource_->Release();
 }
 
 Triangle::~Triangle() {

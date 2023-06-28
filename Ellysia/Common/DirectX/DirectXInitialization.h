@@ -154,9 +154,7 @@ public:
 		return swapChainDesc_;
 	}
 
-	ID3D12DescriptorHeap* GetDsvDescriptorHeap() {
-		return dsvDescriptorHeap_;
-	}
+	
 	
 #pragma endregion
 

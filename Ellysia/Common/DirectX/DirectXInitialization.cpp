@@ -6,6 +6,8 @@ DirectXInitialization::DirectXInitialization() {
 }
 
 
+	
+
 ////CompileShader関数
 IDxcBlob* DirectXInitialization::CompileShader(
 	const std::wstring& filePath,
@@ -265,7 +267,7 @@ void DirectXInitialization::GenerateSwapChain() {
 		nullptr, 
 		reinterpret_cast<IDXGISwapChain1**>(&swapChain_));
 	assert(SUCCEEDED(hr_));
-
+	
 
 }
 
@@ -283,10 +285,7 @@ void DirectXInitialization::MakeDescriptorHeap() {
 	//SRV...ShaderResourceView
 	srvDescriptorHeap_ = GenarateDescriptorHeap(device_, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 128, true);
 
-	//DSVを利用
-	//DSV用のヒープでディスクリプタの数は1。DSVはShaderないで触るものではないので、ShaderVisibleはfalse
-	dsvDescriptorHeap_=GenarateDescriptorHeap(device_, D3D12_DESCRIPTOR_HEAP_TYPE_DSV, 1, false);
-
+	
 
 	#pragma region 
 	
@@ -567,19 +566,6 @@ void DirectXInitialization::MakePSO() {
 	graphicsPipelineStateDesc.SampleMask = D3D12_DEFAULT_SAMPLE_MASK;
 
 
-	//DepthStencilStateの設定
-	D3D12_DEPTH_STENCIL_DESC depthStencilDesc{};
-	//Depthの機能を有効かする
-	depthStencilDesc.DepthEnable = true;
-	//書き込み
-	depthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
-	//比較関数はLessEqual。近いと描画されるよ
-	depthStencilDesc.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
-
-	//DepthStencilを使う意思表示
-	//DepthStencilの設定
-	graphicsPipelineStateDesc.DepthStencilState = depthStencilDesc;
-	graphicsPipelineStateDesc.DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
 
 	//実際に生成
 	//ID3D12PipelineState* graphicsPipelineState_ = nullptr;
@@ -844,7 +830,6 @@ void DirectXInitialization::Release() {
 
 	rtvDescriptorHeap_->Release();
 	srvDescriptorHeap_->Release();
-	dsvDescriptorHeap_->Release();
 
 	swapChainResources_[0]->Release();
 	swapChainResources_[1]->Release();

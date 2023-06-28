@@ -33,10 +33,7 @@ public:
 	//Resource作成の関数化
 	ID3D12Resource* CreateBufferResource(size_t sizeInBytes);
 
-	//DepthStencilTexture...奥行の根幹をなすものであり、非常に大量の読み書きを高速に行う必要がある
-	//						Textureの中でも特に例外的な扱いが必要となっている
-	ID3D12Resource* CreateDepthStencilTextureResource(int32_t width, int32_t height);
-
+	
 	//まとめた方がよさそう
 	void LoadTexture(const std::string& filePath);
 	

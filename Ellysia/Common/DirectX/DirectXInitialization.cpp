@@ -536,7 +536,6 @@ void DirectXInitialization::MakePSO() {
 
 
 
-	//PSで問題
 	pixelShaderBlob_ = CompileShader(L"Object3d.PS.hlsl", L"ps_6_0", dxcUtils_, dxcCompiler_, includeHandler_);
 	assert(pixelShaderBlob_ != nullptr);
 

@@ -222,6 +222,25 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			//遠視投影行列
 			Matrix4x4 projectionMatrix = MakePerspectiveFovMatrix(0.45f, float(WINDOW_SIZE_WIDTH) / float(WINDOW_SIZE_HEIGHT), 0.1f, 100.0f);
 
+			ImGui::Begin("TriangleSRT");
+
+			for (int i = 0; i < TRIANGLE_AMOUNT_MAX; i++) {
+				ImGui::InputFloat3("Scale",&transform[i].scale.x);
+				ImGui::SliderFloat3("ScaleSlide", &transform[i].scale.x, 1.0f,5.0f);
+	
+				ImGui::InputFloat3("Rotate",&transform[i].rotate.x);
+				ImGui::SliderFloat3("RotateSlide", &transform[i].rotate.x, 0.0f,12.0f);
+	
+
+				ImGui::InputFloat3("Translate",&transform[i].translate.x);
+				ImGui::SliderFloat3("TranslateSlide", &transform[i].translate.x, -10.0f,10.0f);
+	
+			}
+			
+
+
+			ImGui::End();
+
 
 			imGuiManager->PreDraw();
 			#pragma endregion
@@ -243,6 +262,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					color[i]
 				);
 			}
+
+			
 
 
 			imGuiManager->EndFrame(directXSetup);

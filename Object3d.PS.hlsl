@@ -19,6 +19,7 @@ struct Material {
 	float32_t4 color;
 };
 
+
 //ConstantBuffer<構造体>変数名:register(b0);
 ConstantBuffer<Material>gMaterial:register(b0);
 struct PixelShaderOutput {

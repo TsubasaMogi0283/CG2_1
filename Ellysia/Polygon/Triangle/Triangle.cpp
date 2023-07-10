@@ -335,7 +335,7 @@ void Triangle::Draw(Vector4 left,Vector4 top,  Vector4 right,Transform transform
 
 
 	//左下2
-	vertexData_[3].position = {-0.5f,-0.5f,0.0f,1.0f};
+	vertexData_[3].position = {-0.5f,-0.5f,0.5f,1.0f};
 	vertexData_[3].texCoord = { 0.0f,1.0f };
 	//上2
 	vertexData_[4].position = {0.0f,0.0f,0.0f,1.0f};
@@ -394,7 +394,7 @@ void Triangle::Draw(Vector4 left,Vector4 top,  Vector4 right,Transform transform
 	
 
 	//描画(DrawCall)３頂点で１つのインスタンス。
-	directXSetup_->GetCommandList()->DrawInstanced(3, 1, 0, 0);
+	directXSetup_->GetCommandList()->DrawInstanced(6, 1, 0, 0);
 
 }
 

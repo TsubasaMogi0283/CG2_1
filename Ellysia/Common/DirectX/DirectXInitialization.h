@@ -48,7 +48,7 @@ private:
 		D3D12_DESCRIPTOR_HEAP_TYPE heapType,
 		UINT numDescriptors, bool shaderVisible);
 
-
+	ID3D12Resource* CreateDepthStencilTextureResource(int32_t width, int32_t height);
 
 #pragma region 初期化について
 	//初期化へ

@@ -17,6 +17,7 @@
 
 
 
+
 //Material...色など三角形の表面の材質をけっていするもの
 struct Material {
 	float32_t4 color;

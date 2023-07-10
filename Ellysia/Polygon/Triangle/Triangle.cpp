@@ -19,7 +19,7 @@ void Triangle::Initialize(DirectXInitialization* directXSetup) {
 
 	//ここでBufferResourceを作る
 	//頂点を6に増やす
-	vertexResouce_ = CreateBufferResource(sizeof(VertexData) * 3);
+	vertexResouce_ = CreateBufferResource(sizeof(VertexData) * 6);
 	materialResource=CreateBufferResource(sizeof(Vector4)* 3);
 	//WVP用のリソースを作る。Matrix4x4　1つ分のサイズを用意する
 	wvpResource_ = CreateBufferResource(sizeof(Matrix4x4));
@@ -231,33 +231,6 @@ ID3D12Resource* Triangle::UploadTextureData(
 
 
 
-//void Triangle::UploadTextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages,ID3D12Device* device,ID3D12GraphicsCommandList* commandList) {
-//	//Meta情報を取得
-//	const DirectX::TexMetadata& metadata = mipImages.GetMetadata();
-//	//全MipMapについて
-//	for (size_t mipLevel = 0; mipLevel < metadata.mipLevels; ++mipLevel) {
-//		//MipMapLevelを指定して各Imageを取得
-//		const DirectX::Image* img = mipImages.GetImage(mipLevel, 0, 0);
-//		//Textureに転送
-//		HRESULT hr = texture->WriteToSubresource(
-//			UINT(mipLevel),			
-//			nullptr,				//全領域
-//			img->pixels,			//元データアドレス
-//			UINT(img->rowPitch),	//1ラインサイズ
-//			UINT(img->slicePitch));	//1枚サイズ
-//
-//		assert(SUCCEEDED(hr));
-//	}
-//	
-//
-//
-//}
-
-
-
-
-
-
 
 //頂点バッファビューを作成する
 void Triangle::GenerateVertexBufferView() {
@@ -265,7 +238,7 @@ void Triangle::GenerateVertexBufferView() {
 	//リソースの先頭のアドレスから使う
 	vertexBufferView_.BufferLocation = vertexResouce_->GetGPUVirtualAddress();
 	//使用するリソースのサイズは頂点３つ分のサイズ
-	vertexBufferView_.SizeInBytes = sizeof(VertexData) * 3;
+	vertexBufferView_.SizeInBytes = sizeof(VertexData) * 6;
 	//１頂点あたりのサイズ
 	vertexBufferView_.StrideInBytes = sizeof(VertexData);
 	
@@ -360,6 +333,16 @@ void Triangle::Draw(Vector4 left,Vector4 top,  Vector4 right,Transform transform
 	vertexData_[2].texCoord = { 1.0f,1.0f };
 	//範囲外は危険だよ！！
 
+
+	//左下2
+	vertexData_[3].position = {-0.5f,-0.5f,0.0f,1.0f};
+	vertexData_[3].texCoord = { 0.0f,1.0f };
+	//上2
+	vertexData_[4].position = {0.0f,0.0f,0.0f,1.0f};
+	vertexData_[4].texCoord = { 0.5f,0.0f };
+	//右下2
+	vertexData_[5].position = {0.5f,-0.5f,-0.5f,1.0f} ;
+	vertexData_[5].texCoord = { 1.0f,1.0f };
 
 
 	//マテリアルにデータを書き込む

@@ -242,7 +242,7 @@ private:
 	ID3D12DescriptorHeap* srvDescriptorHeap_ = nullptr;
 	ID3D12DescriptorHeap* dsvDescriptorHeap_ = nullptr;
 
-	ID3D12Resource* depthStencilRsource_ = nullptr;
+	ID3D12Resource* depthStencilResource_ = nullptr;
 
 	D3D12_DESCRIPTOR_HEAP_DESC rtvDescriptorHeapDesc_{};
 
@@ -255,10 +255,7 @@ private:
 
 	
 
-	typedef struct D3D12_CPU_DESCRIPTOR_HANDLE {
-		SIZE_T ptr_;
-	}D3D12_CPU_DESCRIPTOR_HANDLE;
-
+	
 	D3D12_RESOURCE_BARRIER barrier_{};
 
 	ID3D12Fence* fence_ = nullptr;

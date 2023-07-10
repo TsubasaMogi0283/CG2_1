@@ -88,6 +88,53 @@ ID3D12DescriptorHeap* DirectXInitialization::GenarateDescriptorHeap(
 
 }
 
+ID3D12Resource* DirectXInitialization::CreateDepthStencilTextureResource(ID3D12Device* device,int32_t width, int32_t height) {
+	D3D12_RESOURCE_DESC resourceDesc{};
+	//Textureの幅
+	resourceDesc.Width = width;
+	//Textureの高さ
+	resourceDesc.Height = height;
+	//mipmapの数
+	resourceDesc.MipLevels = 1;
+	//奥行 or 配列Textureの配列数
+	resourceDesc.DepthOrArraySize = 1;
+	//DepthStencilとして利用可能なフォーマット
+	resourceDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	//サンプリングカウント。1固定
+	resourceDesc.SampleDesc.Count = 1;
+	//2次元
+	resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
+	//DepthStencilとして使う通知
+	resourceDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
+
+	//利用するHeapの設定
+	D3D12_HEAP_PROPERTIES heapProperties{};
+	//VRAM上に作る
+	heapProperties.Type = D3D12_HEAP_TYPE_DEFAULT;
+
+	//深度値のクリア設定
+	D3D12_CLEAR_VALUE depthClearValue{};
+	//1.0f(最大値)でクリア
+	depthClearValue.DepthStencil.Depth = 1.0f;
+	//フォーマット。Resourceと合わせる
+	depthClearValue.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+
+	//Resourceの作成
+	ID3D12Resource* resource = nullptr;
+	HRESULT hr = device->CreateCommittedResource(
+		&heapProperties,					//Heapの設定 
+		D3D12_HEAP_FLAG_NONE,				//Heapの特殊な設定。特になし。
+		&resourceDesc,						//Resourceの設定
+		D3D12_RESOURCE_STATE_DEPTH_WRITE,	//深度値を書き込む状態にしておく
+		&depthClearValue,					//Clear最適値
+		IID_PPV_ARGS(&resource));			//作成するResourceポインタへのポインタ
+	assert(SUCCEEDED(hr));
+
+
+	return resource;
+
+}
+
 
 #pragma region Initializeの所で使う関数
 
@@ -285,7 +332,7 @@ void DirectXInitialization::MakeDescriptorHeap() {
 	//SRV...ShaderResourceView
 	srvDescriptorHeap_ = GenarateDescriptorHeap(device_, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 128, true);
 
-	
+	depthStencilRsource_ = CreateDepthStencilTextureResource(device_, kClientWidth_, kClientHeight_);
 
 	#pragma region 
 	

@@ -48,7 +48,9 @@ private:
 		D3D12_DESCRIPTOR_HEAP_TYPE heapType,
 		UINT numDescriptors, bool shaderVisible);
 
-	ID3D12Resource* CreateDepthStencilTextureResource(int32_t width, int32_t height);
+	//DepthStencilTexture...奥行の根幹をなすものであり、非常に大量の読み書きを高速に行う必要がある
+	//						Textureの中でも特に例外的な扱いが必要となっている
+	ID3D12Resource* CreateDepthStencilTextureResource(ID3D12Device* device,int32_t width, int32_t height);
 
 #pragma region 初期化について
 	//初期化へ
@@ -164,9 +166,9 @@ private:
 
 	HRESULT hr_;
 
-
-
 	HWND hwnd_;
+
+
 
 	ID3D12Resource* vertexResource_ = nullptr;
 
@@ -181,6 +183,9 @@ private:
 	IDxcBlob* pixelShaderBlob_ = nullptr;
 
 	IDxcBlob* vertexShaderBlob_ = nullptr;
+
+
+
 
 	HANDLE fenceEvent_ = nullptr;
 
@@ -236,6 +241,8 @@ private:
 	ID3D12DescriptorHeap* rtvDescriptorHeap_ = nullptr;
 	ID3D12DescriptorHeap* srvDescriptorHeap_ = nullptr;
 	ID3D12DescriptorHeap* dsvDescriptorHeap_ = nullptr;
+
+	ID3D12Resource* depthStencilRsource_ = nullptr;
 
 	D3D12_DESCRIPTOR_HEAP_DESC rtvDescriptorHeapDesc_{};
 

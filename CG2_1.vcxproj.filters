@@ -52,18 +52,15 @@
     <Filter Include="ヘッダー ファイル\ConvertFunction">
       <UniqueIdentifier>{88525f3c-706e-4397-b214-f9c6099be35f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\Model">
-      <UniqueIdentifier>{00c97e90-ec44-41d5-8d82-08c85b1218bc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ヘッダー ファイル\Model">
-      <UniqueIdentifier>{a39c0da0-9fd7-4521-926f-6cad2f723d2c}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Ellysia\Ellysia.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Ellysia\Polygon\Triangle\Triangle.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Ellysia\externals\imGui\imgui.cpp">
@@ -108,20 +105,19 @@
     <ClCompile Include="Ellysia\ConvertFunction\ConvertLog\LogConvert.cpp">
       <Filter>ソース ファイル\ConvertFunction</Filter>
     </ClCompile>
-    <ClCompile Include="Ellysia\Polygon\Triangle\Triangle.cpp">
-      <Filter>ソース ファイル\Model</Filter>
+    <ClCompile Include="Ellysia\Polygon\Sprite\Sprite.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Object3d.PS.hlsl">
-      <Filter>リソース ファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="Object3d.VS.hlsl">
-      <Filter>リソース ファイル</Filter>
-    </FxCompile>
+    <FxCompile Include="Object3d.VS.hlsl" />
+    <FxCompile Include="Object3d.PS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Ellysia\Math\Vector\Transform.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Polygon\Triangle\Triangle.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Ellysia\externals\imGui\imconfig.h">
@@ -185,13 +181,13 @@
       <Filter>ヘッダー ファイル\ConvertFunction</Filter>
     </ClInclude>
     <ClInclude Include="Ellysia\Math\Vector\Vector2.h">
-      <Filter>ヘッダー ファイル\Math\Vector</Filter>
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Ellysia\Math\Vector\VertexData.h">
-      <Filter>ヘッダー ファイル\Math\Vector</Filter>
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Ellysia\Polygon\Triangle\Triangle.h">
-      <Filter>ヘッダー ファイル\Model</Filter>
+    <ClInclude Include="Ellysia\Polygon\Sprite\Sprite.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -200,8 +196,6 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Object3d.hlsli">
-      <Filter>リソース ファイル</Filter>
-    </None>
+    <None Include="Object3d.hlsli" />
   </ItemGroup>
 </Project>

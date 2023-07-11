@@ -20,7 +20,11 @@ void Triangle::Initialize(DirectXInitialization* directXSetup) {
 	//ここでBufferResourceを作る
 	//頂点を6に増やす
 	vertexResouce_ = CreateBufferResource(sizeof(VertexData) * 6);
-	materialResource=CreateBufferResource(sizeof(Vector4)* 3);
+	////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
+	materialResource_=CreateBufferResource(sizeof(Vector4)* 3);
+
+	
+
 	//WVP用のリソースを作る。Matrix4x4　1つ分のサイズを用意する
 	wvpResource_ = CreateBufferResource(sizeof(Matrix4x4));
 
@@ -124,6 +128,8 @@ void Triangle::LoadTexture(const std::string& filePath) {
 //6.CommandQueueを使って実行する
 //7.6の実行完了を待つ
 
+
+#pragma region 上のLoadTextureにまとめた
 //Textureを読み込むためのLoad関数
 //1.TextureデータそのものをCPUで読み込む
 DirectX::ScratchImage Triangle::LoadTextureData(const std::string& filePath) {
@@ -230,7 +236,7 @@ ID3D12Resource* Triangle::UploadTextureData(
 }
 
 
-
+#pragma endregion
 
 //頂点バッファビューを作成する
 void Triangle::GenerateVertexBufferView() {
@@ -249,26 +255,27 @@ void Triangle::GenerateVertexBufferView() {
 void Triangle::GenarateVertexResource() {
 
 
-#pragma region 02_01で移動する
 
 	////VertexResourceを生成
 	//頂点リソース用のヒープを設定
 	
+#pragma region 三角形用
+
 	uploadHeapProperties_.Type = D3D12_HEAP_TYPE_UPLOAD;
 
 	//頂点リソースの設定
-	D3D12_RESOURCE_DESC vertexResourceDesc_{};
+	D3D12_RESOURCE_DESC vertexResourceDesc{};
 	//バッファリソース。テクスチャの場合はまた別の設定をする
-	vertexResourceDesc_.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-	vertexResourceDesc_.Width = sizeof(Vector4) * 3;
+	vertexResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
+	vertexResourceDesc.Width = sizeof(Vector4) * 3;
 	//バッファの場合はこれらは1にする決まり
-	vertexResourceDesc_.Height = 1;
-	vertexResourceDesc_.DepthOrArraySize = 1;
-	vertexResourceDesc_.MipLevels = 1;
-	vertexResourceDesc_.SampleDesc.Count = 1;
+	vertexResourceDesc.Height = 1;
+	vertexResourceDesc.DepthOrArraySize = 1;
+	vertexResourceDesc.MipLevels = 1;
+	vertexResourceDesc.SampleDesc.Count = 1;
 
 	//バッファの場合はこれにする決まり
-	vertexResourceDesc_.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
+	vertexResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
 
 
 
@@ -278,37 +285,19 @@ void Triangle::GenarateVertexResource() {
 	hr_ = directXSetup_->GetDevice()->CreateCommittedResource(
 		&uploadHeapProperties_,
 		D3D12_HEAP_FLAG_NONE,
-		&vertexResourceDesc_,
+		&vertexResourceDesc,
 		D3D12_RESOURCE_STATE_GENERIC_READ,
 		nullptr, IID_PPV_ARGS(&vertexResouce_));
 	assert(SUCCEEDED(hr_));
 
-#pragma endregion
+#pragma endregion 
 
-	//頂点バッファビューを作成する
-	GenerateVertexBufferView();
+
+
 	
 }
 
 
-
-//Material用のResourceを作る
-void Triangle::GenerateMaterialResource() {
-	////マテリアl用のリソースを作る。今回はcolor1つ分のサイズを用意する
-	//materialResource = CreateBufferResource(directXSetup_->GetDevice(), sizeof(Vector4));
-	////マテリアルにデータを書き込む
-	//Vector4* materialData_ = nullptr;
-	//
-	////書き込むためのアドレスを取得
-	////reinterpret_cast...char* から int* へ、One_class* から Unrelated_class* へなどの変換に使用
-	//materialResource->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
-	//
-	////今回は赤を書き込んでみる
-	//*materialData_ = Vector4(1.0f, 0.0f, 0.0, 1.0f);
-
-	//サイズに注意を払ってね！！！！！
-	//どれだけのサイズが必要なのか考えよう
-}
 
 //描画
 void Triangle::Draw(Vector4 left,Vector4 top,  Vector4 right,Transform transform,Matrix4x4 viewMatrix,Matrix4x4 projectionMatrix  ,Vector4 color) {
@@ -350,12 +339,16 @@ void Triangle::Draw(Vector4 left,Vector4 top,  Vector4 right,Transform transform
 
 	//書き込むためのアドレスを取得
 	//reinterpret_cast...char* から int* へ、One_class* から Unrelated_class* へなどの変換に使用
-	materialResource->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
+	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 
-	//今回は赤を書き込んでみる
 	*materialData_ = color;
 
-
+	
+	//materialResource_ = CreateBufferResource(directXSetup_->GetDevice(), sizeof(Vector4));
+	
+	
+	//サイズに注意を払ってね！！！！！
+	//どれだけのサイズが必要なのか考えよう
 
 	//新しく引数作った方が良いかも
 	Matrix4x4 worldMatrix = MakeAffineMatrix(transform.scale,transform.rotate,transform.translate);
@@ -384,7 +377,7 @@ void Triangle::Draw(Vector4 left,Vector4 top,  Vector4 right,Transform transform
 
 	//マテリアルCBufferの場所を設定
 	//ここでの[0]はregisterの0ではないよ。rootParameter配列の0番目
-	directXSetup_->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource->GetGPUVirtualAddress());
+	directXSetup_->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
 	//CBVを設定する
 	//wvp用のCBufferの場所を指定
 	//今回はRootParameter[1]に対してCBVの設定を行っている
@@ -403,7 +396,7 @@ void Triangle::Draw(Vector4 left,Vector4 top,  Vector4 right,Transform transform
 void Triangle::Release() {
 	vertexResouce_->Release();
 	textureResource_->Release();
-	materialResource->Release();
+	materialResource_->Release();
 	//Release忘れずに
 	wvpResource_->Release();
 	intermediateResource_->Release();

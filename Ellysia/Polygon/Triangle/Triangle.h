@@ -23,10 +23,6 @@ public:
 	////VertexBufferViewを作成
 	void GenerateVertexBufferView();
 
-	//Material用のリソースを作る
-	void GenerateMaterialResource();
-
-
 	void Draw(Vector4 left,Vector4 top,  Vector4 right,Transform transform,Matrix4x4 viewMatrix,Matrix4x4 projectionMatrix ,Vector4 color);
 
 
@@ -80,12 +76,14 @@ private:
 	D3D12_HEAP_PROPERTIES uploadHeapProperties_{};
 	D3D12_RESOURCE_DESC vertexResourceDesc_{};
 
+	
+
 	//Resourceにデータを書き込む
 	//Vector4* vertexData_ = nullptr;
 	VertexData* vertexData_;
 	
 	//マテリアル用のリソースを作る
-	ID3D12Resource* materialResource = nullptr;
+	ID3D12Resource* materialResource_ = nullptr;
 	Vector4* materialData_ = nullptr;
 	
 

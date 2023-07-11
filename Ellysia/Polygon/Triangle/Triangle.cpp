@@ -293,7 +293,6 @@ void Triangle::GenarateVertexResource() {
 #pragma endregion 
 
 
-
 	
 }
 

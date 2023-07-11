@@ -51,12 +51,13 @@ ID3D12Resource* Sprite::CreateBufferResource(size_t sizeInBytes) {
 void Sprite::GenerateVertexBufferView() {
 	
 	//リソースの先頭のアドレスから使う
-	vertexBufferView_.BufferLocation = vertexResouce_->GetGPUVirtualAddress();
+	vertexBufferViewSprite_.BufferLocation = vertexResouce_->GetGPUVirtualAddress();
 	//使用するリソースのサイズは頂点３つ分のサイズ
-	vertexBufferView_.SizeInBytes = sizeof(VertexData) * 6;
+	vertexBufferViewSprite_.SizeInBytes = sizeof(VertexData) * 6;
 	//１頂点あたりのサイズ
-	vertexBufferView_.StrideInBytes = sizeof(VertexData);
+	vertexBufferViewSprite_.StrideInBytes = sizeof(VertexData);
 	
+
 }
 
 
@@ -67,7 +68,7 @@ void Sprite::Initialize(DirectXInitialization* directXSetup) {
 	//
 	//Triangleとほぼ同じ
 	// 
-	 
+	
 	//ここでBufferResourceを作る
 	//Sprite用の頂点リソースを作る
 	vertexResourceSprite_ = CreateBufferResource(sizeof(VertexData) * 6);
@@ -89,19 +90,11 @@ void Sprite::Initialize(DirectXInitialization* directXSetup) {
 
 //描画
 void Sprite::Draw(Vector4 left, Vector4 top, Vector4 right, Transform transform, Matrix4x4 viewMatrix, Matrix4x4 projectionMatrix, Vector4 color) {
-	#pragma region Sprite用
-	//頂点バッファビューを作成する
-	D3D12_VERTEX_BUFFER_VIEW vertexBufferViewSprite{};
-
-	//リソースの先頭のアドレス
-	vertexBufferViewSprite.BufferLocation = vertexResourceSprite_->GetGPUVirtualAddress();
-	//私用するリソースのサイズは頂点６つ分のサイズ
-	vertexBufferViewSprite.SizeInBytes = sizeof(VertexData) * 6;
-	//使用するリソースのサイズは頂点6つ分のサイズ
-	vertexBufferViewSprite.StrideInBytes = sizeof(VertexData);
+	
 
 
-#pragma endregion
+
+
 }
 
 //デストラクタ

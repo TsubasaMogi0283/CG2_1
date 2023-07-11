@@ -50,7 +50,7 @@ private:
 
 
 	//頂点バッファビューを作成する
-	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_;
+	D3D12_VERTEX_BUFFER_VIEW vertexBufferViewSprite_;
 	ID3D12Resource* vertexResouce_;
 
 

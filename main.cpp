@@ -233,7 +233,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	
 
 				ImGui::InputFloat3("Translate",&transform[i].translate.x);
-				ImGui::SliderFloat3("TranslateSlide", &transform[i].translate.x, -10.0f,10.0f);
+				ImGui::SliderFloat3("TranslateSlide", &transform[i].translate.x, -5.0f,5.0f);
 	
 			}
 			

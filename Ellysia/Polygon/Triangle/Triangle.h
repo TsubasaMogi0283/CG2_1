@@ -18,13 +18,10 @@ public:
 
 	void Initialize(DirectXInitialization* directXSetup);
 
-	void GenarateVertexResource();
-
 	////VertexBufferViewを作成
 	void GenerateVertexBufferView();
 
 	void Draw(Vector4 left,Vector4 top,  Vector4 right,Transform transform,Matrix4x4 viewMatrix,Matrix4x4 projectionMatrix ,Vector4 color);
-
 
 	//Resource作成の関数化
 	ID3D12Resource* CreateBufferResource(size_t sizeInBytes);

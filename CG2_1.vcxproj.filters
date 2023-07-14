@@ -52,6 +52,9 @@
     <Filter Include="ヘッダー ファイル\ConvertFunction">
       <UniqueIdentifier>{88525f3c-706e-4397-b214-f9c6099be35f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\Polygone">
+      <UniqueIdentifier>{7d6b79d6-b619-47a8-8605-e65a4fad754b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -106,6 +109,9 @@
       <Filter>ソース ファイル\ConvertFunction</Filter>
     </ClCompile>
     <ClCompile Include="Ellysia\Polygon\Sprite\Sprite.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Ellysia\Polygon\Sphere\Sphere.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -187,6 +193,9 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Ellysia\Polygon\Sprite\Sprite.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Polygon\Sphere\Sphere.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

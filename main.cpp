@@ -8,6 +8,7 @@
 #include "ConvertFunction/ConvertColor/ColorConvert.h"
 #include "Ellysia/Math/Vector/Transform.h"
 #include "Math/Matrix/Calculation/Matrix4x4Calculation.h"
+#include <Polygon/Sprite/Sprite.h>
 
 
 //Winodwsアプリでもエントリーポイント(main関数)
@@ -56,10 +57,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		triangle[i]->LoadTexture("Resources/uvChecker.png");
 	}
 
-
+	//スプライトの描画
+	Sprite* sprite = new Sprite();
+	sprite->Initialize(directXSetup);
+	sprite->LoadTexture("Resources/uvChecker.png");
 	
 
-	
+
+
 	Vector4 triangleCoodinateLeft[TRIANGLE_AMOUNT_MAX] = {
 		//left
 		//一段目
@@ -156,7 +161,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//{scale,rotate,translate },
 	};
 
-
+	
 
 	//頂いた関数で色を決めていく
 	Vector4 color[TRIANGLE_AMOUNT_MAX] = {
@@ -183,9 +188,20 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	
 	Transform cameraTransform = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,-5.0f} };
-	//CPUで動かす用
+	
+#pragma region
+	//左下
+	Vector4  leftBottom= { 0.0f,360.0f,0.0f,1.0f};
+	//左上
+	Vector4 leftTop = { 0.0f,0.0f,0.0f,1.0f};
+	//右下
+	Vector4 rightBottom = { 640.0f,360.0f,0.0f,1.0f} ;
+	//上2
+	Vector4 rightTop = { 640.0f,0.0f,0.0f,1.0f};
+
 	Transform transformSprite = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
 
+#pragma endregion
 
 	MSG msg{};
 
@@ -209,6 +225,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			#pragma region 更新処理
 
 			imGuiManager->UpDate();
+
+
+
 			//
 			for (int i = 0; i < TRIANGLE_AMOUNT_MAX; i++) {
 				//y軸回転
@@ -238,6 +257,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	
 			}
 			
+			ImGui::End();
+
+			ImGui::Begin("Sprite");
+			ImGui::InputFloat3("Scale", &transformSprite.scale.x);
+			ImGui::SliderFloat3("ScaleSlide", &transformSprite.scale.x, 1.0f,5.0f);
+
+			ImGui::InputFloat3("Rotate", &transformSprite.rotate.x);
+			ImGui::SliderFloat3("RotateSlide", &transformSprite.rotate.x, 0.0f,12.0f);
+
+			ImGui::InputFloat3("Translate", &transformSprite.translate.x);
+			ImGui::SliderFloat3("TranslateSlide", &transformSprite.translate.x,-1000.0f,1000.0f);
 
 
 			ImGui::End();
@@ -264,7 +294,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				);
 			}
 
-			
+			sprite->Draw(
+				leftTop,rightTop,
+				leftBottom,rightBottom, transformSprite,
+				color[0]);
 
 
 			imGuiManager->EndFrame(directXSetup);
@@ -289,7 +322,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		triangle[i]->Release();
 	}
 
-
+	sprite->Release();
 
 	
 	

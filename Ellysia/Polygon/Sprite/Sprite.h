@@ -17,12 +17,6 @@ public:
 	//コンストラクタ
 	Sprite();
 
-	//Resource作成の関数化
-	ID3D12Resource* CreateBufferResource(size_t sizeInBytes);
-
-	//頂点バッファビューを作成する
-	void GenerateVertexBufferView();
-
 	//初期化
 	void Initialize(DirectXInitialization* directXSetup);
 
@@ -31,12 +25,26 @@ public:
 	
 
 	//描画
-	void Draw(Vector4 left,Vector4 top,  Vector4 right,Transform transform,Matrix4x4 viewMatrix,Matrix4x4 projectionMatrix ,Vector4 color);
+	//左上、右上、左下、右下
+	void Draw(Vector4 leftTop,Vector4 RightTop, Vector4 LeftBottom,Vector4 RightBottom,Transform transform,Vector4 color);
+
+
+	//解放
+	void Release();
 
 	//デストラクタ
 	~Sprite();
 
 private:
+
+	
+	//Resource作成の関数化
+	ID3D12Resource* CreateBufferResource(size_t sizeInBytes);
+
+	//頂点バッファビューを作成する
+	void GenerateVertexBufferView();
+
+
 
 #pragma region テクスチャの読み込み
 	//Textureデータを読む
@@ -84,7 +92,6 @@ private:
 
 	//頂点バッファビューを作成する
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferViewSprite_;
-	ID3D12Resource* vertexResouce_;
 
 
 

@@ -57,8 +57,10 @@ ID3D12Resource* Sprite::CreateBufferResource(size_t sizeInBytes) {
 //頂点バッファビューを作成する
 void Sprite::GenerateVertexBufferView() {
 	
+
+	//vertexResourceがnullらしい
 	//リソースの先頭のアドレスから使う
-	vertexBufferViewSprite_.BufferLocation = vertexResouce_->GetGPUVirtualAddress();
+	vertexBufferViewSprite_.BufferLocation = vertexResourceSprite_->GetGPUVirtualAddress();
 	//使用するリソースのサイズは頂点３つ分のサイズ
 	vertexBufferViewSprite_.SizeInBytes = sizeof(VertexData) * 6;
 	//１頂点あたりのサイズ
@@ -260,7 +262,7 @@ ID3D12Resource* Sprite::UploadTextureData(
 
 
 //描画
-void Sprite::Draw(Vector4 left, Vector4 top, Vector4 right, Transform transform, Matrix4x4 viewMatrix, Matrix4x4 projectionMatrix, Vector4 color) {
+void Sprite::Draw(Vector4 leftTop,Vector4 rightTop, Vector4 leftBottom,Vector4 rightBottom,Transform transform, Vector4 color) {
 	
 	//TextureCoordinate(テクスチャ座標系)
 	//TexCoord,UV座標系とも呼ばれている
@@ -281,78 +283,70 @@ void Sprite::Draw(Vector4 left, Vector4 top, Vector4 right, Transform transform,
 	//書き込むためのアドレスを取得
 	//vertexResourceSprite_->Map(0, nullptr, reinterpret_cast<void**>(&vertexDataSprite_));
 	
-	transformationMatrixResourceSprite_->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixDataSprite_));
+	vertexResourceSprite_->Map(0, nullptr, reinterpret_cast<void**>(&vertexDataSprite_));
 	//1枚目の三角形
 	//左下
-	vertexDataSprite_[0].position = { 0.0f,360.0f,0.0f,1.0f};
+	vertexDataSprite_[0].position = {leftBottom};
 	vertexDataSprite_[0].texCoord = { 0.0f,1.0f };
 	//左上
-	vertexDataSprite_[1].position = { 0.0f,0.0f,0.0f,1.0f};
-	vertexDataSprite_[1].texCoord = { 0.5f,0.0f };
+	vertexDataSprite_[1].position = {leftTop};
+	vertexDataSprite_[1].texCoord = { 0.0f,0.0f };
 	//右下
-	vertexDataSprite_[2].position = { 640.0f,360.0f,0.0f,1.0f} ;
+	vertexDataSprite_[2].position = {rightBottom} ;
 	vertexDataSprite_[2].texCoord = { 1.0f,1.0f };
 
 	//2枚目の三角形
-	//左下2
-	vertexDataSprite_[3].position = { 0.0f,0.0f,0.0f,1.0f};
+	//左上2
+	vertexDataSprite_[3].position = { leftTop};
 	vertexDataSprite_[3].texCoord = { 0.0f,0.0f };
-	//上2
-	vertexDataSprite_[4].position = { 640.0f,0.0f,0.0f,1.0f};
+	//右上2
+	vertexDataSprite_[4].position = { rightTop};
 	vertexDataSprite_[4].texCoord = { 1.0f,0.0f };
 	//右下2
-	vertexDataSprite_[5].position = { 640.0f,360.0f,0.0f,1.0f} ;
+	vertexDataSprite_[5].position = { rightBottom} ;
 	vertexDataSprite_[5].texCoord = { 1.0f,1.0f };
 
-
-	//マテリアルにデータを書き込む
-	
-
-	
-	*materialData_ = color;
-
-	
-	//materialResource_ = CreateBufferResource(directXSetup_->GetDevice(), sizeof(Vector4));
-	
 	
 	//サイズに注意を払ってね！！！！！
 	//どれだけのサイズが必要なのか考えよう
+
+	transformationMatrixResourceSprite_->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixDataSprite_));
+	
 
 	//新しく引数作った方が良いかも
 	Matrix4x4 worldMatrixSprite = MakeAffineMatrix(transform.scale,transform.rotate,transform.translate);
 	//遠視投影行列
 	Matrix4x4 viewMatrixSprite = MakeIdentity4x4();
 	
-	//Matrix4x4 projectionMatrix = MakeOrthographicMatrix(0.0f,0.0f, float(directXSetup_->GetClientWidth()) , float(directXSetup_->GetClientHeight()), 0.0f, 100.0f);
-	//Matrix4x4 worldMatrixSprite = MakeAffineMatrix();
+	Matrix4x4 projectionMatrixSprite = MakeOrthographicMatrix(0.0f, 0.0f, float(directXSetup_->GetClientWidth()), float(directXSetup_->GetClientHeight()), 0.0f, 100.0f);
 	
 	//WVP行列を作成
-	Matrix4x4 worldViewProjectionMatrixSprite = Multiply(worldMatrixSprite, Multiply(viewMatrix, projectionMatrix));
+	Matrix4x4 worldViewProjectionMatrixSprite = Multiply(worldMatrixSprite, Multiply(viewMatrixSprite, projectionMatrixSprite));
 
-	
+	*transformationMatrixDataSprite_ = worldViewProjectionMatrixSprite;
+
+	//マテリアルにデータを書き込む
 	//書き込むためのアドレスを取得
 	//reinterpret_cast...char* から int* へ、One_class* から Unrelated_class* へなどの変換に使用
 	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
-
+	*materialData_ = color;
 	
-	//さっき作ったworldMatrixの情報をここに入れる
-	*wvpData_ = worldViewProjectionMatrixSprite;
 	
-	*transformationMatrixDataSprite_ = MakeIdentity4x4();
+	
 
+
+
+
+	//コマンドを積む
 
 	//RootSignatureを設定。PSOに設定しているけど別途設定が必要
 	directXSetup_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferViewSprite_);
 	//形状を設定。PSOに設定しているものとはまた別。同じものを設定すると考えよう
 	directXSetup_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	//マテリアルCBufferの場所を設定
-	//ここでの[0]はregisterの0ではないよ。rootParameter配列の0番目
 	directXSetup_->GetCommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResourceSprite_->GetGPUVirtualAddress());
 	//CBVを設定する
-	//wvp用のCBufferの場所を指定
-	//今回はRootParameter[1]に対してCBVの設定を行っている
-	directXSetup_->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource_->GetGPUVirtualAddress());
+	directXSetup_->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
 	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である
 	directXSetup_->GetCommandList()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU_);
 	
@@ -363,6 +357,22 @@ void Sprite::Draw(Vector4 left, Vector4 top, Vector4 right, Transform transform,
 
 
 
+}
+
+//解放
+void Sprite::Release() {
+	vertexResourceSprite_->Release();
+
+	materialResource_->Release();
+	
+	transformationMatrixResourceSprite_->Release();
+	
+	wvpResource_->Release();
+
+
+	textureResource_->Release();
+	resource_->Release();
+	intermediateResource_->Release();
 }
 
 //デストラクタ

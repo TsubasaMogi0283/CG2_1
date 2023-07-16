@@ -83,7 +83,6 @@ private:
 	Matrix4x4* transformationMatrixDataSprite_ = nullptr;
 
 	//TransformationMatrix用のResource
-	ID3D12Resource* wvpResource_ = nullptr;
 	Matrix4x4* wvpData_=nullptr;
 
 	//描画

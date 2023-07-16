@@ -90,10 +90,6 @@ void Sprite::Initialize(DirectXInitialization* directXSetup) {
 	//Matrix4x4 1つ分サイズを用意する
 	transformationMatrixResourceSprite_ = CreateBufferResource(sizeof(Matrix4x4));
 	
-
-	//WVP用のリソースを作る。Matrix4x4　1つ分のサイズを用意する
-	wvpResource_ = CreateBufferResource(sizeof(Matrix4x4));
-
 	//頂点バッファビューを作成する
 	GenerateVertexBufferView();
 
@@ -367,7 +363,6 @@ void Sprite::Release() {
 	
 	transformationMatrixResourceSprite_->Release();
 	
-	wvpResource_->Release();
 
 
 	textureResource_->Release();

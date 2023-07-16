@@ -120,9 +120,6 @@
     <FxCompile Include="Object3d.PS.hlsl" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Ellysia\Math\Vector\Transform.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Ellysia\Polygon\Triangle\Triangle.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -197,6 +194,12 @@
     </ClInclude>
     <ClInclude Include="Ellysia\Polygon\Sphere\Sphere.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Math\Vector\Transform.h">
+      <Filter>ヘッダー ファイル\Math\Vector</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Math\Vector\SphereVector.h">
+      <Filter>ヘッダー ファイル\Math\Vector</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

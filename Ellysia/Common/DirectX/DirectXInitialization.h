@@ -42,6 +42,9 @@ private:
 		IDxcCompiler3* dxcCompiler,
 		IDxcIncludeHandler* includeHandler);
 
+
+	//関数化したやつ
+
 	//DescriptorHeapの作成関数
 	ID3D12DescriptorHeap* GenarateDescriptorHeap(
 		ID3D12Device* device,
@@ -51,6 +54,13 @@ private:
 	//DepthStencilTexture...奥行の根幹をなすものであり、非常に大量の読み書きを高速に行う必要がある
 	//						Textureの中でも特に例外的な扱いが必要となっている
 	ID3D12Resource* CreateDepthStencilTextureResource(ID3D12Device* device,int32_t width, int32_t height);
+
+	//特定のインデックスのDescriptorHandleを取得する行為は今後頻繁に行われる
+	//関数で計算できるようにしておくと楽だよね
+
+	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index);
+	D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index);
+
 
 #pragma region 初期化について
 	//初期化へ

@@ -206,7 +206,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 #pragma endregion
 
-	SphereStruct sphereCoodinate = { {-5.0f,-2.0f,20.0f},10.0f };
+	SphereStruct sphereCoodinate = { {-5.0f,-2.0f,20.0f},1.0f };
 	Transform transformSphere = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
 
 	MSG msg{};
@@ -300,7 +300,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			ImGui::SliderFloat3("TranslateSlide", &transformSphere.translate.x,-10.0f,10.0f);
 
 			ImGui::InputFloat("Radius", &sphereCoodinate.radius);
-			ImGui::SliderFloat("Radius", &sphereCoodinate.radius, 0.0f, 100.0f);
+			ImGui::SliderFloat("Radius", &sphereCoodinate.radius, 0.0f, 5.0f);
 
 			ImGui::End();
 

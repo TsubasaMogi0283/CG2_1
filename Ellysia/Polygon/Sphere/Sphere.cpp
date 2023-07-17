@@ -295,9 +295,9 @@ void Sphere::Draw(SphereStruct sphereCondtion, Transform transform,Matrix4x4 vie
 			//左上(点B)が原点
 			//abc
 			//資料通りだとここは点a(左下)
-			vertexDataSphere_[start].position.x = (cos(lat) * cos(lon));
-			vertexDataSphere_[start].position.y = (sin(lat));
-			vertexDataSphere_[start].position.z = (cos(lat) * sin(lon)) ;
+			vertexDataSphere_[start].position.x = sphereCondtion.radius*(cos(lat) * cos(lon));
+			vertexDataSphere_[start].position.y = sphereCondtion.radius*(sin(lat));
+			vertexDataSphere_[start].position.z = sphereCondtion.radius*(cos(lat) * sin(lon)) ;
 			vertexDataSphere_[start].position.w = 1.0f;
 			//分割分移動
 			vertexDataSphere_[start].texCoord.x = u;
@@ -305,18 +305,18 @@ void Sphere::Draw(SphereStruct sphereCondtion, Transform transform,Matrix4x4 vie
 
 			//普通にstart+1していけばいいのかな
 			//点b(左上)
-			vertexDataSphere_[start + 1].position.x = (cos(lat + LAT_EVERY)) * cos(lon);
-			vertexDataSphere_[start + 1].position.y = (sin(lat + LAT_EVERY)) ;
-			vertexDataSphere_[start + 1].position.z = (cos(lat + LAT_EVERY)) * sin(lon);
+			vertexDataSphere_[start + 1].position.x = sphereCondtion.radius*(cos(lat + LAT_EVERY)) * cos(lon);
+			vertexDataSphere_[start + 1].position.y = sphereCondtion.radius*(sin(lat + LAT_EVERY)) ;
+			vertexDataSphere_[start + 1].position.z = sphereCondtion.radius*(cos(lat + LAT_EVERY)) * sin(lon);
 			vertexDataSphere_[start + 1].position.w = 1.0f;
 			vertexDataSphere_[start + 1].texCoord.x = u;
 			vertexDataSphere_[start + 1].texCoord.y = v;
 
 
 			//点c(右下)
-			vertexDataSphere_[start + 2].position.x = (cos(lat) * cos(lon + LON_EVERY)) ;
-			vertexDataSphere_[start + 2].position.y = (sin(lat));
-			vertexDataSphere_[start + 2].position.z = (cos(lat) * sin(lon + LON_EVERY));
+			vertexDataSphere_[start + 2].position.x = sphereCondtion.radius*(cos(lat) * cos(lon + LON_EVERY)) ;
+			vertexDataSphere_[start + 2].position.y = sphereCondtion.radius*(sin(lat));
+			vertexDataSphere_[start + 2].position.z = sphereCondtion.radius*(cos(lat) * sin(lon + LON_EVERY));
 			vertexDataSphere_[start + 2].position.w = 1.0f;
 			vertexDataSphere_[start + 2].texCoord.x = u + length;
 			vertexDataSphere_[start + 2].texCoord.y = v + length;
@@ -326,17 +326,17 @@ void Sphere::Draw(SphereStruct sphereCondtion, Transform transform,Matrix4x4 vie
 #pragma region 三角形２枚目
 			//bcd
 			//点d(右上)
-			vertexDataSphere_[start + 3].position.x = (cos(lat + LAT_EVERY) * cos(lon + LON_EVERY));
-			vertexDataSphere_[start + 3].position.y = (sin(lat + LAT_EVERY));
-			vertexDataSphere_[start + 3].position.z = (cos(lat + LAT_EVERY) * sin(lon + LON_EVERY));
+			vertexDataSphere_[start + 3].position.x = sphereCondtion.radius*(cos(lat + LAT_EVERY) * cos(lon + LON_EVERY));
+			vertexDataSphere_[start + 3].position.y = sphereCondtion.radius*(sin(lat + LAT_EVERY));
+			vertexDataSphere_[start + 3].position.z = sphereCondtion.radius*(cos(lat + LAT_EVERY) * sin(lon + LON_EVERY));
 			vertexDataSphere_[start + 3].position.w = 1.0f;
 			vertexDataSphere_[start + 3].texCoord.x = u + length;
 			vertexDataSphere_[start + 3].texCoord.y = v;
 
 			//点c(右下)
-			vertexDataSphere_[start + 4].position.x = (cos(lat) * cos(lon + LON_EVERY));
-			vertexDataSphere_[start + 4].position.y = (sin(lat));
-			vertexDataSphere_[start + 4].position.z = (cos(lat) * sin(lon + LON_EVERY));
+			vertexDataSphere_[start + 4].position.x = sphereCondtion.radius*(cos(lat) * cos(lon + LON_EVERY));
+			vertexDataSphere_[start + 4].position.y = sphereCondtion.radius*(sin(lat));
+			vertexDataSphere_[start + 4].position.z = sphereCondtion.radius*(cos(lat) * sin(lon + LON_EVERY));
 			vertexDataSphere_[start + 4].position.w = 1.0f;
 			vertexDataSphere_[start + 4].texCoord.x = u + length;
 			vertexDataSphere_[start + 4].texCoord.y = v + length;
@@ -344,9 +344,9 @@ void Sphere::Draw(SphereStruct sphereCondtion, Transform transform,Matrix4x4 vie
 
 
 			//点b(左上)
-			vertexDataSphere_[start + 5].position.x = (cos(lat + LAT_EVERY) * cos(lon)) ;
-			vertexDataSphere_[start + 5].position.y = (sin(lat + LAT_EVERY));
-			vertexDataSphere_[start + 5].position.z = (cos(lat + LAT_EVERY) * sin(lon));
+			vertexDataSphere_[start + 5].position.x = sphereCondtion.radius*(cos(lat + LAT_EVERY) * cos(lon)) ;
+			vertexDataSphere_[start + 5].position.y = sphereCondtion.radius*(sin(lat + LAT_EVERY));
+			vertexDataSphere_[start + 5].position.z = sphereCondtion.radius*(cos(lat + LAT_EVERY) * sin(lon));
 			vertexDataSphere_[start + 5].position.w = 1.0f;
 			vertexDataSphere_[start + 5].texCoord.x = u;
 			vertexDataSphere_[start + 5].texCoord.y = v;

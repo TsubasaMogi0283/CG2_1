@@ -114,6 +114,9 @@
     <ClCompile Include="Ellysia\Polygon\Sphere\Sphere.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Ellysia\Math\Vector\Calculation\VectorCalculation.cpp">
+      <Filter>ソース ファイル\Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Object3d.VS.hlsl" />
@@ -198,7 +201,10 @@
     <ClInclude Include="Ellysia\Math\Vector\Transform.h">
       <Filter>ヘッダー ファイル\Math\Vector</Filter>
     </ClInclude>
-    <ClInclude Include="Ellysia\Math\Vector\SphereVector.h">
+    <ClInclude Include="Ellysia\Math\Vector\SphereStruct.h">
+      <Filter>ヘッダー ファイル\Math\Vector</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Math\Vector\Calculation\VectorCalculation.h">
       <Filter>ヘッダー ファイル\Math\Vector</Filter>
     </ClInclude>
   </ItemGroup>

@@ -2,7 +2,7 @@
 #include "Vector3.h"
 
 
-struct Sphere {
+struct SphereStruct {
 	Vector3 center;
 	float radius;
 };

@@ -9,6 +9,7 @@
 #include "Ellysia/Math/Vector/Transform.h"
 #include "Math/Matrix/Calculation/Matrix4x4Calculation.h"
 #include <Polygon/Sprite/Sprite.h>
+#include <Polygon/Sphere/Sphere.h>
 
 
 //Winodwsアプリでもエントリーポイント(main関数)
@@ -62,8 +63,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	sprite->Initialize(directXSetup);
 	sprite->LoadTexture("Resources/uvChecker.png");
 	
-
-
+	//球の描画
+	Sphere* sphere = new Sphere();
+	sphere->Initialize(directXSetup);
+	sphere->LoadTexture("Resources/uvChecker.png");
 
 	Vector4 triangleCoodinateLeft[TRIANGLE_AMOUNT_MAX] = {
 		//left
@@ -189,7 +192,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	
 	Transform cameraTransform = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,-5.0f} };
 	
-#pragma region
+#pragma region Sprite用の座標
 	//左下
 	Vector4  leftBottom= { 0.0f,360.0f,0.0f,1.0f};
 	//左上
@@ -202,6 +205,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Transform transformSprite = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
 
 #pragma endregion
+
+	SphereStruct sphereCoodinate = { {-5.0f,-2.0f,20.0f},10.0f };
+	Transform transformSphere = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
 
 	MSG msg{};
 
@@ -233,14 +239,18 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				//y軸回転
 				transform[i].rotate.y += 0.03f;
 			}
-			
-			
+			transformSphere.rotate.x += 0.03f;
+			transformSphere.rotate.y += 0.03f;
+			transformSphere.rotate.z += 0.03f;
+
 			//カメラ行列
 			Matrix4x4 cameraMatrix = MakeAffineMatrix(cameraTransform.scale, cameraTransform.rotate, cameraTransform.translate);
 			Matrix4x4 viewMatrix = Inverse(cameraMatrix);
 
 			//遠視投影行列
 			Matrix4x4 projectionMatrix = MakePerspectiveFovMatrix(0.45f, float(WINDOW_SIZE_WIDTH) / float(WINDOW_SIZE_HEIGHT), 0.1f, 100.0f);
+			
+#pragma region Triangleの位置情報
 
 			ImGui::Begin("TriangleSRT");
 
@@ -259,6 +269,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			
 			ImGui::End();
 
+#pragma endregion
+
+#pragma region Spriteの位置情報
+
 			ImGui::Begin("Sprite");
 			ImGui::InputFloat3("Scale", &transformSprite.scale.x);
 			ImGui::SliderFloat3("ScaleSlide", &transformSprite.scale.x, 1.0f,5.0f);
@@ -271,6 +285,27 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 			ImGui::End();
+
+#pragma endregion
+
+#pragma region Sphereの位置情報
+			ImGui::Begin("Sphere");
+			ImGui::InputFloat3("Scale", &transformSphere.scale.x);
+			ImGui::SliderFloat3("ScaleSlide", &transformSphere.scale.x, 1.0f,5.0f);
+
+			ImGui::InputFloat3("Rotate", &transformSphere.rotate.x);
+			ImGui::SliderFloat3("RotateSlide", &transformSphere.rotate.x, 0.0f,12.0f);
+
+			ImGui::InputFloat3("Translate", &transformSphere.translate.x);
+			ImGui::SliderFloat3("TranslateSlide", &transformSphere.translate.x,-10.0f,10.0f);
+
+			ImGui::InputFloat("Radius", &sphereCoodinate.radius);
+			ImGui::SliderFloat("Radius", &sphereCoodinate.radius, 0.0f, 100.0f);
+
+			ImGui::End();
+
+#pragma endregion
+
 
 
 			imGuiManager->PreDraw();
@@ -299,6 +334,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				leftBottom,rightBottom, transformSprite,
 				color[0]);
 
+			sphere->Draw(sphereCoodinate, transformSphere,viewMatrix,
+					projectionMatrix, color[0]);
+			
+
 
 			imGuiManager->EndFrame(directXSetup);
 
@@ -316,19 +355,20 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		
 	}
 
+
+	//解放処理
 	
 	for (int i = 0; i < TRIANGLE_AMOUNT_MAX; i++) {
-		//描画処理
 		triangle[i]->Release();
 	}
 
 	sprite->Release();
-
+	sphere->Release();
 	
 	
 
 
-	//解放処理
+	
 	directXSetup->Release();
 	winSetup->Close();
 	imGuiManager->Release();

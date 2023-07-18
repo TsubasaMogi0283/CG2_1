@@ -25,6 +25,11 @@ public:
 	//まとめた方がよさそう
 	void LoadTexture(const std::string& filePath);
 	
+	//更新処理
+	//最終手段。ここにImGui入れる
+	void Update();
+
+
 	//描画
 	//左上、右上、左下、右下
 	void Draw(SphereStruct sphereCondtion, Transform transform,Matrix4x4 viewMatrix,Matrix4x4 projectionMatrix, Vector4 color);
@@ -74,6 +79,8 @@ private:
 	//DirectX内にある情報を取り入れる
 	DirectXInitialization* directXSetup_ = nullptr;
 
+
+
 	//関数用
 	D3D12_HEAP_PROPERTIES uploadHeapProperties_{};
 	D3D12_RESOURCE_DESC vertexResourceDesc_{};
@@ -83,6 +90,8 @@ private:
 
 	//初期化
 	ID3D12Resource* vertexResourceSphere_ = nullptr;
+
+
 
 	//constにする意味はあったのだろうか
 	uint32_t descriptorSizeSRV_=0u;
@@ -100,6 +109,9 @@ private:
 	Matrix4x4* transformationMatrixDataSphere_ = nullptr;
 
 	//画像読み込み
+	DirectX::ScratchImage mipImages_;
+	DirectX::ScratchImage mipImages2_;
+
 	ID3D12Resource* textureResource_ = nullptr;
 	ID3D12Resource* resource_ = nullptr;
 
@@ -123,9 +135,9 @@ private:
 
 
 
-
-
-
+	//モンスターボールに変更するフラグ
+	bool useMonsterBall_ = true;
+	
 
 
 	//分割数

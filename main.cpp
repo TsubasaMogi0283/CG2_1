@@ -66,7 +66,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//球の描画
 	Sphere* sphere = new Sphere();
 	sphere->Initialize(directXSetup);
-	sphere->LoadTexture("Resources/uvChecker.png");
+
+	//Noviceみたいにintで宣言出来るようにしたい
+	//そこで切り替えが楽になるから
+	//sphere->LoadTexture("Resources/uvChecker.png");
+	//INitilizeに入れた
 
 	Vector4 triangleCoodinateLeft[TRIANGLE_AMOUNT_MAX] = {
 		//left
@@ -209,6 +213,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	SphereStruct sphereCoodinate = { {-5.0f,-2.0f,20.0f},1.0f };
 	Transform transformSphere = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
 
+	
+
 	MSG msg{};
 
 	////メインループ
@@ -287,6 +293,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #pragma endregion
 
 #pragma region Sphereの位置情報
+			sphere->Update();
 			ImGui::Begin("Sphere");
 			ImGui::InputFloat3("Scale", &transformSphere.scale.x);
 			ImGui::SliderFloat3("ScaleSlide", &transformSphere.scale.x, 1.0f,5.0f);
@@ -297,10 +304,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			ImGui::InputFloat3("Translate", &transformSphere.translate.x);
 			ImGui::SliderFloat3("TranslateSlide", &transformSphere.translate.x,-10.0f,10.0f);
 
-			ImGui::InputFloat("Radius", &sphereCoodinate.radius);
 			ImGui::SliderFloat("Radius", &sphereCoodinate.radius, 0.0f, 5.0f);
 
+			
+			
 			ImGui::End();
+
+			
 
 #pragma endregion
 
@@ -311,8 +321,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			
 
 			#pragma region 描画処理
-
 			imGuiManager->Draw(directXSetup);
+			
 
 			for (int i = 0; i < TRIANGLE_AMOUNT_MAX; i++) {
 				//描画処理

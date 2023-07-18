@@ -106,6 +106,7 @@ void Sphere::Initialize(DirectXInitialization* directXSetup) {
 	//頂点バッファビューを作成する
 	GenerateVertexBufferView();
 
+	LoadTexture("Resources/uvChecker.png");
 }
 
 //Textureデータを読む
@@ -122,17 +123,17 @@ void Sphere::Initialize(DirectXInitialization* directXSetup) {
 //Before
 void Sphere::LoadTexture(const std::string& filePath) {
 	//Textureを読んで転送する
-	DirectX::ScratchImage mipImages = LoadTextureData(filePath);
-	const DirectX::TexMetadata& metadata = mipImages.GetMetadata();
+	mipImages_ = LoadTextureData(filePath);
+	const DirectX::TexMetadata& metadata = mipImages_.GetMetadata();
 	textureResource_ = CreateTextureResource(directXSetup_->GetDevice(), metadata);
-	intermediateResource_ = UploadTextureData(textureResource_, mipImages);
+	intermediateResource_ = UploadTextureData(textureResource_, mipImages_);
 	
 	//2枚目のTextureを読んで転送する
 	//いつか配列にする。2は何か嫌です。
-	DirectX::ScratchImage mipImages2 = LoadTextureData("Resources/monsterBall.png");
-	const DirectX::TexMetadata& metadata2 = mipImages2.GetMetadata();
+	mipImages2_ = LoadTextureData("Resources/monsterBall.png");
+	const DirectX::TexMetadata& metadata2 = mipImages2_.GetMetadata();
 	textureResource2_ = CreateTextureResource(directXSetup_->GetDevice(), metadata2);
-	UploadTextureData(textureResource2_, mipImages2);
+	UploadTextureData(textureResource2_, mipImages2_);
 
 
 	//ShaderResourceView
@@ -179,6 +180,8 @@ void Sphere::LoadTexture(const std::string& filePath) {
 	textureSrvHandleCPU_.ptr += directXSetup_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	textureSrvHandleGPU_.ptr += directXSetup_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	
+	textureSrvHandleCPU2_.ptr += directXSetup_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	textureSrvHandleGPU2_.ptr += directXSetup_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	//SRVの生成
 	directXSetup_->GetDevice()->CreateShaderResourceView(textureResource_, &srvDesc, textureSrvHandleCPU_);
 	directXSetup_->GetDevice()->CreateShaderResourceView(textureResource2_, &srvDesc2, textureSrvHandleCPU2_);
@@ -303,11 +306,19 @@ ID3D12Resource* Sphere::UploadTextureData(
 
 #pragma endregion
 
+void Sphere::Update() {
+	ImGui::Begin("SphereTextureChange");
+	ImGui::Checkbox("useMonsterBall", &useMonsterBall_);
+
+	ImGui::End();
+}
+
 
 //描画
 //左上、右上、左下、右下
 void Sphere::Draw(SphereStruct sphereCondtion, Transform transform,Matrix4x4 viewMatrix,Matrix4x4 projectionMatrix ,Vector4 color) {
 
+	
 	//書き込み用のアドレスを取得
 	vertexResourceSphere_->Map(0, nullptr, reinterpret_cast<void**>(&vertexDataSphere_));
 
@@ -417,6 +428,7 @@ void Sphere::Draw(SphereStruct sphereCondtion, Transform transform,Matrix4x4 vie
 	
 	}
 
+	
 
 	//サイズに注意を払ってね！！！！！
 	//どれだけのサイズが必要なのか考えよう
@@ -433,13 +445,6 @@ void Sphere::Draw(SphereStruct sphereCondtion, Transform transform,Matrix4x4 vie
 	
 	//WVP行列を作成
 	Matrix4x4 worldViewProjectionMatrixSphere = Multiply(worldMatrixSphere, Multiply(viewMatrix, projectionMatrix));
-
-	//遠視投影行列
-	//Matrix4x4 projectionMatrix = MakePerspectiveFovMatrix(0.5f, float() / float(WINDOW_SIZE_HEIGHT), 0.1f, 100.0f);
-	//Matrix4x4 worldMatrix = MakeAffineMatrix();
-	
-	//WVP行列を作成
-	//Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(viewMatrix, projectionMatrix));
 
 
 	*transformationMatrixDataSphere_ = worldViewProjectionMatrixSphere;
@@ -463,15 +468,14 @@ void Sphere::Draw(SphereStruct sphereCondtion, Transform transform,Matrix4x4 vie
 
 	directXSetup_->GetCommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResourceSphere_->GetGPUVirtualAddress());
 	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である
-	directXSetup_->GetCommandList()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU2_);
+	//trueだったらtextureSrvHandleGPU2_
+	directXSetup_->GetCommandList()->SetGraphicsRootDescriptorTable(2,useMonsterBall_?textureSrvHandleGPU2_:textureSrvHandleGPU_);
 	
 
 	//描画(DrawCall)３頂点で１つのインスタンス。
 	directXSetup_->GetCommandList()->DrawInstanced(SUBDIVISION_*SUBDIVISION_*6, 1, 0, 0);
 
-
-
-
+	
 }
 
 

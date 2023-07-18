@@ -239,9 +239,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				//y軸回転
 				transform[i].rotate.y += 0.03f;
 			}
-			transformSphere.rotate.x += 0.03f;
-			transformSphere.rotate.y += 0.03f;
-			transformSphere.rotate.z += 0.03f;
+			transformSphere.rotate.y += 0.1f;
 
 			//カメラ行列
 			Matrix4x4 cameraMatrix = MakeAffineMatrix(cameraTransform.scale, cameraTransform.rotate, cameraTransform.translate);

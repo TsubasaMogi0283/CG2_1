@@ -46,7 +46,8 @@ private:
 	//頂点バッファビューを作成する
 	void GenerateVertexBufferView();
 
-
+	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index);
+	D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index);
 
 #pragma region テクスチャの読み込み
 	//Textureデータを読む
@@ -83,6 +84,12 @@ private:
 	//初期化
 	ID3D12Resource* vertexResourceSphere_ = nullptr;
 
+	//constにする意味はあったのだろうか
+	uint32_t descriptorSizeSRV_=0u;
+	uint32_t descriptorSizeRTV_=0u;
+	uint32_t descriptorSizeDSV_=0u;
+
+
 	//マテリアル用のリソースを作る
 	ID3D12Resource* materialResourceSphere_ = nullptr;
 	Vector4* materialData_ = nullptr;
@@ -96,8 +103,17 @@ private:
 	ID3D12Resource* textureResource_ = nullptr;
 	ID3D12Resource* resource_ = nullptr;
 
+	ID3D12Resource* textureResource2_ = nullptr;
+
+	//1枚目用
 	D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU_;
 	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU_;
+
+	//2枚目用
+	D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU2_;
+	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU2_;
+
+
 
 	ID3D12Resource* intermediateResource_ = nullptr;
 

@@ -12,8 +12,6 @@ Sphere::Sphere() {
 
 }
 
-
-
 //Resource作成の関数化
 ID3D12Resource* Sphere::CreateBufferResource(size_t sizeInBytes) {
 	//void返り値も忘れずに
@@ -53,6 +51,19 @@ ID3D12Resource* Sphere::CreateBufferResource(size_t sizeInBytes) {
 	return resource;
 }
 
+D3D12_CPU_DESCRIPTOR_HANDLE Sphere::GetCPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index) {
+	D3D12_CPU_DESCRIPTOR_HANDLE handleCPU = descriptorHeap->GetCPUDescriptorHandleForHeapStart();
+	handleCPU.ptr += (descriptorSize * index);
+	return handleCPU;
+}
+
+D3D12_GPU_DESCRIPTOR_HANDLE Sphere::GetGPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index) {
+	D3D12_GPU_DESCRIPTOR_HANDLE handleGPU = descriptorHeap->GetGPUDescriptorHandleForHeapStart();
+	handleGPU.ptr += (descriptorSize * index);
+	return handleGPU;
+}
+
+
 
 //頂点バッファビューを作成する
 void Sphere::GenerateVertexBufferView() {
@@ -86,6 +97,12 @@ void Sphere::Initialize(DirectXInitialization* directXSetup) {
 	//Matrix4x4 1つ分サイズを用意する
 	transformationMatrixResourceSphere_ = CreateBufferResource(sizeof(Matrix4x4));
 
+	//DescriptorSize
+	descriptorSizeSRV_=directXSetup_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	descriptorSizeRTV_=directXSetup_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+	descriptorSizeDSV_=directXSetup_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
+
+
 	//頂点バッファビューを作成する
 	GenerateVertexBufferView();
 
@@ -110,6 +127,13 @@ void Sphere::LoadTexture(const std::string& filePath) {
 	textureResource_ = CreateTextureResource(directXSetup_->GetDevice(), metadata);
 	intermediateResource_ = UploadTextureData(textureResource_, mipImages);
 	
+	//2枚目のTextureを読んで転送する
+	//いつか配列にする。2は何か嫌です。
+	DirectX::ScratchImage mipImages2 = LoadTextureData("Resources/monsterBall.png");
+	const DirectX::TexMetadata& metadata2 = mipImages2.GetMetadata();
+	textureResource2_ = CreateTextureResource(directXSetup_->GetDevice(), metadata2);
+	UploadTextureData(textureResource2_, mipImages2);
+
 
 	//ShaderResourceView
 	//metadataを基にSRVの設定
@@ -120,14 +144,44 @@ void Sphere::LoadTexture(const std::string& filePath) {
 	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
 	srvDesc.Texture2D.MipLevels = UINT(metadata.mipLevels);
 	
+	//2枚目のSRVを作る
+	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc2{};
+	srvDesc2.Format = metadata2.format;
+	srvDesc2.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+	//2Dテクスチャ
+	srvDesc2.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
+	srvDesc2.Texture2D.MipLevels = UINT(metadata2.mipLevels);
+	
+
+
+	//textureSrvHandleCPU_ = directXSetup_->GetSrvDescriptorHeap()->GetCPUDescriptorHandleForHeapStart();
+	//textureSrvHandleGPU_ = directXSetup_->GetSrvDescriptorHeap()->GetGPUDescriptorHandleForHeapStart();
+	
+	//今のDEscriptorHeapには
+	//0...ImGui
+	//1...uvChecker
+	//2...monsterBall
+	//3...NULL
+	//.
+	//.
+	//このような感じで入っている
+	//後ろのindexに対応させる
+
 	//SRVを作成するDescriptorHeapの場所を決める
-	textureSrvHandleCPU_ = directXSetup_->GetSrvDescriptorHeap()->GetCPUDescriptorHandleForHeapStart();
-	textureSrvHandleGPU_ = directXSetup_->GetSrvDescriptorHeap()->GetGPUDescriptorHandleForHeapStart();
+	textureSrvHandleCPU_ = GetCPUDescriptorHandle(directXSetup_->GetSrvDescriptorHeap(), descriptorSizeSRV_, 1);
+	textureSrvHandleGPU_ = GetGPUDescriptorHandle(directXSetup_->GetSrvDescriptorHeap(), descriptorSizeSRV_, 1);
+
+	
+	textureSrvHandleCPU2_=GetCPUDescriptorHandle(directXSetup_->GetSrvDescriptorHeap(), descriptorSizeSRV_, 2);
+	textureSrvHandleGPU2_=GetGPUDescriptorHandle(directXSetup_->GetSrvDescriptorHeap(), descriptorSizeSRV_, 2);
+
 	//先頭はImGuiが使っているのでその次を使う
 	textureSrvHandleCPU_.ptr += directXSetup_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	textureSrvHandleGPU_.ptr += directXSetup_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	
 	//SRVの生成
 	directXSetup_->GetDevice()->CreateShaderResourceView(textureResource_, &srvDesc, textureSrvHandleCPU_);
+	directXSetup_->GetDevice()->CreateShaderResourceView(textureResource2_, &srvDesc2, textureSrvHandleCPU2_);
 
 	
 
@@ -409,7 +463,7 @@ void Sphere::Draw(SphereStruct sphereCondtion, Transform transform,Matrix4x4 vie
 
 	directXSetup_->GetCommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResourceSphere_->GetGPUVirtualAddress());
 	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である
-	directXSetup_->GetCommandList()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU_);
+	directXSetup_->GetCommandList()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU2_);
 	
 
 	//描画(DrawCall)３頂点で１つのインスタンス。

@@ -55,12 +55,7 @@ private:
 	//						Textureの中でも特に例外的な扱いが必要となっている
 	ID3D12Resource* CreateDepthStencilTextureResource(ID3D12Device* device,int32_t width, int32_t height);
 
-	//特定のインデックスのDescriptorHandleを取得する行為は今後頻繁に行われる
-	//関数で計算できるようにしておくと楽だよね
-
-	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index);
-	D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index);
-
+	
 
 #pragma region 初期化について
 	//初期化へ
@@ -154,9 +149,16 @@ public:
 	
 
 
+	ID3D12DescriptorHeap* GetRtvDescriptorHeap() {
+		return  rtvDescriptorHeap_;
+	}
 	ID3D12DescriptorHeap* GetSrvDescriptorHeap() {
 		return  srvDescriptorHeap_;
 	}
+	ID3D12DescriptorHeap* GetDsvDescriptorHeap() {
+		return  dsvDescriptorHeap_;
+	}
+
 
 	D3D12_RENDER_TARGET_VIEW_DESC GetRtvDesc() {
 		return rtvDesc_;

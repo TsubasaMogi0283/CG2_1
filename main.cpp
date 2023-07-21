@@ -3,102 +3,107 @@
 #include "HeaderCpp/Triangle.h"
 
 
-const int32_t WINDOW_SIZE_WIDTH = 1280;
-const int32_t WINDOW_SIZE_HEIGHT = 720;
-
-
-////コンストラクタ
-WindowsInitialization* winSetup = new WindowsInitialization();
-DirectXInitialization* directXSetup = new DirectXInitialization();
-
-
-//三角形の情報
-const int32_t TRIANGLE_AMOUNT_MAX = 15;
-
-
-
-Vector4 TriangleCoodinateLeft[TRIANGLE_AMOUNT_MAX] = {
-		//left
-		//一段目
-		{-1.0f,0.5f,0.0f,1.0f },
-		{-0.6f,0.5f,0.0f,1.0f },
-		{-0.2f,0.5f,0.0f,1.0f },
-		{0.2f,0.5f,0.0f,1.0f },
-		{0.6f,0.5f,0.0f,1.0f },
-		//二段目
-		{-1.0f,0.0f,0.0f,1.0f },
-		{-0.6f,0.0f,0.0f,1.0f },
-		{-0.2f,0.0f,0.0f,1.0f },
-		{0.2f,0.0f,0.0f,1.0f },
-		{0.6f,0.0f,0.0f,1.0f },
-		//三段目
-		{-1.0f,-0.5f,0.0f,1.0f },
-		{-0.6f,-0.5f,0.0f,1.0f },
-		{-0.2f,-0.5f,0.0f,1.0f },
-		{0.2f,-0.5f,0.0f,1.0f },
-		{0.6f,-0.5f,0.0f,1.0f },
-
-	};
-
-Vector4 TriangleCoodinateTop[TRIANGLE_AMOUNT_MAX] = {
-		
-		//up
-		{-0.8f,1.0f,0.0f,1.0f },
-		{-0.4f,1.0f,0.0f,1.0f },
-		{0.0f,1.0f,0.0f,1.0f },
-		{0.4f,1.0f,0.0f,1.0f },
-		{0.8f,1.0f,0.0f,1.0f },
-
-		//
-		{-0.8f,0.5f,0.0f,1.0f },
-		{-0.4f,0.5f,0.0f,1.0f },
-		{0.0f,0.5f,0.0f,1.0f },
-		{0.4f,0.5f,0.0f,1.0f },
-		{0.8f,0.5f,0.0f,1.0f },
-		//
-		{-0.8f,0.0f,0.0f,1.0f },
-		{-0.4f,0.0f,0.0f,1.0f },
-		{0.0f,0.0f,0.0f,1.0f },
-		{0.4f,0.0f,0.0f,1.0f },
-		{0.8f,0.0f,0.0f,1.0f },
-	};
-
-Vector4 TriangleCoodinateRight[TRIANGLE_AMOUNT_MAX] = {
-		//right
-		{-0.6f,0.5f,0.0f,1.0f },
-		{-0.2f,0.5f,0.0f,1.0f },
-		{0.2f,0.5f,0.0f,1.0f },
-		{0.6f,0.5f,0.0f,1.0f },
-		{1.0f,0.5f,0.0f,1.0f },
-		
-		{-0.6f,0.0f,0.0f,1.0f },
-		{-0.2f,0.0f,0.0f,1.0f },
-		{0.2f,0.0f,0.0f,1.0f },
-		{0.6f,0.0f,0.0f,1.0f },
-		{1.0f,0.0f,0.0f,1.0f },
-
-		{-0.6f,-0.5f,0.0f,1.0f },
-		{-0.2f,-0.5f,0.0f,1.0f },
-		{0.2f,-0.5f,0.0f,1.0f },
-		{0.6f,-0.5f,0.0f,1.0f },
-		{1.0f,-0.5f,0.0f,1.0f },
-
-	};
-
-
-
-Triangle* triangle[TRIANGLE_AMOUNT_MAX];
-
 
 //Winodwsアプリでもエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
+
+
+	const int32_t WINDOW_SIZE_WIDTH = 1280;
+	const int32_t WINDOW_SIZE_HEIGHT = 720;
+	
+	
+	////コンストラクタ
+	WindowsInitialization* winSetup = new WindowsInitialization();
+	DirectXInitialization* directXSetup = new DirectXInitialization();
+	
+	
+	//三角形の情報
+	const int32_t TRIANGLE_AMOUNT_MAX = 15;
+	
+	
+	
+	Vector4 TriangleCoodinateLeft[TRIANGLE_AMOUNT_MAX] = {
+			//left
+			//一段目
+			{-1.0f,0.5f,0.0f,1.0f },
+			{-0.6f,0.5f,0.0f,1.0f },
+			{-0.2f,0.5f,0.0f,1.0f },
+			{0.2f,0.5f,0.0f,1.0f },
+			{0.6f,0.5f,0.0f,1.0f },
+			//二段目
+			{-1.0f,0.0f,0.0f,1.0f },
+			{-0.6f,0.0f,0.0f,1.0f },
+			{-0.2f,0.0f,0.0f,1.0f },
+			{0.2f,0.0f,0.0f,1.0f },
+			{0.6f,0.0f,0.0f,1.0f },
+			//三段目
+			{-1.0f,-0.5f,0.0f,1.0f },
+			{-0.6f,-0.5f,0.0f,1.0f },
+			{-0.2f,-0.5f,0.0f,1.0f },
+			{0.2f,-0.5f,0.0f,1.0f },
+			{0.6f,-0.5f,0.0f,1.0f },
+	
+		};
+	
+	Vector4 TriangleCoodinateTop[TRIANGLE_AMOUNT_MAX] = {
+			
+			//up
+			{-0.8f,1.0f,0.0f,1.0f },
+			{-0.4f,1.0f,0.0f,1.0f },
+			{0.0f,1.0f,0.0f,1.0f },
+			{0.4f,1.0f,0.0f,1.0f },
+			{0.8f,1.0f,0.0f,1.0f },
+	
+			//
+			{-0.8f,0.5f,0.0f,1.0f },
+			{-0.4f,0.5f,0.0f,1.0f },
+			{0.0f,0.5f,0.0f,1.0f },
+			{0.4f,0.5f,0.0f,1.0f },
+			{0.8f,0.5f,0.0f,1.0f },
+			//
+			{-0.8f,0.0f,0.0f,1.0f },
+			{-0.4f,0.0f,0.0f,1.0f },
+			{0.0f,0.0f,0.0f,1.0f },
+			{0.4f,0.0f,0.0f,1.0f },
+			{0.8f,0.0f,0.0f,1.0f },
+		};
+	
+	Vector4 TriangleCoodinateRight[TRIANGLE_AMOUNT_MAX] = {
+			//right
+			{-0.6f,0.5f,0.0f,1.0f },
+			{-0.2f,0.5f,0.0f,1.0f },
+			{0.2f,0.5f,0.0f,1.0f },
+			{0.6f,0.5f,0.0f,1.0f },
+			{1.0f,0.5f,0.0f,1.0f },
+			
+			{-0.6f,0.0f,0.0f,1.0f },
+			{-0.2f,0.0f,0.0f,1.0f },
+			{0.2f,0.0f,0.0f,1.0f },
+			{0.6f,0.0f,0.0f,1.0f },
+			{1.0f,0.0f,0.0f,1.0f },
+	
+			{-0.6f,-0.5f,0.0f,1.0f },
+			{-0.2f,-0.5f,0.0f,1.0f },
+			{0.2f,-0.5f,0.0f,1.0f },
+			{0.6f,-0.5f,0.0f,1.0f },
+			{1.0f,-0.5f,0.0f,1.0f },
+	
+		};
+	
+	
+	
+	Triangle* triangle[TRIANGLE_AMOUNT_MAX];
+
+
+
+
 
 	//初期化
 	winSetup->Initialize(L"DirectX",WINDOW_SIZE_WIDTH,WINDOW_SIZE_HEIGHT);
 	directXSetup->Initialize(winSetup->GetClientWidth(),winSetup->GetClientHeight(),winSetup->GetHwnd());
 
 	
-	////三角形について
+	//三角形について
 	for (int i = 0; i < TRIANGLE_AMOUNT_MAX; i++) {
 		triangle[i] = new Triangle();
 		triangle[i]->Initialize(directXSetup);

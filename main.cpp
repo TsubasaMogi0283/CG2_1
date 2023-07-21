@@ -1,34 +1,23 @@
 #include "HeaderCpp/WindowsInitialization.h"
 #include "HeaderCpp/DirectXInitialization.h"
 #include "HeaderCpp/Triangle.h"
-//includeなどは全部Function.hに入っているよ！
+
+
+const int32_t WINDOW_SIZE_WIDTH = 1280;
+const int32_t WINDOW_SIZE_HEIGHT = 720;
+
+
+////コンストラクタ
+WindowsInitialization* winSetup = new WindowsInitialization();
+DirectXInitialization* directXSetup = new DirectXInitialization();
+
+
+//三角形の情報
+const int32_t TRIANGLE_AMOUNT_MAX = 15;
 
 
 
-
-//Winodwsアプリでもエントリーポイント(main関数)
-int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
-
-
-	const int32_t WINDOW_SIZE_WIDTH = 1280;
-	const int32_t WINDOW_SIZE_HEIGHT = 720;
-
-
-	////コンストラクタ
-	WindowsInitialization* winSetup = new WindowsInitialization();
-	DirectXInitialization* directXSetup = new DirectXInitialization();
-	
-	
-	//Adapter* adapter = new Adapter();
-
-
-
-	//三角形の情報
-	const int32_t TRIANGLE_AMOUNT_MAX = 15;
-
-
-	
-	Vector4 TriangleCoodinateLeft[TRIANGLE_AMOUNT_MAX] = {
+Vector4 TriangleCoodinateLeft[TRIANGLE_AMOUNT_MAX] = {
 		//left
 		//一段目
 		{-1.0f,0.5f,0.0f,1.0f },
@@ -51,7 +40,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	};
 
-	Vector4 TriangleCoodinateTop[TRIANGLE_AMOUNT_MAX] = {
+Vector4 TriangleCoodinateTop[TRIANGLE_AMOUNT_MAX] = {
 		
 		//up
 		{-0.8f,1.0f,0.0f,1.0f },
@@ -74,7 +63,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		{0.8f,0.0f,0.0f,1.0f },
 	};
 
-	Vector4 TriangleCoodinateRight[TRIANGLE_AMOUNT_MAX] = {
+Vector4 TriangleCoodinateRight[TRIANGLE_AMOUNT_MAX] = {
 		//right
 		{-0.6f,0.5f,0.0f,1.0f },
 		{-0.2f,0.5f,0.0f,1.0f },
@@ -96,21 +85,25 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	};
 
+
+
+Triangle* triangle[TRIANGLE_AMOUNT_MAX];
+
+
+//Winodwsアプリでもエントリーポイント(main関数)
+int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
+
 	//初期化
 	winSetup->Initialize(L"DirectX",WINDOW_SIZE_WIDTH,WINDOW_SIZE_HEIGHT);
 	directXSetup->Initialize(winSetup->GetClientWidth(),winSetup->GetClientHeight(),winSetup->GetHwnd());
 
-	//adapter->Initialize();
-
-	Triangle* triangle[TRIANGLE_AMOUNT_MAX];
+	
 	////三角形について
 	for (int i = 0; i < TRIANGLE_AMOUNT_MAX; i++) {
 		triangle[i] = new Triangle();
 		triangle[i]->Initialize(directXSetup);
-
-		//triangle[i]->GenarateVertexResource();
-	}
 	
+	}
 
 	MSG msg{};
 
@@ -125,11 +118,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 		else {
 			//ゲームの処理
-			
-
-		}
-
-		//directXSetup->BeginFlame(winSetup->GetClientWidth(), winSetup->GetClientHeight());
+			//directXSetup->BeginFlame(winSetup->GetClientWidth(), winSetup->GetClientHeight());
 			directXSetup->BeginFlame();
 
 			for (int i = 0; i < TRIANGLE_AMOUNT_MAX; i++) {
@@ -147,6 +136,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			//directXSetup->EndFlame();
 			directXSetup->EndFlame();
 
+
+		}
+
+		
 
 		
 	}

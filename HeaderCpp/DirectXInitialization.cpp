@@ -607,8 +607,8 @@ void DirectXInitialization::EndFlame() {
 	ID3D12CommandList* commandLists[] = { commandList_ };
 	commandQueue_->ExecuteCommandLists(1, commandLists);
 	//GPUとOSに画面の交換を行うよう通知する
-	swapChain_->Present(0, 1);
-	
+
+	swapChain_->Present(1, 0);
 
 	////GPUにSignalを送る
 	//GPUの実行完了が目的
@@ -632,7 +632,7 @@ void DirectXInitialization::EndFlame() {
 		WaitForSingleObject(fenceEvent_, INFINITE);
 	}
 
-	swapChain_->Present(1, 0);
+	
 
 	hr_ = commandAllocator_->Reset();
 	assert(SUCCEEDED(hr_));

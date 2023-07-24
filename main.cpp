@@ -165,12 +165,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 		else {
 			//ゲームの処理
-
-
-
-
-		}
-		directXSetup->BeginFlame();
+			directXSetup->BeginFlame();
 
 
 		for (int i = 0; i < TRIANGLE_AMOUNT_MAX; i++) {
@@ -184,6 +179,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 
 		directXSetup->EndFlame();
+
+
+
+		}
+		
 	}
 
 	for (int i = 0; i < TRIANGLE_AMOUNT_MAX; i++) {

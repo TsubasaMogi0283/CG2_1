@@ -125,9 +125,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	
 	
 	
-
-
-	//頂いた関数で色を決めていく
+	//色
 	unsigned int  Color[TRIANGLE_AMOUNT_MAX] = {
 		{ RED},//RED
 		{ GREEN},//GREEN
@@ -139,7 +137,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		{ RED },
 		{ BLACK },
 		{ WHITE },
-		{ PURPLE },
+		{ YELLOW },
 
 		{BLACK },
 		{BLUE },

@@ -17,7 +17,7 @@ public:
 	//Material用のリソースを作る
 	void GenerateMaterialResource();
 
-	void Draw(Vector4 left,Vector4 top,  Vector4 right,Vector4 color);
+	void Draw(Vector4 left,Vector4 top,  Vector4 right,unsigned int  color);
 
 
 	//Resource作成の関数化

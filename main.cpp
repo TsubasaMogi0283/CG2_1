@@ -49,7 +49,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		triangle[i] = new Triangle();
 		triangle[i]->Initialize(directXSetup);
 
-		//triangle[i]->GenarateVertexResource();
 	}
 
 
@@ -129,24 +128,24 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 	//頂いた関数で色を決めていく
-	Vector4 Color[TRIANGLE_AMOUNT_MAX] = {
-		{ ColorAdapter(RED)},//RED
-		{ 0.0f,1.0f,0.0f,1.0f },//GREEN
-		{ ColorAdapter(BLUE) },//BLUE
-		{ ColorAdapter(WHITE)  },
-		{ ColorAdapter(PURPLE) },
+	unsigned int  Color[TRIANGLE_AMOUNT_MAX] = {
+		{ RED},//RED
+		{ GREEN},//GREEN
+		{ BLUE },//BLUE
+		{ WHITE  },
+		{ PURPLE },
 
-		{ 0.0f,0.0f,1.0f,1.0f },
-		{ 1.0f,0.0f,0.0f,1.0f },
-		{ ColorAdapter(BLACK) },
-		{ 0.0f,0.0f,1.0f,1.0f },
-		{ 1.0f,0.0f,0.0f,1.0f },
+		{ BLUE },
+		{ RED },
+		{ BLACK },
+		{ WHITE },
+		{ PURPLE },
 
-		{0.6f,0.5f,0.0f,1.0f },
-		{ColorAdapter(BLUE) },
-		{0.2f,0.5f,0.0f,1.0f },
-		{0.6f,0.5f,0.0f,1.0f },
-		{ColorAdapter(WHITE)  },
+		{BLACK },
+		{BLUE },
+		{RED},
+		{PURPLE },
+		{WHITE  },
 
 	};
 	
@@ -168,15 +167,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			directXSetup->BeginFlame();
 
 
-		for (int i = 0; i < TRIANGLE_AMOUNT_MAX; i++) {
-			//描画処理
-			triangle[i]->Draw(
-				TriangleCoodinateLeft[i], 
-				TriangleCoodinateTop[i],
-				TriangleCoodinateRight[i],
-				Color[i]
-			);
-		}
+			for (int i = 0; i < TRIANGLE_AMOUNT_MAX; i++) {
+				//描画処理
+				triangle[i]->Draw(
+					TriangleCoodinateLeft[i], 
+					TriangleCoodinateTop[i],
+					TriangleCoodinateRight[i],
+					Color[i]
+				);
+			}
 
 		directXSetup->EndFlame();
 

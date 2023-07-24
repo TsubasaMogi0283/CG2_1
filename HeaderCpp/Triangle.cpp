@@ -146,7 +146,7 @@ void Triangle::GenerateMaterialResource() {
 }
 
 
-void Triangle::Draw(Vector4 left,Vector4 top,  Vector4 right,Vector4 color) {
+void Triangle::Draw(Vector4 left,Vector4 top,  Vector4 right,unsigned int  color) {
 	////VertexResourceを生成
 	//GenarateVertexResource();
 
@@ -168,7 +168,7 @@ void Triangle::Draw(Vector4 left,Vector4 top,  Vector4 right,Vector4 color) {
 	materialResource->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 
 	//今回は赤を書き込んでみる
-	*materialData_ = color;
+	*materialData_ = ColorAdapter(color);
 
 
 	

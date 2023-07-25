@@ -5,7 +5,7 @@ Triangle::Triangle() {
 	
 }
 
-void Triangle::Initialize(DirectXInitialization* directXSetup) {
+void Triangle::Initialize(DirectXSetup* directXSetup) {
 	directXSetup_ = directXSetup;
 	GenarateVertexResource();
 

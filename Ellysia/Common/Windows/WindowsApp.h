@@ -1,15 +1,19 @@
 #pragma once
 
-#include "Function.h"
+#include <cstdint>
  
+#include <Windows.h>
+#include <cstdint>
 
-class WindowsInitialization {
+
+
+class WindowsApp {
 public:
 
 	//コンストラクタ
-	WindowsInitialization();
+	WindowsApp();
 
-	
+	static LRESULT WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 
 	//ウィンドウクラスを登録
 	void RegisterWindowsClass();
@@ -19,8 +23,6 @@ public:
 
 
 	void Initialize(const wchar_t* title, const int32_t WindowSizeWidth, const int32_t WindowSizeHeight);
-
-
 
 
 
@@ -44,7 +46,7 @@ public:
 	}
 
 
-	~WindowsInitialization();
+	~WindowsApp();
 
 private:
 

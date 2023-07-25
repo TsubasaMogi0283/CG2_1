@@ -1,18 +1,31 @@
 #pragma once
 
-#include "Function.h"
-#include "WindowsInitialization.h"
- 
+#include <cassert>
+#include <d3d12.h>
+#include <dxgi1_6.h>
+#include <dxgidebug.h>
+
+#pragma comment(lib,"d3d12.lib")
+#pragma comment(lib,"dxgi.lib")
+#pragma comment(lib,"dxguid.lib")
+#pragma comment(lib,"dxcompiler.lib")
+
+
+
+#include <cstdint>
+#include <string>
+#include <dxcapi.h>
+#include <format>
+#include "Vector/Vector4.h"
+#include "LogConvert.h"
 
 
 
 
-
-
-class DirectXInitialization {
+class DirectXSetup {
 public:
 	
-	DirectXInitialization();
+	DirectXSetup();
 
 	//まとめたのが下の「Initialize」
 #pragma region 初期化について
@@ -52,18 +65,9 @@ public:
 	
 	void Initialize(int32_t windowsizeWidth, int32_t windowsizeHeight,HWND hwnd_);
 
-	
-
-
-	//void GenarateVertexResource(TriangleVertex& vertexBuffer);
-
-
-
 #pragma region whileの中身
 	//whileの中身
 	void BeginFlame();
-
-	//void DrawTriangle(Vector4 top, Vector4 left, Vector4 right,TriangleVertex vertexBuffer);
 
 	void EndFlame();
 
@@ -76,10 +80,12 @@ public:
 
 	void CheckRelease();
 
-	~DirectXInitialization();
+	~DirectXSetup();
 
 #pragma endregion
 	
+
+#pragma region アクセッサ
 
 	HRESULT GetHr_() {
 		return hr_;
@@ -93,7 +99,23 @@ public:
 		return commandList_;
 	}
 
+#pragma endregion
+
+
+private:
+	//DirectXSetupでしか使わないから
+	//provateにしても良いと思った。
+	//あとアロー演算子使ったとき邪魔
 	
+	////CompileShader関数
+	IDxcBlob* CompileShader(
+		const std::wstring& filePath,
+		const wchar_t* profile,
+		IDxcUtils* dxcUtils,
+		IDxcCompiler3* dxcCompiler,
+		IDxcIncludeHandler* includeHandler);
+
+
 
 private:
 	int32_t kClientWidth_;

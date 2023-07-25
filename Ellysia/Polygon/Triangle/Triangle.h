@@ -1,8 +1,6 @@
 #pragma once
-#include "Function.h"
-#include "DirectXInitialization.h"
 
-
+#include "DirectX/DirectXSetup.h"
 
 
 
@@ -11,7 +9,7 @@ class Triangle {
 public:
 	Triangle();
 
-	void Initialize(DirectXInitialization* directXSetup);
+	void Initialize(DirectXSetup* directXSetup);
 
 	void GenarateVertexResource();
 
@@ -26,7 +24,7 @@ public:
 
 private:
 
-	DirectXInitialization* directXSetup_ = nullptr;
+	DirectXSetup* directXSetup_ = nullptr;
 
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_;
 	ID3D12Resource* vertexResouce_;

@@ -1,16 +1,78 @@
-#include "DirectXInitialization.h"
-#include "Function.h"
-#include "Triangle.h"
+#include "DirectXSetup.h"
 
 
-DirectXInitialization::DirectXInitialization() {
+
+DirectXSetup::DirectXSetup() {
+
+}
+
+////CompileShader関数
+IDxcBlob* DirectXSetup::CompileShader(
+	const std::wstring& filePath,
+	const wchar_t* profile,
+	IDxcUtils* dxcUtils,
+	IDxcCompiler3* dxcCompiler,
+	IDxcIncludeHandler* includeHandler) {
+	//1.hlslファイルを読む
+	Log(ConvertString(std::format(L"Begin CompileShader,path:{},profile:{}\n", filePath, profile)));
+	//hlslファイルを読む
+	IDxcBlobEncoding* shaderSource = nullptr;
+	HRESULT hr = dxcUtils->LoadFile(filePath.c_str(), nullptr, &shaderSource);
+	//読めなかったら止める
+	assert(SUCCEEDED(hr));
+	//読み込んだファイルの内容を設定する
+	DxcBuffer shaderSourceBuffer;
+	shaderSourceBuffer.Ptr = shaderSource->GetBufferPointer();
+	shaderSourceBuffer.Size = shaderSource->GetBufferSize();
+	shaderSourceBuffer.Encoding = DXC_CP_UTF8;
+
+	//2.Compileする
+	LPCWSTR arguments[] = {
+		filePath.c_str(),
+		L"-E",L"main",
+		L"-T",profile,
+		L"-Zi",L"-Qembed_debug",
+		L"-Od",
+		L"-Zpr",
+	};
+
+	//実際にShaderをコンパイルする
+	IDxcResult* shaderResult = nullptr;
+	hr = dxcCompiler->Compile(&shaderSourceBuffer, arguments, _countof(arguments), includeHandler, IID_PPV_ARGS(&shaderResult));
+	//コンパイルエラーではなくdxcが起動出来ないなど致命的な状況
+	assert(SUCCEEDED(hr));
+
+
+	//3.警告・エラーが出ていないかを確認する
+	//警告・エラーが出てたらログに出して止める
+	IDxcBlobUtf8* shaderError = nullptr;
+	shaderResult->GetOutput(DXC_OUT_ERRORS, IID_PPV_ARGS(&shaderError), nullptr);
+	if (shaderError != nullptr && shaderError->GetStringLength() != 0) {
+		Log(shaderError->GetStringPointer());
+		assert(false);
+	}
+
+
+	//4.Compile結果を受け取って返す
+	//BLOB・・・BinaryLargeOBject
+	IDxcBlob* shaderBlob = nullptr;
+	hr = shaderResult->GetOutput(DXC_OUT_OBJECT, IID_PPV_ARGS(&shaderBlob), nullptr);
+	assert(SUCCEEDED(hr));
+	//成功したログを出す
+	Log(ConvertString(std::format(L"Compile Succeeded,path:{},profile:{}\n", filePath, profile)));
+	//もう使わないリソースを解放
+	shaderSource->Release();
+	shaderResult->Release();
+	//実行用のバイナリを返却
+	return shaderBlob;
+
 
 }
 
 
 
 
-void DirectXInitialization::GenerateDXGIFactory() {
+void DirectXSetup::GenerateDXGIFactory() {
 	//DXGIファクトリーの生成
 #ifdef _DEBUG
 	//ID3D12Debug1* debugController = nullptr;
@@ -33,7 +95,7 @@ void DirectXInitialization::GenerateDXGIFactory() {
 
 }
 
-void DirectXInitialization::SelectAdapter() {
+void DirectXSetup::SelectAdapter() {
 	//仕様するアダプタ用の変数、最初にnullptrを入れておく
 	//IDXGIAdapter4* useAdapter_ = nullptr;
 	//良い順でアダプタを頼む
@@ -61,7 +123,7 @@ void DirectXInitialization::SelectAdapter() {
 	assert(useAdapter_ != nullptr);
 }
 
-void DirectXInitialization::GenerateD3D12Device() {
+void DirectXSetup::GenerateD3D12Device() {
 	//機能レベルとログ出力用の文字
 	D3D_FEATURE_LEVEL featureLevels[] = {
 		D3D_FEATURE_LEVEL_12_2,
@@ -89,7 +151,7 @@ void DirectXInitialization::GenerateD3D12Device() {
 
 }
 
-void DirectXInitialization::StopErrorWarning() {
+void DirectXSetup::StopErrorWarning() {
 		////エラー・警告、即ち停止
 	//ID3D12InfoQueue* infoQueue_ = nullptr;
 	if (SUCCEEDED(device_->QueryInterface(IID_PPV_ARGS(&infoQueue_)))) {
@@ -133,7 +195,7 @@ void DirectXInitialization::StopErrorWarning() {
 
 }
 
-void DirectXInitialization::GenerateCommand() {
+void DirectXSetup::GenerateCommand() {
 	////GPUに作業させよう
 	//コマンドキューを生成する
 	hr_ = device_->CreateCommandQueue(&commandQueueDesc_, IID_PPV_ARGS(&commandQueue_));
@@ -161,7 +223,7 @@ void DirectXInitialization::GenerateCommand() {
 
 }
 
-void DirectXInitialization::GenerateSwapChain() {
+void DirectXSetup::GenerateSwapChain() {
 	
 	//60fpsそのまま映すと大変なので2枚用意して
 	//描画(フロントバッファ)と表示(バックバッファ、プライマリバッファ)に分ける。
@@ -190,7 +252,7 @@ void DirectXInitialization::GenerateSwapChain() {
 
 }
 
-void DirectXInitialization::MakeDescriptorHeap() {
+void DirectXSetup::MakeDescriptorHeap() {
 	//ID3D12DescriptorHeap* rtvDescriptorHeap_ = nullptr;
 	
 	rtvDescriptorHeapDesc_.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;	//レンダーターゲットビュー用
@@ -201,7 +263,7 @@ void DirectXInitialization::MakeDescriptorHeap() {
 	assert(SUCCEEDED(hr_));
 }
 
-void DirectXInitialization::PullResourcesFromSwapChain() {
+void DirectXSetup::PullResourcesFromSwapChain() {
 	//ID3D12Resource* swapChainResources_[2] = { nullptr };
 	hr_ = swapChain_->GetBuffer(0, IID_PPV_ARGS(&swapChainResources_[0]));
 	//上手く取得できなければ起動できない
@@ -211,7 +273,7 @@ void DirectXInitialization::PullResourcesFromSwapChain() {
 
 }
 
-void DirectXInitialization::SetRTV() {
+void DirectXSetup::SetRTV() {
 	//RTVの設定
 	//D3D12_RENDER_TARGET_VIEW_DESC rtvDesc{};
 	rtvDesc_.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;				//出力結果をSRGBに変換して書き込む
@@ -254,7 +316,7 @@ void DirectXInitialization::SetRTV() {
 
 }
 
-void DirectXInitialization::InitializeDXC() {
+void DirectXSetup::InitializeDXC() {
 	////DXCの初期化
 	//dxcCompilerを初期化
 	//IDxcUtils* dxcUtils_ = nullptr;
@@ -270,7 +332,7 @@ void DirectXInitialization::InitializeDXC() {
 
 }
 
-void DirectXInitialization::MakePSO() {
+void DirectXSetup::MakePSO() {
 	//現時点でincludeはしないが、includeに対応
 	//IDxcIncludeHandler* includeHandler_ = nullptr;
 	hr_ = dxcUtils_->CreateDefaultIncludeHandler(&includeHandler_);
@@ -380,7 +442,7 @@ void DirectXInitialization::MakePSO() {
 
 }
 
-void DirectXInitialization::GenarateViewport() {
+void DirectXSetup::GenarateViewport() {
 	////ViewportとScissor
 	//ビューポート
 	
@@ -396,7 +458,7 @@ void DirectXInitialization::GenarateViewport() {
 
 }
 
-void DirectXInitialization::GenerateScissor() {
+void DirectXSetup::GenerateScissor() {
 	//シザー矩形 
 	
 	//基本的にビューポートと同じ矩形が構成されるようにする
@@ -406,7 +468,7 @@ void DirectXInitialization::GenerateScissor() {
 	scissorRect_.bottom = kClientHeight_;
 }
 
-void DirectXInitialization::Initialize(int32_t windowsizeWidth, int32_t windowsizeHeight,HWND hwnd) {
+void DirectXSetup::Initialize(int32_t windowsizeWidth, int32_t windowsizeHeight,HWND hwnd) {
 
 	kClientWidth_ = windowsizeWidth;
 	kClientHeight_ = windowsizeHeight;
@@ -489,7 +551,7 @@ void DirectXInitialization::Initialize(int32_t windowsizeWidth, int32_t windowsi
 
 
 
-void DirectXInitialization::BeginFlame() {
+void DirectXSetup::BeginFlame() {
 
 
 	////コマンドをキックする
@@ -556,7 +618,7 @@ void DirectXInitialization::BeginFlame() {
 
 
 
-void DirectXInitialization::EndFlame() {
+void DirectXSetup::EndFlame() {
 	////画面表示出来るようにする
 	//ここがflameの最後
 	//画面に描く処理は「全て終わり」、画面に映すので、状態を遷移
@@ -611,7 +673,7 @@ void DirectXInitialization::EndFlame() {
 	assert(SUCCEEDED(hr_));
 }
 
-void DirectXInitialization::Release() {
+void DirectXSetup::Release() {
 
 	
 	
@@ -663,7 +725,7 @@ void DirectXInitialization::Release() {
 }
 
 
-void DirectXInitialization::CheckRelease() {
+void DirectXSetup::CheckRelease() {
 	////ReportLiveObjects
 	//DirectX12より低レベルのDXGIに問い合わせをする
 	//リソースリークチェック
@@ -676,6 +738,6 @@ void DirectXInitialization::CheckRelease() {
 	}
 }
 
-DirectXInitialization::~DirectXInitialization(){
+DirectXSetup::~DirectXSetup(){
 
 }

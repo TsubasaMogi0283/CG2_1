@@ -52,6 +52,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>$(ProjectDir)\Ellysia\Math;$(ProjectDir)\Ellysia\Convert\LogConvert;$(ProjectDir)\Ellysia\Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -74,6 +75,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <LanguageStandard>stdcpp20</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>$(ProjectDir)\Ellysia\Math;$(ProjectDir)\Ellysia\Convert\LogConvert;$(ProjectDir)\Ellysia\Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -88,10 +90,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="HeaderCpp\DirectXInitialization.cpp" />
-    <ClCompile Include="HeaderCpp\Function.cpp" />
-    <ClCompile Include="HeaderCpp\Triangle.cpp" />
-    <ClCompile Include="HeaderCpp\WindowsInitialization.cpp" />
+    <ClCompile Include="Ellysia\Common\DirectX\DirectXSetup.cpp" />
+    <ClCompile Include="Ellysia\Common\Windows\WindowsApp.cpp" />
+    <ClCompile Include="Ellysia\Convert\LogConvert\LogConvert.cpp" />
+    <ClCompile Include="Ellysia\Polygon\Triangle\Triangle.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -109,11 +111,12 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="HeaderCpp\Adapter.h" />
-    <ClInclude Include="HeaderCpp\DirectXInitialization.h" />
-    <ClInclude Include="HeaderCpp\Function.h" />
-    <ClInclude Include="HeaderCpp\Triangle.h" />
-    <ClInclude Include="HeaderCpp\WindowsInitialization.h" />
+    <ClInclude Include="Ellysia\Common\DirectX\DirectXSetup.h" />
+    <ClInclude Include="Ellysia\Common\Windows\WindowsApp.h" />
+    <ClInclude Include="Ellysia\Convert\LogConvert\LogConvert.h" />
+    <ClInclude Include="Ellysia\Math\Vector\TriangleCoodinate.h" />
+    <ClInclude Include="Ellysia\Math\Vector\Vector4.h" />
+    <ClInclude Include="Ellysia\Polygon\Triangle\Triangle.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

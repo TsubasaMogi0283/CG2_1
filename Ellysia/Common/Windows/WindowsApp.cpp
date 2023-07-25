@@ -1,4 +1,4 @@
-#include "WindowsInitialization.h"
+#include "WindowsApp.h"
 
 
 
@@ -6,14 +6,26 @@
 
 
 
-WindowsInitialization::WindowsInitialization() {
+WindowsApp::WindowsApp() {
 	
 }
 
 
+LRESULT WindowsApp::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
 
 
-void  WindowsInitialization::RegisterWindowsClass() {
+	switch (msg) {
+		//ウィンドウが破棄された
+	case WM_DESTROY:
+		//OSに対してアプリの終了を伝える
+		PostQuitMessage(0);
+		return 0;
+	}
+
+	return DefWindowProc(hwnd, msg, wparam, lparam);
+}
+
+void  WindowsApp::RegisterWindowsClass() {
 	
 	
 	//ウィンドウプロシャージャ
@@ -54,12 +66,12 @@ void  WindowsInitialization::RegisterWindowsClass() {
 }
 
 
-void WindowsInitialization::DisplayWindow() {
+void WindowsApp::DisplayWindow() {
 	//ウィンドウを表示
 	ShowWindow(hwnd_, SW_SHOW);
 }
 
-void WindowsInitialization::Initialize(const wchar_t* title, const int32_t WindowSizeWidth, const int32_t WindowSizeHeight) {
+void WindowsApp::Initialize(const wchar_t* title, const int32_t WindowSizeWidth, const int32_t WindowSizeHeight) {
 	this->title_ = title;
 	this->kClientWidth_ = WindowSizeWidth;
 	this->kClientHeight_ = WindowSizeHeight;
@@ -77,19 +89,19 @@ void WindowsInitialization::Initialize(const wchar_t* title, const int32_t Windo
 
 
 
-void WindowsInitialization::WindowsMSG(MSG& msg) {
+void WindowsApp::WindowsMSG(MSG& msg) {
 	TranslateMessage(&msg);
 	DispatchMessage(&msg);
 }
 
 
 
-void WindowsInitialization::Close() {
+void WindowsApp::Close() {
 	
 	CloseWindow(hwnd_);
 }
 
-WindowsInitialization::~WindowsInitialization() {
+WindowsApp::~WindowsApp() {
 
 }
 

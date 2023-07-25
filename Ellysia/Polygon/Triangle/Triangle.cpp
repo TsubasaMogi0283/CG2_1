@@ -37,7 +37,8 @@ void Triangle::GenarateVertexResource() {
 	//実際に頂点リソースを作る
 	//ID3D12Resource* vertexResource_ = nullptr;
 	//hrは調査用
-	hr_ = directXSetup_->GetDevice()->CreateCommittedResource(
+
+	HRESULT hr_ = directXSetup_->GetDevice()->CreateCommittedResource(
 		&uploadHeapProperties,
 		D3D12_HEAP_FLAG_NONE,
 		&vertexResourceDesc,

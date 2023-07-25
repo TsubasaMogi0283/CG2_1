@@ -93,6 +93,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Ellysia\Common\DirectX\DirectXSetup.cpp" />
     <ClCompile Include="Ellysia\Common\Windows\WindowsApp.cpp" />
     <ClCompile Include="Ellysia\Convert\LogConvert\LogConvert.cpp" />
+    <ClCompile Include="Ellysia\Ellysia.cpp" />
     <ClCompile Include="Ellysia\Polygon\Triangle\Triangle.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -114,6 +115,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Ellysia\Common\DirectX\DirectXSetup.h" />
     <ClInclude Include="Ellysia\Common\Windows\WindowsApp.h" />
     <ClInclude Include="Ellysia\Convert\LogConvert\LogConvert.h" />
+    <ClInclude Include="Ellysia\Ellysia.h" />
     <ClInclude Include="Ellysia\Math\Vector\TriangleCoodinate.h" />
     <ClInclude Include="Ellysia\Math\Vector\Vector4.h" />
     <ClInclude Include="Ellysia\Polygon\Triangle\Triangle.h" />

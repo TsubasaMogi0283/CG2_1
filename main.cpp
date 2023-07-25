@@ -3,7 +3,7 @@
 #include "Ellysia/Polygon/Triangle/Triangle.h"
 #include <Vector/TriangleCoodinate.h>
 
-
+#include "Ellysia/Ellysia.h"
 
 //Winodwsアプリでもエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
@@ -28,6 +28,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 	TriangleCoodinate triangleCoodinate[TRIANGLE_AMOUNT_MAX] = {
+		//1段目
 		{{-1.0f,0.5f,0.0f,1.0f },{-0.8f,1.0f,0.0f,1.0f },{-0.6f,0.5f,0.0f,1.0f }},
 		{{-0.6f,0.5f,0.0f,1.0f },{-0.4f,1.0f,0.0f,1.0f },{-0.2f,0.5f,0.0f,1.0f }},
 		{{-0.2f,0.5f,0.0f,1.0f },{0.0f,1.0f,0.0f,1.0f }, {0.2f,0.5f,0.0f,1.0f }},
@@ -50,77 +51,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	};
 
-	
-	Vector4 TriangleCoodinateLeft[TRIANGLE_AMOUNT_MAX] = {
-			//left
-			//一段目
-			{-1.0f,0.5f,0.0f,1.0f }, 
-			{-0.6f,0.5f,0.0f,1.0f }, 
-			{-0.2f,0.5f,0.0f,1.0f }, 
-			{0.2f,0.5f,0.0f,1.0f },	 
-			{0.6f,0.5f,0.0f,1.0f },  
-			//二段目
-			{-1.0f,0.0f,0.0f,1.0f }, 
-			{-0.6f,0.0f,0.0f,1.0f }, 
-			{-0.2f,0.0f,0.0f,1.0f }, 
-			{0.2f,0.0f,0.0f,1.0f },  
-			{0.6f,0.0f,0.0f,1.0f },  
-			//三段目
-			{-1.0f,-0.5f,0.0f,1.0f },
-			{-0.6f,-0.5f,0.0f,1.0f },
-			{-0.2f,-0.5f,0.0f,1.0f },
-			{0.2f,-0.5f,0.0f,1.0f }, 
-			{0.6f,-0.5f,0.0f,1.0f }, 
-	
-		};
-	
-	Vector4 TriangleCoodinateTop[TRIANGLE_AMOUNT_MAX] = {
-			
-			//up
-			///{-0.8f,1.0f,0.0f,1.0f },
-			///{-0.4f,1.0f,0.0f,1.0f },
-			//{0.0f,1.0f,0.0f,1.0f },
-			//{0.4f,1.0f,0.0f,1.0f },
-			//{0.8f,1.0f,0.0f,1.0f },
-	
-			//
-			//{-0.8f,0.5f,0.0f,1.0f },
-			//{-0.4f,0.5f,0.0f,1.0f },
-			//{0.0f,0.5f,0.0f,1.0f },
-			//{0.4f,0.5f,0.0f,1.0f },
-			//{0.8f,0.5f,0.0f,1.0f },
-			////
-			//{-0.8f,0.0f,0.0f,1.0f },
-			//{-0.4f,0.0f,0.0f,1.0f },
-			//{0.0f,0.0f,0.0f,1.0f },
-			//{0.4f,0.0f,0.0f,1.0f },
-			//{0.8f,0.0f,0.0f,1.0f },
-		};
-	
-	Vector4 TriangleCoodinateRight[TRIANGLE_AMOUNT_MAX] = {
-			//right
-			{-0.6f,0.5f,0.0f,1.0f },
-			{-0.2f,0.5f,0.0f,1.0f },
-			{0.2f,0.5f,0.0f,1.0f },
-			{0.6f,0.5f,0.0f,1.0f },
-			{1.0f,0.5f,0.0f,1.0f },
-			
-			{-0.6f,0.0f,0.0f,1.0f },
-			{-0.2f,0.0f,0.0f,1.0f },
-			{0.2f,0.0f,0.0f,1.0f },
-			{0.6f,0.0f,0.0f,1.0f },
-			{1.0f,0.0f,0.0f,1.0f },
-		
-	
-			{-0.6f,-0.5f,0.0f,1.0f },
-			{-0.2f,-0.5f,0.0f,1.0f },
-			{0.2f,-0.5f,0.0f,1.0f },
-			{0.6f,-0.5f,0.0f,1.0f },
-			{1.0f,-0.5f,0.0f,1.0f },
-	
-		};
-	
-	
 	
 	Triangle* triangle[TRIANGLE_AMOUNT_MAX];
 

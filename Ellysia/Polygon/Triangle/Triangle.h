@@ -27,12 +27,12 @@ private:
 	DirectXSetup* directXSetup_ = nullptr;
 
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_;
-	ID3D12Resource* vertexResouce_;
+	ID3D12Resource* vertexResouce_=nullptr;
 
 	//Resourceにデータを書き込む
 	Vector4* vertexData_ = nullptr;
 	
 
-	HRESULT hr_;
+	
 	
 };

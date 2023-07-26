@@ -7,8 +7,23 @@ Triangle::Triangle() {
 
 void Triangle::Initialize(DirectXSetup* directXSetup) {
 	directXSetup_ = directXSetup;
+
+	
+
 	GenarateVertexResource();
 
+}
+
+void Triangle::SetVertexData0(Vector4 vD0) {
+	vertexData_[0] = vD0;
+}
+
+void Triangle::SetVertexData1(Vector4 vD1) {
+	vertexData_[1] = vD1;
+}
+
+void Triangle::SetVertexData2(Vector4 vD2) {
+	vertexData_[2] = vD2;
 }
 
 //三角形
@@ -65,19 +80,19 @@ void Triangle::GenarateVertexResource() {
 
 
 
-void Triangle::Draw(Vector4 left,Vector4 top,  Vector4 right) {
+void Triangle::Draw() {
 	////VertexResourceを生成
 	//GenarateVertexResource();
 
 
-	
-	//左下
-	vertexData_[0] = left;
-	//上
-	vertexData_[1] =  top ;
-	//右下
-	vertexData_[2] =  right ;
-	//範囲外は危険だよ！！
+	////左下
+	//vertexData_[0] = left;
+	////上
+	//vertexData_[1] =  top ;
+	////右下
+	//vertexData_[2] =  right ;
+	////範囲外は危険だよ！！
+
 
 
 	//RootSignatureを設定。PSOに設定しているけど別途設定が必要

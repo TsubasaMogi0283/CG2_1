@@ -18,7 +18,7 @@ void Ellysia::Initialize() {
 		triangle_[i] = new Triangle();
 		triangle_[i]->Initialize(directXSetup_);
 
-		//左下
+		//三角形の座標
 		triangle_[i]->SetVertexData0({ -0.2f, 0.8f - 0.2f * i, 0.0f, 1.0f });
 		triangle_[i]->SetVertexData1({0.0f,1.0f - 0.2f * i,0.0f,1.0f});
 		triangle_[i]->SetVertexData2({  0.2f,0.8f - 0.2f * i,0.0f,1.0f  });

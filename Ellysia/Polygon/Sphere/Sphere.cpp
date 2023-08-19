@@ -477,6 +477,7 @@ void Sphere::Draw(SphereStruct sphereCondtion, Transform transform,Matrix4x4 vie
 
 	
 
+
 }
 
 

@@ -7,6 +7,7 @@
 struct TransformationMatrix {
 	//32bitのfloatが4x4個
 	float32_t4x4 WVP;
+	float32_t4x4 World;
 };
 
 //CBuffer

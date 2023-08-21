@@ -20,6 +20,7 @@
 //Material...色など三角形の表面の材質をけっていするもの
 struct Material {
 	float32_t4 color;
+	int32 enableLighting;
 };
 //
 ////ConstantBuffer<構造体>変数名:register(b0);

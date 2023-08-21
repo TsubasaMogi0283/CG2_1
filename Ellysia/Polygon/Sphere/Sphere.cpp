@@ -367,6 +367,10 @@ void Sphere::Draw(SphereStruct sphereCondtion, Transform transform,Matrix4x4 vie
 			//分割分移動
 			vertexDataSphere_[start].texCoord.x = u;
 			vertexDataSphere_[start].texCoord.y = v + length;
+			//法線情報を追加
+			vertexDataSphere_[start].normal.x = vertexDataSphere_[start].position.x;
+			vertexDataSphere_[start].normal.y = vertexDataSphere_[start].position.y;
+			vertexDataSphere_[start].normal.z = vertexDataSphere_[start].position.z;
 
 			//普通にstart+1していけばいいのかな
 			//点b(左上)
@@ -376,6 +380,9 @@ void Sphere::Draw(SphereStruct sphereCondtion, Transform transform,Matrix4x4 vie
 			vertexDataSphere_[start + 1].position.w = 1.0f;
 			vertexDataSphere_[start + 1].texCoord.x = u;
 			vertexDataSphere_[start + 1].texCoord.y = v;
+			vertexDataSphere_[start + 1].normal.x = vertexDataSphere_[start + 1].position.x;
+			vertexDataSphere_[start + 1].normal.y = vertexDataSphere_[start + 1].position.y;
+			vertexDataSphere_[start + 1].normal.z = vertexDataSphere_[start + 1].position.z;
 
 
 			//点c(右下)
@@ -385,6 +392,9 @@ void Sphere::Draw(SphereStruct sphereCondtion, Transform transform,Matrix4x4 vie
 			vertexDataSphere_[start + 2].position.w = 1.0f;
 			vertexDataSphere_[start + 2].texCoord.x = u + length;
 			vertexDataSphere_[start + 2].texCoord.y = v + length;
+			vertexDataSphere_[start + 2].normal.x = vertexDataSphere_[start + 2].position.x;
+			vertexDataSphere_[start + 2].normal.y = vertexDataSphere_[start + 2].position.y;
+			vertexDataSphere_[start + 2].normal.z = vertexDataSphere_[start + 2].position.z;
 
 #pragma endregion
 
@@ -397,6 +407,10 @@ void Sphere::Draw(SphereStruct sphereCondtion, Transform transform,Matrix4x4 vie
 			vertexDataSphere_[start + 3].position.w = 1.0f;
 			vertexDataSphere_[start + 3].texCoord.x = u + length;
 			vertexDataSphere_[start + 3].texCoord.y = v;
+			vertexDataSphere_[start + 3].normal.x = vertexDataSphere_[start + 3].position.x;
+			vertexDataSphere_[start + 3].normal.y = vertexDataSphere_[start + 3].position.y;
+			vertexDataSphere_[start + 3].normal.z = vertexDataSphere_[start + 3].position.z;
+
 
 			//点c(右下)
 			vertexDataSphere_[start + 4].position.x = sphereCondtion.radius*(cos(lat) * cos(lon + LON_EVERY));
@@ -405,6 +419,9 @@ void Sphere::Draw(SphereStruct sphereCondtion, Transform transform,Matrix4x4 vie
 			vertexDataSphere_[start + 4].position.w = 1.0f;
 			vertexDataSphere_[start + 4].texCoord.x = u + length;
 			vertexDataSphere_[start + 4].texCoord.y = v + length;
+			vertexDataSphere_[start + 4].normal.x = vertexDataSphere_[start + 4].position.x;
+			vertexDataSphere_[start + 4].normal.y = vertexDataSphere_[start + 4].position.y;
+			vertexDataSphere_[start + 4].normal.z = vertexDataSphere_[start + 4].position.z;
 
 
 
@@ -415,6 +432,9 @@ void Sphere::Draw(SphereStruct sphereCondtion, Transform transform,Matrix4x4 vie
 			vertexDataSphere_[start + 5].position.w = 1.0f;
 			vertexDataSphere_[start + 5].texCoord.x = u;
 			vertexDataSphere_[start + 5].texCoord.y = v;
+			vertexDataSphere_[start + 5].normal.x = vertexDataSphere_[start + 5].position.x;
+			vertexDataSphere_[start + 5].normal.y = vertexDataSphere_[start + 5].position.y;
+			vertexDataSphere_[start + 5].normal.z = vertexDataSphere_[start + 5].position.z;
 
 			
 			

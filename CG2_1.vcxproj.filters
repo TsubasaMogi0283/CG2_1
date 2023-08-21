@@ -216,6 +216,9 @@
     <ClInclude Include="Ellysia\Math\Matrix\Matrix\TransformationMatrix.h">
       <Filter>ヘッダー ファイル\Math\Matrix</Filter>
     </ClInclude>
+    <ClInclude Include="Ellysia\Math\Vector\DirectionalLight.h">
+      <Filter>ヘッダー ファイル\Math\Vector</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Ellysia\externals\imGui\LICENSE.txt">

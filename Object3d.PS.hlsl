@@ -22,6 +22,17 @@ struct Material {
 	float32_t4 color;
 	int32 enableLighting;
 };
+
+
+struct DirectionalLight {
+	//ライトの色
+	float32_t4 color;
+	//ライトの向き
+	float32_t3 direction;
+	//ライトの輝度
+	float intensity;
+};
+
 //
 ////ConstantBuffer<構造体>変数名:register(b0);
 //ConstantBuffer<Material>gMaterial:register(b0);

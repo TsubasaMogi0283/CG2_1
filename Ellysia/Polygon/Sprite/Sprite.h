@@ -9,6 +9,7 @@
 #include "Math/Vector/Transform.h"
 #include <Math/Vector/VertexData.h>
 #include "Math/Matrix/Matrix/WorldViewMatrix.h"
+#include <Math/Vector/Material.h>
 
 #include <string>
 class Sprite {
@@ -74,8 +75,8 @@ private:
 	ID3D12Resource* vertexResourceSprite_ = nullptr;
 
 	//マテリアル用のリソースを作る
-	ID3D12Resource* materialResource_ = nullptr;
-	Vector4* materialData_ = nullptr;
+	ID3D12Resource* materialResourceSprite_ = nullptr;
+	Material* materialDataSprite_ = nullptr;
 	
 	//Sprite用のTransformationMatrix用のリソースを作る。
 	//Matrix4x4 1つ分サイズを用意する

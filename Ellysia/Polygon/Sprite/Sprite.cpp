@@ -8,6 +8,7 @@
 #include <vector>
 
 
+
 //コンストラクタ
 Sprite::Sprite(){
 
@@ -84,12 +85,15 @@ void Sprite::Initialize(DirectXInitialization* directXSetup) {
 
 
 	////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
-	materialResource_=CreateBufferResource(sizeof(Vector4)* 3);
+	materialResourceSprite_=CreateBufferResource(sizeof(Material));
 
 	//Sprite用のTransformationMatrix用のリソースを作る。
 	//Matrix4x4 1つ分サイズを用意する
 	transformationMatrixResourceSprite_ = CreateBufferResource(sizeof(Matrix4x4));
 	
+
+
+
 	//頂点バッファビューを作成する
 	GenerateVertexBufferView();
 
@@ -277,8 +281,6 @@ void Sprite::Draw(Vector4 leftTop,Vector4 rightTop, Vector4 leftBottom,Vector4 r
 
 
 	//書き込むためのアドレスを取得
-	//vertexResourceSprite_->Map(0, nullptr, reinterpret_cast<void**>(&vertexDataSprite_));
-	
 	vertexResourceSprite_->Map(0, nullptr, reinterpret_cast<void**>(&vertexDataSprite_));
 	//1枚目の三角形
 	//左下
@@ -333,9 +335,10 @@ void Sprite::Draw(Vector4 leftTop,Vector4 rightTop, Vector4 leftBottom,Vector4 r
 	//マテリアルにデータを書き込む
 	//書き込むためのアドレスを取得
 	//reinterpret_cast...char* から int* へ、One_class* から Unrelated_class* へなどの変換に使用
-	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
-	*materialData_ = color;
-	
+	materialResourceSprite_->Map(0, nullptr, reinterpret_cast<void**>(&materialDataSprite_));
+	materialDataSprite_->color = color;
+	//ライティングしない
+	materialDataSprite_->enableLighting = false;
 	
 	
 
@@ -351,7 +354,7 @@ void Sprite::Draw(Vector4 leftTop,Vector4 rightTop, Vector4 leftBottom,Vector4 r
 
 	directXSetup_->GetCommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResourceSprite_->GetGPUVirtualAddress());
 	//CBVを設定する
-	directXSetup_->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+	directXSetup_->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResourceSprite_->GetGPUVirtualAddress());
 	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である
 	directXSetup_->GetCommandList()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU_);
 	
@@ -368,7 +371,7 @@ void Sprite::Draw(Vector4 leftTop,Vector4 rightTop, Vector4 leftBottom,Vector4 r
 void Sprite::Release() {
 	vertexResourceSprite_->Release();
 
-	materialResource_->Release();
+	materialResourceSprite_->Release();
 	
 	transformationMatrixResourceSprite_->Release();
 	

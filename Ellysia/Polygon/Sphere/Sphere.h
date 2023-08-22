@@ -111,7 +111,7 @@ private:
 	TransformationMatrix* transformationMatrixDataSphere_ = nullptr;
 
 	//Lighting用
-	ID3D12Resource* directionalLightResourece_ = nullptr;
+	ID3D12Resource* directionalLightResource_ = nullptr;
 	DirectionalLight* directionalLightData_ = nullptr;
 
 	//画像読み込み

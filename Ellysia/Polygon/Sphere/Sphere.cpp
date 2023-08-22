@@ -95,6 +95,13 @@ void Sphere::Initialize(DirectXInitialization* directXSetup) {
 	////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
 	materialResourceSphere_=CreateBufferResource(sizeof(Material));
 
+	//Lighting
+	directionalLightResource_ = CreateBufferResource(sizeof(DirectionalLight));
+	directionalLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightData_));
+	directionalLightData_->color={ 1.0f,1.0f,1.0f,1.0f };
+	directionalLightData_->direction = { 0.0f,-1.0f,0.0f };
+	directionalLightData_->intensity = 1.0f;
+
 	//Sphere用のTransformationMatrix用のリソースを作る。
 	//Matrix4x4 1つ分サイズを用意する
 	transformationMatrixResourceSphere_ = CreateBufferResource(sizeof(TransformationMatrix));
@@ -469,13 +476,16 @@ void Sphere::Draw(SphereStruct sphereCondtion, Transform transform,Matrix4x4 vie
 	Matrix4x4 worldViewProjectionMatrixSphere = Multiply(worldMatrixSphere, Multiply(viewMatrix, projectionMatrix));
 
 
-	*transformationMatrixDataSphere_ = worldViewProjectionMatrixSphere;
+	transformationMatrixDataSphere_->WVP = worldViewProjectionMatrixSphere;
+	transformationMatrixDataSphere_->World =MakeIdentity4x4();
+
 
 	//マテリアルにデータを書き込む
 	//書き込むためのアドレスを取得
 	//reinterpret_cast...char* から int* へ、One_class* から Unrelated_class* へなどの変換に使用
 	materialResourceSphere_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
-	*materialData_ = color;
+	materialData_->color = color;
+	materialData_->enableLighting=true;
 	
 	
 	//コマンドを積む
@@ -492,7 +502,9 @@ void Sphere::Draw(SphereStruct sphereCondtion, Transform transform,Matrix4x4 vie
 	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である
 	//trueだったらtextureSrvHandleGPU2_
 	directXSetup_->GetCommandList()->SetGraphicsRootDescriptorTable(2,useMonsterBall_?textureSrvHandleGPU2_:textureSrvHandleGPU_);
-	
+	//Light
+	directXSetup_->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
+
 
 	//描画(DrawCall)３頂点で１つのインスタンス。
 	directXSetup_->GetCommandList()->DrawInstanced(SUBDIVISION_*SUBDIVISION_*6, 1, 0, 0);

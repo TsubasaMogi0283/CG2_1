@@ -459,6 +459,13 @@ void Sphere::Draw(SphereStruct sphereCondtion, Transform transform,Matrix4x4 vie
 
 	
 
+	//マテリアルにデータを書き込む
+	//書き込むためのアドレスを取得
+	//reinterpret_cast...char* から int* へ、One_class* から Unrelated_class* へなどの変換に使用
+	materialResourceSphere_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
+	materialData_->color = color;
+	materialData_->enableLighting=true;
+
 	//サイズに注意を払ってね！！！！！
 	//どれだけのサイズが必要なのか考えよう
 
@@ -480,12 +487,7 @@ void Sphere::Draw(SphereStruct sphereCondtion, Transform transform,Matrix4x4 vie
 	transformationMatrixDataSphere_->World =MakeIdentity4x4();
 
 
-	//マテリアルにデータを書き込む
-	//書き込むためのアドレスを取得
-	//reinterpret_cast...char* から int* へ、One_class* から Unrelated_class* へなどの変換に使用
-	materialResourceSphere_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
-	materialData_->color = color;
-	materialData_->enableLighting=true;
+	
 	
 	
 	//コマンドを積む

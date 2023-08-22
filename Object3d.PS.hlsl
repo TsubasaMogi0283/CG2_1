@@ -56,7 +56,6 @@ struct PixelShaderOutput {
 struct VertexShaderOutput {
 	float32_t4 position : SV_POSITION;
 	float32_t2 texcoord : TEXCOORD0;
-	float32_t3 normal : NORMAL0;
 };
 
 
@@ -64,8 +63,8 @@ struct VertexShaderOutput {
 PixelShaderOutput main(VertexShaderOutput input) {
 	PixelShaderOutput output;
 	float32_t4 textureColor = gTexture.Sample(gSampler,input.texcoord);
-	output.color = gMaterial.color * textureColor;
-	
+	//
+	//
 	////Lightingする場合
 	//if (gMaterial.enableLighting != 0) {
 	//
@@ -77,7 +76,19 @@ PixelShaderOutput main(VertexShaderOutput input) {
 	//}
 	//else {
 	//	//Lightingしない場合
+	//	output.color = gMaterial.color * textureColor;
+	//}
+	//return output;
+	//PixelShaderOutput output;
+	//float32_t4 textureColor = gTexture.Sample(gSampler,input.texcoord);
+	//if (gMaterial.enableLighting !=0) {//Lightingする場合
+	//	float cos = saturate(dot(normalize(input.normal),-gDirectionalLight.direction));
+	//	output.color = gMaterial.color * textureColor * gDirectionalLight.color * cos * gDirectionalLight.intensity;
+	//}
+	//else {//Lightingしない場合
 	//	
 	//}
+	output.color = gMaterial.color * textureColor;
+	
 	return output;
 }

@@ -1,5 +1,4 @@
 #include "Object3d.hlsli"
-//#include "Resources/Shader/object3d.hlsli"
 
 ///PixelShader
 //ここからの出力は色で、OutputManagerに送られて
@@ -53,31 +52,28 @@ SamplerState gSampler : register(s0);
 struct PixelShaderOutput {
 	float32_t4 color : SV_TARGET0;
 };
-//struct VertexShaderOutput {
-//	float32_t4 position : SV_POSITION;
-//	float32_t2 texcoord : TEXCOORD0;
-//};
+
 
 
  
 PixelShaderOutput main(VertexShaderOutput input) {
 	PixelShaderOutput output;
 	float32_t4 textureColor = gTexture.Sample(gSampler,input.texcoord);
-	//
-	//
-	////Lightingする場合
-	//if (gMaterial.enableLighting != 0) {
-	//
-	//	//このままdotだと[-1,1]になる。
-	//	//光が当たらないところは「当たらない」のでもっと暗くなるわけではない。そこでsaturate関数を使う
-	//	//saturate関数は値を[0,1]にclampするもの。エフェクターにもSaturationってあるよね。
-	//	float cos = saturate(dot(normalize(input.normal),-gDirectionalLight.direction));
-	//	output.color = gMaterial.color * textureColor * gDirectionalLight.color * cos * gDirectionalLight.intensity;
-	//}
-	//else {
-	//	//Lightingしない場合
-	//	output.color = gMaterial.color * textureColor;
-	//}
+	
+	
+	//Lightingする場合
+	if (gMaterial.enableLighting != 0) {
+	
+		//このままdotだと[-1,1]になる。
+		//光が当たらないところは「当たらない」のでもっと暗くなるわけではない。そこでsaturate関数を使う
+		//saturate関数は値を[0,1]にclampするもの。エフェクターにもSaturationってあるよね。
+		float cos = saturate(dot(normalize(input.normal),-gDirectionalLight.direction));
+		output.color = gMaterial.color * textureColor * gDirectionalLight.color * cos * gDirectionalLight.intensity;
+	}
+	else {
+		//Lightingしない場合
+		output.color = gMaterial.color * textureColor;
+	}
 	//return output;
 	//PixelShaderOutput output;
 	//float32_t4 textureColor = gTexture.Sample(gSampler,input.texcoord);
@@ -86,9 +82,9 @@ PixelShaderOutput main(VertexShaderOutput input) {
 	//	output.color = gMaterial.color * textureColor * gDirectionalLight.color * cos * gDirectionalLight.intensity;
 	//}
 	//else {//Lightingしない場合
-	//	
+	//	output.color = gMaterial.color * textureColor;
 	//}
-	output.color = gMaterial.color * textureColor;
+	
 	
 	return output;
 }

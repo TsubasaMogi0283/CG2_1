@@ -543,8 +543,7 @@ void DirectXInitialization::MakePSO() {
 
 
 
-
-
+	//CreateRootSignature
 
 
 
@@ -836,7 +835,7 @@ void DirectXInitialization::BeginFrame() {
 	D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = dsvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart();
 
 	commandList_->OMSetRenderTargets(1, &rtvHandles_[backBufferIndex_], false, &dsvHandle);
-
+	commandList_->ClearDepthStencilView(dsvHandle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 	
 	commandList_->SetDescriptorHeaps(1, descriptorHeaps);
 
@@ -848,7 +847,7 @@ void DirectXInitialization::BeginFrame() {
 	commandList_->RSSetScissorRects(1, &scissorRect_);
 	commandList_->SetGraphicsRootSignature(rootSignature_);
 	commandList_->SetPipelineState(graphicsPipelineState_);
-	commandList_->ClearDepthStencilView(dsvHandle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
+	
 }
 
 

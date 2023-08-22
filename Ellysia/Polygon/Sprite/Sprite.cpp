@@ -295,33 +295,26 @@ void Sprite::Draw(Vector4 leftTop,Vector4 rightTop, Vector4 leftBottom,Vector4 r
 	//左下
 	vertexDataSprite_[0].position = {leftBottom};
 	vertexDataSprite_[0].texCoord = { 0.0f,1.0f };
-	vertexDataSprite_[0].normal = { 0.0f,0.0f,-1.0f };
 
 	//左上
 	vertexDataSprite_[1].position = {leftTop};
 	vertexDataSprite_[1].texCoord = { 0.0f,0.0f };
-	vertexDataSprite_[1].normal = { 0.0f,0.0f,-1.0f };
 	
 	//右下
 	vertexDataSprite_[2].position = {rightBottom} ;
 	vertexDataSprite_[2].texCoord = { 1.0f,1.0f };
-	vertexDataSprite_[2].normal = { 0.0f,0.0f,-1.0f };
 
 	//2枚目の三角形
 	//左上2
 	vertexDataSprite_[3].position = { leftTop};
 	vertexDataSprite_[3].texCoord = { 0.0f,0.0f };
-	vertexDataSprite_[3].normal = { 0.0f,0.0f,-1.0f };
 
 	//右上2
 	vertexDataSprite_[4].position = { rightTop};
 	vertexDataSprite_[4].texCoord = { 1.0f,0.0f };
-	vertexDataSprite_[4].normal = { 0.0f,0.0f,-1.0f };
-	
 	//右下2
 	vertexDataSprite_[5].position = { rightBottom} ;
 	vertexDataSprite_[5].texCoord = { 1.0f,1.0f };
-	vertexDataSprite_[5].normal = { 0.0f,0.0f,-1.0f };
 	
 	//サイズに注意を払ってね！！！！！
 	//どれだけのサイズが必要なのか考えよう

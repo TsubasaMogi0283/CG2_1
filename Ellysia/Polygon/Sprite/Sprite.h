@@ -90,8 +90,6 @@ private:
 	ID3D12Resource* transformationMatrixResourceSprite_ = nullptr;
 	TransformationMatrix* transformationMatrixDataSprite_ = nullptr;
 
-	//TransformationMatrix用のResource
-	Matrix4x4* wvpData_=nullptr;
 
 	//描画
 	VertexData* vertexDataSprite_ = nullptr;

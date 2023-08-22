@@ -1,6 +1,6 @@
 //応急処置で消した
 // //このまま止まっているのは効率が悪い
-//#include "Object3d.hlsli"
+#include "Object3d.hlsli"
 
 
 //座標返還を行うVS
@@ -19,11 +19,6 @@ struct VertexShaderInput {
 	float32_t3 normal : NORMAL0;
 };
 
-struct VertexShaderOutput {
-	float32_t4 position : SV_POSITION;
-	float32_t2 texcoord : TEXCOORD0;
-	float32_t3 normal : NORMAL0;
-};
 
 VertexShaderOutput main(VertexShaderInput input) {
 	VertexShaderOutput output;
@@ -33,6 +28,6 @@ VertexShaderOutput main(VertexShaderInput input) {
 	//法線の変換にはWorldMatrixの平衡移動は不要。拡縮回転情報が必要
 	//左上3x3だけを取り出す
 	//法線と言えば正規化をなのでそれを忘れないようにする
-	output.normal = normalize(mul(input.normal, (float32_t3x3)gTransformationMatrix.World));
+	//output.normal = normalize(mul(input.normal, (float32_t3x3)gTransformationMatrix.World));
 	return output;
 }

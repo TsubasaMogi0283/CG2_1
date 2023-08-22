@@ -65,5 +65,19 @@ PixelShaderOutput main(VertexShaderOutput input) {
 	PixelShaderOutput output;
 	float32_t4 textureColor = gTexture.Sample(gSampler,input.texcoord);
 	output.color = gMaterial.color * textureColor;
+	
+	////Lightingする場合
+	//if (gMaterial.enableLighting != 0) {
+	//
+	//	//このままdotだと[-1,1]になる。
+	//	//光が当たらないところは「当たらない」のでもっと暗くなるわけではない。そこでsaturate関数を使う
+	//	//saturate関数は値を[0,1]にclampするもの。エフェクターにもSaturationってあるよね。
+	//	float cos = saturate(dot(normalize(input.normal),-gDirectionalLight.direction));
+	//	output.color = gMaterial.color * textureColor * gDirectionalLight.color * cos * gDirectionalLight.intensity;
+	//}
+	//else {
+	//	//Lightingしない場合
+	//	
+	//}
 	return output;
 }

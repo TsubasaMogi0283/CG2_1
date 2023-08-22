@@ -9,6 +9,7 @@
 
 
 
+
 //コンストラクタ
 Sprite::Sprite(){
 
@@ -87,9 +88,17 @@ void Sprite::Initialize(DirectXInitialization* directXSetup) {
 	////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
 	materialResourceSprite_=CreateBufferResource(sizeof(Material));
 
+
+	directionalLightResource_ = CreateBufferResource(sizeof(DirectionalLight));
+	directionalLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightDataSprite_));
+	directionalLightDataSprite_->color={ 1.0f,1.0f,1.0f,1.0f };
+	directionalLightDataSprite_->direction = { 0.0f,-1.0f,0.0f };
+	directionalLightDataSprite_->intensity = 1.0f;
+
+
 	//Sprite用のTransformationMatrix用のリソースを作る。
 	//Matrix4x4 1つ分サイズを用意する
-	transformationMatrixResourceSprite_ = CreateBufferResource(sizeof(Matrix4x4));
+	transformationMatrixResourceSprite_ = CreateBufferResource(sizeof(TransformationMatrix));
 	
 
 
@@ -330,7 +339,8 @@ void Sprite::Draw(Vector4 leftTop,Vector4 rightTop, Vector4 leftBottom,Vector4 r
 	//WVP行列を作成
 	Matrix4x4 worldViewProjectionMatrixSprite = Multiply(worldMatrixSprite, Multiply(viewMatrixSprite, projectionMatrixSprite));
 
-	*transformationMatrixDataSprite_ = worldViewProjectionMatrixSprite;
+	transformationMatrixDataSprite_->WVP = worldViewProjectionMatrixSprite;
+	transformationMatrixDataSprite_->World = MakeIdentity4x4();
 
 	//マテリアルにデータを書き込む
 	//書き込むためのアドレスを取得
@@ -357,7 +367,9 @@ void Sprite::Draw(Vector4 leftTop,Vector4 rightTop, Vector4 leftBottom,Vector4 r
 	directXSetup_->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResourceSprite_->GetGPUVirtualAddress());
 	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である
 	directXSetup_->GetCommandList()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU_);
-	
+	//Light
+	directXSetup_->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
+
 
 	//描画(DrawCall)３頂点で１つのインスタンス。
 	directXSetup_->GetCommandList()->DrawInstanced(6, 1, 0, 0);

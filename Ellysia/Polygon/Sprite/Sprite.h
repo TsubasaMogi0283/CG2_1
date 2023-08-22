@@ -12,6 +12,9 @@
 #include <Math/Vector/Material.h>
 
 #include <string>
+#include <Math/Vector/DirectionalLight.h>
+#include <Math/Matrix/Matrix/TransformationMatrix.h>
+
 class Sprite {
 public:
 
@@ -78,10 +81,14 @@ private:
 	ID3D12Resource* materialResourceSprite_ = nullptr;
 	Material* materialDataSprite_ = nullptr;
 	
+	//Lighting用
+	ID3D12Resource* directionalLightResource_ = nullptr;
+	DirectionalLight* directionalLightDataSprite_ = nullptr;
+
 	//Sprite用のTransformationMatrix用のリソースを作る。
 	//Matrix4x4 1つ分サイズを用意する
 	ID3D12Resource* transformationMatrixResourceSprite_ = nullptr;
-	Matrix4x4* transformationMatrixDataSprite_ = nullptr;
+	TransformationMatrix* transformationMatrixDataSprite_ = nullptr;
 
 	//TransformationMatrix用のResource
 	Matrix4x4* wvpData_=nullptr;

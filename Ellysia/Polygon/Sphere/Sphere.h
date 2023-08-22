@@ -11,7 +11,9 @@
 #include <Math/Vector/VertexData.h>
 #include "Math/Matrix/Matrix/WorldViewMatrix.h"
 #include <Math/Vector/SphereStruct.h>
-
+#include <Math/Vector/Material.h>
+#include <Math/Matrix/Matrix/TransformationMatrix.h>
+#include <Math/Vector/DirectionalLight.h>
 
 class Sphere {
 public:
@@ -101,12 +103,16 @@ private:
 
 	//マテリアル用のリソースを作る
 	ID3D12Resource* materialResourceSphere_ = nullptr;
-	Vector4* materialData_ = nullptr;
+	Material* materialData_ = nullptr;
 
 	//球を描画するとき用のTransformationMatrix用のリソースを作る。
 	//Matrix4x4 1つ分サイズを用意する
 	ID3D12Resource* transformationMatrixResourceSphere_ = nullptr;
-	Matrix4x4* transformationMatrixDataSphere_ = nullptr;
+	TransformationMatrix* transformationMatrixDataSphere_ = nullptr;
+
+	//Lighting用
+	ID3D12Resource* directionalLightResourece_ = nullptr;
+	DirectionalLight* directionalLightData_ = nullptr;
 
 	//画像読み込み
 	DirectX::ScratchImage mipImages_;

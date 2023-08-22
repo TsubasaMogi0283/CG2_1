@@ -7,6 +7,8 @@
 #include <numbers>
 #include <Math/Vector/Calculation/VectorCalculation.h>
 
+
+
 //コンストラクタ
 Sphere::Sphere() {
 
@@ -91,11 +93,11 @@ void Sphere::Initialize(DirectXInitialization* directXSetup) {
 	//頂点を6に増やす
 	vertexResourceSphere_ = CreateBufferResource(sizeof(VertexData) * SUBDIVISION_ *SUBDIVISION_ * 6);
 	////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
-	materialResourceSphere_=CreateBufferResource(sizeof(Vector4)* 3);
+	materialResourceSphere_=CreateBufferResource(sizeof(Material));
 
 	//Sphere用のTransformationMatrix用のリソースを作る。
 	//Matrix4x4 1つ分サイズを用意する
-	transformationMatrixResourceSphere_ = CreateBufferResource(sizeof(Matrix4x4));
+	transformationMatrixResourceSphere_ = CreateBufferResource(sizeof(TransformationMatrix));
 
 	//DescriptorSize
 	descriptorSizeSRV_=directXSetup_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);

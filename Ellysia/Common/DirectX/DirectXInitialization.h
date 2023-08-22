@@ -76,7 +76,6 @@ private:
 
 	void PullResourcesFromSwapChain();
 
-	//void DecideDescriptorPoisition();
 	void SetRTV();
 
 	void InitializeDXC();

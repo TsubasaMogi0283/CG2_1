@@ -543,8 +543,6 @@ void DirectXInitialization::MakePSO() {
 
 
 
-	//CreateRootSignature
-
 
 
 

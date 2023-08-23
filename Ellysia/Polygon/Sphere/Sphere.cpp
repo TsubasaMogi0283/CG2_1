@@ -129,7 +129,7 @@ void Sphere::Initialize(DirectXInitialization* directXSetup) {
 //void UploadTextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages);
 
 
-//Before
+//統合
 void Sphere::LoadTexture(const std::string& filePath) {
 	//Textureを読んで転送する
 	mipImages_ = LoadTextureData(filePath);

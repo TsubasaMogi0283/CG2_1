@@ -91,8 +91,9 @@ private:
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferViewSphere_;
 
 	//初期化
+	//頂点データ
 	ID3D12Resource* vertexResourceSphere_ = nullptr;
-
+	VertexData* vertexDataSphere_ = nullptr;
 
 
 	//constにする意味はあったのだろうか
@@ -113,6 +114,10 @@ private:
 	//Lighting用
 	ID3D12Resource* directionalLightResource_ = nullptr;
 	DirectionalLight* directionalLightData_ = nullptr;
+
+
+
+#pragma region テクスチャ
 
 	//画像読み込み
 	DirectX::ScratchImage mipImages_;
@@ -136,14 +141,14 @@ private:
 	ID3D12Resource* intermediateResource_ = nullptr;
 
 
-	//頂点データ
-	VertexData* vertexDataSphere_ = nullptr;
+	
 
 
 
 	//モンスターボールに変更するフラグ
 	bool useMonsterBall_ = true;
 	
+#pragma endregion
 
 
 	//分割数

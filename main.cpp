@@ -256,6 +256,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			
 #pragma region Triangleの位置情報
 
+
 			ImGui::Begin("TriangleSRT");
 
 			for (int i = 0; i < TRIANGLE_AMOUNT_MAX; i++) {

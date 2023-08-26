@@ -323,8 +323,8 @@ void Triangle::Draw(Vector4 left, Vector4 top, Vector4 right, Transform transfor
 	
 	
 	//さっき作ったworldMatrixの情報をここに入れる
-	wvpData_->World = worldViewProjectionMatrix;
-	wvpData_->WVP = MakeIdentity4x4();
+	wvpData_->WVP = worldViewProjectionMatrix;
+	wvpData_->World = MakeIdentity4x4();
 	
 
 

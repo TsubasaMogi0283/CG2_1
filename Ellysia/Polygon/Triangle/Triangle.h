@@ -10,6 +10,8 @@
 #include <Math/Vector/VertexData.h>
 
 #include <string>
+#include <Math/Vector/Material.h>
+#include <Math/Matrix/Matrix/TransformationMatrix.h>
 
 class Triangle {
 public:
@@ -81,12 +83,12 @@ private:
 	
 	//マテリアル用のリソースを作る
 	ID3D12Resource* materialResource_ = nullptr;
-	Vector4* materialData_ = nullptr;
+	Material* materialData_ = nullptr;
 	
 
 	//TransformationMatrix用のResource
 	ID3D12Resource* wvpResource_ = nullptr;
-	Matrix4x4* wvpData_=nullptr;
+	TransformationMatrix* wvpData_=nullptr;
 
 	
 	ID3D12Resource* resource_ = nullptr;

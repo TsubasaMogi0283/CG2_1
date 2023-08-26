@@ -21,12 +21,12 @@ void Triangle::Initialize(DirectXInitialization* directXSetup) {
 	//頂点を6に増やす
 	vertexResouce_ = CreateBufferResource(sizeof(VertexData) * 6);
 	////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
-	materialResource_=CreateBufferResource(sizeof(Vector4)* 3);
+	materialResource_=CreateBufferResource(sizeof(Material));
 
 	
 
 	//WVP用のリソースを作る。Matrix4x4　1つ分のサイズを用意する
-	wvpResource_ = CreateBufferResource(sizeof(Matrix4x4));
+	wvpResource_ = CreateBufferResource(sizeof(TransformationMatrix));
 
 	//頂点バッファビューを作成する
 	GenerateVertexBufferView();
@@ -257,8 +257,8 @@ void Triangle::GenerateVertexBufferView() {
 
 
 //描画
-void Triangle::Draw(Vector4 left,Vector4 top,  Vector4 right,Transform transform,Matrix4x4 viewMatrix,Matrix4x4 projectionMatrix  ,Vector4 color) {
-	
+void Triangle::Draw(Vector4 left, Vector4 top, Vector4 right, Transform transform, Matrix4x4 viewMatrix, Matrix4x4 projectionMatrix, Vector4 color) {
+
 	//TextureCoordinate(テクスチャ座標系)
 	//TexCoord,UV座標系とも呼ばれている
 
@@ -267,9 +267,9 @@ void Triangle::Draw(Vector4 left,Vector4 top,  Vector4 right,Transform transform
 
 	//書き込むためのアドレスを取得
 	vertexResouce_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
-	
+
 	//左下
-	vertexData_[0].position = {-0.5f,-0.5f,0.0f,1.0f};
+	vertexData_[0].position = { -0.5f,-0.5f,0.0f,1.0f };
 	vertexData_[0].texCoord = { 0.0f,1.0f };
 	//上
 	vertexData_[1].position = {0.0f,0.5f,0.0f,1.0f};
@@ -298,7 +298,8 @@ void Triangle::Draw(Vector4 left,Vector4 top,  Vector4 right,Transform transform
 	//reinterpret_cast...char* から int* へ、One_class* から Unrelated_class* へなどの変換に使用
 	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 
-	*materialData_ = color;
+	materialData_->color = color;
+	materialData_->enableLighting = false;
 
 	
 	//materialResource_ = CreateBufferResource(directXSetup_->GetDevice(), sizeof(Vector4));
@@ -322,7 +323,8 @@ void Triangle::Draw(Vector4 left,Vector4 top,  Vector4 right,Transform transform
 	
 	
 	//さっき作ったworldMatrixの情報をここに入れる
-	*wvpData_ = worldViewProjectionMatrix;
+	wvpData_->World = worldViewProjectionMatrix;
+	wvpData_->WVP = MakeIdentity4x4();
 	
 
 

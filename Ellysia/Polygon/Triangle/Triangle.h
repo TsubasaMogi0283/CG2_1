@@ -1,5 +1,5 @@
 #pragma once
-#include "Common/DirectX/DirectXInitialization.h"
+#include "Common/DirectX/DirectXSetup.h"
 #include "ConvertFunction/ConvertLog/LogConvert.h"
 #include "externals/DirectXTex/DirectXTex.h"
 
@@ -18,7 +18,7 @@ public:
 	Triangle();
 
 
-	void Initialize(DirectXInitialization* directXSetup);
+	void Initialize(DirectXSetup* directXSetup);
 
 	////VertexBufferViewを作成
 	void GenerateVertexBufferView();
@@ -64,7 +64,7 @@ public:
 
 private:
 
-	DirectXInitialization* directXSetup_ = nullptr;
+	DirectXSetup* directXSetup_ = nullptr;
 
 	HRESULT hr_;
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_;

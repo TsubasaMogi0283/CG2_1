@@ -87,12 +87,6 @@
     <ClCompile Include="Ellysia\externals\imGui\imgui_widgets.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
-    <ClCompile Include="Ellysia\Common\DirectX\DirectXInitialization.cpp">
-      <Filter>ソース ファイル\Common</Filter>
-    </ClCompile>
-    <ClCompile Include="Ellysia\Common\Windows\WindowsInitialization.cpp">
-      <Filter>ソース ファイル\Common</Filter>
-    </ClCompile>
     <ClCompile Include="Ellysia\GameScene\GameScene.cpp">
       <Filter>ソース ファイル\GamaScene</Filter>
     </ClCompile>
@@ -119,6 +113,12 @@
     </ClCompile>
     <ClCompile Include="Ellysia\Polygon\Triangle\Triangle.cpp">
       <Filter>ソース ファイル\Polygone</Filter>
+    </ClCompile>
+    <ClCompile Include="Ellysia\Common\DirectX\DirectXSetup.cpp">
+      <Filter>ソース ファイル\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Ellysia\Common\Windows\WinApp.cpp">
+      <Filter>ソース ファイル\Common</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -149,12 +149,6 @@
     </ClInclude>
     <ClInclude Include="Ellysia\externals\imGui\imstb_truetype.h">
       <Filter>imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="Ellysia\Common\DirectX\DirectXInitialization.h">
-      <Filter>ヘッダー ファイル\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="Ellysia\Common\Windows\WindowsInitialization.h">
-      <Filter>ヘッダー ファイル\Common</Filter>
     </ClInclude>
     <ClInclude Include="Ellysia\GameScene\GameScene.h">
       <Filter>ヘッダー ファイル\GameScene</Filter>
@@ -218,6 +212,12 @@
     </ClInclude>
     <ClInclude Include="Ellysia\Math\Vector\DirectionalLight.h">
       <Filter>ヘッダー ファイル\Math\Vector</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Common\DirectX\DirectXSetup.h">
+      <Filter>ヘッダー ファイル\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Common\Windows\WinApp.h">
+      <Filter>ヘッダー ファイル\Common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -73,7 +73,7 @@ void Sprite::GenerateVertexBufferView() {
 
 
 //初期化
-void Sprite::Initialize(DirectXInitialization* directXSetup) {
+void Sprite::Initialize(DirectXSetup* directXSetup) {
 	directXSetup_ = directXSetup;
 
 	//

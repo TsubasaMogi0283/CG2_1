@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Common/Windows/WindowsInitialization.h"
-#include "Common/DirectX/DirectXInitialization.h"
+#include "Common/DirectX/DirectXSetup.h"
 
 
 //・Ellysia(エリシア・エレシア)

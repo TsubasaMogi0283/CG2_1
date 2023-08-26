@@ -1,4 +1,4 @@
-#include "Common/Windows/WindowsInitialization.h"
+#include "Common/Windows/WinApp.h"
 
 
 
@@ -6,13 +6,13 @@
 
 
 //コンストラクタ
-WindowsInitialization::WindowsInitialization() {
+WinApp::WinApp() {
 	
 
 }
 
 //
-LRESULT WindowsInitialization::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam){
+LRESULT WinApp::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam){
 	if (ImGui_ImplWin32_WndProcHandler(hwnd, msg, wparam, lparam)) {
 		return true;
 	}
@@ -30,7 +30,7 @@ LRESULT WindowsInitialization::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LP
 }
 
 //ウィンドウに情報を入れる
-void  WindowsInitialization::RegisterWindowsClass() {
+void  WinApp::RegisterWindowsClass() {
 	
 	
 	//ウィンドウプロシャージャ
@@ -71,13 +71,13 @@ void  WindowsInitialization::RegisterWindowsClass() {
 }
 
 //ウィンドウを表示
-void WindowsInitialization::DisplayWindow() {
+void WinApp::DisplayWindow() {
 	//ウィンドウを表示
 	ShowWindow(hwnd_, SW_SHOW);
 }
 
 //初期化
-void WindowsInitialization::Initialize(const wchar_t* title, const int32_t WindowSizeWidth, const int32_t WindowSizeHeight) {
+void WinApp::Initialize(const wchar_t* title, const int32_t WindowSizeWidth, const int32_t WindowSizeHeight) {
 	this->title_ = title;
 	this->kClientWidth_ = WindowSizeWidth;
 	this->kClientHeight_=WindowSizeHeight;
@@ -97,7 +97,7 @@ void WindowsInitialization::Initialize(const wchar_t* title, const int32_t Windo
 
 
 //メッセージを送る
-void WindowsInitialization::WindowsMSG(MSG& msg) {
+void WinApp::WindowsMSG(MSG& msg) {
 	TranslateMessage(&msg);
 	DispatchMessage(&msg);
 }
@@ -105,7 +105,7 @@ void WindowsInitialization::WindowsMSG(MSG& msg) {
 
 
 //ウィンドウを閉じる
-void WindowsInitialization::Close() {
+void WinApp::Close() {
 	
 	CloseWindow(hwnd_);
 }

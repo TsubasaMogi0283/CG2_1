@@ -1,7 +1,7 @@
 #pragma once
 #include <cstdint>
-#include "Common/Windows/WindowsInitialization.h"
-#include "Common/DirectX/DirectXInitialization.h"
+#include "Common/Windows/WinApp.h"
+#include "Common/DirectX/DirectXSetup.h"
 #include "Polygon/Triangle/Triangle.h"
 
 #include "ConvertFunction/ConvertColor/ColorConvert.h"
@@ -63,8 +63,8 @@ private:
 
 
 	//インスタンス(空)
-	WindowsInitialization* winSetup = nullptr;
-	DirectXInitialization* directXSetup = nullptr;
+	WinApp* winSetup = nullptr;
+	DirectXSetup* directXSetup = nullptr;
 
 
 	

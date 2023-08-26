@@ -12,7 +12,7 @@ ImGuiManager::ImGuiManager() {
 
 //メインループ前に
 //初期化
-void ImGuiManager::Initialize(WindowsInitialization* winSetup,DirectXInitialization* directXSetup) {
+void ImGuiManager::Initialize(WinApp* winSetup,DirectXSetup* directXSetup) {
 	//Getterを使いたい
 	//this->winSetup_ = winSetup;
 	//this->directXSetup_ = directXSetup;
@@ -54,7 +54,7 @@ void ImGuiManager::PreDraw() {
 }
 
 //描画
-void ImGuiManager::Draw(DirectXInitialization* directXSetup) {
+void ImGuiManager::Draw(DirectXSetup* directXSetup) {
 	//描画用のDescriptorの設定
 	ID3D12DescriptorHeap* descriptorHeaps[] = { directXSetup->GetSrvDescriptorHeap() };
 	directXSetup->GetCommandList()->SetDescriptorHeaps(1, descriptorHeaps);
@@ -62,7 +62,7 @@ void ImGuiManager::Draw(DirectXInitialization* directXSetup) {
 
 
 //ここでフレームが終わる
-void ImGuiManager::EndFrame(DirectXInitialization* directXSetup) {
+void ImGuiManager::EndFrame(DirectXSetup* directXSetup) {
 	//コマンドを積む
 	//実際のcommandListのImGuiの描画コマンドを積む
 	ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), directXSetup->GetCommandList());

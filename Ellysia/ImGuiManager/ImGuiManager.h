@@ -1,6 +1,6 @@
 #pragma once
-#include "Common/Windows/WindowsInitialization.h"
-#include "Common/DirectX/DirectXInitialization.h"
+#include "Common/Windows/WinApp.h"
+#include "Common/DirectX/DirectXSetup.h"
 
 class ImGuiManager {
 public:
@@ -9,7 +9,7 @@ public:
 	ImGuiManager();
 
 	//初期化
-	void Initialize(WindowsInitialization* winSetup,DirectXInitialization* directXSetup);
+	void Initialize(WinApp* winSetup,DirectXSetup* directXSetup);
 
 	//ここからフレームが始まる
 	void BeginFrame();
@@ -22,10 +22,10 @@ public:
 	void PreDraw();
 
 	//描画
-	void Draw(DirectXInitialization* directXSetup);
+	void Draw(DirectXSetup* directXSetup);
 
 
-	void EndFrame(DirectXInitialization* directXSetup);
+	void EndFrame(DirectXSetup* directXSetup);
 
 
 	//解放処理

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ConvertFunction/ConvertLog/LogConvert.h"
-#include "Common/Windows/WindowsInitialization.h"
+#include "Common/Windows/WinApp.h"
 #include "Math/Vector/Vector4.h"
 
 
@@ -21,10 +21,10 @@
 
 //メンバ変数関数いつか整理したい・・・
 //ごちゃごちゃしてる
-class DirectXInitialization {
+class DirectXSetup {
 public:
 	
-	DirectXInitialization();
+	DirectXSetup();
 
 	//まとめたのが下の「Initialize」
 	//他の所では使わないからprivateにしても良さそう
@@ -115,7 +115,7 @@ public:
 
 	void CheckRelease();
 
-	~DirectXInitialization();
+	~DirectXSetup();
 
 #pragma endregion
 	

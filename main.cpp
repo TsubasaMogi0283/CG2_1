@@ -1,5 +1,5 @@
-#include "Ellysia/Common/Windows/WindowsInitialization.h"
-#include "Ellysia/Common/DirectX/DirectXInitialization.h"
+#include "Common/Windows/WinApp.h"
+#include "Common/DirectX/DirectXSetup.h"
 #include "Polygon/Triangle/Triangle.h"
 #include <ImGuiManager/ImGuiManager.h>
 
@@ -33,8 +33,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//いつかKAMATA ENGINEみたいにGameSceneでまとめたい
 	//GameScene* gamescene = new GameScene();
 
-	WindowsInitialization* winSetup = new WindowsInitialization();
-	DirectXInitialization* directXSetup = new DirectXInitialization();
+	WinApp* winSetup = new WinApp();
+	DirectXSetup* directXSetup = new DirectXSetup();
 	ImGuiManager* imGuiManager = new ImGuiManager();
 	
 	

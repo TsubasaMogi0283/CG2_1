@@ -2,8 +2,8 @@
 
 
 GameScene::GameScene() {
-	winSetup = new WindowsInitialization();
-	directXSetup = new DirectXInitialization();
+	winSetup = new WinApp();
+	directXSetup = new DirectXSetup();
 }
 
 void GameScene::Initialize() {

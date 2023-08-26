@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Common/DirectX/DirectXInitialization.h"
+#include "Common/DirectX/DirectXSetup.h"
 #include "ConvertFunction/ConvertLog/LogConvert.h"
 #include "externals/DirectXTex/DirectXTex.h"
 
@@ -22,7 +22,7 @@ public:
 	Sphere();
 
 	//初期化
-	void Initialize(DirectXInitialization* directXSetup);
+	void Initialize(DirectXSetup* directXSetup);
 
 	//まとめた方がよさそう
 	void LoadTexture(const std::string& filePath);
@@ -79,7 +79,7 @@ private:
 private:
 
 	//DirectX内にある情報を取り入れる
-	DirectXInitialization* directXSetup_ = nullptr;
+	DirectXSetup* directXSetup_ = nullptr;
 
 
 

@@ -84,7 +84,7 @@ void Sphere::GenerateVertexBufferView() {
 
 
 //初期化
-void Sphere::Initialize(DirectXInitialization* directXSetup) {
+void Sphere::Initialize(DirectXSetup* directXSetup) {
 	this->directXSetup_ = directXSetup;
 
 

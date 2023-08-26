@@ -11,11 +11,11 @@
 //extern...グローバル変数を共有する
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd,UINT msg,WPARAM wParam,LPARAM lParam);
 
-class WindowsInitialization {
+class WinApp {
 public:
 
 	//コンストラクタ
-	WindowsInitialization();
+	WinApp();
 
 	
 	//Window Procedure

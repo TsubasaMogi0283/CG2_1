@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Common/Windows/WindowsInitialization.h"
+#include "Common/Windows/WinApp.h"
 #include "Common/DirectX/DirectXSetup.h"
 
 

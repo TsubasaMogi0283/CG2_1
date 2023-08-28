@@ -67,7 +67,13 @@ PixelShaderOutput main(VertexShaderOutput input) {
 		//このままdotだと[-1,1]になる。
 		//光が当たらないところは「当たらない」のでもっと暗くなるわけではない。そこでsaturate関数を使う
 		//saturate関数は値を[0,1]にclampするもの。エフェクターにもSaturationってあるよね。
-		float cos = saturate(dot(normalize(input.normal),-gDirectionalLight.direction));
+		//float cos = saturate(dot(normalize(input.normal),-gDirectionalLight.direction));
+		
+
+		//Half Lambert
+		float NdotL = dot(normalize(input.normal), -gDirectionalLight.direction);
+		float cos = pow(NdotL * 0.5f + 0.5f, 2.0f);
+
 		output.color = gMaterial.color * textureColor * gDirectionalLight.color * cos * gDirectionalLight.intensity;
 	}
 	else {

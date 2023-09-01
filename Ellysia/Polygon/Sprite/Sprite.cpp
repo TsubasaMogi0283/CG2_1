@@ -301,6 +301,13 @@ void Sprite::Draw(Vector4 leftTop,Vector4 rightTop, Vector4 leftBottom,Vector4 r
 	//|         \ |
 	//-------------
 
+	//13
+	//02
+
+
+
+	//「結合した」のでvertexDataに書き込むものが減るよ。やったね
+	//4つだけだよ
 
 	//書き込むためのアドレスを取得
 	vertexResourceSprite_->Map(0, nullptr, reinterpret_cast<void**>(&vertexDataSprite_));
@@ -317,18 +324,39 @@ void Sprite::Draw(Vector4 leftTop,Vector4 rightTop, Vector4 leftBottom,Vector4 r
 	vertexDataSprite_[2].position = {rightBottom} ;
 	vertexDataSprite_[2].texCoord = { 1.0f,1.0f };
 
-	//2枚目の三角形
-	//左上2
-	vertexDataSprite_[3].position = { leftTop};
-	vertexDataSprite_[3].texCoord = { 0.0f,0.0f };
 
-	//右上2
-	vertexDataSprite_[4].position = { rightTop};
-	vertexDataSprite_[4].texCoord = { 1.0f,0.0f };
-	//右下2
-	vertexDataSprite_[5].position = { rightBottom} ;
-	vertexDataSprite_[5].texCoord = { 1.0f,1.0f };
+	//右上
+	vertexDataSprite_[3].position = { rightTop };
+	vertexDataSprite_[3].texCoord = { 1.0f,0.0f };
+
+
+	////2枚目の三角形
+	////左上2
+	//vertexDataSprite_[3].position = { leftTop};
+	//vertexDataSprite_[3].texCoord = { 0.0f,0.0f };
+	//
+	////右上2
+	//vertexDataSprite_[4].position = { rightTop};
+	//vertexDataSprite_[4].texCoord = { 1.0f,0.0f };
+	////右下2
+	//vertexDataSprite_[5].position = { rightBottom} ;
+	//vertexDataSprite_[5].texCoord = { 1.0f,1.0f };
 	
+
+	
+
+	//IndexResourceにデータを書き込む
+	//インデックスデータにデータを書き込む
+	indexResourceSprite_->Map(0, nullptr, reinterpret_cast<void**>(&indexDataSprite_));
+	indexDataSprite_[0] = 0;
+	indexDataSprite_[1] = 1;
+	indexDataSprite_[2] = 2;
+	indexDataSprite_[3] = 1;
+	indexDataSprite_[4] = 3;
+	indexDataSprite_[5] = 2;
+
+
+
 	//サイズに注意を払ってね！！！！！
 	//どれだけのサイズが必要なのか考えよう
 
@@ -348,10 +376,6 @@ void Sprite::Draw(Vector4 leftTop,Vector4 rightTop, Vector4 leftBottom,Vector4 r
 	transformationMatrixDataSprite_->WVP = worldViewProjectionMatrixSprite;
 	transformationMatrixDataSprite_->World = MakeIdentity4x4();
 
-
-	//IndexResourceにデータを書き込む
-	//インデックスデータにデータを書き込む
-	indexResourceSprite_->Map(0, nullptr, reinterpret_cast<void**>(&indexDataSprite_));
 
 
 	//マテリアルにデータを書き込む
@@ -373,6 +397,9 @@ void Sprite::Draw(Vector4 leftTop,Vector4 rightTop, Vector4 leftBottom,Vector4 r
 	directXSetup_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferViewSprite_);
 	//形状を設定。PSOに設定しているものとはまた別。同じものを設定すると考えよう
 	directXSetup_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	//IBVを設定
+	directXSetup_->GetCommandList()->IASetIndexBuffer(&indexBufferViewSprite_);
+
 
 	directXSetup_->GetCommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResourceSprite_->GetGPUVirtualAddress());
 	//CBVを設定する
@@ -383,10 +410,12 @@ void Sprite::Draw(Vector4 leftTop,Vector4 rightTop, Vector4 leftBottom,Vector4 r
 	directXSetup_->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
 
 
-	//描画(DrawCall)３頂点で１つのインスタンス。
-	directXSetup_->GetCommandList()->DrawInstanced(6, 1, 0, 0);
+	////描画(DrawCall)３頂点で１つのインスタンス。
+	//directXSetup_->GetCommandList()->DrawInstanced(6, 1, 0, 0);
 
-
+	//今度はこっちでドローコールをするよ
+	//描画(DrawCall)6個のインデックスを使用し1つのインスタンスを描画。
+	directXSetup_->GetCommandList()->DrawIndexedInstanced(6, 1, 0, 0, 0);
 
 
 }
@@ -399,7 +428,7 @@ void Sprite::Release() {
 	
 	transformationMatrixResourceSprite_->Release();
 	
-
+	indexResourceSprite_->Release();
 
 	textureResource_->Release();
 	resource_->Release();

@@ -68,6 +68,14 @@ void Sprite::GenerateVertexBufferView() {
 	//１頂点あたりのサイズ
 	vertexBufferViewSprite_.StrideInBytes = sizeof(VertexData);
 	
+	//Indexを利用
+	//リsp－スの先頭のアドレスから使う
+	indexBufferViewSprite_.BufferLocation = indexResource_->GetGPUVirtualAddress();
+	//使用するリソースのサイズはインデックス6つ分のサイズ
+	indexBufferViewSprite_.SizeInBytes = sizeof(uint32_t) * 6;
+	//インデックスはuint32_tとする
+	indexBufferViewSprite_.Format = DXGI_FORMAT_R32_UINT;
+
 
 }
 
@@ -83,6 +91,11 @@ void Sprite::Initialize(DirectXSetup* directXSetup) {
 	//ここでBufferResourceを作る
 	//Sprite用の頂点リソースを作る
 	vertexResourceSprite_ = CreateBufferResource(sizeof(VertexData) * 6);
+
+	//index用のリソースを作る
+	indexResource_ = CreateBufferResource(sizeof(uint32_t) * 6);
+
+
 
 
 	////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する

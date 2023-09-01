@@ -70,7 +70,7 @@ void Sprite::GenerateVertexBufferView() {
 	
 	//Indexを利用
 	//リsp－スの先頭のアドレスから使う
-	indexBufferViewSprite_.BufferLocation = indexResource_->GetGPUVirtualAddress();
+	indexBufferViewSprite_.BufferLocation = indexResourceSprite_->GetGPUVirtualAddress();
 	//使用するリソースのサイズはインデックス6つ分のサイズ
 	indexBufferViewSprite_.SizeInBytes = sizeof(uint32_t) * 6;
 	//インデックスはuint32_tとする
@@ -93,7 +93,7 @@ void Sprite::Initialize(DirectXSetup* directXSetup) {
 	vertexResourceSprite_ = CreateBufferResource(sizeof(VertexData) * 6);
 
 	//index用のリソースを作る
-	indexResource_ = CreateBufferResource(sizeof(uint32_t) * 6);
+	indexResourceSprite_ = CreateBufferResource(sizeof(uint32_t) * 6);
 
 
 
@@ -347,6 +347,12 @@ void Sprite::Draw(Vector4 leftTop,Vector4 rightTop, Vector4 leftBottom,Vector4 r
 
 	transformationMatrixDataSprite_->WVP = worldViewProjectionMatrixSprite;
 	transformationMatrixDataSprite_->World = MakeIdentity4x4();
+
+
+	//IndexResourceにデータを書き込む
+	//インデックスデータにデータを書き込む
+	indexResourceSprite_->Map(0, nullptr, reinterpret_cast<void**>(&indexDataSprite_));
+
 
 	//マテリアルにデータを書き込む
 	//書き込むためのアドレスを取得

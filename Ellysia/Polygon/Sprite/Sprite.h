@@ -102,10 +102,15 @@ private:
 
 
 	//index用
-	ID3D12Resource* indexResource_ = nullptr;
+	ID3D12Resource* indexResourceSprite_ = nullptr;
 
 	//IndexBufferViewを作成
 	D3D12_INDEX_BUFFER_VIEW indexBufferViewSprite_{};
+
+	//インデックスデータ
+	uint32_t* indexDataSprite_ = nullptr;
+
+
 
 	//画像読み込み
 	ID3D12Resource* textureResource_ = nullptr;

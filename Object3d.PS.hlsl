@@ -19,7 +19,8 @@
 //Material...色など三角形の表面の材質をけっていするもの
 struct Material {
 	float32_t4 color;
-	int32_t enableLighting;
+	int32_t enableLighting;///
+	float32_t3x3 uvTransform;
 };
 
 
@@ -58,9 +59,11 @@ struct PixelShaderOutput {
  
 PixelShaderOutput main(VertexShaderOutput input) {
 	PixelShaderOutput output;
-	float32_t4 textureColor = gTexture.Sample(gSampler,input.texcoord);
 	
-	
+	//Materialを拡張する
+	float3 transformedUV = mul(float32_t3(input.texcoord, 1.0f), gMaterial.uvTransform);
+	float32_t4 textureColor = gTexture.Sample(gSampler, transformedUV.xy);
+
 	//Lightingする場合
 	if (gMaterial.enableLighting != 0) {
 	
@@ -74,7 +77,10 @@ PixelShaderOutput main(VertexShaderOutput input) {
 		float NdotL = dot(normalize(input.normal), -gDirectionalLight.direction);
 		float cos = pow(NdotL * 0.5f + 0.5f, 2.0f);
 
+		
+
 		output.color = gMaterial.color * textureColor * gDirectionalLight.color * cos * gDirectionalLight.intensity;
+	
 	}
 	else {
 		//Lightingしない場合

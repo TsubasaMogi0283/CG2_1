@@ -116,6 +116,13 @@ void Sprite::Initialize(DirectXSetup* directXSetup) {
 
 
 
+	uvTransformSprite_ = {
+		{1.0f,1.0f,1.0f},
+		{0.0f,0.0f,0.0f},
+		{0.0f,0.0f,0.0f} 
+	};
+
+
 	//頂点バッファビューを作成する
 	GenerateVertexBufferView();
 
@@ -281,7 +288,16 @@ ID3D12Resource* Sprite::UploadTextureData(
 #pragma endregion
 
 
+void Sprite::Updata() {
+	ImGui::Begin("Sprite");
+	ImGui::DragFloat2("UVTranslate", &uvTransformSprite_.translate.x, 0.01f, -10.0f, 10.0f);
+	ImGui::DragFloat2("UVScale", &uvTransformSprite_.scale.x, 0.01f, -10.0f, 10.0f);
+	ImGui::SliderAngle("UVRotate", &uvTransformSprite_.rotate.z);
 
+
+
+	ImGui::End();
+}
 
 //描画
 void Sprite::Draw(Vector4 leftTop,Vector4 rightTop, Vector4 leftBottom,Vector4 rightBottom,Transform transform, Vector4 color) {
@@ -385,10 +401,13 @@ void Sprite::Draw(Vector4 leftTop,Vector4 rightTop, Vector4 leftBottom,Vector4 r
 	materialDataSprite_->color = color;
 	//ライティングしない
 	materialDataSprite_->enableLighting = false;
-	
+	//materialDataSprite_->uvTransform = MakeIdentity4x4();
 	
 
-
+	Matrix4x4 uvTransformMatrix = MakeScaleMatrix(uvTransformSprite_.scale);
+	uvTransformMatrix = Multiply(uvTransformMatrix, MakeRotateZMatrix(uvTransformSprite_.rotate.z));
+	uvTransformMatrix = Multiply(uvTransformMatrix, MakeTranslateMatrix(uvTransformSprite_.translate));
+	materialDataSprite_->uvTransform = uvTransformMatrix;
 
 
 	//コマンドを積む

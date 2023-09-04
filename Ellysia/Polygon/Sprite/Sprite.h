@@ -27,6 +27,7 @@ public:
 	//まとめた方がよさそう
 	void LoadTexture(const std::string& filePath);
 	
+	void Updata();
 
 	//描画
 	//左上、右上、左下、右下
@@ -120,5 +121,8 @@ private:
 	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU_;
 
 	ID3D12Resource* intermediateResource_ = nullptr;
+
+
+	Transform uvTransformSprite_ = {};
 
 };

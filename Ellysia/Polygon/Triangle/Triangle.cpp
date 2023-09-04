@@ -300,7 +300,7 @@ void Triangle::Draw(Vector4 left, Vector4 top, Vector4 right, Transform transfor
 
 	materialData_->color = color;
 	materialData_->enableLighting = false;
-
+	materialData_->uvTransform = MakeIdentity4x4();
 	
 	//materialResource_ = CreateBufferResource(directXSetup_->GetDevice(), sizeof(Vector4));
 	

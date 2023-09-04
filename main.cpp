@@ -278,6 +278,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 #pragma region Spriteの位置情報
 
+
+			sprite->Updata();
+
 			ImGui::Begin("Sprite");
 			ImGui::InputFloat3("Scale", &transformSprite.scale.x);
 			ImGui::SliderFloat3("ScaleSlide", &transformSprite.scale.x, 1.0f,5.0f);

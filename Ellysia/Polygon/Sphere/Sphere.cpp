@@ -472,6 +472,8 @@ void Sphere::Draw(SphereStruct sphereCondtion, Transform transform,Matrix4x4 vie
 	materialData_->color = color;
 	materialData_->enableLighting=true;
 
+	materialData_->uvTransform = MakeIdentity4x4();
+
 	//サイズに注意を払ってね！！！！！
 	//どれだけのサイズが必要なのか考えよう
 

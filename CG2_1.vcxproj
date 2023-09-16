@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|x64">
@@ -106,6 +106,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Ellysia\ImGuiManager\ImGuiManager.cpp" />
     <ClCompile Include="Ellysia\Math\Matrix\Calculation\Matrix4x4Calculation.cpp" />
     <ClCompile Include="Ellysia\Math\Vector\Calculation\VectorCalculation.cpp" />
+    <ClCompile Include="Ellysia\Polygon\LoadObject\LoadObj\LoadObj.cpp" />
     <ClCompile Include="Ellysia\Polygon\Sphere\Sphere.cpp" />
     <ClCompile Include="Ellysia\Polygon\Sprite\Sprite.cpp" />
     <ClCompile Include="Ellysia\Polygon\Triangle\Triangle.cpp" />
@@ -148,12 +149,14 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Ellysia\Math\Vector\Calculation\VectorCalculation.h" />
     <ClInclude Include="Ellysia\Math\Vector\DirectionalLight.h" />
     <ClInclude Include="Ellysia\Math\Vector\Material.h" />
+    <ClInclude Include="Ellysia\Math\Vector\ModelData.h" />
     <ClInclude Include="Ellysia\Math\Vector\SphereStruct.h" />
     <ClInclude Include="Ellysia\Math\Vector\Transform.h" />
     <ClInclude Include="Ellysia\Math\Vector\Vector2.h" />
     <ClInclude Include="Ellysia\Math\Vector\Vector3.h" />
     <ClInclude Include="Ellysia\Math\Vector\Vector4.h" />
     <ClInclude Include="Ellysia\Math\Vector\VertexData.h" />
+    <ClInclude Include="Ellysia\Polygon\LoadObject\LoadObj\LoadObj.h" />
     <ClInclude Include="Ellysia\Polygon\Sphere\Sphere.h" />
     <ClInclude Include="Ellysia\Polygon\Sprite\Sprite.h" />
     <ClInclude Include="Ellysia\Polygon\Triangle\Triangle.h" />

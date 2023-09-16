@@ -120,6 +120,9 @@
     <ClCompile Include="Ellysia\Common\Windows\WinApp.cpp">
       <Filter>ソース ファイル\Common</Filter>
     </ClCompile>
+    <ClCompile Include="Ellysia\Polygon\LoadObject\LoadObj\LoadObj.cpp">
+      <Filter>ソース ファイル\Polygone</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Object3d.VS.hlsl" />
@@ -218,6 +221,12 @@
     </ClInclude>
     <ClInclude Include="Ellysia\Common\Windows\WinApp.h">
       <Filter>ヘッダー ファイル\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Math\Vector\ModelData.h">
+      <Filter>ヘッダー ファイル\Math\Vector</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Polygon\LoadObject\LoadObj\LoadObj.h">
+      <Filter>ヘッダー ファイル\Polygone</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

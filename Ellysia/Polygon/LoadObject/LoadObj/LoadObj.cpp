@@ -1,6 +1,6 @@
 #include "LoadObj.h"
 
-ModelData LoadObjFile(const std::string& directoryPath, const std::string& fileName) {
+ModelData Model::LoadObjFile(const std::string& directoryPath, const std::string& fileName) {
 	//1.中で必要となる変数の宣言
 	//構築するModelData
 	ModelData modelData;

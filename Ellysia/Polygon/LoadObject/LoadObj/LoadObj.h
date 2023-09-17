@@ -5,4 +5,19 @@
 #include <fstream>
 #include <sstream>
 
-static ModelData LoadObjFile(const std::string& directoryPath, const std::string& fileName);
+class Model {
+public:
+
+	static ModelData LoadObjFile(const std::string& directoryPath, const std::string& fileName);
+
+
+
+
+
+
+private:
+
+
+
+};
+

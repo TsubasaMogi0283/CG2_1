@@ -1,5 +1,65 @@
 #include "LoadObj.h"
 
+
+//Resource作成の関数化
+ID3D12Resource* Model::CreateBufferResource(size_t sizeInBytes) {
+	//void返り値も忘れずに
+	ID3D12Resource* resource = nullptr;
+	
+	////VertexResourceを生成
+	//頂点リソース用のヒープを設定
+	
+	uploadHeapProperties_.Type = D3D12_HEAP_TYPE_UPLOAD;
+
+	//頂点リソースの設定
+	
+	//バッファリソース。テクスチャの場合はまた別の設定をする
+	vertexResourceDesc_.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
+	vertexResourceDesc_.Width = sizeInBytes;
+	//バッファの場合はこれらは1にする決まり
+	vertexResourceDesc_.Height = 1;
+	vertexResourceDesc_.DepthOrArraySize = 1;
+	vertexResourceDesc_.MipLevels = 1;
+	vertexResourceDesc_.SampleDesc.Count = 1;
+
+	//バッファの場合はこれにする決まり
+	vertexResourceDesc_.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
+
+	//実際に頂点リソースを作る
+	//ID3D12Resource* vertexResource_ = nullptr;
+	//hrは調査用
+	HRESULT hr;
+	hr = directXSetup_->GetDevice()->CreateCommittedResource(
+		&uploadHeapProperties_,
+		D3D12_HEAP_FLAG_NONE,
+		&vertexResourceDesc_,
+		D3D12_RESOURCE_STATE_GENERIC_READ,
+		nullptr, IID_PPV_ARGS(&resource));
+	assert(SUCCEEDED(hr));
+
+	return resource;
+}
+
+void Model::Initialize() {
+	//モデルの読み込み
+	modelData_ = LoadObjFile("Resources/05_02","plane.obj");
+
+	//頂点リソースを作る
+	vertexResource_ = CreateBufferResource(sizeof(VertexData) * modelData_.vertices.size());
+
+	//頂点バッファビューを作成する
+	
+}
+
+void Model::Update() {
+
+}
+
+void Model::Draw() {
+
+}
+
+
 ModelData Model::LoadObjFile(const std::string& directoryPath, const std::string& fileName) {
 	//1.中で必要となる変数の宣言
 	//構築するModelData

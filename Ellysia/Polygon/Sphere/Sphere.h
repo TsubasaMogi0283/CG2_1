@@ -128,20 +128,19 @@ private:
 
 	ID3D12Resource* textureResource2_ = nullptr;
 
-	//1枚目用
-	D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU_;
-	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU_;
-
-	//2枚目用
-	D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU2_;
-	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU2_;
-
-
+	
 
 	ID3D12Resource* intermediateResource_ = nullptr;
 
 
-	
+	//1枚目用
+	D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU_;
+	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU_;
+
+
+	//2枚目用
+	D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU2_;
+	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU2_;
 
 
 

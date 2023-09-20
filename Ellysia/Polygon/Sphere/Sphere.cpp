@@ -87,8 +87,6 @@ void Sphere::GenerateVertexBufferView() {
 void Sphere::Initialize(DirectXSetup* directXSetup) {
 	this->directXSetup_ = directXSetup;
 
-
-
 	//ここでBufferResourceを作る
 	//頂点を6に増やす
 	vertexResourceSphere_ = CreateBufferResource(sizeof(VertexData) * SUBDIVISION_ *SUBDIVISION_ * 6);
@@ -176,6 +174,11 @@ void Sphere::LoadTexture(const std::string& filePath) {
 	//.
 	//このような感じで入っている
 	//後ろのindexに対応させる
+
+
+	
+	
+
 
 	//SRVを作成するDescriptorHeapの場所を決める
 	textureSrvHandleCPU_ = GetCPUDescriptorHandle(directXSetup_->GetSrvDescriptorHeap(), descriptorSizeSRV_, 1);

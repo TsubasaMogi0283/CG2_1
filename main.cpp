@@ -10,6 +10,7 @@
 #include "Math/Matrix/Calculation/Matrix4x4Calculation.h"
 #include <Polygon/Sprite/Sprite.h>
 #include <Polygon/Sphere/Sphere.h>
+#include <Polygon/Model/Model.h>
 
 
 //Winodwsアプリでもエントリーポイント(main関数)
@@ -32,6 +33,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//
 	//いつかKAMATA ENGINEみたいにGameSceneでまとめたい
 	//GameScene* gamescene = new GameScene();
+
+	//Model,Sphere, Sprite,TriangleをEllysiaでまとめた方がよさそう
 
 	WinApp* winSetup = new WinApp();
 	DirectXSetup* directXSetup = new DirectXSetup();
@@ -67,7 +70,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Sphere* sphere = new Sphere();
 	sphere->Initialize(directXSetup);
 
-	//Noviceみたいにintで宣言出来るようにしたい
+	Model* plane = new Model();
+	plane->Initialize(directXSetup);
+
 	//そこで切り替えが楽になるから
 	//sphere->LoadTexture("Resources/uvChecker.png");
 	//INitilizeに入れた
@@ -238,7 +243,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			imGuiManager->UpDate();
 
-
+			plane->Update();
 
 			//
 			for (int i = 0; i < TRIANGLE_AMOUNT_MAX; i++) {
@@ -328,28 +333,28 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			imGuiManager->Draw(directXSetup);
 			
 
-			for (int i = 0; i < TRIANGLE_AMOUNT_MAX; i++) {
-				//描画処理
-				triangle[i]->Draw(
-					triangleCoodinateLeft[i], 
-					triangleCoodinateTop[i],
-					triangleCoodinateRight[i],
-					transform[i],
-					viewMatrix,
-					projectionMatrix,
-					color[i]
-				);
-			}
-
-			sprite->Draw(
-				leftTop,rightTop,
-				leftBottom,rightBottom, transformSprite,
-				color[0]);
-
-			sphere->Draw(sphereCoodinate, transformSphere,viewMatrix,
-					projectionMatrix, color[0]);
+			//for (int i = 0; i < TRIANGLE_AMOUNT_MAX; i++) {
+			//	//描画処理
+			//	triangle[i]->Draw(
+			//		triangleCoodinateLeft[i], 
+			//		triangleCoodinateTop[i],
+			//		triangleCoodinateRight[i],
+			//		transform[i],
+			//		viewMatrix,
+			//		projectionMatrix,
+			//		color[i]
+			//	);
+			//}
+			//
+			//sprite->Draw(
+			//	leftTop,rightTop,
+			//	leftBottom,rightBottom, transformSprite,
+			//	color[0]);
+			//
+			//sphere->Draw(sphereCoodinate, transformSphere,viewMatrix,
+			//		projectionMatrix, color[0]);
 			
-
+			plane->Draw(transformSphere, viewMatrix, projectionMatrix);
 
 			imGuiManager->EndFrame(directXSetup);
 
@@ -376,7 +381,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	sprite->Release();
 	sphere->Release();
-	
+	plane->Release();
 	
 
 

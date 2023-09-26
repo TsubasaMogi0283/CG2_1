@@ -250,7 +250,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				//y軸回転
 				transform[i].rotate.y += 0.03f;
 			}
-			transformSphere.rotate.y += 0.1f;
+			//transformSphere.rotate.y += 0.1f;
 
 			//カメラ行列
 			Matrix4x4 cameraMatrix = MakeAffineMatrix(cameraTransform.scale, cameraTransform.rotate, cameraTransform.translate);
@@ -333,27 +333,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			imGuiManager->Draw(directXSetup);
 			
 
-			//for (int i = 0; i < TRIANGLE_AMOUNT_MAX; i++) {
-			//	//描画処理
-			//	triangle[i]->Draw(
-			//		triangleCoodinateLeft[i], 
-			//		triangleCoodinateTop[i],
-			//		triangleCoodinateRight[i],
-			//		transform[i],
-			//		viewMatrix,
-			//		projectionMatrix,
-			//		color[i]
-			//	);
-			//}
-			//
-			//sprite->Draw(
-			//	leftTop,rightTop,
-			//	leftBottom,rightBottom, transformSprite,
-			//	color[0]);
-			//
-			//sphere->Draw(sphereCoodinate, transformSphere,viewMatrix,
-			//		projectionMatrix, color[0]);
-			
 			plane->Draw(transformSphere, viewMatrix, projectionMatrix);
 
 			imGuiManager->EndFrame(directXSetup);

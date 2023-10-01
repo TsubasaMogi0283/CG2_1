@@ -48,7 +48,8 @@ private:
 	//頂点バッファビューを作成する
 	void GenerateVertexBufferView();
 	
-
+	D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index);
+	
 
 
 private:
@@ -74,4 +75,19 @@ private:
 	VertexData* vertexData_;
 
 
+	//Sprite用のTransformationMatrix用のリソースを作る。
+	//Matrix4x4 1つ分サイズを用意する
+	ID3D12Resource* transformationMatrixResource_ = nullptr;
+	TransformationMatrix* transformationMatrixData_ = nullptr;
+
+	//マテリアル用のリソースを作る
+	ID3D12Resource* materialResource_ = nullptr;
+	Material* materialData_ = nullptr;
+
+
+	//Lighting用
+	ID3D12Resource* directionalLightResource_ = nullptr;
+	DirectionalLight* directionalLightData_ = nullptr;
+
+	uint32_t descriptorSizeSRV_=0u;
 };

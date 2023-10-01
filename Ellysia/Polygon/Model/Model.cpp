@@ -6,6 +6,13 @@ Model::Model() {
 
 }
 
+D3D12_GPU_DESCRIPTOR_HANDLE Model::GetGPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index) {
+	D3D12_GPU_DESCRIPTOR_HANDLE handleGPU = descriptorHeap->GetGPUDescriptorHandleForHeapStart();
+	handleGPU.ptr += (descriptorSize * index);
+	return handleGPU;
+}
+
+
 //モデルデータの読み込み
 ModelData Model::LoadObjectFile(const std::string& directoryPath,const std::string& fileName) {
 		//1.中で必要となる変数の宣言
@@ -160,6 +167,22 @@ void Model::Initialize(DirectXSetup* directXSetup) {
 	//頂点リソースを作る
 	vertexResource_ = CreateBufferResource(sizeof(VertexData) * modelData_.vertices.size());
 
+	////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
+	materialResource_=CreateBufferResource(sizeof(Material));
+
+
+	//Sprite用のTransformationMatrix用のリソースを作る。
+	//Matrix4x4 1つ分サイズを用意する
+	transformationMatrixResource_ = CreateBufferResource(sizeof(TransformationMatrix));
+	
+	//Lighting
+	directionalLightResource_ = CreateBufferResource(sizeof(DirectionalLight));
+	directionalLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightData_));
+	directionalLightData_->color={ 1.0f,1.0f,1.0f,1.0f };
+	directionalLightData_->direction = { 0.0f,-1.0f,0.0f };
+	directionalLightData_->intensity = 1.0f;
+
+
 	GenerateVertexBufferView();
 
 }
@@ -180,6 +203,41 @@ void Model::Draw(Transform transform,Matrix4x4 viewMatrix,Matrix4x4 projectionMa
 
 
 
+
+	transformationMatrixResource_->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixData_));
+	
+
+	//マテリアルにデータを書き込む
+	//書き込むためのアドレスを取得
+	//reinterpret_cast...char* から int* へ、One_class* から Unrelated_class* へなどの変換に使用
+	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
+	materialData_->color = {1.0f,1.0f,1.0f,1.0f};
+	materialData_->enableLighting=false;
+
+	materialData_->uvTransform = MakeIdentity4x4();
+
+
+
+	//新しく引数作った方が良いかも
+	Matrix4x4 worldMatrixSphere = MakeAffineMatrix(transform.scale,transform.rotate,transform.translate);
+	//遠視投影行列
+	Matrix4x4 viewMatrixSphere = MakeIdentity4x4();
+	
+	Matrix4x4 projectionMatrixSphere = MakeOrthographicMatrix(0.0f, 0.0f, float(directXSetup_->GetClientWidth()), float(directXSetup_->GetClientHeight()), 0.0f, 100.0f);
+	
+	//WVP行列を作成
+	Matrix4x4 worldViewProjectionMatrixSphere = Multiply(worldMatrixSphere, Multiply(viewMatrix, projectionMatrix));
+
+
+	transformationMatrixData_->WVP = worldViewProjectionMatrixSphere;
+	transformationMatrixData_->World =MakeIdentity4x4();
+
+
+
+	D3D12_GPU_DESCRIPTOR_HANDLE srvHandles[1];
+	srvHandles[0] = GetGPUDescriptorHandle(directXSetup_->GetSrvDescriptorHeap(), descriptorSizeSRV_, 1);
+	
+
 	//コマンドを積む
 
 	//RootSignatureを設定。PSOに設定しているけど別途設定が必要
@@ -190,10 +248,10 @@ void Model::Draw(Transform transform,Matrix4x4 viewMatrix,Matrix4x4 projectionMa
 	directXSetup_->GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
 
 
-	directXSetup_->GetCommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResourceSphere_->GetGPUVirtualAddress());
+	directXSetup_->GetCommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResource_->GetGPUVirtualAddress());
 	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である
 	//trueだったらtextureSrvHandleGPU2_
-	//directXSetup_->GetCommandList()->SetGraphicsRootDescriptorTable(2,useMonsterBall_?textureSrvHandleGPU2_:textureSrvHandleGPU_);
+	directXSetup_->GetCommandList()->SetGraphicsRootDescriptorTable(2,srvHandles[0]);
 	//Light
 	directXSetup_->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
 

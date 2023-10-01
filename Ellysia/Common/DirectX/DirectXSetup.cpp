@@ -891,7 +891,7 @@ void DirectXSetup::EndFrame() {
 	//D3D12: **BREAK** enabled for the previous message, which was: [ ERROR EXECUTION #961: GPU_BASED_VALIDATION_ROOT_DESCRIPTOR_ACCESS_OUT_OF_BOUNDS 
 
 
-	swapChain_->Present(1, 0);
+ 	swapChain_->Present(1, 0);
 
 	////GPUにSignalを送る
 	//GPUの実行完了が目的

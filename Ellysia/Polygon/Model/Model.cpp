@@ -60,6 +60,7 @@ ModelData Model::LoadObjectFile(const std::string& directoryPath,const std::stri
 			Vector4 position;
 			//ex).  v 「1.0000」 「1.0000」 「-0.0000」
 			s >> position.x >> position.y >> position.z;
+			position.x *= -1.0f;
 			position.w = 1.0f;
 			positions.push_back(position);
 		}
@@ -71,10 +72,12 @@ ModelData Model::LoadObjectFile(const std::string& directoryPath,const std::stri
 		else if (identifier == "vn") {
 			Vector3 normal;
 			s >> normal.x >> normal.y >> normal.z;
+			normal.x *= -1.0f;
 			normals.push_back(normal);
 		}
 		else if (identifier == "f") {
 			//面は三角形限定。その他は未対応
+			VertexData triangle[3];
 			for (int32_t faceVertex = 0; faceVertex < 3; ++faceVertex) {
 				std::string vertexDefinition;
 				s >> vertexDefinition;
@@ -375,13 +378,14 @@ void Model::Initialize(DirectXSetup* directXSetup) {
 	transformationMatrixResource_ = CreateBufferResource(sizeof(TransformationMatrix));
 	
 	//Lighting
-	//directionalLightResource_ = CreateBufferResource(sizeof(DirectionalLight));
-	//directionalLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightData_));
-	//directionalLightData_->color={ 1.0f,1.0f,1.0f,1.0f };
-	//directionalLightData_->direction = { 0.0f,-1.0f,0.0f };
-	//directionalLightData_->intensity = 1.0f;
+	directionalLightResource_ = CreateBufferResource(sizeof(DirectionalLight));
+	directionalLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightData_));
+	directionalLightData_->color={ 1.0f,1.0f,1.0f,1.0f };
+	directionalLightData_->direction = { 0.0f,-1.0f,0.0f };
+	directionalLightData_->intensity = 1.0f;
 
 
+	LoadTexture("Resources/uvChecker.png");
 	GenerateVertexBufferView();
 
 }
@@ -450,7 +454,7 @@ void Model::Draw(Transform transform,Matrix4x4 viewMatrix,Matrix4x4 projectionMa
 	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である
 	directXSetup_->GetCommandList()->SetGraphicsRootDescriptorTable(2,textureSrvHandleGPU_);
 	//Light
-	//directXSetup_->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
+	directXSetup_->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
 
 
 	directXSetup_->GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);

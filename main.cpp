@@ -215,7 +215,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 #pragma endregion
 
-	SphereStruct sphereCoodinate = { {-5.0f,-2.0f,20.0f},1.0f };
+	SphereStruct sphereCoodinate = { {-5.0f,-2.0f,20.0f},1.0f};
 	Transform transformSphere = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
 
 	
@@ -243,7 +243,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			imGuiManager->UpDate();
 
-			plane->Update();
+			//plane->Update();
 
 			//
 			for (int i = 0; i < TRIANGLE_AMOUNT_MAX; i++) {

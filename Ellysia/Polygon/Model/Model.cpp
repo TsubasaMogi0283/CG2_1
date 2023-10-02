@@ -375,11 +375,11 @@ void Model::Initialize(DirectXSetup* directXSetup) {
 	transformationMatrixResource_ = CreateBufferResource(sizeof(TransformationMatrix));
 	
 	//Lighting
-	directionalLightResource_ = CreateBufferResource(sizeof(DirectionalLight));
-	directionalLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightData_));
-	directionalLightData_->color={ 1.0f,1.0f,1.0f,1.0f };
-	directionalLightData_->direction = { 0.0f,-1.0f,0.0f };
-	directionalLightData_->intensity = 1.0f;
+	//directionalLightResource_ = CreateBufferResource(sizeof(DirectionalLight));
+	//directionalLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightData_));
+	//directionalLightData_->color={ 1.0f,1.0f,1.0f,1.0f };
+	//directionalLightData_->direction = { 0.0f,-1.0f,0.0f };
+	//directionalLightData_->intensity = 1.0f;
 
 
 	GenerateVertexBufferView();
@@ -448,10 +448,9 @@ void Model::Draw(Transform transform,Matrix4x4 viewMatrix,Matrix4x4 projectionMa
 
 	directXSetup_->GetCommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResource_->GetGPUVirtualAddress());
 	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である
-	//trueだったらtextureSrvHandleGPU2_
 	directXSetup_->GetCommandList()->SetGraphicsRootDescriptorTable(2,textureSrvHandleGPU_);
 	//Light
-	directXSetup_->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
+	//directXSetup_->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
 
 
 	directXSetup_->GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);

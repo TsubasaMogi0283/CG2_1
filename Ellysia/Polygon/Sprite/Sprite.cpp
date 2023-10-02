@@ -102,11 +102,11 @@ void Sprite::Initialize(DirectXSetup* directXSetup) {
 	materialResourceSprite_=CreateBufferResource(sizeof(Material));
 
 
-	directionalLightResource_ = CreateBufferResource(sizeof(DirectionalLight));
-	directionalLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightDataSprite_));
-	directionalLightDataSprite_->color={ 1.0f,1.0f,1.0f,1.0f };
-	directionalLightDataSprite_->direction = { 0.0f,-1.0f,0.0f };
-	directionalLightDataSprite_->intensity = 1.0f;
+	//directionalLightResource_ = CreateBufferResource(sizeof(DirectionalLight));
+	//directionalLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightDataSprite_));
+	//directionalLightDataSprite_->color={ 1.0f,1.0f,1.0f,1.0f };
+	//directionalLightDataSprite_->direction = { 0.0f,-1.0f,0.0f };
+	//directionalLightDataSprite_->intensity = 1.0f;
 
 
 	//Sprite用のTransformationMatrix用のリソースを作る。
@@ -426,7 +426,7 @@ void Sprite::Draw(Vector4 leftTop,Vector4 rightTop, Vector4 leftBottom,Vector4 r
 	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である
 	directXSetup_->GetCommandList()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU_);
 	//Light
-	directXSetup_->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
+	//directXSetup_->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
 
 
 	////描画(DrawCall)３頂点で１つのインスタンス。

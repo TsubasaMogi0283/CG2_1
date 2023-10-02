@@ -14,6 +14,7 @@
 #include <Math/Vector/Material.h>
 #include <Math/Matrix/Matrix/TransformationMatrix.h>
 #include <Math/Vector/DirectionalLight.h>
+#include <TextureManager/MaterialData/MaterialData.h>
 
 class Model {
 public:
@@ -26,6 +27,9 @@ public:
 
 	//モデルデータの読み込み
 	ModelData LoadObjectFile(const std::string& directoryPath,const std::string& fileName);
+
+	//mtlファイルの読み込み
+	MaterialData LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& fileName);
 
 	//テクスチャの読み込み
 	void LoadTexture(const std::string& filePath);

@@ -3,6 +3,7 @@
 #include <Math/Vector/Calculation/VectorCalculation.h>
 #include <externals/DirectXTex/d3dx12.h>
 
+
 Model::Model() {
 
 }
@@ -122,6 +123,40 @@ ModelData Model::LoadObjectFile(const std::string& directoryPath,const std::stri
 	//4.ModelDataを返す
 	return modelData;
 }
+
+//mtlファイルを読む関数
+MaterialData LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& fileName) {
+
+	#pragma region 1.中で必要となる変数の宣言
+	//構築するMaterialData
+	MaterialData materialData;
+	//ファイルから読んだ1行を格納するもの
+	std::string line;
+	
+	#pragma endregion
+
+
+
+	#pragma region 2.ファイルを開く
+	std::ifstream file(directoryPath + "/" + fileName);
+	//開かなかったら止める
+	assert(file.is_open());
+
+	#pragma endregion
+
+	
+
+
+	//3.実際にファイルを読み、MaterialDataを構築していく
+
+	//4.MaterialDataを返す
+
+
+
+
+
+}
+
 
 //Resource作成の関数化
 ID3D12Resource* Model::CreateBufferResource(size_t sizeInBytes) {

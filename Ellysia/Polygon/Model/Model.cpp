@@ -147,11 +147,31 @@ MaterialData LoadMaterialTemplateFile(const std::string& directoryPath, const st
 	
 
 
-	//3.実際にファイルを読み、MaterialDataを構築していく
+	#pragma region 3.実際にファイルを読み、MaterialDataを構築していく
+	while (std::getline(file,line)){
+		std::string identifier;
+		std::istringstream s(line);
+		s >> identifier;
+
+		//identifierに応じた処理
+		//map_Kdにはtextureのファイル名が記載されているよ
+		if (identifier == "map_Kd") {
+			std::string textureFileName;
+			s >> textureFileName;
+			//連結してファイルパスにする
+			materialData.textureFilePath = directoryPath + "/" + textureFileName;
+
+
+
+		}
+
+	}
+
+	#pragma endregion
 
 	//4.MaterialDataを返す
 
-
+	return materialData;
 
 
 

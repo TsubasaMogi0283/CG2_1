@@ -81,47 +81,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//left
 		//一段目
 		{-0.5f,-0.5f,0.0f,1.0f}
-		//{-1.0f,0.5f,0.0f,1.0f },
-		//{-0.6f,0.5f,0.0f,1.0f },
-		//{-0.2f,0.5f,0.0f,1.0f },
-		//{0.2f,0.5f,0.0f,1.0f },
-		//{0.6f,0.5f,0.0f,1.0f },
-		////二段目
-		//{-1.0f,0.0f,0.0f,1.0f },
-		//{-0.6f,0.0f,0.0f,1.0f },
-		//{-0.2f,0.0f,0.0f,1.0f },
-		//{0.2f,0.0f,0.0f,1.0f },
-		//{0.6f,0.0f,0.0f,1.0f },
-		////三段目
-		//{-1.0f,-0.5f,0.0f,1.0f },
-		//{-0.6f,-0.5f,0.0f,1.0f },
-		//{-0.2f,-0.5f,0.0f,1.0f },
-		//{0.2f,-0.5f,0.0f,1.0f },
-		//{0.6f,-0.5f,0.0f,1.0f },
 
 	};
 
 	Vector4 triangleCoodinateTop[TRIANGLE_AMOUNT_MAX] = {
 		{0.0f,0.5f,0.0f,1.0f}
-		//up
-		//{-0.8f,1.0f,0.0f,1.0f },
-		//{-0.4f,1.0f,0.0f,1.0f },
-		//{0.0f,1.0f,0.0f,1.0f },
-		//{0.4f,1.0f,0.0f,1.0f },
-		//{0.8f,1.0f,0.0f,1.0f },
-		//
-		////
-		//{-0.8f,0.5f,0.0f,1.0f },
-		//{-0.4f,0.5f,0.0f,1.0f },
-		//{0.0f,0.5f,0.0f,1.0f },
-		//{0.4f,0.5f,0.0f,1.0f },
-		//{0.8f,0.5f,0.0f,1.0f },
-		////
-		//{-0.8f,0.0f,0.0f,1.0f },
-		//{-0.4f,0.0f,0.0f,1.0f },
-		//{0.0f,0.0f,0.0f,1.0f },
-		//{0.4f,0.0f,0.0f,1.0f },
-		//{0.8f,0.0f,0.0f,1.0f },
 	};
 
 	Vector4 triangleCoodinateRight[TRIANGLE_AMOUNT_MAX] = {
@@ -155,45 +119,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	Transform transform[TRIANGLE_AMOUNT_MAX]{
 		{scale,rotate,translate },
-		//{scale,rotate,translate },
-		//{scale,rotate,translate },
-		//{scale,rotate,translate },
-		//{scale,rotate,translate },
-		//
-		//{scale,rotate,translate },
-		//{scale,rotate,translate },
-		//{scale,rotate,translate },
-		//{scale,rotate,translate },
-		//{scale,rotate,translate },
-		//
-		//{scale,rotate,translate },
-		//{scale,rotate,translate },
-		//{scale,rotate,translate },
-		//{scale,rotate,translate },
-		//{scale,rotate,translate },
 	};
 
 	
 
 	//頂いた関数で色を決めていく
 	Vector4 color[TRIANGLE_AMOUNT_MAX] = {
-		{ ColorAdapter(WHITE)},//WHITE
-		//{ 0.0f,1.0f,0.0f,1.0f },//GREEN
-		//{ ColorAdapter(BLUE) },//BLUE
-		//{ ColorAdapter(WHITE)  },
-		//{ ColorAdapter(PURPLE) },
-		//
-		//{ 0.0f,0.0f,1.0f,1.0f },
-		//{ 1.0f,0.0f,0.0f,1.0f },
-		//{ ColorAdapter(BLACK) },
-		//{ 0.0f,0.0f,1.0f,1.0f },
-		//{ 1.0f,0.0f,0.0f,1.0f },
-		//
-		//{0.6f,0.5f,0.0f,1.0f },
-		//{ColorAdapter(BLUE) },
-		//{0.2f,0.5f,0.0f,1.0f },
-		//{0.6f,0.5f,0.0f,1.0f },
-		//{ColorAdapter(WHITE)  },
+		{ ColorAdapter(WHITE)},
 
 	};
 	

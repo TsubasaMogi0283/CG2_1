@@ -532,6 +532,31 @@ void Model::Draw(Transform transform,Matrix4x4 viewMatrix,Matrix4x4 projectionMa
 //解放
 void Model::Release() {
 	vertexResource_->Release();
+
+
+	transformationMatrixResource_->Release();
+
+	//マテリアル用のリソースを作る
+	materialResource_->Release();
+
+
+	//Lighting用
+	directionalLightResource_->Release();
+	
+	resource_->Release();
+
+
+	for (int i = 0; i < MAX_TEXTURE_; i++) {
+		if (isUsedTextureIndex[i]==true) {
+			textureResource_[i]->Release();
+			intermediateResource_[i]->Release();
+
+		}
+		
+
+	}
+	
+
 }
 
 

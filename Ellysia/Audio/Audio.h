@@ -31,11 +31,6 @@ public:
 	void Update();
 
 
-
-
-
-
-
 	//デストラクタ
 	~Audio();
 

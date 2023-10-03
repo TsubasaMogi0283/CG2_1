@@ -63,9 +63,6 @@
     <ClCompile Include="main.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Ellysia\Ellysia.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Ellysia\externals\imGui\imgui.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
@@ -121,12 +118,19 @@
       <Filter>ソース ファイル\Common</Filter>
     </ClCompile>
     <ClCompile Include="Ellysia\Polygon\Model\Model.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\Polygone</Filter>
+    </ClCompile>
+    <ClCompile Include="Ellysia\Ellysia.cpp">
+      <Filter>ソース ファイル\Polygone</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Object3d.VS.hlsl" />
-    <FxCompile Include="Object3d.PS.hlsl" />
+    <FxCompile Include="Object3d.PS.hlsl">
+      <Filter>リソース ファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="Object3d.VS.hlsl">
+      <Filter>リソース ファイル</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Ellysia\externals\imGui\imconfig.h">
@@ -222,14 +226,14 @@
     <ClInclude Include="Ellysia\Common\Windows\WinApp.h">
       <Filter>ヘッダー ファイル\Common</Filter>
     </ClInclude>
-    <ClInclude Include="Ellysia\Math\Vector\ModelData.h">
-      <Filter>ヘッダー ファイル\Math\Vector</Filter>
-    </ClInclude>
-    <ClInclude Include="Ellysia\Polygon\Model\Model.h">
+    <ClInclude Include="Ellysia\TextureManager\MaterialData\MaterialData.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Ellysia\TextureManager\MaterialData\MaterialData.h">
-      <Filter>ソース ファイル</Filter>
+    <ClInclude Include="Ellysia\Polygon\Model\Model.h">
+      <Filter>ヘッダー ファイル\Polygone</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\TextureManager\ModelData\ModelData.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

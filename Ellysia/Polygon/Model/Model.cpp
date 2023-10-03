@@ -1,7 +1,4 @@
 #include "Model.h"
-#include <Math/Matrix/Calculation/Matrix4x4Calculation.h>
-#include <Math/Vector/Calculation/VectorCalculation.h>
-#include <externals/DirectXTex/d3dx12.h>
 
 
 Model::Model() {
@@ -114,18 +111,34 @@ ModelData Model::LoadObjectFile(const std::string& directoryPath,const std::stri
 			modelData.vertices.push_back(triangle[0]);
 
 		}
-
+		else if (identifier == "mtllib") {
+			//materialTemplateLibraryファイルの名前を取得する
+			std::string materialFileName;
+			s >> materialFileName;
+			//基本的にobjファイルと同一階層にmtlは存在させるので、ディレクトリ名とファイル名を渡す
+			modelData.material = LoadMaterialTemplateFile(directoryPath, materialFileName);
+		}
 
 
 	}
 
+	////ここで問題
+	//インデックス作った方がよさそう
+	modelData.textureIndex = LoadTexture(modelData.material.textureFilePath);
+
+	
+	//頂点リソースを作る
+	vertexResource_ = CreateBufferResource(sizeof(VertexData) * modelData_.vertices.size());
+
+	//読み込みのところでバッファインデックスを作った方がよさそう
+	GenerateVertexBufferView();
 
 	//4.ModelDataを返す
 	return modelData;
 }
 
 //mtlファイルを読む関数
-MaterialData LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& fileName) {
+MaterialData Model::LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& fileName) {
 
 	#pragma region 1.中で必要となる変数の宣言
 	//構築するMaterialData
@@ -147,7 +160,7 @@ MaterialData LoadMaterialTemplateFile(const std::string& directoryPath, const st
 	
 
 
-	#pragma region 3.実際にファイルを読み、MaterialDataを構築していく
+	#pragma region  実際にファイルを読みMaterialDataを構築していく
 	while (std::getline(file,line)){
 		std::string identifier;
 		std::istringstream s(line);
@@ -161,9 +174,9 @@ MaterialData LoadMaterialTemplateFile(const std::string& directoryPath, const st
 			//連結してファイルパスにする
 			materialData.textureFilePath = directoryPath + "/" + textureFileName;
 
-
-
 		}
+		
+
 
 	}
 
@@ -204,6 +217,8 @@ ID3D12Resource* Model::CreateBufferResource(size_t sizeInBytes) {
 
 	//実際に頂点リソースを作る
 	//ID3D12Resource* vertexResource_ = nullptr;
+	
+	//次はここで問題
 	//hrは調査用
 	HRESULT hr;
 	hr = directXSetup_->GetDevice()->CreateCommittedResource(
@@ -235,20 +250,33 @@ void Model::GenerateVertexBufferView() {
 
 
 //統合
-void Model::LoadTexture(const std::string& filePath) {
+int Model::LoadTexture(const std::string& filePath) {
+
+	
+	int spriteIndex = MAX_TEXTURE_+1;
+	for (int i = 0; i < MAX_TEXTURE_; i++) {
+		if (isUsedTextureIndex[i] == false) {
+			spriteIndex = i;
+			isUsedTextureIndex[i] = true;
+			break;
+		}
+	}
+	if (spriteIndex < 0) {
+		//0より少ない
+		assert(false);
+	}
+	if (spriteIndex > MAX_TEXTURE_) {
+		//MAX_TEXTUREより多い
+		assert(false);
+	}
+
+
 	//Textureを読んで転送する
 	mipImages_ = LoadTextureData(filePath);
 	const DirectX::TexMetadata& metadata = mipImages_.GetMetadata();
-	textureResource_ = CreateTextureResource(directXSetup_->GetDevice(), metadata);
-	intermediateResource_ = UploadTextureData(textureResource_, mipImages_);
+	textureResource_[spriteIndex] = CreateTextureResource(directXSetup_->GetDevice(), metadata);
+	intermediateResource_[spriteIndex] = UploadTextureData(textureResource_[spriteIndex], mipImages_);
 	
-	//2枚目のTextureを読んで転送する
-	//いつか配列にする。2は何か嫌です。
-	//mipImages2_ = LoadTextureData("Resources/monsterBall.png");
-	//const DirectX::TexMetadata& metadata2 = mipImages2_.GetMetadata();
-	//textureResource2_ = CreateTextureResource(directXSetup_->GetDevice(), metadata2);
-	//UploadTextureData(textureResource2_, mipImages2_);
-
 
 	//ShaderResourceView
 	//metadataを基にSRVの設定
@@ -259,20 +287,7 @@ void Model::LoadTexture(const std::string& filePath) {
 	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
 	srvDesc.Texture2D.MipLevels = UINT(metadata.mipLevels);
 	
-	////2枚目のSRVを作る
-	//D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc2{};
-	//srvDesc2.Format = metadata2.format;
-	//srvDesc2.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-	////2Dテクスチャ
-	//srvDesc2.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
-	//srvDesc2.Texture2D.MipLevels = UINT(metadata2.mipLevels);
-	
-
-
-	//textureSrvHandleCPU_ = directXSetup_->GetSrvDescriptorHeap()->GetCPUDescriptorHandleForHeapStart();
-	//textureSrvHandleGPU_ = directXSetup_->GetSrvDescriptorHeap()->GetGPUDescriptorHandleForHeapStart();
-	
-	//今のDEscriptorHeapには
+	//今のDescriptorHeapには
 	//0...ImGui
 	//1...uvChecker
 	//2...monsterBall
@@ -283,29 +298,18 @@ void Model::LoadTexture(const std::string& filePath) {
 	//後ろのindexに対応させる
 
 
-	
-	
-
-
 	//SRVを作成するDescriptorHeapの場所を決める
-	textureSrvHandleCPU_ = GetCPUDescriptorHandle(directXSetup_->GetSrvDescriptorHeap(), descriptorSizeSRV_, 1);
-	textureSrvHandleGPU_ = GetGPUDescriptorHandle(directXSetup_->GetSrvDescriptorHeap(), descriptorSizeSRV_, 1);
-
-	//
-	//textureSrvHandleCPU2_=GetCPUDescriptorHandle(directXSetup_->GetSrvDescriptorHeap(), descriptorSizeSRV_, 2);
-	//textureSrvHandleGPU2_=GetGPUDescriptorHandle(directXSetup_->GetSrvDescriptorHeap(), descriptorSizeSRV_, 2);
+	textureSrvHandleCPU_[spriteIndex] = GetCPUDescriptorHandle(directXSetup_->GetSrvDescriptorHeap(), descriptorSizeSRV_, 1);
+	textureSrvHandleGPU_[spriteIndex] = GetGPUDescriptorHandle(directXSetup_->GetSrvDescriptorHeap(), descriptorSizeSRV_, 1);
 
 	//先頭はImGuiが使っているのでその次を使う
-	textureSrvHandleCPU_.ptr += directXSetup_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-	textureSrvHandleGPU_.ptr += directXSetup_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	textureSrvHandleCPU_[spriteIndex].ptr += directXSetup_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	textureSrvHandleGPU_[spriteIndex].ptr += directXSetup_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	
-	//textureSrvHandleCPU2_.ptr += directXSetup_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-	//textureSrvHandleGPU2_.ptr += directXSetup_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	//SRVの生成
-	directXSetup_->GetDevice()->CreateShaderResourceView(textureResource_, &srvDesc, textureSrvHandleCPU_);
-	//directXSetup_->GetDevice()->CreateShaderResourceView(textureResource2_, &srvDesc2, textureSrvHandleCPU2_);
-
+	directXSetup_->GetDevice()->CreateShaderResourceView(textureResource_[spriteIndex], &srvDesc, textureSrvHandleCPU_[spriteIndex]);
 	
+	return spriteIndex;
 
 }
 
@@ -327,6 +331,7 @@ DirectX::ScratchImage Model::LoadTextureData(const std::string& filePath) {
 	//テクスチャファイルを読んでプログラムで扱えるようにする
 	DirectX::ScratchImage image{};
 	std::wstring filePathW = ConvertString(filePath);
+	//ここで問題
 	HRESULT hr = DirectX::LoadFromWICFile(filePathW.c_str(), DirectX::WIC_FLAGS_FORCE_SRGB, nullptr, image);
 	assert(SUCCEEDED(hr));
 	
@@ -370,13 +375,6 @@ ID3D12Resource* Model::CreateTextureResource(ID3D12Device* device, const DirectX
 	heapProperties.MemoryPoolPreference = D3D12_MEMORY_POOL_L0;
 
 	
-
-
-	////WriteBackポリシーでCPUアクセス可能
-	//heapProperties.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_WRITE_BACK;
-	////プロセッサの近くに配置
-	//heapProperties.MemoryPoolPreference = D3D12_MEMORY_POOL_L0;
-
 	
 
 	//3.Resourceを生成する
@@ -433,9 +431,6 @@ void Model::Initialize(DirectXSetup* directXSetup) {
 	//モデルの読み込み
 	modelData_ = LoadObjectFile("Resources/05_02", "plane.obj");
 
-	//頂点リソースを作る
-	vertexResource_ = CreateBufferResource(sizeof(VertexData) * modelData_.vertices.size());
-
 	////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
 	materialResource_=CreateBufferResource(sizeof(Material));
 
@@ -453,7 +448,7 @@ void Model::Initialize(DirectXSetup* directXSetup) {
 
 
 	LoadTexture("Resources/uvChecker.png");
-	GenerateVertexBufferView();
+	
 
 }
 
@@ -519,7 +514,7 @@ void Model::Draw(Transform transform,Matrix4x4 viewMatrix,Matrix4x4 projectionMa
 
 	directXSetup_->GetCommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResource_->GetGPUVirtualAddress());
 	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である
-	directXSetup_->GetCommandList()->SetGraphicsRootDescriptorTable(2,textureSrvHandleGPU_);
+	directXSetup_->GetCommandList()->SetGraphicsRootDescriptorTable(2,textureSrvHandleGPU_[modelData_.textureIndex]);
 	//Light
 	directXSetup_->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
 

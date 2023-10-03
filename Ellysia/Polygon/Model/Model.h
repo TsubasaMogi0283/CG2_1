@@ -1,5 +1,4 @@
 #pragma once
-#include "Math/Vector/ModelData.h"
 #include <string>
 #include <cassert>
 #include <fstream>
@@ -15,10 +14,23 @@
 #include <Math/Matrix/Matrix/TransformationMatrix.h>
 #include <Math/Vector/DirectionalLight.h>
 #include <TextureManager/MaterialData/MaterialData.h>
+#include <TextureManager/ModelData/ModelData.h>
+
+
+
+#include "Math/Vector/Vector4.h"
+#include "Math/Matrix/Calculation/Matrix4x4Calculation.h"
+#include <Math/Vector/VertexData.h>
+#include "Math/Matrix/Matrix/WorldViewMatrix.h"
+
+#include <Math/Vector/Calculation/VectorCalculation.h>
+#include <externals/DirectXTex/d3dx12.h>
+
+
 
 class Model {
 public:
-	
+
 	//コンストラクタ
 	Model();
 
@@ -26,20 +38,20 @@ public:
 	void Initialize(DirectXSetup* directXSetup);
 
 	//モデルデータの読み込み
-	ModelData LoadObjectFile(const std::string& directoryPath,const std::string& fileName);
+	ModelData LoadObjectFile(const std::string& directoryPath, const std::string& fileName);
 
 	//mtlファイルの読み込み
 	MaterialData LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& fileName);
 
 	//テクスチャの読み込み
-	void LoadTexture(const std::string& filePath);
-	
+	int LoadTexture(const std::string& filePath);
+
 
 	//更新
 	void Update();
 
 	//描画
-	void Draw(Transform transform,Matrix4x4 viewMatrix,Matrix4x4 projectionMatrix);
+	void Draw(Transform transform, Matrix4x4 viewMatrix, Matrix4x4 projectionMatrix);
 
 	//解放
 	void Release();
@@ -55,12 +67,12 @@ private:
 
 	//頂点バッファビューを作成する
 	void GenerateVertexBufferView();
-	
+
 	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index);
 	D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index);
 
 
-	#pragma region テクスチャの読み込み
+#pragma region テクスチャの読み込み
 	//Textureデータを読む
 	//1.TextureデータそのものをCPUで読み込む
 	DirectX::ScratchImage LoadTextureData(const std::string& filePath);
@@ -75,7 +87,7 @@ private:
 
 #pragma endregion
 
-	
+
 
 
 private:
@@ -115,19 +127,20 @@ private:
 	ID3D12Resource* directionalLightResource_ = nullptr;
 	DirectionalLight* directionalLightData_ = nullptr;
 
-	uint32_t descriptorSizeSRV_=0u;
+	uint32_t descriptorSizeSRV_ = 0u;
 
+	static const int MAX_TEXTURE_ = 3;
+	bool isUsedTextureIndex[MAX_TEXTURE_];
 
-	ID3D12Resource* textureResource_ = nullptr;
+	ID3D12Resource* textureResource_[MAX_TEXTURE_] = {nullptr};
 	ID3D12Resource* resource_ = nullptr;
 
 	//画像読み込み
 	DirectX::ScratchImage mipImages_;
-	ID3D12Resource* intermediateResource_ = nullptr;
+	ID3D12Resource* intermediateResource_[MAX_TEXTURE_] = { nullptr };
 
-	//1枚目用
-	D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU_;
-	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU_;
+	D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU_[MAX_TEXTURE_] = {} ;
+	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU_[MAX_TEXTURE_] = {};
 
-
+	
 };

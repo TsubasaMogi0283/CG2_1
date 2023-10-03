@@ -149,7 +149,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Ellysia\Math\Vector\Calculation\VectorCalculation.h" />
     <ClInclude Include="Ellysia\Math\Vector\DirectionalLight.h" />
     <ClInclude Include="Ellysia\Math\Vector\Material.h" />
-    <ClInclude Include="Ellysia\Math\Vector\ModelData.h" />
     <ClInclude Include="Ellysia\Math\Vector\SphereStruct.h" />
     <ClInclude Include="Ellysia\Math\Vector\Transform.h" />
     <ClInclude Include="Ellysia\Math\Vector\Vector2.h" />
@@ -161,6 +160,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Ellysia\Polygon\Sprite\Sprite.h" />
     <ClInclude Include="Ellysia\Polygon\Triangle\Triangle.h" />
     <ClInclude Include="Ellysia\TextureManager\MaterialData\MaterialData.h" />
+    <ClInclude Include="Ellysia\TextureManager\ModelData\ModelData.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Ellysia\externals\imGui\LICENSE.txt" />

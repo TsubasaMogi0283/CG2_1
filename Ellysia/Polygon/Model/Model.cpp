@@ -127,11 +127,7 @@ ModelData Model::LoadObjectFile(const std::string& directoryPath,const std::stri
 	modelData.textureIndex = LoadTexture(modelData.material.textureFilePath);
 
 	
-	//頂点リソースを作る
-	vertexResource_ = CreateBufferResource(sizeof(VertexData) * modelData_.vertices.size());
-
-	//読み込みのところでバッファインデックスを作った方がよさそう
-	GenerateVertexBufferView();
+	
 
 	//4.ModelDataを返す
 	return modelData;
@@ -429,11 +425,20 @@ void Model::Initialize(DirectXSetup* directXSetup) {
 	this->directXSetup_ = directXSetup;
 	
 	//モデルの読み込み
-	modelData_ = LoadObjectFile("Resources/05_02", "plane.obj");
+
+	//この２つ外に出した方がよさそう
+	modelData_ = LoadObjectFile("Resources/05_02", "axis.obj");
+	LoadTexture("Resources/uvChecker.png");
+
 
 	////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
 	materialResource_=CreateBufferResource(sizeof(Material));
 
+	//頂点リソースを作る
+	vertexResource_ = CreateBufferResource(sizeof(VertexData) * modelData_.vertices.size());
+
+	//読み込みのところでバッファインデックスを作った方がよさそう
+	GenerateVertexBufferView();
 
 	//Sprite用のTransformationMatrix用のリソースを作る。
 	//Matrix4x4 1つ分サイズを用意する
@@ -447,7 +452,7 @@ void Model::Initialize(DirectXSetup* directXSetup) {
 	directionalLightData_->intensity = 1.0f;
 
 
-	LoadTexture("Resources/uvChecker.png");
+	
 	
 
 }

@@ -241,6 +241,15 @@
     <ClInclude Include="Ellysia\Audio\Audio.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="Ellysia\Audio\ChunkHeader\ChunkHeader.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Audio\RiffHeader\RiffHeader.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Audio\FormatChunk\FormatChunk.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Ellysia\externals\imGui\LICENSE.txt">

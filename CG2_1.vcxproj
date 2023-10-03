@@ -132,6 +132,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Ellysia\Audio\ChunkHeader\ChunkHeader.h" />
     <ClInclude Include="Ellysia\Audio\FormatChunk\FormatChunk.h" />
     <ClInclude Include="Ellysia\Audio\RiffHeader\RiffHeader.h" />
+    <ClInclude Include="Ellysia\Audio\SoundData\SoundData.h" />
     <ClInclude Include="Ellysia\Common\DirectX\DirectXSetup.h" />
     <ClInclude Include="Ellysia\Common\Windows\WinApp.h" />
     <ClInclude Include="Ellysia\ConvertFunction\ConvertColor\ColorConvert.h" />

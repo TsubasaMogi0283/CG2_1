@@ -482,7 +482,7 @@ void Model::Draw(Transform transform,Matrix4x4 viewMatrix,Matrix4x4 projectionMa
 	//reinterpret_cast...char* から int* へ、One_class* から Unrelated_class* へなどの変換に使用
 	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 	materialData_->color = {1.0f,1.0f,1.0f,1.0f};
-	materialData_->enableLighting=false;
+	materialData_->enableLighting=true;
 
 	materialData_->uvTransform = MakeIdentity4x4();
 

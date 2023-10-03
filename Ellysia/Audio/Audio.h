@@ -14,6 +14,7 @@
 
 using Microsoft::WRL::ComPtr;
 #include <wrl.h>
+#include "SoundData/SoundData.h"
 
 
 
@@ -27,8 +28,16 @@ public:
 	//初期化
 	void Initialize();
 
+	//読み込み
+	SoundData SoundLoadWave(const char* fileName);
+
+
 	//更新
 	void Update();
+
+
+	//音声データの開放
+	void SoundUnload(SoundData* soundData);
 
 
 	//デストラクタ

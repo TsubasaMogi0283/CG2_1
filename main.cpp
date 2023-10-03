@@ -12,6 +12,8 @@
 #include <Polygon/Sphere/Sphere.h>
 #include <Polygon/Model/Model.h>
 
+#include "Audio/Audio.h"
+
 
 //Winodwsアプリでもエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
@@ -149,8 +151,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	SphereStruct sphereCoodinate = { {-5.0f,-2.0f,20.0f},1.0f};
 	Transform transformSphere = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
-
-	
 
 	MSG msg{};
 

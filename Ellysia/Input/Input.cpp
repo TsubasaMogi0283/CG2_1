@@ -46,9 +46,9 @@ void Input::Initialize(WinApp* winApp) {
 
 
 //Push状態
-bool Input::PushKey(BYTE keyNumber) {
+bool Input::PushKey(uint8_t keyNumber) {
 	//指定されていたキーを押していればtrueを返す
-	if (key_[keyNumber]) {
+	if (key_[keyNumber]!=0) {
 		return true;
 	}
 	//押されていなければfalseを返す
@@ -56,12 +56,25 @@ bool Input::PushKey(BYTE keyNumber) {
 
 }
 
+bool Input::TriggerKey(uint8_t keyNumber) {
+	if (key_[keyNumber]!=0 && preKey_[keyNumber]==0) {
+		return true;
+	}
+
+	return false;
+}
+
 
 
 void Input::Update() {
+
+	//前回のキー入力を保存
+	memcpy(preKey_, key_, sizeof(key_));
+
+
+
 	//キーボード情報の取得開始
 	keyboard_->Acquire();
-
 	
 	keyboard_->GetDeviceState(sizeof(key_), key_);
 

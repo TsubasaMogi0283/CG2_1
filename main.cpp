@@ -125,7 +125,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			
 
 #pragma region Modelの位置情報
-			if (input->PushKey(DIK_SPACE) == true) {
+			if (input->TriggerKey(DIK_SPACE) == true) {
 				ImGui::Begin("Model:");
 				ImGui::InputFloat3("Scale", &transformSphere.scale.x);
 				ImGui::SliderFloat3("ScaleSlide", &transformSphere.scale.x, 1.0f,5.0f);

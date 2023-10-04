@@ -75,6 +75,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Model* plane = new Model();
 	plane->Initialize(directXSetup);
 
+
+
+	Audio* sampleAudio_ = new Audio();
+	sampleAudio_->Initialize();
+	
+
+	SoundData soundData = sampleAudio_->SoundLoadWave("Resources/Audio/Sample/Win.wav");
+
+
+	sampleAudio_->PlayWave(soundData);
+
 	//そこで切り替えが楽になるから
 	//sphere->LoadTexture("Resources/uvChecker.png");
 	//INitilizeに入れた
@@ -151,6 +162,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	SphereStruct sphereCoodinate = { {-5.0f,-2.0f,20.0f},1.0f};
 	Transform transformSphere = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
+
+	
 
 	MSG msg{};
 
@@ -294,7 +307,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	sphere->Release();
 	plane->Release();
 	
-
+	sampleAudio_->SoundUnload(&soundData);
 
 	
 	directXSetup->Release();

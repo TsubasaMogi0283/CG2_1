@@ -1,6 +1,4 @@
 #include "Audio.h"
-#include "RiffHeader/RiffHeader.h"
-#include "FormatChunk/FormatChunk.h"
 
 //コンストラクタ
 Audio::Audio() {
@@ -12,17 +10,18 @@ Audio::Audio() {
 void Audio::Initialize() {
 
 	//XAudioのエンジンのインスタンスを生成
-	HRESULT hr{};
+	HRESULT hr;
 	hr = XAudio2Create(&xAudio2_, 0, XAUDIO2_DEFAULT_PROCESSOR);
 
 	//マスターボイスを生成
 	hr = xAudio2_->CreateMasteringVoice(&masterVoice_);
 
+
 }
 
 //読み込み
 SoundData Audio::SoundLoadWave(const char* fileName) {
-	HRESULT hr{};
+	//HRESULT hr;
 
 	#pragma region １,ファイルオープン
 	//ファイル入力ストリームのインスタンス
@@ -52,7 +51,7 @@ SoundData Audio::SoundLoadWave(const char* fileName) {
 	FormatChunk format = {};
 	//チャンクヘッダーの確認
 	file.read((char*)&format, sizeof(ChunkHeader));
-	if (strncmp(format.chunk.id, "fmt", 4) != 0) {
+	if (strncmp(format.chunk.id, "fmt ", 4) != 0) {
 		assert(0);
 	}
 
@@ -103,12 +102,39 @@ SoundData Audio::SoundLoadWave(const char* fileName) {
 
 }
 
+//音声再生
+void Audio::PlayWave(const SoundData& soundData) {
+	HRESULT hr{};
+	
+	
+	//波形フォーマットを基にSourceVoiceの生成
+	IXAudio2SourceVoice* pSourceVoice = nullptr;
+	hr = xAudio2_->CreateSourceVoice(&pSourceVoice, &soundData.wfex);
+	assert(SUCCEEDED(hr));
+
+	//再生する波形データの設定
+	XAUDIO2_BUFFER buf{};
+	buf.pAudioData = soundData.pBuffer;
+	buf.AudioBytes = soundData.bufferSize;
+	buf.Flags = XAUDIO2_END_OF_STREAM;
+
+	//波形データの再生
+	hr = pSourceVoice->SubmitSourceBuffer(&buf);
+	hr = pSourceVoice->Start();
+
+}
+
 
 //更新
 void Audio::Update() {
 
 }
 
+//解放
+void Audio::Release() {
+	//XAudio2解放
+	xAudio2_.Reset();
+}
 
 //音声データの開放
 void Audio::SoundUnload(SoundData* soundData) {
@@ -118,8 +144,10 @@ void Audio::SoundUnload(SoundData* soundData) {
 	soundData->bufferSize = 0;
 	soundData->wfex = {};
 
-
+	Release();
 }
+
+
 
 
 //デストラクタ

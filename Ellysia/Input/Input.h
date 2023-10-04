@@ -18,6 +18,10 @@ public:
 
 	void Update();
 
+	//Push状態
+	bool PushKey(BYTE keyNumber);
+
+
 
 	~Input();
 	
@@ -33,7 +37,8 @@ private:
 	//キーボードデバイスの生成
 	IDirectInputDevice8* keyboard_ = nullptr;
 
-
+	//全キーの入力状態を取得する
+	BYTE key_[256] = {};
 
 
 

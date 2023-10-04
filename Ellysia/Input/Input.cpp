@@ -45,14 +45,29 @@ void Input::Initialize(WinApp* winApp) {
 }
 
 
+//Push状態
+bool Input::PushKey(BYTE keyNumber) {
+	//指定されていたキーを押していればtrueを返す
+	if (key_[keyNumber]) {
+		return true;
+	}
+	//押されていなければfalseを返す
+	return false;
+
+}
+
+
+
 void Input::Update() {
 	//キーボード情報の取得開始
 	keyboard_->Acquire();
 
-	//全キーの入力状態を取得する
-	BYTE key[256] = {};
-	keyboard_->GetDeviceState(sizeof(key), key);
+	
+	keyboard_->GetDeviceState(sizeof(key_), key_);
 
+	//0から255番まであるよ
+	//エンターキーを押していると0x80(128)が代入されるよ
+	//押していないとどのキーも0x00(0)が代入されるよ
 
 
 }

@@ -13,6 +13,7 @@
 #include <Polygon/Model/Model.h>
 
 #include "Audio/Audio.h"
+#include <Input/Input.h>
 
 
 //Winodwsアプリでもエントリーポイント(main関数)
@@ -41,11 +42,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	WinApp* winSetup = new WinApp();
 	DirectXSetup* directXSetup = new DirectXSetup();
 	ImGuiManager* imGuiManager = new ImGuiManager();
+	Input* input = new Input();
 	
-	
-	//三角形の情報
-	const int32_t TRIANGLE_AMOUNT_MAX = 1;
-
 	
 	
 
@@ -53,95 +51,19 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	winSetup->Initialize(L"DirectX",WINDOW_SIZE_WIDTH,WINDOW_SIZE_HEIGHT);
 	directXSetup->Initialize(winSetup->GetClientWidth(),winSetup->GetClientHeight(),winSetup->GetHwnd());
 	imGuiManager->Initialize(winSetup, directXSetup);
+	input->Initialize(winSetup);
 
 
-	////三角形について
-	Triangle* triangle[TRIANGLE_AMOUNT_MAX];
-	for (int i = 0; i < TRIANGLE_AMOUNT_MAX; i++) {
-		triangle[i] = new Triangle();
-		triangle[i]->Initialize(directXSetup);
-		triangle[i]->LoadTexture("Resources/uvChecker.png");
-	}
 
-	//スプライトの描画
-	Sprite* sprite = new Sprite();
-	sprite->Initialize(directXSetup);
-	sprite->LoadTexture("Resources/uvChecker.png");
-	
-	//球の描画
-	Sphere* sphere = new Sphere();
-	sphere->Initialize(directXSetup);
 
 	Model* plane = new Model();
 	plane->Initialize(directXSetup);
 
 
 
-	Audio* sampleAudio_ = new Audio();
-	sampleAudio_->Initialize();
-	
-
-	SoundData soundData = sampleAudio_->SoundLoadWave("Resources/Audio/Sample/Win.wav");
-
-
-	sampleAudio_->PlayWave(soundData);
-
-	//そこで切り替えが楽になるから
-	//sphere->LoadTexture("Resources/uvChecker.png");
-	//INitilizeに入れた
-
-	Vector4 triangleCoodinateLeft[TRIANGLE_AMOUNT_MAX] = {
-		//left
-		//一段目
-		{-0.5f,-0.5f,0.0f,1.0f}
-
-	};
-
-	Vector4 triangleCoodinateTop[TRIANGLE_AMOUNT_MAX] = {
-		{0.0f,0.5f,0.0f,1.0f}
-	};
-
-	Vector4 triangleCoodinateRight[TRIANGLE_AMOUNT_MAX] = {
-		{0.5f,-0.5f,0.0f,1.0f}
-		//right
-		//{-0.6f,0.5f,0.0f,1.0f },
-		//{-0.2f,0.5f,0.0f,1.0f },
-		//{0.2f,0.5f,0.0f,1.0f },
-		//{0.6f,0.5f,0.0f,1.0f },
-		//{1.0f,0.5f,0.0f,1.0f },
-		//
-		//{-0.6f,0.0f,0.0f,1.0f },
-		//{-0.2f,0.0f,0.0f,1.0f },
-		//{0.2f,0.0f,0.0f,1.0f },
-		//{0.6f,0.0f,0.0f,1.0f },
-		//{1.0f,0.0f,0.0f,1.0f },
-		//
-		//{-0.6f,-0.5f,0.0f,1.0f },
-		//{-0.2f,-0.5f,0.0f,1.0f },
-		//{0.2f,-0.5f,0.0f,1.0f },
-		//{0.6f,-0.5f,0.0f,1.0f },
-		//{1.0f,-0.5f,0.0f,1.0f },
-
-	};
-	
 	Vector3 scale = { 1.0f,1.0f,1.0f };
 	Vector3 rotate = { 0.0f,0.0f,0.0f };
 	Vector3 translate={ 0.0f,0.0f,0.0f };
-
-	Transform transform2 = { scale,rotate,translate };
-
-	Transform transform[TRIANGLE_AMOUNT_MAX]{
-		{scale,rotate,translate },
-	};
-
-	
-
-	//頂いた関数で色を決めていく
-	Vector4 color[TRIANGLE_AMOUNT_MAX] = {
-		{ ColorAdapter(WHITE)},
-
-	};
-	
 
 	
 	Transform cameraTransform = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,-5.0f} };
@@ -188,14 +110,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 			imGuiManager->UpDate();
 
-			//plane->Update();
+			//入力の更新
+			input->Update();
 
-			//
-			for (int i = 0; i < TRIANGLE_AMOUNT_MAX; i++) {
-				//y軸回転
-				transform[i].rotate.y += 0.03f;
-			}
-			//transformSphere.rotate.y += 0.1f;
+
+
 
 			//カメラ行列
 			Matrix4x4 cameraMatrix = MakeAffineMatrix(cameraTransform.scale, cameraTransform.rotate, cameraTransform.translate);
@@ -206,22 +125,25 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			
 
 #pragma region Modelの位置情報
-			sphere->Update();
-			ImGui::Begin("Model:");
-			ImGui::InputFloat3("Scale", &transformSphere.scale.x);
-			ImGui::SliderFloat3("ScaleSlide", &transformSphere.scale.x, 1.0f,5.0f);
+			if (input->PushKey(DIK_SPACE) == true) {
+				ImGui::Begin("Model:");
+				ImGui::InputFloat3("Scale", &transformSphere.scale.x);
+				ImGui::SliderFloat3("ScaleSlide", &transformSphere.scale.x, 1.0f,5.0f);
 
-			ImGui::InputFloat3("Rotate", &transformSphere.rotate.x);
-			ImGui::SliderFloat3("RotateSlide", &transformSphere.rotate.x, 0.0f,12.0f);
+				ImGui::InputFloat3("Rotate", &transformSphere.rotate.x);
+				ImGui::SliderFloat3("RotateSlide", &transformSphere.rotate.x, 0.0f,12.0f);
 
-			ImGui::InputFloat3("Translate", &transformSphere.translate.x);
-			ImGui::SliderFloat3("TranslateSlide", &transformSphere.translate.x,-10.0f,10.0f);
+				ImGui::InputFloat3("Translate", &transformSphere.translate.x);
+				ImGui::SliderFloat3("TranslateSlide", &transformSphere.translate.x,-10.0f,10.0f);
 
-			ImGui::SliderFloat("Radius", &sphereCoodinate.radius, 0.0f, 5.0f);
+				ImGui::SliderFloat("Radius", &sphereCoodinate.radius, 0.0f, 5.0f);
+
+				
+				
+				ImGui::End();
+			}
 
 			
-			
-			ImGui::End();
 
 			
 
@@ -257,17 +179,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 	//解放処理
-	
-	for (int i = 0; i < TRIANGLE_AMOUNT_MAX; i++) {
-		triangle[i]->Release();
-	}
-
-	sprite->Release();
-	sphere->Release();
 	plane->Release();
 	
-	sampleAudio_->SoundUnload(&soundData);
-
 	
 	directXSetup->Release();
 	winSetup->Close();

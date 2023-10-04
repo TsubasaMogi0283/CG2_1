@@ -16,6 +16,7 @@ public:
 
 	void Initialize(WinApp* winApp);
 
+	void Update();
 
 
 	~Input();
@@ -27,8 +28,10 @@ private:
 
 
 	//DirectInputの初期化
-	IDirectInput8* directInput = nullptr;
+	IDirectInput8* directInput_ = nullptr;
 
+	//キーボードデバイスの生成
+	IDirectInputDevice8* keyboard_ = nullptr;
 
 
 

@@ -58,6 +58,12 @@
     <Filter Include="ソース ファイル\Polygone">
       <UniqueIdentifier>{6a198dbf-5723-494c-be30-e68adffa3015}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\Audio">
+      <UniqueIdentifier>{667f4c55-6d76-4bce-bf4c-aeca7b140181}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Audio">
+      <UniqueIdentifier>{8d0f9bce-01fe-4d26-8cbb-25d7d7b8ea83}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -123,8 +129,11 @@
     <ClCompile Include="Ellysia\Ellysia.cpp">
       <Filter>ソース ファイル\Polygone</Filter>
     </ClCompile>
+    <ClCompile Include="Project\Player\Player.cpp">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClCompile>
     <ClCompile Include="Ellysia\Audio\Audio.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\Audio</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -238,19 +247,22 @@
     <ClInclude Include="Ellysia\TextureManager\ModelData\ModelData.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Ellysia\Audio\Audio.h">
-      <Filter>ソース ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Ellysia\Audio\ChunkHeader\ChunkHeader.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Ellysia\Audio\RiffHeader\RiffHeader.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\Audio</Filter>
     </ClInclude>
     <ClInclude Include="Ellysia\Audio\FormatChunk\FormatChunk.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Audio\RiffHeader\RiffHeader.h">
+      <Filter>ヘッダー ファイル\Audio</Filter>
     </ClInclude>
     <ClInclude Include="Ellysia\Audio\SoundData\SoundData.h">
+      <Filter>ヘッダー ファイル\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Audio\Audio.h">
+      <Filter>ヘッダー ファイル\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Player\Player.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

@@ -51,6 +51,8 @@ SoundData Audio::SoundLoadWave(const char* fileName) {
 	FormatChunk format = {};
 	//チャンクヘッダーの確認
 	file.read((char*)&format, sizeof(ChunkHeader));
+	//何かここ空白入れないとダメらしい
+	//後ろが4だからかな・・
 	if (strncmp(format.chunk.id, "fmt ", 4) != 0) {
 		assert(0);
 	}

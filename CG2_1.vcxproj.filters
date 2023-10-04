@@ -58,6 +58,30 @@
     <Filter Include="ソース ファイル\Polygone">
       <UniqueIdentifier>{6a198dbf-5723-494c-be30-e68adffa3015}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\Audio">
+      <UniqueIdentifier>{17a133ca-1765-41b5-ac1f-88c022b6f072}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\ModelData">
+      <UniqueIdentifier>{f741242e-7cbc-4c51-b146-156531028030}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Polygone\2D">
+      <UniqueIdentifier>{37a056bf-c227-41e3-ad05-cccd28aeef55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Polygone\3D">
+      <UniqueIdentifier>{c8ecca75-30a5-4916-bedc-18d047b75326}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Polygone\2D">
+      <UniqueIdentifier>{47704ace-0e4d-48b7-a32a-f0fbfdde24fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Polygone\3D">
+      <UniqueIdentifier>{35b89b43-cc3c-46d0-91a6-e8c2ea339870}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Audio">
+      <UniqueIdentifier>{31120d8e-cb74-4a14-b38b-2cc0eeea8adc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\TextureManager">
+      <UniqueIdentifier>{511c7def-d00b-4f84-bb17-82918b2ccb0a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -102,15 +126,6 @@
     <ClCompile Include="Ellysia\Math\Vector\Calculation\VectorCalculation.cpp">
       <Filter>ソース ファイル\Math</Filter>
     </ClCompile>
-    <ClCompile Include="Ellysia\Polygon\Sphere\Sphere.cpp">
-      <Filter>ソース ファイル\Polygone</Filter>
-    </ClCompile>
-    <ClCompile Include="Ellysia\Polygon\Sprite\Sprite.cpp">
-      <Filter>ソース ファイル\Polygone</Filter>
-    </ClCompile>
-    <ClCompile Include="Ellysia\Polygon\Triangle\Triangle.cpp">
-      <Filter>ソース ファイル\Polygone</Filter>
-    </ClCompile>
     <ClCompile Include="Ellysia\Common\DirectX\DirectXSetup.cpp">
       <Filter>ソース ファイル\Common</Filter>
     </ClCompile>
@@ -118,12 +133,27 @@
       <Filter>ソース ファイル\Common</Filter>
     </ClCompile>
     <ClCompile Include="Ellysia\Polygon\Model\Model.cpp">
-      <Filter>ソース ファイル\Polygone</Filter>
+      <Filter>ソース ファイル\Polygone\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Ellysia\Polygon\Sphere\Sphere.cpp">
+      <Filter>ソース ファイル\Polygone\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Ellysia\Polygon\Sprite\Sprite.cpp">
+      <Filter>ソース ファイル\Polygone\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Ellysia\Polygon\Triangle\Triangle.cpp">
+      <Filter>ソース ファイル\Polygone\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Ellysia\Audio\Audio.cpp">
+      <Filter>ソース ファイル\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="Ellysia\TextureManager\TextureManager.cpp">
+      <Filter>ソース ファイル\TextureManager</Filter>
     </ClCompile>
     <ClCompile Include="Ellysia\Ellysia.cpp">
       <Filter>ソース ファイル\Polygone</Filter>
     </ClCompile>
-    <ClCompile Include="Ellysia\Audio\Audio.cpp">
+    <ClCompile Include="Ellysia\Input\Input.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -199,17 +229,8 @@
     <ClInclude Include="Ellysia\Math\Vector\Calculation\VectorCalculation.h">
       <Filter>ヘッダー ファイル\Math\Vector</Filter>
     </ClInclude>
-    <ClInclude Include="Ellysia\Polygon\Sprite\Sprite.h">
-      <Filter>ヘッダー ファイル\Polygone</Filter>
-    </ClInclude>
-    <ClInclude Include="Ellysia\Polygon\Triangle\Triangle.h">
-      <Filter>ヘッダー ファイル\Polygone</Filter>
-    </ClInclude>
     <ClInclude Include="Ellysia\Math\Vector\Vector2.h">
       <Filter>ヘッダー ファイル\Math\Vector</Filter>
-    </ClInclude>
-    <ClInclude Include="Ellysia\Polygon\Sphere\Sphere.h">
-      <Filter>ヘッダー ファイル\Polygone</Filter>
     </ClInclude>
     <ClInclude Include="Ellysia\Math\Vector\VertexData.h">
       <Filter>ヘッダー ファイル\Math\Vector</Filter>
@@ -229,28 +250,43 @@
     <ClInclude Include="Ellysia\Common\Windows\WinApp.h">
       <Filter>ヘッダー ファイル\Common</Filter>
     </ClInclude>
-    <ClInclude Include="Ellysia\TextureManager\MaterialData\MaterialData.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Ellysia\Audio\ChunkHeader\ChunkHeader.h">
+      <Filter>ヘッダー ファイル\Audio</Filter>
     </ClInclude>
-    <ClInclude Include="Ellysia\Polygon\Model\Model.h">
-      <Filter>ヘッダー ファイル\Polygone</Filter>
+    <ClInclude Include="Ellysia\Audio\FormatChunk\FormatChunk.h">
+      <Filter>ヘッダー ファイル\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Audio\RiffHeader\RiffHeader.h">
+      <Filter>ヘッダー ファイル\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Audio\SoundData\SoundData.h">
+      <Filter>ヘッダー ファイル\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\TextureManager\MaterialData\MaterialData.h">
+      <Filter>ヘッダー ファイル\ModelData</Filter>
     </ClInclude>
     <ClInclude Include="Ellysia\TextureManager\ModelData\ModelData.h">
+      <Filter>ヘッダー ファイル\ModelData</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Polygon\Model\Model.h">
+      <Filter>ヘッダー ファイル\Polygone\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Polygon\Sphere\Sphere.h">
+      <Filter>ヘッダー ファイル\Polygone\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Polygon\Sprite\Sprite.h">
+      <Filter>ヘッダー ファイル\Polygone\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Polygon\Triangle\Triangle.h">
+      <Filter>ヘッダー ファイル\Polygone\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\TextureManager\TextureManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Ellysia\Audio\Audio.h">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\Audio</Filter>
     </ClInclude>
-    <ClInclude Include="Ellysia\Audio\ChunkHeader\ChunkHeader.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Ellysia\Audio\RiffHeader\RiffHeader.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Ellysia\Audio\FormatChunk\FormatChunk.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Ellysia\Audio\SoundData\SoundData.h">
+    <ClInclude Include="Ellysia\Input\Input.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

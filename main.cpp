@@ -204,51 +204,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			//遠視投影行列
 			Matrix4x4 projectionMatrix = MakePerspectiveFovMatrix(0.45f, float(WINDOW_SIZE_WIDTH) / float(WINDOW_SIZE_HEIGHT), 0.1f, 100.0f);
 			
-#pragma region Triangleの位置情報
 
-
-			ImGui::Begin("TriangleSRT");
-
-			for (int i = 0; i < TRIANGLE_AMOUNT_MAX; i++) {
-				ImGui::InputFloat3("Scale",&transform[i].scale.x);
-				ImGui::SliderFloat3("ScaleSlide", &transform[i].scale.x, 1.0f,5.0f);
-	
-				ImGui::InputFloat3("Rotate",&transform[i].rotate.x);
-				ImGui::SliderFloat3("RotateSlide", &transform[i].rotate.x, 0.0f,12.0f);
-	
-
-				ImGui::InputFloat3("Translate",&transform[i].translate.x);
-				ImGui::SliderFloat3("TranslateSlide", &transform[i].translate.x, -5.0f,5.0f);
-	
-			}
-			
-			ImGui::End();
-
-#pragma endregion
-
-#pragma region Spriteの位置情報
-
-
-			sprite->Updata();
-
-			ImGui::Begin("Sprite");
-			ImGui::InputFloat3("Scale", &transformSprite.scale.x);
-			ImGui::SliderFloat3("ScaleSlide", &transformSprite.scale.x, 1.0f,5.0f);
-
-			ImGui::InputFloat3("Rotate", &transformSprite.rotate.x);
-			ImGui::SliderFloat3("RotateSlide", &transformSprite.rotate.x, 0.0f,12.0f);
-
-			ImGui::InputFloat3("Translate", &transformSprite.translate.x);
-			ImGui::SliderFloat3("TranslateSlide", &transformSprite.translate.x,-1000.0f,1000.0f);
-
-
-			ImGui::End();
-
-#pragma endregion
-
-#pragma region Sphereの位置情報
+#pragma region Modelの位置情報
 			sphere->Update();
-			ImGui::Begin("Sphere");
+			ImGui::Begin("Model:");
 			ImGui::InputFloat3("Scale", &transformSphere.scale.x);
 			ImGui::SliderFloat3("ScaleSlide", &transformSphere.scale.x, 1.0f,5.0f);
 

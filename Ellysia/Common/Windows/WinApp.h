@@ -53,6 +53,10 @@ public:
 		return hwnd_;
 	}
 
+	HINSTANCE GetHInstance() {
+		return wc_.hInstance;
+	}
+
 private:
 
 	////ウィンドウクラスを登録する

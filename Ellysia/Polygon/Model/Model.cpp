@@ -419,18 +419,16 @@ ID3D12Resource* Model ::UploadTextureData(
 
 #pragma endregion
 
-
-//初期化
-void Model::Initialize(DirectXSetup* directXSetup) {
+void Model::LoadDirectX(DirectXSetup* directXSetup) {
 	this->directXSetup_ = directXSetup;
-	
-	//モデルの読み込み
+}
 
-	//この２つ外に出した方がよさそう
-	modelData_ = LoadObjectFile("Resources/05_02", "axis.obj");
-	LoadTexture("Resources/uvChecker.png");
+void Model::LoadObject(const std::string& directoryPath,const std::string& fileName) {
+	modelData_ = LoadObjectFile(directoryPath, fileName);
 
+}
 
+void Model::CreateResource() {
 	////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
 	materialResource_=CreateBufferResource(sizeof(Material));
 
@@ -440,6 +438,41 @@ void Model::Initialize(DirectXSetup* directXSetup) {
 	//読み込みのところでバッファインデックスを作った方がよさそう
 	GenerateVertexBufferView();
 
+	//Sprite用のTransformationMatrix用のリソースを作る。
+	//Matrix4x4 1つ分サイズを用意する
+	transformationMatrixResource_ = CreateBufferResource(sizeof(TransformationMatrix));
+	
+	//Lighting
+	directionalLightResource_ = CreateBufferResource(sizeof(DirectionalLight));
+	directionalLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightData_));
+	directionalLightData_->color={ 1.0f,1.0f,1.0f,1.0f };
+	directionalLightData_->direction = { 0.0f,-1.0f,0.0f };
+	directionalLightData_->intensity = 1.0f;
+
+
+	
+}
+
+//初期化
+void Model::Initialize(const std::string& directoryPath,const std::string& fileName) {
+	
+	LoadDirectX(directXSetup_);
+
+	
+
+	////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
+	materialResource_=CreateBufferResource(sizeof(Material));
+
+	//モデルの読み込み
+	//この２つ外に出した方がよさそう
+	LoadObject(directoryPath, fileName);
+
+	//頂点リソースを作る
+	vertexResource_ = CreateBufferResource(sizeof(VertexData) * modelData_.vertices.size());
+	
+	//読み込みのところでバッファインデックスを作った方がよさそう
+	GenerateVertexBufferView();
+	
 	//Sprite用のTransformationMatrix用のリソースを作る。
 	//Matrix4x4 1つ分サイズを用意する
 	transformationMatrixResource_ = CreateBufferResource(sizeof(TransformationMatrix));
@@ -482,7 +515,7 @@ void Model::Draw(Transform transform,Matrix4x4 viewMatrix,Matrix4x4 projectionMa
 	//reinterpret_cast...char* から int* へ、One_class* から Unrelated_class* へなどの変換に使用
 	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 	materialData_->color = {1.0f,1.0f,1.0f,1.0f};
-	materialData_->enableLighting=true;
+	materialData_->enableLighting=false;
 
 	materialData_->uvTransform = MakeIdentity4x4();
 

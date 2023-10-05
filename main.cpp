@@ -55,33 +55,32 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 	Model* plane = new Model();
-	plane->Initialize(directXSetup);
+	plane->LoadDirectX(directXSetup);
+	
+	plane->Initialize("Resources/05_02", "axis.obj");
+	plane->LoadTexture("Resources/uvChecker.png");
 
+	
+	Model* plane2 = new Model();
+	plane2->LoadDirectX(directXSetup);
+	
+	plane2->Initialize("Resources/05_02", "plane.obj");
+	plane2->LoadTexture("Resources/uvChecker.png");
 
+	
 
 	Vector3 scale = { 1.0f,1.0f,1.0f };
 	Vector3 rotate = { 0.0f,0.0f,0.0f };
 	Vector3 translate={ 0.0f,0.0f,0.0f };
 
 	
-	Transform cameraTransform = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,-5.0f} };
+	Transform cameraTransform = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,-9.8f} };
 	
-#pragma region Sprite用の座標
-	//左下
-	Vector4  leftBottom= { 0.0f,360.0f,0.0f,1.0f};
-	//左上
-	Vector4 leftTop = { 0.0f,0.0f,0.0f,1.0f};
-	//右下
-	Vector4 rightBottom = { 640.0f,360.0f,0.0f,1.0f} ;
-	//上2
-	Vector4 rightTop = { 640.0f,0.0f,0.0f,1.0f};
-
-	Transform transformSprite = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
-
-#pragma endregion
-
 	SphereStruct sphereCoodinate = { {-5.0f,-2.0f,20.0f},1.0f};
 	Transform transformSphere = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
+	Transform transformSphere2 = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,2.0f} };
+
+
 
 	int number = 0;
 	
@@ -130,7 +129,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 			if (input->GetJoystickState(joyState)) {
-				if (input->IsTriggerRight(joyState) == true) {
+				if (input->IsPushLeft(joyState) == true) {
 					ImGui::Begin("Model:");
 			
 			
@@ -172,6 +171,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			
 
 			plane->Draw(transformSphere, viewMatrix, projectionMatrix);
+			plane2->Draw(transformSphere2, viewMatrix, projectionMatrix);
 
 			imGuiManager->EndFrame(directXSetup);
 
@@ -192,7 +192,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	//解放処理
 	plane->Release();
-	
+	plane2->Release();
 	
 	directXSetup->Release();
 	winSetup->Close();

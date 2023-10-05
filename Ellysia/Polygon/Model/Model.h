@@ -34,8 +34,17 @@ public:
 	//コンストラクタ
 	Model();
 
+
+	void LoadDirectX(DirectXSetup* directXSetup);
+
+	void CreateResource();
+
 	//初期化
-	void Initialize(DirectXSetup* directXSetup);
+	void Initialize(const std::string& directoryPath,const std::string& fileName);
+
+	void LoadObject(const std::string& directoryPath,const std::string& fileName);
+
+
 
 	//モデルデータの読み込み
 	ModelData LoadObjectFile(const std::string& directoryPath, const std::string& fileName);

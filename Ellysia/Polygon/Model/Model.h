@@ -34,7 +34,8 @@ public:
 	//コンストラクタ
 	Model();
 
-
+	//関数が凄いことになってるけどあまり気にしないでね
+	//いつか直す
 	void LoadDirectX(DirectXSetup* directXSetup);
 
 	void CreateResource();
@@ -67,6 +68,19 @@ public:
 
 	//デストラクタ
 	~Model();
+
+
+
+
+public:
+	//アクセッサのまとめ
+
+	//透明度の変更
+	void SetColor(Vector4 color) {
+		this->color_ = color;
+	}
+
+
 
 
 private:
@@ -138,7 +152,7 @@ private:
 
 	uint32_t descriptorSizeSRV_ = 0u;
 
-	static const int MAX_TEXTURE_ = 3;
+	static const int MAX_TEXTURE_ = 20;
 	bool isUsedTextureIndex[MAX_TEXTURE_];
 
 	ID3D12Resource* textureResource_[MAX_TEXTURE_] = {nullptr};
@@ -150,6 +164,11 @@ private:
 
 	D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU_[MAX_TEXTURE_] = {} ;
 	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU_[MAX_TEXTURE_] = {};
+
+
+
+	//色関係のメンバ変数
+	Vector4 color_;
 
 	
 };

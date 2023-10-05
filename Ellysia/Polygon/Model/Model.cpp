@@ -458,7 +458,6 @@ void Model::Initialize(const std::string& directoryPath,const std::string& fileN
 	
 	LoadDirectX(directXSetup_);
 
-	
 
 	////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
 	materialResource_=CreateBufferResource(sizeof(Material));
@@ -482,9 +481,9 @@ void Model::Initialize(const std::string& directoryPath,const std::string& fileN
 	directionalLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightData_));
 	directionalLightData_->color={ 1.0f,1.0f,1.0f,1.0f };
 	directionalLightData_->direction = { 0.0f,-1.0f,0.0f };
-	directionalLightData_->intensity = 1.0f;
+	directionalLightData_->intensity = 3.0f;
 
-
+	//color_ = { 1.0f,1.0f,1.0f,1.0f };
 	
 	
 
@@ -514,7 +513,7 @@ void Model::Draw(Transform transform,Matrix4x4 viewMatrix,Matrix4x4 projectionMa
 	//書き込むためのアドレスを取得
 	//reinterpret_cast...char* から int* へ、One_class* から Unrelated_class* へなどの変換に使用
 	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
-	materialData_->color = {1.0f,1.0f,1.0f,1.0f};
+	materialData_->color = color_;
 	materialData_->enableLighting=false;
 
 	materialData_->uvTransform = MakeIdentity4x4();

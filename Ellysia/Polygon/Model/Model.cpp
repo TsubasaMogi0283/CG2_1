@@ -483,7 +483,7 @@ void Model::Initialize(const std::string& directoryPath,const std::string& fileN
 	directionalLightData_->direction = { 0.0f,-1.0f,0.0f };
 	directionalLightData_->intensity = 3.0f;
 
-	//color_ = { 1.0f,1.0f,1.0f,1.0f };
+	color_ = { 1.0f,1.0f,1.0f,1.0f };
 	
 	
 

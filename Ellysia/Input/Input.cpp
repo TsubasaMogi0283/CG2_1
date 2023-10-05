@@ -1,8 +1,10 @@
 #include "Input.h"
 
+//コンストラクタ
 Input::Input() {
 
 }
+
 
 void Input::Initialize(WinApp* winApp) {
 	this->winApp_ = winApp;
@@ -93,6 +95,34 @@ bool Input::IsTriggerMouse(int32_t mouseNumber) {
 }
 #pragma endregion
 
+#pragma region コントローラー
+
+//状態を取得
+bool Input::GetJoystickState(XINPUT_STATE& state){
+	DWORD dwResult = XInputGetState(0, &state);
+	if (dwResult == ERROR_SUCCESS){
+		return true;
+	}
+	return false;
+	
+}
+
+bool Input::IsPushLeft(XINPUT_STATE& state) {
+	if (state.Gamepad.wButtons & XINPUT_GAMEPAD_LEFT_SHOULDER) {
+		return true;
+	}
+	return false;
+}
+
+bool Input::IsPushRight(XINPUT_STATE& state) {
+	if (state.Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER) {
+		return true;
+	}
+	return false;
+}
+
+
+#pragma endregion
 
 void Input::Update() {
 
@@ -119,10 +149,6 @@ void Input::Update() {
 
 }
 
-
-
 Input::~Input() {
 
 }
-
-

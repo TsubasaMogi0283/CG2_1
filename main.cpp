@@ -15,7 +15,6 @@
 #include "Audio/Audio.h"
 #include <Input/Input.h>
 
-
 //Winodwsアプリでもエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//COMの初期化
@@ -42,8 +41,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	WinApp* winSetup = new WinApp();
 	DirectXSetup* directXSetup = new DirectXSetup();
 	ImGuiManager* imGuiManager = new ImGuiManager();
-	Input* input = new Input();
-	
+	Input* input = new Input();;
 	
 	
 
@@ -126,25 +124,34 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			
 
 #pragma region Modelの位置情報
-			if (input->IsTriggerMouse(LeftButton) == true) {
-				ImGui::Begin("Model:");
-				
-				
-				ImGui::InputFloat3("Scale", &transformSphere.scale.x);
-				ImGui::SliderFloat3("ScaleSlide", &transformSphere.scale.x, 1.0f,5.0f);
 
-				ImGui::InputFloat3("Rotate", &transformSphere.rotate.x);
-				ImGui::SliderFloat3("RotateSlide", &transformSphere.rotate.x, 0.0f,12.0f);
+			XINPUT_STATE joyState{};
+		
 
-				ImGui::InputFloat3("Translate", &transformSphere.translate.x);
-				ImGui::SliderFloat3("TranslateSlide", &transformSphere.translate.x,-10.0f,10.0f);
 
-				ImGui::SliderFloat("Radius", &sphereCoodinate.radius, 0.0f, 5.0f);
-				
-				number += 1;
-				
-				ImGui::End();
+			if (input->GetJoystickState(joyState)) {
+				if (input->IsTriggerRight(joyState) == true) {
+					ImGui::Begin("Model:");
+			
+			
+					ImGui::InputFloat3("Scale", &transformSphere.scale.x);
+					ImGui::SliderFloat3("ScaleSlide", &transformSphere.scale.x, 1.0f, 5.0f);
+			
+					ImGui::InputFloat3("Rotate", &transformSphere.rotate.x);
+					ImGui::SliderFloat3("RotateSlide", &transformSphere.rotate.x, 0.0f, 12.0f);
+			
+					ImGui::InputFloat3("Translate", &transformSphere.translate.x);
+					ImGui::SliderFloat3("TranslateSlide", &transformSphere.translate.x, -10.0f, 10.0f);
+			
+					ImGui::SliderFloat("Radius", &sphereCoodinate.radius, 0.0f, 5.0f);
+			
+					number += 1;
+			
+					ImGui::End();
+				}
 			}
+			
+			
 
 			
 			ImGui::Begin("B");

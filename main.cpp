@@ -126,7 +126,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			
 
 #pragma region Modelの位置情報
-			if (input->IsTriggerMouse(0) == true) {
+			if (input->IsTriggerMouse(LeftButton) == true) {
 				ImGui::Begin("Model:");
 				
 				

@@ -5,12 +5,15 @@
 
 #include <dinput.h>
 #include <Common/Windows/WinApp.h>
+#include "Input/Mouse/MouseInformation.h"
 
 #pragma comment(lib,"dinput8.lib")
 #pragma comment(lib,"dxguid.lib")
 
 #include <wrl.h>
 using namespace Microsoft::WRL;
+
+
 
 class Input {
 public:
@@ -67,8 +70,6 @@ private:
 	//マウスの入力状態を取得
 	DIMOUSESTATE currentMouse_ = {};
 	DIMOUSESTATE preMouse_ = {};
-
-
 
 
 };

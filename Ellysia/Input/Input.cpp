@@ -75,6 +75,7 @@ bool Input::IsTriggerKey(uint8_t keyNumber) {
 
 #pragma endregion
 
+#pragma region マウス
 //Push状態
 bool Input::IsPushMouse(int32_t mouseNumber) {
 	if (currentMouse_.rgbButtons[mouseNumber] != 0) {
@@ -90,7 +91,7 @@ bool Input::IsTriggerMouse(int32_t mouseNumber) {
 	}
 	return false;
 }
-
+#pragma endregion
 
 
 void Input::Update() {

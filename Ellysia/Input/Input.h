@@ -21,11 +21,27 @@ public:
 
 	void Update();
 
+
+#pragma region キーボード
 	//Push状態
-	bool PushKey(uint8_t keyNumber);
+	bool IsPushKey(uint8_t keyNumber);
 
 	//Trigger状態
-	bool TriggerKey(uint8_t keyNumber);
+	bool IsTriggerKey(uint8_t keyNumber);
+
+	//Releaseいるかな・・・
+	//必要になったら追加する
+
+#pragma endregion
+	//intがいいのかな
+	//Noviceではint32_tだった
+	//Push状態
+	bool IsPushMouse(int32_t keyNumber);
+
+	//Trigger状態
+	bool IsTriggerMouse(int32_t keyNumber);
+
+
 
 
 	~Input();
@@ -41,11 +57,16 @@ private:
 
 	//キーボードデバイスの生成
 	ComPtr<IDirectInputDevice8> keyboard_ = nullptr;
+	//マウスのデバイスを生成
+	ComPtr<IDirectInputDevice8> mouseDevice_ = nullptr;
 
 	//全キーの入力状態を取得する
 	BYTE preKey_[256] = {};
-	BYTE key_[256] = {};
+	BYTE currentKey_[256] = {};
 
+	//マウスの入力状態を取得
+	DIMOUSESTATE currentMouse_ = {};
+	DIMOUSESTATE preMouse_ = {};
 
 
 

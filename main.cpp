@@ -85,6 +85,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	SphereStruct sphereCoodinate = { {-5.0f,-2.0f,20.0f},1.0f};
 	Transform transformSphere = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
 
+	int number = 0;
 	
 
 	MSG msg{};
@@ -125,8 +126,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			
 
 #pragma region Modelの位置情報
-			if (input->TriggerKey(DIK_SPACE) == true) {
+			if (input->IsTriggerMouse(0) == true) {
 				ImGui::Begin("Model:");
+				
+				
 				ImGui::InputFloat3("Scale", &transformSphere.scale.x);
 				ImGui::SliderFloat3("ScaleSlide", &transformSphere.scale.x, 1.0f,5.0f);
 
@@ -137,14 +140,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				ImGui::SliderFloat3("TranslateSlide", &transformSphere.translate.x,-10.0f,10.0f);
 
 				ImGui::SliderFloat("Radius", &sphereCoodinate.radius, 0.0f, 5.0f);
-
 				
+				number += 1;
 				
 				ImGui::End();
 			}
 
 			
-
+			ImGui::Begin("B");
+			ImGui::Text("aa:%d", number);
+			ImGui::End();
 			
 
 #pragma endregion

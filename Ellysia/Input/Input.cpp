@@ -24,13 +24,18 @@ void Input::Initialize(WinApp* winApp) {
 	//GUID_Joystick,GUID_SysMouseを指定して、コントローラーとマウスも使えるよ
 	hr = directInput_->CreateDevice(GUID_SysKeyboard, &keyboard_, NULL);
 	assert(SUCCEEDED(hr));
+	//マウスデバイスの生成
+	hr = directInput_->CreateDevice(GUID_SysMouse, &mouseDevice_, NULL);
+	assert(SUCCEEDED(hr));
 
 	
 	//入力データの形式のセット
 	//標準形式
 	hr = keyboard_->SetDataFormat(&c_dfDIKeyboard);
 	assert(SUCCEEDED(hr));
-
+	//マウスの方の入力データ形式セット
+	hr = mouseDevice_->SetDataFormat(&c_dfDIMouse);
+	assert(SUCCEEDED(hr));
 
 	//排他制御レベルのセット
 	//
@@ -40,15 +45,18 @@ void Input::Initialize(WinApp* winApp) {
 
 	hr = keyboard_->SetCooperativeLevel(winApp_->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
 	assert(SUCCEEDED(hr));
+	hr = mouseDevice_->SetCooperativeLevel(winApp_->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE);
+	assert(SUCCEEDED(hr));
 
 
 }
 
+#pragma region キーボード
 
 //Push状態
-bool Input::PushKey(uint8_t keyNumber) {
+bool Input::IsPushKey(uint8_t keyNumber) {
 	//指定されていたキーを押していればtrueを返す
-	if (key_[keyNumber]!=0) {
+	if (currentKey_[keyNumber]!=0) {
 		return true;
 	}
 	//押されていなければfalseを返す
@@ -56,11 +64,30 @@ bool Input::PushKey(uint8_t keyNumber) {
 
 }
 
-bool Input::TriggerKey(uint8_t keyNumber) {
-	if (key_[keyNumber]!=0 && preKey_[keyNumber]==0) {
+//トリガー
+bool Input::IsTriggerKey(uint8_t keyNumber) {
+	if (currentKey_[keyNumber]!=0 && preKey_[keyNumber]==0) {
 		return true;
 	}
 
+	return false;
+}
+
+#pragma endregion
+
+//Push状態
+bool Input::IsPushMouse(int32_t mouseNumber) {
+	if (currentMouse_.rgbButtons[mouseNumber] != 0) {
+		return true;
+	}
+	return false;
+}
+
+//Trigger状態
+bool Input::IsTriggerMouse(int32_t mouseNumber) {
+	if (currentMouse_.rgbButtons[mouseNumber] != 0 && preMouse_.rgbButtons[mouseNumber] == 0) {
+		return true;
+	}
 	return false;
 }
 
@@ -69,19 +96,25 @@ bool Input::TriggerKey(uint8_t keyNumber) {
 void Input::Update() {
 
 	//前回のキー入力を保存
-	memcpy(preKey_, key_, sizeof(key_));
+	memcpy(preKey_, currentKey_, sizeof(currentKey_));
 
-
+	//Keyと違ってそのまま代入で大丈夫だよ
+	preMouse_ = currentMouse_;
 
 	//キーボード情報の取得開始
 	keyboard_->Acquire();
-	
-	keyboard_->GetDeviceState(sizeof(key_), key_);
+	//マウス情報の取得開始
+	mouseDevice_->Acquire();
+
+
+	keyboard_->GetDeviceState(sizeof(currentKey_), currentKey_);
 
 	//0から255番まであるよ
 	//エンターキーを押していると0x80(128)が代入されるよ
 	//押していないとどのキーも0x00(0)が代入されるよ
 
+	mouseDevice_->GetDeviceState(sizeof(DIMOUSESTATE), &currentMouse_);
+	
 
 }
 

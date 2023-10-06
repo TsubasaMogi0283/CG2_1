@@ -38,18 +38,20 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	//Model,Sphere, Sprite,TriangleをEllysiaでまとめた方がよさそう
 
-	WinApp* winSetup = new WinApp();
+	//WinとDirectXは一つだけで良いよ
+	//何かImGuiもInputもひとつだけで良い気がしてきたのでこっちもやる
+	//シングルで
 	DirectXSetup* directXSetup = new DirectXSetup();
+
 	ImGuiManager* imGuiManager = new ImGuiManager();
 	Input* input = new Input();;
 	
-	
 
 	//初期化
-	winSetup->Initialize(L"DirectX",WINDOW_SIZE_WIDTH,WINDOW_SIZE_HEIGHT);
-	directXSetup->Initialize(winSetup->GetClientWidth(),winSetup->GetClientHeight(),winSetup->GetHwnd());
-	imGuiManager->Initialize(winSetup, directXSetup);
-	input->Initialize(winSetup);
+	WinApp::GetInstance()->Initialize(L"DirectX",WINDOW_SIZE_WIDTH,WINDOW_SIZE_HEIGHT);
+	directXSetup->Initialize(WinApp::GetInstance()->GetClientWidth(),WinApp::GetInstance()->GetClientHeight(),WinApp::GetInstance()->GetHwnd());
+	imGuiManager->Initialize(WinApp::GetInstance(), directXSetup);
+	input->Initialize(WinApp::GetInstance());
 
 
 
@@ -93,7 +95,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
 			
 			//common_->WinMSG(msg);
-			winSetup->WindowsMSG(msg);
+			WinApp::GetInstance()->WindowsMSG(msg);
 
 		}
 		else {
@@ -185,11 +187,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	plane2->Release();
 	
 	directXSetup->Release();
-	winSetup->Close();
+	WinApp::GetInstance()->Close();
 	imGuiManager->Release();
 
 	delete directXSetup;
-	delete winSetup;
 	delete imGuiManager;
 	
 	//ゲーム終了時にはCOMの終了処理を行っておく

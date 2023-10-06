@@ -2,7 +2,7 @@
 
 
 GameScene::GameScene() {
-	winSetup = new WinApp();
+	winSetup = WinApp::GetInstance();
 	directXSetup = new DirectXSetup();
 }
 

@@ -1,15 +1,20 @@
 #include "Common/Windows/WinApp.h"
 
 
-
-
-
-
 //コンストラクタ
 WinApp::WinApp() {
 	
 
 }
+
+
+WinApp* WinApp::GetInstance() {
+	//関数内static変数として宣言する
+	static WinApp instance;
+
+	return &instance;
+}
+
 
 //
 LRESULT WinApp::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam){
@@ -29,6 +34,8 @@ LRESULT WinApp::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam){
 
 }
 
+#pragma region Initializeに入れる関数
+
 //ウィンドウに情報を入れる
 void  WinApp::RegisterWindowsClass() {
 	
@@ -46,7 +53,7 @@ void  WinApp::RegisterWindowsClass() {
 
 	//クライアント領域サイズ
 	//ウィンドウサイズを表す構造体にクライアント領域を入れる
-	RECT wrc_ = { 0,0,kClientWidth_ ,kClientHeight_ };
+	RECT wrc_ = { 0,0,clientWidth_ ,clientHeight_ };
 	// クライアント領域を元に実際のサイズにwrcを変更
 	AdjustWindowRect(&wrc_, WS_OVERLAPPEDWINDOW, false);
 	// ウィンドウ生成
@@ -76,13 +83,13 @@ void WinApp::DisplayWindow() {
 	ShowWindow(hwnd_, SW_SHOW);
 }
 
+#pragma endregion
+
 //初期化
-void WinApp::Initialize(const wchar_t* title, const int32_t WindowSizeWidth, const int32_t WindowSizeHeight) {
+void WinApp::Initialize(const wchar_t* title, int32_t clientWidth,int32_t clientHeight) {
 	this->title_ = title;
-	this->kClientWidth_ = WindowSizeWidth;
-	this->kClientHeight_=WindowSizeHeight;
-
-
+	this->clientWidth_ = clientWidth;
+	this->clientHeight_ = clientHeight;
 
 
 	//ウィンドウクラスを登録
@@ -110,3 +117,8 @@ void WinApp::Close() {
 	CloseWindow(hwnd_);
 }
 
+
+//デストラクタも
+WinApp::~WinApp() {
+
+}

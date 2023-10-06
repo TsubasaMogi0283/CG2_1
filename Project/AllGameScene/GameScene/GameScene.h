@@ -2,7 +2,6 @@
 #include <cstdint>
 #include "Common/Windows/WinApp.h"
 #include "Common/DirectX/DirectXSetup.h"
-#include "Polygon/Triangle/Triangle.h"
 
 #include "ConvertFunction/ConvertColor/ColorConvert.h"
 

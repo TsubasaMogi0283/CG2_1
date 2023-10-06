@@ -17,6 +17,9 @@
 
 //Winodwsアプリでもエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
+
+
+
 	//COMの初期化
 	//COM...ComponentObjectModel、Microsoftの提唱する設計技術の１つ
 	//		DirectX12も簡略化されたCOM(Nano-COM)という設計で作られている

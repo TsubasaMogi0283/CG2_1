@@ -108,9 +108,6 @@
     <ClCompile Include="Ellysia\externals\imGui\imgui_widgets.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
-    <ClCompile Include="Ellysia\GameScene\GameScene.cpp">
-      <Filter>ソース ファイル\GamaScene</Filter>
-    </ClCompile>
     <ClCompile Include="Ellysia\Math\Matrix\Calculation\Matrix4x4Calculation.cpp">
       <Filter>ソース ファイル\Math</Filter>
     </ClCompile>
@@ -156,6 +153,9 @@
     <ClCompile Include="Ellysia\Input\Input.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Ellysia\GameManager\GameManager.cpp">
+      <Filter>ソース ファイル\TextureManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Object3d.PS.hlsl">
@@ -189,9 +189,6 @@
     </ClInclude>
     <ClInclude Include="Ellysia\externals\imGui\imstb_truetype.h">
       <Filter>imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="Ellysia\GameScene\GameScene.h">
-      <Filter>ヘッダー ファイル\GameScene</Filter>
     </ClInclude>
     <ClInclude Include="Ellysia\Math\Vector\Vector3.h">
       <Filter>ヘッダー ファイル\Math\Vector</Filter>
@@ -293,6 +290,9 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Ellysia\Blend\BlendMode.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\GameManager\GameManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

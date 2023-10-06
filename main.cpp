@@ -43,8 +43,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	WinApp* winApp = WinApp::GetInstance();
 	DirectXSetup* directXSetup = new DirectXSetup();
 
-	ImGuiManager* imGuiManager = new ImGuiManager();
-	Input* input = new Input();;
+	ImGuiManager* imGuiManager = ImGuiManager::GetInstance();
+	Input* input = new Input();
 	
 
 	//初期化
@@ -192,8 +192,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	imGuiManager->Release();
 
 	delete directXSetup;
-
-	delete imGuiManager;
 
 	//ゲーム終了時にはCOMの終了処理を行っておく
 	CoUninitialize();

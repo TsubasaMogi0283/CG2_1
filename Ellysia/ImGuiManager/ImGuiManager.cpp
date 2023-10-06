@@ -7,6 +7,12 @@ ImGuiManager::ImGuiManager() {
 	
 }
 
+ImGuiManager* ImGuiManager::GetInstance() {
+	//関数内static変数として宣言する
+	static ImGuiManager instance;
+
+	return &instance;
+}
 
 
 
@@ -44,7 +50,8 @@ void ImGuiManager::BeginFrame() {
 //パラメータを変更したいタイミングで処理を行う
 void ImGuiManager::UpDate() {
 	//これはデモ用のUI
-	ImGui::ShowDemoWindow();
+	//使う予定が無いのでコメントアウトします
+	//ImGui::ShowDemoWindow();
 }
 
 
@@ -74,6 +81,8 @@ void ImGuiManager::Release() {
 	ImGui_ImplDX12_Shutdown();
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
-	//delete winSetup_;
-	//delete directXSetup_;
+}
+
+ImGuiManager::~ImGuiManager() {
+
 }

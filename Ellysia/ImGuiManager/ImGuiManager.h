@@ -2,12 +2,28 @@
 #include "Common/Windows/WinApp.h"
 #include "Common/DirectX/DirectXSetup.h"
 
-class ImGuiManager {
-public:
-
+class ImGuiManager final{
+private:
 	//コンストラクタ
 	ImGuiManager();
 
+	//デストラクタ
+	~ImGuiManager();
+
+public:
+	
+		//コピーコンストラクタ禁止
+	ImGuiManager(const ImGuiManager& imGui) = delete;
+
+	//代入演算子を無効にする
+	ImGuiManager& operator=(const ImGuiManager& imGui) = delete;
+
+	//インスタンスを取得
+	static ImGuiManager* GetInstance();
+
+public:
+
+	
 	//初期化
 	void Initialize(WinApp* winSetup,DirectXSetup* directXSetup);
 

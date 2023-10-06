@@ -5,16 +5,23 @@ Input::Input() {
 
 }
 
+//シングルインスタンス
+Input* Input::GetInstance() {
+	static Input instance;
 
-void Input::Initialize(WinApp* winApp) {
-	this->winApp_ = winApp;
+	return &instance;
+}
+
+void Input::Initialize() {
+	
 
 	HRESULT hr;
+	
 
 	//DirectInputオブジェクトの生成
 	//これは一つだけで良い
 	hr = DirectInput8Create(
-		winApp_->GetHInstance(), 
+		WinApp::GetInstance()->GetHInstance(),
 		DIRECTINPUT_VERSION, 
 		IID_IDirectInput8, 
 		(void**)&directInput_, nullptr);
@@ -45,9 +52,9 @@ void Input::Initialize(WinApp* winApp) {
 	//DISCL_NONEXCLUSIVE...デバイスをこのアプリだけで専有しない
 	//DISCL_NOWINKEY...Windowsキーを無効にする
 
-	hr = keyboard_->SetCooperativeLevel(winApp_->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
+	hr = keyboard_->SetCooperativeLevel(WinApp::GetInstance()->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
 	assert(SUCCEEDED(hr));
-	hr = mouseDevice_->SetCooperativeLevel(winApp_->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE);
+	hr = mouseDevice_->SetCooperativeLevel(WinApp::GetInstance()->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE);
 	assert(SUCCEEDED(hr));
 
 

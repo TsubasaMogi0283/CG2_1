@@ -20,11 +20,29 @@ using namespace Microsoft::WRL;
 
 
 class Input {
-public:
+private:
 
+	//コンストラクタ
 	Input();
 	
-	void Initialize(WinApp* winApp);
+	//デストラクタ
+	~Input();
+
+public:
+	//シングルインスタンスにするための関数
+	
+	//コピーコンストラクタ禁止
+	Input(const Input& input) = delete;
+
+	//代入演算子を無効にする
+	Input& operator=(const Input& input) = delete;
+
+	//シングルインスタンス
+	static Input* GetInstance();
+
+public:
+
+	void Initialize();
 
 	void Update();
 
@@ -67,13 +85,12 @@ public:
 #pragma endregion
 	
 
-	~Input();
+	
 
 	
 
 private:
 
-	WinApp* winApp_ = nullptr;
 
 	static Input* instance_;
 

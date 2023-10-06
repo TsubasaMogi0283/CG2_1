@@ -44,16 +44,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	DirectXSetup* directXSetup = new DirectXSetup();
 
 	ImGuiManager* imGuiManager = ImGuiManager::GetInstance();
-	Input* input = new Input();
+	Input* input = Input::GetInstance();
 	
 
 	//初期化
 
 	WinApp::GetInstance()->Initialize(titleBarName,WINDOW_SIZE_WIDTH,WINDOW_SIZE_HEIGHT);
 	directXSetup->Initialize(WinApp::GetInstance()->GetClientWidth(),WinApp::GetInstance()->GetClientHeight(),WinApp::GetInstance()->GetHwnd());
-	imGuiManager->Initialize(WinApp::GetInstance(), directXSetup);
-	input->Initialize(WinApp::GetInstance());
-
+	imGuiManager->Initialize(directXSetup);
+	input->Initialize();
+	
 
 
 
@@ -160,13 +160,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			
 
 			#pragma region 描画処理
-			imGuiManager->Draw(directXSetup);
+			imGuiManager->Draw();
 			
 
 			plane->Draw(transformSphere, viewMatrix, projectionMatrix);
 			plane2->Draw(transformSphere2, viewMatrix, projectionMatrix);
 
-			imGuiManager->EndFrame(directXSetup);
+			imGuiManager->EndFrame();
 
 			#pragma endregion
 

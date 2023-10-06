@@ -25,7 +25,7 @@ public:
 
 	
 	//初期化
-	void Initialize(WinApp* winSetup,DirectXSetup* directXSetup);
+	void Initialize(DirectXSetup* directXSetup);
 
 	//ここからフレームが始まる
 	void BeginFrame();
@@ -38,10 +38,10 @@ public:
 	void PreDraw();
 
 	//描画
-	void Draw(DirectXSetup* directXSetup);
+	void Draw();
 
 
-	void EndFrame(DirectXSetup* directXSetup);
+	void EndFrame();
 
 
 	//解放処理
@@ -51,7 +51,7 @@ public:
 
 private:
 	//WindowsInitialization* winSetup_ = nullptr;
-	//DirectXInitialization* directXSetup_ = nullptr;
+	DirectXSetup* directXSetup_ = nullptr;
 
 	//ID3D12DescriptorHeap* descriptorHeaps_[];
 };

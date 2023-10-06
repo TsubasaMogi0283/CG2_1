@@ -3,7 +3,7 @@
 
 GameScene::GameScene() {
 	winSetup = WinApp::GetInstance();
-	directXSetup = new DirectXSetup();
+	directXSetup = new DirectXSetup;
 }
 
 void GameScene::Initialize() {
@@ -11,16 +11,6 @@ void GameScene::Initialize() {
 	winSetup->Initialize(L"DirectX",WINDOW_SIZE_WIDTH_,WINDOW_SIZE_HEIGHT_);
 	directXSetup->Initialize(WINDOW_SIZE_WIDTH_,WINDOW_SIZE_HEIGHT_,winSetup->GetHwnd());
 
-
-	//三角形の情報
-	const int32_t TRIANGLE_AMOUNT_MAX = 15;
-
-	Triangle* triangle[TRIANGLE_AMOUNT_MAX];
-	for (int i = 0; i < TRIANGLE_AMOUNT_MAX; i++) {
-		triangle[i] = new Triangle();
-		triangle[i]->Initialize(directXSetup);
-
-	}
 
 	
 

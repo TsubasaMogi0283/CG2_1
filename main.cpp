@@ -26,21 +26,21 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	CoInitializeEx(0, COINIT_MULTITHREADED);
 
 	
+	//ここでタイトルバーの名前を決めてね
+	const wchar_t* titleBarName = L"Ellysia";
+
 	//ウィンドウのサイズを決める
 	const int32_t WINDOW_SIZE_WIDTH = 1280;
 	const int32_t WINDOW_SIZE_HEIGHT = 720;
 
 
 	//コンストラクタ
-	//
-	//いつかKAMATA ENGINEみたいにGameSceneでまとめたい
-	//GameScene* gamescene = new GameScene();
-
-	//Model,Sphere, Sprite,TriangleをEllysiaでまとめた方がよさそう
-
 	//WinとDirectXは一つだけで良いよ
 	//何かImGuiもInputもひとつだけで良い気がしてきたのでこっちもやる
 	//シングルで
+	//main.cpp側ではwinApp=GetInstanceでやってるけど他のクラスでは直接GetInstanceってやった方が楽かも
+
+	WinApp* winApp = WinApp::GetInstance();
 	DirectXSetup* directXSetup = new DirectXSetup();
 
 	ImGuiManager* imGuiManager = new ImGuiManager();
@@ -48,7 +48,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	
 
 	//初期化
-	WinApp::GetInstance()->Initialize(L"DirectX",WINDOW_SIZE_WIDTH,WINDOW_SIZE_HEIGHT);
+
+	WinApp::GetInstance()->Initialize(titleBarName,WINDOW_SIZE_WIDTH,WINDOW_SIZE_HEIGHT);
 	directXSetup->Initialize(WinApp::GetInstance()->GetClientWidth(),WinApp::GetInstance()->GetClientHeight(),WinApp::GetInstance()->GetHwnd());
 	imGuiManager->Initialize(WinApp::GetInstance(), directXSetup);
 	input->Initialize(WinApp::GetInstance());
@@ -57,15 +58,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 	Model* plane = new Model();
+	//plane->LoadDirectX(directXSetup);
 	plane->LoadDirectX(directXSetup);
-	
+
 	plane->Initialize("Resources/05_02", "axis.obj");
 	plane->LoadTexture("Resources/uvChecker.png");
 
 	
 	Model* plane2 = new Model();
 	plane2->LoadDirectX(directXSetup);
-	
 	plane2->Initialize("Resources/05_02", "plane.obj");
 	plane2->LoadTexture("Resources/uvChecker.png");
 
@@ -95,7 +96,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
 			
 			//common_->WinMSG(msg);
-			WinApp::GetInstance()->WindowsMSG(msg);
+			winApp->WindowsMSG(msg);
 
 		}
 		else {
@@ -187,12 +188,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	plane2->Release();
 	
 	directXSetup->Release();
-	WinApp::GetInstance()->Close();
+	winApp->Close();
 	imGuiManager->Release();
 
 	delete directXSetup;
+
 	delete imGuiManager;
-	
+
 	//ゲーム終了時にはCOMの終了処理を行っておく
 	CoUninitialize();
 	return 0;

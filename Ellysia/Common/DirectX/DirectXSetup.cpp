@@ -1,12 +1,27 @@
 #include "DirectXSetup.h"
 
+DirectXSetup* DirectXSetup::instance_ = nullptr;
 
 DirectXSetup::DirectXSetup() {
 
 }
 
+//インスタンス
+DirectXSetup* DirectXSetup::GetInstance() {
+	//これだと無限に生成される
+	if (instance_ == nullptr) {
+		instance_ = new DirectXSetup();
 
+	}
 	
+	return instance_;
+}
+
+//デリート代わりの関数
+void DirectXSetup::DeleteInstance() {
+	delete instance_;
+}
+
 
 ////CompileShader関数
 IDxcBlob* DirectXSetup::CompileShader(

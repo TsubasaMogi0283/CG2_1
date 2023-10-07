@@ -24,7 +24,24 @@
 class DirectXSetup {
 public:
 	
+	//コンストラクタ
 	DirectXSetup();
+
+	//デストラクタ
+	~DirectXSetup();
+
+public:
+	//インスタンス
+	static DirectXSetup* GetInstance();
+
+	//デリート代わりの関数
+	void DeleteInstance();
+
+	//コピーコンストラクタ禁止
+	DirectXSetup(const DirectXSetup& directXSetup) = delete;
+
+	//代入演算子を無効にする
+	DirectXSetup& operator=(const DirectXSetup& directXSetup) = delete;
 
 	//まとめたのが下の「Initialize」
 	//他の所では使わないからprivateにしても良さそう
@@ -115,7 +132,7 @@ public:
 
 	void CheckRelease();
 
-	~DirectXSetup();
+	
 
 #pragma endregion
 	
@@ -172,6 +189,9 @@ public:
 #pragma endregion
 
 private:
+	static DirectXSetup* instance_;
+
+
 	int32_t kClientWidth_;
 	int32_t kClientHeight_;
 

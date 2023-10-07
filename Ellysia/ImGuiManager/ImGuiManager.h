@@ -25,7 +25,7 @@ public:
 
 	
 	//初期化
-	void Initialize(DirectXSetup* directXSetup);
+	void Initialize();
 
 	//ここからフレームが始まる
 	void BeginFrame();

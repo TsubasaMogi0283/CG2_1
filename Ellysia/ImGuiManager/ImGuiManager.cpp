@@ -18,10 +18,9 @@ ImGuiManager* ImGuiManager::GetInstance() {
 
 //メインループ前に
 //初期化
-void ImGuiManager::Initialize(DirectXSetup* directXSetup) {
+void ImGuiManager::Initialize() {
 	//Getterを使いたい
-	//this->winSetup_ = winSetup;
-	this->directXSetup_ = directXSetup;
+	this->directXSetup_ = DirectXSetup::GetInstance();
 
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();

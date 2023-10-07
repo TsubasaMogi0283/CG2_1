@@ -419,45 +419,18 @@ ID3D12Resource* Model ::UploadTextureData(
 
 #pragma endregion
 
-void Model::LoadDirectX(DirectXSetup* directXSetup) {
-	this->directXSetup_ = directXSetup;
-}
 
 void Model::LoadObject(const std::string& directoryPath,const std::string& fileName) {
 	modelData_ = LoadObjectFile(directoryPath, fileName);
 
 }
 
-void Model::CreateResource() {
-	////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
-	materialResource_=CreateBufferResource(sizeof(Material));
-
-	//頂点リソースを作る
-	vertexResource_ = CreateBufferResource(sizeof(VertexData) * modelData_.vertices.size());
-
-	//読み込みのところでバッファインデックスを作った方がよさそう
-	GenerateVertexBufferView();
-
-	//Sprite用のTransformationMatrix用のリソースを作る。
-	//Matrix4x4 1つ分サイズを用意する
-	transformationMatrixResource_ = CreateBufferResource(sizeof(TransformationMatrix));
-	
-	//Lighting
-	directionalLightResource_ = CreateBufferResource(sizeof(DirectionalLight));
-	directionalLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightData_));
-	directionalLightData_->color={ 1.0f,1.0f,1.0f,1.0f };
-	directionalLightData_->direction = { 0.0f,-1.0f,0.0f };
-	directionalLightData_->intensity = 1.0f;
-
-
-	
-}
 
 //初期化
-void Model::Initialize(const std::string& directoryPath,const std::string& fileName) {
+void Model::CreateObject(const std::string& directoryPath,const std::string& fileName) {
 	
-	LoadDirectX(directXSetup_);
-
+	//LoadDirectX(directXSetup_);
+	this->directXSetup_ = DirectXSetup::GetInstance();
 
 	////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
 	materialResource_=CreateBufferResource(sizeof(Material));

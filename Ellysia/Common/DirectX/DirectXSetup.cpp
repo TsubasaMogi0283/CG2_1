@@ -715,11 +715,11 @@ void DirectXSetup::GenerateScissor() {
 
 #pragma endregion
 
-void DirectXSetup::Initialize(int32_t windowsizeWidth, int32_t windowsizeHeight,HWND hwnd) {
+void DirectXSetup::Initialize() {
 
-	kClientWidth_ = windowsizeWidth;
-	kClientHeight_ = windowsizeHeight;
-	hwnd_ = hwnd;
+	kClientWidth_ = WinApp::GetInstance()->GetClientWidth();
+	kClientHeight_ = WinApp::GetInstance()->GetClientHeight();
+	hwnd_ = WinApp::GetInstance()->GetHwnd();
 
 	//出力ウィンドウへの文字出力
 	OutputDebugStringA("Hello,DirectX!\n");

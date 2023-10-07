@@ -36,12 +36,12 @@ public:
 
 	//関数が凄いことになってるけどあまり気にしないでね
 	//いつか直す
-	void LoadDirectX(DirectXSetup* directXSetup);
+	
 
-	void CreateResource();
 
 	//初期化
-	void Initialize(const std::string& directoryPath,const std::string& fileName);
+	//Initializeも兼ねているよ
+	void CreateObject(const std::string& directoryPath,const std::string& fileName);
 
 	void LoadObject(const std::string& directoryPath,const std::string& fileName);
 

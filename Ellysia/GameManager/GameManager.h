@@ -49,14 +49,14 @@ private:
 
 
 private:
-	WinApp* winApp_;
-	DirectXSetup* directXSetup_;
+	WinApp* winApp_ = nullptr;
+	DirectXSetup* directXSetup_ = nullptr;
 
-	ImGuiManager* imGuiManager_;
-	Input* input_;
+	ImGuiManager* imGuiManager_ = nullptr;
+	Input* input_ = nullptr;
 
-	Model* plane_;
-
+	Model* plane_ = nullptr;
+	Model* plane2_ = nullptr;
 
 
 

@@ -29,7 +29,7 @@ void GameManager::Draw() {
 	imGuiManager_->Draw();
 			
 	plane_->Draw(transformSphere,viewMatrix,projectionMatrix);
-			
+	plane2_->Draw(transformSphere,viewMatrix,projectionMatrix);
 
 }
 
@@ -70,7 +70,7 @@ void GameManager::Operate() {
 	//main.cpp側ではwinApp=GetInstanceでやってるけど他のクラスでは直接GetInstanceってやった方が楽かも
 
 	winApp_ = WinApp::GetInstance();
-	directXSetup_ = new DirectXSetup();
+	directXSetup_ = DirectXSetup::GetInstance();
 
 	imGuiManager_ = ImGuiManager::GetInstance();
 	input_ = Input::GetInstance();
@@ -79,8 +79,8 @@ void GameManager::Operate() {
 	//初期化
 
 	winApp_->Initialize(titleBarName,WINDOW_SIZE_WIDTH,WINDOW_SIZE_HEIGHT);
-	directXSetup_->Initialize(WinApp::GetInstance()->GetClientWidth(),WinApp::GetInstance()->GetClientHeight(),WinApp::GetInstance()->GetHwnd());
-	imGuiManager_->Initialize(directXSetup_);
+	directXSetup_->Initialize();
+	imGuiManager_->Initialize();
 	input_->Initialize();
 	
 
@@ -88,16 +88,16 @@ void GameManager::Operate() {
 
 	plane_ = new Model();
 	//plane->LoadDirectX(directXSetup);
-	plane_->LoadDirectX(directXSetup_);
+	//plane_->LoadDirectX(directXSetup_);
 	
-	plane_->Initialize("Resources/05_02", "axis.obj");
+	plane_->CreateObject("Resources/05_02", "axis.obj");
 	plane_->LoadTexture("Resources/uvChecker.png");
 	//
 	//
-	//Model* plane2 = new Model();
+	plane2_ = new Model();
 	//plane2->LoadDirectX(directXSetup);
-	//plane2->Initialize("Resources/05_02", "plane.obj");
-	//plane2->LoadTexture("Resources/uvChecker.png");
+	plane2_->CreateObject("Resources/05_02", "plane.obj");
+	plane2_->LoadTexture("Resources/uvChecker.png");
 
 	
 
@@ -154,7 +154,6 @@ void GameManager::Operate() {
 
 #pragma region Modelの位置情報
 
-			XINPUT_STATE joyState{};
 			plane_->SetColor(transparency);
 
 
@@ -197,14 +196,18 @@ void GameManager::Operate() {
 
 
 	//解放処理
-	//plane->Release();
-	//plane2->Release();
+	plane_->Release();
+	plane2_->Release();
 	
+	delete plane_;
+	delete plane2_;
+
+
 	directXSetup_->Release();
 	winApp_->Close();
 	imGuiManager_->Release();
 
-	delete directXSetup_;
+	directXSetup_->DeleteInstance();
 
 	//ゲーム終了時にはCOMの終了処理を行っておく
 	CoUninitialize();

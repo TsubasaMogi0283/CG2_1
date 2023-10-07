@@ -22,7 +22,7 @@
 //メンバ変数関数いつか整理したい・・・
 //ごちゃごちゃしてる
 class DirectXSetup {
-public:
+private:
 	
 	//コンストラクタ
 	DirectXSetup();
@@ -109,7 +109,7 @@ private:
 
 public:
 
-	void Initialize(int32_t windowsizeWidth, int32_t windowsizeHeight,HWND hwnd_);
+	void Initialize();
 
 	
 

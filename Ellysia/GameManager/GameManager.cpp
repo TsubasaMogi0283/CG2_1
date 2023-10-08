@@ -21,15 +21,13 @@ void GameManager::Update() {
 }
 
 void GameManager::Draw() {
-	imGuiManager_->PreDraw();
-			
-			
-
-			
+	imGuiManager_->PreDraw();	
 	imGuiManager_->Draw();
-			
-	plane_->Draw(transformSphere,viewMatrix,projectionMatrix);
-	plane2_->Draw(transformSphere,viewMatrix,projectionMatrix);
+	
+	//viewMatrixとprojectionを消したい
+	plane2_->Draw(transformModel2,viewMatrix,projectionMatrix);
+	plane_->Draw(transformModel,viewMatrix,projectionMatrix);
+	
 
 }
 
@@ -64,20 +62,15 @@ void GameManager::Operate() {
 
 
 	//コンストラクタ
-	//WinとDirectXは一つだけで良いよ
-	//何かImGuiもInputもひとつだけで良い気がしてきたのでこっちもやる
-	//シングルで
-	//main.cpp側ではwinApp=GetInstanceでやってるけど他のクラスでは直接GetInstanceってやった方が楽かも
+	//GameManager.cpp側ではwinApp=GetInstanceでやってるけど他のクラスでは直接GetInstanceってやった方が楽かも
 
 	winApp_ = WinApp::GetInstance();
 	directXSetup_ = DirectXSetup::GetInstance();
-
 	imGuiManager_ = ImGuiManager::GetInstance();
 	input_ = Input::GetInstance();
 	
 
 	//初期化
-
 	winApp_->Initialize(titleBarName,WINDOW_SIZE_WIDTH,WINDOW_SIZE_HEIGHT);
 	directXSetup_->Initialize();
 	imGuiManager_->Initialize();
@@ -87,34 +80,38 @@ void GameManager::Operate() {
 
 
 	plane_ = new Model();
-	//plane->LoadDirectX(directXSetup);
-	//plane_->LoadDirectX(directXSetup_);
 	
 	plane_->CreateObject("Resources/05_02", "axis.obj");
 	plane_->LoadTexture("Resources/uvChecker.png");
 	//
-	//
+	
 	plane2_ = new Model();
-	//plane2->LoadDirectX(directXSetup);
 	plane2_->CreateObject("Resources/05_02", "plane.obj");
 	plane2_->LoadTexture("Resources/uvChecker.png");
 
 	
-
-	Vector3 scale = { 1.0f,1.0f,1.0f };
-	Vector3 rotate = { 0.0f,0.0f,0.0f };
-	Vector3 translate={ 0.0f,0.0f,0.0f };
-
 	
+
+
 	Transform cameraTransform = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,-9.8f} };
 	
-	SphereStruct sphereCoodinate = { {-5.0f,-2.0f,20.0f},1.0f};
 	
 	Transform transformSphere2 = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,2.0f} };
 
 	Vector4 transparency = { 1.0f,1.0f,1.0f,1.0f };
-	transformSphere = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
-	
+	float transparency2 = 1.0f;
+	transformModel = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
+	transformModel2= { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
+
+
+
+	Sprite* sprite_ = new Sprite();
+	sprite_->Initialize();
+	sprite_->LoadTexture("Resources/uvChecker.png");
+
+	transformSprite_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
+	spriteAllPosition_ = { {0.0f,0.0f},{0.0f,512.0f},{512.0f,0.0f},{512.0f,512.0f} };
+	sprite_->SetAllPosition(spriteAllPosition_);
 
 	MSG msg{};
 
@@ -155,26 +152,47 @@ void GameManager::Operate() {
 #pragma region Modelの位置情報
 
 			plane_->SetColor(transparency);
+			plane2_->SetTransparency(transparency2);
 
-
-			ImGui::Begin("Model:");
+			ImGui::Begin("Model");
 			
 			ImGui::InputFloat4("Transparency", &transparency.x);
 			ImGui::SliderFloat4("TransparencySlide", &transparency.x,0.0f,1.0f);
 
 			
-			ImGui::InputFloat3("Scale", &transformSphere.scale.x);
-			ImGui::SliderFloat3("ScaleSlide", &transformSphere.scale.x, 1.0f, 5.0f);
+			ImGui::InputFloat3("Scale", &transformModel.scale.x);
+			ImGui::SliderFloat3("ScaleSlide", &transformModel.scale.x, 1.0f, 5.0f);
 			
-			ImGui::InputFloat3("Rotate", &transformSphere.rotate.x);
-			ImGui::SliderFloat3("RotateSlide", &transformSphere.rotate.x, 0.0f, 12.0f);
+			ImGui::InputFloat3("Rotate", &transformModel.rotate.x);
+			ImGui::SliderFloat3("RotateSlide", &transformModel.rotate.x, 0.0f, 12.0f);
 			
-			ImGui::InputFloat3("Translate", &transformSphere.translate.x);
-			ImGui::SliderFloat3("TranslateSlide", &transformSphere.translate.x, -10.0f, 10.0f);
+			ImGui::InputFloat3("Translate", &transformModel.translate.x);
+			ImGui::SliderFloat3("TranslateSlide", &transformModel.translate.x, -10.0f, 10.0f);
 			
 			
 			ImGui::End();
+
+
+
+
+			ImGui::Begin("Mode2:");
 			
+			plane2_->SetTransparency(transparency2);
+			ImGui::InputFloat("Transparency", &transparency2);
+			ImGui::SliderFloat("TransparencySlide", &transparency2,0.0f,1.0f);
+
+			
+			ImGui::InputFloat3("Scale", &transformModel2.scale.x);
+			ImGui::SliderFloat3("ScaleSlide", &transformModel2.scale.x, 1.0f, 5.0f);
+			
+			ImGui::InputFloat3("Rotate", &transformModel2.rotate.x);
+			ImGui::SliderFloat3("RotateSlide", &transformModel2.rotate.x, 0.0f, 12.0f);
+			
+			ImGui::InputFloat3("Translate", &transformModel2.translate.x);
+			ImGui::SliderFloat3("TranslateSlide", &transformModel2.translate.x, -10.0f, 10.0f);
+			
+			
+			ImGui::End();
 
 			
 
@@ -182,7 +200,7 @@ void GameManager::Operate() {
 			#pragma endregion
 			Draw();
 			
-			
+			sprite_->DrawRect(transformSprite_);
 
 
 
@@ -198,10 +216,11 @@ void GameManager::Operate() {
 	//解放処理
 	plane_->Release();
 	plane2_->Release();
-	
+	sprite_->Release();
+
 	delete plane_;
 	delete plane2_;
-
+	delete sprite_;
 
 	directXSetup_->Release();
 	winApp_->Close();

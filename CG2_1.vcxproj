@@ -161,6 +161,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Ellysia\Math\Vector\DirectionalLight.h" />
     <ClInclude Include="Ellysia\Math\Vector\Material.h" />
     <ClInclude Include="Ellysia\Math\Vector\SphereStruct.h" />
+    <ClInclude Include="Ellysia\Math\Vector\SpritePosition.h" />
     <ClInclude Include="Ellysia\Math\Vector\Transform.h" />
     <ClInclude Include="Ellysia\Math\Vector\Vector2.h" />
     <ClInclude Include="Ellysia\Math\Vector\Vector3.h" />

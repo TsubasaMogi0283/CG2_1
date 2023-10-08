@@ -34,19 +34,12 @@ public:
 	//コンストラクタ
 	Model();
 
-	//関数が凄いことになってるけどあまり気にしないでね
-	//いつか直す
-	
-
-
 	//初期化
 	//Initializeも兼ねているよ
 	void CreateObject(const std::string& directoryPath,const std::string& fileName);
 
-	void LoadObject(const std::string& directoryPath,const std::string& fileName);
 
-
-
+#pragma region モデルの読み込み関係の関数
 	//モデルデータの読み込み
 	ModelData LoadObjectFile(const std::string& directoryPath, const std::string& fileName);
 
@@ -55,10 +48,8 @@ public:
 
 	//テクスチャの読み込み
 	int LoadTexture(const std::string& filePath);
+#pragma endregion
 
-
-	//更新
-	void Update();
 
 	//描画
 	void Draw(Transform transform, Matrix4x4 viewMatrix, Matrix4x4 projectionMatrix);
@@ -80,6 +71,9 @@ public:
 		this->color_ = color;
 	}
 
+	void SetTransparency(float transparency) {
+		this->color_.w = transparency;
+	}
 
 
 

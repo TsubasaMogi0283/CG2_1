@@ -84,8 +84,8 @@ void Sphere::GenerateVertexBufferView() {
 
 
 //初期化
-void Sphere::Initialize(DirectXSetup* directXSetup) {
-	this->directXSetup_ = directXSetup;
+void Sphere::Initialize() {
+	this->directXSetup_ = DirectXSetup::GetInstance();
 
 	//ここでBufferResourceを作る
 	//頂点を6に増やす

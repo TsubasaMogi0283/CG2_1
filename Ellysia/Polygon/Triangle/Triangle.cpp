@@ -14,8 +14,8 @@ Triangle::Triangle() {
 
 
 
-void Triangle::Initialize(DirectXSetup* directXSetup) {
-	directXSetup_ = directXSetup;
+void Triangle::Initialize() {
+	directXSetup_ = DirectXSetup::GetInstance();
 
 	//ここでBufferResourceを作る
 	//頂点を6に増やす

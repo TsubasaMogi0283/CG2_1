@@ -295,6 +295,9 @@
     <ClInclude Include="Ellysia\GameManager\GameManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="Ellysia\Math\Vector\SpritePosition.h">
+      <Filter>ヘッダー ファイル\Math\Vector</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Ellysia\externals\imGui\LICENSE.txt">

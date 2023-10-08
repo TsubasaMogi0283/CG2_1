@@ -14,6 +14,7 @@
 #include <string>
 #include <Math/Vector/DirectionalLight.h>
 #include <Math/Matrix/Matrix/TransformationMatrix.h>
+#include "Math/Vector/SpritePosition.h"
 
 class Sprite {
 public:
@@ -22,16 +23,15 @@ public:
 	Sprite();
 
 	//初期化
-	void Initialize(DirectXSetup* directXSetup);
+	void Initialize();
 
 	//まとめた方がよさそう
 	void LoadTexture(const std::string& filePath);
 	
-	void Updata();
 
 	//描画
 	//左上、右上、左下、右下
-	void Draw(Vector4 leftTop,Vector4 RightTop, Vector4 LeftBottom,Vector4 RightBottom,Transform transform,Vector4 color);
+	void DrawRect(Transform transform);
 
 
 	//解放
@@ -39,6 +39,22 @@ public:
 
 	//デストラクタ
 	~Sprite();
+
+
+	
+public:
+#pragma region アクセッサ
+	void SetAllPosition(SpritePosition spritePosition) {
+		this->position_ = spritePosition;
+	}
+	void SetTransparency(float transparency) {
+		this->color_.w = transparency;
+	}
+
+
+#pragma endregion
+
+
 
 private:
 
@@ -109,8 +125,10 @@ private:
 	D3D12_INDEX_BUFFER_VIEW indexBufferViewSprite_{};
 
 	//インデックスデータ
-	uint32_t* indexDataSprite_ = nullptr;
+	uint32_t* indexData_ = nullptr;
 
+	static const int MAX_TEXTURE_ = 20;
+	bool isUsedTextureIndex;
 
 
 	//画像読み込み
@@ -120,9 +138,24 @@ private:
 	D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU_;
 	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU_;
 
-	ID3D12Resource* intermediateResource_ = nullptr;
+	ID3D12Resource* intermediateResource_= nullptr ;
 
 
 	Transform uvTransformSprite_ = {};
+
+	int textureIndex_ = 0;
+	
+
+
+	//位置
+	SpritePosition position_ = {};
+
+	Vector4 leftBottom_ = {};
+	Vector4 leftTop_ = {};
+	Vector4 rightBottom_ = {};
+	Vector4 rightTop_ = {};
+
+	Vector4 color_ = {};
+
 
 };

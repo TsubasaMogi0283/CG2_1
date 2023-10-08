@@ -420,10 +420,6 @@ ID3D12Resource* Model ::UploadTextureData(
 #pragma endregion
 
 
-void Model::LoadObject(const std::string& directoryPath,const std::string& fileName) {
-	modelData_ = LoadObjectFile(directoryPath, fileName);
-
-}
 
 
 //初期化
@@ -437,7 +433,7 @@ void Model::CreateObject(const std::string& directoryPath,const std::string& fil
 
 	//モデルの読み込み
 	//この２つ外に出した方がよさそう
-	LoadObject(directoryPath, fileName);
+	modelData_ = LoadObjectFile(directoryPath, fileName);
 
 	//頂点リソースを作る
 	vertexResource_ = CreateBufferResource(sizeof(VertexData) * modelData_.vertices.size());
@@ -463,10 +459,6 @@ void Model::CreateObject(const std::string& directoryPath,const std::string& fil
 }
 
 
-//更新
-void Model::Update() {
-
-}
 
 //描画
 void Model::Draw(Transform transform,Matrix4x4 viewMatrix,Matrix4x4 projectionMatrix) {

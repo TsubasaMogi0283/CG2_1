@@ -61,9 +61,16 @@ private:
 
 
 
-	Transform transformSphere;
+	Transform transformModel;
+	Transform transformModel2;
 	Matrix4x4 viewMatrix;
 
 	//遠視投影行列
 	Matrix4x4 projectionMatrix;
+
+
+
+	Transform transformSprite_;
+	SpritePosition spriteAllPosition_;
+
 };

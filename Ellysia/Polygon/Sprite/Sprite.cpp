@@ -81,9 +81,10 @@ void Sprite::GenerateVertexBufferView() {
 
 
 //初期化
-void Sprite::Initialize(DirectXSetup* directXSetup) {
-	directXSetup_ = directXSetup;
-
+void Sprite::Initialize() {
+	directXSetup_ = DirectXSetup::GetInstance();
+	position_ = {};
+	color_ = { 1.0f,1.0f,1.0f,1.0f };
 	//
 	//Triangleとほぼ同じ
 	// 
@@ -142,11 +143,13 @@ void Sprite::Initialize(DirectXSetup* directXSetup) {
 
 //Before
 void Sprite::LoadTexture(const std::string& filePath) {
+
+
 	//Textureを読んで転送する
 	DirectX::ScratchImage mipImages = LoadTextureData(filePath);
 	const DirectX::TexMetadata& metadata = mipImages.GetMetadata();
 	textureResource_ = CreateTextureResource(directXSetup_->GetDevice(), metadata);
-	intermediateResource_ = UploadTextureData(textureResource_, mipImages);
+	intermediateResource_= UploadTextureData(textureResource_, mipImages);
 	
 
 	//ShaderResourceView
@@ -167,7 +170,6 @@ void Sprite::LoadTexture(const std::string& filePath) {
 	//SRVの生成
 	directXSetup_->GetDevice()->CreateShaderResourceView(textureResource_, &srvDesc, textureSrvHandleCPU_);
 
-	
 
 }
 
@@ -288,20 +290,16 @@ ID3D12Resource* Sprite::UploadTextureData(
 #pragma endregion
 
 
-void Sprite::Updata() {
-	ImGui::Begin("Sprite");
-	ImGui::DragFloat2("UVTranslate", &uvTransformSprite_.translate.x, 0.01f, -10.0f, 10.0f);
-	ImGui::DragFloat2("UVScale", &uvTransformSprite_.scale.x, 0.01f, -10.0f, 10.0f);
-	ImGui::SliderAngle("UVRotate", &uvTransformSprite_.rotate.z);
-
-
-
-	ImGui::End();
-}
-
 //描画
-void Sprite::Draw(Vector4 leftTop,Vector4 rightTop, Vector4 leftBottom,Vector4 rightBottom,Transform transform, Vector4 color) {
+void Sprite::DrawRect(Transform transform) {
 	
+	//SetAllPosition
+	leftBottom_ = {position_.leftBottom.x,position_.leftBottom.y,0.0f,1.0f};
+	leftTop_ = {position_.leftTop.x,position_.leftTop.y,0.0f,1.0f};
+	rightBottom_ = {position_.rightBottom.x,position_.rightBottom.y,0.0f,1.0f};
+	rightTop_ = {position_.rightTop.x,position_.rightTop.y,0.0f,1.0f};
+
+
 	//TextureCoordinate(テクスチャ座標系)
 	//TexCoord,UV座標系とも呼ばれている
 
@@ -329,47 +327,33 @@ void Sprite::Draw(Vector4 leftTop,Vector4 rightTop, Vector4 leftBottom,Vector4 r
 	vertexResourceSprite_->Map(0, nullptr, reinterpret_cast<void**>(&vertexDataSprite_));
 	//1枚目の三角形
 	//左下
-	vertexDataSprite_[0].position = {leftBottom};
+	vertexDataSprite_[0].position = {leftBottom_};
 	vertexDataSprite_[0].texCoord = { 0.0f,1.0f };
 
 	//左上
-	vertexDataSprite_[1].position = {leftTop};
+	vertexDataSprite_[1].position = {leftTop_};
 	vertexDataSprite_[1].texCoord = { 0.0f,0.0f };
 	
 	//右下
-	vertexDataSprite_[2].position = {rightBottom} ;
+	vertexDataSprite_[2].position = {rightBottom_} ;
 	vertexDataSprite_[2].texCoord = { 1.0f,1.0f };
 
 
 	//右上
-	vertexDataSprite_[3].position = { rightTop };
+	vertexDataSprite_[3].position = { rightTop_ };
 	vertexDataSprite_[3].texCoord = { 1.0f,0.0f };
 
 
-	////2枚目の三角形
-	////左上2
-	//vertexDataSprite_[3].position = { leftTop};
-	//vertexDataSprite_[3].texCoord = { 0.0f,0.0f };
-	//
-	////右上2
-	//vertexDataSprite_[4].position = { rightTop};
-	//vertexDataSprite_[4].texCoord = { 1.0f,0.0f };
-	////右下2
-	//vertexDataSprite_[5].position = { rightBottom} ;
-	//vertexDataSprite_[5].texCoord = { 1.0f,1.0f };
-	
-
-	
 
 	//IndexResourceにデータを書き込む
 	//インデックスデータにデータを書き込む
-	indexResourceSprite_->Map(0, nullptr, reinterpret_cast<void**>(&indexDataSprite_));
-	indexDataSprite_[0] = 0;
-	indexDataSprite_[1] = 1;
-	indexDataSprite_[2] = 2;
-	indexDataSprite_[3] = 1;
-	indexDataSprite_[4] = 3;
-	indexDataSprite_[5] = 2;
+	indexResourceSprite_->Map(0, nullptr, reinterpret_cast<void**>(&indexData_));
+	indexData_[0] = 0;
+	indexData_[1] = 1;
+	indexData_[2] = 2;
+	indexData_[3] = 1;
+	indexData_[4] = 3;
+	indexData_[5] = 2;
 
 
 
@@ -398,7 +382,7 @@ void Sprite::Draw(Vector4 leftTop,Vector4 rightTop, Vector4 leftBottom,Vector4 r
 	//書き込むためのアドレスを取得
 	//reinterpret_cast...char* から int* へ、One_class* から Unrelated_class* へなどの変換に使用
 	materialResourceSprite_->Map(0, nullptr, reinterpret_cast<void**>(&materialDataSprite_));
-	materialDataSprite_->color = color;
+	materialDataSprite_->color = color_;
 	//ライティングしない
 	materialDataSprite_->enableLighting = false;
 	//materialDataSprite_->uvTransform = MakeIdentity4x4();

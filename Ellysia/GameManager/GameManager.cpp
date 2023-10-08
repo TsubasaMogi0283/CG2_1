@@ -80,7 +80,6 @@ void GameManager::Operate() {
 
 
 	plane_ = new Model();
-	
 	plane_->CreateObject("Resources/05_02", "axis.obj");
 	plane_->LoadTexture("Resources/uvChecker.png");
 	//
@@ -106,7 +105,7 @@ void GameManager::Operate() {
 
 
 	Sprite* sprite_ = new Sprite();
-	sprite_->Initialize();
+	//sprite_->Initialize();
 	sprite_->LoadTexture("Resources/uvChecker.png");
 
 	transformSprite_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
@@ -115,7 +114,7 @@ void GameManager::Operate() {
 
 
 	Sprite* sprite2_ = new Sprite();
-	sprite2_->Initialize();
+	//sprite2_->Initialize();
 	sprite2_->LoadTexture("Resources/uvChecker.png");
 
 	transformSprite2_ = { {0.5f,0.5f,0.5f},{0.0f,0.0f,0.0f},{0.0f,0.0f,510.0f} };
@@ -152,8 +151,8 @@ void GameManager::Operate() {
 
 
 			//カメラ行列
-			Matrix4x4 cameraMatrix = MakeAffineMatrix(cameraTransform.scale, cameraTransform.rotate, cameraTransform.translate);
-			viewMatrix = Inverse(cameraMatrix);
+			cameraMatrix_ = MakeAffineMatrix(cameraTransform.scale, cameraTransform.rotate, cameraTransform.translate);
+			viewMatrix = Inverse(cameraMatrix_);
 
 			//遠視投影行列
 			projectionMatrix = MakePerspectiveFovMatrix(0.45f, float(WINDOW_SIZE_WIDTH) / float(WINDOW_SIZE_HEIGHT), 0.1f, 100.0f);

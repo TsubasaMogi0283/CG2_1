@@ -63,6 +63,7 @@ private:
 
 	Transform transformModel;
 	Transform transformModel2;
+	Matrix4x4 cameraMatrix_;
 	Matrix4x4 viewMatrix;
 
 	//遠視投影行列

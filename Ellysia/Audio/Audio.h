@@ -35,6 +35,10 @@ public:
 	//音声再生
 	void PlayWave(const SoundData& soundData);
 
+	//音声停止
+	void StopWave()
+
+
 	//更新
 	void Update();
 

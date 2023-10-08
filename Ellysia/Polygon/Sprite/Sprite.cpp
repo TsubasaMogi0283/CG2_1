@@ -103,12 +103,6 @@ void Sprite::Initialize() {
 	materialResourceSprite_=CreateBufferResource(sizeof(Material));
 
 
-	//directionalLightResource_ = CreateBufferResource(sizeof(DirectionalLight));
-	//directionalLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightDataSprite_));
-	//directionalLightDataSprite_->color={ 1.0f,1.0f,1.0f,1.0f };
-	//directionalLightDataSprite_->direction = { 0.0f,-1.0f,0.0f };
-	//directionalLightDataSprite_->intensity = 1.0f;
-
 
 	//Sprite用のTransformationMatrix用のリソースを作る。
 	//Matrix4x4 1つ分サイズを用意する
@@ -143,7 +137,8 @@ void Sprite::Initialize() {
 
 //Before
 void Sprite::LoadTexture(const std::string& filePath) {
-
+	//ここで初期化いれて一つにしたい
+	Initialize();
 
 	//Textureを読んで転送する
 	DirectX::ScratchImage mipImages = LoadTextureData(filePath);

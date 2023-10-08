@@ -124,6 +124,8 @@ void Audio::PlayWave(const SoundData& soundData) {
 	hr = pSourceVoice->SubmitSourceBuffer(&buf);
 	hr = pSourceVoice->Start();
 
+
+	//pSourceVoice->Stop();
 }
 
 

@@ -22,8 +22,7 @@ public:
 	//コンストラクタ
 	Sprite();
 
-	//初期化
-	void Initialize();
+	
 
 	//まとめた方がよさそう
 	void LoadTexture(const std::string& filePath);
@@ -57,7 +56,8 @@ public:
 
 
 private:
-
+	//初期化
+	void Initialize();
 	
 	//Resource作成の関数化
 	ID3D12Resource* CreateBufferResource(size_t sizeInBytes);

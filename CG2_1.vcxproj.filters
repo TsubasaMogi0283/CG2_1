@@ -280,9 +280,6 @@
     <ClInclude Include="Ellysia\TextureManager\TextureManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Ellysia\Audio\Audio.h">
-      <Filter>ソース ファイル\Audio</Filter>
-    </ClInclude>
     <ClInclude Include="Ellysia\Input\Input.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -297,6 +294,12 @@
     </ClInclude>
     <ClInclude Include="Ellysia\Math\Vector\SpritePosition.h">
       <Filter>ヘッダー ファイル\Math\Vector</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\AllGameScene\IGameScene.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Audio\Audio.h">
+      <Filter>ヘッダー ファイル\Audio</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

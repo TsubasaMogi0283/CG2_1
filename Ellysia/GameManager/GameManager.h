@@ -73,4 +73,6 @@ private:
 	Transform transformSprite_;
 	SpritePosition spriteAllPosition_;
 
+	Transform transformSprite2_;
+	SpritePosition spriteAllPosition2_;
 };

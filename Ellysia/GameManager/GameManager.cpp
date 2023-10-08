@@ -113,6 +113,16 @@ void GameManager::Operate() {
 	spriteAllPosition_ = { {0.0f,0.0f},{0.0f,512.0f},{512.0f,0.0f},{512.0f,512.0f} };
 	sprite_->SetAllPosition(spriteAllPosition_);
 
+
+	Sprite* sprite2_ = new Sprite();
+	sprite2_->Initialize();
+	sprite2_->LoadTexture("Resources/uvChecker.png");
+
+	transformSprite2_ = { {0.5f,0.5f,0.5f},{0.0f,0.0f,0.0f},{0.0f,0.0f,510.0f} };
+	spriteAllPosition2_ = { {0.0f,0.0f},{0.0f,512.0f},{512.0f,0.0f},{512.0f,512.0f} };
+	sprite2_->SetAllPosition(spriteAllPosition2_);
+
+
 	MSG msg{};
 
 	////メインループ
@@ -154,54 +164,70 @@ void GameManager::Operate() {
 			plane_->SetColor(transparency);
 			plane2_->SetTransparency(transparency2);
 
-			ImGui::Begin("Model");
-			
-			ImGui::InputFloat4("Transparency", &transparency.x);
-			ImGui::SliderFloat4("TransparencySlide", &transparency.x,0.0f,1.0f);
+			//ImGui::Begin("Model");
+			//
+			//ImGui::InputFloat4("Transparency", &transparency.x);
+			//ImGui::SliderFloat4("TransparencySlide", &transparency.x,0.0f,1.0f);
+			//
+			//
+			//ImGui::InputFloat3("Scale", &transformModel.scale.x);
+			//ImGui::SliderFloat3("ScaleSlide", &transformModel.scale.x, 1.0f, 5.0f);
+			//
+			//ImGui::InputFloat3("Rotate", &transformModel.rotate.x);
+			//ImGui::SliderFloat3("RotateSlide", &transformModel.rotate.x, 0.0f, 12.0f);
+			//
+			//ImGui::InputFloat3("Translate", &transformModel.translate.x);
+			//ImGui::SliderFloat3("TranslateSlide", &transformModel.translate.x, -10.0f, 10.0f);
+			//
+			//
+			//ImGui::End();
+			//
+			//
+			//
+			//
+			//ImGui::Begin("Mode2:");
+			//
+			//
+			//ImGui::InputFloat("Transparency", &transparency2);
+			//ImGui::SliderFloat("TransparencySlide", &transparency2,0.0f,1.0f);
+			//
+			//
+			//ImGui::InputFloat3("Scale", &transformModel2.scale.x);
+			//ImGui::SliderFloat3("ScaleSlide", &transformModel2.scale.x, 1.0f, 5.0f);
+			//
+			//ImGui::InputFloat3("Rotate", &transformModel2.rotate.x);
+			//ImGui::SliderFloat3("RotateSlide", &transformModel2.rotate.x, 0.0f, 12.0f);
+			//
+			//ImGui::InputFloat3("Translate", &transformModel2.translate.x);
+			//ImGui::SliderFloat3("TranslateSlide", &transformModel2.translate.x, -10.0f, 10.0f);
+			//
+			//
+			//ImGui::End();
+			ImGui::Begin("Sprite");
 
+
+			ImGui::InputFloat3("position", &transformSprite_.translate.x);
+			ImGui::SliderFloat3("position", &transformSprite_.translate.x, 0.0f, 2000.0f);
+
+			ImGui::End();
 			
-			ImGui::InputFloat3("Scale", &transformModel.scale.x);
-			ImGui::SliderFloat3("ScaleSlide", &transformModel.scale.x, 1.0f, 5.0f);
-			
-			ImGui::InputFloat3("Rotate", &transformModel.rotate.x);
-			ImGui::SliderFloat3("RotateSlide", &transformModel.rotate.x, 0.0f, 12.0f);
-			
-			ImGui::InputFloat3("Translate", &transformModel.translate.x);
-			ImGui::SliderFloat3("TranslateSlide", &transformModel.translate.x, -10.0f, 10.0f);
-			
-			
+			ImGui::Begin("Sprite2");
+
+			ImGui::InputFloat3("position", &transformSprite2_.translate.x);
+			ImGui::SliderFloat3("position", &transformSprite2_.translate.x, 0.0f, 2000.0f);
+
+
 			ImGui::End();
 
 
 
-
-			ImGui::Begin("Mode2:");
-			
-			plane2_->SetTransparency(transparency2);
-			ImGui::InputFloat("Transparency", &transparency2);
-			ImGui::SliderFloat("TransparencySlide", &transparency2,0.0f,1.0f);
-
-			
-			ImGui::InputFloat3("Scale", &transformModel2.scale.x);
-			ImGui::SliderFloat3("ScaleSlide", &transformModel2.scale.x, 1.0f, 5.0f);
-			
-			ImGui::InputFloat3("Rotate", &transformModel2.rotate.x);
-			ImGui::SliderFloat3("RotateSlide", &transformModel2.rotate.x, 0.0f, 12.0f);
-			
-			ImGui::InputFloat3("Translate", &transformModel2.translate.x);
-			ImGui::SliderFloat3("TranslateSlide", &transformModel2.translate.x, -10.0f, 10.0f);
-			
-			
-			ImGui::End();
-
-			
 
 #pragma endregion
 			#pragma endregion
 			Draw();
 			
 			sprite_->DrawRect(transformSprite_);
-
+			sprite2_->DrawRect(transformSprite2_);
 
 
 			//フレームの終わり
@@ -221,6 +247,7 @@ void GameManager::Operate() {
 	delete plane_;
 	delete plane2_;
 	delete sprite_;
+	delete sprite2_;
 
 	directXSetup_->Release();
 	winApp_->Close();

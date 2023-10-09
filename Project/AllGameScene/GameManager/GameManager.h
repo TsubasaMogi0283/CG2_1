@@ -5,6 +5,7 @@
 #include "Polygon/Triangle/Triangle.h"
 #include <ImGuiManager/ImGuiManager.h>
 
+
 #include "Math/Matrix/Matrix/Matrix4x4.h"
 #include "ConvertFunction/ConvertColor/ColorConvert.h"
 #include "Math/Matrix/Calculation/Matrix4x4Calculation.h"
@@ -14,6 +15,7 @@
 
 #include "Audio/Audio.h"
 #include <Input/Input.h>
+#include "IGameScene.h"
 
 //main.cppにあるものを全部こっちに引っ越しする
 class GameManager {
@@ -21,22 +23,20 @@ public:
 	//シングルトンダメだった
 	//コンストラクタ
 	GameManager();
-	
-	
 
 	//基本の動作
 	void Operate();
 
-
 	//デストラクタ
 	~GameManager();
 
-
 private:
+
 	void Initialize();
 
 	void BeginFrame();
 
+	void ChangeScene(IGameScene* newGameScene);
 
 	void Update();
 
@@ -49,14 +49,24 @@ private:
 
 
 private:
+	//ウィンドウのサイズを決める
+	const int32_t WINDOW_SIZE_WIDTH_ = 1280;
+	const int32_t WINDOW_SIZE_HEIGHT_ = 720;
+
+
+
+
 	WinApp* winApp_ = nullptr;
 	DirectXSetup* directXSetup_ = nullptr;
 
 	ImGuiManager* imGuiManager_ = nullptr;
 	Input* input_ = nullptr;
 
-	Model* plane_ = nullptr;
-	Model* plane2_ = nullptr;
+
+
+#pragma region サンプル
+	/*Model* plane_ = nullptr;
+	Model* plane2_ = nullptr;*/
 
 
 
@@ -70,10 +80,21 @@ private:
 	Matrix4x4 projectionMatrix;
 
 
+	Sprite* sprite_ = nullptr;
 
 	Transform transformSprite_;
 	SpritePosition spriteAllPosition_;
 
+	//Sprite* sprite2_ = nullptr;
 	Transform transformSprite2_;
 	SpritePosition spriteAllPosition2_;
+
+	Audio* audio_ = nullptr;
+	SoundData soundData_ = {};
+
+#pragma endregion
+
+	//StatePatternに必要な変数
+	IGameScene* currentGamaScene_ = nullptr;
+
 };

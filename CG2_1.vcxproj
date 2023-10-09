@@ -52,7 +52,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalIncludeDirectories>$(ProjectDir)\Math;$(ProjectDir)\GameScene;$(ProjectDir)\Common;$(ProjectDir)\ConvertFunction;$(ProjectDir)\Ellysia;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\Project;$(ProjectDir)\Math;$(ProjectDir)\GameScene;$(ProjectDir)\Common;$(ProjectDir)\ConvertFunction;$(ProjectDir)\Ellysia;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -75,7 +75,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <LanguageStandard>stdcpp20</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalIncludeDirectories>$(ProjectDir)\Math;$(ProjectDir)\GameScene;$(ProjectDir)\Common;$(ProjectDir)\ConvertFunction;$(ProjectDir)\Ellysia;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\Project;$(ProjectDir)\Math;$(ProjectDir)\GameScene;$(ProjectDir)\Common;$(ProjectDir)\ConvertFunction;$(ProjectDir)\Ellysia;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -103,10 +103,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Ellysia\externals\imGui\imgui_impl_win32.cpp" />
     <ClCompile Include="Ellysia\externals\imGui\imgui_tables.cpp" />
     <ClCompile Include="Ellysia\externals\imGui\imgui_widgets.cpp" />
-    <ClCompile Include="Ellysia\GameManager\GameManager.cpp" />
     <ClCompile Include="Ellysia\ImGuiManager\ImGuiManager.cpp" />
     <ClCompile Include="Ellysia\Input\Input.cpp" />
     <ClCompile Include="Ellysia\Math\Matrix\Calculation\Matrix4x4Calculation.cpp" />
+    <ClCompile Include="Ellysia\Math\Matrix\Matrix\CameraMatrix.cpp" />
     <ClCompile Include="Ellysia\Math\Vector\Calculation\VectorCalculation.cpp" />
     <ClCompile Include="Ellysia\Polygon\Model\Model.cpp" />
     <ClCompile Include="Ellysia\Polygon\Sphere\Sphere.cpp" />
@@ -114,6 +114,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Ellysia\Polygon\Triangle\Triangle.cpp" />
     <ClCompile Include="Ellysia\TextureManager\TextureManager.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Project\AllGameScene\GameManager\GameManager.cpp" />
+    <ClCompile Include="Project\AllGameScene\SampleScene\SampleScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Object3d.PS.hlsl">
@@ -148,11 +150,11 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Ellysia\externals\imGui\imstb_rectpack.h" />
     <ClInclude Include="Ellysia\externals\imGui\imstb_textedit.h" />
     <ClInclude Include="Ellysia\externals\imGui\imstb_truetype.h" />
-    <ClInclude Include="Ellysia\GameManager\GameManager.h" />
     <ClInclude Include="Ellysia\ImGuiManager\ImGuiManager.h" />
     <ClInclude Include="Ellysia\Input\Input.h" />
     <ClInclude Include="Ellysia\Input\Mouse\MouseInformation.h" />
     <ClInclude Include="Ellysia\Math\Matrix\Calculation\Matrix4x4Calculation.h" />
+    <ClInclude Include="Ellysia\Math\Matrix\Matrix\CameraMatrix.h" />
     <ClInclude Include="Ellysia\Math\Matrix\Matrix\Matrix3x3.h" />
     <ClInclude Include="Ellysia\Math\Matrix\Matrix\Matrix4x4.h" />
     <ClInclude Include="Ellysia\Math\Matrix\Matrix\TransformationMatrix.h" />
@@ -174,7 +176,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Ellysia\TextureManager\MaterialData\MaterialData.h" />
     <ClInclude Include="Ellysia\TextureManager\ModelData\ModelData.h" />
     <ClInclude Include="Ellysia\TextureManager\TextureManager.h" />
-    <ClInclude Include="Project\AllGameScene\IGameScene.h" />
+    <ClInclude Include="Project\AllGameScene\GameManager\GameManager.h" />
+    <ClInclude Include="Project\AllGameScene\GameManager\IGameScene.h" />
+    <ClInclude Include="Project\AllGameScene\SampleScene\SampleScene.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Ellysia\externals\imGui\LICENSE.txt" />

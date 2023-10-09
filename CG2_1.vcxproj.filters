@@ -82,6 +82,21 @@
     <Filter Include="ソース ファイル\TextureManager">
       <UniqueIdentifier>{511c7def-d00b-4f84-bb17-82918b2ccb0a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\GamaScene\SampleScene">
+      <UniqueIdentifier>{21f550a2-78ff-4589-9602-c2a653d20e93}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\GameScene\SampleScene">
+      <UniqueIdentifier>{cfe63980-9cfb-4417-8db9-50dd411e5520}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Input">
+      <UniqueIdentifier>{c533585d-234b-43c6-8ba0-d10d113e0ac7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソース ファイル\Shader">
+      <UniqueIdentifier>{a3330e3b-ebb6-4091-9be2-4e92c2f224e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Math\Matrix\Camera">
+      <UniqueIdentifier>{5616d2f1-7a47-4c1b-ae84-d81053a643c7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -153,16 +168,22 @@
     <ClCompile Include="Ellysia\Input\Input.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Ellysia\GameManager\GameManager.cpp">
-      <Filter>ソース ファイル\TextureManager</Filter>
+    <ClCompile Include="Project\AllGameScene\SampleScene\SampleScene.cpp">
+      <Filter>ソース ファイル\GamaScene\SampleScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\AllGameScene\GameManager\GameManager.cpp">
+      <Filter>ソース ファイル\GamaScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Ellysia\Math\Matrix\Matrix\CameraMatrix.cpp">
+      <Filter>ソース ファイル\Math</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Object3d.PS.hlsl">
-      <Filter>リソース ファイル</Filter>
+      <Filter>リソース ファイル\Shader</Filter>
     </FxCompile>
     <FxCompile Include="Object3d.VS.hlsl">
-      <Filter>リソース ファイル</Filter>
+      <Filter>リソース ファイル\Shader</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
@@ -280,26 +301,32 @@
     <ClInclude Include="Ellysia\TextureManager\TextureManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Ellysia\Input\Input.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Ellysia\Input\Mouse\MouseInformation.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Ellysia\Blend\BlendMode.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Ellysia\GameManager\GameManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Ellysia\Math\Vector\SpritePosition.h">
       <Filter>ヘッダー ファイル\Math\Vector</Filter>
     </ClInclude>
-    <ClInclude Include="Project\AllGameScene\IGameScene.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Ellysia\Audio\Audio.h">
       <Filter>ヘッダー ファイル\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\AllGameScene\SampleScene\SampleScene.h">
+      <Filter>ヘッダー ファイル\GameScene\SampleScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\AllGameScene\GameManager\GameManager.h">
+      <Filter>ヘッダー ファイル\GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\AllGameScene\GameManager\IGameScene.h">
+      <Filter>ヘッダー ファイル\GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Input\Input.h">
+      <Filter>ヘッダー ファイル\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Input\Mouse\MouseInformation.h">
+      <Filter>ヘッダー ファイル\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Math\Matrix\Matrix\CameraMatrix.h">
+      <Filter>ヘッダー ファイル\Math\Matrix\Camera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -309,7 +336,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Object3d.hlsli">
-      <Filter>リソース ファイル</Filter>
+      <Filter>リソース ファイル\Shader</Filter>
     </None>
   </ItemGroup>
 </Project>

@@ -21,53 +21,64 @@ using Microsoft::WRL::ComPtr;
 
 
 class Audio {
-public:
-
+private:
 	//コンストラクタ
 	Audio();
+
+	//デストラクタ
+	~Audio();
+public:
+	//インスタンスの取得
+	static Audio* GetInstance();
+
+	//コピーコンストラクタ禁止
+	Audio(const Audio& obj) = delete;
+
+	//代入演算子を無効にする
+	Audio& operator=(const Audio& obj) = delete;
+
+public:
+
+	
 
 	//初期化
 	void Initialize();
 
 	//読み込み
-	SoundData SoundLoadWave(const char* fileName);
+	SoundData LoadWave(const char* fileName);
+
+	//読み込み
+	//void LoadWave(const char* fileName);
+
 
 	//音声再生
-	void PlayWave(const SoundData& soundData);
+	void PlayWave(const SoundData& soundData,bool isLoop);
 
 	//音声停止
-	void StopWave()
+	void StopWave(const SoundData& soundData);
 
 
-	//更新
-	void Update();
 
 
 	//音声データの開放
 	void SoundUnload(SoundData* soundData);
 
 
-	//解放
-	void Release();
-
-	//デストラクタ
-	~Audio();
-
-
-
-
-
 
 
 private:
+	static Audio* instance_;
+
 	//IXAudio2はCOMオブジェクトなのでComPtr管理
-	ComPtr<IXAudio2> xAudio2_;
-	IXAudio2MasteringVoice* masterVoice_;
+	ComPtr<IXAudio2> xAudio2_=nullptr;
+	IXAudio2MasteringVoice* masterVoice_=nullptr;
 
 
 
+	bool isUsedAudioIndex = {false};
 
-
+	//波形フォーマットを基にSourceVoiceの生成
+	IXAudio2SourceVoice* pSourceVoice_ = { nullptr };
 
 
 

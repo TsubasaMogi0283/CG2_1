@@ -1,8 +1,19 @@
 #include "Audio.h"
 
+Audio* Audio::instance_ = nullptr;
+
 //コンストラクタ
 Audio::Audio() {
 
+}
+
+Audio* Audio::GetInstance() {
+	if (instance_ == nullptr) {
+		instance_ = new Audio();
+
+	}
+
+	return instance_;
 }
 
 //初期化
@@ -15,14 +26,13 @@ void Audio::Initialize() {
 
 	//マスターボイスを生成
 	hr = xAudio2_->CreateMasteringVoice(&masterVoice_);
-
+	
 
 }
 
 //読み込み
-SoundData Audio::SoundLoadWave(const char* fileName) {
-	//HRESULT hr;
-
+SoundData Audio::LoadWave(const char* fileName) {
+	
 	#pragma region １,ファイルオープン
 	//ファイル入力ストリームのインスタンス
 	std::ifstream file;
@@ -105,13 +115,13 @@ SoundData Audio::SoundLoadWave(const char* fileName) {
 }
 
 //音声再生
-void Audio::PlayWave(const SoundData& soundData) {
+void Audio::PlayWave(const SoundData& soundData,bool isLoop) {
 	HRESULT hr{};
 	
 	
 	//波形フォーマットを基にSourceVoiceの生成
-	IXAudio2SourceVoice* pSourceVoice = nullptr;
-	hr = xAudio2_->CreateSourceVoice(&pSourceVoice, &soundData.wfex);
+	//IXAudio2SourceVoice* pSourceVoice = nullptr;
+	hr = xAudio2_->CreateSourceVoice(&pSourceVoice_, &soundData.wfex);
 	assert(SUCCEEDED(hr));
 
 	//再生する波形データの設定
@@ -119,26 +129,25 @@ void Audio::PlayWave(const SoundData& soundData) {
 	buf.pAudioData = soundData.pBuffer;
 	buf.AudioBytes = soundData.bufferSize;
 	buf.Flags = XAUDIO2_END_OF_STREAM;
+	if (isLoop == true) {
+		//ずっとループさせたいならLoopCountにXAUDIO2_LOOP_INFINITEをいれよう
+		buf.LoopCount = XAUDIO2_LOOP_INFINITE;
+	}
 
 	//波形データの再生
-	hr = pSourceVoice->SubmitSourceBuffer(&buf);
-	hr = pSourceVoice->Start();
+	hr = pSourceVoice_->SubmitSourceBuffer(&buf);
+	hr = pSourceVoice_->Start();
 
 
-	//pSourceVoice->Stop();
+	
 }
 
-
-//更新
-void Audio::Update() {
-
+//音声停止
+void Audio::StopWave(const SoundData& soundData) {
+	HRESULT hr{};
+	hr = pSourceVoice_->Stop();
 }
 
-//解放
-void Audio::Release() {
-	//XAudio2解放
-	xAudio2_.Reset();
-}
 
 //音声データの開放
 void Audio::SoundUnload(SoundData* soundData) {
@@ -148,7 +157,8 @@ void Audio::SoundUnload(SoundData* soundData) {
 	soundData->bufferSize = 0;
 	soundData->wfex = {};
 
-	Release();
+	//XAudio2解放
+	xAudio2_.Reset();
 }
 
 

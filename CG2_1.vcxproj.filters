@@ -177,6 +177,9 @@
     <ClCompile Include="Ellysia\Math\Matrix\Matrix\CameraMatrix.cpp">
       <Filter>ソース ファイル\Math</Filter>
     </ClCompile>
+    <ClCompile Include="Project\AllGameScene\SampleScene2\SampleScene2.cpp">
+      <Filter>ソース ファイル\GamaScene\SampleScene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Object3d.PS.hlsl">
@@ -327,6 +330,9 @@
     </ClInclude>
     <ClInclude Include="Ellysia\Math\Matrix\Matrix\CameraMatrix.h">
       <Filter>ヘッダー ファイル\Math\Matrix\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\AllGameScene\SampleScene2\SampleScene2.h">
+      <Filter>ヘッダー ファイル\GameScene\SampleScene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

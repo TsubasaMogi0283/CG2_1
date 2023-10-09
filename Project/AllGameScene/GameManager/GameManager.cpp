@@ -37,6 +37,8 @@ void GameManager::Initialize() {
 
 	//シーンごとに動作確認したいときはここを変えてね
 	currentGamaScene_ = new SampleScene();
+	currentGamaScene_->Initialize(this);
+
 }
 
 void GameManager::BeginFrame() {
@@ -100,41 +102,7 @@ void GameManager::Operate() {
 	Initialize();
 	
 
-	//plane_ = new Model();
-	//plane_->CreateObject("Resources/05_02", "axis.obj");
-	//plane_->LoadTexture("Resources/uvChecker.png");
-	////
-	//
-	//plane2_ = new Model();
-	//plane2_->CreateObject("Resources/05_02", "plane.obj");
-	//plane2_->LoadTexture("Resources/uvChecker.png");
-
 	
-	
-
-
-	//Transform cameraTransform = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,-9.8f} };
-	//
-	//
-	//Transform transformSphere2 = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,2.0f} };
-	//
-	//Vector4 transparency = { 1.0f,1.0f,1.0f,1.0f };
-	//float transparency2 = 1.0f;
-	//transformModel = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
-	//transformModel2= { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
-
-
-
-	
-
-	audio_ = Audio::GetInstance();
-	audio_->Initialize();
-	soundData_ = audio_->LoadWave("Resources/Audio/Sample/Hit.wav");
-
-
-	audio_->PlayWave(soundData_ ,false);
-	
-
 	MSG msg{};
 
 	////メインループ
@@ -170,29 +138,7 @@ void GameManager::Operate() {
 
 #pragma region Modelの位置情報
 
-			//plane_->SetColor(transparency);
-			//plane2_->SetTransparency(transparency2);
-
 			
-			ImGui::Begin("Sprite");
-
-
-			ImGui::InputFloat3("position", &transformSprite_.translate.x);
-			ImGui::SliderFloat3("position", &transformSprite_.translate.x, 0.0f, 2000.0f);
-
-			ImGui::End();
-			
-			ImGui::Begin("Sprite2");
-
-			ImGui::InputFloat3("position", &transformSprite2_.translate.x);
-			ImGui::SliderFloat3("position", &transformSprite2_.translate.x, 0.0f, 2000.0f);
-
-
-			ImGui::End();
-
-
-
-
 #pragma endregion
 			#pragma endregion
 			Draw();
@@ -214,7 +160,7 @@ void GameManager::Operate() {
 	//plane2_->Release();
 	//sprite_->Release();
 
-	audio_->SoundUnload(&soundData_);
+	
 
 	//delete plane_;
 	//delete plane2_;
@@ -222,8 +168,6 @@ void GameManager::Operate() {
 	//delete sprite2_;
 
 	Release();
-	
-	
 
 	//ゲーム終了時にはCOMの終了処理を行っておく
 	CoUninitialize();

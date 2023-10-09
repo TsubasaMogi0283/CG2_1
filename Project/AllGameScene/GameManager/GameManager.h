@@ -27,16 +27,19 @@ public:
 	//基本の動作
 	void Operate();
 
+	//シーンチェンジ
+	void ChangeScene(IGameScene* newGameScene);
+
 	//デストラクタ
 	~GameManager();
+
+
 
 private:
 
 	void Initialize();
 
 	void BeginFrame();
-
-	void ChangeScene(IGameScene* newGameScene);
 
 	void Update();
 

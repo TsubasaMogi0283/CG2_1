@@ -1,4 +1,5 @@
 #pragma once
+
 #include <Input/Input.h>
 #include <Audio/Audio.h>
 #include "AllGameScene/GameManager/GameManager.h"
@@ -7,14 +8,14 @@
 //StatePatternをル買う時は必ず前方宣言をするように
 class Gamemanager;
 
-class SampleScene : public IGameScene {
+class SampleScene2 : public IGameScene {
 public:
 
 	//コンストラクタ
-	SampleScene();
+	SampleScene2();
 
 	/// デストラクタ
-	~SampleScene();
+	~SampleScene2();
 
 	/// 初期化
 	void Initialize(GameManager* gameManager)override;
@@ -41,10 +42,4 @@ private:
 	Transform transformSprite_;
 	SpritePosition spriteAllPosition_;
 
-	int sampleTimer_ = 0;
-
 };
-
-
-
-

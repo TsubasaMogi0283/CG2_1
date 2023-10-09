@@ -16,6 +16,12 @@ Audio* Audio::GetInstance() {
 	return instance_;
 }
 
+//デリート代わりの関数
+void Audio::DeleteInstance() {
+	delete instance_;
+}
+
+
 //初期化
 //これはDirecX初期化の後に入れてね
 void Audio::Initialize() {

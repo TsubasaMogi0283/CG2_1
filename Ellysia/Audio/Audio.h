@@ -31,6 +31,9 @@ public:
 	//インスタンスの取得
 	static Audio* GetInstance();
 
+	//デリート代わりの関数
+	void DeleteInstance();
+
 	//コピーコンストラクタ禁止
 	Audio(const Audio& obj) = delete;
 

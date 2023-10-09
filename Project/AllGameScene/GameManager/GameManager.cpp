@@ -129,10 +129,10 @@ void GameManager::Operate() {
 
 	audio_ = Audio::GetInstance();
 	audio_->Initialize();
-	soundData_ = audio_->LoadWave("Resources/Audio/Sample/Win.wav");
+	soundData_ = audio_->LoadWave("Resources/Audio/Sample/Hit.wav");
 
 
-	audio_->PlayWave(soundData_ ,true);
+	audio_->PlayWave(soundData_ ,false);
 	
 
 	MSG msg{};

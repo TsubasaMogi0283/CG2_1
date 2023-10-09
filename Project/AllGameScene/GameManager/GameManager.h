@@ -71,23 +71,23 @@ private:
 
 
 
-	Transform transformModel;
-	Transform transformModel2;
-	Matrix4x4 cameraMatrix_;
-	Matrix4x4 viewMatrix;
+	Transform transformModel = {};
+	Transform transformModel2 = {};
+	Matrix4x4 cameraMatrix_ = {};
+	Matrix4x4 viewMatrix = {};
 
 	//遠視投影行列
-	Matrix4x4 projectionMatrix;
+	Matrix4x4 projectionMatrix = {};
 
 
 	Sprite* sprite_ = nullptr;
 
-	Transform transformSprite_;
-	SpritePosition spriteAllPosition_;
+	Transform transformSprite_ = {};
+	SpritePosition spriteAllPosition_ = {};
 
 	//Sprite* sprite2_ = nullptr;
-	Transform transformSprite2_;
-	SpritePosition spriteAllPosition2_;
+	Transform transformSprite2_ = {};
+	SpritePosition spriteAllPosition2_ = {};
 
 	Audio* audio_ = nullptr;
 	SoundData soundData_ = {};

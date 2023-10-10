@@ -34,7 +34,7 @@ void SampleScene::Initialize(GameManager* gameManager) {
 	plane_ = new Model();
 	plane_->CreateObject("Resources/05_02","/plane.obj");
 	plane_->LoadTexture("Resources/05_02/uvChecker.png");
-	transformModel_ = { {0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
+	transformModel_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
 	cameraTransform_ = { {0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,-9.8f} };
 
 	audio_ = Audio::GetInstance();

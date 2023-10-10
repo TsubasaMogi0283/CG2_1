@@ -32,10 +32,10 @@ void SampleScene::Initialize(GameManager* gameManager) {
 
 
 	plane_ = new Model();
-	plane_->CreateObject("Resources/05_02","/plane.obj");
+	plane_->CreateObject("Resources/05_02","/axis.obj");
 	plane_->LoadTexture("Resources/05_02/uvChecker.png");
 	transformModel_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
-	cameraTransform_ = { {0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,-9.8f} };
+	cameraTransform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,-9.8f} };
 
 	audio_ = Audio::GetInstance();
 	audio_->Initialize();
@@ -58,8 +58,9 @@ void SampleScene::Update(GameManager* gameManager) {
 	viewMatrix_ = Inverse(cameraMatrix_);
 	
 	//遠視投影行列
-	projectionMatrix_ = MakePerspectiveFovMatrix(0.45f, float(DirectXSetup::GetInstance()->GetClientWidth()) / float(DirectXSetup::GetInstance()->GetClientWidth()), 0.1f, 100.0f);
+	projectionMatrix_ = MakePerspectiveFovMatrix(0.45f, float(DirectXSetup::GetInstance()->GetClientWidth()) / float(DirectXSetup::GetInstance()->GetClientHeight()), 0.1f, 100.0f);
 		
+	
 
 	sampleTimer_ += 1;
 	

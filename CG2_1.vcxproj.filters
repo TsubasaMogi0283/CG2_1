@@ -174,11 +174,11 @@
     <ClCompile Include="Project\AllGameScene\GameManager\GameManager.cpp">
       <Filter>ソース ファイル\GamaScene</Filter>
     </ClCompile>
-    <ClCompile Include="Ellysia\Math\Matrix\Matrix\CameraMatrix.cpp">
-      <Filter>ソース ファイル\Math</Filter>
-    </ClCompile>
     <ClCompile Include="Project\AllGameScene\SampleScene2\SampleScene2.cpp">
       <Filter>ソース ファイル\GamaScene\SampleScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Ellysia\Camera\Camera.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -328,11 +328,11 @@
     <ClInclude Include="Ellysia\Input\Mouse\MouseInformation.h">
       <Filter>ヘッダー ファイル\Input</Filter>
     </ClInclude>
-    <ClInclude Include="Ellysia\Math\Matrix\Matrix\CameraMatrix.h">
-      <Filter>ヘッダー ファイル\Math\Matrix\Camera</Filter>
-    </ClInclude>
     <ClInclude Include="Project\AllGameScene\SampleScene2\SampleScene2.h">
       <Filter>ヘッダー ファイル\GameScene\SampleScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Camera\Camera.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

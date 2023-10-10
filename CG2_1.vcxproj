@@ -91,6 +91,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Ellysia\Audio\Audio.cpp" />
+    <ClCompile Include="Ellysia\Camera\Camera.cpp" />
     <ClCompile Include="Ellysia\Common\DirectX\DirectXSetup.cpp" />
     <ClCompile Include="Ellysia\Common\Windows\WinApp.cpp" />
     <ClCompile Include="Ellysia\ConvertFunction\ConvertColor\ColorConvert.cpp" />
@@ -106,7 +107,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Ellysia\ImGuiManager\ImGuiManager.cpp" />
     <ClCompile Include="Ellysia\Input\Input.cpp" />
     <ClCompile Include="Ellysia\Math\Matrix\Calculation\Matrix4x4Calculation.cpp" />
-    <ClCompile Include="Ellysia\Math\Matrix\Matrix\CameraMatrix.cpp" />
     <ClCompile Include="Ellysia\Math\Vector\Calculation\VectorCalculation.cpp" />
     <ClCompile Include="Ellysia\Polygon\Model\Model.cpp" />
     <ClCompile Include="Ellysia\Polygon\Sphere\Sphere.cpp" />
@@ -139,6 +139,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Ellysia\Audio\RiffHeader\RiffHeader.h" />
     <ClInclude Include="Ellysia\Audio\SoundData\SoundData.h" />
     <ClInclude Include="Ellysia\Blend\BlendMode.h" />
+    <ClInclude Include="Ellysia\Camera\Camera.h" />
     <ClInclude Include="Ellysia\Common\DirectX\DirectXSetup.h" />
     <ClInclude Include="Ellysia\Common\Windows\WinApp.h" />
     <ClInclude Include="Ellysia\ConvertFunction\ConvertColor\ColorConvert.h" />
@@ -155,7 +156,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Ellysia\Input\Input.h" />
     <ClInclude Include="Ellysia\Input\Mouse\MouseInformation.h" />
     <ClInclude Include="Ellysia\Math\Matrix\Calculation\Matrix4x4Calculation.h" />
-    <ClInclude Include="Ellysia\Math\Matrix\Matrix\CameraMatrix.h" />
     <ClInclude Include="Ellysia\Math\Matrix\Matrix\Matrix3x3.h" />
     <ClInclude Include="Ellysia\Math\Matrix\Matrix\Matrix4x4.h" />
     <ClInclude Include="Ellysia\Math\Matrix\Matrix\TransformationMatrix.h" />

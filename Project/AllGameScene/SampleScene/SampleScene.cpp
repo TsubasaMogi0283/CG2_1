@@ -80,5 +80,5 @@ void SampleScene::Draw(GameManager* gameManager) {
 	plane_->Draw(transformModel_,viewMatrix_,projectionMatrix_);
 
 
-	//sprite_->DrawRect(transformSprite_);
+	sprite_->DrawRect(transformSprite_);
 }

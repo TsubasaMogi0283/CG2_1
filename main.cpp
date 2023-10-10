@@ -171,7 +171,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 					TriangleCoodinateLeft[i], 
 					TriangleCoodinateTop[i],
 					TriangleCoodinateRight[i],
-					Color[i]
+					
 				);
 			}
 

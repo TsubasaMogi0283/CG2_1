@@ -4,13 +4,6 @@
 #include "WindowsInitialization.h"
  
 
-struct TriangleVertex {
-	D3D12_VERTEX_BUFFER_VIEW vertexBuffer;
-	ID3D12Resource* resouce;
-};
-
-
-
 
 
 //メンバ変数関数いつか整理したい・・・
@@ -51,6 +44,9 @@ private:
 
 	void InitializeDXC();
 
+
+
+	//下の３つをTriangleにうつしてブレンドが出来るかどうか確認する
 	void MakePSO();
 
 	void GenarateViewport();

@@ -17,7 +17,7 @@ public:
 	//Material用のリソースを作る
 	void GenerateMaterialResource();
 
-	void Draw(Vector4 left,Vector4 top,  Vector4 right,unsigned int  color);
+	void Draw(Vector4 left,Vector4 top,  Vector4 right);
 
 
 	//Resource作成の関数化
@@ -54,6 +54,6 @@ private:
 	Vector4* materialData_ = nullptr;
 	
 
-
+	Vector4 color_;
 	
 };

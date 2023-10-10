@@ -30,6 +30,10 @@ void SampleScene::Initialize(GameManager* gameManager) {
 	sprite_->SetAllPosition(spriteAllPosition_);
 
 
+	plane_ = new Model();
+	plane_->CreateObject("Resources/05_02","/plane.obj");
+	plane_->LoadTexture("Resources/05_02/plane.obj");
+
 	audio_ = Audio::GetInstance();
 	audio_->Initialize();
 	soundData_ = audio_->LoadWave("Resources/Audio/Sample/Hit.wav");
@@ -61,5 +65,16 @@ void SampleScene::Update(GameManager* gameManager) {
 /// 描画
 /// </summary>
 void SampleScene::Draw(GameManager* gameManager) {
+
+	//カメラ行列
+	cameraMatrix_ = MakeAffineMatrix(cameraTransform.scale, cameraTransform.rotate, cameraTransform.translate);
+	viewMatrix_ = Inverse(cameraMatrix_);
+	
+	//遠視投影行列
+	projectionMatrix_ = MakePerspectiveFovMatrix(0.45f, float(WINDOW_SIZE_WIDTH_) / float(WINDOW_SIZE_HEIGHT_), 0.1f, 100.0f);
+			
+	plane_->Draw(transformModel,viewMatrix,projectionMatrix);
+
+
 	sprite_->DrawRect(transformSprite_);
 }

@@ -41,6 +41,15 @@ private:
 	Transform transformSprite_;
 	SpritePosition spriteAllPosition_;
 
+
+	Model* plane_ = nullptr;
+	Transform transformModel_ = {};
+	Matrix4x4 cameraMatrix_ = {};
+	Matrix4x4 viewMatrix = {};
+
+	//遠視投影行列
+	Matrix4x4 projectionMatrix = {};
+
 	int sampleTimer_ = 0;
 
 };

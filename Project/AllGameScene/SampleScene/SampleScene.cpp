@@ -15,6 +15,7 @@ SampleScene::~SampleScene() {
 	//sprite_->Release();
 	audio_->SoundUnload(&soundData_);
 	delete sprite_;
+	delete plane_;
 }
 
 /// <summary>
@@ -32,14 +33,16 @@ void SampleScene::Initialize(GameManager* gameManager) {
 
 	plane_ = new Model();
 	plane_->CreateObject("Resources/05_02","/plane.obj");
-	plane_->LoadTexture("Resources/05_02/plane.obj");
+	plane_->LoadTexture("Resources/05_02/uvChecker.png");
+	transformModel_ = { {0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
+	cameraTransform_ = { {0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,-9.8f} };
 
 	audio_ = Audio::GetInstance();
 	audio_->Initialize();
 	soundData_ = audio_->LoadWave("Resources/Audio/Sample/Hit.wav");
 
 
-	audio_->PlayWave(soundData_ ,true);
+	//audio_->PlayWave(soundData_ ,true);
 	
 
 	
@@ -50,10 +53,16 @@ void SampleScene::Initialize(GameManager* gameManager) {
 /// </summary>
 void SampleScene::Update(GameManager* gameManager) {
 
+	//カメラ行列
+	cameraMatrix_ = MakeAffineMatrix(cameraTransform_.scale, cameraTransform_.rotate, cameraTransform_.translate);
+	viewMatrix_ = Inverse(cameraMatrix_);
+	
+	//遠視投影行列
+	projectionMatrix_ = MakePerspectiveFovMatrix(0.45f, float(DirectXSetup::GetInstance()->GetClientWidth()) / float(DirectXSetup::GetInstance()->GetClientWidth()), 0.1f, 100.0f);
+		
+
 	sampleTimer_ += 1;
-	if (sampleTimer_ > 60) {
-		gameManager->ChangeScene(new SampleScene2());
-	}
+	
 	
 	ImGui::Begin("SampleScene1");
 	ImGui::Text("Time",sampleTimer_);
@@ -66,15 +75,9 @@ void SampleScene::Update(GameManager* gameManager) {
 /// </summary>
 void SampleScene::Draw(GameManager* gameManager) {
 
-	//カメラ行列
-	cameraMatrix_ = MakeAffineMatrix(cameraTransform.scale, cameraTransform.rotate, cameraTransform.translate);
-	viewMatrix_ = Inverse(cameraMatrix_);
-	
-	//遠視投影行列
-	projectionMatrix_ = MakePerspectiveFovMatrix(0.45f, float(WINDOW_SIZE_WIDTH_) / float(WINDOW_SIZE_HEIGHT_), 0.1f, 100.0f);
-			
-	plane_->Draw(transformModel,viewMatrix,projectionMatrix);
+		
+	plane_->Draw(transformModel_,viewMatrix_,projectionMatrix_);
 
 
-	sprite_->DrawRect(transformSprite_);
+	//sprite_->DrawRect(transformSprite_);
 }

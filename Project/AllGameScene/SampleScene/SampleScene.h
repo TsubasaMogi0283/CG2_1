@@ -45,10 +45,11 @@ private:
 	Model* plane_ = nullptr;
 	Transform transformModel_ = {};
 	Matrix4x4 cameraMatrix_ = {};
-	Matrix4x4 viewMatrix = {};
+	Matrix4x4 viewMatrix_ = {};
 
 	//遠視投影行列
-	Matrix4x4 projectionMatrix = {};
+	Transform cameraTransform_ = {};
+	Matrix4x4 projectionMatrix_ = {};
 
 	int sampleTimer_ = 0;
 

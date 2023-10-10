@@ -15,8 +15,7 @@
 #include <Math/Vector/DirectionalLight.h>
 #include <TextureManager/MaterialData/MaterialData.h>
 #include <TextureManager/ModelData/ModelData.h>
-
-
+#include "Camera/Camera.h"
 
 #include "Math/Vector/Vector4.h"
 #include "Math/Matrix/Calculation/Matrix4x4Calculation.h"
@@ -25,6 +24,7 @@
 
 #include <Math/Vector/Calculation/VectorCalculation.h>
 #include <externals/DirectXTex/d3dx12.h>
+
 
 
 
@@ -52,7 +52,7 @@ public:
 
 
 	//描画
-	void Draw(Transform transform, Matrix4x4 viewMatrix, Matrix4x4 projectionMatrix);
+	void Draw(Transform transform);
 
 	//解放
 	void Release();
@@ -111,7 +111,7 @@ private:
 
 	//DirectX内にある情報を取り入れる
 	DirectXSetup* directXSetup_ = nullptr;
-
+	Camera* camera_ = nullptr;
 
 	//モデルの読み込み
 	ModelData modelData_;

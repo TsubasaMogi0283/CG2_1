@@ -21,7 +21,7 @@ GameManager::GameManager() {
 	directXSetup_ = DirectXSetup::GetInstance();
 	imGuiManager_ = ImGuiManager::GetInstance();
 	input_ = Input::GetInstance();
-	
+	camera_ = Camera::GetInstance();
 }
 	
 void GameManager::Initialize() {
@@ -80,6 +80,7 @@ void GameManager::EndFrame() {
 
 void GameManager::Release() {
 	imGuiManager_->Release();
+	camera_->DeleteInstance();
 	directXSetup_->Release();
 	directXSetup_->DeleteInstance();
 	winApp_->Close();

@@ -1,4 +1,5 @@
 #include "Model.h"
+#include <Camera/Camera.h>
 
 
 Model::Model() {
@@ -427,6 +428,8 @@ void Model::CreateObject(const std::string& directoryPath,const std::string& fil
 	
 	//LoadDirectX(directXSetup_);
 	this->directXSetup_ = DirectXSetup::GetInstance();
+	this->camera_ = Camera::GetInstance();
+
 
 	////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
 	materialResource_=CreateBufferResource(sizeof(Material));
@@ -461,7 +464,7 @@ void Model::CreateObject(const std::string& directoryPath,const std::string& fil
 
 
 //描画
-void Model::Draw(Transform transform,Matrix4x4 viewMatrix,Matrix4x4 projectionMatrix) {
+void Model::Draw(Transform transform) {
 	//書き込むためのデータを書き込む
 	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
 
@@ -493,8 +496,8 @@ void Model::Draw(Transform transform,Matrix4x4 viewMatrix,Matrix4x4 projectionMa
 	Matrix4x4 projectionMatrixSphere = MakeOrthographicMatrix(0.0f, 0.0f, float(directXSetup_->GetClientWidth()), float(directXSetup_->GetClientHeight()), 0.0f, 100.0f);
 	
 	//WVP行列を作成
-	Matrix4x4 worldViewProjectionMatrixSphere = Multiply(worldMatrixSphere, Multiply(viewMatrix, projectionMatrix));
-
+	//Matrix4x4 worldViewProjectionMatrixSphere = Multiply(worldMatrixSphere, Multiply(viewMatrix, projectionMatrix));
+	Matrix4x4 worldViewProjectionMatrixSphere = Multiply(worldMatrixSphere, Multiply(camera_->GetViewMatrix(),camera_->GetProjectionMatrix_()));
 
 	transformationMatrixData_->WVP = worldViewProjectionMatrixSphere;
 	transformationMatrixData_->World =MakeIdentity4x4();
@@ -559,5 +562,5 @@ void Model::Release() {
 
 //デストラクタ
 Model::~Model() {
-
+	
 }

@@ -29,23 +29,21 @@ public:
 
 public:
 
-	void Initialize();
-
-	void Update();
-
-
+	//基本はアクセッサだけにする
 	void SetRotate(Vector3 rotate) {
-
+		this->cameraTransform_.rotate = rotate;
 	}
 
 	void SetTranslate(Vector3 translate) {
-
+		this->cameraTransform_.translate = translate;
 	}
+
+	Matrix4x4 GetViewMatrix();
+
+	Matrix4x4 GetProjectionMatrix_();
 
 private:
 	static Camera* instance_;
-
-
 
 	Matrix4x4 cameraMatrix_ = {};
 	Matrix4x4 viewMatrix_ = {};

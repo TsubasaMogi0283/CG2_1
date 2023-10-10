@@ -12,9 +12,10 @@ SampleScene::SampleScene() {
 /// デストラクタ
 /// </summary>
 SampleScene::~SampleScene() {
-	//sprite_->Release();
+	sprite_->Release();
 	audio_->SoundUnload(&soundData_);
 	delete sprite_;
+	plane_->Release();
 	delete plane_;
 }
 
@@ -23,7 +24,6 @@ SampleScene::~SampleScene() {
 /// </summary>
 void SampleScene::Initialize(GameManager* gameManager) {
 	sprite_ = new Sprite();
-	//sprite_->Initialize();
 	sprite_->LoadTexture("Resources/uvChecker.png");
 
 	transformSprite_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
@@ -77,7 +77,7 @@ void SampleScene::Update(GameManager* gameManager) {
 void SampleScene::Draw(GameManager* gameManager) {
 
 		
-	plane_->Draw(transformModel_,viewMatrix_,projectionMatrix_);
+	plane_->Draw(transformModel_);
 
 
 	sprite_->DrawRect(transformSprite_);

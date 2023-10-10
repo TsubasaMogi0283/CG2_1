@@ -16,6 +16,7 @@
 #include "Audio/Audio.h"
 #include <Input/Input.h>
 #include "IGameScene.h"
+#include "Camera/Camera.h"
 
 //main.cppにあるものを全部こっちに引っ越しする
 class GameManager {
@@ -64,6 +65,7 @@ private:
 
 	ImGuiManager* imGuiManager_ = nullptr;
 	Input* input_ = nullptr;
+	Camera* camera_ = nullptr;
 
 
 

@@ -289,9 +289,6 @@
     <ClInclude Include="Ellysia\Input\Mouse\MouseInformation.h">
       <Filter>ヘッダー ファイル\Input</Filter>
     </ClInclude>
-    <ClInclude Include="Ellysia\Camera\Camera.h">
-      <Filter>ソース ファイル\Polygone</Filter>
-    </ClInclude>
     <ClInclude Include="Ellysia\Math\Vector\SpritePosition.h">
       <Filter>ヘッダー ファイル\Math\Vector</Filter>
     </ClInclude>
@@ -338,6 +335,9 @@
       <Filter>ヘッダー ファイル\GameScene</Filter>
     </ClInclude>
     <ClInclude Include="Ellysia\ResourceObject\ResourceObject.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Camera\Camera.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

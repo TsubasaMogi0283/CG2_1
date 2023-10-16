@@ -15,8 +15,8 @@
 #pragma comment(lib,"dxguid.lib")
 #pragma comment(lib,"dxcompiler.lib")
 
-
-
+#include <wrl.h>
+using Microsoft::WRL::ComPtr;
 
 
 
@@ -48,17 +48,6 @@ public:
 	//他の所では使わないからprivateにしても良さそう
 	//アロー演算子を使ったとき邪魔になるから
 private:
-
-	////CompilerShader関数
-	//IDxcBlob* CompileShader(
-	//	//CompilerするShaderファイルへのパス
-	//	const std::wstring& filePath,
-	//	//Compilerに使用するProfile
-	//	const wchar_t* profile,
-	//	//初期化で生成したものを３つ
-	//	IDxcUtils* dxcUtils,
-	//	IDxcCompiler3* dxcCompiler,
-	//	IDxcIncludeHandler* includeHandler);
 
 
 	//関数化したやつ
@@ -158,24 +147,24 @@ public:
 		return hr_;
 	}
 
-	ID3D12Device* GetDevice() {
+	ComPtr<ID3D12Device> GetDevice() {
 		return device_;
 	}
 	
-	ID3D12GraphicsCommandList* GetCommandList() {
+	ComPtr<ID3D12GraphicsCommandList> GetCommandList() {
 		return commandList_;
 	}
 	
 
 
-	ID3D12DescriptorHeap* GetRtvDescriptorHeap() {
-		return  rtvDescriptorHeap_;
+	ComPtr<ID3D12DescriptorHeap> GetRtvDescriptorHeap() {
+		return  rtvDescriptorHeap_.Get();
 	}
-	ID3D12DescriptorHeap* GetSrvDescriptorHeap() {
-		return  srvDescriptorHeap_;
+	ComPtr<ID3D12DescriptorHeap> GetSrvDescriptorHeap() {
+		return  srvDescriptorHeap_.Get();
 	}
-	ID3D12DescriptorHeap* GetDsvDescriptorHeap() {
-		return  dsvDescriptorHeap_;
+	ComPtr<ID3D12DescriptorHeap> GetDsvDescriptorHeap() {
+		return  dsvDescriptorHeap_.Get();
 	}
 
 
@@ -224,30 +213,30 @@ private:
 	
 
 	
-
+	//IDXGIやID3D12はComPtr対象
 	
 
-	ID3D12InfoQueue* infoQueue_ = nullptr;
+	ComPtr<ID3D12InfoQueue> infoQueue_ = nullptr;
 
 	//
-	IDXGIFactory7* dxgiFactory_ = nullptr;
+	ComPtr<IDXGIFactory7> dxgiFactory_ = nullptr;
 	//
-	IDXGIAdapter4* useAdapter_ = nullptr;
+	ComPtr<IDXGIAdapter4> useAdapter_ = nullptr;
 
 	//
-	ID3D12Device* device_ = nullptr;
+	ComPtr<ID3D12Device> device_ = nullptr;
 
 
 
 
 
-	ID3D12GraphicsCommandList* commandList_ = nullptr;
+	ComPtr<ID3D12GraphicsCommandList> commandList_ = nullptr;
 	
-	ID3D12CommandQueue* commandQueue_ = nullptr;
+	ComPtr<ID3D12CommandQueue> commandQueue_ = nullptr;
 	
-	D3D12_COMMAND_QUEUE_DESC commandQueueDesc_{};
 	
-	ID3D12CommandAllocator* commandAllocator_ = nullptr;
+	
+	ComPtr<ID3D12CommandAllocator> commandAllocator_ = nullptr;
 
 
 
@@ -260,16 +249,16 @@ private:
 	//D3D12_RENDER_TARGET_VIEW_DESC rtvDesc_{};
 	//DXGI_SWAP_CHAIN_DESC1 swapChainDesc_{};
 
-	IDXGISwapChain4* swapChain_ = nullptr;
+	ComPtr<IDXGISwapChain4> swapChain_ = nullptr;
 	DXGI_SWAP_CHAIN_DESC1 swapChainDesc_{};
 
-	ID3D12Resource* swapChainResources_[2] = { nullptr };
+	ComPtr<ID3D12Resource> swapChainResources_[2] = { nullptr };
 
-	ID3D12DescriptorHeap* rtvDescriptorHeap_ = nullptr;
-	ID3D12DescriptorHeap* srvDescriptorHeap_ = nullptr;
-	ID3D12DescriptorHeap* dsvDescriptorHeap_ = nullptr;
+	ComPtr<ID3D12DescriptorHeap> rtvDescriptorHeap_ = nullptr;
+	ComPtr<ID3D12DescriptorHeap> srvDescriptorHeap_ = nullptr;
+	ComPtr<ID3D12DescriptorHeap> dsvDescriptorHeap_ = nullptr;
 
-	ID3D12Resource* depthStencilResource_ = nullptr;
+	ComPtr<ID3D12Resource> depthStencilResource_ = nullptr;
 
 	D3D12_DESCRIPTOR_HEAP_DESC rtvDescriptorHeapDesc_{};
 
@@ -285,43 +274,12 @@ private:
 	
 	D3D12_RESOURCE_BARRIER barrier_{};
 
-	ID3D12Fence* fence_ = nullptr;
+	ComPtr<ID3D12Fence> fence_ = nullptr;
 
 	uint64_t fenceValue_ = 0;
 
 
-	ID3D12Debug1* debugController_ = nullptr;
-
-//#pragma region 後で消す
-//
-//#pragma region DXCの初期化について
-//	IDxcCompiler3* dxcCompiler_ = nullptr;
-//
-//	IDxcIncludeHandler* includeHandler_ = nullptr;
-//
-//#pragma endregion
-//
-//	//PSO
-//	D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature_{};
-//
-//
-//	ID3DBlob* signatureBlob_ = nullptr;
-//
-//	ID3DBlob* errorBlob_ = nullptr;
-//
-//
-//
-//	ID3D12RootSignature* rootSignature_ = nullptr;
-//
-//	IDxcBlob* pixelShaderBlob_ = nullptr;
-//
-//	IDxcBlob* vertexShaderBlob_ = nullptr;
-//
-//	ID3D12PipelineState* graphicsPipelineState_ = nullptr;
-//
-//
-//
-//#pragma endregion
+	ComPtr<ID3D12Debug1> debugController_ = nullptr;
 
 
 	D3D12_VIEWPORT viewport_{};
@@ -333,6 +291,6 @@ private:
 
 	Vector4* vertexData_ = nullptr;
 
-	IDXGIDebug1* debug_;
+	ComPtr<IDXGIDebug1> debug_;
 
 };

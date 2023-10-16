@@ -64,6 +64,30 @@
     <Filter Include="ヘッダー ファイル\Input">
       <UniqueIdentifier>{bd6a7a20-7921-47f1-a1ef-c5a99c26491a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\Audio">
+      <UniqueIdentifier>{38c8c39f-90cc-4b8a-99bb-e3a6cf511aa2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Polygone\Model">
+      <UniqueIdentifier>{e5a13ab7-8f0d-4526-bba9-e90030f8a6d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Pipeline">
+      <UniqueIdentifier>{960690e0-f2d3-4f0a-a7e9-81f206ff3f49}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Blend">
+      <UniqueIdentifier>{41250f08-3f73-4c50-a28e-c98adcfbb3f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\TextureManager">
+      <UniqueIdentifier>{7cee7120-9bf3-4b3b-a93a-30c9b8710e6d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\TextureManager">
+      <UniqueIdentifier>{923fe313-40bb-48ce-aa0b-eb17ee0b5333}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Audio">
+      <UniqueIdentifier>{4e9ce233-b84c-4858-95a3-08d752302d12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Pipeline">
+      <UniqueIdentifier>{dd9a03be-6394-4e47-b16e-f7b88147685e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -129,23 +153,26 @@
     <ClCompile Include="Ellysia\Input\Input.cpp">
       <Filter>ソース ファイル\Input</Filter>
     </ClCompile>
-    <ClCompile Include="Ellysia\PipelineManager\PipelineManager.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Ellysia\Camera\Camera.cpp">
       <Filter>ソース ファイル\Polygone</Filter>
     </ClCompile>
-    <ClCompile Include="Ellysia\TextureManager\TextureManager.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Ellysia\Audio\Audio.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="Project\AllGameScene\SampleScene\SampleScene.cpp">
+      <Filter>ソース ファイル\GamaScene</Filter>
     </ClCompile>
     <ClCompile Include="Project\AllGameScene\GameManager\GameManager.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\GamaScene</Filter>
     </ClCompile>
-    <ClCompile Include="Project\AllGameScene\SampleScene\SampleScene.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="Ellysia\TextureManager\TextureManager.cpp">
+      <Filter>ソース ファイル\TextureManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Ellysia\Audio\Audio.cpp">
+      <Filter>ソース ファイル\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="Ellysia\PipelineManager\PipelineManager.cpp">
+      <Filter>ソース ファイル\Pipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="Ellysia\ResourceObject\ResourceObject.cpp">
+      <Filter>ヘッダー ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -253,15 +280,6 @@
     <ClInclude Include="Ellysia\Common\Windows\WinApp.h">
       <Filter>ヘッダー ファイル\Common</Filter>
     </ClInclude>
-    <ClInclude Include="Ellysia\TextureManager\MaterialData\MaterialData.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Ellysia\Polygon\Model\Model.h">
-      <Filter>ヘッダー ファイル\Polygone</Filter>
-    </ClInclude>
-    <ClInclude Include="Ellysia\TextureManager\ModelData\ModelData.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Ellysia\ConvertFunction\CompileShader\CompileShaderManager.h">
       <Filter>ヘッダー ファイル\ConvertFunction</Filter>
     </ClInclude>
@@ -271,44 +289,56 @@
     <ClInclude Include="Ellysia\Input\Mouse\MouseInformation.h">
       <Filter>ヘッダー ファイル\Input</Filter>
     </ClInclude>
-    <ClInclude Include="Ellysia\PipelineManager\PipelineManager.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Ellysia\Camera\Camera.h">
       <Filter>ソース ファイル\Polygone</Filter>
     </ClInclude>
-    <ClInclude Include="Ellysia\TextureManager\TextureManager.h">
-      <Filter>ソース ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Ellysia\Blend\BlendMode.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Ellysia\Audio\Audio.h">
-      <Filter>ソース ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Ellysia\Audio\SoundData\SoundData.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Ellysia\Audio\RiffHeader\RiffHeader.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Ellysia\Audio\FormatChunk\FormatChunk.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Ellysia\Audio\ChunkHeader\ChunkHeader.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Project\AllGameScene\GameManager\GameManager.h">
-      <Filter>ソース ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Project\AllGameScene\GameManager\IGameScene.h">
-      <Filter>ソース ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Project\AllGameScene\SampleScene\SampleScene.h">
-      <Filter>ソース ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Ellysia\Math\Vector\SpritePosition.h">
       <Filter>ヘッダー ファイル\Math\Vector</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Audio\ChunkHeader\ChunkHeader.h">
+      <Filter>ヘッダー ファイル\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Audio\FormatChunk\FormatChunk.h">
+      <Filter>ヘッダー ファイル\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Audio\RiffHeader\RiffHeader.h">
+      <Filter>ヘッダー ファイル\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Audio\SoundData\SoundData.h">
+      <Filter>ヘッダー ファイル\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Polygon\Model\Model.h">
+      <Filter>ヘッダー ファイル\Polygone\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\TextureManager\MaterialData\MaterialData.h">
+      <Filter>ヘッダー ファイル\Polygone\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\TextureManager\ModelData\ModelData.h">
+      <Filter>ヘッダー ファイル\Polygone\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\PipelineManager\PipelineManager.h">
+      <Filter>ヘッダー ファイル\Pipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Blend\BlendMode.h">
+      <Filter>ヘッダー ファイル\Blend</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Audio\Audio.h">
+      <Filter>ヘッダー ファイル\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\AllGameScene\GameManager\IGameScene.h">
+      <Filter>ヘッダー ファイル\GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\AllGameScene\GameManager\GameManager.h">
+      <Filter>ヘッダー ファイル\GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\TextureManager\TextureManager.h">
+      <Filter>ヘッダー ファイル\TextureManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\AllGameScene\SampleScene\SampleScene.h">
+      <Filter>ヘッダー ファイル\GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\ResourceObject\ResourceObject.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

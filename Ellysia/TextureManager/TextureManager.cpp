@@ -18,9 +18,9 @@ TextureManager::TextureManager() {
 
 
 //Resource作成の関数化
-ID3D12Resource* TextureManager::CreateBufferResource(size_t sizeInBytes) {
+ComPtr<ID3D12Resource> TextureManager::CreateBufferResource(size_t sizeInBytes) {
 	//返り値も忘れずに
-	ID3D12Resource* resource = nullptr;
+	ComPtr<ID3D12Resource> resource = nullptr;
 	
 	////VertexResourceを生成
 	//頂点リソース用のヒープを設定
@@ -111,8 +111,8 @@ uint32_t TextureManager::LoadTexture(const std::string& filePath) {
 	mipImages_[textureIndex] = LoadTextureData(filePath);
 
 	const DirectX::TexMetadata& metadata = mipImages_[textureIndex].GetMetadata();
-	TextureManager::GetInstance()->textureResource_[textureIndex] = CreateTextureResource(metadata);
-	UploadTextureData(TextureManager::GetInstance()->textureResource_[textureIndex], mipImages_[textureIndex]);
+	TextureManager::GetInstance()->textureResource_[textureIndex] = CreateTextureResource(metadata).Get();
+	UploadTextureData(TextureManager::GetInstance()->textureResource_[textureIndex].Get(), mipImages_[textureIndex]);
 
 
 	//ShaderResourceView
@@ -137,11 +137,11 @@ uint32_t TextureManager::LoadTexture(const std::string& filePath) {
 
 	//SRVを作成するDescriptorHeapの場所を決める
 	//後ろが1固定だったのでindex
-	TextureManager::GetInstance()->textureSrvHandleCPU_[textureIndex] = TextureManager::GetInstance()->GetCPUDescriptorHandle(DirectXSetup::GetInstance()->GetSrvDescriptorHeap(), descriptorSizeSRV_, textureIndex);
-	TextureManager::GetInstance()->textureSrvHandleGPU_[textureIndex] = TextureManager::GetInstance()->GetGPUDescriptorHandle(DirectXSetup::GetInstance()->GetSrvDescriptorHeap(), descriptorSizeSRV_, textureIndex);
+	TextureManager::GetInstance()->textureSrvHandleCPU_[textureIndex] = TextureManager::GetInstance()->GetCPUDescriptorHandle(DirectXSetup::GetInstance()->GetSrvDescriptorHeap().Get(), descriptorSizeSRV_, textureIndex);
+	TextureManager::GetInstance()->textureSrvHandleGPU_[textureIndex] = TextureManager::GetInstance()->GetGPUDescriptorHandle(DirectXSetup::GetInstance()->GetSrvDescriptorHeap().Get(), descriptorSizeSRV_, textureIndex);
 
 	//SRVの生成
-	DirectXSetup::GetInstance()->GetDevice()->CreateShaderResourceView(TextureManager::GetInstance()->textureResource_[textureIndex], &srvDesc[textureIndex], TextureManager::GetInstance()->textureSrvHandleCPU_[textureIndex]);
+	DirectXSetup::GetInstance()->GetDevice()->CreateShaderResourceView(TextureManager::GetInstance()->textureResource_[textureIndex].Get(), &srvDesc[textureIndex], TextureManager::GetInstance()->textureSrvHandleCPU_[textureIndex]);
 	
 
 	return textureIndex;
@@ -182,8 +182,8 @@ DirectX::ScratchImage TextureManager::LoadTextureData(const std::string& filePat
 }
 
 //2.DirectX12のTextureResourceを作る
-ID3D12Resource* TextureManager::CreateTextureResource(const DirectX::TexMetadata& metadata) {
-	ID3D12Resource* resource = nullptr;
+ComPtr<ID3D12Resource> TextureManager::CreateTextureResource(const DirectX::TexMetadata& metadata) {
+	ComPtr<ID3D12Resource> resource = nullptr;
 	
 	//1.metadataを基にResourceの設定
 	D3D12_RESOURCE_DESC resourceDesc{};

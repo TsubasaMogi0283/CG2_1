@@ -53,7 +53,7 @@ private:
 	int sampleTimer_ = 0;
 
 
-	//Model* plane_ = nullptr;
+	Model* plane_ = nullptr;
 	Transform transformModel_ = {};
 
 	float transparency1 = 1.0f;

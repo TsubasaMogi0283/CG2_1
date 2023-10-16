@@ -155,7 +155,7 @@ void DirectXSetup::GenerateD3D12Device() {
 	//高い順に生成出来るか試していく
 	for (size_t i = 0; i < _countof(featureLevels); ++i) {
 		//採用したアダプターでデバイスが生成
-		hr_ = D3D12CreateDevice(useAdapter_, featureLevels[i], IID_PPV_ARGS(&device_));
+		hr_ = D3D12CreateDevice(useAdapter_.Get(), featureLevels[i], IID_PPV_ARGS(&device_));
 		//指定した機能レベルでデバイスが生成できたか確認
 		if (SUCCEEDED(hr_)) {
 			//生成できたのでログ出力を行ってループを抜ける
@@ -218,12 +218,14 @@ void DirectXSetup::StopErrorWarning() {
 void DirectXSetup::GenerateCommand() {
 	////GPUに作業させよう
 	//コマンドキューを生成する
+	D3D12_COMMAND_QUEUE_DESC commandQueueDesc_{};
 	hr_ = device_->CreateCommandQueue(&commandQueueDesc_, IID_PPV_ARGS(&commandQueue_));
 	//コマンドキューの生成が上手くいかなかったので起動できない
 	assert(SUCCEEDED(hr_));
 
 	//コマンドアロケータを生成する
-	//ID3D12CommandAllocator* commandAllocator_ = nullptr;
+	//DirectX12のAPIが要求するのは生ポインタ。ComPtrではないよ
+	//Get()関数で生ポインタを取り出す
 	hr_ = device_->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&commandAllocator_));
 	//コマンドアロケータの生成が上手くいかなかったので起動できない
 	assert(SUCCEEDED(hr_));
@@ -233,7 +235,7 @@ void DirectXSetup::GenerateCommand() {
 	hr_ = device_->CreateCommandList(
 		0, 
 		D3D12_COMMAND_LIST_TYPE_DIRECT, 
-		commandAllocator_, 
+		commandAllocator_.Get(),
 		nullptr, 
 		IID_PPV_ARGS(&commandList_));
 
@@ -261,12 +263,12 @@ void DirectXSetup::GenerateSwapChain() {
 
 	//コマンドキュー、ウィンドウハンドル、設定を渡して生成する
 	hr_ = dxgiFactory_->CreateSwapChainForHwnd(
-		commandQueue_,
+		commandQueue_.Get(),
 		hwnd_, 
 		&swapChainDesc_, 
 		nullptr, 
 		nullptr, 
-		reinterpret_cast<IDXGISwapChain1**>(&swapChain_));
+		reinterpret_cast<IDXGISwapChain1**>(swapChain_.GetAddressOf()));
 	assert(SUCCEEDED(hr_));
 	
 
@@ -280,15 +282,15 @@ void DirectXSetup::MakeDescriptorHeap() {
 	//Viewは作業方法
 
 	//作った関数をここで使う
-	rtvDescriptorHeap_ = GenarateDescriptorHeap(device_, D3D12_DESCRIPTOR_HEAP_TYPE_RTV, 2, false);
+	rtvDescriptorHeap_ = GenarateDescriptorHeap(device_.Get(), D3D12_DESCRIPTOR_HEAP_TYPE_RTV, 2, false);
 
 	//ImGuiを使うにはSRV用のDescriptorが必要となる
 	//SRV...ShaderResourceView
-	srvDescriptorHeap_ = GenarateDescriptorHeap(device_, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 128, true);
+	srvDescriptorHeap_ = GenarateDescriptorHeap(device_.Get(), D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 128, true);
 
-	depthStencilResource_ = CreateDepthStencilTextureResource(device_, kClientWidth_, kClientHeight_);
+	depthStencilResource_ = CreateDepthStencilTextureResource(device_.Get(), kClientWidth_, kClientHeight_);
 
-	dsvDescriptorHeap_ = GenarateDescriptorHeap(device_, D3D12_DESCRIPTOR_HEAP_TYPE_DSV, 1, false);
+	dsvDescriptorHeap_ = GenarateDescriptorHeap(device_.Get(), D3D12_DESCRIPTOR_HEAP_TYPE_DSV, 1, false);
 
 
 
@@ -299,7 +301,7 @@ void DirectXSetup::MakeDescriptorHeap() {
 	//2DTexture
 	dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
 	//DSVHeapの先頭にDSVを作る
-	device_->CreateDepthStencilView(depthStencilResource_, &dsvDesc, dsvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart());
+	device_->CreateDepthStencilView(depthStencilResource_.Get(), &dsvDesc, dsvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart());
 
 	
 
@@ -340,11 +342,11 @@ void DirectXSetup::SetRTV() {
 	//D3D12_CPU_DESCRIPTOR_HANDLE rtvHandles[2] = {};
 	//まず1つ目を作る。１つ目は最初の所に作る。作る場所をこちらで指定してあげる必要がある
 	rtvHandles_[0] = rtvStartHandle_;
-	device_->CreateRenderTargetView(swapChainResources_[0], &rtvDesc_, rtvHandles_[0]);
+	device_->CreateRenderTargetView(swapChainResources_[0].Get(), &rtvDesc_, rtvHandles_[0]);
 	//２つ目のディスクリプタハンドルを得る(自力で)
 	rtvHandles_[1].ptr = rtvHandles_[0].ptr + device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 	//２つ目を作る
-	device_->CreateRenderTargetView(swapChainResources_[1], &rtvDesc_, rtvHandles_[1]);
+	device_->CreateRenderTargetView(swapChainResources_[1].Get(), &rtvDesc_, rtvHandles_[1]);
 
 
 
@@ -524,7 +526,7 @@ void DirectXSetup::BeginFrame() {
 	//Noneにする
 	barrier_.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
 	//バリアを張る対象のリソース。現在のバックバッファに対して行う
-	barrier_.Transition.pResource = swapChainResources_[backBufferIndex_];
+	barrier_.Transition.pResource = swapChainResources_[backBufferIndex_].Get();
 	//遷移前(現在)のResourceState
 	barrier_.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT;
 	//遷移後のResourceState
@@ -541,7 +543,7 @@ void DirectXSetup::BeginFrame() {
 	commandList_->ClearRenderTargetView(rtvHandles_[backBufferIndex_], clearColor, 0, nullptr);
 
 	////コマンドを積む
-	ID3D12DescriptorHeap* descriptorHeaps[] = { srvDescriptorHeap_ };
+	ID3D12DescriptorHeap* descriptorHeaps[] = { srvDescriptorHeap_.Get()};
 
 	//描画先のRTVとDSVを設定する
 	D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = dsvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart();
@@ -584,7 +586,7 @@ void DirectXSetup::EndFrame() {
 
 	//コマンドをキックする
 	//GPUにコマンドリストの実行を行わせる
-	ID3D12CommandList* commandLists[] = { commandList_ };
+	ID3D12CommandList* commandLists[] = { commandList_.Get()};
 	commandQueue_->ExecuteCommandLists(1, commandLists);
 	//GPUとOSに画面の交換を行うよう通知する
 
@@ -602,7 +604,7 @@ void DirectXSetup::EndFrame() {
 	//Fenceの値を更新
 	fenceValue_++;
 	//GPUがここまでたどりついた時に、Fenceの値を代入するようSignalを送る
-	commandQueue_->Signal(fence_, fenceValue_);
+	commandQueue_->Signal(fence_.Get(), fenceValue_);
 	
 
 	//Fenceの値が指定したSignal値にたどりついているか確認する
@@ -619,7 +621,7 @@ void DirectXSetup::EndFrame() {
 	hr_ = commandAllocator_->Reset();
 	assert(SUCCEEDED(hr_));
 
-	hr_ = commandList_->Reset(commandAllocator_, nullptr);
+	hr_ = commandList_->Reset(commandAllocator_.Get(), nullptr);
 	assert(SUCCEEDED(hr_));
 }
 
@@ -630,47 +632,14 @@ void DirectXSetup::Release() {
 
 	//////解放処理
 	CloseHandle(fenceEvent_);
-	fence_->Release();
 
-	rtvDescriptorHeap_->Release();
-	srvDescriptorHeap_->Release();
 
-	swapChainResources_[0]->Release();
-	swapChainResources_[1]->Release();
-	swapChain_->Release();
 
-	commandList_->Release();
-	commandAllocator_->Release();
-	commandQueue_->Release();
 
-	device_->Release();
-	useAdapter_->Release();
-	dxgiFactory_->Release();
 
-	//////解放処理
-	//vertexResource_->Release();
 
 
 	
-
-#ifdef _DEBUG
-	debugController_->Release();
-
-#endif
-
-	
-	/*graphicsPipelineState_->Release();
-	signatureBlob_->Release();
-	if (errorBlob_) {
-		errorBlob_->Release();
-	}
-	
-	rootSignature_->Release();
-
-	vertexShaderBlob_->Release();	
-	pixelShaderBlob_->Release();*/
-
-
 
 
 }

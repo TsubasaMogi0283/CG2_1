@@ -132,14 +132,14 @@ void Sphere::LoadTexture(const std::string& filePath) {
 	//Textureを読んで転送する
 	mipImages_ = LoadTextureData(filePath);
 	const DirectX::TexMetadata& metadata = mipImages_.GetMetadata();
-	textureResource_ = CreateTextureResource(directXSetup_->GetDevice(), metadata);
+	textureResource_ = CreateTextureResource(directXSetup_->GetDevice().Get(), metadata);
 	intermediateResource_ = UploadTextureData(textureResource_, mipImages_);
 	
 	//2枚目のTextureを読んで転送する
 	//いつか配列にする。2は何か嫌です。
 	mipImages2_ = LoadTextureData("Resources/monsterBall.png");
 	const DirectX::TexMetadata& metadata2 = mipImages2_.GetMetadata();
-	textureResource2_ = CreateTextureResource(directXSetup_->GetDevice(), metadata2);
+	textureResource2_ = CreateTextureResource(directXSetup_->GetDevice().Get(), metadata2);
 	UploadTextureData(textureResource2_, mipImages2_);
 
 
@@ -181,12 +181,12 @@ void Sphere::LoadTexture(const std::string& filePath) {
 
 
 	//SRVを作成するDescriptorHeapの場所を決める
-	textureSrvHandleCPU_ = GetCPUDescriptorHandle(directXSetup_->GetSrvDescriptorHeap(), descriptorSizeSRV_, 1);
-	textureSrvHandleGPU_ = GetGPUDescriptorHandle(directXSetup_->GetSrvDescriptorHeap(), descriptorSizeSRV_, 1);
+	textureSrvHandleCPU_ = GetCPUDescriptorHandle(directXSetup_->GetSrvDescriptorHeap().Get(), descriptorSizeSRV_, 1);
+	textureSrvHandleGPU_ = GetGPUDescriptorHandle(directXSetup_->GetSrvDescriptorHeap().Get(), descriptorSizeSRV_, 1);
 
 	
-	textureSrvHandleCPU2_=GetCPUDescriptorHandle(directXSetup_->GetSrvDescriptorHeap(), descriptorSizeSRV_, 2);
-	textureSrvHandleGPU2_=GetGPUDescriptorHandle(directXSetup_->GetSrvDescriptorHeap(), descriptorSizeSRV_, 2);
+	textureSrvHandleCPU2_=GetCPUDescriptorHandle(directXSetup_->GetSrvDescriptorHeap().Get(), descriptorSizeSRV_, 2);
+	textureSrvHandleGPU2_=GetGPUDescriptorHandle(directXSetup_->GetSrvDescriptorHeap().Get(), descriptorSizeSRV_, 2);
 
 	//先頭はImGuiが使っているのでその次を使う
 	textureSrvHandleCPU_.ptr += directXSetup_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
@@ -296,10 +296,10 @@ ID3D12Resource* Sphere::UploadTextureData(
 	const DirectX::ScratchImage& mipImages) {
 
 	std::vector<D3D12_SUBRESOURCE_DATA>subresource;
-	DirectX::PrepareUpload(directXSetup_->GetDevice(), mipImages.GetImages(), mipImages.GetImageCount(), mipImages.GetMetadata(), subresource);
+	DirectX::PrepareUpload(directXSetup_->GetDevice().Get(), mipImages.GetImages(), mipImages.GetImageCount(), mipImages.GetMetadata(), subresource);
 	uint64_t intermediateSize = GetRequiredIntermediateSize(texture, 0, UINT(subresource.size()));
 	ID3D12Resource* intermediateResource = CreateBufferResource(intermediateSize);
-	UpdateSubresources(directXSetup_->GetCommandList(), texture, intermediateResource, 0, 0, UINT(subresource.size()), subresource.data());
+	UpdateSubresources(directXSetup_->GetCommandList().Get(), texture, intermediateResource, 0, 0, UINT(subresource.size()), subresource.data());
 	
 	//Textureへの転送後は利用出来るようD3D12_RESOURCE_STATE_COPY_DESTからD3D12_RESOURCE_STATE_GENERIC_READへResourceStateを変更
 	D3D12_RESOURCE_BARRIER barrier{};

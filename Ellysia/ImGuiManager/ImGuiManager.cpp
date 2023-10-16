@@ -7,27 +7,32 @@ ImGuiManager::ImGuiManager() {
 	
 }
 
+ImGuiManager* ImGuiManager::GetInstance() {
+	//関数内static変数として宣言する
+	static ImGuiManager instance;
+
+	return &instance;
+}
 
 
 
 //メインループ前に
 //初期化
-void ImGuiManager::Initialize(WinApp* winSetup,DirectXSetup* directXSetup) {
+void ImGuiManager::Initialize() {
 	//Getterを使いたい
-	//this->winSetup_ = winSetup;
-	//this->directXSetup_ = directXSetup;
+	this->directXSetup_ = DirectXSetup::GetInstance();
 
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGui::StyleColorsDark();
-	ImGui_ImplWin32_Init(winSetup->GetHwnd());
+	ImGui_ImplWin32_Init(WinApp::GetInstance()->GetHwnd());
 	ImGui_ImplDX12_Init(
-		directXSetup->GetDevice(),
-		directXSetup->GetswapChainDesc().BufferCount,
-		directXSetup->GetRtvDesc().Format,
-		directXSetup->GetSrvDescriptorHeap(),
-		directXSetup->GetSrvDescriptorHeap()->GetCPUDescriptorHandleForHeapStart(),
-		directXSetup->GetSrvDescriptorHeap()->GetGPUDescriptorHandleForHeapStart());
+		directXSetup_->GetDevice(),
+		directXSetup_->GetswapChainDesc().BufferCount,
+		directXSetup_->GetRtvDesc().Format,
+		directXSetup_->GetSrvDescriptorHeap(),
+		directXSetup_->GetSrvDescriptorHeap()->GetCPUDescriptorHandleForHeapStart(),
+		directXSetup_->GetSrvDescriptorHeap()->GetGPUDescriptorHandleForHeapStart());
 
 }
 
@@ -44,7 +49,8 @@ void ImGuiManager::BeginFrame() {
 //パラメータを変更したいタイミングで処理を行う
 void ImGuiManager::UpDate() {
 	//これはデモ用のUI
-	ImGui::ShowDemoWindow();
+	//使う予定が無いのでコメントアウトします
+	//ImGui::ShowDemoWindow();
 }
 
 
@@ -54,18 +60,18 @@ void ImGuiManager::PreDraw() {
 }
 
 //描画
-void ImGuiManager::Draw(DirectXSetup* directXSetup) {
+void ImGuiManager::Draw() {
 	//描画用のDescriptorの設定
-	ID3D12DescriptorHeap* descriptorHeaps[] = { directXSetup->GetSrvDescriptorHeap() };
-	directXSetup->GetCommandList()->SetDescriptorHeaps(1, descriptorHeaps);
+	ID3D12DescriptorHeap* descriptorHeaps[] = { directXSetup_->GetSrvDescriptorHeap() };
+	directXSetup_->GetCommandList()->SetDescriptorHeaps(1, descriptorHeaps);
 }
 
 
 //ここでフレームが終わる
-void ImGuiManager::EndFrame(DirectXSetup* directXSetup) {
+void ImGuiManager::EndFrame() {
 	//コマンドを積む
 	//実際のcommandListのImGuiの描画コマンドを積む
-	ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), directXSetup->GetCommandList());
+	ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), directXSetup_->GetCommandList());
 }
 
 
@@ -74,6 +80,8 @@ void ImGuiManager::Release() {
 	ImGui_ImplDX12_Shutdown();
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
-	//delete winSetup_;
-	//delete directXSetup_;
+}
+
+ImGuiManager::~ImGuiManager() {
+
 }

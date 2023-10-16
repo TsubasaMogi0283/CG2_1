@@ -1,4 +1,7 @@
 #include "Model.h"
+#include <Camera/Camera.h>
+#include <TextureManager/TextureManager.h>
+#include <PipelineManager/PipelineManager.h>
 
 
 Model::Model() {
@@ -19,9 +22,8 @@ D3D12_GPU_DESCRIPTOR_HANDLE Model::GetGPUDescriptorHandle(ID3D12DescriptorHeap* 
 
 //モデルデータの読み込み
 ModelData Model::LoadObjectFile(const std::string& directoryPath,const std::string& fileName) {
-		//1.中で必要となる変数の宣言
-	//構築するModelData
-	ModelData modelData;
+	//1.中で必要となる変数の宣言
+	
 	//位置
 	std::vector<Vector4> positions;
 	//法線
@@ -124,7 +126,7 @@ ModelData Model::LoadObjectFile(const std::string& directoryPath,const std::stri
 
 	////ここで問題
 	//インデックス作った方がよさそう
-	modelData.textureIndex = LoadTexture(modelData.material.textureFilePath);
+	modelData.textureIndex = TextureManager::GetInstance()->LoadTexture(modelData.material.textureFilePath);
 
 	
 	
@@ -245,201 +247,36 @@ void Model::GenerateVertexBufferView() {
 
 
 
-//統合
-int Model::LoadTexture(const std::string& filePath) {
 
-	
-	int spriteIndex = MAX_TEXTURE_+1;
-	for (int i = 0; i < MAX_TEXTURE_; i++) {
-		if (isUsedTextureIndex[i] == false) {
-			spriteIndex = i;
-			isUsedTextureIndex[i] = true;
-			break;
-		}
-	}
-	if (spriteIndex < 0) {
-		//0より少ない
-		assert(false);
-	}
-	if (spriteIndex > MAX_TEXTURE_) {
-		//MAX_TEXTUREより多い
-		assert(false);
-	}
-
-
-	//Textureを読んで転送する
-	mipImages_ = LoadTextureData(filePath);
-	const DirectX::TexMetadata& metadata = mipImages_.GetMetadata();
-	textureResource_[spriteIndex] = CreateTextureResource(directXSetup_->GetDevice(), metadata);
-	intermediateResource_[spriteIndex] = UploadTextureData(textureResource_[spriteIndex], mipImages_);
-	
-
-	//ShaderResourceView
-	//metadataを基にSRVの設定
-	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
-	srvDesc.Format = metadata.format;
-	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-	//2Dテクスチャ
-	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
-	srvDesc.Texture2D.MipLevels = UINT(metadata.mipLevels);
-	
-	//今のDescriptorHeapには
-	//0...ImGui
-	//1...uvChecker
-	//2...monsterBall
-	//3...NULL
-	//.
-	//.
-	//このような感じで入っている
-	//後ろのindexに対応させる
-
-
-	//SRVを作成するDescriptorHeapの場所を決める
-	textureSrvHandleCPU_[spriteIndex] = GetCPUDescriptorHandle(directXSetup_->GetSrvDescriptorHeap(), descriptorSizeSRV_, 1);
-	textureSrvHandleGPU_[spriteIndex] = GetGPUDescriptorHandle(directXSetup_->GetSrvDescriptorHeap(), descriptorSizeSRV_, 1);
-
-	//先頭はImGuiが使っているのでその次を使う
-	textureSrvHandleCPU_[spriteIndex].ptr += directXSetup_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-	textureSrvHandleGPU_[spriteIndex].ptr += directXSetup_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-	
-	//SRVの生成
-	directXSetup_->GetDevice()->CreateShaderResourceView(textureResource_[spriteIndex], &srvDesc, textureSrvHandleCPU_[spriteIndex]);
-	
-	return spriteIndex;
-
-}
-
-//After
-//1.TextureデータそのものをCPUで読み込む
-//2.DirectX12のTextureResourceを作る
-//3.CPUで書き込む用にUploadHeapのResourceを作る(IntermediateResource)
-//4.3に対してCPUでデータを書き込む
-//5.CommandListに3を2に転送するコマンドを積む
-//6.CommandQueueを使って実行する
-//7.6の実行完了を待つ
-
-
-#pragma region 上のLoadTextureにまとめた
-//Textureを読み込むためのLoad関数
-//1.TextureデータそのものをCPUで読み込む
-DirectX::ScratchImage Model::LoadTextureData(const std::string& filePath) {
-	
-	//テクスチャファイルを読んでプログラムで扱えるようにする
-	DirectX::ScratchImage image{};
-	std::wstring filePathW = ConvertString(filePath);
-	//ここで問題
-	HRESULT hr = DirectX::LoadFromWICFile(filePathW.c_str(), DirectX::WIC_FLAGS_FORCE_SRGB, nullptr, image);
-	assert(SUCCEEDED(hr));
-	
-	//ミップマップの作成
-	//ミップマップ...元画像より小さなテクスチャ群
-	DirectX::ScratchImage mipImages{};
-	hr = DirectX::GenerateMipMaps(image.GetImages(), image.GetImageCount(), image.GetMetadata(), DirectX::TEX_FILTER_SRGB, 0, mipImages);
-	assert(SUCCEEDED(hr));
-
-	//ミップマップ月のデータを返す
-	return mipImages;
-}
-
-//2.DirectX12のTextureResourceを作る
-ID3D12Resource* Model::CreateTextureResource(ID3D12Device* device, const DirectX::TexMetadata& metadata) {
-	//1.metadataを基にResourceの設定
-	D3D12_RESOURCE_DESC resourceDesc{};
-	//Textureの幅
-	resourceDesc.Width = UINT(metadata.width);
-	//Textureの高さ
-	resourceDesc.Height = UINT(metadata.height);
-	//mipmapの数
-	resourceDesc.MipLevels = UINT16(metadata.mipLevels);
-	//奥行き or 配列Textureの配列数
-	resourceDesc.DepthOrArraySize = UINT16(metadata.arraySize);
-	//TextureのFormat
-	resourceDesc.Format = metadata.format;
-	//サンプリングカウント
-	resourceDesc.SampleDesc.Count = 1;
-	//Textureの次元数。普段使っているのは2次元
-	resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION(metadata.dimension);
-
-	//2.利用するHeapの設定
-	//利用するHeapの設定。非常に特殊な運用。02_04exで一般的なケース版がある
-	D3D12_HEAP_PROPERTIES heapProperties{};
-	//細かい設定を行う
-	heapProperties.Type = D3D12_HEAP_TYPE_CUSTOM;
-	//WriteBackポリシーでCPUアクセス可能
-	heapProperties.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_WRITE_BACK;
-	//プロセッサの近くに配置
-	heapProperties.MemoryPoolPreference = D3D12_MEMORY_POOL_L0;
-
-	
-	
-
-	//3.Resourceを生成する
-	
-	HRESULT hr = directXSetup_->GetDevice()->CreateCommittedResource(
-		&heapProperties,					//Heapの設定
-		D3D12_HEAP_FLAG_NONE,				//Heapの特殊な設定
-		&resourceDesc,						//Resourceの設定
-		D3D12_RESOURCE_STATE_COPY_DEST,	//初回のResourceState。データの転送を受け入れられるようにする
-		nullptr,							//Clear最適値。使わないのでnullptr
-		IID_PPV_ARGS(&resource_));			//作成するResourceポインタへのポインタ
-	assert(SUCCEEDED(hr));
-
-	return resource_;
-
-
-}
-
-//3.TextureResourceに1で読んだデータを転送する
-//書き換え
-[[nodiscard]]
-ID3D12Resource* Model ::UploadTextureData(
-	ID3D12Resource* texture, 
-	const DirectX::ScratchImage& mipImages) {
-
-	std::vector<D3D12_SUBRESOURCE_DATA>subresource;
-	DirectX::PrepareUpload(directXSetup_->GetDevice(), mipImages.GetImages(), mipImages.GetImageCount(), mipImages.GetMetadata(), subresource);
-	uint64_t intermediateSize = GetRequiredIntermediateSize(texture, 0, UINT(subresource.size()));
-	ID3D12Resource* intermediateResource = CreateBufferResource(intermediateSize);
-	UpdateSubresources(directXSetup_->GetCommandList(), texture, intermediateResource, 0, 0, UINT(subresource.size()), subresource.data());
-	
-	//Textureへの転送後は利用出来るようD3D12_RESOURCE_STATE_COPY_DESTからD3D12_RESOURCE_STATE_GENERIC_READへResourceStateを変更
-	D3D12_RESOURCE_BARRIER barrier{};
-	barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-	barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-	barrier.Transition.pResource = texture ;
-	barrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
-	barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_COPY_DEST;
-	barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_GENERIC_READ;
-	directXSetup_->GetCommandList()->ResourceBarrier(1, &barrier);
-	return intermediateResource;
-
-
-}
-
-
-#pragma endregion
 
 
 //初期化
-void Model::Initialize(DirectXSetup* directXSetup) {
-	this->directXSetup_ = directXSetup;
+void Model::CreateObject(const std::string& directoryPath,const std::string& fileName) {
 	
-	//モデルの読み込み
+	this->directXSetup_ = DirectXSetup::GetInstance();
 
-	//この２つ外に出した方がよさそう
-	modelData_ = LoadObjectFile("Resources/05_02", "axis.obj");
-	LoadTexture("Resources/uvChecker.png");
+	//PSOの設定
+	//全部のブレンドモードに対応させたい
+	//switch文でやるのが良いかなと思った。切り替えが楽だから
+
+
 
 
 	////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
 	materialResource_=CreateBufferResource(sizeof(Material));
 
-	//頂点リソースを作る
-	vertexResource_ = CreateBufferResource(sizeof(VertexData) * modelData_.vertices.size());
+	//モデルの読み込み
+	//この２つ外に出した方がよさそう
+	modelData_ = LoadObjectFile(directoryPath, fileName);
+	//textureあった
 
+	//頂点リソースを作る
+	//モデルの頂点の数によって変わるよ
+	vertexResource_ = CreateBufferResource(sizeof(VertexData) * modelData_.vertices.size());
+	
 	//読み込みのところでバッファインデックスを作った方がよさそう
 	GenerateVertexBufferView();
-
+	
 	//Sprite用のTransformationMatrix用のリソースを作る。
 	//Matrix4x4 1つ分サイズを用意する
 	transformationMatrixResource_ = CreateBufferResource(sizeof(TransformationMatrix));
@@ -449,22 +286,18 @@ void Model::Initialize(DirectXSetup* directXSetup) {
 	directionalLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightData_));
 	directionalLightData_->color={ 1.0f,1.0f,1.0f,1.0f };
 	directionalLightData_->direction = { 0.0f,-1.0f,0.0f };
-	directionalLightData_->intensity = 1.0f;
+	directionalLightData_->intensity = 3.0f;
 
-
+	color_ = { 1.0f,1.0f,1.0f,1.0f };
 	
 	
 
 }
 
 
-//更新
-void Model::Update() {
-
-}
 
 //描画
-void Model::Draw(Transform transform,Matrix4x4 viewMatrix,Matrix4x4 projectionMatrix) {
+void Model::Draw(Transform transform) {
 	//書き込むためのデータを書き込む
 	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
 
@@ -481,8 +314,8 @@ void Model::Draw(Transform transform,Matrix4x4 viewMatrix,Matrix4x4 projectionMa
 	//書き込むためのアドレスを取得
 	//reinterpret_cast...char* から int* へ、One_class* から Unrelated_class* へなどの変換に使用
 	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
-	materialData_->color = {1.0f,1.0f,1.0f,1.0f};
-	materialData_->enableLighting=true;
+	materialData_->color = color_;
+	materialData_->enableLighting=false;
 
 	materialData_->uvTransform = MakeIdentity4x4();
 
@@ -496,7 +329,7 @@ void Model::Draw(Transform transform,Matrix4x4 viewMatrix,Matrix4x4 projectionMa
 	Matrix4x4 projectionMatrixSphere = MakeOrthographicMatrix(0.0f, 0.0f, float(directXSetup_->GetClientWidth()), float(directXSetup_->GetClientHeight()), 0.0f, 100.0f);
 	
 	//WVP行列を作成
-	Matrix4x4 worldViewProjectionMatrixSphere = Multiply(worldMatrixSphere, Multiply(viewMatrix, projectionMatrix));
+	Matrix4x4 worldViewProjectionMatrixSphere = Multiply(worldMatrixSphere, Multiply(Camera::GetInstance()->GetViewMatrix(), Camera::GetInstance()->GetProjectionMatrix_()));
 
 
 	transformationMatrixData_->WVP = worldViewProjectionMatrixSphere;
@@ -507,6 +340,10 @@ void Model::Draw(Transform transform,Matrix4x4 viewMatrix,Matrix4x4 projectionMa
 
 
 	//コマンドを積む
+
+	directXSetup_->GetCommandList()->SetGraphicsRootSignature(PipelineManager::GetInstance()->GetModelRootSignature());
+	directXSetup_->GetCommandList()->SetPipelineState(PipelineManager::GetInstance()->GetModelGraphicsPipelineState());
+
 
 	//RootSignatureを設定。PSOに設定しているけど別途設定が必要
 	directXSetup_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);
@@ -519,7 +356,13 @@ void Model::Draw(Transform transform,Matrix4x4 viewMatrix,Matrix4x4 projectionMa
 
 	directXSetup_->GetCommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResource_->GetGPUVirtualAddress());
 	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である
-	directXSetup_->GetCommandList()->SetGraphicsRootDescriptorTable(2,textureSrvHandleGPU_[modelData_.textureIndex]);
+	
+	if (modelData.textureIndex  != 0) {
+		TextureManager::TexCommand(modelData.textureIndex );
+
+	}
+	
+
 	//Light
 	directXSetup_->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
 
@@ -546,16 +389,6 @@ void Model::Release() {
 	resource_->Release();
 
 
-	for (int i = 0; i < MAX_TEXTURE_; i++) {
-		if (isUsedTextureIndex[i]==true) {
-			textureResource_[i]->Release();
-			intermediateResource_[i]->Release();
-
-		}
-		
-
-	}
-	
 
 }
 

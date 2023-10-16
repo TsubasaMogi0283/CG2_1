@@ -1,75 +1,29 @@
 #include "DirectXSetup.h"
 
+static DirectXSetup* instance_;
 
 DirectXSetup::DirectXSetup() {
 
 }
 
+//インスタンス
+DirectXSetup* DirectXSetup::GetInstance() {
+	//これだと無限に生成されるので
+	//ない時に生成する
+	if (instance_ == nullptr) {
+		instance_ = new DirectXSetup();
 
-	
-
-////CompileShader関数
-IDxcBlob* DirectXSetup::CompileShader(
-	const std::wstring& filePath,
-	const wchar_t* profile,
-	IDxcUtils* dxcUtils,
-	IDxcCompiler3* dxcCompiler,
-	IDxcIncludeHandler* includeHandler) {
-	//1.hlslファイルを読む
-	Log(ConvertString(std::format(L"Begin CompileShader,path:{},profile:{}\n", filePath, profile)));
-	//hlslファイルを読む
-	IDxcBlobEncoding* shaderSource = nullptr;
-	HRESULT hr = dxcUtils->LoadFile(filePath.c_str(), nullptr, &shaderSource);
-	//読めなかったら止める
-	assert(SUCCEEDED(hr));
-	//読み込んだファイルの内容を設定する
-	DxcBuffer shaderSourceBuffer;
-	shaderSourceBuffer.Ptr = shaderSource->GetBufferPointer();
-	shaderSourceBuffer.Size = shaderSource->GetBufferSize();
-	shaderSourceBuffer.Encoding = DXC_CP_UTF8;
-
-	//2.Compileする
-	LPCWSTR arguments[] = {
-		filePath.c_str(),
-		L"-E",L"main",
-		L"-T",profile,
-		L"-Zi",L"-Qembed_debug",
-		L"-Od",
-		L"-Zpr",
-	};
-
-	//実際にShaderをコンパイルする
-	IDxcResult* shaderResult = nullptr;
-	hr = dxcCompiler->Compile(&shaderSourceBuffer, arguments, _countof(arguments), includeHandler, IID_PPV_ARGS(&shaderResult));
-	//コンパイルエラーではなくdxcが起動出来ないなど致命的な状況
-	assert(SUCCEEDED(hr));
-
-
-	//3.警告・エラーが出ていないかを確認する
-	//警告・エラーが出てたらログに出して止める
-	IDxcBlobUtf8* shaderError = nullptr;
-	shaderResult->GetOutput(DXC_OUT_ERRORS, IID_PPV_ARGS(&shaderError), nullptr);
-	if (shaderError != nullptr && shaderError->GetStringLength() != 0) {
-		Log(shaderError->GetStringPointer());
-		assert(false);
 	}
-
-
-	//4.Compile結果を受け取って返す
-	//BLOB・・・BinaryLargeOBject
-	IDxcBlob* shaderBlob = nullptr;
-	hr = shaderResult->GetOutput(DXC_OUT_OBJECT, IID_PPV_ARGS(&shaderBlob), nullptr);
-	assert(SUCCEEDED(hr));
-	//成功したログを出す
-	Log(ConvertString(std::format(L"Compile Succeeded,path:{},profile:{}\n", filePath, profile)));
-	//もう使わないリソースを解放
-	shaderSource->Release();
-	shaderResult->Release();
-	//実行用のバイナリを返却
-	return shaderBlob;
-
-
+	
+	return instance_;
 }
+
+//デリート代わりの関数
+void DirectXSetup::DeleteInstance() {
+	delete instance_;
+}
+
+
 
 //DescriptorHeapの作成関数
 ID3D12DescriptorHeap* DirectXSetup::GenarateDescriptorHeap(
@@ -155,7 +109,6 @@ void DirectXSetup::GenerateDXGIFactory() {
 
 #endif 
 	
-	//IDXGIFactory7* dxgiFactory_ = nullptr;
 	//関数が成功したかSUCCEEDEDでマクロで判定できる
 	hr_ = CreateDXGIFactory(IID_PPV_ARGS(&dxgiFactory_));
 	//初期でエラーが発生した場合どうにもできないのでassert
@@ -165,7 +118,6 @@ void DirectXSetup::GenerateDXGIFactory() {
 
 void DirectXSetup::SelectAdapter() {
 	//仕様するアダプタ用の変数、最初にnullptrを入れておく
-	//IDXGIAdapter4* useAdapter_ = nullptr;
 	//良い順でアダプタを頼む
 	for (UINT i = 0; dxgiFactory_->EnumAdapterByGpuPreference(i,
 		DXGI_GPU_PREFERENCE_HIGH_PERFORMANCE, IID_PPV_ARGS(&useAdapter_)) !=
@@ -418,247 +370,9 @@ void DirectXSetup::SetRTV() {
 
 }
 
-void DirectXSetup::InitializeDXC() {
-	////DXCの初期化
-	//dxcCompilerを初期化
-	//IDxcUtils* dxcUtils_ = nullptr;
-	//IDxcCompiler3* dxcCompiler_ = nullptr;
-	hr_ = DxcCreateInstance(CLSID_DxcUtils, IID_PPV_ARGS(&dxcUtils_));
-	assert(SUCCEEDED(hr_));
-
-	hr_ = DxcCreateInstance(CLSID_DxcCompiler, IID_PPV_ARGS(&dxcCompiler_));
-	assert(SUCCEEDED(hr_));
-
-	//現時点でincludeはしないが、includeに対応
-	//IDxcIncludeHandler* includeHandler_ = nullptr;
-	hr_ = dxcUtils_->CreateDefaultIncludeHandler(&includeHandler_);
-	assert(SUCCEEDED(hr_));
-	
-
-}
-
-void DirectXSetup::MakePSO() {
-	
-	//PSO
-	////RootSignatureを作成
-	//RootSignature・・ShaderとResourceをどのように間レンズけるかを示したオブジェクトである
-	
-	descriptionRootSignature_.Flags =
-		D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
-
-
-	//rootParameter生成。複数設定できるので配列。
-	//今回は結果一つだけなので長さ１の配列
-
-	//VSでもCBufferを利用することになったので設定を追加
-	D3D12_ROOT_PARAMETER rootParameters[4] = {};
-	//CBVを使う
-	rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-	////PixelShaderで使う
-	rootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	//レジスタ番号とバインド
-	//register...Shader上のResource配置情報
-	rootParameters[0].Descriptor.ShaderRegister = 0;
-
-
-	//CBVを使う
-	rootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-	//VertwxShaderで使う
-	rootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
-	//register...Shader上のResource配置情報
-	rootParameters[1].Descriptor.ShaderRegister = 0;
-	//ルートパラメータ配列へのポイント
-	descriptionRootSignature_.pParameters = rootParameters;
-	//配列の長さ
-	descriptionRootSignature_.NumParameters = _countof(rootParameters);
-
-	//rootParameterは今後必要あるたびに追加していく
-
-	//DescriptorRangle
-	//複数枚のTexture(SRV)を扱う場合1つづつ設定すると効率低下に繋がる
-	//利用する範囲を指定して一括で設定を行う機能のこと
-	D3D12_DESCRIPTOR_RANGE descriptorRange[1] = {};
-	//0から始まる
-	descriptorRange[0].BaseShaderRegister = 0;	
-	//数は1つ
-	descriptorRange[0].NumDescriptors = 1;	
-	//SRVを使う
-	descriptorRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;	
-	 //Offsetを自動計算
-	descriptorRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND; 
-
-
-	//DescriptorTableを使う
-	rootParameters[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	
-	//PixelShaderを使う
-	rootParameters[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;				
-	//Tableの中身の配列を指定
-	rootParameters[2].DescriptorTable.pDescriptorRanges = descriptorRange;
-	//Tableで利用する数
-	rootParameters[2].DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);
-
-	//CBVを使う
-	rootParameters[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-	//PixelShaderで使う
-	rootParameters[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	//レジスタ番号1を使う
-	rootParameters[3].Descriptor.ShaderRegister = 1;
-	
-
-	D3D12_STATIC_SAMPLER_DESC staticSamplers[1] = {};
-	//バイリニアフィルタ
-	staticSamplers[0].Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
-	//0~1の範囲外をリピート
-	staticSamplers[0].AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-	staticSamplers[0].AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-	staticSamplers[0].AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-	//比較しない
-	staticSamplers[0].ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;
-	//ありったけのMipmapを使う
-	staticSamplers[0].MaxLOD = D3D12_FLOAT32_MAX;
-	//レジスタ番号0を使う
-	staticSamplers[0].ShaderRegister = 0;
-	//PixelShaderで使う
-	staticSamplers[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	descriptionRootSignature_.pStaticSamplers = staticSamplers;
-	descriptionRootSignature_.NumStaticSamplers = _countof(staticSamplers);
-
-
-	//シリアライズしてバイナリにする
-	//ID3DBlob* signatureBlob_ = nullptr;
-	//ID3DBlob* errorBlob_ = nullptr;
-	hr_ = D3D12SerializeRootSignature(&descriptionRootSignature_,
-		D3D_ROOT_SIGNATURE_VERSION_1, &signatureBlob_, &errorBlob_);
-	if (FAILED(hr_)) {
-		Log(reinterpret_cast<char*>(errorBlob_->GetBufferPointer()));
-		assert(false);
-	}
-
-	//バイナリを元に生成
-	//ID3D12RootSignature* rootSignature_ = nullptr;
-	hr_ = device_->CreateRootSignature(0, signatureBlob_->GetBufferPointer(),
-		signatureBlob_->GetBufferSize(), IID_PPV_ARGS(&rootSignature_));
-	assert(SUCCEEDED(hr_));
 
 
 
-
-
-
-
-
-	////InputLayout
-	//InputLayout・・VertexShaderへ渡す頂点データがどのようなものかを指定するオブジェクト
-	//InputLayout
-	D3D12_INPUT_ELEMENT_DESC inputElementDescs[3] = {};
-	inputElementDescs[0].SemanticName = "POSITION";
-	inputElementDescs[0].SemanticIndex = 0;
-	inputElementDescs[0].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
-	inputElementDescs[0].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
-
-	inputElementDescs[1].SemanticName = "TEXCOORD";
-	inputElementDescs[1].SemanticIndex = 0;
-	inputElementDescs[1].Format = DXGI_FORMAT_R32G32_FLOAT;
-	inputElementDescs[1].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
-
-	inputElementDescs[2].SemanticName = "NORMAL";
-	inputElementDescs[2].SemanticIndex = 0;
-	inputElementDescs[2].Format = DXGI_FORMAT_R32G32B32_FLOAT;
-	inputElementDescs[2].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
-
-
-
-	D3D12_INPUT_LAYOUT_DESC inputLayoutDesc{};
-	inputLayoutDesc.pInputElementDescs = inputElementDescs;
-	inputLayoutDesc.NumElements = _countof(inputElementDescs);
-
-
-
-
-
-
-
-	////BlendStateの設定を行う
-	//BlendStateの設定
-	D3D12_BLEND_DESC blendDesc{};
-	//全ての色要素を書き込む
-	blendDesc.RenderTarget[0].RenderTargetWriteMask =D3D12_COLOR_WRITE_ENABLE_ALL;
-
-
-
-
-	////RasterizerState
-	//RasterizerState・・・Rasterizerに対する設定
-	//					  三角形の内部をピクセルに分解して、
-	//					  PixelShaderを起動することでこの処理への設定を行う
-
-	//RasterizerStateの設定
-	D3D12_RASTERIZER_DESC rasterizerDesc{};
-	//裏面(時計回り)を表示しない
-	rasterizerDesc.CullMode = D3D12_CULL_MODE_BACK;
-	//三角形の中を塗りつぶす
-	rasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
-
-
-
-	//ShaderをCompileする
-	vertexShaderBlob_ = CompileShader(L"Object3d.VS.hlsl", L"vs_6_0", dxcUtils_, dxcCompiler_, includeHandler_);
-	assert(vertexShaderBlob_ != nullptr);
-
-
-
-	pixelShaderBlob_ = CompileShader(L"Object3d.PS.hlsl", L"ps_6_0", dxcUtils_, dxcCompiler_, includeHandler_);
-	assert(pixelShaderBlob_ != nullptr);
-
-
-
-	
-
-	////PSO生成
-	D3D12_GRAPHICS_PIPELINE_STATE_DESC graphicsPipelineStateDesc{};
-	graphicsPipelineStateDesc.pRootSignature = rootSignature_;
-	graphicsPipelineStateDesc.InputLayout = inputLayoutDesc;
-	graphicsPipelineStateDesc.VS = { vertexShaderBlob_->GetBufferPointer(),vertexShaderBlob_->GetBufferSize() };
-	//vertexShaderBlob_->GetBufferSize();
-	graphicsPipelineStateDesc.PS = { pixelShaderBlob_->GetBufferPointer(),pixelShaderBlob_->GetBufferSize() };
-	//pixelShaderBlob_->GetBufferSize();
-	graphicsPipelineStateDesc.BlendState = blendDesc;
-	graphicsPipelineStateDesc.RasterizerState = rasterizerDesc;
-
-	//書き込むRTVの情報
-	graphicsPipelineStateDesc.NumRenderTargets = 1;
-	graphicsPipelineStateDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
-
-	//利用するトポロジ(形状)のタイプ三角形
-	graphicsPipelineStateDesc.PrimitiveTopologyType =
-		D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
-
-	//どのように画面に色を打ち込むのか設定
-	graphicsPipelineStateDesc.SampleDesc.Count = 1;
-	graphicsPipelineStateDesc.SampleMask = D3D12_DEFAULT_SAMPLE_MASK;
-
-	//DepthStencilStateの設定
-	D3D12_DEPTH_STENCIL_DESC depthStencilDesc{};
-	//Depthの機能を有効化する
-	depthStencilDesc.DepthEnable = true;
-	//書き込みします
-	depthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
-	//比較関数はLessEqual 近ければ描画される
-	depthStencilDesc.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
-	//DepthStencilの設定
-	graphicsPipelineStateDesc.DepthStencilState = depthStencilDesc;
-	graphicsPipelineStateDesc.DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
-
-	//実際に生成
-	//ID3D12PipelineState* graphicsPipelineState_ = nullptr;
-	hr_ = device_->CreateGraphicsPipelineState(&graphicsPipelineStateDesc,
-		IID_PPV_ARGS(&graphicsPipelineState_));
-	assert(SUCCEEDED(hr_));
-
-
-	
-
-}
 
 void DirectXSetup::GenarateViewport() {
 	////ViewportとScissor
@@ -689,11 +403,11 @@ void DirectXSetup::GenerateScissor() {
 
 #pragma endregion
 
-void DirectXSetup::Initialize(int32_t windowsizeWidth, int32_t windowsizeHeight,HWND hwnd) {
+void DirectXSetup::Initialize() {
 
-	kClientWidth_ = windowsizeWidth;
-	kClientHeight_ = windowsizeHeight;
-	hwnd_ = hwnd;
+	kClientWidth_ = WinApp::GetInstance()->GetClientWidth();
+	kClientHeight_ = WinApp::GetInstance()->GetClientHeight();
+	hwnd_ = WinApp::GetInstance()->GetHwnd();
 
 	//出力ウィンドウへの文字出力
 	OutputDebugStringA("Hello,DirectX!\n");
@@ -754,10 +468,10 @@ void DirectXSetup::Initialize(int32_t windowsizeWidth, int32_t windowsizeHeight,
 	// 
 	// DXC(DirectX Shader Compiler)がHLSLからDXILにするCompilerである
 	//
-	InitializeDXC();
+	//CompileShaderManager::GetInstance()->InitializeDXC();
 
 	//PSOの生成
-	MakePSO();
+	//MakePSO();
 
 	//ビューポートの生成
 	GenarateViewport();
@@ -837,14 +551,13 @@ void DirectXSetup::BeginFrame() {
 	
 	commandList_->SetDescriptorHeaps(1, descriptorHeaps);
 
-	//描画先のRTVとDSVを設定する
-	//D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = dsvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart();
-	//commandList_->OMSetRenderTargets(1,&rtvHandles_[backBufferIndex_],false,&dsvHandle);
-
 	commandList_->RSSetViewports(1, &viewport_);
 	commandList_->RSSetScissorRects(1, &scissorRect_);
-	commandList_->SetGraphicsRootSignature(rootSignature_);
-	commandList_->SetPipelineState(graphicsPipelineState_);
+
+
+	//これをそれぞれに入れたい
+	//commandList_->SetGraphicsRootSignature(rootSignature_);
+	//commandList_->SetPipelineState(graphicsPipelineState_);
 	
 }
 
@@ -875,20 +588,6 @@ void DirectXSetup::EndFrame() {
 	commandQueue_->ExecuteCommandLists(1, commandLists);
 	//GPUとOSに画面の交換を行うよう通知する
 
-
-
-
-
-
-	//D3D12 ERROR: GPU-BASED VALIDATION: Draw, Root descriptor access out of bounds (results undefined): Resource: 0x0000024B1827FF60:
-	// 'Unnamed ID3D12Resource Object', Root Descriptor Type: CBV, Highest byte offset from view start accessed: [75], 
-	// Bytes available from view start based on remaining resource size: 64. Shader Stage: VERTEX, Root Parameter Index: [1],
-	//  Draw Index: [0], Shader Code: Object3d.VS.hlsl(30,82-82), Asm Instruction Range: [0x3-0xffffffff], Asm Operand Index: [0], 
-	// Command List: 0x0000024B18710A30:'Unnamed ID3D12GraphicsCommandList Object', 
-	// SRV/UAV/CBV Descriptor Heap: 0x0000024B1884A1A0:'Unnamed ID3D12DescriptorHeap Object', 
-	// Sampler Descriptor Heap: <not set>, Pipeline State: 0x0000024B0ED44280:'Unnamed ID3D12PipelineState Object',  
-	// [ EXECUTION ERROR #961: GPU_BASED_VALIDATION_ROOT_DESCRIPTOR_ACCESS_OUT_OF_BOUNDS]
-	//D3D12: **BREAK** enabled for the previous message, which was: [ ERROR EXECUTION #961: GPU_BASED_VALIDATION_ROOT_DESCRIPTOR_ACCESS_OUT_OF_BOUNDS 
 
 
  	swapChain_->Present(1, 0);
@@ -960,7 +659,7 @@ void DirectXSetup::Release() {
 #endif
 
 	
-	graphicsPipelineState_->Release();
+	/*graphicsPipelineState_->Release();
 	signatureBlob_->Release();
 	if (errorBlob_) {
 		errorBlob_->Release();
@@ -969,7 +668,7 @@ void DirectXSetup::Release() {
 	rootSignature_->Release();
 
 	vertexShaderBlob_->Release();	
-	pixelShaderBlob_->Release();
+	pixelShaderBlob_->Release();*/
 
 
 

@@ -2,14 +2,30 @@
 #include "Common/Windows/WinApp.h"
 #include "Common/DirectX/DirectXSetup.h"
 
-class ImGuiManager {
-public:
-
+class ImGuiManager final{
+private:
 	//コンストラクタ
 	ImGuiManager();
 
+	//デストラクタ
+	~ImGuiManager();
+
+public:
+	
+		//コピーコンストラクタ禁止
+	ImGuiManager(const ImGuiManager& imGui) = delete;
+
+	//代入演算子を無効にする
+	ImGuiManager& operator=(const ImGuiManager& imGui) = delete;
+
+	//インスタンスを取得
+	static ImGuiManager* GetInstance();
+
+public:
+
+	
 	//初期化
-	void Initialize(WinApp* winSetup,DirectXSetup* directXSetup);
+	void Initialize();
 
 	//ここからフレームが始まる
 	void BeginFrame();
@@ -22,10 +38,10 @@ public:
 	void PreDraw();
 
 	//描画
-	void Draw(DirectXSetup* directXSetup);
+	void Draw();
 
 
-	void EndFrame(DirectXSetup* directXSetup);
+	void EndFrame();
 
 
 	//解放処理
@@ -35,7 +51,7 @@ public:
 
 private:
 	//WindowsInitialization* winSetup_ = nullptr;
-	//DirectXInitialization* directXSetup_ = nullptr;
+	DirectXSetup* directXSetup_ = nullptr;
 
 	//ID3D12DescriptorHeap* descriptorHeaps_[];
 };

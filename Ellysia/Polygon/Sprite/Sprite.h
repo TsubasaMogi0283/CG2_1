@@ -1,7 +1,10 @@
 #pragma once
 #include "Common/DirectX/DirectXSetup.h"
+#include "TextureManager/TextureManager.h"
+
 #include "ConvertFunction/ConvertLog/LogConvert.h"
 #include "externals/DirectXTex/DirectXTex.h"
+#include "PipelineManager/PipelineManager.h"
 
 #include "Math/Vector/Vector4.h"
 #include "Math/Matrix/Matrix/Matrix4x4.h"
@@ -12,8 +15,10 @@
 #include <Math/Vector/Material.h>
 
 #include <string>
+#include <format>
 #include <Math/Vector/DirectionalLight.h>
 #include <Math/Matrix/Matrix/TransformationMatrix.h>
+#include "Math/Vector/SpritePosition.h"
 
 class Sprite {
 public:
@@ -21,17 +26,13 @@ public:
 	//コンストラクタ
 	Sprite();
 
-	//初期化
-	void Initialize(DirectXSetup* directXSetup);
-
-	//まとめた方がよさそう
-	void LoadTexture(const std::string& filePath);
 	
-	void Updata();
+	void LoadTextureHandle(uint32_t textureHandle);
+
 
 	//描画
 	//左上、右上、左下、右下
-	void Draw(Vector4 leftTop,Vector4 RightTop, Vector4 LeftBottom,Vector4 RightBottom,Transform transform,Vector4 color);
+	void DrawRect(Transform transform);
 
 
 	//解放
@@ -40,32 +41,41 @@ public:
 	//デストラクタ
 	~Sprite();
 
-private:
 
 	
-	//Resource作成の関数化
-	ID3D12Resource* CreateBufferResource(size_t sizeInBytes);
+public:
+#pragma region アクセッサ
+	void SetAllPosition(SpritePosition spritePosition) {
+		this->position_ = spritePosition;
+	}
+	void SetTransparency(float transparency) {
+		this->color_.w = transparency;
+	}
+	void SetColor(Vector4 color) {
+		this->color_ = color;
+	}
 
-	//頂点バッファビューを作成する
-	void GenerateVertexBufferView();
-
-
-
-#pragma region テクスチャの読み込み
-	//Textureデータを読む
-	//1.TextureデータそのものをCPUで読み込む
-	DirectX::ScratchImage LoadTextureData(const std::string& filePath);
-
-	//2.DirectX12のTextureResourceを作る
-	ID3D12Resource* CreateTextureResource(ID3D12Device* device, const DirectX::TexMetadata& metadata);
-
-	//3.TextureResourceに1で読んだデータを転送する
-	//void UploadTextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages,ID3D12Device* device,ID3D12GraphicsCommandList* commandList);
-	ID3D12Resource* UploadTextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages);
 
 
 #pragma endregion
 
+
+
+private:
+	//初期化
+	void Initialize();
+	
+	//Resource作成の関数化
+	//Buffer
+	ID3D12Resource* CreateBufferResource(size_t sizeInBytes);
+	//Vertex
+	void CreateVertexBufferView();
+	//Index
+	void CreateIndexBufferView();
+
+
+	//
+	void AssertInformation();
 
 private:
 	DirectXSetup* directXSetup_ = nullptr;
@@ -76,41 +86,43 @@ private:
 
 	//Sprite用
 	//三角形2枚
-	ID3D12Resource* vertexResourceSprite_ = nullptr;
+	ID3D12Resource* vertexResource_ = nullptr;
 
 	//マテリアル用のリソースを作る
-	ID3D12Resource* materialResourceSprite_ = nullptr;
-	Material* materialDataSprite_ = nullptr;
+	ID3D12Resource* materialResource_ = nullptr;
+	Material* materialData_ = nullptr;
 	
+
+	//スプライトだからLightingは必要ないね
+	//Shaderいつか分ける。このLightingを消したい
 	//Lighting用
 	ID3D12Resource* directionalLightResource_ = nullptr;
 	DirectionalLight* directionalLightDataSprite_ = nullptr;
 
 	//Sprite用のTransformationMatrix用のリソースを作る。
 	//Matrix4x4 1つ分サイズを用意する
-	ID3D12Resource* transformationMatrixResourceSprite_ = nullptr;
-	TransformationMatrix* transformationMatrixDataSprite_ = nullptr;
+	ID3D12Resource* transformationMatrixResource_ = nullptr;
+	TransformationMatrix* transformationMatrixData_ = nullptr;
 
 
 	//描画
-	VertexData* vertexDataSprite_ = nullptr;
+	VertexData* vertexData_ = nullptr;
 
 
 	//頂点バッファビューを作成する
-	D3D12_VERTEX_BUFFER_VIEW vertexBufferViewSprite_;
+	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_;
 
-
+	
 
 
 	//index用
-	ID3D12Resource* indexResourceSprite_ = nullptr;
-
+	ID3D12Resource* indexResource_ = nullptr;
 	//IndexBufferViewを作成
-	D3D12_INDEX_BUFFER_VIEW indexBufferViewSprite_{};
-
+	D3D12_INDEX_BUFFER_VIEW indexBufferView_{};
 	//インデックスデータ
-	uint32_t* indexDataSprite_ = nullptr;
+	uint32_t* indexData_ = nullptr;
 
+	static const int MAX_TEXTURE_ = 20;
 
 
 	//画像読み込み
@@ -120,9 +132,26 @@ private:
 	D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU_;
 	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU_;
 
-	ID3D12Resource* intermediateResource_ = nullptr;
+	ID3D12Resource* intermediateResource_= nullptr ;
 
 
 	Transform uvTransformSprite_ = {};
 
+	int textureIndex_ = 0;
+	
+
+
+	//位置
+	SpritePosition position_ = {};
+
+	Vector4 leftBottom_ = {};
+	Vector4 leftTop_ = {};
+	Vector4 rightBottom_ = {};
+	Vector4 rightTop_ = {};
+
+	Vector4 color_ = {};
+
+
+	uint32_t texturehandle_ = 0u;
+	bool isLoadTexture_ = false;
 };

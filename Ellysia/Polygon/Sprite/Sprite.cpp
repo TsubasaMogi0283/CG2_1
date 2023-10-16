@@ -2,8 +2,6 @@
 
 
 
-//補助ライブラリ
-#include "externals/DirectXTex/d3dx12.h"
 //動的配列
 #include <vector>
 
@@ -55,65 +53,56 @@ ID3D12Resource* Sprite::CreateBufferResource(size_t sizeInBytes) {
 	return resource;
 }
 
-
-//頂点バッファビューを作成する
-void Sprite::GenerateVertexBufferView() {
-	
-
-	//vertexResourceがnullらしい
+//Vertex
+void Sprite::CreateVertexBufferView() {
 	//リソースの先頭のアドレスから使う
-	vertexBufferViewSprite_.BufferLocation = vertexResourceSprite_->GetGPUVirtualAddress();
+	vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
 	//使用するリソースのサイズは頂点３つ分のサイズ
-	vertexBufferViewSprite_.SizeInBytes = sizeof(VertexData) * 6;
+	vertexBufferView_.SizeInBytes = sizeof(VertexData) * 4;
 	//１頂点あたりのサイズ
-	vertexBufferViewSprite_.StrideInBytes = sizeof(VertexData);
-	
-	//Indexを利用
-	//リsp－スの先頭のアドレスから使う
-	indexBufferViewSprite_.BufferLocation = indexResourceSprite_->GetGPUVirtualAddress();
-	//使用するリソースのサイズはインデックス6つ分のサイズ
-	indexBufferViewSprite_.SizeInBytes = sizeof(uint32_t) * 6;
-	//インデックスはuint32_tとする
-	indexBufferViewSprite_.Format = DXGI_FORMAT_R32_UINT;
+	vertexBufferView_.StrideInBytes = sizeof(VertexData);
+}
 
+//Index
+void Sprite::CreateIndexBufferView() {
+	
+	//リsp－スの先頭のアドレスから使う
+	indexBufferView_.BufferLocation = indexResource_->GetGPUVirtualAddress();
+	//使用するリソースのサイズはインデックス6つ分のサイズ
+	indexBufferView_.SizeInBytes = sizeof(uint32_t) * 6;
+	//インデックスはuint32_tとする
+	indexBufferView_.Format = DXGI_FORMAT_R32_UINT;
 
 }
 
 
-//初期化
-void Sprite::Initialize(DirectXSetup* directXSetup) {
-	directXSetup_ = directXSetup;
 
-	//
-	//Triangleとほぼ同じ
-	// 
+
+//初期化
+void Sprite::Initialize() {
+	directXSetup_ = DirectXSetup::GetInstance();
+	position_ = {};
+	color_ = { 1.0f,1.0f,1.0f,1.0f };
+	
 	
 	//ここでBufferResourceを作る
 	//Sprite用の頂点リソースを作る
-	vertexResourceSprite_ = CreateBufferResource(sizeof(VertexData) * 6);
-
+	//以前三角形二枚にしてたけど結合して四角一枚で良くなったので4で良いよね
+	vertexResource_ = CreateBufferResource(sizeof(VertexData) * 6);
 	//index用のリソースを作る
-	indexResourceSprite_ = CreateBufferResource(sizeof(uint32_t) * 6);
-
-
-
-
+	indexResource_ = CreateBufferResource(sizeof(uint32_t) * 6);
 	////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
-	materialResourceSprite_=CreateBufferResource(sizeof(Material));
-
-
-	//directionalLightResource_ = CreateBufferResource(sizeof(DirectionalLight));
-	//directionalLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightDataSprite_));
-	//directionalLightDataSprite_->color={ 1.0f,1.0f,1.0f,1.0f };
-	//directionalLightDataSprite_->direction = { 0.0f,-1.0f,0.0f };
-	//directionalLightDataSprite_->intensity = 1.0f;
-
-
+	materialResource_=CreateBufferResource(sizeof(Material));
 	//Sprite用のTransformationMatrix用のリソースを作る。
 	//Matrix4x4 1つ分サイズを用意する
-	transformationMatrixResourceSprite_ = CreateBufferResource(sizeof(TransformationMatrix));
+	transformationMatrixResource_ = CreateBufferResource(sizeof(TransformationMatrix));
 	
 
+	//頂点バッファビューを作成する
+	CreateVertexBufferView();
+
+	//Indexを利用
+	CreateIndexBufferView();
 
 
 	uvTransformSprite_ = {
@@ -123,185 +112,74 @@ void Sprite::Initialize(DirectXSetup* directXSetup) {
 	};
 
 
-	//頂点バッファビューを作成する
-	GenerateVertexBufferView();
+	
+}
+
+void Sprite::LoadTextureHandle(uint32_t textureHandle) {
+	this->texturehandle_ = textureHandle;
+	Initialize();
 
 }
 
+void Sprite::AssertInformation() {
 
-//Textureデータを読む
-////1.TextureデータそのものをCPUで読み込む
-//DirectX::ScratchImage LoadTextureData(const std::string& filePath);
-//
-////2.DirectX12のTextureResourceを作る
-//ID3D12Resource* CreateTextureResource(ID3D12Device* device, const DirectX::TexMetadata& metadata);
-//
-////3.TextureResourceに1で読んだデータを転送する
-//void UploadTextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages);
-
-
-//Before
-void Sprite::LoadTexture(const std::string& filePath) {
-	//Textureを読んで転送する
-	DirectX::ScratchImage mipImages = LoadTextureData(filePath);
-	const DirectX::TexMetadata& metadata = mipImages.GetMetadata();
-	textureResource_ = CreateTextureResource(directXSetup_->GetDevice(), metadata);
-	intermediateResource_ = UploadTextureData(textureResource_, mipImages);
+	//leftTop,LeftBottom,RightTop,RightBottom
+	//{ {0.0f,0.0f},{512.0f,0.0f}
+	// {0.1f,512.0f},{512.0f,512.0f} };
 	
+	//座標を入れるとき値が違っていると面倒なので
+	//Assertで止めたい
 
-	//ShaderResourceView
-	//metadataを基にSRVの設定
-	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
-	srvDesc.Format = metadata.format;
-	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-	//2Dテクスチャ
-	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
-	srvDesc.Texture2D.MipLevels = UINT(metadata.mipLevels);
+	//左側2つのX座標が一致していない
+	if (leftBottom_.x != leftTop_.x) {
+		Log("Please Set Same Value LeftBottom.x And LeftTop.x !!!\n\n");
+
+		assert(leftBottom_.x == leftTop_.x);
+	}
+
+	//上側2つのY座標が一致していない
+	if (leftTop_.y != rightTop_.y) {
+		Log("Please Set Same Value LeftTop.y And RightTop.y !!!\n\n");
+
+		assert(leftTop_.y == rightTop_.y);
+	}
+
+
+
+	//右側2つのX座標が一致していない
+	if (rightTop_.x != rightBottom_.x) {
+		Log("Please Set Same Value RightTop.x And RightBottom.x !!!\n\n");
+
+		assert(rightTop_.x == rightBottom_.x);
+	}
+
+	//下側2つのY座標が一致していない
+	if (rightBottom_.y != leftBottom_.y) {
+		Log("Please Set Same Value RightBottom.y And LeftBottom.y !!!\n\n");
+
+		assert(rightBottom_.y == leftBottom_.y);
+	}
 	
-	//SRVを作成するDescriptorHeapの場所を決める
-	textureSrvHandleCPU_ = directXSetup_->GetSrvDescriptorHeap()->GetCPUDescriptorHandleForHeapStart();
-	textureSrvHandleGPU_ = directXSetup_->GetSrvDescriptorHeap()->GetGPUDescriptorHandleForHeapStart();
-	//先頭はImGuiが使っているのでその次を使う
-	textureSrvHandleCPU_.ptr += directXSetup_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-	textureSrvHandleGPU_.ptr += directXSetup_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-	//SRVの生成
-	directXSetup_->GetDevice()->CreateShaderResourceView(textureResource_, &srvDesc, textureSrvHandleCPU_);
-
-	
-
-}
-
-//After
-//1.TextureデータそのものをCPUで読み込む
-//2.DirectX12のTextureResourceを作る
-//3.CPUで書き込む用にUploadHeapのResourceを作る(IntermediateResource)
-//4.3に対してCPUでデータを書き込む
-//5.CommandListに3を2に転送するコマンドを積む
-//6.CommandQueueを使って実行する
-//7.6の実行完了を待つ
-
-
-#pragma region 上のLoadTextureにまとめた
-//Textureを読み込むためのLoad関数
-//1.TextureデータそのものをCPUで読み込む
-DirectX::ScratchImage Sprite::LoadTextureData(const std::string& filePath) {
-	
-	//テクスチャファイルを読んでプログラムで扱えるようにする
-	DirectX::ScratchImage image{};
-	std::wstring filePathW = ConvertString(filePath);
-	HRESULT hr = DirectX::LoadFromWICFile(filePathW.c_str(), DirectX::WIC_FLAGS_FORCE_SRGB, nullptr, image);
-	assert(SUCCEEDED(hr));
-	
-	//ミップマップの作成
-	//ミップマップ...元画像より小さなテクスチャ群
-	DirectX::ScratchImage mipImages{};
-	hr = DirectX::GenerateMipMaps(image.GetImages(), image.GetImageCount(), image.GetMetadata(), DirectX::TEX_FILTER_SRGB, 0, mipImages);
-	assert(SUCCEEDED(hr));
-
-	//ミップマップ月のデータを返す
-	return mipImages;
-}
-
-//2.DirectX12のTextureResourceを作る
-ID3D12Resource* Sprite::CreateTextureResource(ID3D12Device* device, const DirectX::TexMetadata& metadata) {
-	//1.metadataを基にResourceの設定
-	D3D12_RESOURCE_DESC resourceDesc{};
-	//Textureの幅
-	resourceDesc.Width = UINT(metadata.width);
-	//Textureの高さ
-	resourceDesc.Height = UINT(metadata.height);
-	//mipmapの数
-	resourceDesc.MipLevels = UINT16(metadata.mipLevels);
-	//奥行き or 配列Textureの配列数
-	resourceDesc.DepthOrArraySize = UINT16(metadata.arraySize);
-	//TextureのFormat
-	resourceDesc.Format = metadata.format;
-	//サンプリングカウント
-	resourceDesc.SampleDesc.Count = 1;
-	//Textureの次元数。普段使っているのは2次元
-	resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION(metadata.dimension);
-
-	//2.利用するHeapの設定
-	//利用するHeapの設定。非常に特殊な運用。02_04exで一般的なケース版がある
-	D3D12_HEAP_PROPERTIES heapProperties{};
-	//細かい設定を行う
-	heapProperties.Type = D3D12_HEAP_TYPE_CUSTOM;
-	//WriteBackポリシーでCPUアクセス可能
-	heapProperties.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_WRITE_BACK;
-	//プロセッサの近くに配置
-	heapProperties.MemoryPoolPreference = D3D12_MEMORY_POOL_L0;
-
-	
-
-
-	////WriteBackポリシーでCPUアクセス可能
-	//heapProperties.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_WRITE_BACK;
-	////プロセッサの近くに配置
-	//heapProperties.MemoryPoolPreference = D3D12_MEMORY_POOL_L0;
-
-	
-
-	//3.Resourceを生成する
-	
-	HRESULT hr = directXSetup_->GetDevice()->CreateCommittedResource(
-		&heapProperties,					//Heapの設定
-		D3D12_HEAP_FLAG_NONE,				//Heapの特殊な設定
-		&resourceDesc,						//Resourceの設定
-		D3D12_RESOURCE_STATE_COPY_DEST,	//初回のResourceState。データの転送を受け入れられるようにする
-		nullptr,							//Clear最適値。使わないのでnullptr
-		IID_PPV_ARGS(&resource_));			//作成するResourceポインタへのポインタ
-	assert(SUCCEEDED(hr));
-
-	return resource_;
-
-
-}
-
-//3.TextureResourceに1で読んだデータを転送する
-//書き換え
-[[nodiscard]]
-ID3D12Resource* Sprite::UploadTextureData(
-	ID3D12Resource* texture, 
-	const DirectX::ScratchImage& mipImages) {
-
-	std::vector<D3D12_SUBRESOURCE_DATA>subresource;
-	DirectX::PrepareUpload(directXSetup_->GetDevice(), mipImages.GetImages(), mipImages.GetImageCount(), mipImages.GetMetadata(), subresource);
-	uint64_t intermediateSize = GetRequiredIntermediateSize(texture, 0, UINT(subresource.size()));
-	ID3D12Resource* intermediateResource = CreateBufferResource(intermediateSize);
-	UpdateSubresources(directXSetup_->GetCommandList(), texture, intermediateResource, 0, 0, UINT(subresource.size()), subresource.data());
-	
-	//Textureへの転送後は利用出来るようD3D12_RESOURCE_STATE_COPY_DESTからD3D12_RESOURCE_STATE_GENERIC_READへResourceStateを変更
-	D3D12_RESOURCE_BARRIER barrier{};
-	barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-	barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-	barrier.Transition.pResource = texture ;
-	barrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
-	barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_COPY_DEST;
-	barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_GENERIC_READ;
-	directXSetup_->GetCommandList()->ResourceBarrier(1, &barrier);
-	return intermediateResource;
-
-
-}
-
-
-#pragma endregion
-
-
-void Sprite::Updata() {
-	ImGui::Begin("Sprite");
-	ImGui::DragFloat2("UVTranslate", &uvTransformSprite_.translate.x, 0.01f, -10.0f, 10.0f);
-	ImGui::DragFloat2("UVScale", &uvTransformSprite_.scale.x, 0.01f, -10.0f, 10.0f);
-	ImGui::SliderAngle("UVRotate", &uvTransformSprite_.rotate.z);
-
-
-
-	ImGui::End();
 }
 
 //描画
-void Sprite::Draw(Vector4 leftTop,Vector4 rightTop, Vector4 leftBottom,Vector4 rightBottom,Transform transform, Vector4 color) {
+void Sprite::DrawRect(Transform transform) {
 	
+	//参考
+	//assert(device_ != nullptr);
+
+
+	//SetAllPosition
+	leftBottom_ = {position_.leftBottom.x,position_.leftBottom.y,0.0f,1.0f};
+	leftTop_ = {position_.leftTop.x,position_.leftTop.y,0.0f,1.0f};
+	rightBottom_ = {position_.rightBottom.x,position_.rightBottom.y,0.0f,1.0f};
+	rightTop_ = {position_.rightTop.x,position_.rightTop.y,0.0f,1.0f};
+
+	
+	//AssertInformation();
+
+	
+
 	//TextureCoordinate(テクスチャ座標系)
 	//TexCoord,UV座標系とも呼ばれている
 
@@ -326,57 +204,43 @@ void Sprite::Draw(Vector4 leftTop,Vector4 rightTop, Vector4 leftBottom,Vector4 r
 	//4つだけだよ
 
 	//書き込むためのアドレスを取得
-	vertexResourceSprite_->Map(0, nullptr, reinterpret_cast<void**>(&vertexDataSprite_));
+	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
 	//1枚目の三角形
 	//左下
-	vertexDataSprite_[0].position = {leftBottom};
-	vertexDataSprite_[0].texCoord = { 0.0f,1.0f };
+	vertexData_[0].position = {leftBottom_};
+	vertexData_[0].texCoord = { 0.0f,1.0f };
 
 	//左上
-	vertexDataSprite_[1].position = {leftTop};
-	vertexDataSprite_[1].texCoord = { 0.0f,0.0f };
+	vertexData_[1].position = {leftTop_};
+	vertexData_[1].texCoord = { 0.0f,0.0f };
 	
 	//右下
-	vertexDataSprite_[2].position = {rightBottom} ;
-	vertexDataSprite_[2].texCoord = { 1.0f,1.0f };
+	vertexData_[2].position = {rightBottom_} ;
+	vertexData_[2].texCoord = { 1.0f,1.0f };
 
 
 	//右上
-	vertexDataSprite_[3].position = { rightTop };
-	vertexDataSprite_[3].texCoord = { 1.0f,0.0f };
+	vertexData_[3].position = { rightTop_ };
+	vertexData_[3].texCoord = { 1.0f,0.0f };
 
 
-	////2枚目の三角形
-	////左上2
-	//vertexDataSprite_[3].position = { leftTop};
-	//vertexDataSprite_[3].texCoord = { 0.0f,0.0f };
-	//
-	////右上2
-	//vertexDataSprite_[4].position = { rightTop};
-	//vertexDataSprite_[4].texCoord = { 1.0f,0.0f };
-	////右下2
-	//vertexDataSprite_[5].position = { rightBottom} ;
-	//vertexDataSprite_[5].texCoord = { 1.0f,1.0f };
-	
-
-	
 
 	//IndexResourceにデータを書き込む
 	//インデックスデータにデータを書き込む
-	indexResourceSprite_->Map(0, nullptr, reinterpret_cast<void**>(&indexDataSprite_));
-	indexDataSprite_[0] = 0;
-	indexDataSprite_[1] = 1;
-	indexDataSprite_[2] = 2;
-	indexDataSprite_[3] = 1;
-	indexDataSprite_[4] = 3;
-	indexDataSprite_[5] = 2;
+	indexResource_->Map(0, nullptr, reinterpret_cast<void**>(&indexData_));
+	indexData_[0] = 0;
+	indexData_[1] = 1;
+	indexData_[2] = 2;
+	indexData_[3] = 1;
+	indexData_[4] = 3;
+	indexData_[5] = 2;
 
 
 
 	//サイズに注意を払ってね！！！！！
 	//どれだけのサイズが必要なのか考えよう
 
-	transformationMatrixResourceSprite_->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixDataSprite_));
+	transformationMatrixResource_->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixData_));
 	
 
 	//新しく引数作った方が良いかも
@@ -389,49 +253,58 @@ void Sprite::Draw(Vector4 leftTop,Vector4 rightTop, Vector4 leftBottom,Vector4 r
 	//WVP行列を作成
 	Matrix4x4 worldViewProjectionMatrixSprite = Multiply(worldMatrixSprite, Multiply(viewMatrixSprite, projectionMatrixSprite));
 
-	transformationMatrixDataSprite_->WVP = worldViewProjectionMatrixSprite;
-	transformationMatrixDataSprite_->World = MakeIdentity4x4();
+	transformationMatrixData_->WVP = worldViewProjectionMatrixSprite;
+	transformationMatrixData_->World = MakeIdentity4x4();
 
 
 
 	//マテリアルにデータを書き込む
 	//書き込むためのアドレスを取得
 	//reinterpret_cast...char* から int* へ、One_class* から Unrelated_class* へなどの変換に使用
-	materialResourceSprite_->Map(0, nullptr, reinterpret_cast<void**>(&materialDataSprite_));
-	materialDataSprite_->color = color;
+	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
+	materialData_->color = color_;
 	//ライティングしない
-	materialDataSprite_->enableLighting = false;
+	materialData_->enableLighting = false;
 	//materialDataSprite_->uvTransform = MakeIdentity4x4();
 	
 
 	Matrix4x4 uvTransformMatrix = MakeScaleMatrix(uvTransformSprite_.scale);
 	uvTransformMatrix = Multiply(uvTransformMatrix, MakeRotateZMatrix(uvTransformSprite_.rotate.z));
 	uvTransformMatrix = Multiply(uvTransformMatrix, MakeTranslateMatrix(uvTransformSprite_.translate));
-	materialDataSprite_->uvTransform = uvTransformMatrix;
+	materialData_->uvTransform = uvTransformMatrix;
 
 
 	//コマンドを積む
+	//パイプラインはここに引っ越したい
+
+	//参考
+	//commands.m_pList->SetGraphicsRootSignature(PSO.rootSignature.Get());
+	//commands.m_pList->SetPipelineState(PSO.GraphicsPipelineState.Get());
+	directXSetup_->GetCommandList()->SetGraphicsRootSignature(PipelineManager::GetInstance()->GetSpriteRootSignature());
+	directXSetup_->GetCommandList()->SetPipelineState(PipelineManager::GetInstance()->GetSpriteGraphicsPipelineState());
+
 
 	//RootSignatureを設定。PSOに設定しているけど別途設定が必要
-	directXSetup_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferViewSprite_);
+	directXSetup_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);
+	//IBVを設定
+	directXSetup_->GetCommandList()->IASetIndexBuffer(&indexBufferView_);
+	
 	//形状を設定。PSOに設定しているものとはまた別。同じものを設定すると考えよう
 	directXSetup_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	//IBVを設定
-	directXSetup_->GetCommandList()->IASetIndexBuffer(&indexBufferViewSprite_);
-
-
-	directXSetup_->GetCommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResourceSprite_->GetGPUVirtualAddress());
+	
 	//CBVを設定する
-	directXSetup_->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResourceSprite_->GetGPUVirtualAddress());
+	directXSetup_->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+	directXSetup_->GetCommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResource_->GetGPUVirtualAddress());
+	
 	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である
-	directXSetup_->GetCommandList()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU_);
-	//Light
-	//directXSetup_->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
+	//directXSetup_->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureIndex());
+	
+	
+	if (texturehandle_ != 0) {
+		TextureManager::TexCommand(texturehandle_);
 
-
-	////描画(DrawCall)３頂点で１つのインスタンス。
-	//directXSetup_->GetCommandList()->DrawInstanced(6, 1, 0, 0);
-
+	}
+	
 	//今度はこっちでドローコールをするよ
 	//描画(DrawCall)6個のインデックスを使用し1つのインスタンスを描画。
 	directXSetup_->GetCommandList()->DrawIndexedInstanced(6, 1, 0, 0, 0);
@@ -441,13 +314,13 @@ void Sprite::Draw(Vector4 leftTop,Vector4 rightTop, Vector4 leftBottom,Vector4 r
 
 //解放
 void Sprite::Release() {
-	vertexResourceSprite_->Release();
+	vertexResource_->Release();
 
-	materialResourceSprite_->Release();
+	materialResource_->Release();
 	
-	transformationMatrixResourceSprite_->Release();
+	transformationMatrixResource_->Release();
 	
-	indexResourceSprite_->Release();
+	indexResource_->Release();
 
 	textureResource_->Release();
 	resource_->Release();

@@ -19,28 +19,46 @@
 
 
 
+
 //メンバ変数関数いつか整理したい・・・
 //ごちゃごちゃしてる
 class DirectXSetup {
-public:
+private:
 	
+	//コンストラクタ
 	DirectXSetup();
+
+	//デストラクタ
+	~DirectXSetup();
+
+public:
+	//インスタンス
+	static DirectXSetup* GetInstance();
+
+	//デリート代わりの関数
+	void DeleteInstance();
+
+	//コピーコンストラクタ禁止
+	DirectXSetup(const DirectXSetup& directXSetup) = delete;
+
+	//代入演算子を無効にする
+	DirectXSetup& operator=(const DirectXSetup& directXSetup) = delete;
 
 	//まとめたのが下の「Initialize」
 	//他の所では使わないからprivateにしても良さそう
 	//アロー演算子を使ったとき邪魔になるから
 private:
 
-	//CompilerShader関数
-	IDxcBlob* CompileShader(
-		//CompilerするShaderファイルへのパス
-		const std::wstring& filePath,
-		//Compilerに使用するProfile
-		const wchar_t* profile,
-		//初期化で生成したものを３つ
-		IDxcUtils* dxcUtils,
-		IDxcCompiler3* dxcCompiler,
-		IDxcIncludeHandler* includeHandler);
+	////CompilerShader関数
+	//IDxcBlob* CompileShader(
+	//	//CompilerするShaderファイルへのパス
+	//	const std::wstring& filePath,
+	//	//Compilerに使用するProfile
+	//	const wchar_t* profile,
+	//	//初期化で生成したものを３つ
+	//	IDxcUtils* dxcUtils,
+	//	IDxcCompiler3* dxcCompiler,
+	//	IDxcIncludeHandler* includeHandler);
 
 
 	//関数化したやつ
@@ -78,9 +96,11 @@ private:
 
 	void SetRTV();
 
-	void InitializeDXC();
 
-	void MakePSO();
+
+	//void InitializeDXC();
+
+	//void MakePSO();
 
 	void GenarateViewport();
 
@@ -92,7 +112,7 @@ private:
 
 public:
 
-	void Initialize(int32_t windowsizeWidth, int32_t windowsizeHeight,HWND hwnd_);
+	void Initialize();
 
 	
 
@@ -115,7 +135,7 @@ public:
 
 	void CheckRelease();
 
-	~DirectXSetup();
+	
 
 #pragma endregion
 	
@@ -172,6 +192,9 @@ public:
 #pragma endregion
 
 private:
+	
+
+
 	int32_t kClientWidth_;
 	int32_t kClientHeight_;
 
@@ -183,17 +206,10 @@ private:
 
 	ID3D12Resource* vertexResource_ = nullptr;
 
-	ID3D12PipelineState* graphicsPipelineState_ = nullptr;
+	
+	
 
-	ID3DBlob* signatureBlob_ = nullptr;
-
-	ID3DBlob* errorBlob_ = nullptr;
-
-	ID3D12RootSignature* rootSignature_ = nullptr;
-
-	IDxcBlob* pixelShaderBlob_ = nullptr;
-
-	IDxcBlob* vertexShaderBlob_ = nullptr;
+	
 
 
 
@@ -276,18 +292,36 @@ private:
 
 	ID3D12Debug1* debugController_ = nullptr;
 
-
-
-#pragma region DXCの初期化について
-	IDxcUtils* dxcUtils_ = nullptr;
-	IDxcCompiler3* dxcCompiler_ = nullptr;
-
-	IDxcIncludeHandler* includeHandler_ = nullptr;
-
-#pragma endregion
-
-	//PSO
-	D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature_{};
+//#pragma region 後で消す
+//
+//#pragma region DXCの初期化について
+//	IDxcCompiler3* dxcCompiler_ = nullptr;
+//
+//	IDxcIncludeHandler* includeHandler_ = nullptr;
+//
+//#pragma endregion
+//
+//	//PSO
+//	D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature_{};
+//
+//
+//	ID3DBlob* signatureBlob_ = nullptr;
+//
+//	ID3DBlob* errorBlob_ = nullptr;
+//
+//
+//
+//	ID3D12RootSignature* rootSignature_ = nullptr;
+//
+//	IDxcBlob* pixelShaderBlob_ = nullptr;
+//
+//	IDxcBlob* vertexShaderBlob_ = nullptr;
+//
+//	ID3D12PipelineState* graphicsPipelineState_ = nullptr;
+//
+//
+//
+//#pragma endregion
 
 
 	D3D12_VIEWPORT viewport_{};

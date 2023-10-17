@@ -71,6 +71,7 @@ void GameManager::EndFrame() {
 
 void GameManager::Release() {
 	audio_->DeleteInstance();
+
 	camera_->DeleteInstance();
 	
 	textureManager_->Release();
@@ -80,8 +81,10 @@ void GameManager::Release() {
 	pipelineManager_->DeleteInstance();
 
 	imGuiManager_->Release();
+
 	directXSetup_->Release();
 	directXSetup_->DeleteInstance();
+
 	winApp_->Close();
 }
 

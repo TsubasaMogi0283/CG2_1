@@ -19,7 +19,17 @@
 
 #include "ConvertFunction/CompileShader/CompileShaderManager.h"
 
-
+struct D3DResourceLeakChecker{
+	~D3DResourceLeakChecker() {
+		ComPtr<IDXGIDebug1>debug;
+		if (SUCCEEDED(DXGIGetDebugInterface1(0, IID_PPV_ARGS(&debug))))
+		{
+			debug->ReportLiveObjects(DXGI_DEBUG_ALL, DXGI_DEBUG_RLO_ALL);
+			debug->ReportLiveObjects(DXGI_DEBUG_APP, DXGI_DEBUG_RLO_ALL);
+			debug->ReportLiveObjects(DXGI_DEBUG_D3D12, DXGI_DEBUG_RLO_ALL);
+		}
+	}
+};
 
 //メンバ変数関数いつか整理したい・・・
 //ごちゃごちゃしてる
@@ -293,36 +303,7 @@ private:
 
 	ID3D12Debug1* debugController_ = nullptr;
 
-//#pragma region 後で消す
-//
-//#pragma region DXCの初期化について
-//	IDxcCompiler3* dxcCompiler_ = nullptr;
-//
-//	IDxcIncludeHandler* includeHandler_ = nullptr;
-//
-//#pragma endregion
-//
-//	//PSO
-//	D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature_{};
-//
-//
-//	ID3DBlob* signatureBlob_ = nullptr;
-//
-//	ID3DBlob* errorBlob_ = nullptr;
-//
-//
-//
-//	ID3D12RootSignature* rootSignature_ = nullptr;
-//
-//	IDxcBlob* pixelShaderBlob_ = nullptr;
-//
-//	IDxcBlob* vertexShaderBlob_ = nullptr;
-//
-//	ID3D12PipelineState* graphicsPipelineState_ = nullptr;
-//
-//
-//
-//#pragma endregion
+
 
 
 	D3D12_VIEWPORT viewport_{};

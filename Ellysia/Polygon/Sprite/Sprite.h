@@ -67,7 +67,7 @@ private:
 	
 	//Resource作成の関数化
 	//Buffer
-	ComPtr<ID3D12Resource> CreateBufferResource(size_t sizeInBytes);
+	ID3D12Resource* CreateBufferResource(size_t sizeInBytes);
 	//Vertex
 	void CreateVertexBufferView();
 	//Index
@@ -86,22 +86,22 @@ private:
 
 	//Sprite用
 	//三角形2枚
-	ComPtr<ID3D12Resource> vertexResource_ = nullptr;
+	ID3D12Resource* vertexResource_ = nullptr;
 
 	//マテリアル用のリソースを作る
-	ComPtr<ID3D12Resource> materialResource_ = nullptr;
+	ID3D12Resource* materialResource_ = nullptr;
 	Material* materialData_ = nullptr;
 	
 
 	//スプライトだからLightingは必要ないね
 	//Shaderいつか分ける。このLightingを消したい
 	//Lighting用
-	ComPtr<ID3D12Resource> directionalLightResource_ = nullptr;
+	ID3D12Resource* directionalLightResource_ = nullptr;
 	DirectionalLight* directionalLightDataSprite_ = nullptr;
 
 	//Sprite用のTransformationMatrix用のリソースを作る。
 	//Matrix4x4 1つ分サイズを用意する
-	ComPtr<ID3D12Resource> transformationMatrixResource_ = nullptr;
+	ID3D12Resource* transformationMatrixResource_ = nullptr;
 	TransformationMatrix* transformationMatrixData_ = nullptr;
 
 
@@ -116,7 +116,7 @@ private:
 
 
 	//index用
-	ComPtr<ID3D12Resource> indexResource_ = nullptr;
+	ID3D12Resource* indexResource_ = nullptr;
 	//IndexBufferViewを作成
 	D3D12_INDEX_BUFFER_VIEW indexBufferView_{};
 	//インデックスデータ
@@ -125,10 +125,14 @@ private:
 	static const int MAX_TEXTURE_ = 20;
 
 
+	//画像読み込み
+	ID3D12Resource* textureResource_ = nullptr;
+	ID3D12Resource* resource_ = nullptr;
 
 	D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU_;
 	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU_;
 
+	ID3D12Resource* intermediateResource_= nullptr ;
 
 
 	Transform uvTransformSprite_ = {};

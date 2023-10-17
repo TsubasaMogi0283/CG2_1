@@ -1,5 +1,7 @@
 #include "Input.h"
 
+static Input* instance_;
+
 //コンストラクタ
 Input::Input() {
 
@@ -7,9 +9,18 @@ Input::Input() {
 
 //シングルインスタンス
 Input* Input::GetInstance() {
-	static Input instance;
+	if (instance_ == nullptr) {
+		instance_ = new Input();
 
-	return &instance;
+	}
+	
+	return instance_;
+}
+
+
+//デリート代わりの関数
+void Input::DeleteInstance() {
+	delete instance_;
 }
 
 void Input::Initialize() {

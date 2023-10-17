@@ -30,18 +30,18 @@ public:
 	void DeleteInstance();
 
 	//コマンドに積む専用のGetter
-	ComPtr<ID3D12RootSignature> GetSpriteRootSignature() {
+	ID3D12RootSignature* GetSpriteRootSignature() {
 		return psoSprite_.rootSignature_;
 	}
-	ComPtr<ID3D12PipelineState> GetSpriteGraphicsPipelineState() {
+	ID3D12PipelineState* GetSpriteGraphicsPipelineState() {
 		return psoSprite_.graphicsPipelineState_;
 	}
 
 	//コマンドに積む専用のGetter
-	ComPtr<ID3D12RootSignature> GetModelRootSignature() {
+	ID3D12RootSignature* GetModelRootSignature() {
 		return psoModel_.rootSignature_;
 	}
-	ComPtr<ID3D12PipelineState> GetModelGraphicsPipelineState() {
+	ID3D12PipelineState* GetModelGraphicsPipelineState() {
 		return psoModel_.graphicsPipelineState_;
 	}
 
@@ -60,17 +60,17 @@ public:
 private:
 	//メンバ変数
 	struct PipelineVariable {
-		ComPtr<ID3DBlob> signatureBlob_ = nullptr;
+		ID3DBlob* signatureBlob_ = nullptr;
 
-		ComPtr<ID3DBlob> errorBlob_ = nullptr;
+		ID3DBlob* errorBlob_ = nullptr;
 
-		ComPtr<ID3D12RootSignature> rootSignature_ = nullptr;
+		ID3D12RootSignature* rootSignature_ = nullptr;
 
-		ComPtr<IDxcBlob> pixelShaderBlob_ = nullptr;
+		IDxcBlob* pixelShaderBlob_ = nullptr;
 
-		ComPtr<IDxcBlob> vertexShaderBlob_ = nullptr;
+		IDxcBlob* vertexShaderBlob_ = nullptr;
 
-		ComPtr<ID3D12PipelineState> graphicsPipelineState_ = nullptr;
+		ID3D12PipelineState* graphicsPipelineState_ = nullptr;
 	};
 
 	PipelineVariable psoSprite_;

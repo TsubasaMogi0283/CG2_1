@@ -4,6 +4,7 @@
 #include "Common/Windows/WinApp.h"
 //Winodwsアプリでもエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
+	
 	GameManager* gameManager = new GameManager();
 
 

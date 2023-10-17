@@ -29,14 +29,14 @@ public:
 
 private:
 	//Audio
-	Audio* audio_ = nullptr;
+	//Audio* audio_ = nullptr;
 	//Input
-	Input* input_ = nullptr;
-	TextureManager* textureManager_ = nullptr;
+	//Input* input_ = nullptr;
+	//TextureManager* textureManager_ = nullptr;
 	
 
-	Sprite* sprite_ = nullptr;
-	Sprite* sprite2_ = nullptr;
+	//Sprite* sprite_ = nullptr;
+	//Sprite* sprite2_ = nullptr;
 	//Sprite* sprite3_ = nullptr;
 
 
@@ -53,7 +53,7 @@ private:
 	int sampleTimer_ = 0;
 
 
-	Model* plane_ = nullptr;
+	//Model* plane_ = nullptr;
 	Transform transformModel_ = {};
 
 	float transparency1 = 1.0f;

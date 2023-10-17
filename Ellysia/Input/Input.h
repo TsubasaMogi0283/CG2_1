@@ -40,6 +40,9 @@ public:
 	//シングルインスタンス
 	static Input* GetInstance();
 
+
+	void DeleteInstance();
+
 public:
 
 	void Initialize();
@@ -91,8 +94,6 @@ public:
 
 private:
 
-
-	static Input* instance_;
 
 	//DirectInputの初期化
 	ComPtr<IDirectInput8> directInput_ = nullptr;

@@ -11,16 +11,15 @@ SampleScene::SampleScene() {
 /// デストラクタ
 /// </summary>
 SampleScene::~SampleScene() {
-	sprite_->Release();
-	sprite2_->Release();
-	audio_->SoundUnload(&soundData_);
-	delete sprite_;
-	delete sprite2_;
+	//sprite_->Release();
+	//sprite2_->Release();
+	//audio_->SoundUnload(&soundData_);
+	///delete sprite_;
+	//delete sprite2_;
 	//delete sprite3_;
-	//plane_->Release();
-	delete plane_;
+	//delete plane_;
 
-	audio_->DeleteInstance();;
+	//audio_->DeleteInstance();;
 }
 
 /// <summary>
@@ -29,7 +28,7 @@ SampleScene::~SampleScene() {
 void SampleScene::Initialize(GameManager* gameManager) {
 	
 
-	textureManager_ = TextureManager::GetInstance();
+	//textureManager_ = TextureManager::GetInstance();
 	
 	 
 	 
@@ -43,17 +42,17 @@ void SampleScene::Initialize(GameManager* gameManager) {
 
 	transformSprite_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
 	
-	sprite_ = new Sprite();
-	sprite_->LoadTextureHandle(textureHandle_);
-	spriteAllPosition_ = { {0.0f,0.0f},{0.0f,512.0f},{512.0f,0.0f},{512.0f,512.0f} };
-	sprite_->SetAllPosition(spriteAllPosition_);
+	//sprite_ = new Sprite();
+	//sprite_->LoadTextureHandle(textureHandle_);
+	//spriteAllPosition_ = { {0.0f,0.0f},{0.0f,512.0f},{512.0f,0.0f},{512.0f,512.0f} };
+	//sprite_->SetAllPosition(spriteAllPosition_);
 
 	transformSprite2_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{300.0f,0.0f,0.0f} };
 	
-	sprite2_ = new Sprite();
-	sprite2_->LoadTextureHandle(textureHandle2_);
-	spriteAllPosition2_ = { {0.0f,0.0f},{0.0f,512.0f},{512.0f,0.0f},{512.0f,512.0f} };
-	sprite2_->SetAllPosition(spriteAllPosition2_);
+	//sprite2_ = new Sprite();
+	//sprite2_->LoadTextureHandle(textureHandle2_);
+	//spriteAllPosition2_ = { {0.0f,0.0f},{0.0f,512.0f},{512.0f,0.0f},{512.0f,512.0f} };
+	//sprite2_->SetAllPosition(spriteAllPosition2_);
 
 	
 
@@ -68,17 +67,17 @@ void SampleScene::Initialize(GameManager* gameManager) {
 
 
 	transformModel_ = {{1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f}};
-	plane_ = new Model();
-	plane_->CreateObject("Resources/Sample", "enemy.obj");
+	//plane_ = new Model();
+	//plane_->CreateObject("Resources/Sample", "enemy.obj");
 	
 	
 
-	audio_ = Audio::GetInstance();
-	audio_->Initialize();
-	soundData_ = audio_->LoadWave("Resources/Audio/Sample/Hit.wav");
+	//audio_ = Audio::GetInstance();
+	//audio_->Initialize();
+	//soundData_ = audio_->LoadWave("Resources/Audio/Sample/Hit.wav");
 
 
-	audio_->PlayWave(soundData_ ,true);
+	//audio_->PlayWave(soundData_ ,true);
 	
 
 	
@@ -97,8 +96,8 @@ void SampleScene::Update(GameManager* gameManager) {
 		//gameManager->ChangeScene(new SampleScene2());
 	}
 	
-	sprite_->SetTransparency(transparency1);
-	sprite2_->SetTransparency(transparency2);
+	//sprite_->SetTransparency(transparency1);
+	//sprite2_->SetTransparency(transparency2);
 
 
 	ImGui::Begin("SampleScene1");
@@ -130,9 +129,9 @@ void SampleScene::Update(GameManager* gameManager) {
 /// 描画
 /// </summary>
 void SampleScene::Draw(GameManager* gameManager) {
-	plane_->Draw(transformModel_);
-	sprite_->DrawRect(transformSprite_);
-	sprite2_->DrawRect(transformSprite2_);
+	//plane_->Draw(transformModel_);
+	//sprite_->DrawRect(transformSprite_);
+	//sprite2_->DrawRect(transformSprite2_);
 	//sprite3_->DrawRect(transformSprite3_);
 
 }

@@ -1,6 +1,8 @@
 #include "Common/Windows/WinApp.h"
 
 
+static WinApp* instance;
+
 //コンストラクタ
 WinApp::WinApp() {
 	
@@ -11,11 +13,18 @@ WinApp::WinApp() {
 WinApp* WinApp::GetInstance() {
 	//関数内static変数として宣言する
 	//共有するからここに宣言して大丈夫
-	static WinApp instance;
+	if (instance== nullptr) {
+		instance = new WinApp();
 
-	return &instance;
+	}
+
+	return instance;
 }
 
+
+void WinApp::DeleteInstance() {
+	delete instance;
+}
 
 //
 LRESULT WinApp::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam){

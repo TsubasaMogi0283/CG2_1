@@ -37,6 +37,10 @@ public:
 	//静的メンバ関数にする。クラス名を指定すればアクセスできる
 	static WinApp* GetInstance();
 
+	//デストラクタ代わり
+	void DeleteInstance();
+
+
 	//Window Procedure
 	static LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 

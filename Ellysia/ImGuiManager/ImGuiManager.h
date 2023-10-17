@@ -53,5 +53,4 @@ private:
 	//WindowsInitialization* winSetup_ = nullptr;
 	DirectXSetup* directXSetup_ = nullptr;
 
-	//ID3D12DescriptorHeap* descriptorHeaps_[];
 };

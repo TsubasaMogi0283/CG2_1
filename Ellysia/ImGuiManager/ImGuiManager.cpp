@@ -27,10 +27,10 @@ void ImGuiManager::Initialize() {
 	ImGui::StyleColorsDark();
 	ImGui_ImplWin32_Init(WinApp::GetInstance()->GetHwnd());
 	ImGui_ImplDX12_Init(
-		directXSetup_->GetDevice().Get(),
+		directXSetup_->GetDevice(),
 		directXSetup_->GetswapChainDesc().BufferCount,
 		directXSetup_->GetRtvDesc().Format,
-		directXSetup_->GetSrvDescriptorHeap().Get(),
+		directXSetup_->GetSrvDescriptorHeap(),
 		directXSetup_->GetSrvDescriptorHeap()->GetCPUDescriptorHandleForHeapStart(),
 		directXSetup_->GetSrvDescriptorHeap()->GetGPUDescriptorHandleForHeapStart());
 
@@ -62,7 +62,7 @@ void ImGuiManager::PreDraw() {
 //描画
 void ImGuiManager::Draw() {
 	//描画用のDescriptorの設定
-	ID3D12DescriptorHeap* descriptorHeaps[] = { directXSetup_->GetSrvDescriptorHeap().Get()};
+	ID3D12DescriptorHeap* descriptorHeaps[] = { directXSetup_->GetSrvDescriptorHeap() };
 	directXSetup_->GetCommandList()->SetDescriptorHeaps(1, descriptorHeaps);
 }
 
@@ -71,7 +71,7 @@ void ImGuiManager::Draw() {
 void ImGuiManager::EndFrame() {
 	//コマンドを積む
 	//実際のcommandListのImGuiの描画コマンドを積む
-	ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), directXSetup_->GetCommandList().Get());
+	ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), directXSetup_->GetCommandList());
 }
 
 

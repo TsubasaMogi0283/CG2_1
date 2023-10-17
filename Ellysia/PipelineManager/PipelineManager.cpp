@@ -1,5 +1,4 @@
 #include "PipelineManager.h"
-#include <ConvertFunction/CompileShader/CompileShaderManager.h>
 
 
 static PipelineManager* instance_;
@@ -215,7 +214,7 @@ void PipelineManager::GenerateSpritePSO() {
 
 	////PSO生成
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC graphicsPipelineStateDesc{};
-	graphicsPipelineStateDesc.pRootSignature = psoSprite_.rootSignature_.Get();
+	graphicsPipelineStateDesc.pRootSignature = psoSprite_.rootSignature_;
 	graphicsPipelineStateDesc.InputLayout = inputLayoutDesc;
 	graphicsPipelineStateDesc.VS = { psoSprite_.vertexShaderBlob_->GetBufferPointer(),psoSprite_.vertexShaderBlob_->GetBufferSize() };
 	//vertexShaderBlob_->GetBufferSize();
@@ -451,7 +450,7 @@ void PipelineManager::GenerateModelPSO() {
 
 	////PSO生成
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC graphicsPipelineStateDesc{};
-	graphicsPipelineStateDesc.pRootSignature = psoModel_.rootSignature_.Get();
+	graphicsPipelineStateDesc.pRootSignature = psoModel_.rootSignature_;
 	graphicsPipelineStateDesc.InputLayout = inputLayoutDesc;
 	graphicsPipelineStateDesc.VS = { psoModel_.vertexShaderBlob_->GetBufferPointer(),psoModel_.vertexShaderBlob_->GetBufferSize() };
 	//vertexShaderBlob_->GetBufferSize();
@@ -497,7 +496,36 @@ void PipelineManager::GenerateModelPSO() {
 
 //解放
 void PipelineManager::Release() {
+	psoSprite_.graphicsPipelineState_->Release();
+	psoSprite_.signatureBlob_->Release();
+	if (psoSprite_.errorBlob_) {
+		psoSprite_.errorBlob_->Release();
+	}
 	
+	psoSprite_.rootSignature_->Release();
+
+	psoSprite_.vertexShaderBlob_->Release();	
+	psoSprite_.pixelShaderBlob_->Release();
+
+
+
+
+
+	//Model
+	//null
+	psoModel_.graphicsPipelineState_->Release();
+	
+	psoModel_.signatureBlob_->Release();
+	if (psoModel_.errorBlob_) {
+		psoModel_.errorBlob_->Release();
+	}
+	
+	psoModel_.rootSignature_->Release();
+	
+	psoModel_.vertexShaderBlob_->Release();	
+	psoModel_.pixelShaderBlob_->Release();
+
+
 
 }
 

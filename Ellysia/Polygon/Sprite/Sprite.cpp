@@ -15,9 +15,9 @@ Sprite::Sprite(){
 
 
 //Resource作成の関数化
-ComPtr<ID3D12Resource> Sprite::CreateBufferResource(size_t sizeInBytes) {
+ID3D12Resource* Sprite::CreateBufferResource(size_t sizeInBytes) {
 	//void返り値も忘れずに
-	ComPtr<ID3D12Resource> resource = nullptr;
+	ID3D12Resource* resource = nullptr;
 	
 	////VertexResourceを生成
 	//頂点リソース用のヒープを設定
@@ -88,14 +88,14 @@ void Sprite::Initialize() {
 	//ここでBufferResourceを作る
 	//Sprite用の頂点リソースを作る
 	//以前三角形二枚にしてたけど結合して四角一枚で良くなったので4で良いよね
-	vertexResource_ = CreateBufferResource(sizeof(VertexData) * 6).Get();
+	vertexResource_ = CreateBufferResource(sizeof(VertexData) * 6);
 	//index用のリソースを作る
-	indexResource_ = CreateBufferResource(sizeof(uint32_t) * 6).Get();
+	indexResource_ = CreateBufferResource(sizeof(uint32_t) * 6);
 	////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
-	materialResource_=CreateBufferResource(sizeof(Material)).Get();
+	materialResource_=CreateBufferResource(sizeof(Material));
 	//Sprite用のTransformationMatrix用のリソースを作る。
 	//Matrix4x4 1つ分サイズを用意する
-	transformationMatrixResource_ = CreateBufferResource(sizeof(TransformationMatrix)).Get();
+	transformationMatrixResource_ = CreateBufferResource(sizeof(TransformationMatrix));
 	
 
 	//頂点バッファビューを作成する
@@ -280,8 +280,8 @@ void Sprite::DrawRect(Transform transform) {
 	//参考
 	//commands.m_pList->SetGraphicsRootSignature(PSO.rootSignature.Get());
 	//commands.m_pList->SetPipelineState(PSO.GraphicsPipelineState.Get());
-	directXSetup_->GetCommandList()->SetGraphicsRootSignature(PipelineManager::GetInstance()->GetSpriteRootSignature().Get());
-	directXSetup_->GetCommandList()->SetPipelineState(PipelineManager::GetInstance()->GetSpriteGraphicsPipelineState().Get());
+	directXSetup_->GetCommandList()->SetGraphicsRootSignature(PipelineManager::GetInstance()->GetSpriteRootSignature());
+	directXSetup_->GetCommandList()->SetPipelineState(PipelineManager::GetInstance()->GetSpriteGraphicsPipelineState());
 
 
 	//RootSignatureを設定。PSOに設定しているけど別途設定が必要
@@ -314,8 +314,17 @@ void Sprite::DrawRect(Transform transform) {
 
 //解放
 void Sprite::Release() {
+	vertexResource_->Release();
 
+	materialResource_->Release();
 	
+	transformationMatrixResource_->Release();
+	
+	indexResource_->Release();
+
+	textureResource_->Release();
+	resource_->Release();
+	intermediateResource_->Release();
 }
 
 //デストラクタ

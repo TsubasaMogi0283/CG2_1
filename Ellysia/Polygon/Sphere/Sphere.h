@@ -22,7 +22,7 @@ public:
 	Sphere();
 
 	//初期化
-	void Initialize(DirectXSetup* directXSetup);
+	void Initialize();
 
 	//まとめた方がよさそう
 	void LoadTexture(const std::string& filePath);

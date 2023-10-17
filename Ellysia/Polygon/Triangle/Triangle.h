@@ -18,7 +18,7 @@ public:
 	Triangle();
 
 
-	void Initialize(DirectXSetup* directXSetup);
+	void Initialize();
 
 	////VertexBufferViewを作成
 	void GenerateVertexBufferView();

@@ -1,10 +1,9 @@
 #pragma once
-#include <Input/Input.h>
-#include <Audio/Audio.h>
-#include "TextureManager/TextureManager.h"
-#include "AllGameScene/GameManager/GameManager.h"
 #include "AllGameScene/GameManager/IGameScene.h"
+
+#include "Polygon/Sprite/Sprite.h"
 #include <Math/Vector/SpritePosition.h>
+#include "Math/Vector/Transform.h"
 
 //StatePatternをル買う時は必ず前方宣言をするように
 class Gamemanager;
@@ -30,23 +29,7 @@ public:
 private:
 
 
-	SoundData soundData_ = {};
-
-	Transform transformSprite_ = {};
-	Transform transformSprite2_ = {};
-	Transform transformSprite3_ = {};
-
-	SpritePosition spriteAllPosition_ = {};
-	SpritePosition spriteAllPosition2_ = {};
-	SpritePosition spriteAllPosition3_ = {};
-
-	int sampleTimer_ = 0;
-
-
-	float transparency1 = 1.0f;
-	float transparency2 = 1.0f;
-
-
+	
 };
 
 

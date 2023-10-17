@@ -25,9 +25,9 @@ TextureManager* TextureManager::GetInstance() {
 
 
 //Resource作成の関数化
-ID3D12Resource* TextureManager::CreateBufferResource(size_t sizeInBytes) {
+ComPtr<ID3D12Resource> TextureManager::CreateBufferResource(size_t sizeInBytes) {
 	//返り値も忘れずに
-	ID3D12Resource* resource = nullptr;
+	ComPtr<ID3D12Resource> resource = nullptr;
 	
 	////VertexResourceを生成
 	//頂点リソース用のヒープを設定
@@ -69,7 +69,7 @@ ID3D12Resource* TextureManager::CreateBufferResource(size_t sizeInBytes) {
 	return resource;
 }
 
-D3D12_CPU_DESCRIPTOR_HANDLE TextureManager::GetCPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index) {
+D3D12_CPU_DESCRIPTOR_HANDLE TextureManager::GetCPUDescriptorHandle(ComPtr<ID3D12DescriptorHeap> descriptorHeap, uint32_t descriptorSize, uint32_t index) {
 	D3D12_CPU_DESCRIPTOR_HANDLE handleCPU = descriptorHeap->GetCPUDescriptorHandleForHeapStart();
 	handleCPU.ptr += (descriptorSize * index);
 	return handleCPU;
@@ -95,7 +95,7 @@ void TextureManager::Initilalize() {
 
 
 
-D3D12_GPU_DESCRIPTOR_HANDLE TextureManager::GetGPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index) {
+D3D12_GPU_DESCRIPTOR_HANDLE TextureManager::GetGPUDescriptorHandle(ComPtr<ID3D12DescriptorHeap> descriptorHeap, uint32_t descriptorSize, uint32_t index) {
 	D3D12_GPU_DESCRIPTOR_HANDLE handleGPU = descriptorHeap->GetGPUDescriptorHandleForHeapStart();
 	handleGPU.ptr += (descriptorSize * index);
 	return handleGPU;
@@ -184,8 +184,8 @@ DirectX::ScratchImage TextureManager::LoadTextureData(const std::string& filePat
 }
 
 //2.DirectX12のTextureResourceを作る
-ID3D12Resource* TextureManager::CreateTextureResource(const DirectX::TexMetadata& metadata) {
-	ID3D12Resource* resource = nullptr;
+ComPtr<ID3D12Resource> TextureManager::CreateTextureResource(const DirectX::TexMetadata& metadata) {
+	ComPtr<ID3D12Resource> resource = nullptr;
 	
 	//1.metadataを基にResourceの設定
 	D3D12_RESOURCE_DESC resourceDesc{};
@@ -236,7 +236,7 @@ ID3D12Resource* TextureManager::CreateTextureResource(const DirectX::TexMetadata
 //3.TextureResourceに1で読んだデータを転送する
 //書き換え
 void TextureManager::UploadTextureData(
-	ID3D12Resource* texture, 
+	ComPtr<ID3D12Resource> texture, 
 	const DirectX::ScratchImage& mipImages) {
 
 	//Meta情報を取得

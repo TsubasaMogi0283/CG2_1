@@ -25,13 +25,14 @@ void GameManager::Initialize() {
 
 	//初期化
 	winApp_->Initialize(titleBarName,WINDOW_SIZE_WIDTH_,WINDOW_SIZE_HEIGHT_);
-	directXSetup_->Initialize();
-	pipelineManager_->GenerateSpritePSO();
-	pipelineManager_->GenerateModelPSO();
-	imGuiManager_->Initialize();
-	input_->Initialize();
-	textureManager_->Initilalize();
-	audio_->Initialize();
+	//directXSetup_->Initialize();
+	DirectXSetup::Initialize();
+	//pipelineManager_->GenerateSpritePSO();
+	//pipelineManager_->GenerateModelPSO();
+	//imGuiManager_->Initialize();
+	//input_->Initialize();
+	//textureManager_->Initilalize();
+	//audio_->Initialize();
 
 	//シーンごとに動作確認したいときはここを変えてね
 	currentGamaScene_ = new SampleScene();
@@ -40,46 +41,47 @@ void GameManager::Initialize() {
 }
 
 void GameManager::BeginFrame() {
-	directXSetup_->BeginFrame();
-	imGuiManager_->BeginFrame();
+	//directXSetup_->BeginFrame();
+	//imGuiManager_->BeginFrame();
 
 }
 
 
 void GameManager::Update() {
-	imGuiManager_->UpDate();
+	//imGuiManager_->UpDate();
 
 	//入力の更新
-	input_->Update();
-	currentGamaScene_->Update(this);
+	//input_->Update();
+	//currentGamaScene_->Update(this);
 }
 
 void GameManager::Draw() {
-	imGuiManager_->PreDraw();	
-	imGuiManager_->Draw();
+	//imGuiManager_->PreDraw();	
+	//imGuiManager_->Draw();
 	
-	currentGamaScene_->Draw(this);
+	//currentGamaScene_->Draw(this);
 
 }
 
 void GameManager::EndFrame() {
 
-	imGuiManager_->EndFrame();
-	directXSetup_->EndFrame();
+	//imGuiManager_->EndFrame();
+	//directXSetup_->EndFrame();
 			
 }
 
 void GameManager::Release() {
 
-	audio_->Release();
-	
-	textureManager_->Release();
-
-	pipelineManager_->Release();
-
-	imGuiManager_->Release();
-
-	directXSetup_->Release();
+	//audio_->Release();
+	//
+	//textureManager_->Release();
+	//
+	//pipelineManager_->Release();
+	//
+	//imGuiManager_->Release();
+	//
+	//directXSetup_->Release();
+	//
 
 	winApp_->Close();
 }
@@ -91,16 +93,12 @@ void GameManager::ChangeScene(IGameScene* newGameScene) {
 	currentGamaScene_ = newGameScene;
 	//今は言っているシーンが引数
 	currentGamaScene_->Initialize(this);
-
-
 }
 
 
 void GameManager::Operate() {
 	
 	Initialize();
-	
-
 	
 	MSG msg{};
 
@@ -128,10 +126,7 @@ void GameManager::Operate() {
 
 			//描画
 			Draw();
-			
-			
-
-
+		
 			//フレームの終わり
 			EndFrame();
 
@@ -142,8 +137,7 @@ void GameManager::Operate() {
 
 	Release();
 
-	//ゲーム終了時にはCOMの終了処理を行っておく
-	CoUninitialize();
+
 }
 
 
@@ -154,6 +148,7 @@ void GameManager::Operate() {
 //デストラクタ
 GameManager::~GameManager() {
 	delete currentGamaScene_;
+
 }
 
 

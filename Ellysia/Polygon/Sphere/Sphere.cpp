@@ -113,214 +113,14 @@ void Sphere::Initialize() {
 	//頂点バッファビューを作成する
 	GenerateVertexBufferView();
 
-	LoadTexture("Resources/uvChecker.png");
-}
-
-//Textureデータを読む
-////1.TextureデータそのものをCPUで読み込む
-//DirectX::ScratchImage LoadTextureData(const std::string& filePath);
-//
-////2.DirectX12のTextureResourceを作る
-//ID3D12Resource* CreateTextureResource(ID3D12Device* device, const DirectX::TexMetadata& metadata);
-//
-////3.TextureResourceに1で読んだデータを転送する
-//void UploadTextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages);
-
-
-//統合
-void Sphere::LoadTexture(const std::string& filePath) {
-	//Textureを読んで転送する
-	mipImages_ = LoadTextureData(filePath);
-	const DirectX::TexMetadata& metadata = mipImages_.GetMetadata();
-	textureResource_ = CreateTextureResource(directXSetup_->GetDevice(), metadata);
-	intermediateResource_ = UploadTextureData(textureResource_, mipImages_);
-	
-	//2枚目のTextureを読んで転送する
-	//いつか配列にする。2は何か嫌です。
-	mipImages2_ = LoadTextureData("Resources/monsterBall.png");
-	const DirectX::TexMetadata& metadata2 = mipImages2_.GetMetadata();
-	textureResource2_ = CreateTextureResource(directXSetup_->GetDevice(), metadata2);
-	UploadTextureData(textureResource2_, mipImages2_);
-
-
-	//ShaderResourceView
-	//metadataを基にSRVの設定
-	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
-	srvDesc.Format = metadata.format;
-	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-	//2Dテクスチャ
-	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
-	srvDesc.Texture2D.MipLevels = UINT(metadata.mipLevels);
-	
-	//2枚目のSRVを作る
-	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc2{};
-	srvDesc2.Format = metadata2.format;
-	srvDesc2.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-	//2Dテクスチャ
-	srvDesc2.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
-	srvDesc2.Texture2D.MipLevels = UINT(metadata2.mipLevels);
-	
-
-
-	//textureSrvHandleCPU_ = directXSetup_->GetSrvDescriptorHeap()->GetCPUDescriptorHandleForHeapStart();
-	//textureSrvHandleGPU_ = directXSetup_->GetSrvDescriptorHeap()->GetGPUDescriptorHandleForHeapStart();
-	
-	//今のDEscriptorHeapには
-	//0...ImGui
-	//1...uvChecker
-	//2...monsterBall
-	//3...NULL
-	//.
-	//.
-	//このような感じで入っている
-	//後ろのindexに対応させる
-
-
-	
-	
-
-
-	//SRVを作成するDescriptorHeapの場所を決める
-	textureSrvHandleCPU_ = GetCPUDescriptorHandle(directXSetup_->GetSrvDescriptorHeap(), descriptorSizeSRV_, 1);
-	textureSrvHandleGPU_ = GetGPUDescriptorHandle(directXSetup_->GetSrvDescriptorHeap(), descriptorSizeSRV_, 1);
-
-	
-	textureSrvHandleCPU2_=GetCPUDescriptorHandle(directXSetup_->GetSrvDescriptorHeap(), descriptorSizeSRV_, 2);
-	textureSrvHandleGPU2_=GetGPUDescriptorHandle(directXSetup_->GetSrvDescriptorHeap(), descriptorSizeSRV_, 2);
-
-	//先頭はImGuiが使っているのでその次を使う
-	textureSrvHandleCPU_.ptr += directXSetup_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-	textureSrvHandleGPU_.ptr += directXSetup_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-	
-	textureSrvHandleCPU2_.ptr += directXSetup_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-	textureSrvHandleGPU2_.ptr += directXSetup_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-	//SRVの生成
-	directXSetup_->GetDevice()->CreateShaderResourceView(textureResource_, &srvDesc, textureSrvHandleCPU_);
-	directXSetup_->GetDevice()->CreateShaderResourceView(textureResource2_, &srvDesc2, textureSrvHandleCPU2_);
-
-	
-
-}
-
-//After
-//1.TextureデータそのものをCPUで読み込む
-//2.DirectX12のTextureResourceを作る
-//3.CPUで書き込む用にUploadHeapのResourceを作る(IntermediateResource)
-//4.3に対してCPUでデータを書き込む
-//5.CommandListに3を2に転送するコマンドを積む
-//6.CommandQueueを使って実行する
-//7.6の実行完了を待つ
-
-
-#pragma region 上のLoadTextureにまとめた
-//Textureを読み込むためのLoad関数
-//1.TextureデータそのものをCPUで読み込む
-DirectX::ScratchImage Sphere::LoadTextureData(const std::string& filePath) {
-	
-	//テクスチャファイルを読んでプログラムで扱えるようにする
-	DirectX::ScratchImage image{};
-	std::wstring filePathW = ConvertString(filePath);
-	HRESULT hr = DirectX::LoadFromWICFile(filePathW.c_str(), DirectX::WIC_FLAGS_FORCE_SRGB, nullptr, image);
-	assert(SUCCEEDED(hr));
-	
-	//ミップマップの作成
-	//ミップマップ...元画像より小さなテクスチャ群
-	DirectX::ScratchImage mipImages{};
-	hr = DirectX::GenerateMipMaps(image.GetImages(), image.GetImageCount(), image.GetMetadata(), DirectX::TEX_FILTER_SRGB, 0, mipImages);
-	assert(SUCCEEDED(hr));
-
-	//ミップマップ月のデータを返す
-	return mipImages;
-}
-
-//2.DirectX12のTextureResourceを作る
-ID3D12Resource* Sphere::CreateTextureResource(ID3D12Device* device, const DirectX::TexMetadata& metadata) {
-	//1.metadataを基にResourceの設定
-	D3D12_RESOURCE_DESC resourceDesc{};
-	//Textureの幅
-	resourceDesc.Width = UINT(metadata.width);
-	//Textureの高さ
-	resourceDesc.Height = UINT(metadata.height);
-	//mipmapの数
-	resourceDesc.MipLevels = UINT16(metadata.mipLevels);
-	//奥行き or 配列Textureの配列数
-	resourceDesc.DepthOrArraySize = UINT16(metadata.arraySize);
-	//TextureのFormat
-	resourceDesc.Format = metadata.format;
-	//サンプリングカウント
-	resourceDesc.SampleDesc.Count = 1;
-	//Textureの次元数。普段使っているのは2次元
-	resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION(metadata.dimension);
-
-	//2.利用するHeapの設定
-	//利用するHeapの設定。非常に特殊な運用。02_04exで一般的なケース版がある
-	D3D12_HEAP_PROPERTIES heapProperties{};
-	//細かい設定を行う
-	heapProperties.Type = D3D12_HEAP_TYPE_CUSTOM;
-	//WriteBackポリシーでCPUアクセス可能
-	heapProperties.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_WRITE_BACK;
-	//プロセッサの近くに配置
-	heapProperties.MemoryPoolPreference = D3D12_MEMORY_POOL_L0;
-
-	
-
-
-	////WriteBackポリシーでCPUアクセス可能
-	//heapProperties.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_WRITE_BACK;
-	////プロセッサの近くに配置
-	//heapProperties.MemoryPoolPreference = D3D12_MEMORY_POOL_L0;
-
-	
-
-	//3.Resourceを生成する
-	
-	HRESULT hr = directXSetup_->GetDevice()->CreateCommittedResource(
-		&heapProperties,					//Heapの設定
-		D3D12_HEAP_FLAG_NONE,				//Heapの特殊な設定
-		&resourceDesc,						//Resourceの設定
-		D3D12_RESOURCE_STATE_COPY_DEST,	//初回のResourceState。データの転送を受け入れられるようにする
-		nullptr,							//Clear最適値。使わないのでnullptr
-		IID_PPV_ARGS(&resource_));			//作成するResourceポインタへのポインタ
-	assert(SUCCEEDED(hr));
-
-	return resource_;
-
-
-}
-
-//3.TextureResourceに1で読んだデータを転送する
-//書き換え
-[[nodiscard]]
-ID3D12Resource* Sphere::UploadTextureData(
-	ID3D12Resource* texture, 
-	const DirectX::ScratchImage& mipImages) {
-
-	std::vector<D3D12_SUBRESOURCE_DATA>subresource;
-	DirectX::PrepareUpload(directXSetup_->GetDevice(), mipImages.GetImages(), mipImages.GetImageCount(), mipImages.GetMetadata(), subresource);
-	uint64_t intermediateSize = GetRequiredIntermediateSize(texture, 0, UINT(subresource.size()));
-	ID3D12Resource* intermediateResource = CreateBufferResource(intermediateSize);
-	UpdateSubresources(directXSetup_->GetCommandList(), texture, intermediateResource, 0, 0, UINT(subresource.size()), subresource.data());
-	
-	//Textureへの転送後は利用出来るようD3D12_RESOURCE_STATE_COPY_DESTからD3D12_RESOURCE_STATE_GENERIC_READへResourceStateを変更
-	D3D12_RESOURCE_BARRIER barrier{};
-	barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-	barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-	barrier.Transition.pResource = texture ;
-	barrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
-	barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_COPY_DEST;
-	barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_GENERIC_READ;
-	directXSetup_->GetCommandList()->ResourceBarrier(1, &barrier);
-	return intermediateResource;
-
-
+	//LoadTexture("Resources/uvChecker.png");
 }
 
 
-#pragma endregion
 
 void Sphere::Update() {
 	ImGui::Begin("Sphere");
-	ImGui::Checkbox("useMonsterBall", &useMonsterBall_);
+	//ImGui::Checkbox("useMonsterBall", &useMonsterBall_);
 	ImGui::InputFloat3("color", &directionalLightData_->color.x);
 	ImGui::SliderFloat3("color", &directionalLightData_->color.x, 0.0f, 1.0f);
 	ImGui::InputFloat3("direction", &directionalLightData_->direction.x);
@@ -514,7 +314,7 @@ void Sphere::Draw(SphereStruct sphereCondtion, Transform transform,Matrix4x4 vie
 	directXSetup_->GetCommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResourceSphere_->GetGPUVirtualAddress());
 	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である
 	//trueだったらtextureSrvHandleGPU2_
-	directXSetup_->GetCommandList()->SetGraphicsRootDescriptorTable(2,useMonsterBall_?textureSrvHandleGPU2_:textureSrvHandleGPU_);
+	//directXSetup_->GetCommandList()->SetGraphicsRootDescriptorTable(2,useMonsterBall_?textureSrvHandleGPU2_:textureSrvHandleGPU_);
 	//Light
 	directXSetup_->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
 
@@ -541,12 +341,7 @@ void Sphere::Release() {
 	//Matrix4x4 1つ分サイズを用意する
 	transformationMatrixResourceSphere_->Release();
 	
-	//画像読み込み
-	textureResource_->Release();
-	resource_->Release();
-
-	intermediateResource_->Release();
-
+	
 
 }
 

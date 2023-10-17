@@ -86,5 +86,5 @@ private:
 
 
 
-	D3DResourceLeakChecker leakCheck_;
+	
 };

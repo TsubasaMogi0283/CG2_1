@@ -316,17 +316,6 @@ void Sprite::DrawRect(Transform transform) {
 void Sprite::Release() {
 
 	
-
-	vertexResource_->Release();
-
-	materialResource_->Release();
-	
-	transformationMatrixResource_->Release();
-	
-	indexResource_->Release();
-
-	textureResource_->Release();
-	resource_->Release();
 }
 
 //デストラクタ

@@ -86,17 +86,17 @@ private:
 
 	//Sprite用
 	//三角形2枚
-	ID3D12Resource* vertexResource_ = nullptr;
+	ComPtr<ID3D12Resource> vertexResource_ = nullptr;
 
 	//マテリアル用のリソースを作る
-	ID3D12Resource* materialResource_ = nullptr;
+	ComPtr<ID3D12Resource> materialResource_ = nullptr;
 	Material* materialData_ = nullptr;
 	
 
 
 	//Sprite用のTransformationMatrix用のリソースを作る。
 	//Matrix4x4 1つ分サイズを用意する
-	ID3D12Resource* transformationMatrixResource_ = nullptr;
+	ComPtr<ID3D12Resource> transformationMatrixResource_ = nullptr;
 	TransformationMatrix* transformationMatrixData_ = nullptr;
 
 
@@ -111,7 +111,7 @@ private:
 
 
 	//index用
-	ID3D12Resource* indexResource_ = nullptr;
+	ComPtr<ID3D12Resource> indexResource_ = nullptr;
 	//IndexBufferViewを作成
 	D3D12_INDEX_BUFFER_VIEW indexBufferView_{};
 	//インデックスデータ
@@ -121,8 +121,8 @@ private:
 
 
 	//画像読み込み
-	ID3D12Resource* textureResource_ = nullptr;
-	ID3D12Resource* resource_ = nullptr;
+	ComPtr<ID3D12Resource> textureResource_ = nullptr;
+	ComPtr<ID3D12Resource> resource_ = nullptr;
 
 	D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU_;
 	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU_;

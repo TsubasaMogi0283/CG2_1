@@ -659,18 +659,7 @@ void DirectXSetup::Release() {
 #endif
 
 	
-	/*graphicsPipelineState_->Release();
-	signatureBlob_->Release();
-	if (errorBlob_) {
-		errorBlob_->Release();
-	}
 	
-	rootSignature_->Release();
-
-	vertexShaderBlob_->Release();	
-	pixelShaderBlob_->Release();*/
-
-
 
 
 }

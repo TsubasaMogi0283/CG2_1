@@ -18,7 +18,6 @@
 #include <wrl.h>
 using Microsoft::WRL::ComPtr;
 
-#include "ConvertFunction/CompileShader/CompileShaderManager.h"
 
 struct D3DResourceLeakChecker{
 	~D3DResourceLeakChecker() {
@@ -29,6 +28,9 @@ struct D3DResourceLeakChecker{
 			debug->ReportLiveObjects(DXGI_DEBUG_APP, DXGI_DEBUG_RLO_ALL);
 			debug->ReportLiveObjects(DXGI_DEBUG_D3D12, DXGI_DEBUG_RLO_ALL);
 		}
+
+
+	
 	}
 };
 
@@ -47,9 +49,6 @@ public:
 	//インスタンス
 	static DirectXSetup* GetInstance();
 
-	//デリート代わりの関数
-	void DeleteInstance();
-
 	//コピーコンストラクタ禁止
 	DirectXSetup(const DirectXSetup& directXSetup) = delete;
 
@@ -61,19 +60,6 @@ public:
 	//アロー演算子を使ったとき邪魔になるから
 private:
 
-	////CompilerShader関数
-	//IDxcBlob* CompileShader(
-	//	//CompilerするShaderファイルへのパス
-	//	const std::wstring& filePath,
-	//	//Compilerに使用するProfile
-	//	const wchar_t* profile,
-	//	//初期化で生成したものを３つ
-	//	IDxcUtils* dxcUtils,
-	//	IDxcCompiler3* dxcCompiler,
-	//	IDxcIncludeHandler* includeHandler);
-
-
-	//関数化したやつ
 
 	//DescriptorHeapの作成関数
 	ID3D12DescriptorHeap* GenarateDescriptorHeap(
@@ -108,12 +94,6 @@ private:
 
 	void SetRTV();
 
-
-
-	//void InitializeDXC();
-
-	//void MakePSO();
-
 	void GenarateViewport();
 
 	void GenerateScissor();
@@ -133,8 +113,6 @@ public:
 #pragma region whileの中身
 	//whileの中身
 	void BeginFrame();
-
-	//void DrawTriangle(Vector4 top, Vector4 left, Vector4 right,TriangleVertex vertexBuffer);
 
 	void EndFrame();
 
@@ -213,16 +191,6 @@ private:
 	HRESULT hr_;
 
 	HWND hwnd_;
-
-
-
-	ID3D12Resource* vertexResource_ = nullptr;
-
-	
-	
-
-	
-
 
 
 
@@ -316,6 +284,5 @@ private:
 
 	Vector4* vertexData_ = nullptr;
 
-	IDXGIDebug1* debug_;
 
 };

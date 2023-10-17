@@ -21,8 +21,6 @@ private:
 public:
 	static TextureManager* GetInstance();
 
-	//デリート代わりの関数
-	void DeleteInstance();
 
 	//コピーコンストラクタ禁止
 	TextureManager(const TextureManager& textureManager) = delete;
@@ -81,7 +79,7 @@ private:
 
 	
 
-	ID3D12Resource* textureResource_[TEXTURE_MAX_AMOUNT_] = {nullptr};
+	ComPtr<ID3D12Resource> textureResource_[TEXTURE_MAX_AMOUNT_] = {nullptr};
 
 	//画像読み込み
 	

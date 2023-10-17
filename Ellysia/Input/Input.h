@@ -41,8 +41,6 @@ public:
 	static Input* GetInstance();
 
 
-	void DeleteInstance();
-
 public:
 
 	void Initialize();

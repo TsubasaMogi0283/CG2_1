@@ -22,9 +22,6 @@ WinApp* WinApp::GetInstance() {
 }
 
 
-void WinApp::DeleteInstance() {
-	delete instance;
-}
 
 //
 LRESULT WinApp::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam){

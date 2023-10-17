@@ -314,6 +314,9 @@ void Sprite::DrawRect(Transform transform) {
 
 //解放
 void Sprite::Release() {
+
+	
+
 	vertexResource_->Release();
 
 	materialResource_->Release();
@@ -324,7 +327,6 @@ void Sprite::Release() {
 
 	textureResource_->Release();
 	resource_->Release();
-	intermediateResource_->Release();
 }
 
 //デストラクタ

@@ -31,8 +31,6 @@ public:
 	//インスタンスの取得
 	static Audio* GetInstance();
 
-	//デリート代わりの関数
-	void DeleteInstance();
 
 	//コピーコンストラクタ禁止
 	Audio(const Audio& obj) = delete;
@@ -50,10 +48,6 @@ public:
 	//読み込み
 	SoundData LoadWave(const char* fileName);
 
-	//読み込み
-	//void LoadWave(const char* fileName);
-
-
 	//音声再生
 	void PlayWave(const SoundData& soundData,bool isLoop);
 
@@ -66,12 +60,13 @@ public:
 	//音声データの開放
 	void SoundUnload(SoundData* soundData);
 
+	//解放
+	void Release();
 
 
 
 private:
-	static Audio* instance_;
-
+	
 	//IXAudio2はCOMオブジェクトなのでComPtr管理
 	ComPtr<IXAudio2> xAudio2_=nullptr;
 	IXAudio2MasteringVoice* masterVoice_=nullptr;

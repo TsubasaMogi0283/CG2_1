@@ -1,6 +1,9 @@
 #pragma once
 #include <d3d12.h>
 
+#include <wrl.h>
+using Microsoft::WRL::ComPtr;
+
 class ResourceObject {
 public:
 	ResourceObject(ID3D12Resource* resource)
@@ -14,6 +17,6 @@ public:
 
 
 private:
-	ID3D12Resource* resource_;
+	ComPtr<ID3D12Resource> resource_;
 
 };

@@ -1,6 +1,5 @@
 #include "DirectXSetup.h"
 
-static DirectXSetup* instance_;
 
 DirectXSetup::DirectXSetup() {
 
@@ -8,20 +7,13 @@ DirectXSetup::DirectXSetup() {
 
 //インスタンス
 DirectXSetup* DirectXSetup::GetInstance() {
-	//これだと無限に生成されるので
-	//ない時に生成する
-	if (instance_ == nullptr) {
-		instance_ = new DirectXSetup();
 
-	}
-	
-	return instance_;
+	//関数内static変数として宣言する
+	static DirectXSetup instance;
+
+	return &instance;
 }
 
-//デリート代わりの関数
-void DirectXSetup::DeleteInstance() {
-	delete instance_;
-}
 
 
 
@@ -625,13 +617,25 @@ void DirectXSetup::EndFrame() {
 
 void DirectXSetup::Release() {
 
-	
+
+
+
+
+
+
+
+
+
+
 	
 
 	//////解放処理
 	CloseHandle(fenceEvent_);
 	fence_->Release();
 
+
+	depthStencilResource_->Release();
+	dsvDescriptorHeap_->Release();
 	rtvDescriptorHeap_->Release();
 	srvDescriptorHeap_->Release();
 
@@ -647,10 +651,8 @@ void DirectXSetup::Release() {
 	useAdapter_->Release();
 	dxgiFactory_->Release();
 
-	//////解放処理
-	//vertexResource_->Release();
-
-
+	
+	infoQueue_->Release();
 	
 
 #ifdef _DEBUG
@@ -670,12 +672,12 @@ void DirectXSetup::CheckRelease() {
 	//DirectX12より低レベルのDXGIに問い合わせをする
 	//リソースリークチェック
 	
-	if (SUCCEEDED(DXGIGetDebugInterface1(0, IID_PPV_ARGS(&debug_)))) {
-		debug_->ReportLiveObjects(DXGI_DEBUG_ALL, DXGI_DEBUG_RLO_ALL);
-		debug_->ReportLiveObjects(DXGI_DEBUG_APP, DXGI_DEBUG_RLO_ALL);
-		debug_->ReportLiveObjects(DXGI_DEBUG_D3D12, DXGI_DEBUG_RLO_ALL);
-		debug_->Release();
-	}
+	//if (SUCCEEDED(DXGIGetDebugInterface1(0, IID_PPV_ARGS(&debug_)))) {
+	//	debug_->ReportLiveObjects(DXGI_DEBUG_ALL, DXGI_DEBUG_RLO_ALL);
+	//	debug_->ReportLiveObjects(DXGI_DEBUG_APP, DXGI_DEBUG_RLO_ALL);
+	//	debug_->ReportLiveObjects(DXGI_DEBUG_D3D12, DXGI_DEBUG_RLO_ALL);
+	//	debug_->Release();
+	//}
 }
 
 DirectXSetup::~DirectXSetup(){

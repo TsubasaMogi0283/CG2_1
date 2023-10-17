@@ -374,6 +374,15 @@ void Model::Draw(Transform transform) {
 
 //解放
 void Model::Release() {
+
+
+
+	
+
+
+
+
+
 	vertexResource_->Release();
 
 

@@ -93,11 +93,6 @@ private:
 	Material* materialData_ = nullptr;
 	
 
-	//スプライトだからLightingは必要ないね
-	//Shaderいつか分ける。このLightingを消したい
-	//Lighting用
-	ID3D12Resource* directionalLightResource_ = nullptr;
-	DirectionalLight* directionalLightDataSprite_ = nullptr;
 
 	//Sprite用のTransformationMatrix用のリソースを作る。
 	//Matrix4x4 1つ分サイズを用意する
@@ -132,7 +127,6 @@ private:
 	D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU_;
 	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU_;
 
-	ID3D12Resource* intermediateResource_= nullptr ;
 
 
 	Transform uvTransformSprite_ = {};

@@ -70,20 +70,16 @@ void GameManager::EndFrame() {
 }
 
 void GameManager::Release() {
-	audio_->DeleteInstance();
 
-	camera_->DeleteInstance();
+	audio_->Release();
 	
 	textureManager_->Release();
-	textureManager_->DeleteInstance();
 
 	pipelineManager_->Release();
-	pipelineManager_->DeleteInstance();
 
 	imGuiManager_->Release();
 
 	directXSetup_->Release();
-	directXSetup_->DeleteInstance();
 
 	winApp_->Close();
 }
@@ -157,7 +153,7 @@ void GameManager::Operate() {
 
 //デストラクタ
 GameManager::~GameManager() {
-
+	delete currentGamaScene_;
 }
 
 

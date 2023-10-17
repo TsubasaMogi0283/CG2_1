@@ -1,6 +1,5 @@
 #include "Audio.h"
 
-Audio* Audio::instance_ = nullptr;
 
 //コンストラクタ
 Audio::Audio() {
@@ -8,18 +7,12 @@ Audio::Audio() {
 }
 
 Audio* Audio::GetInstance() {
-	if (instance_ == nullptr) {
-		instance_ = new Audio();
+	//関数内static変数として宣言する
+	static Audio instance;
 
-	}
-
-	return instance_;
+	return &instance;
 }
 
-//デリート代わりの関数
-void Audio::DeleteInstance() {
-	delete instance_;
-}
 
 
 //初期化
@@ -163,10 +156,14 @@ void Audio::SoundUnload(SoundData* soundData) {
 	soundData->bufferSize = 0;
 	soundData->wfex = {};
 
+	
+}
+
+//解放
+void Audio::Release() {
 	//XAudio2解放
 	xAudio2_.Reset();
 }
-
 
 
 

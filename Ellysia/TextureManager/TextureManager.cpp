@@ -16,6 +16,13 @@ TextureManager::TextureManager() {
 
 }
 
+TextureManager* TextureManager::GetInstance() {
+	//これだと無限に生成される
+	
+	static TextureManager instance;
+	return &instance;
+}
+
 
 //Resource作成の関数化
 ID3D12Resource* TextureManager::CreateBufferResource(size_t sizeInBytes) {
@@ -67,12 +74,7 @@ D3D12_CPU_DESCRIPTOR_HANDLE TextureManager::GetCPUDescriptorHandle(ID3D12Descrip
 	handleCPU.ptr += (descriptorSize * index);
 	return handleCPU;
 }
-TextureManager* TextureManager::GetInstance() {
-	//これだと無限に生成される
-	
-	static TextureManager instance;
-	return &instance;
-}
+
 
 //初期化
 void TextureManager::Initilalize() {
@@ -112,7 +114,7 @@ uint32_t TextureManager::LoadTexture(const std::string& filePath) {
 
 	const DirectX::TexMetadata& metadata = mipImages_[textureIndex].GetMetadata();
 	TextureManager::GetInstance()->textureResource_[textureIndex] = CreateTextureResource(metadata);
-	UploadTextureData(TextureManager::GetInstance()->textureResource_[textureIndex], mipImages_[textureIndex]);
+	UploadTextureData(TextureManager::GetInstance()->textureResource_[textureIndex].Get(), mipImages_[textureIndex]);
 
 
 	//ShaderResourceView
@@ -141,7 +143,7 @@ uint32_t TextureManager::LoadTexture(const std::string& filePath) {
 	TextureManager::GetInstance()->textureSrvHandleGPU_[textureIndex] = TextureManager::GetInstance()->GetGPUDescriptorHandle(DirectXSetup::GetInstance()->GetSrvDescriptorHeap(), descriptorSizeSRV_, textureIndex);
 
 	//SRVの生成
-	DirectXSetup::GetInstance()->GetDevice()->CreateShaderResourceView(TextureManager::GetInstance()->textureResource_[textureIndex], &srvDesc[textureIndex], TextureManager::GetInstance()->textureSrvHandleCPU_[textureIndex]);
+	DirectXSetup::GetInstance()->GetDevice()->CreateShaderResourceView(TextureManager::GetInstance()->textureResource_[textureIndex].Get(), &srvDesc[textureIndex], TextureManager::GetInstance()->textureSrvHandleCPU_[textureIndex]);
 	
 
 	return textureIndex;
@@ -274,14 +276,12 @@ void TextureManager::TexCommand(uint32_t texHandle) {
 }
 
 void TextureManager::Release() {
+	
+	
 	//ゲーム終了時にはCOMの終了処理を行っておく
 	CoUninitialize();
 }
 
-//デリート代わりの関数
-void TextureManager::DeleteInstance() {
-
-}
 
 //コンストラクタ
 TextureManager::~TextureManager() {

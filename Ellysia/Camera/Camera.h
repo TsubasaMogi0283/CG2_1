@@ -17,8 +17,6 @@ public:
 	static Camera* GetInstance();
 
 
-	//デリート代わりの関数
-	void DeleteInstance();
 
 	//コピーコンストラクタ禁止
 	Camera(const Camera& camera) = delete;

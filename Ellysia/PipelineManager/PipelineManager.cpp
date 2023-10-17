@@ -1,7 +1,7 @@
 #include "PipelineManager.h"
 
 
-static PipelineManager* instance_;
+
 
 
 //コンストラクタ
@@ -12,14 +12,10 @@ PipelineManager::PipelineManager() {
 
 
 PipelineManager* PipelineManager::GetInstance() {
-	//これだと無限に生成されるので
-	//ない時に生成する
-	if (instance_ == nullptr) {
-		instance_ = new PipelineManager();
+	//関数内static変数として宣言する
+	static PipelineManager instance;
 
-	}
-	
-	return instance_;
+	return &instance;
  }
 
 
@@ -116,15 +112,15 @@ void PipelineManager::GenerateSpritePSO() {
 	//シリアライズしてバイナリにする
 	HRESULT hr_ = {};
 	hr_ = D3D12SerializeRootSignature(&descriptionRootSignature_,
-		D3D_ROOT_SIGNATURE_VERSION_1, &psoSprite_.signatureBlob_, &psoSprite_.errorBlob_);
+		D3D_ROOT_SIGNATURE_VERSION_1, &spriteSignatureBlob_, &spriteErrorBlob_);
 	if (FAILED(hr_)) {
-		Log(reinterpret_cast<char*>(psoSprite_.errorBlob_->GetBufferPointer()));
+		Log(reinterpret_cast<char*>(spriteErrorBlob_->GetBufferPointer()));
 		assert(false);
 	}
 
 	//バイナリを元に生成
-	hr_ = DirectXSetup::GetInstance()->GetDevice()->CreateRootSignature(0, psoSprite_.signatureBlob_->GetBufferPointer(),
-		psoSprite_.signatureBlob_->GetBufferSize(), IID_PPV_ARGS(&psoSprite_.rootSignature_));
+	hr_ = DirectXSetup::GetInstance()->GetDevice()->CreateRootSignature(0, spriteSignatureBlob_->GetBufferPointer(),
+		spriteSignatureBlob_->GetBufferSize(), IID_PPV_ARGS(&spriteRootSignature_));
 	assert(SUCCEEDED(hr_));
 
 
@@ -200,13 +196,13 @@ void PipelineManager::GenerateSpritePSO() {
 
 
 	//ShaderをCompileする
-	psoSprite_.vertexShaderBlob_ = CompileShaderManager::GetInstance()->CompileShader(L"Resources/Shader/Object2d.VS.hlsl", L"vs_6_0");
-	assert(psoSprite_.vertexShaderBlob_ != nullptr);
+	spriteVertexShaderBlob_ = CompileShaderManager::GetInstance()->CompileShader(L"Resources/Shader/Object2d.VS.hlsl", L"vs_6_0");
+	assert(spriteVertexShaderBlob_ != nullptr);
 
 
 
-	psoSprite_.pixelShaderBlob_ = CompileShaderManager::GetInstance()->CompileShader(L"Resources/Shader/Object2d.PS.hlsl", L"ps_6_0");
-	assert(psoSprite_.pixelShaderBlob_ != nullptr);
+	spritePixelShaderBlob_ = CompileShaderManager::GetInstance()->CompileShader(L"Resources/Shader/Object2d.PS.hlsl", L"ps_6_0");
+	assert(spritePixelShaderBlob_ != nullptr);
 
 
 
@@ -214,11 +210,11 @@ void PipelineManager::GenerateSpritePSO() {
 
 	////PSO生成
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC graphicsPipelineStateDesc{};
-	graphicsPipelineStateDesc.pRootSignature = psoSprite_.rootSignature_;
+	graphicsPipelineStateDesc.pRootSignature = spriteRootSignature_;
 	graphicsPipelineStateDesc.InputLayout = inputLayoutDesc;
-	graphicsPipelineStateDesc.VS = { psoSprite_.vertexShaderBlob_->GetBufferPointer(),psoSprite_.vertexShaderBlob_->GetBufferSize() };
+	graphicsPipelineStateDesc.VS = { spriteVertexShaderBlob_->GetBufferPointer(),spriteVertexShaderBlob_->GetBufferSize() };
 	//vertexShaderBlob_->GetBufferSize();
-	graphicsPipelineStateDesc.PS = { psoSprite_.pixelShaderBlob_->GetBufferPointer(),psoSprite_.pixelShaderBlob_->GetBufferSize() };
+	graphicsPipelineStateDesc.PS = { spritePixelShaderBlob_->GetBufferPointer(),spritePixelShaderBlob_->GetBufferSize() };
 	//pixelShaderBlob_->GetBufferSize();
 	graphicsPipelineStateDesc.BlendState = blendDesc;
 	graphicsPipelineStateDesc.RasterizerState = rasterizerDesc;
@@ -250,7 +246,7 @@ void PipelineManager::GenerateSpritePSO() {
 	//実際に生成
 	//ID3D12PipelineState* graphicsPipelineState_ = nullptr;
 	hr_ = DirectXSetup::GetInstance()->GetDevice()->CreateGraphicsPipelineState(&graphicsPipelineStateDesc,
-		IID_PPV_ARGS(&psoSprite_.graphicsPipelineState_));
+		IID_PPV_ARGS(&spriteGraphicsPipelineState_));
 	assert(SUCCEEDED(hr_));
 
 
@@ -351,16 +347,16 @@ void PipelineManager::GenerateModelPSO() {
 	//シリアライズしてバイナリにする
 	HRESULT hr = {};
 	hr = D3D12SerializeRootSignature(&descriptionRootSignature_,
-		D3D_ROOT_SIGNATURE_VERSION_1, &psoModel_.signatureBlob_, &psoModel_.errorBlob_);
+		D3D_ROOT_SIGNATURE_VERSION_1, &modelSignatureBlob_, &modelErrorBlob_);
 	if (FAILED(hr)) {
-		Log(reinterpret_cast<char*>(psoModel_.errorBlob_->GetBufferPointer()));
+		Log(reinterpret_cast<char*>(modelErrorBlob_->GetBufferPointer()));
 		assert(false);
 	}
 
 	//バイナリを元に生成
 	//ID3D12RootSignature* rootSignature_ = nullptr;
-	hr = DirectXSetup::GetInstance()->GetDevice()->CreateRootSignature(0, psoModel_.signatureBlob_->GetBufferPointer(),
-		psoModel_.signatureBlob_->GetBufferSize(), IID_PPV_ARGS(&psoModel_.rootSignature_));
+	hr = DirectXSetup::GetInstance()->GetDevice()->CreateRootSignature(0, modelSignatureBlob_->GetBufferPointer(),
+		modelSignatureBlob_->GetBufferSize(), IID_PPV_ARGS(&modelRootSignature_));
 	assert(SUCCEEDED(hr));
 
 
@@ -436,13 +432,13 @@ void PipelineManager::GenerateModelPSO() {
 
 
 	//ShaderをCompileする
-	psoModel_.vertexShaderBlob_ = CompileShaderManager::GetInstance()->CompileShader(L"Resources/Shader/Object3d.VS.hlsl", L"vs_6_0");
-	assert(psoModel_.vertexShaderBlob_ != nullptr);
+	modelVertexShaderBlob_ = CompileShaderManager::GetInstance()->CompileShader(L"Resources/Shader/Object3d.VS.hlsl", L"vs_6_0");
+	assert(modelVertexShaderBlob_ != nullptr);
 
 
 
-	psoModel_.pixelShaderBlob_ = CompileShaderManager::GetInstance()->CompileShader(L"Resources/Shader/Object3d.PS.hlsl", L"ps_6_0");
-	assert(psoModel_.pixelShaderBlob_ != nullptr);
+	modelPixelShaderBlob_ = CompileShaderManager::GetInstance()->CompileShader(L"Resources/Shader/Object3d.PS.hlsl", L"ps_6_0");
+	assert(modelPixelShaderBlob_ != nullptr);
 
 
 
@@ -450,11 +446,11 @@ void PipelineManager::GenerateModelPSO() {
 
 	////PSO生成
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC graphicsPipelineStateDesc{};
-	graphicsPipelineStateDesc.pRootSignature = psoModel_.rootSignature_;
+	graphicsPipelineStateDesc.pRootSignature = modelRootSignature_;
 	graphicsPipelineStateDesc.InputLayout = inputLayoutDesc;
-	graphicsPipelineStateDesc.VS = { psoModel_.vertexShaderBlob_->GetBufferPointer(),psoModel_.vertexShaderBlob_->GetBufferSize() };
+	graphicsPipelineStateDesc.VS = { modelVertexShaderBlob_->GetBufferPointer(),modelVertexShaderBlob_->GetBufferSize() };
 	//vertexShaderBlob_->GetBufferSize();
-	graphicsPipelineStateDesc.PS = { psoModel_.pixelShaderBlob_->GetBufferPointer(),psoModel_.pixelShaderBlob_->GetBufferSize() };
+	graphicsPipelineStateDesc.PS = { modelPixelShaderBlob_->GetBufferPointer(),modelPixelShaderBlob_->GetBufferSize() };
 	//pixelShaderBlob_->GetBufferSize();
 	graphicsPipelineStateDesc.BlendState = blendDesc;
 	graphicsPipelineStateDesc.RasterizerState = rasterizerDesc;
@@ -486,7 +482,7 @@ void PipelineManager::GenerateModelPSO() {
 	//実際に生成
 	//ID3D12PipelineState* graphicsPipelineState_ = nullptr;
 	hr = DirectXSetup::GetInstance()->GetDevice()->CreateGraphicsPipelineState(&graphicsPipelineStateDesc,
-		IID_PPV_ARGS(&psoModel_.graphicsPipelineState_));
+		IID_PPV_ARGS(&modelGraphicsPipelineState_));
 	assert(SUCCEEDED(hr));
 
 
@@ -496,43 +492,41 @@ void PipelineManager::GenerateModelPSO() {
 
 //解放
 void PipelineManager::Release() {
-	psoSprite_.graphicsPipelineState_->Release();
-	psoSprite_.signatureBlob_->Release();
-	if (psoSprite_.errorBlob_) {
-		psoSprite_.errorBlob_->Release();
+
+	
+
+	spriteGraphicsPipelineState_->Release();
+	spriteSignatureBlob_->Release();
+	if (spriteErrorBlob_) {
+		spriteErrorBlob_->Release();
 	}
 	
-	psoSprite_.rootSignature_->Release();
+	spriteRootSignature_->Release();
 
-	psoSprite_.vertexShaderBlob_->Release();	
-	psoSprite_.pixelShaderBlob_->Release();
-
+	spriteVertexShaderBlob_->Release();	
+	spritePixelShaderBlob_->Release();
 
 
 
 
 	//Model
 	//null
-	psoModel_.graphicsPipelineState_->Release();
+	modelGraphicsPipelineState_->Release();
 	
-	psoModel_.signatureBlob_->Release();
-	if (psoModel_.errorBlob_) {
-		psoModel_.errorBlob_->Release();
+	modelSignatureBlob_->Release();
+	if (modelErrorBlob_) {
+		modelErrorBlob_->Release();
 	}
 	
-	psoModel_.rootSignature_->Release();
+	modelRootSignature_->Release();
 	
-	psoModel_.vertexShaderBlob_->Release();	
-	psoModel_.pixelShaderBlob_->Release();
+	modelVertexShaderBlob_->Release();	
+	modelPixelShaderBlob_->Release();
 
 
 
 }
 
-
-void PipelineManager::DeleteInstance() {
-	delete instance_;
-}
 
 //デストラクタ
 PipelineManager::~PipelineManager() {

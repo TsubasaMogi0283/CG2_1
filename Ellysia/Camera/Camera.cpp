@@ -1,7 +1,7 @@
 #include "Camera.h"
 #include <Math/Matrix/Calculation/Matrix4x4Calculation.h>
 
-Camera* Camera::instance_=nullptr;
+
 
 //コンストラクタ
 Camera::Camera() {
@@ -13,13 +13,11 @@ Camera::Camera() {
 
 //インスタンス
 Camera* Camera::GetInstance() {
-	//これだと無限に生成される
-	if (instance_ == nullptr) {
-		instance_ = new Camera();
+	//関数内static変数として宣言する
+	static Camera instance;
 
-	}
+	return &instance;
 	
-	return instance_;
 }
 
 
@@ -39,11 +37,6 @@ Matrix4x4 Camera::GetProjectionMatrix_() {
 
 
 
-
-//デリート代わりの関数
-void Camera::DeleteInstance() {
-	delete instance_;
-}
 
 //デストラクタ
 Camera::~Camera() {

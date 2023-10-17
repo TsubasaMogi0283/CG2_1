@@ -2,6 +2,7 @@
 #include <d3d12.h>
 #include <cassert>
 
+#include <ConvertFunction/CompileShader/CompileShaderManager.h>
 #include <ConvertFunction/ConvertLog/LogConvert.h>
 #include <Common/DirectX/DirectXSetup.h>
 
@@ -26,23 +27,21 @@ public:
 	//シングルインスタンス
 	static PipelineManager* GetInstance();
 
-	//デリート代わり
-	void DeleteInstance();
 
 	//コマンドに積む専用のGetter
 	ID3D12RootSignature* GetSpriteRootSignature() {
-		return psoSprite_.rootSignature_;
+		return spriteRootSignature_;
 	}
 	ID3D12PipelineState* GetSpriteGraphicsPipelineState() {
-		return psoSprite_.graphicsPipelineState_;
+		return spriteGraphicsPipelineState_;
 	}
 
 	//コマンドに積む専用のGetter
 	ID3D12RootSignature* GetModelRootSignature() {
-		return psoModel_.rootSignature_;
+		return modelRootSignature_;
 	}
 	ID3D12PipelineState* GetModelGraphicsPipelineState() {
-		return psoModel_.graphicsPipelineState_;
+		return modelGraphicsPipelineState_;
 	}
 
 	void Release();
@@ -58,22 +57,23 @@ public:
 	void GenerateModelPSO();
 
 private:
-	//メンバ変数
-	struct PipelineVariable {
-		ID3DBlob* signatureBlob_ = nullptr;
 
-		ID3DBlob* errorBlob_ = nullptr;
 
-		ID3D12RootSignature* rootSignature_ = nullptr;
+	ID3DBlob* spriteSignatureBlob_ = nullptr;
+	ID3DBlob* spriteErrorBlob_ = nullptr;
+	ID3D12RootSignature* spriteRootSignature_ = nullptr;
+	IDxcBlob* spritePixelShaderBlob_ = nullptr;
+	IDxcBlob* spriteVertexShaderBlob_ = nullptr;
+	ID3D12PipelineState* spriteGraphicsPipelineState_ = nullptr;
 
-		IDxcBlob* pixelShaderBlob_ = nullptr;
 
-		IDxcBlob* vertexShaderBlob_ = nullptr;
+	ID3DBlob* modelSignatureBlob_ = nullptr;
+	ID3DBlob* modelErrorBlob_ = nullptr;
+	ID3D12RootSignature* modelRootSignature_ = nullptr;
+	IDxcBlob* modelPixelShaderBlob_ = nullptr;
+	IDxcBlob* modelVertexShaderBlob_ = nullptr;
+	ID3D12PipelineState* modelGraphicsPipelineState_ = nullptr;
 
-		ID3D12PipelineState* graphicsPipelineState_ = nullptr;
-	};
 
-	PipelineVariable psoSprite_;
-	PipelineVariable psoModel_ ;
 };
 

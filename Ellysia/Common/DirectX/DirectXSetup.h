@@ -136,7 +136,7 @@ public:
 	}
 
 	ComPtr<ID3D12Device> GetDevice() {
-		return device_;
+		return m_device_;
 	}
 	
 	ComPtr<ID3D12GraphicsCommandList> GetCommandList() {
@@ -197,12 +197,12 @@ private:
 	ComPtr<ID3D12InfoQueue> infoQueue_ = nullptr;
 
 	//
-	ComPtr<IDXGIFactory7> dxgiFactory_ = nullptr;
+	ComPtr<IDXGIFactory7> m_dxgiFactory_ = nullptr;
 	//
-	ComPtr<IDXGIAdapter4> useAdapter_ = nullptr;
+	ComPtr<IDXGIAdapter4> m_useAdapter_ = nullptr;
 
 	//
-	ComPtr<ID3D12Device> device_ = nullptr;
+	ComPtr<ID3D12Device> m_device_ = nullptr;
 
 
 

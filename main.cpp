@@ -18,6 +18,7 @@ struct D3DResourceLeakChecker{
 	}
 };
 
+//staticはdeleteの後に解放されるよ
 static D3DResourceLeakChecker checker;
 
 //Winodwsアプリでもエントリーポイント(main関数)

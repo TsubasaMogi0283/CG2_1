@@ -94,27 +94,31 @@ void DirectXSetup::GenerateDXGIFactory() {
 
 
 #endif 
-	ComPtr<IDXGIFactory7> f;
+	ComPtr<IDXGIFactory7> dxgiFactory;
 	//関数が成功したかSUCCEEDEDでマクロで判定できる
-	HRESULT hr = CreateDXGIFactory(IID_PPV_ARGS(&f));
+	HRESULT hr = CreateDXGIFactory(IID_PPV_ARGS(&dxgiFactory));
 	//初期でエラーが発生した場合どうにもできないのでassert
 	assert(SUCCEEDED(hr));
-	DirectXSetup::GetInstance()->dxgiFactory_ = f;
+	DirectXSetup::GetInstance()->m_dxgiFactory_ = dxgiFactory;
 
 }
 
 void DirectXSetup::SelectAdapter() {
 	//仕様するアダプタ用の変数、最初にnullptrを入れておく
-	ComPtr<IDXGIFactory7> f=DirectXSetup::GetInstance()->dxgiFactory_;
+
+	ComPtr<IDXGIFactory7> dxgiFactory= nullptr;
+	ComPtr<IDXGIAdapter4> useAdapter = nullptr;
+
 	//良い順でアダプタを頼む
-	for (UINT i = 0; f->EnumAdapterByGpuPreference(i,
-		DXGI_GPU_PREFERENCE_HIGH_PERFORMANCE, IID_PPV_ARGS(&useAdapter_)) !=
+	for (UINT i = 0; dxgiFactory->EnumAdapterByGpuPreference(i,
+		DXGI_GPU_PREFERENCE_HIGH_PERFORMANCE, IID_PPV_ARGS(&useAdapter)) !=
 		DXGI_ERROR_NOT_FOUND; ++i) {
 
 		//アダプターの情報を取得する
+		HRESULT hr = {};
 		DXGI_ADAPTER_DESC3 adapterDesc{};
-		hr_ = useAdapter_->GetDesc3(&adapterDesc);
-		assert(SUCCEEDED(hr_));
+		hr = useAdapter->GetDesc3(&adapterDesc);
+		assert(SUCCEEDED(hr));
 
 		//ソフトウェアアダプタでなければ採用
 		if (!(adapterDesc.Flags & DXGI_ADAPTER_FLAG3_SOFTWARE)) {
@@ -123,42 +127,49 @@ void DirectXSetup::SelectAdapter() {
 			break;
 		}
 		//ソフトウェアアダプタだった場合無視
-		DirectXSetup::GetInstance()->useAdapter_ = nullptr;
+		useAdapter = nullptr;
 
 
 	}
 	//適切なアダプタが見つからなかったので起動できない
-	assert(useAdapter_ != nullptr);
-	DirectXSetup::GetInstance()->dxgiFactory_ = f;
+	assert(useAdapter != nullptr);
+	
+	//更新したデータをメンバ変数にまた保存
+	DirectXSetup::GetInstance()->m_dxgiFactory_ = dxgiFactory;
+	DirectXSetup::GetInstance()->m_useAdapter_ = useAdapter;
+
+
+
 }
 
-//void DirectXSetup::GenerateD3D12Device() {
-//	//機能レベルとログ出力用の文字
-//	D3D_FEATURE_LEVEL featureLevels[] = {
-//		D3D_FEATURE_LEVEL_12_2,
-//		D3D_FEATURE_LEVEL_12_1,
-//		D3D_FEATURE_LEVEL_12_0
-//	};
-//	
-//	const char* featureLevelStrings[] = { "12.2","12.1","12.0" };
-//	//高い順に生成出来るか試していく
-//	for (size_t i = 0; i < _countof(featureLevels); ++i) {
-//		//採用したアダプターでデバイスが生成
-//		hr_ = D3D12CreateDevice(useAdapter_.Get(), featureLevels[i], IID_PPV_ARGS(&device_));
-//		//指定した機能レベルでデバイスが生成できたか確認
-//		if (SUCCEEDED(hr_)) {
-//			//生成できたのでログ出力を行ってループを抜ける
-//			Log(std::format("FeatureLevel : {}\n", featureLevelStrings[i]));
-//			break;
-//		}
-//	}
-//
-//	//デバイスの生成が上手くいかなかったので起動できない
-//	assert(device_ != nullptr);
-//	Log("Complete create D3D12Device!!!\n");
-//
-//
-//}
+void DirectXSetup::GenerateD3D12Device() {
+	//機能レベルとログ出力用の文字
+	D3D_FEATURE_LEVEL featureLevels[] = {
+		D3D_FEATURE_LEVEL_12_2,
+		D3D_FEATURE_LEVEL_12_1,
+		D3D_FEATURE_LEVEL_12_0
+	};
+	
+	const char* featureLevelStrings[] = { "12.2","12.1","12.0" };
+	//高い順に生成出来るか試していく
+	for (size_t i = 0; i < _countof(featureLevels); ++i) {
+		//採用したアダプターでデバイスが生成
+		HRESULT hr = {};
+		hr = D3D12CreateDevice(DirectXSetup::GetInstance()->m_useAdapter_.Get(), featureLevels[i], IID_PPV_ARGS(&DirectXSetup::GetInstance()->m_device_));
+		//指定した機能レベルでデバイスが生成できたか確認
+		if (SUCCEEDED(hr)) {
+			//生成できたのでログ出力を行ってループを抜ける
+			Log(std::format("FeatureLevel : {}\n", featureLevelStrings[i]));
+			break;
+		}
+	}
+
+	//デバイスの生成が上手くいかなかったので起動できない
+	assert(DirectXSetup::GetInstance()->m_device_ != nullptr);
+	Log("Complete create D3D12Device!!!\n");
+
+
+}
 //
 //void DirectXSetup::StopErrorWarning() {
 //		////エラー・警告、即ち停止

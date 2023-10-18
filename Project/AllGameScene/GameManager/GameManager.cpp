@@ -11,12 +11,12 @@ GameManager::GameManager() {
 
 	winApp_ = WinApp::GetInstance();
 	directXSetup_ = DirectXSetup::GetInstance();
-	imGuiManager_ = ImGuiManager::GetInstance();
-	input_ = Input::GetInstance();
-	camera_ = Camera::GetInstance();
-	textureManager_ = TextureManager::GetInstance();
-	audio_ = Audio::GetInstance();
-	pipelineManager_ = PipelineManager::GetInstance();
+	//imGuiManager_ = ImGuiManager::GetInstance();
+	//input_ = Input::GetInstance();
+	//camera_ = Camera::GetInstance();
+	//textureManager_ = TextureManager::GetInstance();
+	//audio_ = Audio::GetInstance();
+	//pipelineManager_ = PipelineManager::GetInstance();
 }
 	
 void GameManager::Initialize() {
@@ -25,8 +25,8 @@ void GameManager::Initialize() {
 
 	//初期化
 	winApp_->Initialize(titleBarName,WINDOW_SIZE_WIDTH_,WINDOW_SIZE_HEIGHT_);
-	//directXSetup_->Initialize();
-	DirectXSetup::Initialize();
+	directXSetup_->Initialize();
+	//DirectXSetup::Initialize();
 	//pipelineManager_->GenerateSpritePSO();
 	//pipelineManager_->GenerateModelPSO();
 	//imGuiManager_->Initialize();
@@ -41,7 +41,7 @@ void GameManager::Initialize() {
 }
 
 void GameManager::BeginFrame() {
-	//directXSetup_->BeginFrame();
+	directXSetup_->BeginFrame();
 	//imGuiManager_->BeginFrame();
 
 }
@@ -66,7 +66,7 @@ void GameManager::Draw() {
 void GameManager::EndFrame() {
 
 	//imGuiManager_->EndFrame();
-	//directXSetup_->EndFrame();
+	directXSetup_->EndFrame();
 			
 }
 
@@ -80,7 +80,7 @@ void GameManager::Release() {
 	//
 	//imGuiManager_->Release();
 	//
-	//directXSetup_->Release();
+	directXSetup_->Release();
 	//
 
 	winApp_->Close();
@@ -141,14 +141,8 @@ void GameManager::Operate() {
 }
 
 
-
-
-
-
 //デストラクタ
 GameManager::~GameManager() {
 	delete currentGamaScene_;
 
 }
-
-

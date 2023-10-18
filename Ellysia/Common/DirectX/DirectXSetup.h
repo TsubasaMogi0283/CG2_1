@@ -18,7 +18,11 @@
 #include <wrl.h>
 using Microsoft::WRL::ComPtr;
 
-
+struct SwapChain{
+	ComPtr<IDXGISwapChain4> m_pSwapChain;
+	ComPtr<ID3D12Resource> m_pResource[2];
+	DXGI_SWAP_CHAIN_DESC1 swapChainDesc{};
+};
 
 
 //メンバ変数関数いつか整理したい・・・
@@ -49,14 +53,13 @@ private:
 
 
 	//DescriptorHeapの作成関数
-	ComPtr<ID3D12DescriptorHeap> GenarateDescriptorHeap(
-		ComPtr<ID3D12Device> device,
+	static ComPtr<ID3D12DescriptorHeap> GenarateDescriptorHeap(
 		D3D12_DESCRIPTOR_HEAP_TYPE heapType,
 		UINT numDescriptors, bool shaderVisible);
 
 	//DepthStencilTexture...奥行の根幹をなすものであり、非常に大量の読み書きを高速に行う必要がある
 	//						Textureの中でも特に例外的な扱いが必要となっている
-	ComPtr<ID3D12Resource> CreateDepthStencilTextureResource(ComPtr<ID3D12Device> device,int32_t width, int32_t height);
+	static ComPtr<ID3D12Resource> CreateDepthStencilTextureResource(const int32_t width,const int32_t height);
 
 	
 
@@ -131,28 +134,25 @@ public:
 	 
 
 
-	HRESULT GetHr_() {
-		return hr_;
-	}
 
 	ComPtr<ID3D12Device> GetDevice() {
 		return m_device_;
 	}
 	
 	ComPtr<ID3D12GraphicsCommandList> GetCommandList() {
-		return commandList_;
+		return DirectXSetup::GetInstance()->m_commandList_;
 	}
 	
 
 
 	ComPtr<ID3D12DescriptorHeap> GetRtvDescriptorHeap() {
-		return  rtvDescriptorHeap_;
+		return  m_rtvDescriptorHeap_;
 	}
 	ComPtr<ID3D12DescriptorHeap> GetSrvDescriptorHeap() {
-		return  srvDescriptorHeap_;
+		return  m_srvDescriptorHeap_;
 	}
 	ComPtr<ID3D12DescriptorHeap> GetDsvDescriptorHeap() {
-		return  dsvDescriptorHeap_;
+		return  m_dsvDescriptorHeap_;
 	}
 
 
@@ -160,8 +160,8 @@ public:
 		return rtvDesc_;
 	}
 	
-	DXGI_SWAP_CHAIN_DESC1 GetswapChainDesc() {
-		return swapChainDesc_;
+	SwapChain GetswapChain() {
+		return DirectXSetup::GetInstance()->swapChain;
 	}
 
 	
@@ -175,87 +175,60 @@ private:
 	int32_t kClientWidth_;
 	int32_t kClientHeight_;
 
-	HRESULT hr_;
 
 	HWND hwnd_;
 
 
-
-	HANDLE fenceEvent_ = nullptr;
-
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	ComPtr<ID3D12InfoQueue> infoQueue_ = nullptr;
-
 	//
 	ComPtr<IDXGIFactory7> m_dxgiFactory_ = nullptr;
-	//
 	ComPtr<IDXGIAdapter4> m_useAdapter_ = nullptr;
-
-	//
 	ComPtr<ID3D12Device> m_device_ = nullptr;
 
 
 
 
-
-	ComPtr<ID3D12GraphicsCommandList> commandList_ = nullptr;
+	ComPtr<ID3D12GraphicsCommandList> m_commandList_ = nullptr;
 	
-	ComPtr<ID3D12CommandQueue> commandQueue_ = nullptr;
+	ComPtr<ID3D12CommandQueue> m_commandQueue_ = nullptr;
 	
-	D3D12_COMMAND_QUEUE_DESC commandQueueDesc_{};
 	
-	ComPtr<ID3D12CommandAllocator> commandAllocator_ = nullptr;
+	ComPtr<ID3D12CommandAllocator> m_commandAllocator_ = nullptr;
 
 
-
+	
 
 
 	UINT backBufferIndex_;
 
 
-	//ID3D12DescriptorHeap* srvDescriptorHeap_ = nullptr;
-	//D3D12_RENDER_TARGET_VIEW_DESC rtvDesc_{};
-	//DXGI_SWAP_CHAIN_DESC1 swapChainDesc_{};
 
-	ComPtr<IDXGISwapChain4> swapChain_ = nullptr;
-	DXGI_SWAP_CHAIN_DESC1 swapChainDesc_{};
 
-	ComPtr<ID3D12Resource> swapChainResources_[2] = { nullptr };
 
-	ComPtr<ID3D12DescriptorHeap> rtvDescriptorHeap_ = nullptr;
-	ComPtr<ID3D12DescriptorHeap> srvDescriptorHeap_ = nullptr;
-	ComPtr<ID3D12DescriptorHeap> dsvDescriptorHeap_ = nullptr;
+	ComPtr<ID3D12DescriptorHeap> m_rtvDescriptorHeap_ = nullptr;
+	ComPtr<ID3D12DescriptorHeap> m_srvDescriptorHeap_ = nullptr;
+	ComPtr<ID3D12DescriptorHeap> m_dsvDescriptorHeap_ = nullptr;
 
-	ComPtr<ID3D12Resource> depthStencilResource_ = nullptr;
+	ComPtr<ID3D12Resource> m_depthStencilResource_ = nullptr;
 
-	D3D12_DESCRIPTOR_HEAP_DESC rtvDescriptorHeapDesc_{};
-
+	
+	SwapChain swapChain = {};
 	
 
 	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc_{};
+
 	D3D12_CPU_DESCRIPTOR_HANDLE rtvStartHandle_;
 	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandles_[2] = {};
-
+	D3D12_DESCRIPTOR_HEAP_DESC rtvDescriptorHeapDesc_{};
 
 	
 
 	
 	D3D12_RESOURCE_BARRIER barrier_{};
 
-	ComPtr<ID3D12Fence> fence_ = nullptr;
+	ComPtr<ID3D12Fence> m_fence_ = nullptr;
 
 	uint64_t fenceValue_ = 0;
-
+	HANDLE fenceEvent_ = nullptr;
 
 	ComPtr<ID3D12Debug1> debugController_ = nullptr;
 
@@ -268,8 +241,6 @@ private:
 
 
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_{};
-
-	Vector4* vertexData_ = nullptr;
 
 
 };

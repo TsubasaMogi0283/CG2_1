@@ -27,7 +27,7 @@ struct SwapChain{
 
 //メンバ変数関数いつか整理したい・・・
 //ごちゃごちゃしてる
-class DirectXSetup {
+class DirectXSetup final{
 private:
 	
 	//コンストラクタ

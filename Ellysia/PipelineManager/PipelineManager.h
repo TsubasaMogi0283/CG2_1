@@ -29,18 +29,18 @@ public:
 
 
 	//コマンドに積む専用のGetter
-	ID3D12RootSignature* GetSpriteRootSignature() {
+	ComPtr<ID3D12RootSignature> GetSpriteRootSignature() {
 		return spriteRootSignature_;
 	}
-	ID3D12PipelineState* GetSpriteGraphicsPipelineState() {
+	ComPtr<ID3D12PipelineState> GetSpriteGraphicsPipelineState() {
 		return spriteGraphicsPipelineState_;
 	}
 
 	//コマンドに積む専用のGetter
-	ID3D12RootSignature* GetModelRootSignature() {
+	ComPtr<ID3D12RootSignature> GetModelRootSignature() {
 		return modelRootSignature_;
 	}
-	ID3D12PipelineState* GetModelGraphicsPipelineState() {
+	ComPtr<ID3D12PipelineState> GetModelGraphicsPipelineState() {
 		return modelGraphicsPipelineState_;
 	}
 
@@ -51,28 +51,28 @@ public:
 	//アロー演算子の時邪魔になってしまうからここにいれよう
 
 	//スプライト用
-	void GenerateSpritePSO();
+	static void GenerateSpritePSO();
 
 	//モデル用
-	void GenerateModelPSO();
+	static void GenerateModelPSO();
 
 private:
 
 
-	ID3DBlob* spriteSignatureBlob_ = nullptr;
-	ID3DBlob* spriteErrorBlob_ = nullptr;
-	ID3D12RootSignature* spriteRootSignature_ = nullptr;
-	IDxcBlob* spritePixelShaderBlob_ = nullptr;
-	IDxcBlob* spriteVertexShaderBlob_ = nullptr;
-	ID3D12PipelineState* spriteGraphicsPipelineState_ = nullptr;
+	ComPtr<ID3DBlob> spriteSignatureBlob_ = nullptr;
+	ComPtr<ID3DBlob> spriteErrorBlob_ = nullptr;
+	ComPtr<ID3D12RootSignature> spriteRootSignature_ = nullptr;
+	ComPtr<IDxcBlob> spritePixelShaderBlob_ = nullptr;
+	ComPtr<IDxcBlob> spriteVertexShaderBlob_ = nullptr;
+	ComPtr<ID3D12PipelineState> spriteGraphicsPipelineState_ = nullptr;
 
 
-	ID3DBlob* modelSignatureBlob_ = nullptr;
-	ID3DBlob* modelErrorBlob_ = nullptr;
-	ID3D12RootSignature* modelRootSignature_ = nullptr;
-	IDxcBlob* modelPixelShaderBlob_ = nullptr;
-	IDxcBlob* modelVertexShaderBlob_ = nullptr;
-	ID3D12PipelineState* modelGraphicsPipelineState_ = nullptr;
+	ComPtr<ID3DBlob> modelSignatureBlob_ = nullptr;
+	ComPtr<ID3DBlob> modelErrorBlob_ = nullptr;
+	ComPtr<ID3D12RootSignature> modelRootSignature_ = nullptr;
+	ComPtr<IDxcBlob> modelPixelShaderBlob_ = nullptr;
+	ComPtr<IDxcBlob> modelVertexShaderBlob_ = nullptr;
+	ComPtr<ID3D12PipelineState> modelGraphicsPipelineState_ = nullptr;
 
 
 };

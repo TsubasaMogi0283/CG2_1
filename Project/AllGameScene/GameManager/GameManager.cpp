@@ -26,8 +26,8 @@ void GameManager::Initialize() {
 	//初期化
 	winApp_->Initialize(titleBarName,WINDOW_SIZE_WIDTH_,WINDOW_SIZE_HEIGHT_);
 	directXSetup_->Initialize();
-	//pipelineManager_->GenerateSpritePSO();
-	//pipelineManager_->GenerateModelPSO();
+	pipelineManager_->GenerateSpritePSO();
+	pipelineManager_->GenerateModelPSO();
 	imGuiManager_->Initialize();
 	//input_->Initialize();
 	//textureManager_->Initilalize();
@@ -75,7 +75,7 @@ void GameManager::Release() {
 	//
 	//textureManager_->Release();
 	//
-	//pipelineManager_->Release();
+	pipelineManager_->Release();
 	//
 	imGuiManager_->Release();
 	//

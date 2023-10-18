@@ -60,6 +60,7 @@ void GameManager::Draw() {
 	
 	currentGamaScene_->Draw(this);
 
+
 }
 
 void GameManager::EndFrame() {

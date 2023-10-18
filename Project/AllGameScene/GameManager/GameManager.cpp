@@ -13,8 +13,8 @@ GameManager::GameManager() {
 	directXSetup_ = DirectXSetup::GetInstance();
 	imGuiManager_ = ImGuiManager::GetInstance();
 	input_ = Input::GetInstance();
-	//camera_ = Camera::GetInstance();
-	//textureManager_ = TextureManager::GetInstance();
+	camera_ = Camera::GetInstance();
+	textureManager_ = TextureManager::GetInstance();
 	audio_ = Audio::GetInstance();
 	pipelineManager_ = PipelineManager::GetInstance();
 }
@@ -30,7 +30,7 @@ void GameManager::Initialize() {
 	pipelineManager_->GenerateModelPSO();
 	imGuiManager_->Initialize();
 	input_->Initialize();
-	//textureManager_->Initilalize();
+	textureManager_->Initilalize();
 	audio_->Initialize();
 
 	//シーンごとに動作確認したいときはここを変えてね
@@ -51,14 +51,14 @@ void GameManager::Update() {
 
 	//入力の更新
 	input_->Update();
-	//currentGamaScene_->Update(this);
+	currentGamaScene_->Update(this);
 }
 
 void GameManager::Draw() {
 	imGuiManager_->PreDraw();	
 	imGuiManager_->Draw();
 	
-	//currentGamaScene_->Draw(this);
+	currentGamaScene_->Draw(this);
 
 }
 
@@ -73,7 +73,7 @@ void GameManager::Release() {
 
 	audio_->Release();
 	//
-	//textureManager_->Release();
+	textureManager_->Release();
 	//
 	pipelineManager_->Release();
 	//

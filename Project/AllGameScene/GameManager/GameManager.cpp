@@ -12,11 +12,11 @@ GameManager::GameManager() {
 	winApp_ = WinApp::GetInstance();
 	directXSetup_ = DirectXSetup::GetInstance();
 	imGuiManager_ = ImGuiManager::GetInstance();
-	//input_ = Input::GetInstance();
+	input_ = Input::GetInstance();
 	//camera_ = Camera::GetInstance();
 	//textureManager_ = TextureManager::GetInstance();
-	//audio_ = Audio::GetInstance();
-	//pipelineManager_ = PipelineManager::GetInstance();
+	audio_ = Audio::GetInstance();
+	pipelineManager_ = PipelineManager::GetInstance();
 }
 	
 void GameManager::Initialize() {
@@ -29,9 +29,9 @@ void GameManager::Initialize() {
 	pipelineManager_->GenerateSpritePSO();
 	pipelineManager_->GenerateModelPSO();
 	imGuiManager_->Initialize();
-	//input_->Initialize();
+	input_->Initialize();
 	//textureManager_->Initilalize();
-	//audio_->Initialize();
+	audio_->Initialize();
 
 	//シーンごとに動作確認したいときはここを変えてね
 	currentGamaScene_ = new SampleScene();
@@ -50,7 +50,7 @@ void GameManager::Update() {
 	imGuiManager_->UpDate();
 
 	//入力の更新
-	//input_->Update();
+	input_->Update();
 	//currentGamaScene_->Update(this);
 }
 
@@ -64,14 +64,14 @@ void GameManager::Draw() {
 
 void GameManager::EndFrame() {
 
-	//imGuiManager_->EndFrame();
+	imGuiManager_->EndFrame();
 	directXSetup_->EndFrame();
 			
 }
 
 void GameManager::Release() {
 
-	//audio_->Release();
+	audio_->Release();
 	//
 	//textureManager_->Release();
 	//

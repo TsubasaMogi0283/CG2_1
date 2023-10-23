@@ -1,5 +1,6 @@
 #pragma once
 #include <Math/Vector/Vector3.h>
+#include "ViewProjection/ViewProjection.h"
 
 class DebugCamera {
 private:
@@ -36,6 +37,7 @@ private:
 	Vector3 translate_ = { 0.0f,0.0f, - 50.0f };
 
 	//ビュー行列
+	ViewProjection viewProjection_ = {};
 
 	//射影行列
 

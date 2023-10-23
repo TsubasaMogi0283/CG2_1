@@ -17,7 +17,6 @@ TextureManager::TextureManager() {
 }
 
 TextureManager* TextureManager::GetInstance() {
-	//これだと無限に生成される
 	
 	static TextureManager instance;
 	return &instance;

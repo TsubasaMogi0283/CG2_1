@@ -88,6 +88,9 @@
     <Filter Include="ソース ファイル\Pipeline">
       <UniqueIdentifier>{dd9a03be-6394-4e47-b16e-f7b88147685e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\DebugCamera">
+      <UniqueIdentifier>{6e47dfb1-b930-4c50-b9d8-f2c7d12decc5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -172,6 +175,12 @@
       <Filter>ソース ファイル\Pipeline</Filter>
     </ClCompile>
     <ClCompile Include="Ellysia\ResourceObject\ResourceObject.cpp">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Ellysia\DebugCamera\DebugCamera.cpp">
+      <Filter>ソース ファイル\DebugCamera</Filter>
+    </ClCompile>
+    <ClCompile Include="Ellysia\ViewProjection\ViewProjection.cpp">
       <Filter>ヘッダー ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -338,6 +347,12 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Ellysia\Camera\Camera.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\DebugCamera\DebugCamera.h">
+      <Filter>ソース ファイル\DebugCamera</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\ViewProjection\ViewProjection.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

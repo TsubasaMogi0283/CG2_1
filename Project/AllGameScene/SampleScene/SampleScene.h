@@ -33,14 +33,7 @@ public:
 	void Draw(GameManager* gameManager)override;
 
 private:
-	//Player* player_ = nullptr;
-	Model* model_ = nullptr;
+	Player* player_ = nullptr;
 
-	Transform transform_ = {};
-	
 
-	Sprite* sprite_ = nullptr;
-	Transform transformSprite_ = {};
-
-	SpritePosition spriteAllPosition_ = {};
 };

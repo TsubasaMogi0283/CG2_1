@@ -7,12 +7,11 @@ Player::Player() {
 
 //初期化
 void Player::Initialize() {
-	//textureManager_ = TextureManager::GetInstance();
 
 	model_ = new Model();
-	model_->CreateObject("Resources/Sample/Enemy", "enemy.obj");
+	model_->CreateObject("Resources/Sample/cube", "cube.obj");
 
-	transform_ = { {0.1f,0.1f,0.1f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
+	transform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
 
 }
 

@@ -124,13 +124,6 @@ public:
 
 
 #pragma region 他のクラスでも使いたいのでGetter
-	int32_t GetClientWidth() {
-		return kClientWidth_;
-	}
-
-	int32_t GetClientHeight() {
-		return kClientHeight_;
-	}
 	 
 
 

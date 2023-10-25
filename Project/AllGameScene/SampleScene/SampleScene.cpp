@@ -22,6 +22,7 @@ SampleScene::~SampleScene() {
 void SampleScene::Initialize(GameManager* gameManager) {
 
 
+
 }
 
 /// <summary>

@@ -1,5 +1,5 @@
 #pragma once
-#include "Common/DirectX/DirectXSetup.h"
+#include "Common/Windows/WinApp.h"
 
 #include <Math/Vector/Transform.h>
 #include <Math/Matrix/Matrix/Matrix4x4.h>

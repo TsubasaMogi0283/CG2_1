@@ -18,7 +18,7 @@ struct ViewProjection {
 	//視野角
 	float fov_ = 0.45f;
 	//アスペクト比
-	float aspectRatio_ = WinApp::GetInstance()->GetClientWidth() / WinApp::GetInstance()->GetClientHeight();
+	float aspectRatio_ = float(WinApp::GetInstance()->GetClientWidth() / WinApp::GetInstance()->GetClientHeight());
 
 	//Near
 	float nearClip_ = 0.1f;

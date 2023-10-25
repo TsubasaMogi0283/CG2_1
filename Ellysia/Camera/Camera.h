@@ -1,5 +1,5 @@
 #pragma once
-#include "Common/DirectX/DirectXSetup.h"
+#include "Common/Windows/WinApp.h"
 
 #include <Math/Vector/Transform.h>
 #include <Math/Matrix/Matrix/Matrix4x4.h>
@@ -35,6 +35,8 @@ public:
 	void SetTranslate(Vector3 translate) {
 		this->cameraTransform_.translate = translate;
 	}
+
+	void Initialize();
 
 	Matrix4x4 GetViewMatrix();
 

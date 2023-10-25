@@ -22,6 +22,8 @@ void SampleScene::Initialize(GameManager* gameManager) {
 	transform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
 	uint32_t textureHandle_ = TextureManager::LoadTexture("Resources/uvChecker.png");
 	
+	transformSprite_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
+
 	sprite_ = new Sprite();
 	sprite_->LoadTextureHandle(textureHandle_);
 	spriteAllPosition_ = { {0.0f,0.0f},{0.0f,512.0f},{512.0f,0.0f},{512.0f,512.0f} };
@@ -37,7 +39,7 @@ void SampleScene::Update(GameManager* gameManager) {
 
 	ImGui::Begin("Model");
 	ImGui::SliderFloat3("Scale", &transform_.scale.x, 0.0f, 2.0f);
-	ImGui::SliderFloat3("Rotate", &transform_.scale.x, 0.0f, 10.0f);
+	ImGui::SliderFloat3("Rotate", &transform_.rotate.x, 0.0f, 10.0f);
 	ImGui::SliderFloat3("Translate", &transform_.translate.x, -10.0f, 10.0f);
 
 	ImGui::End();
@@ -49,7 +51,7 @@ void SampleScene::Update(GameManager* gameManager) {
 /// </summary>
 void SampleScene::Draw(GameManager* gameManager) {
 	//player_->Draw();
-	sprite_->DrawRect(transformSprite_);
+	//sprite_->DrawRect(transformSprite_);
 	model_->Draw(transform_);
 }
 

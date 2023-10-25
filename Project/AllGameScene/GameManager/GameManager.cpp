@@ -30,6 +30,7 @@ void GameManager::Initialize() {
 	pipelineManager_->GenerateModelPSO();
 	imGuiManager_->Initialize();
 	input_->Initialize();
+	camera_->Initialize();
 	textureManager_->Initilalize();
 	audio_->Initialize();
 

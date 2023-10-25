@@ -8,7 +8,7 @@ Camera::Camera() {
 	//コンストラクタの所で値を入れる
 	//わざわざInitialize関数を作るのは面倒だから
 	//デフォルト
-	cameraTransform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,-9.8f} };
+	
 }
 
 //インスタンス
@@ -18,6 +18,10 @@ Camera* Camera::GetInstance() {
 
 	return &instance;
 	
+}
+
+void Camera::Initialize() {
+	cameraTransform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,-9.8f} };
 }
 
 
@@ -30,7 +34,7 @@ Matrix4x4 Camera::GetViewMatrix() {
 
 Matrix4x4 Camera::GetProjectionMatrix_() {
 	//遠視投影行列
-	projectionMatrix_ = MakePerspectiveFovMatrix(0.45f, float(DirectXSetup::GetInstance()->GetClientWidth()) / float(DirectXSetup::GetInstance()->GetClientHeight()), 0.1f, 100.0f);
+	projectionMatrix_ = MakePerspectiveFovMatrix(0.45f, float(WinApp::GetInstance()->GetClientWidth()) / float(WinApp::GetInstance()->GetClientHeight()), 0.1f, 100.0f);
 	
 	return projectionMatrix_;
 }

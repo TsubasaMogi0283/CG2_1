@@ -132,6 +132,10 @@ void Audio::PlayWave(const SoundData& soundData,bool isLoop) {
 		//ずっとループさせたいならLoopCountにXAUDIO2_LOOP_INFINITEをいれよう
 		buf.LoopCount = XAUDIO2_LOOP_INFINITE;
 	}
+	if (isLoop == false) {
+		buf.LoopCount = XAUDIO2_NO_LOOP_REGION;
+	}
+
 
 	//波形データの再生
 	hr = pSourceVoice_->SubmitSourceBuffer(&buf);

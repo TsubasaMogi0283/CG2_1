@@ -6,7 +6,10 @@
 #include "Math/Vector/Transform.h"
 
 #include <Player/Player.h>
+
+#include "AllGameScene/GameManager/GameManager.h"
 #include "Polygon/Model/Model.h"
+#include "TextureManager/TextureManager.h"
 
 //StatePatternをル買う時は必ず前方宣言をするように
 class Gamemanager;
@@ -35,4 +38,9 @@ private:
 
 	Transform transform_ = {};
 	
+
+	Sprite* sprite_ = nullptr;
+	Transform transformSprite_ = {};
+
+	SpritePosition spriteAllPosition_ = {};
 };

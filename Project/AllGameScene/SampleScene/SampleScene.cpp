@@ -1,6 +1,4 @@
 #include "SampleScene.h"
-#include "AllGameScene/GameManager/GameManager.h"
-#include "TextureManager/TextureManager.h"
 
 /// <summary>
 	/// コンストラクタ
@@ -22,8 +20,12 @@ void SampleScene::Initialize(GameManager* gameManager) {
 	model_->CreateObject("Resources/Sample/Enemy", "enemy.obj");
 
 	transform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
-
-
+	uint32_t textureHandle_ = TextureManager::LoadTexture("Resources/uvChecker.png");
+	
+	sprite_ = new Sprite();
+	sprite_->LoadTextureHandle(textureHandle_);
+	spriteAllPosition_ = { {0.0f,0.0f},{0.0f,512.0f},{512.0f,0.0f},{512.0f,512.0f} };
+	sprite_->SetAllPosition(spriteAllPosition_);
 }
 
 /// <summary>
@@ -31,6 +33,14 @@ void SampleScene::Initialize(GameManager* gameManager) {
 /// </summary>
 void SampleScene::Update(GameManager* gameManager) {
 	//player_->Update();
+
+
+	ImGui::Begin("Model");
+	ImGui::SliderFloat3("Scale", &transform_.scale.x, 0.0f, 2.0f);
+	ImGui::SliderFloat3("Rotate", &transform_.scale.x, 0.0f, 10.0f);
+	ImGui::SliderFloat3("Translate", &transform_.translate.x, -10.0f, 10.0f);
+
+	ImGui::End();
 	
 }
 
@@ -39,7 +49,7 @@ void SampleScene::Update(GameManager* gameManager) {
 /// </summary>
 void SampleScene::Draw(GameManager* gameManager) {
 	//player_->Draw();
-
+	sprite_->DrawRect(transformSprite_);
 	model_->Draw(transform_);
 }
 
@@ -49,4 +59,5 @@ void SampleScene::Draw(GameManager* gameManager) {
 /// </summary>
 SampleScene::~SampleScene() {
 	delete model_;
+	delete sprite_;
 }

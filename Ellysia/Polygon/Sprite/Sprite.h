@@ -67,7 +67,7 @@ private:
 	
 	//Resource作成の関数化
 	//Buffer
-	ID3D12Resource* CreateBufferResource(size_t sizeInBytes);
+	ComPtr<ID3D12Resource> CreateBufferResource(size_t sizeInBytes);
 	//Vertex
 	void CreateVertexBufferView();
 	//Index

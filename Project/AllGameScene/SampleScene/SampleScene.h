@@ -6,6 +6,7 @@
 #include "Math/Vector/Transform.h"
 
 #include <Player/Player.h>
+#include "Polygon/Model/Model.h"
 
 //StatePatternをル買う時は必ず前方宣言をするように
 class Gamemanager;
@@ -29,7 +30,9 @@ public:
 	void Draw(GameManager* gameManager)override;
 
 private:
-	Player* player_ = nullptr;
+	//Player* player_ = nullptr;
+	Model* model_ = nullptr;
 
+	Transform transform_ = {};
 	
 };

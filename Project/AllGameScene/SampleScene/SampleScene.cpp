@@ -15,8 +15,14 @@ SampleScene::SampleScene() {
 /// 初期化
 /// </summary>
 void SampleScene::Initialize(GameManager* gameManager) {
-	player_ = new Player();
-	player_->Initialize();
+	//player_ = new Player();
+	//player_->Initialize();
+
+	model_ = new Model();
+	model_->CreateObject("Resources/Sample/Enemy", "enemy.obj");
+
+	transform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
+
 
 }
 
@@ -33,6 +39,8 @@ void SampleScene::Update(GameManager* gameManager) {
 /// </summary>
 void SampleScene::Draw(GameManager* gameManager) {
 	//player_->Draw();
+
+	model_->Draw(transform_);
 }
 
 
@@ -40,5 +48,5 @@ void SampleScene::Draw(GameManager* gameManager) {
 /// デストラクタ
 /// </summary>
 SampleScene::~SampleScene() {
-	delete player_;
+	delete model_;
 }

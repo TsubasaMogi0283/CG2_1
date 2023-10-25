@@ -5,6 +5,8 @@
 #include <Math/Vector/SpritePosition.h>
 #include "Math/Vector/Transform.h"
 
+#include <Player/Player.h>
+
 //StatePatternをル買う時は必ず前方宣言をするように
 class Gamemanager;
 
@@ -27,11 +29,7 @@ public:
 	void Draw(GameManager* gameManager)override;
 
 private:
-
+	Player* player_ = nullptr;
 
 	
 };
-
-
-
-

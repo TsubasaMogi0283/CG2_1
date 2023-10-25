@@ -88,6 +88,12 @@
     <Filter Include="ソース ファイル\Pipeline">
       <UniqueIdentifier>{dd9a03be-6394-4e47-b16e-f7b88147685e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Project">
+      <UniqueIdentifier>{9f830fa7-3796-4543-9ea6-7142ca3fbe7b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project\Player">
+      <UniqueIdentifier>{601a7746-f0f4-4f9d-807c-447fad5e8d1b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -173,6 +179,9 @@
     </ClCompile>
     <ClCompile Include="Ellysia\ResourceObject\ResourceObject.cpp">
       <Filter>ヘッダー ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Player\Player.cpp">
+      <Filter>Project\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -339,6 +348,9 @@
     </ClInclude>
     <ClInclude Include="Ellysia\Camera\Camera.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Player\Player.h">
+      <Filter>Project\Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

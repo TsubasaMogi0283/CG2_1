@@ -7,7 +7,7 @@ Player::Player() {
 
 //初期化
 void Player::Initialize() {
-	textureManager_ = TextureManager::GetInstance();
+	//textureManager_ = TextureManager::GetInstance();
 
 	model_ = new Model();
 	model_->CreateObject("Resources/Sample/Enemy", "enemy.obj");
@@ -28,7 +28,7 @@ void Player::Update() {
 
 //描画
 void Player::Draw() {
-	model_->Draw(transform_);
+	//model_->Draw(transform_);
 }
 
 

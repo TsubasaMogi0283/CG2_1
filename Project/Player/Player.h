@@ -26,9 +26,9 @@ public:
 private:
 	
 	//Input
-	Input* input_ = nullptr;
+	//Input* input_ = nullptr;
 	//Texturemanager
-	TextureManager* textureManager_ = nullptr;
+	//TextureManager* textureManager_ = nullptr;
 
 
 

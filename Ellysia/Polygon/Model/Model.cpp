@@ -8,13 +8,13 @@ Model::Model() {
 
 }
 
-D3D12_CPU_DESCRIPTOR_HANDLE Model::GetCPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index) {
+D3D12_CPU_DESCRIPTOR_HANDLE Model::GetCPUDescriptorHandle(ComPtr<ID3D12DescriptorHeap> descriptorHeap, uint32_t descriptorSize, uint32_t index) {
 	D3D12_CPU_DESCRIPTOR_HANDLE handleCPU = descriptorHeap->GetCPUDescriptorHandleForHeapStart();
 	handleCPU.ptr += (descriptorSize * index);
 	return handleCPU;
 }
 
-D3D12_GPU_DESCRIPTOR_HANDLE Model::GetGPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index) {
+D3D12_GPU_DESCRIPTOR_HANDLE Model::GetGPUDescriptorHandle(ComPtr<ID3D12DescriptorHeap> descriptorHeap, uint32_t descriptorSize, uint32_t index) {
 	D3D12_GPU_DESCRIPTOR_HANDLE handleGPU = descriptorHeap->GetGPUDescriptorHandleForHeapStart();
 	handleGPU.ptr += (descriptorSize * index);
 	return handleGPU;
@@ -190,9 +190,9 @@ MaterialData Model::LoadMaterialTemplateFile(const std::string& directoryPath, c
 
 
 //Resource作成の関数化
-ID3D12Resource* Model::CreateBufferResource(size_t sizeInBytes) {
+ComPtr<ID3D12Resource> Model::CreateBufferResource(size_t sizeInBytes) {
 	//void返り値も忘れずに
-	ID3D12Resource* resource = nullptr;
+	ComPtr<ID3D12Resource> resource = nullptr;
 	
 	////VertexResourceを生成
 	//頂点リソース用のヒープを設定
@@ -263,7 +263,7 @@ void Model::CreateObject(const std::string& directoryPath,const std::string& fil
 
 
 	////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
-	materialResource_=CreateBufferResource(sizeof(Material));
+	materialResource_=CreateBufferResource(sizeof(Material)).Get();
 
 	//モデルの読み込み
 	//この２つ外に出した方がよさそう
@@ -272,17 +272,17 @@ void Model::CreateObject(const std::string& directoryPath,const std::string& fil
 
 	//頂点リソースを作る
 	//モデルの頂点の数によって変わるよ
-	vertexResource_ = CreateBufferResource(sizeof(VertexData) * modelData_.vertices.size());
+	vertexResource_ = CreateBufferResource(sizeof(VertexData) * modelData_.vertices.size()).Get();
 	
 	//読み込みのところでバッファインデックスを作った方がよさそう
 	GenerateVertexBufferView();
 	
 	//Sprite用のTransformationMatrix用のリソースを作る。
 	//Matrix4x4 1つ分サイズを用意する
-	transformationMatrixResource_ = CreateBufferResource(sizeof(TransformationMatrix));
+	transformationMatrixResource_ = CreateBufferResource(sizeof(TransformationMatrix)).Get();
 	
 	//Lighting
-	directionalLightResource_ = CreateBufferResource(sizeof(DirectionalLight));
+	directionalLightResource_ = CreateBufferResource(sizeof(DirectionalLight)).Get();
 	directionalLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightData_));
 	directionalLightData_->color={ 1.0f,1.0f,1.0f,1.0f };
 	directionalLightData_->direction = { 0.0f,-1.0f,0.0f };
@@ -372,34 +372,7 @@ void Model::Draw(Transform transform) {
 
 }
 
-//解放
-void Model::Release() {
 
-
-
-	
-
-
-
-
-
-	vertexResource_->Release();
-
-
-	transformationMatrixResource_->Release();
-
-	//マテリアル用のリソースを作る
-	materialResource_->Release();
-
-
-	//Lighting用
-	directionalLightResource_->Release();
-	
-	resource_->Release();
-
-
-
-}
 
 
 //デストラクタ

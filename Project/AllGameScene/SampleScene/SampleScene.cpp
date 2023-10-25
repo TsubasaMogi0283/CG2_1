@@ -24,7 +24,7 @@ void SampleScene::Initialize(GameManager* gameManager) {
 /// 更新
 /// </summary>
 void SampleScene::Update(GameManager* gameManager) {
-	player_->Update();
+	//player_->Update();
 	
 }
 
@@ -32,7 +32,7 @@ void SampleScene::Update(GameManager* gameManager) {
 /// 描画
 /// </summary>
 void SampleScene::Draw(GameManager* gameManager) {
-	player_->Draw();
+	//player_->Draw();
 }
 
 

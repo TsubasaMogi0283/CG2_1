@@ -291,7 +291,6 @@ void DirectXSetup::GenerateSwapChain() {
 		reinterpret_cast<IDXGISwapChain1**>(&DirectXSetup::GetInstance()->swapChain));
 	assert(SUCCEEDED(hr));
 	
-	//DirectXSetup::GetInstance()->m_commandQueue_ = commandQueue;
 	DirectXSetup::GetInstance()->swapChain.swapChainDesc = swapChainDesc;
 
 }

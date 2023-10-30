@@ -43,7 +43,7 @@ void DebugCamera::Update() {
 
 
 	#pragma region ビュー行列の更新
-	viewProjection_.matView_ = Multiply(Inverse(translateMatrix), Inverse(matRot_));
+	//viewProjection_.matView_ = Multiply(Inverse(translateMatrix), Inverse(matRot_));
 	//プロジェクション行列の計算
 	viewProjection_.matProjection_ = MakePerspectiveFovMatrix(
 		viewProjection_.fov_, viewProjection_.aspectRatio_, 

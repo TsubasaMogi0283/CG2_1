@@ -137,9 +137,6 @@ public:
 
 #pragma endregion
 	
-
-private:
-	
 	
 
 

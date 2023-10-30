@@ -1,7 +1,7 @@
 #include "Common/Windows/WinApp.h"
 
+#pragma comment(lib,"winmm.lib")
 
-static WinApp* instance;
 
 //コンストラクタ
 WinApp::WinApp() {
@@ -11,14 +11,9 @@ WinApp::WinApp() {
 
 
 WinApp* WinApp::GetInstance() {
-	//関数内static変数として宣言する
-	//共有するからここに宣言して大丈夫
-	if (instance== nullptr) {
-		instance = new WinApp();
+	static WinApp instance;
 
-	}
-
-	return instance;
+	return &instance;
 }
 
 
@@ -98,6 +93,8 @@ void WinApp::Initialize(const wchar_t* title, int32_t clientWidth,int32_t client
 	this->clientWidth_ = clientWidth;
 	this->clientHeight_ = clientHeight;
 
+	//システムタイマーの分解能を上げる
+	timeBeginPeriod(1);
 
 	//ウィンドウクラスを登録
 	RegisterWindowsClass();

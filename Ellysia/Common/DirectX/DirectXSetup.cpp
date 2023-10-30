@@ -446,7 +446,11 @@ void DirectXSetup::GenerateScissor() {
 
 //FPS固定初期化
 void DirectXSetup::InitializeFPS() {
+	//現在時間を記録する
+	//初期化前の時間を記録
+	DirectXSetup::GetInstance()->reference_ = std::chrono::steady_clock::now();
 
+	//std::chrono::steady_clock...逆行しないタイマー
 }
 
 #pragma endregion
@@ -459,6 +463,8 @@ void DirectXSetup::Initialize() {
 
 	//出力ウィンドウへの文字出力
 	OutputDebugStringA("Hello,DirectX!\n");
+
+	InitializeFPS();
 
 	//DXGIFactoryを生成
 	GenerateDXGIFactory();
@@ -530,6 +536,39 @@ void DirectXSetup::Initialize() {
 
 	//FPS固定更新
 void DirectXSetup::UpdateFPS() {
+	//1/60秒ピッタリの時間
+	//1フレームの時間
+	const std::chrono::microseconds MIN_TIME(uint64_t(1000000.0f / 60.0f));
+	
+	//1/60秒よりわずかに短い時間
+	const std::chrono::microseconds MIN_CHECK_TIME(uint64_t(1000000.0f / 65.0f));
+
+
+
+	//現在時間を取得する
+	//VSync待ちが完了した時点での時間を取得する
+	std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
+
+	//前回記録からの経過時間を取得する
+	//現在時間から前回の時間を引くことで前回からの経過時間を取得する
+	std::chrono::microseconds elapsed = std::chrono::duration_cast<std::chrono::microseconds>(now - DirectXSetup::GetInstance()->reference_);
+
+	//前回から1/60秒経つまで待機する
+	//1/60秒(よりわずかに短い時間)経っていない場合
+	if (elapsed < MIN_CHECK_TIME) {
+		//1/60秒経過するまで微小なスリープを繰り返す
+		while (std::chrono::steady_clock::now() - DirectXSetup::GetInstance()->reference_ < MIN_TIME) {
+			//1マイクロ秒スリープ
+			std::this_thread::sleep_for(std::chrono::microseconds(1));
+		}
+	}
+
+	//次のフレームの計算に使うため、待機完了後の時間を記録しておく
+	//現在の時間を記録する
+	DirectXSetup::GetInstance()->reference_ = std::chrono::steady_clock::now();
+
+
+
 
 }
 
@@ -661,7 +700,8 @@ void DirectXSetup::EndFrame() {
 		WaitForSingleObject(fenceEvent_, INFINITE);
 	}
 	
-	
+	UpdateFPS();
+
 
 	hr = DirectXSetup::GetInstance()->m_commandAllocator_->Reset();
 	assert(SUCCEEDED(hr));

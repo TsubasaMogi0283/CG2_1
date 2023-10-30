@@ -15,9 +15,9 @@ Sprite::Sprite(){
 
 
 //Resource作成の関数化
-ID3D12Resource* Sprite::CreateBufferResource(size_t sizeInBytes) {
+ComPtr<ID3D12Resource> Sprite::CreateBufferResource(size_t sizeInBytes) {
 	//void返り値も忘れずに
-	ID3D12Resource* resource = nullptr;
+	ComPtr<ID3D12Resource> resource = nullptr;
 	
 	////VertexResourceを生成
 	//頂点リソース用のヒープを設定
@@ -88,14 +88,14 @@ void Sprite::Initialize() {
 	//ここでBufferResourceを作る
 	//Sprite用の頂点リソースを作る
 	//以前三角形二枚にしてたけど結合して四角一枚で良くなったので4で良いよね
-	vertexResource_ = CreateBufferResource(sizeof(VertexData) * 6);
+	vertexResource_ = CreateBufferResource(sizeof(VertexData) * 6).Get();
 	//index用のリソースを作る
-	indexResource_ = CreateBufferResource(sizeof(uint32_t) * 6);
+	indexResource_ = CreateBufferResource(sizeof(uint32_t) * 6).Get();
 	////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
 	materialResource_=CreateBufferResource(sizeof(Material));
 	//Sprite用のTransformationMatrix用のリソースを作る。
 	//Matrix4x4 1つ分サイズを用意する
-	transformationMatrixResource_ = CreateBufferResource(sizeof(TransformationMatrix));
+	transformationMatrixResource_ = CreateBufferResource(sizeof(TransformationMatrix)).Get();
 	
 
 	//頂点バッファビューを作成する

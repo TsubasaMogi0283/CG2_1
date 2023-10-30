@@ -48,6 +48,15 @@ public:
 	void SetAllPosition(SpritePosition spritePosition) {
 		this->position_ = spritePosition;
 	}
+
+
+
+
+
+
+
+
+	//色
 	void SetTransparency(float transparency) {
 		this->color_.w = transparency;
 	}
@@ -79,6 +88,9 @@ private:
 
 private:
 	DirectXSetup* directXSetup_ = nullptr;
+
+
+#pragma region リソース
 
 	//関数用
 	D3D12_HEAP_PROPERTIES uploadHeapProperties_{};
@@ -126,6 +138,9 @@ private:
 
 	D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU_;
 	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU_;
+
+
+#pragma endregion
 
 
 

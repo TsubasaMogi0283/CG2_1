@@ -176,7 +176,7 @@ void Sprite::DrawRect(Transform transform) {
 	rightTop_ = {position_.rightTop.x,position_.rightTop.y,0.0f,1.0f};
 
 	
-	//AssertInformation();
+	AssertInformation();
 
 	
 
@@ -244,6 +244,7 @@ void Sprite::DrawRect(Transform transform) {
 	
 
 	//新しく引数作った方が良いかも
+	//3x3x3
 	Matrix4x4 worldMatrixSprite = MakeAffineMatrix(transform.scale,transform.rotate,transform.translate);
 	//遠視投影行列
 	Matrix4x4 viewMatrixSprite = MakeIdentity4x4();

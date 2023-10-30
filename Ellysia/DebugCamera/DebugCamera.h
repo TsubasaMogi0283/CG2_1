@@ -1,6 +1,7 @@
 #pragma once
 #include <Math/Vector/Vector3.h>
 #include "ViewProjection/ViewProjection.h"
+#include "WorldTransform/WorldTransform.h"
 
 class DebugCamera {
 private:
@@ -31,15 +32,22 @@ public:
 
 
 private:
+	//必要性はあまりないけど一応Scaleも
+	Vector3 scale_ = {};
+
 	//X,Y,Z軸回りのローカル回転角
-	Vector3 rotattion_ = { 0.0f,0.0f,0.0f };
+	Vector3 rotattion_ = { };
 	//ローカル座標
-	Vector3 translate_ = { 0.0f,0.0f, - 50.0f };
+	Vector3 translate_ = {};
 
 	//ビュー行列
 	ViewProjection viewProjection_ = {};
 
-	//射影行列
+	//ワールド座標
+	WorldTransform worldTransform_ = {};
+
+	//累積回転行列
+	Matrix4x4 matRot_ = {};
 
 
 };

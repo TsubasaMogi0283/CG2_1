@@ -12,12 +12,12 @@ struct WorldTransform {
 	//座標
 	Vector3 translation_ = {0.0f, 0.0f, 0.0f};
 	//ワールド変換行列
-	Matrix4x4 matWorld_;
+	Matrix4x4 matWorld_{};
 	// 親となるワールド変換へのポインタ
 	const WorldTransform* parent_ = nullptr;
 
 
-
+	//行列の計算
 	void UpdateMatrix();
 
 

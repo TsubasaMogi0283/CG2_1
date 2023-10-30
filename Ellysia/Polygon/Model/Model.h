@@ -52,8 +52,6 @@ public:
 	//描画
 	void Draw(Transform transform);
 
-	//解放
-	void Release();
 
 	//デストラクタ
 	~Model();
@@ -78,7 +76,7 @@ public:
 private:
 
 	//Resource作成の関数化
-	ID3D12Resource* CreateBufferResource(size_t sizeInBytes);
+	ComPtr<ID3D12Resource> CreateBufferResource(size_t sizeInBytes);
 
 	//頂点バッファビューを作成する
 	void GenerateVertexBufferView();
@@ -99,7 +97,7 @@ private:
 	ModelData modelData_;
 
 	//頂点リソースを作る
-	ID3D12Resource* vertexResource_ = nullptr;
+	ComPtr<ID3D12Resource> vertexResource_ = nullptr;
 	//関数用
 	D3D12_HEAP_PROPERTIES uploadHeapProperties_{};
 	D3D12_RESOURCE_DESC vertexResourceDesc_{};
@@ -128,6 +126,7 @@ private:
 
 	uint32_t descriptorSizeSRV_ = 0u;
 
+	ComPtr<ID3D12Resource> resource_ = nullptr;
 
 
 	//構築するModelData
@@ -138,5 +137,4 @@ private:
 	Vector4 color_;
 
 	
-	ID3D12Resource* resource = nullptr;
 };

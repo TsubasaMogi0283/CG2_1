@@ -18,6 +18,10 @@
 #include <wrl.h>
 using Microsoft::WRL::ComPtr;
 
+
+#include <chrono>
+
+
 struct SwapChain{
 	ComPtr<IDXGISwapChain4> m_pSwapChain;
 	ComPtr<ID3D12Resource> m_pResource[2];
@@ -66,6 +70,10 @@ private:
 #pragma region 初期化について
 	//初期化へ
 
+	
+
+
+
 	static void GenerateDXGIFactory();
 
 	static void SelectAdapter();
@@ -90,7 +98,15 @@ private:
 
 
 #pragma endregion
-	
+
+private:
+	//FPS固定初期化
+	static void InitializeFPS();
+
+	//FPS固定更新
+	static void UpdateFPS();
+
+
 
 public:
 
@@ -103,6 +119,8 @@ public:
 #pragma region whileの中身
 	//whileの中身
 	void BeginFrame();
+
+	
 
 	void EndFrame();
 
@@ -118,6 +136,10 @@ public:
 	
 
 #pragma endregion
+	
+
+private:
+	
 	
 
 
@@ -173,31 +195,24 @@ private:
 	HWND hwnd_;
 
 
-	//
+	//デバイス
 	ComPtr<IDXGIFactory7> m_dxgiFactory_ = nullptr;
 	ComPtr<IDXGIAdapter4> m_useAdapter_ = nullptr;
 	ComPtr<ID3D12Device> m_device_ = nullptr;
 
 
 
-
+	//コマンド
 	ComPtr<ID3D12GraphicsCommandList> m_commandList_ = nullptr;
-	
 	ComPtr<ID3D12CommandQueue> m_commandQueue_ = nullptr;
-	
-	
 	ComPtr<ID3D12CommandAllocator> m_commandAllocator_ = nullptr;
 
 
 	
-
-
 	UINT backBufferIndex_;
 
 
-
-
-
+	//ディスクリプタ
 	ComPtr<ID3D12DescriptorHeap> m_rtvDescriptorHeap_ = nullptr;
 	ComPtr<ID3D12DescriptorHeap> m_srvDescriptorHeap_ = nullptr;
 	ComPtr<ID3D12DescriptorHeap> m_dsvDescriptorHeap_ = nullptr;
@@ -209,7 +224,6 @@ private:
 	
 
 	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc_{};
-
 	D3D12_CPU_DESCRIPTOR_HANDLE rtvStartHandle_;
 	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandles_[2] = {};
 	D3D12_DESCRIPTOR_HEAP_DESC rtvDescriptorHeapDesc_{};
@@ -235,6 +249,12 @@ private:
 
 
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_{};
+
+
+
+	//FPS
+	//記録時間(FPS固定用)
+	std::chrono::steady_clock::time_point reference_;
 
 
 };

@@ -444,6 +444,11 @@ void DirectXSetup::GenerateScissor() {
 }
 
 
+//FPS固定初期化
+void DirectXSetup::InitializeFPS() {
+
+}
+
 #pragma endregion
 
 void DirectXSetup::Initialize() {
@@ -522,6 +527,11 @@ void DirectXSetup::Initialize() {
 }
 
 
+
+	//FPS固定更新
+void DirectXSetup::UpdateFPS() {
+
+}
 
 
 void DirectXSetup::BeginFrame() {

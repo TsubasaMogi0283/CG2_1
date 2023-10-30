@@ -650,7 +650,7 @@ void DirectXSetup::EndFrame() {
 		//イベントを待つ
 		WaitForSingleObject(fenceEvent_, INFINITE);
 	}
-
+	
 	
 
 	hr = DirectXSetup::GetInstance()->m_commandAllocator_->Reset();

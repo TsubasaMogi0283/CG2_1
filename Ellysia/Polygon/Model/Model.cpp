@@ -8,13 +8,13 @@ Model::Model() {
 
 }
 
-D3D12_CPU_DESCRIPTOR_HANDLE Model::GetCPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index) {
+D3D12_CPU_DESCRIPTOR_HANDLE Model::GetCPUDescriptorHandle(ComPtr<ID3D12DescriptorHeap> descriptorHeap, uint32_t descriptorSize, uint32_t index) {
 	D3D12_CPU_DESCRIPTOR_HANDLE handleCPU = descriptorHeap->GetCPUDescriptorHandleForHeapStart();
 	handleCPU.ptr += (descriptorSize * index);
 	return handleCPU;
 }
 
-D3D12_GPU_DESCRIPTOR_HANDLE Model::GetGPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index) {
+D3D12_GPU_DESCRIPTOR_HANDLE Model::GetGPUDescriptorHandle(ComPtr<ID3D12DescriptorHeap> descriptorHeap, uint32_t descriptorSize, uint32_t index) {
 	D3D12_GPU_DESCRIPTOR_HANDLE handleGPU = descriptorHeap->GetGPUDescriptorHandleForHeapStart();
 	handleGPU.ptr += (descriptorSize * index);
 	return handleGPU;
@@ -192,7 +192,7 @@ MaterialData Model::LoadMaterialTemplateFile(const std::string& directoryPath, c
 //Resource作成の関数化
 ID3D12Resource* Model::CreateBufferResource(size_t sizeInBytes) {
 	//void返り値も忘れずに
-	ID3D12Resource* resource = nullptr;
+	
 	
 	////VertexResourceを生成
 	//頂点リソース用のヒープを設定
@@ -258,9 +258,6 @@ void Model::CreateObject(const std::string& directoryPath,const std::string& fil
 	//PSOの設定
 	//全部のブレンドモードに対応させたい
 	//switch文でやるのが良いかなと思った。切り替えが楽だから
-
-
-
 
 	////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
 	materialResource_=CreateBufferResource(sizeof(Material));
@@ -374,28 +371,6 @@ void Model::Draw(Transform transform) {
 
 //解放
 void Model::Release() {
-
-
-
-	
-
-
-
-
-
-	vertexResource_->Release();
-
-
-	transformationMatrixResource_->Release();
-
-	//マテリアル用のリソースを作る
-	materialResource_->Release();
-
-
-	//Lighting用
-	directionalLightResource_->Release();
-	
-	resource_->Release();
 
 
 

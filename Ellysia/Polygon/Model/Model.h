@@ -83,8 +83,8 @@ private:
 	//頂点バッファビューを作成する
 	void GenerateVertexBufferView();
 
-	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index);
-	D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index);
+	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(ComPtr<ID3D12DescriptorHeap> descriptorHeap, uint32_t descriptorSize, uint32_t index);
+	D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(ComPtr<ID3D12DescriptorHeap> descriptorHeap, uint32_t descriptorSize, uint32_t index);
 
 
 
@@ -114,21 +114,20 @@ private:
 
 	//Sprite用のTransformationMatrix用のリソースを作る。
 	//Matrix4x4 1つ分サイズを用意する
-	ID3D12Resource* transformationMatrixResource_ = nullptr;
+	ComPtr<ID3D12Resource> transformationMatrixResource_ = nullptr;
 	TransformationMatrix* transformationMatrixData_ = nullptr;
 
 	//マテリアル用のリソースを作る
-	ID3D12Resource* materialResource_ = nullptr;
+	ComPtr<ID3D12Resource> materialResource_ = nullptr;
 	Material* materialData_ = nullptr;
 
 
 	//Lighting用
-	ID3D12Resource* directionalLightResource_ = nullptr;
+	ComPtr<ID3D12Resource> directionalLightResource_ = nullptr;
 	DirectionalLight* directionalLightData_ = nullptr;
 
 	uint32_t descriptorSizeSRV_ = 0u;
 
-	ID3D12Resource* resource_ = nullptr;
 
 
 	//構築するModelData
@@ -139,4 +138,5 @@ private:
 	Vector4 color_;
 
 	
+	ID3D12Resource* resource = nullptr;
 };

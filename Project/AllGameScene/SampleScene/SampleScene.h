@@ -5,6 +5,8 @@
 #include <Math/Vector/SpritePosition.h>
 #include "Math/Vector/Transform.h"
 
+#include "Polygon/Model/Model.h"
+
 //StatePatternをル買う時は必ず前方宣言をするように
 class Gamemanager;
 
@@ -28,8 +30,8 @@ public:
 
 private:
 
-
-	
+	Model* model_ = nullptr;
+	Transform modelTransform_ = {};
 };
 
 

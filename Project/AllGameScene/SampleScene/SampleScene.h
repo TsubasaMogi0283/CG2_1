@@ -32,10 +32,12 @@ private:
 
 	Model* model_ = nullptr;
 	Transform modelTransform_ = {};
+	Vector4 modelColor_ = {};
 
 
 	Sprite* sprite = nullptr;
 	Transform spriteTransform_ = {};
+	Vector4 spriteColor_ = {};
 
 };
 

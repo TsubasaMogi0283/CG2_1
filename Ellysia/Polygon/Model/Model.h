@@ -61,6 +61,9 @@ public:
 
 public:
 	//アクセッサのまとめ
+	void SetBlendMode(int32_t blendmode) {
+		blendModeNumber_ = blendmode;
+	}
 
 	//透明度の変更
 	void SetColor(Vector4 color) {
@@ -137,4 +140,7 @@ private:
 	Vector4 color_;
 
 	
+
+	//デフォルトはα加算
+	int32_t blendModeNumber_ ;
 };

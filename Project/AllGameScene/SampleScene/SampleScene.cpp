@@ -1,6 +1,7 @@
 #include "SampleScene.h"
 #include "AllGameScene/GameManager/GameManager.h"
 #include "TextureManager/TextureManager.h"
+#include <Blend/BlendMode.h>
 
 /// <summary>
 	/// コンストラクタ
@@ -15,14 +16,18 @@ SampleScene::SampleScene() {
 /// 初期化
 /// </summary>
 void SampleScene::Initialize(GameManager* gameManager) {
+
+	//BlendModeを使う時は各Initializeの前で使ってね
 	model_ = new Model();
+	model_->SetBlendMode(BlendModeSubtract);
 	model_->CreateObject("Resources/05_02","plane.obj");
 	modelTransform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
 
 	spriteTransform_ = { {0.5f,0.5f,0.5f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
 	sprite = new Sprite();
 	uint32_t textureHandle = TextureManager::LoadTexture("Resources/uvChecker.png");
-	sprite->SetBlendMode(blendmode_);
+
+	sprite->SetBlendMode(BlendModeAdd);
 	sprite->LoadTextureHandle(textureHandle);
 	sprite->SetAllPosition({ { 0.0f,0.0f }, { 0.0f,512.0f }, { 512.0f,0.0f, }, { 512.0f,512.0f} });
 

@@ -61,12 +61,23 @@ struct PixelShaderOutput {
 PixelShaderOutput main(VertexShaderOutput input) {
 	PixelShaderOutput output;
 	
+   
+	
 	//Materialを拡張する
 	float4 transformedUV = mul(float32_t4(input.texcoord,0.0f, 1.0f), gMaterial.uvTransform);
 	float32_t4 textureColor = gTexture.Sample(gSampler, transformedUV.xy);
-
+	
+    if (textureColor.a <= 0.5f)
+    {
+        discard;
+    }
+    if (output.color.a == 0.0f)
+    {
+        discard;
+    }
+	
 	//Lightingする場合
-	if (gMaterial.enableLighting != 0) {
+	if (gMaterial.enableLighting != 0){
 	
 		//このままdotだと[-1,1]になる。
 		//光が当たらないところは「当たらない」のでもっと暗くなるわけではない。そこでsaturate関数を使う
@@ -78,17 +89,20 @@ PixelShaderOutput main(VertexShaderOutput input) {
 		float NdotL = dot(normalize(input.normal), -gDirectionalLight.direction);
 		float cos = pow(NdotL * 0.5f + 0.5f, 2.0f);
 
-		
-
+	
 		output.color = gMaterial.color * textureColor * gDirectionalLight.color * cos * gDirectionalLight.intensity;
 	
-	}
-	else {
-		//Lightingしない場合
-		output.color = gMaterial.color * textureColor;
-	}
+		
 
+    }
+    else{
+	//Lightingしない場合
+		output.color = gMaterial.color * textureColor;
+    }
+
+    
+    
+    
 	
-	
-	return output;
+    return output;
 }

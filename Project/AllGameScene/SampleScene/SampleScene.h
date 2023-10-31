@@ -41,7 +41,7 @@ private:
 	int32_t blendmode_ = 5;
 
 	Vector3 cameraPosition_ = {};
-
+	Vector3 cameraRotate_ = {};
 };
 
 

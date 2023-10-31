@@ -27,13 +27,13 @@ void SampleScene::Initialize(GameManager* gameManager) {
 	sprite = new Sprite();
 	uint32_t textureHandle = TextureManager::LoadTexture("Resources/uvChecker.png");
 
-	sprite->SetBlendMode(BlendModeAdd);
+	sprite->SetBlendMode(BlendModeNormal);
 	sprite->LoadTextureHandle(textureHandle);
 	sprite->SetAllPosition({ { 0.0f,0.0f }, { 0.0f,512.0f }, { 512.0f,0.0f, }, { 512.0f,512.0f} });
 
 	
-	cameraPosition_ = Camera::GetInstance()->GetTranslate();
-
+	cameraPosition_ = {0.0f,3.7f,-8.0f};
+	cameraRotate_ = { 0.4f,0.0f,0.0f };
 }
 
 /// <summary>
@@ -41,8 +41,14 @@ void SampleScene::Initialize(GameManager* gameManager) {
 /// </summary>
 void SampleScene::Update(GameManager* gameManager) {
 	
-
+	//カメラ
+	Camera::GetInstance()->SetRotate(cameraRotate_);
 	Camera::GetInstance()->SetTranslate(cameraPosition_);
+
+
+
+
+
 	sprite->SetColor(spriteColor_);
 	model_->SetColor(modelColor_);
 
@@ -59,7 +65,8 @@ void SampleScene::Update(GameManager* gameManager) {
 	ImGui::End();
 	
 	ImGui::Begin("Camera");
-	ImGui::SliderFloat3("Translate", &cameraPosition_.x, -10.0f, 10.0f);
+	ImGui::SliderFloat3("Translate", &cameraPosition_.x, -20.0f, 10.0f);
+	ImGui::SliderFloat3("Rotate", &cameraRotate_.x, -5.0f, 5.0f);
 	ImGui::End();
 
 }

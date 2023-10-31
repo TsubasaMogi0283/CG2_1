@@ -115,7 +115,8 @@ void Sprite::Initialize() {
 		{0.0f,0.0f,0.0f} 
 	};
 
-	PipelineManager::GetInstance()->SetSpriteBlendMode(BlendModeAdd);
+	//ブレンドモードの設定
+	PipelineManager::GetInstance()->SetSpriteBlendMode(BlendModeMultiply);
 	PipelineManager::GetInstance()->GenerateSpritePSO();
 	
 }

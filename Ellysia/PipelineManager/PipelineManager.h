@@ -28,6 +28,9 @@ public:
 	static PipelineManager* GetInstance();
 
 
+
+#pragma region アクセッサ
+
 	//コマンドに積む専用のGetter
 	ComPtr<ID3D12RootSignature> GetSpriteRootSignature() {
 		return spriteRootSignature_;
@@ -44,10 +47,16 @@ public:
 		return modelGraphicsPipelineState_;
 	}
 
-	void Release();
+	void SetSpriteBlendMode(int32_t blendmode) {
+		selectSpriteBlendMode_ = blendmode;
+	}
+	void SetModelBlendMode(int32_t blendmode) {
+		selectModelBlendMode_ = blendmode;
+	}
+
+#pragma endregion
 
 public:
-	//private関数
 	//アロー演算子の時邪魔になってしまうからここにいれよう
 
 	//スプライト用
@@ -74,6 +83,12 @@ private:
 	ComPtr<IDxcBlob> modelVertexShaderBlob_ = nullptr;
 	ComPtr<ID3D12PipelineState> modelGraphicsPipelineState_ = nullptr;
 
+
+	//スプライト用
+	int32_t selectSpriteBlendMode_ = 1;
+
+	//モデル用の
+	int32_t selectModelBlendMode_ = 1;
 
 };
 

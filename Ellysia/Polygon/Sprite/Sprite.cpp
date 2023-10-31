@@ -4,6 +4,7 @@
 
 //動的配列
 #include <vector>
+#include <Blend/BlendMode.h>
 
 
 
@@ -84,6 +85,9 @@ void Sprite::Initialize() {
 	position_ = {};
 	color_ = { 1.0f,1.0f,1.0f,1.0f };
 	
+
+
+
 	
 	//ここでBufferResourceを作る
 	//Sprite用の頂点リソースを作る
@@ -111,7 +115,8 @@ void Sprite::Initialize() {
 		{0.0f,0.0f,0.0f} 
 	};
 
-
+	PipelineManager::GetInstance()->SetSpriteBlendMode(BlendModeAdd);
+	PipelineManager::GetInstance()->GenerateSpritePSO();
 	
 }
 

@@ -21,9 +21,11 @@ void SampleScene::Initialize(GameManager* gameManager) {
 
 	spriteTransform_ = { {0.5f,0.5f,0.5f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
 	sprite = new Sprite();
-	uint32_t textureHandle = TextureManager::LoadTexture("Resources/monsterBall.png");
+	uint32_t textureHandle = TextureManager::LoadTexture("Resources/uvChecker.png");
 	sprite->LoadTextureHandle(textureHandle);
-	sprite->SetAllPosition({ { 0.0f,0.0f }, { 0.0f,600.0f }, { 1200.0f,0.0f, }, { 1200.0f,600.0f} });
+	sprite->SetAllPosition({ { 0.0f,0.0f }, { 0.0f,512.0f }, { 512.0f,0.0f, }, { 512.0f,512.0f} });
+
+
 
 
 }
@@ -34,6 +36,7 @@ void SampleScene::Initialize(GameManager* gameManager) {
 void SampleScene::Update(GameManager* gameManager) {
 
 	sprite->SetColor(spriteColor_);
+	model_->SetColor(modelColor_);
 
 	ImGui::Begin("Sprite");
 	ImGui::SliderFloat4("Color", &spriteColor_.x, 0.0f, 1.0f);

@@ -291,7 +291,8 @@ void Model::CreateObject(const std::string& directoryPath,const std::string& fil
 	color_ = { 1.0f,1.0f,1.0f,1.0f };
 	
 	
-
+	//pipelineManager_->GenerateSpritePSO();
+	//pipelineManager_->GenerateModelPSO();
 }
 
 

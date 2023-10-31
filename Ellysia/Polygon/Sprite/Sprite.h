@@ -163,4 +163,8 @@ private:
 
 	uint32_t texturehandle_ = 0u;
 	bool isLoadTexture_ = false;
+
+	//デフォルトはα加算
+	int32_t blendModeNumber_ = 1;
+
 };

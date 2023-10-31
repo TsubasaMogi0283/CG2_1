@@ -19,6 +19,12 @@ void SampleScene::Initialize(GameManager* gameManager) {
 	model_->CreateObject("Resources/05_02","plane.obj");
 	modelTransform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
 
+	spriteTransform_ = { {0.5f,0.5f,0.5f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
+	sprite = new Sprite();
+	uint32_t textureHandle = TextureManager::LoadTexture("Resources/monsterBall.png");
+	sprite->LoadTextureHandle(textureHandle);
+	sprite->SetAllPosition({ { 0.0f,0.0f }, { 0.0f,600.0f }, { 1200.0f,0.0f, }, { 1200.0f,600.0f} });
+
 
 }
 
@@ -40,6 +46,7 @@ void SampleScene::Update(GameManager* gameManager) {
 /// </summary>
 void SampleScene::Draw(GameManager* gameManager) {
 	model_->Draw(modelTransform_);
+	sprite->DrawRect(spriteTransform_);
 }
 
 /// <summary>
@@ -47,4 +54,5 @@ void SampleScene::Draw(GameManager* gameManager) {
 /// </summary>
 SampleScene::~SampleScene() {
 	delete model_;
+	delete sprite;
 }

@@ -32,6 +32,11 @@ private:
 
 	Model* model_ = nullptr;
 	Transform modelTransform_ = {};
+
+
+	Sprite* sprite = nullptr;
+	Transform spriteTransform_ = {};
+
 };
 
 

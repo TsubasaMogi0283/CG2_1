@@ -39,6 +39,9 @@ private:
 	Transform spriteTransform_ = {};
 	Vector4 spriteColor_ = {1.0f,1.0f,1.0f,1.0f};
 	int32_t blendmode_ = 5;
+
+	Vector3 cameraPosition_ = {};
+
 };
 
 

@@ -642,9 +642,6 @@ void DirectXSetup::BeginFrame() {
 	DirectXSetup::GetInstance()->m_commandList_->RSSetScissorRects(1, &scissorRect_);
 
 
-	//これをそれぞれに入れたい
-	//commandList_->SetGraphicsRootSignature(rootSignature_);
-	//commandList_->SetPipelineState(graphicsPipelineState_);
 	
 }
 

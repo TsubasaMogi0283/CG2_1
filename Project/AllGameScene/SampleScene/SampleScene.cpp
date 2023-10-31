@@ -22,10 +22,11 @@ void SampleScene::Initialize(GameManager* gameManager) {
 	spriteTransform_ = { {0.5f,0.5f,0.5f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
 	sprite = new Sprite();
 	uint32_t textureHandle = TextureManager::LoadTexture("Resources/uvChecker.png");
+	sprite->SetBlendMode(blendmode_);
 	sprite->LoadTextureHandle(textureHandle);
 	sprite->SetAllPosition({ { 0.0f,0.0f }, { 0.0f,512.0f }, { 512.0f,0.0f, }, { 512.0f,512.0f} });
 
-
+	
 
 
 }
@@ -34,7 +35,7 @@ void SampleScene::Initialize(GameManager* gameManager) {
 /// 更新
 /// </summary>
 void SampleScene::Update(GameManager* gameManager) {
-	sprite->SetBlendMode(blendmode_);
+	
 	sprite->SetColor(spriteColor_);
 	model_->SetColor(modelColor_);
 

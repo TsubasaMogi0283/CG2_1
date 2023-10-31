@@ -50,7 +50,9 @@ public:
 	}
 
 
-
+	void SetBlendMode(int32_t blendmode) {
+		blendModeNumber_ = blendmode;
+	}
 
 
 

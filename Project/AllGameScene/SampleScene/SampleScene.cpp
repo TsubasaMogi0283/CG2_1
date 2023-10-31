@@ -34,13 +34,12 @@ void SampleScene::Initialize(GameManager* gameManager) {
 /// 更新
 /// </summary>
 void SampleScene::Update(GameManager* gameManager) {
-
+	sprite->SetBlendMode(blendmode_);
 	sprite->SetColor(spriteColor_);
 	model_->SetColor(modelColor_);
 
 	ImGui::Begin("Sprite");
 	ImGui::SliderFloat4("Color", &spriteColor_.x, 0.0f, 1.0f);
-
 	ImGui::End();
 
 

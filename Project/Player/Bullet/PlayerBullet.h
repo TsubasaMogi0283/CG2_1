@@ -6,7 +6,7 @@ public:
 
 	PlayerBullet();
 
-	void Initialize(Vector3 position);
+	void Initialize(Vector3 position,Vector3 velocity);
 
 	void Update();
 
@@ -17,6 +17,8 @@ public:
 private:
 	Model* model_ = nullptr;
 	Transform transform_ = {};
+
+	Vector3 velocity_;
 
 };
 

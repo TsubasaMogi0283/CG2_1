@@ -109,6 +109,10 @@ uint32_t TextureManager::LoadTexture(const std::string& filePath) {
 	//同じ画像しか貼れなかったのはこれが原因
 	++textureIndex;
 
+	if (textureIndex > 127) {
+		textureIndex = 0;
+	}
+
 	//Textureを読んで転送する
 	mipImages_[textureIndex] = LoadTextureData(filePath);
 

@@ -67,10 +67,16 @@ void Player::Attack() {
 		ImGui::Begin("s");
 		ImGui::End();
 
+		Vector3 velocity = { 0.0f,0.0f,0.8f };
 
+		
+		Matrix4x4 worldmatrix = MakeAffineMatrix(transform_.scale, transform_.rotate, transform_.translate);
+
+		//プレイヤーの向きに合わせて回転させる
+		velocity = TransformNormal(velocity,worldmatrix );
 
 		PlayerBullet* newBullet = new PlayerBullet();
-		newBullet->Initialize(transform_.translate);
+		newBullet->Initialize(transform_.translate,velocity);
 		
 		bullets_.push_back(newBullet);
 	}

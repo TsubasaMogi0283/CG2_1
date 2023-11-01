@@ -16,6 +16,14 @@ void Enemy::Initialize(){
 
 }
 
+void (Enemy::*Enemy::spFuncTable[])()={
+
+	//0
+	&Enemy::Approach,
+	//1
+	&Enemy::Leave,
+
+};
 
 void Enemy::Approach() {
 	transform_.translate = Add(transform_.translate, approachVelocity_);
@@ -32,20 +40,8 @@ void Enemy::Leave() {
 
 void Enemy::Update(){
 	
-
-	switch (phase_) {
-	case Phase::Approach:
-	default:
-		Approach();
-
-		break;
-		case Phase::Leave:
-		Leave();
-		
-
-
-		break;
-	}
+	(this->*spFuncTable[static_cast<size_t>(phase_)])();
+	
 
 }
 

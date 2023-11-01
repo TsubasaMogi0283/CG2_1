@@ -48,5 +48,9 @@ private:
 
 	Phase phase_;
 
+
+	//メンバ関数ポインタのテーブル
+	static void (Enemy::*spFuncTable[])();
+
 };
 

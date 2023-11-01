@@ -36,6 +36,10 @@ public:
 		this->cameraTransform_.translate = translate;
 	}
 
+	Vector3 GetTranslate() {
+		return cameraTransform_.translate;
+	}
+
 	void Initialize();
 
 	Matrix4x4 GetViewMatrix();

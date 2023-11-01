@@ -35,5 +35,5 @@ public:
 private:
 	Player* player_ = nullptr;
 
-
+	Vector3 cameraTranslate_ = {};
 };

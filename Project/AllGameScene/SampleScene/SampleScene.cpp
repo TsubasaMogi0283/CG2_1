@@ -23,6 +23,16 @@ void SampleScene::Initialize(GameManager* gameManager) {
 /// 更新
 /// </summary>
 void SampleScene::Update(GameManager* gameManager) {
+
+	cameraTranslate_ = Camera::GetInstance()->GetTranslate();
+
+
+	ImGui::Begin("Camera");
+	ImGui::SliderFloat3("Tranlate", &cameraTranslate_.x, -20.0f, 10.0f);
+
+	ImGui::End();
+
+
 	player_->Update();
 
 	

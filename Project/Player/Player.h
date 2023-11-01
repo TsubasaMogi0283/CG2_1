@@ -26,7 +26,7 @@ public:
 private:
 	
 	//Input
-	//Input* input_ = nullptr;
+	Input* input_ = nullptr;
 	//Texturemanager
 	//TextureManager* textureManager_ = nullptr;
 
@@ -35,6 +35,7 @@ private:
 	Model* model_ = nullptr;
 
 	Transform transform_ = {};
+	const float MOVE_AMOUNT_ = 0.1f;
 
 };
 

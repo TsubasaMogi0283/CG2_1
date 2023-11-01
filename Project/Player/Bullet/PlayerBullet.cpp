@@ -23,6 +23,10 @@ void PlayerBullet::Update(){
 
 	transform_.translate = Add(transform_.translate, velocity_);
 
+	if (--deathTimer_ <= 0) {
+		isDead_ = true;
+	}
+
 }
 
 void PlayerBullet::Draw(){

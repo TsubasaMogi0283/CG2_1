@@ -92,6 +92,16 @@ void Player::Update() {
 
 	ImGui::End();
 
+
+	//デスフラグの立った玉を削除
+	bullets_.remove_if([](PlayerBullet* bullet) {
+		if (bullet->IsDead()) {
+			delete bullet;
+			return true;
+		}
+		return false;
+	});
+
 	Rotate();
 	Move();
 	Attack();

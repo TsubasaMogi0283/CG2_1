@@ -1,6 +1,14 @@
 #pragma once
 #include <Polygon/Model/Model.h>
 #include <Math/Vector/Transform.h>
+
+
+enum class Phase {
+	Approach,
+	Leave,
+};
+
+
 class Enemy{
 public:
 
@@ -22,7 +30,10 @@ public:
 	//デストラクタ
 	~Enemy();
 
+private:
 
+	void Approach();
+	void Leave();
 
 
 
@@ -32,7 +43,10 @@ private:
 	Model* model_ = nullptr;
 	Transform transform_ = {};
 
-	Vector3 velocity_ = {};
+	Vector3 approachVelocity_ = {};
+	Vector3 leaveVelocity_ = {};
+
+	Phase phase_;
 
 };
 

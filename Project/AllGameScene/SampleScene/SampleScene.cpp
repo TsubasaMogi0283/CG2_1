@@ -18,6 +18,7 @@ SampleScene::SampleScene() {
 void SampleScene::Initialize(GameManager* gameManager) {
 
 	//BlendModeを使う時は各Initializeの前で使ってね
+	modelColor_ = {1.0f,1.0f,1.0f,1.0f};
 	model_ = new Model();
 	model_->SetBlendMode(BlendModeNormal);
 	model_->CreateObject("Resources/Sample/fence","fence.obj");

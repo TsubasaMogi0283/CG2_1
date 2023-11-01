@@ -452,7 +452,6 @@ void PipelineManager::GenerateModelPSO() {
 	}
 
 	//バイナリを元に生成
-	//ID3D12RootSignature* rootSignature_ = nullptr;
 	hr = DirectXSetup::GetInstance()->GetDevice()->CreateRootSignature(0,PipelineManager::GetInstance()->modelSignatureBlob_->GetBufferPointer(),
 		PipelineManager::GetInstance()->modelSignatureBlob_->GetBufferSize(), IID_PPV_ARGS(&PipelineManager::GetInstance()->modelRootSignature_));
 	assert(SUCCEEDED(hr));
@@ -584,7 +583,9 @@ void PipelineManager::GenerateModelPSO() {
 		blendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
 		blendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ONE;
 
-
+		//小野先生すみません。
+		//	CG3_00_03の2値抜きについての質問で、資料に書いてあること以外で何か追加する物はありますか？
+		//	Model用のPixelShaderでdiscardを資料通りに追加したのですが
 
 
 

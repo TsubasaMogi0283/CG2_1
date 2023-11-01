@@ -94,6 +94,9 @@
     <Filter Include="Project\Player">
       <UniqueIdentifier>{601a7746-f0f4-4f9d-807c-447fad5e8d1b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Project\PlayerBullet">
+      <UniqueIdentifier>{b3c4ff6d-029b-44a9-aae6-02bbe7711848}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -182,6 +185,9 @@
     </ClCompile>
     <ClCompile Include="Project\Player\Player.cpp">
       <Filter>Project\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Player\Bullet\PlayerBullet.cpp">
+      <Filter>Project\PlayerBullet</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -351,6 +357,9 @@
     </ClInclude>
     <ClInclude Include="Project\Player\Player.h">
       <Filter>Project\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Player\Bullet\PlayerBullet.h">
+      <Filter>Project\PlayerBullet</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

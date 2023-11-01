@@ -5,6 +5,9 @@
 
 #include "Player/Bullet/PlayerBullet.h"
 
+#include <list>
+
+
 class Player{
 public:
 	//コンストラクタ
@@ -44,7 +47,7 @@ private:
 
 
 	PlayerBullet* bullet_ = nullptr;
-
+	std::list<PlayerBullet*>bullets_;
 
 };
 

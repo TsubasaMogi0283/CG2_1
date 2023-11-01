@@ -11,6 +11,9 @@ void Player::Initialize() {
 	model_ = new Model();
 	model_->CreateObject("Resources/Sample/cube", "cube.obj");
 
+
+
+
 	transform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
 	input_ = Input::GetInstance();
 }
@@ -60,21 +63,16 @@ void Player::Move() {
 
 
 void Player::Attack() {
-	if (input_->IsPushKey(DIK_SPACE)) {
+	if (input_->IsTriggerKey(DIK_SPACE)) {
 		ImGui::Begin("s");
 		ImGui::End();
 
-		if (bullet_) {
-			delete bullet_;
-			bullet_ = nullptr;
-		}
 
 
 		PlayerBullet* newBullet = new PlayerBullet();
-		newBullet->Initialize({0.0f,0.0f,0.0f});
-
-		bullet_ = newBullet;
-
+		newBullet->Initialize(transform_.translate);
+		
+		bullets_.push_back(newBullet);
 	}
 }
 
@@ -92,25 +90,28 @@ void Player::Update() {
 	Move();
 	Attack();
 
-	if (bullet_) {
-		bullet_->Update();
+	for (PlayerBullet* bullet : bullets_) {
+		bullet->Update();
 	}
-
 	
 }
 
 //描画
 void Player::Draw() {
 	model_->Draw(transform_);
-	if (bullet_) {
-		bullet_->Draw();
+	
+	for (PlayerBullet* bullet : bullets_) {
+		bullet->Draw();
 	}
+	
 }
 
 
 //デストラクタ
 Player::~Player() {
-	delete bullet_;
+	for (PlayerBullet* bullet : bullets_) {
+		delete bullet;
+	}
 	delete model_;
 }
 

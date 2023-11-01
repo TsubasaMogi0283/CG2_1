@@ -17,6 +17,11 @@ void SampleScene::Initialize(GameManager* gameManager) {
 	player_->Initialize();
 	uint32_t textureHandle_ = TextureManager::LoadTexture("Resources/uvChecker.png");
 	cameraTranslate_ = Camera::GetInstance()->GetTranslate();
+
+	
+
+
+
 }
 
 /// <summary>
@@ -34,7 +39,6 @@ void SampleScene::Update(GameManager* gameManager) {
 
 
 	player_->Update();
-
 	
 }
 

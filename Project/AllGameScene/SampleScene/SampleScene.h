@@ -4,8 +4,11 @@
 #include "Polygon/Sprite/Sprite.h"
 #include <Math/Vector/SpritePosition.h>
 #include "Math/Vector/Transform.h"
+#include "Camera/Camera.h"
 
 #include "Polygon/Model/Model.h"
+#include <DebugCamera/DebugCamera.h>
+#include "Input/Input.h"
 
 //StatePatternをル買う時は必ず前方宣言をするように
 class Gamemanager;
@@ -29,9 +32,14 @@ public:
 	void Draw(GameManager* gameManager)override;
 
 private:
+	DebugCamera* debugCamera_ = nullptr;
+	Input* input_ = nullptr;
 
 	Model* model_ = nullptr;
 	Transform modelTransform_ = {};
+
+	bool isActivateCamera_ = false;
+
 };
 
 

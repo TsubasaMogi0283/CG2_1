@@ -36,6 +36,15 @@ public:
 		this->cameraTransform_.translate = translate;
 	}
 
+
+	void SetViewMatrix(Matrix4x4 viewMatrix) {
+		this->viewMatrix_ = viewMatrix;
+	}
+	void SetProjectionMatrix(Matrix4x4 projectionMatrix) {
+		this->projectionMatrix_ = projectionMatrix;
+	}
+
+
 	Matrix4x4 GetViewMatrix();
 
 	Matrix4x4 GetProjectionMatrix_();

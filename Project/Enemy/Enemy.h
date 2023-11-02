@@ -1,6 +1,7 @@
 #pragma once
 #include <Polygon/Model/Model.h>
 #include <Math/Vector/Transform.h>
+#include "State/IEnemy/IEnemy.h"
 
 
 enum class Phase {
@@ -17,7 +18,7 @@ public:
 
 	//初期化
 	void Initialize();
-
+	void ChangeState(IEnemy* newState);
 	
 
 	//更新
@@ -49,8 +50,8 @@ private:
 	Phase phase_;
 
 
-	//メンバ関数ポインタのテーブル
-	static void (Enemy::*spFuncTable[])();
+	IEnemy* state_ = nullptr;
+
 
 };
 

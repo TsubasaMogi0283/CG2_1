@@ -16,14 +16,12 @@ void Enemy::Initialize(){
 
 }
 
-void (Enemy::*Enemy::spFuncTable[])()={
+void Enemy::ChangeState(IEnemy* newState) {
+	delete state_;
+	this->state_ = newState;
 
-	//0
-	&Enemy::Approach,
-	//1
-	&Enemy::Leave,
 
-};
+}
 
 void Enemy::Approach() {
 	transform_.translate = Add(transform_.translate, approachVelocity_);
@@ -40,7 +38,6 @@ void Enemy::Leave() {
 
 void Enemy::Update(){
 	
-	(this->*spFuncTable[static_cast<size_t>(phase_)])();
 	
 
 }

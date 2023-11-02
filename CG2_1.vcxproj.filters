@@ -100,6 +100,9 @@
     <Filter Include="Project\Enemy">
       <UniqueIdentifier>{29073113-0486-4fdc-8731-8a8494acc5ef}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Project\Enemy\State">
+      <UniqueIdentifier>{3d3ded16-7fa8-4061-a6ce-963343903705}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -194,6 +197,15 @@
     </ClCompile>
     <ClCompile Include="Project\Enemy\Enemy.cpp">
       <Filter>Project\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Enemy\State\IEnemy\IEnemy.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Enemy\State\EnemyApproach\EnemyApproach.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyLeave.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -369,6 +381,15 @@
     </ClInclude>
     <ClInclude Include="Project\Enemy\Enemy.h">
       <Filter>Project\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Enemy\State\IEnemy\IEnemy.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Enemy\State\EnemyApproach\EnemyApproach.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Enemy\State\EnemyLeave\EnemyLeave.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

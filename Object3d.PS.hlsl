@@ -74,6 +74,7 @@ PixelShaderOutput main(VertexShaderOutput input) {
     }
    
 	
+	
 	//Lightingする場合
 	if (gMaterial.enableLighting != 0){
 	

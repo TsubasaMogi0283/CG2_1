@@ -508,9 +508,6 @@ void PipelineManager::GenerateModelPSO() {
 	case BlendModeNone:
 		//ブレンド無し
 		blendDesc.RenderTarget[0].BlendEnable = false;
-		blendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
-		blendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
-		blendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
 		break;
 
 	case BlendModeNormal:
@@ -519,6 +516,7 @@ void PipelineManager::GenerateModelPSO() {
 		blendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
 		blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
 		blendDesc.RenderTarget[0].DestBlend=D3D12_BLEND_INV_SRC_ALPHA;
+
 		blendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
 		blendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
 		blendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
@@ -537,10 +535,9 @@ void PipelineManager::GenerateModelPSO() {
 		blendDesc.RenderTarget[0].DestBlend=D3D12_BLEND_ONE;
 		
 		//透明度これはどのブレンドモードでも同じ
-		blendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_SRC_ALPHA;
+		blendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
 		blendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
-		blendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ONE;
-
+		blendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
 
 
 
@@ -555,10 +552,9 @@ void PipelineManager::GenerateModelPSO() {
 		blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_REV_SUBTRACT;
 		blendDesc.RenderTarget[0].DestBlend=D3D12_BLEND_ONE;
 		
-		blendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_SRC_ALPHA;
+		blendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
 		blendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
-		blendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ONE;
-
+		blendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
 		break;
 
 	case BlendModeMultiply: 
@@ -568,10 +564,9 @@ void PipelineManager::GenerateModelPSO() {
 		blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
 		blendDesc.RenderTarget[0].DestBlend=D3D12_BLEND_SRC_COLOR;
 
-		blendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_SRC_ALPHA;
+		blendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
 		blendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
-		blendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ONE;
-
+		blendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
 		break;
 
 	case BlendModeScreen:
@@ -581,14 +576,10 @@ void PipelineManager::GenerateModelPSO() {
 		blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
 		blendDesc.RenderTarget[0].DestBlend=D3D12_BLEND_ONE;
 
-		blendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_SRC_ALPHA;
+		blendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
 		blendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
-		blendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ONE;
-
-		//小野先生すみません。
-		//	CG3_00_03の2値抜きについての質問で、資料に書いてあること以外で何か追加する物はありますか？
-		//	Model用のPixelShaderでdiscardを資料通りに追加したのですが
-
+		blendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
+		
 
 
 		break;

@@ -72,10 +72,7 @@ PixelShaderOutput main(VertexShaderOutput input) {
     {
         discard;
     }
-    
-    if (output.color.a==0.0f){
-        discard;
-    }
+   
 	
 	//Lightingする場合
 	if (gMaterial.enableLighting != 0){
@@ -97,15 +94,17 @@ PixelShaderOutput main(VertexShaderOutput input) {
         
         
     }
-	
-   
-
-	
     else{
 	//Lightingしない場合
-		output.color = gMaterial.color * textureColor;
+		output.color.a = gMaterial.color.a * textureColor;
+        
+		
     }
 
+    if (output.color.a <= 0.5f)
+    {
+        discard;
+    }
    
    
     

@@ -77,7 +77,7 @@ void SampleScene::Update(GameManager* gameManager) {
 /// </summary>
 void SampleScene::Draw(GameManager* gameManager) {
 	model_->Draw(modelTransform_);
-	sprite->DrawRect(spriteTransform_);
+	//sprite->DrawRect(spriteTransform_);
 }
 
 /// <summary>

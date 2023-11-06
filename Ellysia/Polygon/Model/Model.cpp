@@ -292,7 +292,8 @@ void Model::CreateObject(const std::string& directoryPath,const std::string& fil
 
 
 
-
+	//モデルの読み込み
+	//ModelData modelData_;
 
 	
 	//モデルの読み込み

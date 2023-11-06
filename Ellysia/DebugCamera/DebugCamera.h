@@ -18,6 +18,14 @@ public:
 	//インスタンスを取得
 	static DebugCamera* GetInstance();
 
+	//コピーコンストラクタ禁止
+	DebugCamera(const DebugCamera& debugCamera) = delete;
+
+	//代入演算子を無効にする
+	DebugCamera& operator=(const DebugCamera& debugCamera) = delete;
+
+
+
 	//初期化
 	void Initialize();
 

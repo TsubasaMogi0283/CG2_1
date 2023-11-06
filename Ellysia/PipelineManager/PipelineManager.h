@@ -27,6 +27,12 @@ public:
 	//シングルインスタンス
 	static PipelineManager* GetInstance();
 
+	//コピーコンストラクタ禁止
+	PipelineManager(const PipelineManager& pipeline) = delete;
+
+	//代入演算子を無効にする
+	PipelineManager& operator=(const PipelineManager& pipeline) = delete;
+
 
 	//コマンドに積む専用のGetter
 	ComPtr<ID3D12RootSignature> GetSpriteRootSignature() {

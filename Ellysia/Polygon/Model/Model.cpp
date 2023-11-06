@@ -124,10 +124,6 @@ ModelData Model::LoadObjectFile(const std::string& directoryPath,const std::stri
 
 	}
 
-	////ここで問題
-	//インデックス作った方がよさそう
-	modelData.textureIndex = TextureManager::GetInstance()->LoadTexture(modelData.material.textureFilePath);
-
 	
 	
 
@@ -255,19 +251,54 @@ void Model::CreateObject(const std::string& directoryPath,const std::string& fil
 	
 	this->directXSetup_ = DirectXSetup::GetInstance();
 
-	//PSOの設定
-	//全部のブレンドモードに対応させたい
-	//switch文でやるのが良いかなと思った。切り替えが楽だから
+	
+	//すでに読み込んだモデルの場合
+	//ここで今リストに入っているものを比べている
+	for (ModelData modelData : multipleModelData_) {
+		if (modelData.modelName == fileName) {
+
+			////メッシュの作成
+			//vertex_ = std::make_unique<Mesh>();
+			//vertex_->Create(modelData.vertices);
+			
+			////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
+			materialResource_=CreateBufferResource(sizeof(Material)).Get();
+			//頂点リソースを作る
+			//モデルの頂点の数によって変わるよ
+			vertexResource_ = CreateBufferResource(sizeof(VertexData) * modelData_.vertices.size()).Get();
+			
+			//読み込みのところでバッファインデックスを作った方がよさそう
+			GenerateVertexBufferView();
+			
+			//Sprite用のTransformationMatrix用のリソースを作る。
+			//Matrix4x4 1つ分サイズを用意する
+			transformationMatrixResource_ = CreateBufferResource(sizeof(TransformationMatrix)).Get();
+
+			//Lighting
+			directionalLightResource_ = CreateBufferResource(sizeof(DirectionalLight)).Get();
+			directionalLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightData_));
+			directionalLightData_->color={ 1.0f,1.0f,1.0f,1.0f };
+			directionalLightData_->direction = { 0.0f,-1.0f,0.0f };
+			directionalLightData_->intensity = 3.0f;
+
+			color_ = { 1.0f,1.0f,1.0f,1.0f };
+			//テクスチャの読み込み
+			modelData.textureIndex = TextureManager::GetInstance()->LoadTexture(modelData.material.textureFilePath);
+
+			//ここで返す、下にあるものは全部無視
+			return;
+		}
+	}
 
 
 
 
-	////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
-	materialResource_=CreateBufferResource(sizeof(Material)).Get();
 
+	
 	//モデルの読み込み
 	//この２つ外に出した方がよさそう
 	modelData_ = LoadObjectFile(directoryPath, fileName);
+	multipleModelData_.push_back(modelData_);
 	//textureあった
 
 	//頂点リソースを作る
@@ -277,6 +308,10 @@ void Model::CreateObject(const std::string& directoryPath,const std::string& fil
 	//読み込みのところでバッファインデックスを作った方がよさそう
 	GenerateVertexBufferView();
 	
+	////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
+	materialResource_=CreateBufferResource(sizeof(Material)).Get();
+
+
 	//Sprite用のTransformationMatrix用のリソースを作る。
 	//Matrix4x4 1つ分サイズを用意する
 	transformationMatrixResource_ = CreateBufferResource(sizeof(TransformationMatrix)).Get();
@@ -290,8 +325,17 @@ void Model::CreateObject(const std::string& directoryPath,const std::string& fil
 
 	color_ = { 1.0f,1.0f,1.0f,1.0f };
 	
+	////ここで問題
+	//インデックス作った方がよさそう
+	modelData.textureIndex = TextureManager::GetInstance()->LoadTexture(modelData.material.textureFilePath);
+
 	
 
+	//初期化の所でやってね、Update,Drawでやるのが好ましいけど凄く重くなった。
+	//ブレンドモードの設定
+	PipelineManager::GetInstance()->SetModelBlendMode(blendModeNumber_);
+	PipelineManager::GetInstance()->GenerateModelPSO();
+	
 }
 
 
@@ -315,7 +359,7 @@ void Model::Draw(Transform transform) {
 	//reinterpret_cast...char* から int* へ、One_class* から Unrelated_class* へなどの変換に使用
 	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 	materialData_->color = color_;
-	materialData_->enableLighting=false;
+	materialData_->enableLighting = true;
 
 	materialData_->uvTransform = MakeIdentity4x4();
 

@@ -3,6 +3,7 @@
 #include <cassert>
 #include <fstream>
 #include <sstream>
+#include <list>
 
 #include "Common/DirectX/DirectXSetup.h"
 #include "ConvertFunction/ConvertLog/LogConvert.h"
@@ -61,6 +62,9 @@ public:
 
 public:
 	//アクセッサのまとめ
+	void SetBlendMode(int32_t blendmode) {
+		blendModeNumber_ = blendmode;
+	}
 
 	//透明度の変更
 	void SetColor(Vector4 color) {
@@ -137,4 +141,15 @@ private:
 	Vector4 color_;
 
 	
+
+	//デフォルトはα加算
+	int32_t blendModeNumber_ ;
+
+	//他のエンジンから参考にした
+	//モデルのデータ？を保存するのはリストがおすすめらしい
+	//どんどんリストにいれて、かぶったら取り出す感じ
+	
+	//dataってそもそも複数形にも取れるから「s」つけてはいけないらしい
+	std::list<ModelData> multipleModelData_;
+
 };

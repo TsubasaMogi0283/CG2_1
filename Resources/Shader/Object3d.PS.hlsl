@@ -17,20 +17,22 @@
 
 
 //Material...色など三角形の表面の材質をけっていするもの
-struct Material {
-	float32_t4 color;
-	int32_t enableLighting;///
-	float32_t4x4 uvTransform;
+struct Material
+{
+    float4 color;
+    int32_t enableLighting; ///
+    float32_t4x4 uvTransform;
 };
 
 
-struct DirectionalLight {
+struct DirectionalLight
+{
 	//ライトの色
-	float32_t4 color;
+    float32_t4 color;
 	//ライトの向き
-	float32_t3 direction;
+    float32_t3 direction;
 	//ライトの輝度
-	float intensity;
+    float intensity;
 };
 
 //
@@ -51,22 +53,32 @@ SamplerState gSampler : register(s0);
 //Textureの各PixelのことはTexelという
 //Excelみたいだね()
 
-struct PixelShaderOutput {
-	float32_t4 color : SV_TARGET0;
+struct PixelShaderOutput
+{
+    float32_t4 color : SV_TARGET0;
 };
 
 
 
  
-PixelShaderOutput main(VertexShaderOutput input) {
-	PixelShaderOutput output;
+PixelShaderOutput main(VertexShaderOutput input)
+{
+    PixelShaderOutput output;
 	
 	//Materialを拡張する
-	float4 transformedUV = mul(float32_t4(input.texcoord,0.0f, 1.0f), gMaterial.uvTransform);
-	float32_t4 textureColor = gTexture.Sample(gSampler, transformedUV.xy);
+    float4 transformedUV = mul(float32_t4(input.texcoord, 0.0f, 1.0f), gMaterial.uvTransform);
+    float32_t4 textureColor = gTexture.Sample(gSampler, transformedUV.xy);
 
+	//2値抜き
+	//textureのα値が0.5以下の時にPixelを棄却
+    if (textureColor.a <= 0.5f)
+    {
+        discard;
+    }
+	
 	//Lightingする場合
-	if (gMaterial.enableLighting != 0) {
+    if (gMaterial.enableLighting != 0)
+    {
 	
 		//このままdotだと[-1,1]になる。
 		//光が当たらないところは「当たらない」のでもっと暗くなるわけではない。そこでsaturate関数を使う
@@ -75,24 +87,26 @@ PixelShaderOutput main(VertexShaderOutput input) {
 		
 
 		//Half Lambert
-		float NdotL = dot(normalize(input.normal), -gDirectionalLight.direction);
-		float cos = pow(NdotL * 0.5f + 0.5f, 2.0f);
-
-        if (textureColor.a == 0){
-            discard;
-        }
-
-		//output.color = gMaterial.color * textureColor * gDirectionalLight.color * cos * gDirectionalLight.intensity;
+        float NdotL = dot(normalize(input.normal), -gDirectionalLight.direction);
+        float cos = pow(NdotL * 0.5f + 0.5f, 2.0f);
+		
+		
+        
+		
         output.color.rgb = gMaterial.color.rgb * textureColor.rgb * gDirectionalLight.color.rgb * cos * gDirectionalLight.intensity;
         output.color.a = gMaterial.color.a * textureColor.a;
 
     }
-	else {
+    else
+    {
 		//Lightingしない場合
-		output.color = gMaterial.color * textureColor;
-	}
-
+        output.color = gMaterial.color * textureColor;
+    }
+    if (output.color.a == 0.0f)
+    {
+        discard;
+    }
 	
 	
-	return output;
+    return output;
 }

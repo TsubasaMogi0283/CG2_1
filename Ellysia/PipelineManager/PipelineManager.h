@@ -11,7 +11,15 @@
 //スプライトはスプライトで同じ情報だからインスタンス１つでいいよね
 //同様にモデルも
 
+struct PSOInformation {
+	ComPtr<ID3DBlob> spriteSignatureBlob_ = nullptr;
+	ComPtr<ID3DBlob> spriteErrorBlob_ = nullptr;
+	ComPtr<ID3D12RootSignature> spriteRootSignature_ = nullptr;
+	ComPtr<IDxcBlob> spritePixelShaderBlob_ = nullptr;
+	ComPtr<IDxcBlob> spriteVertexShaderBlob_ = nullptr;
+	ComPtr<ID3D12PipelineState> spriteGraphicsPipelineState_ = nullptr;
 
+};
 
 
 class PipelineManager {
@@ -64,6 +72,9 @@ public:
 
 	//モデル用
 	static void GenerateModelPSO();
+
+	//3Dパーティクル用
+	static void GenerateParticle3DPSO();
 
 private:
 

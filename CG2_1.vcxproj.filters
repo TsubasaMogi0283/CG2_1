@@ -203,6 +203,12 @@
     <FxCompile Include="Resources\Shader\Object3d.VS.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
+    <FxCompile Include="Resources\Shader\Particle3D.VS.hlsl">
+      <Filter>リソース ファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\Particle3D.PS.hlsl">
+      <Filter>リソース ファイル</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Ellysia\externals\imGui\imconfig.h">
@@ -378,6 +384,9 @@
       <Filter>リソース ファイル</Filter>
     </None>
     <None Include="Resources\Shader\Object3d.hlsli">
+      <Filter>リソース ファイル</Filter>
+    </None>
+    <None Include="Resources\Shader\Particle3D.hlsli">
       <Filter>リソース ファイル</Filter>
     </None>
   </ItemGroup>

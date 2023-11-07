@@ -5,7 +5,7 @@
 #include <Math/Vector/SpritePosition.h>
 #include "Math/Vector/Transform.h"
 
-#include "Polygon/Model/Model.h"
+#include "Polygon/Particle/3D/Particle3D.h"
 
 //StatePatternをル買う時は必ず前方宣言をするように
 class Gamemanager;
@@ -30,7 +30,7 @@ public:
 
 private:
 
-	Model* model_ = nullptr;
+	Particle3D* particle_ = nullptr;
 	Transform modelTransform_ = {};
 	Vector4 modelColor_ = {1.0f,1.0f,1.0f,1.0f};
 

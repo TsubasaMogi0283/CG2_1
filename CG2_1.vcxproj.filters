@@ -186,6 +186,9 @@
     <ClCompile Include="Ellysia\WorldTransform\WorldTransform.cpp">
       <Filter>ヘッダー ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Ellysia\Polygon\Particle\3D\Particle3D.cpp">
+      <Filter>ソース ファイル\Polygone</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\Object2d.PS.hlsl">
@@ -360,6 +363,9 @@
     </ClInclude>
     <ClInclude Include="Ellysia\WorldTransform\WorldTransform.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Polygon\Particle\3D\Particle3D.h">
+      <Filter>ヘッダー ファイル\Polygone</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

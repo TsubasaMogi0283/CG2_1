@@ -19,9 +19,9 @@ void SampleScene::Initialize(GameManager* gameManager) {
 
 	//BlendModeを使う時は各Initializeの前で使ってね
 	modelColor_ = {1.0f,1.0f,1.0f,1.0f};
-	model_ = new Model();
-	model_->SetBlendMode(BlendModeNormal);
-	model_->CreateObject("Resources/Sample/fence","fence.obj");
+	particle_ = new Particle3D();
+	particle_->SetBlendMode(BlendModeNormal);
+	particle_->CreateObject("Resources/05_02","plane.obj");
 	modelTransform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
 
 	spriteTransform_ = { {0.5f,0.5f,0.5f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
@@ -47,11 +47,11 @@ void SampleScene::Update(GameManager* gameManager) {
 	Camera::GetInstance()->SetTranslate(cameraPosition_);
 
 
-
+	particle_->Update();
 
 
 	sprite->SetColor(spriteColor_);
-	model_->SetColor(modelColor_);
+	particle_->SetColor(modelColor_);
 
 	ImGui::Begin("Sprite");
 	ImGui::SliderFloat4("Color", &spriteColor_.x, 0.0f, 1.0f);
@@ -59,11 +59,7 @@ void SampleScene::Update(GameManager* gameManager) {
 
 
 	//modelTransform_.rotate.y += 0.05f;
-
-	ImGui::Begin("Plane");
-	ImGui::SliderFloat3("Translate", &modelTransform_.translate.x, -10.0f, 10.0f);
-	ImGui::SliderFloat4("Color", &modelColor_.x, 0.0f, 1.0f);
-	ImGui::End();
+	
 	
 	ImGui::Begin("Camera");
 	ImGui::SliderFloat3("Translate", &cameraPosition_.x, -20.0f, 10.0f);
@@ -76,7 +72,7 @@ void SampleScene::Update(GameManager* gameManager) {
 /// 描画
 /// </summary>
 void SampleScene::Draw(GameManager* gameManager) {
-	model_->Draw(modelTransform_);
+	particle_->Draw();
 	//sprite->DrawRect(spriteTransform_);
 }
 
@@ -84,6 +80,6 @@ void SampleScene::Draw(GameManager* gameManager) {
 /// デストラクタ
 /// </summary>
 SampleScene::~SampleScene() {
-	delete model_;
+	delete particle_;
 	delete sprite;
 }

@@ -115,12 +115,12 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Ellysia\Polygon\Triangle\Triangle.cpp" />
     <ClCompile Include="Ellysia\ResourceObject\ResourceObject.cpp" />
     <ClCompile Include="Ellysia\TextureManager\TextureManager.cpp" />
-    <ClCompile Include="EnemyLeave.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Project\AllGameScene\GameManager\GameManager.cpp" />
     <ClCompile Include="Project\AllGameScene\SampleScene\SampleScene.cpp" />
     <ClCompile Include="Project\Enemy\Enemy.cpp" />
     <ClCompile Include="Project\Enemy\State\EnemyApproach\EnemyApproach.cpp" />
+    <ClCompile Include="Project\Enemy\State\EnemyLeave\EnemyLeave.cpp" />
     <ClCompile Include="Project\Enemy\State\IEnemy\IEnemy.cpp" />
     <ClCompile Include="Project\Player\Bullet\PlayerBullet.cpp" />
     <ClCompile Include="Project\Player\Player.cpp" />

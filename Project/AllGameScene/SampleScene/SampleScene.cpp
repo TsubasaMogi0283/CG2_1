@@ -26,9 +26,6 @@ void SampleScene::Initialize(GameManager* gameManager) {
 	cameraTranslate_ = Camera::GetInstance()->GetTranslate();
 
 	
-
-
-
 }
 
 /// <summary>

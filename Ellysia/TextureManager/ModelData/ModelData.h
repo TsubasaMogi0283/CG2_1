@@ -7,6 +7,6 @@
 struct ModelData {
 	std::vector<VertexData> vertices;
 	MaterialData material;
-	uint32_t textureIndex;
+	//uint32_t textureIndex;
 	std::string modelName;
 };

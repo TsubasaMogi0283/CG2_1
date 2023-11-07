@@ -1,6 +1,7 @@
 #pragma once
 #include <d3d12.h>
 #include <string>
+#include <array>
 
 #include "externals/DirectXTex/DirectXTex.h"
 #include <externals/DirectXTex/d3dx12.h>
@@ -8,6 +9,18 @@
 
 #include "Common/DirectX/DirectXSetup.h"
 #include <ConvertFunction/ConvertLog/LogConvert.h>
+
+
+struct TextureInformation {
+	ComPtr<ID3D12Resource> textureResource_;
+	//画像読み込み
+	
+	D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU_;
+	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU_;
+
+	std::string textureName_;
+	uint32_t textureHandle_;
+};
 
 //テクスチャに関するクラス
 class TextureManager {
@@ -74,18 +87,21 @@ private:
 	
 
 public:
-		static const int TEXTURE_MAX_AMOUNT_ = 256;
+		
+	static const int TEXTURE_MAX_AMOUNT_ = 256;
+	static std::array<TextureInformation, TEXTURE_MAX_AMOUNT_> textureInformations_;
+	
 private:
 
 	
-
-	ComPtr<ID3D12Resource> textureResource_[TEXTURE_MAX_AMOUNT_] = {nullptr};
-
-	//画像読み込み
+	//ComPtr<ID3D12Resource> textureResource_[TEXTURE_MAX_AMOUNT_] = {nullptr};
+	//
+	////画像読み込み
+	//
+	//D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU_[TEXTURE_MAX_AMOUNT_] = {};
+	//D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU_[TEXTURE_MAX_AMOUNT_] = {};
+	//
+	//static std::list<std::string> textureName_;
+	//static std::list<uint32_t> textureHandle_;
 	
-	D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU_[TEXTURE_MAX_AMOUNT_] = {};
-	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU_[TEXTURE_MAX_AMOUNT_] = {};
-
-
-
 };

@@ -27,8 +27,6 @@
 #include <Math/Vector/Calculation/VectorCalculation.h>
 #include <externals/DirectXTex/d3dx12.h>
 
-
-
 class Model {
 public:
 
@@ -133,23 +131,25 @@ private:
 	ComPtr<ID3D12Resource> resource_ = nullptr;
 
 
-	//構築するModelData
-	ModelData modelData;
+	
 
 
 	//色関係のメンバ変数
-	Vector4 color_;
+	Vector4 color_ = {1.0f,1.0f,1.0f,1.0f};
 
 	
 
 	//デフォルトはα加算
-	int32_t blendModeNumber_ ;
+	int32_t blendModeNumber_=1 ;
 
 	//他のエンジンから参考にした
 	//モデルのデータ？を保存するのはリストがおすすめらしい
 	//どんどんリストにいれて、かぶったら取り出す感じ
 	
 	//dataってそもそも複数形にも取れるから「s」つけてはいけないらしい
-	std::list<ModelData> multipleModelData_;
+	std::list<ModelData> multipleModelData_{};
+
+	//textureHandleこっちにした方がよさそう
+	uint32_t textureHandle_ = 0u;
 
 };

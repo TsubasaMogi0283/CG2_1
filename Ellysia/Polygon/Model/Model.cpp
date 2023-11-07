@@ -4,6 +4,8 @@
 #include <PipelineManager/PipelineManager.h>
 
 
+
+
 Model::Model() {
 
 }
@@ -21,9 +23,11 @@ D3D12_GPU_DESCRIPTOR_HANDLE Model::GetGPUDescriptorHandle(ComPtr<ID3D12Descripto
 }
 
 //モデルデータの読み込み
+//画像とはまた別だよ
 ModelData Model::LoadObjectFile(const std::string& directoryPath,const std::string& fileName) {
 	//1.中で必要となる変数の宣言
-	
+	//構築するModelData
+	ModelData modelData;
 	//位置
 	std::vector<Vector4> positions;
 	//法線
@@ -124,7 +128,7 @@ ModelData Model::LoadObjectFile(const std::string& directoryPath,const std::stri
 
 	}
 
-	
+	modelData.modelName = fileName;
 	
 
 	//4.ModelDataを返す
@@ -257,10 +261,6 @@ void Model::CreateObject(const std::string& directoryPath,const std::string& fil
 	for (ModelData modelData : multipleModelData_) {
 		if (modelData.modelName == fileName) {
 
-			////メッシュの作成
-			//vertex_ = std::make_unique<Mesh>();
-			//vertex_->Create(modelData.vertices);
-			
 			////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
 			materialResource_=CreateBufferResource(sizeof(Material)).Get();
 			//頂点リソースを作る
@@ -283,8 +283,8 @@ void Model::CreateObject(const std::string& directoryPath,const std::string& fil
 
 			color_ = { 1.0f,1.0f,1.0f,1.0f };
 			//テクスチャの読み込み
-			modelData.textureIndex = TextureManager::GetInstance()->LoadTexture(modelData.material.textureFilePath);
-
+			//modelData.textureIndex = TextureManager::GetInstance()->LoadTexture(modelData.material.textureFilePath);
+			textureHandle_ = TextureManager::GetInstance()->LoadTexture(modelData.material.textureFilePath);
 			//ここで返す、下にあるものは全部無視
 			return;
 		}
@@ -298,7 +298,7 @@ void Model::CreateObject(const std::string& directoryPath,const std::string& fil
 	
 	//モデルの読み込み
 	//この２つ外に出した方がよさそう
-	modelData_ = LoadObjectFile(directoryPath, fileName);
+ 	modelData_ = LoadObjectFile(directoryPath, fileName);
 	multipleModelData_.push_back(modelData_);
 	//textureあった
 
@@ -328,8 +328,8 @@ void Model::CreateObject(const std::string& directoryPath,const std::string& fil
 	
 	////ここで問題
 	//インデックス作った方がよさそう
-	modelData.textureIndex = TextureManager::GetInstance()->LoadTexture(modelData.material.textureFilePath);
-
+	//modelData.textureIndex = TextureManager::GetInstance()->LoadTexture(modelData.material.textureFilePath);
+	textureHandle_ = TextureManager::GetInstance()->LoadTexture(modelData_.material.textureFilePath);
 	
 
 	//初期化の所でやってね、Update,Drawでやるのが好ましいけど凄く重くなった。
@@ -402,8 +402,8 @@ void Model::Draw(Transform transform) {
 	directXSetup_->GetCommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResource_->GetGPUVirtualAddress());
 	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である
 	
-	if (modelData.textureIndex  != 0) {
-		TextureManager::TexCommand(modelData.textureIndex );
+	if (textureHandle_ != 0) {
+		TextureManager::TexCommand(textureHandle_ );
 
 	}
 	

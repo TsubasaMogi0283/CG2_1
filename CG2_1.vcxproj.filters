@@ -204,7 +204,7 @@
     <ClCompile Include="Project\Enemy\State\EnemyApproach\EnemyApproach.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="EnemyLeave.cpp">
+    <ClCompile Include="Project\Enemy\State\EnemyLeave\EnemyLeave.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>

@@ -7,7 +7,7 @@ public:
 	EnemyBullet();
 
 
-	void Initialzie();
+	void Initialzie(Vector3 position);
 
 	void Update();
 

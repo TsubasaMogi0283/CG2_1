@@ -43,5 +43,5 @@ private:
 
 	
 
-	EnemyBullet* enemyBullet_= nullptr;
+	//EnemyBullet* enemyBullet_= nullptr;
 };

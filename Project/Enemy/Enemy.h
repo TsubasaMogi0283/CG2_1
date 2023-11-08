@@ -64,7 +64,7 @@ private:
 	IEnemy* state_ = nullptr;
 
 
-	//EnemyBullet* bullet_ = nullptr;
+	EnemyBullet* bullet_ = nullptr;
 
 };
 

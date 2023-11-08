@@ -19,9 +19,9 @@ void SampleScene::Initialize(GameManager* gameManager) {
 
 	//BlendModeを使う時は各Initializeの前で使ってね
 	modelColor_ = {1.0f,1.0f,1.0f,1.0f};
-	particle_ = new Particle3D();
-	particle_->SetBlendMode(BlendModeNormal);
-	particle_->CreateObject("Resources/05_02","plane.obj");
+	model_ = new Model();
+	model_->SetBlendMode(BlendModeNormal);
+	model_->CreateObject("Resources/05_02","plane.obj");
 	modelTransform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
 
 	spriteTransform_ = { {0.5f,0.5f,0.5f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
@@ -47,11 +47,11 @@ void SampleScene::Update(GameManager* gameManager) {
 	Camera::GetInstance()->SetTranslate(cameraPosition_);
 
 
-	particle_->Update();
+	//particle_->Update();
 
 
 	sprite->SetColor(spriteColor_);
-	particle_->SetColor(modelColor_);
+	model_->SetColor(modelColor_);
 
 	ImGui::Begin("Sprite");
 	ImGui::SliderFloat4("Color", &spriteColor_.x, 0.0f, 1.0f);
@@ -72,14 +72,14 @@ void SampleScene::Update(GameManager* gameManager) {
 /// 描画
 /// </summary>
 void SampleScene::Draw(GameManager* gameManager) {
-	particle_->Draw();
-	//sprite->DrawRect(spriteTransform_);
+	model_->Draw(modelTransform_);
+	sprite->DrawRect(spriteTransform_);
 }
 
 /// <summary>
 /// デストラクタ
 /// </summary>
 SampleScene::~SampleScene() {
-	delete particle_;
+	delete model_;
 	delete sprite;
 }

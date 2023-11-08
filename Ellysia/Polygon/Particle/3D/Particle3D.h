@@ -38,7 +38,7 @@ public:
 
 	//初期化
 	//Initializeも兼ねているよ
-	void CreateObject(const std::string& directoryPath,const std::string& fileName);
+	void CreateObject(const std::string& directoryPath, const std::string& fileName);
 
 private:
 #pragma region モデルの読み込み関係の関数
@@ -128,7 +128,7 @@ private:
 
 	//マテリアル用のリソースを作る
 	ComPtr<ID3D12Resource> materialResource_[PARTICLE_AMOUNT_] = { nullptr };
-	Material* materialData_ = nullptr;
+	Material* materialData_[PARTICLE_AMOUNT_] = {nullptr};
 
 
 	//Lighting用

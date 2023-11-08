@@ -321,7 +321,7 @@ void Particle3D::CreateObject(const std::string& directoryPath,const std::string
 	//初期化の所でやってね、Update,Drawでやるのが好ましいけど凄く重くなった。
 	//ブレンドモードの設定
 	PipelineManager::GetInstance()->SetModelBlendMode(blendModeNumber_);
-	PipelineManager::GetInstance()->GenerateModelPSO();
+	PipelineManager::GetInstance()->GenerateParticle3DPSO();
 	
 }
 
@@ -358,12 +358,12 @@ void Particle3D::Draw() {
 	//reinterpret_cast...char* から int* へ、One_class* から Unrelated_class* へなどの変換に使用
 	for (int i = 0; i < PARTICLE_AMOUNT_; i++) {
 		materialResource_[i]->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
+		materialData_[i]->color = color_;
+		materialData_[i]->enableLighting = true;
+		materialData_[i]->uvTransform = MakeIdentity4x4();
 	
 	}
-	materialData_->color = color_;
-	materialData_->enableLighting = true;
-
-	materialData_->uvTransform = MakeIdentity4x4();
+	
 
 	
 	

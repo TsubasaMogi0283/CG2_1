@@ -12,12 +12,12 @@
 //同様にモデルも
 
 struct PSOInformation {
-	ComPtr<ID3DBlob> spriteSignatureBlob_ = nullptr;
-	ComPtr<ID3DBlob> spriteErrorBlob_ = nullptr;
-	ComPtr<ID3D12RootSignature> spriteRootSignature_ = nullptr;
-	ComPtr<IDxcBlob> spritePixelShaderBlob_ = nullptr;
-	ComPtr<IDxcBlob> spriteVertexShaderBlob_ = nullptr;
-	ComPtr<ID3D12PipelineState> spriteGraphicsPipelineState_ = nullptr;
+	ComPtr<ID3DBlob> signatureBlob_ = nullptr;
+	ComPtr<ID3DBlob> errorBlob_ = nullptr;
+	ComPtr<ID3D12RootSignature> rootSignature_ = nullptr;
+	ComPtr<IDxcBlob> pixelShaderBlob_ = nullptr;
+	ComPtr<IDxcBlob> vertexShaderBlob_ = nullptr;
+	ComPtr<ID3D12PipelineState> graphicsPipelineState_ = nullptr;
 
 };
 
@@ -41,18 +41,18 @@ public:
 
 	//コマンドに積む専用のGetter
 	ComPtr<ID3D12RootSignature> GetSpriteRootSignature() {
-		return spriteRootSignature_;
+		return spritePSO_.rootSignature_;
 	}
 	ComPtr<ID3D12PipelineState> GetSpriteGraphicsPipelineState() {
-		return spriteGraphicsPipelineState_;
+		return spritePSO_.graphicsPipelineState_;
 	}
 
 	//コマンドに積む専用のGetter
 	ComPtr<ID3D12RootSignature> GetModelRootSignature() {
-		return modelRootSignature_;
+		return modelPSO_.rootSignature_;
 	}
 	ComPtr<ID3D12PipelineState> GetModelGraphicsPipelineState() {
-		return modelGraphicsPipelineState_;
+		return modelPSO_.graphicsPipelineState_;
 	}
 
 	void SetSpriteBlendMode(int32_t blendmode) {
@@ -78,21 +78,13 @@ public:
 
 private:
 
+	//スプライト用
+	PSOInformation spritePSO_ = {};
+	//モデル用の変数
+	PSOInformation modelPSO_ = {};
+	//モデル用の変数
+	PSOInformation particle3DPSO_ = {};
 
-	ComPtr<ID3DBlob> spriteSignatureBlob_ = nullptr;
-	ComPtr<ID3DBlob> spriteErrorBlob_ = nullptr;
-	ComPtr<ID3D12RootSignature> spriteRootSignature_ = nullptr;
-	ComPtr<IDxcBlob> spritePixelShaderBlob_ = nullptr;
-	ComPtr<IDxcBlob> spriteVertexShaderBlob_ = nullptr;
-	ComPtr<ID3D12PipelineState> spriteGraphicsPipelineState_ = nullptr;
-
-
-	ComPtr<ID3DBlob> modelSignatureBlob_ = nullptr;
-	ComPtr<ID3DBlob> modelErrorBlob_ = nullptr;
-	ComPtr<ID3D12RootSignature> modelRootSignature_ = nullptr;
-	ComPtr<IDxcBlob> modelPixelShaderBlob_ = nullptr;
-	ComPtr<IDxcBlob> modelVertexShaderBlob_ = nullptr;
-	ComPtr<ID3D12PipelineState> modelGraphicsPipelineState_ = nullptr;
 
 
 	//スプライト用

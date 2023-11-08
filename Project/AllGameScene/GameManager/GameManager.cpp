@@ -136,6 +136,7 @@ void GameManager::Operate() {
 		
 	}
 
+
 	Release();
 
 

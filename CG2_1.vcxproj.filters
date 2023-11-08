@@ -183,6 +183,9 @@
     <ClCompile Include="Project\Player\Player.cpp">
       <Filter>Project\Player</Filter>
     </ClCompile>
+    <ClCompile Include="Project\Player\Bullet\PlayerBullet.cpp">
+      <Filter>Project\Player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Object3d.PS.hlsl">
@@ -350,6 +353,9 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Project\Player\Player.h">
+      <Filter>Project\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Player\Bullet\PlayerBullet.h">
       <Filter>Project\Player</Filter>
     </ClInclude>
   </ItemGroup>

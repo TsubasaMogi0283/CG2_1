@@ -32,6 +32,10 @@ void Enemy::ChangeState(IEnemy* newState) {
 
 
 void Enemy:: Fire() {
+	//ここで弾を生成
+
+
+
 	bullet_->Update();
 }
 

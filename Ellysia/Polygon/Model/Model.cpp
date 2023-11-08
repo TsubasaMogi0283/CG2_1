@@ -322,6 +322,23 @@ void Model::Draw(Transform transform) {
 
 
 	//新しく引数作った方が良いかも
+	if (transform.scale.x == 0.0f) {
+		Log("Don't Set 0.0f ScaleX Size !!!\n\n");
+
+		assert(transform.scale.x != 0.0f);
+	}
+	if (transform.scale.y == 0.0f) {
+		Log("Don't Set 0.0f ScaleY Size !!!\n\n");
+
+		assert(transform.scale.y != 0.0f);
+	}
+	if (transform.scale.z == 0.0f) {
+		Log("Don't Set 0.0f ScaleZ Size !!!\n\n");
+
+		assert(transform.scale.z != 0.0f);
+	}
+
+
 	Matrix4x4 worldMatrixSphere = MakeAffineMatrix(transform.scale,transform.rotate,transform.translate);
 	//遠視投影行列
 	Matrix4x4 viewMatrixSphere = MakeIdentity4x4();

@@ -4,6 +4,8 @@
 #include "State/IEnemy/IEnemy.h"
 #include "Enemy/Bullet/EnemyBullet.h"
 
+#include <list>
+
 enum class Phase {
 	Approach,
 	Leave,
@@ -65,6 +67,7 @@ private:
 
 
 	EnemyBullet* bullet_ = nullptr;
+	std::list<EnemyBullet> enemyBullets_;
 
 };
 

@@ -2,7 +2,7 @@
 #include <Polygon/Model/Model.h>
 #include <Math/Vector/Transform.h>
 #include "State/IEnemy/IEnemy.h"
-//#include "Enemy/Bullet/EnemyBullet.h"
+#include "Enemy/Bullet/EnemyBullet.h"
 
 enum class Phase {
 	Approach,
@@ -64,7 +64,7 @@ private:
 	IEnemy* state_ = nullptr;
 
 
-	///EnemyBullet* bullet_ = nullptr;
+	//EnemyBullet* bullet_ = nullptr;
 
 };
 

@@ -12,6 +12,12 @@ void Enemy::Initialize(){
 	transform_ = { {0.5f,0.5f,0.5f},{0.0f,0.0f,0.0f},{0.0f,1.0f,30.0f} };
 	
 	state_ = new EnemyApproach();
+
+	//弾
+	//bullet_ = new EnemyBullet();
+	//bullet_->Initialzie(transform_.translate);
+
+
 }
 
 
@@ -26,7 +32,7 @@ void Enemy::ChangeState(IEnemy* newState) {
 
 
 void Enemy:: Fire() {
-
+	//bullet_->Update();
 }
 
 void Enemy::Update(){
@@ -39,9 +45,10 @@ void Enemy::Update(){
 
 void Enemy::Draw(){
 	model_->Draw(transform_);
-
+	//bullet_->Draw();
 }
 
 Enemy::~Enemy(){
 	delete model_;
+	//delete bullet_;
 }

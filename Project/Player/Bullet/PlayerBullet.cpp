@@ -8,7 +8,7 @@ void PlayerBullet::Initialize(Vector3 position,Vector3 velocity){
 	//良い感じなの無かったからとりあえずこれで
 	//真っ黒
    	model_ = new Model();
-   	model_->CreateObject("Resources/Sample/Enemy", "enemy.obj");
+   	model_->CreateObject("Resources/Sample/cube", "cube.obj");
 	transform_ = { {0.5f,0.5f,0.5f},{0.0f,0.0f,0.0f},position };
 	velocity_ = velocity;
 }

@@ -11,8 +11,9 @@
 #include "Polygon/Model/Model.h"
 #include "TextureManager/TextureManager.h"
 #include <Enemy/Enemy.h>
+#include "Enemy/Bullet/EnemyBullet.h"
 
-//StatePatternをル買う時は必ず前方宣言をするように
+//StatePatternを使う時は必ず前方宣言をするように
 class Gamemanager;
 
 class SampleScene : public IGameScene {
@@ -42,5 +43,5 @@ private:
 
 	
 
-
+	EnemyBullet* enemyBullet_= nullptr;
 };

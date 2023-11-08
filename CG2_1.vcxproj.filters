@@ -216,8 +216,8 @@
     <ClCompile Include="Project\Player\Bullet\PlayerBullet.cpp">
       <Filter>Project\Player\Bullet</Filter>
     </ClCompile>
-    <ClCompile Include="EnemyBullet.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="Project\Enemy\Bullet\EnemyBullet.cpp">
+      <Filter>Project\Enemy\Bullet</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -403,8 +403,8 @@
     <ClInclude Include="Project\Player\Bullet\PlayerBullet.h">
       <Filter>Project\Player\Bullet</Filter>
     </ClInclude>
-    <ClInclude Include="EnemyBullet.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Project\Enemy\Bullet\EnemyBullet.h">
+      <Filter>Project\Enemy\Bullet</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

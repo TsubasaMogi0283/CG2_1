@@ -9,10 +9,7 @@ Player::Player() {
 void Player::Initialize() {
 
 	model_ = new Model();
-	model_->CreateObject("Resources/Sample/cube", "cube.obj");
-
-
-
+	model_->CreateObject("Resources/Sample/Player", "playre.obj");
 
 	transform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
 	input_ = Input::GetInstance();
@@ -64,8 +61,7 @@ void Player::Move() {
 
 void Player::Attack() {
 	if (input_->IsTriggerKey(DIK_SPACE)) {
-		ImGui::Begin("s");
-		ImGui::End();
+		
 
 		Vector3 velocity = { 0.0f,0.0f,0.8f };
 

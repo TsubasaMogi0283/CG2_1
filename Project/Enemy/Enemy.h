@@ -2,7 +2,7 @@
 #include <Polygon/Model/Model.h>
 #include <Math/Vector/Transform.h>
 #include "State/IEnemy/IEnemy.h"
-
+//#include "Enemy/Bullet/EnemyBullet.h"
 
 enum class Phase {
 	Approach,
@@ -31,6 +31,10 @@ public:
 	//デストラクタ
 	~Enemy();
 
+private:
+	void Fire();
+
+
 
 public:
 	//アクセッサ
@@ -55,12 +59,12 @@ private:
 	Vector3 leaveVelocity_ = {};
 
 
-	Phase phase_;
 
 
 	IEnemy* state_ = nullptr;
-	//メンバ関数ポインタのテーブル
-	static void (Enemy::*spFuncTable[])();
+
+
+	///EnemyBullet* bullet_ = nullptr;
 
 };
 

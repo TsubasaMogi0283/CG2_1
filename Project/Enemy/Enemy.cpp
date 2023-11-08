@@ -25,10 +25,13 @@ void Enemy::ChangeState(IEnemy* newState) {
 
 
 
+void Enemy:: Fire() {
+
+}
 
 void Enemy::Update(){
-	//メンバ関数ポインタに入っている関数を呼び出す
-	//(this->*spFuncTable[static_cast<size_t>(phase_)])();
+	//攻撃
+	Fire();
 
 	state_->Update(this);
 

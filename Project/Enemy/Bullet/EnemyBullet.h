@@ -15,11 +15,21 @@ public:
 
 	~EnemyBullet();
 
+
+
+	//アクセッサ
+	bool IsDead() const{
+		return isDead_;
+	}
+
 private:
 	Model* model_ = nullptr;
 
 	Transform transform_ = {};
 	Vector3 velocity_ = {};
 
+	bool isDead_ = false;
+
+	int deathTimer_ = 120;
 };
 

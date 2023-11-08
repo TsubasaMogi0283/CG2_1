@@ -13,13 +13,20 @@ void Enemy::Initialize(){
 	
 	state_ = new EnemyApproach();
 
-	//弾
-	bullet_ = new EnemyBullet();
-	bullet_->Initialzie(transform_.translate);
-
+	num = state_->GetState();
 
 }
 
+void Enemy::Fire() {
+	//弾
+	EnemyBullet* bullet_ = new EnemyBullet();
+	bullet_->Initialzie(transform_.translate);
+
+	//リストへ
+	bullets_.push_back(bullet_);
+	shotTime_ = FIRE_INTERVAL_;
+
+}
 
 
 void Enemy::ChangeState(IEnemy* newState) {
@@ -31,17 +38,38 @@ void Enemy::ChangeState(IEnemy* newState) {
 
 
 
-void Enemy:: Fire() {
-	//ここで弾を生成
-
-
-
-	bullet_->Update();
-}
-
 void Enemy::Update(){
-	//攻撃
-	Fire();
+	ImGui::Begin("aaaa");
+	ImGui::InputInt("satet", &num);
+	ImGui::End();
+
+
+	if (state_->GetState() == 0) {
+		//離脱になるまで発射
+		shotTime_ -= 1;
+		if (shotTime_ == 0) {
+			Fire();
+
+			
+		}
+		
+		//更新
+		for (EnemyBullet* bullet : bullets_) {
+			bullet->Update();
+		
+		}
+
+		//デスフラグの立った玉を削除
+		bullets_.remove_if([](EnemyBullet* bullet) {
+			if (bullet->IsDead()) {
+				delete bullet;
+				return true;
+			}
+			return false;
+		});
+	}
+
+	
 
 	state_->Update(this);
 
@@ -49,10 +77,23 @@ void Enemy::Update(){
 
 void Enemy::Draw(){
 	model_->Draw(transform_);
-	bullet_->Draw();
+	if (state_->GetState() == 0) {
+		for (EnemyBullet* bullet : bullets_) {
+			bullet->Draw();
+		}
+	}
+	
+
+	//弾も
+	state_->Draw(this);
 }
 
 Enemy::~Enemy(){
+	for (EnemyBullet* bullet : bullets_) {
+		delete bullet;
+	}
+
 	delete model_;
-	delete bullet_;
+	delete state_;
+	
 }

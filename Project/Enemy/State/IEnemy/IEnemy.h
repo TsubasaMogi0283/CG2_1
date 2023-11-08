@@ -7,10 +7,19 @@ public:
 
 	virtual void Update(Enemy* enemy)=0;
 
+	virtual void Draw(Enemy* enemy) = 0;
 
 	~IEnemy();
 
+	int GetState() {
+		return state_;
+	}
+
+private:
 
 
+
+protected:
+	int state_ = 0;
 };
 

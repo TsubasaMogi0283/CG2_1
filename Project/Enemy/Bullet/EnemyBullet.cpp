@@ -16,13 +16,18 @@ void EnemyBullet::Initialzie(Vector3 position){
 	transform_.scale = {SCALE_,SCALE_,SCALE_};
 	transform_.translate = position;
 
-	velocity_ = { 0.0f,0.0f,-0.1f };
+	velocity_ = { 0.0f,0.0f,-0.3f };
 
 }
 
 void EnemyBullet::Update(){
 	transform_.translate = Add(transform_.translate, velocity_);
 	model_->SetColor({ 1.0f,0.0f,0.0f,1.0f });
+
+
+	if (--deathTimer_ <= 0) {
+		isDead_ = true;
+	}
 
 	ImGui::Begin("EnemyBullet");
 	ImGui::InputFloat3("Translate", &transform_.translate.x);

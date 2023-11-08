@@ -8,9 +8,10 @@ public:
 
 	void Update(Enemy* enemy)override;
 
+	void Draw(Enemy* enemy)override;
 
 private:
-
+	
 	
 
 };

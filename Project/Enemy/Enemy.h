@@ -31,21 +31,29 @@ public:
 	//デストラクタ
 	~Enemy();
 
-private:
 
-	void Approach();
-	void Leave();
+public:
+	//アクセッサ
+	void SetTranslate(Vector3 translate) {
+		this->transform_.translate = translate;
+	}
 
-
-
-
+	Vector3 GetTranslate() {
+		return transform_.translate;
+	}
+	
+	void SetVelocity(Vector3 velocity) {
+		this->velocity_ = velocity;
+	}
 
 private:
 	Model* model_ = nullptr;
 	Transform transform_ = {};
 
+	Vector3 velocity_ = {};
 	Vector3 approachVelocity_ = {};
 	Vector3 leaveVelocity_ = {};
+
 
 	Phase phase_;
 

@@ -8,7 +8,7 @@ public:
 	virtual void Update(Enemy* enemy)=0;
 
 
-	virtual ~IEnemy() = 0;
+	~IEnemy();
 
 
 

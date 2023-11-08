@@ -118,6 +118,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Project\AllGameScene\GameManager\GameManager.cpp" />
     <ClCompile Include="Project\AllGameScene\SampleScene\SampleScene.cpp" />
+    <ClCompile Include="Project\Enemy\Enemy.cpp" />
+    <ClCompile Include="Project\Enemy\State\EnemyApproach\EnemyApproach.cpp" />
+    <ClCompile Include="Project\Enemy\State\EnemyLeave\EnemyLeave.cpp" />
+    <ClCompile Include="Project\Enemy\State\IEnemy\IEnemy.cpp" />
     <ClCompile Include="Project\Player\Bullet\PlayerBullet.cpp" />
     <ClCompile Include="Project\Player\Player.cpp" />
   </ItemGroup>
@@ -194,6 +198,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Project\AllGameScene\GameManager\GameManager.h" />
     <ClInclude Include="Project\AllGameScene\GameManager\IGameScene.h" />
     <ClInclude Include="Project\AllGameScene\SampleScene\SampleScene.h" />
+    <ClInclude Include="Project\Enemy\Enemy.h" />
+    <ClInclude Include="Project\Enemy\State\EnemyApproach\EnemyApproach.h" />
+    <ClInclude Include="Project\Enemy\State\EnemyLeave\EnemyLeave.h" />
+    <ClInclude Include="Project\Enemy\State\IEnemy\IEnemy.h" />
     <ClInclude Include="Project\Player\Bullet\PlayerBullet.h" />
     <ClInclude Include="Project\Player\Player.h" />
   </ItemGroup>

@@ -15,8 +15,17 @@ SampleScene::SampleScene() {
 void SampleScene::Initialize(GameManager* gameManager) {
 	player_ = new Player();
 	player_->Initialize();
+
+
+
+	enemy_ = new Enemy();
+	enemy_->Initialize();
+
+
 	uint32_t textureHandle_ = TextureManager::LoadTexture("Resources/uvChecker.png");
 	cameraTranslate_ = Camera::GetInstance()->GetTranslate();
+
+	
 }
 
 /// <summary>
@@ -34,8 +43,9 @@ void SampleScene::Update(GameManager* gameManager) {
 
 
 	player_->Update();
-
 	
+	enemy_->Update();
+
 }
 
 /// <summary>
@@ -43,6 +53,9 @@ void SampleScene::Update(GameManager* gameManager) {
 /// </summary>
 void SampleScene::Draw(GameManager* gameManager) {
 	player_->Draw();
+
+	enemy_->Draw();
+
 }
 
 
@@ -51,4 +64,5 @@ void SampleScene::Draw(GameManager* gameManager) {
 /// </summary>
 SampleScene::~SampleScene() {
 	delete player_;
+	delete enemy_;
 }

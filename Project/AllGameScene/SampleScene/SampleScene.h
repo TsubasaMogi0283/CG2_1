@@ -10,6 +10,7 @@
 #include "AllGameScene/GameManager/GameManager.h"
 #include "Polygon/Model/Model.h"
 #include "TextureManager/TextureManager.h"
+#include <Enemy/Enemy.h>
 
 //StatePatternをル買う時は必ず前方宣言をするように
 class Gamemanager;
@@ -34,6 +35,12 @@ public:
 
 private:
 	Player* player_ = nullptr;
+	Enemy* enemy_ = nullptr;
+
 
 	Vector3 cameraTranslate_ = {};
+
+	
+
+
 };

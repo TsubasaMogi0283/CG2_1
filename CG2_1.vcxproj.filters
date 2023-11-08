@@ -94,6 +94,21 @@
     <Filter Include="Project\Player">
       <UniqueIdentifier>{601a7746-f0f4-4f9d-807c-447fad5e8d1b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Project\Enemy">
+      <UniqueIdentifier>{30e36902-b6fd-465d-ae93-bcbf37bf562b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project\Enemy\State">
+      <UniqueIdentifier>{4ca3ca42-cc4f-4566-b8a0-edd913713c5c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project\Enemy\State\Approach">
+      <UniqueIdentifier>{f7379a8c-114f-46b7-b59b-278856e938a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project\Enemy\State\Leave">
+      <UniqueIdentifier>{69438c4d-2762-4cd2-b07f-8c76d60a80be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project\Player\Bullet">
+      <UniqueIdentifier>{0437cd55-0690-444d-b05a-d0e5a2a06e8a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -183,8 +198,20 @@
     <ClCompile Include="Project\Player\Player.cpp">
       <Filter>Project\Player</Filter>
     </ClCompile>
+    <ClCompile Include="Project\Enemy\Enemy.cpp">
+      <Filter>Project\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Enemy\State\IEnemy\IEnemy.cpp">
+      <Filter>Project\Enemy\State</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Enemy\State\EnemyApproach\EnemyApproach.cpp">
+      <Filter>Project\Enemy\State\Approach</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Enemy\State\EnemyLeave\EnemyLeave.cpp">
+      <Filter>Project\Enemy\State\Leave</Filter>
+    </ClCompile>
     <ClCompile Include="Project\Player\Bullet\PlayerBullet.cpp">
-      <Filter>Project\Player</Filter>
+      <Filter>Project\Player\Bullet</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -355,8 +382,20 @@
     <ClInclude Include="Project\Player\Player.h">
       <Filter>Project\Player</Filter>
     </ClInclude>
+    <ClInclude Include="Project\Enemy\Enemy.h">
+      <Filter>Project\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Enemy\State\IEnemy\IEnemy.h">
+      <Filter>Project\Enemy\State</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Enemy\State\EnemyApproach\EnemyApproach.h">
+      <Filter>Project\Enemy\State\Approach</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Enemy\State\EnemyLeave\EnemyLeave.h">
+      <Filter>Project\Enemy\State\Leave</Filter>
+    </ClInclude>
     <ClInclude Include="Project\Player\Bullet\PlayerBullet.h">
-      <Filter>Project\Player</Filter>
+      <Filter>Project\Player\Bullet</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

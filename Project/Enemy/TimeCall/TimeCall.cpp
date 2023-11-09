@@ -1,15 +1,14 @@
 #include "Enemy/TimeCall/TimeCall.h"
 
-TimeCall::TimedCall(std::function<void()> f, uint32_t time){
+//コンストラクタ
+TimeCall::TimeCall(std::function<void()> fire, uint32_t time){
 	//FireAndReset
-	f_ = f;
+	fire_ = fire;
 	//kFireInterval
 	time_ = time;
-
 }
 
-
-void TimedCall::Update() { 
+void TimeCall::Update(){
 	if (isFinish_) {
 		return;
 	}
@@ -17,13 +16,14 @@ void TimedCall::Update() {
 	if (time_ <= 0) {
 		isFinish_ = true;
 		//コールバック関数呼び出し
-		f_();
+		fire_();
 		
 	}
 
 
-
-
 }
+
+
+
 
 

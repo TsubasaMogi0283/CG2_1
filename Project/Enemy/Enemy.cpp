@@ -53,11 +53,7 @@ void Enemy::Update(){
 			
 		}
 		
-		//更新
-		for (EnemyBullet* bullet : bullets_) {
-			bullet->Update();
 		
-		}
 
 		//デスフラグの立った玉を削除
 		bullets_.remove_if([](EnemyBullet* bullet) {
@@ -68,7 +64,11 @@ void Enemy::Update(){
 			return false;
 		});
 	}
-
+	//更新
+	for (EnemyBullet* bullet : bullets_) {
+		bullet->Update();
+		
+	}
 	
 
 	state_->Update(this);
@@ -77,12 +77,10 @@ void Enemy::Update(){
 
 void Enemy::Draw(){
 	model_->Draw(transform_);
-	if (state_->GetState() == 0) {
-		for (EnemyBullet* bullet : bullets_) {
-			bullet->Draw();
-		}
-	}
 	
+	for (EnemyBullet* bullet : bullets_) {
+		bullet->Draw();
+	}
 
 	//弾も
 	state_->Draw(this);

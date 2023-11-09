@@ -4,6 +4,7 @@
 #include "State/IEnemy/IEnemy.h"
 
 #include "Enemy/Bullet/EnemyBullet.h"
+#include "Enemy/TimeCall/TimeCall.h"
 
 enum class Phase {
 	Approach,
@@ -72,6 +73,12 @@ private:
 	int shotTime_ = FIRE_INTERVAL_;
 
 	int num = 0;
+
+
+	//時限発動のリスト
+	TimeCall* timeCall_ = nullptr;
+	std::list<TimeCall*> timedCalls_;
+
 
 };
 

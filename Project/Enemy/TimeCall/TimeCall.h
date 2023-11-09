@@ -1,10 +1,12 @@
 #pragma once
 #include <functional>
+#include <stdint.h>
+#include <stdio.h>
 
 class TimeCall{
 public:
 	//コンストラクタ
-	TimedCall(std::function<void()> f, uint32_t time);
+	TimeCall(std::function<void()> fire, uint32_t time);
 
 	
 	//更新
@@ -24,7 +26,7 @@ public:
 private:
 	//コールバック
 	//呼び出したい関数std::function
-	std::function<void()> f_;
+	std::function<void()> fire_;
 
 
 	//残り時間

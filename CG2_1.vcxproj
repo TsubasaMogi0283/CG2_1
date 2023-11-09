@@ -123,6 +123,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Project\Enemy\State\EnemyApproach\EnemyApproach.cpp" />
     <ClCompile Include="Project\Enemy\State\EnemyLeave\EnemyLeave.cpp" />
     <ClCompile Include="Project\Enemy\State\IEnemy\IEnemy.cpp" />
+    <ClCompile Include="Project\Enemy\TimeCall\TimeCall.cpp" />
     <ClCompile Include="Project\Player\Bullet\PlayerBullet.cpp" />
     <ClCompile Include="Project\Player\Player.cpp" />
   </ItemGroup>
@@ -200,6 +201,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Project\Enemy\State\EnemyApproach\EnemyApproach.h" />
     <ClInclude Include="Project\Enemy\State\EnemyLeave\EnemyLeave.h" />
     <ClInclude Include="Project\Enemy\State\IEnemy\IEnemy.h" />
+    <ClInclude Include="Project\Enemy\TimeCall\TimeCall.h" />
     <ClInclude Include="Project\Player\Bullet\PlayerBullet.h" />
     <ClInclude Include="Project\Player\Player.h" />
   </ItemGroup>

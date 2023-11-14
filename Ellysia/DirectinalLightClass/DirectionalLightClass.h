@@ -39,8 +39,6 @@ private:
 	ComPtr<ID3D12Resource> resource_ = nullptr;
 	DirectionalLight* data_ = nullptr;
 
-	//関数用
-	static D3D12_HEAP_PROPERTIES uploadHeapProperties_;
-	static D3D12_RESOURCE_DESC vertexResourceDesc_;
+	
 };
 

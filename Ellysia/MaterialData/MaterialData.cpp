@@ -1,17 +1,18 @@
-#include "DirectionalLightClass.h"
+#include "MaterialData.h"
+#include <Math/Matrix/Calculation/Matrix4x4Calculation.h>
 
 //Resource作成の関数化
-ComPtr<ID3D12Resource> DirectionalLightClass::CreateBufferResource(size_t sizeInBytes) {
+ComPtr<ID3D12Resource> MaterialDataClass::CreateBufferResource(size_t sizeInBytes) {
 	//void返り値も忘れずに
 	ComPtr<ID3D12Resource> resource = nullptr;
 	
 	////VertexResourceを生成
 	//頂点リソース用のヒープを設定
 	D3D12_HEAP_PROPERTIES uploadHeapProperties_{};
-	
 	uploadHeapProperties_.Type = D3D12_HEAP_TYPE_UPLOAD;
 
 	//頂点リソースの設定
+	//関数用
 	D3D12_RESOURCE_DESC vertexResourceDesc_{};
 	//バッファリソース。テクスチャの場合はまた別の設定をする
 	vertexResourceDesc_.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
@@ -38,18 +39,26 @@ ComPtr<ID3D12Resource> DirectionalLightClass::CreateBufferResource(size_t sizeIn
 	return resource;
 }
 
+void MaterialDataClass::Initialize(){
+	////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
+	resource_=CreateBufferResource(sizeof(Material)).Get();
+}
 
-void DirectionalLightClass::Initialize(){
-	resource_ = CreateBufferResource(sizeof(DirectionalLight));
+void MaterialDataClass::DrawInformation(Vector4 color){
+
+	//マテリアルにデータを書き込む
+	//書き込むためのアドレスを取得
+	//reinterpret_cast...char* から int* へ、One_class* から Unrelated_class* へなどの変換に使用
 	resource_->Map(0, nullptr, reinterpret_cast<void**>(&data_));
-	data_->color={ 1.0f,1.0f,1.0f,1.0f };
-	data_->direction = { 0.0f,-1.0f,0.0f };
-	data_->intensity = 3.0f;
+	data_->color = color;
+	data_->enableLighting=false;
 
+	data_->uvTransform = MakeIdentity4x4();
+}
+
+void MaterialDataClass::SetGraphicCommand(){
+	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(0, resource_->GetGPUVirtualAddress());
 
 }
 
-void DirectionalLightClass::SetGraphicsCommand() {
-	//lightingResourceの場所を設定
-	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(3, resource_->GetGPUVirtualAddress());
-}
+

@@ -122,6 +122,7 @@ uint32_t TextureManager::LoadTexture(const std::string& filePath) {
 	}
 
 
+
 	//読み込むたびにインデックスが増やし重複を防ごう
 	//同じ画像しか貼れなかったのはこれが原因
 	++textureIndex;

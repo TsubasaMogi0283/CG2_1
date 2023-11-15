@@ -47,6 +47,9 @@ public:
 
 
 
+	/// テクスチャの情報を取得
+	const D3D12_RESOURCE_DESC GetResourceDesc(uint32_t textureHandle);
+
 private:
 
 

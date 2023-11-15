@@ -1,6 +1,6 @@
 #include "Sprite.h"
 
-
+#include "TextureManager/TextureManager.h"
 
 //動的配列
 #include <vector>
@@ -21,7 +21,9 @@ ComPtr<ID3D12Resource> Sprite::CreateBufferResource(size_t sizeInBytes) {
 	
 	////VertexResourceを生成
 	//頂点リソース用のヒープを設定
-	
+	//関数用
+	D3D12_HEAP_PROPERTIES uploadHeapProperties_{};
+	D3D12_RESOURCE_DESC vertexResourceDesc_{};
 	uploadHeapProperties_.Type = D3D12_HEAP_TYPE_UPLOAD;
 
 	//頂点リソースの設定
@@ -81,9 +83,10 @@ void Sprite::CreateIndexBufferView() {
 //初期化
 void Sprite::Initialize() {
 	directXSetup_ = DirectXSetup::GetInstance();
-	spritePosition_ = {};
 	color_ = { 1.0f,1.0f,1.0f,1.0f };
 	
+	
+
 	
 	//ここでBufferResourceを作る
 	//Sprite用の頂点リソースを作る
@@ -117,66 +120,24 @@ void Sprite::Initialize() {
 
 void Sprite::LoadTextureHandle(uint32_t textureHandle) {
 	this->texturehandle_ = textureHandle;
+
+	//テクスチャの情報を取得
+	resourceDesc_ = TextureManager::GetInstance()->GetResourceDesc(texturehandle_);
+	size_ = { float(resourceDesc_.Width),float(resourceDesc_.Height) };
+
 	Initialize();
 
 }
-
-void Sprite::AssertInformation() {
-
-	//leftTop,LeftBottom,RightTop,RightBottom
-	//{ {0.0f,0.0f},{512.0f,0.0f}
-	// {0.1f,512.0f},{512.0f,512.0f} };
-	
-	//座標を入れるとき値が違っていると面倒なので
-	//Assertで止めたい
-
-	//左側2つのX座標が一致していない
-	if (leftBottom_.x != leftTop_.x) {
-		Log("Please Set Same Value LeftBottom.x And LeftTop.x !!!\n\n");
-
-		assert(leftBottom_.x == leftTop_.x);
-	}
-
-	//上側2つのY座標が一致していない
-	if (leftTop_.y != rightTop_.y) {
-		Log("Please Set Same Value LeftTop.y And RightTop.y !!!\n\n");
-
-		assert(leftTop_.y == rightTop_.y);
-	}
-
-
-
-	//右側2つのX座標が一致していない
-	if (rightTop_.x != rightBottom_.x) {
-		Log("Please Set Same Value RightTop.x And RightBottom.x !!!\n\n");
-
-		assert(rightTop_.x == rightBottom_.x);
-	}
-
-	//下側2つのY座標が一致していない
-	if (rightBottom_.y != leftBottom_.y) {
-		Log("Please Set Same Value RightBottom.y And LeftBottom.y !!!\n\n");
-
-		assert(rightBottom_.y == leftBottom_.y);
-	}
-	
-}
-
 //描画
-void Sprite::DrawRect(Transform transform) {
+void Sprite::DrawRect() {
 	
 	//参考
 	//assert(device_ != nullptr);
 
 
-	//SetAllPosition
-	leftBottom_ = {spritePosition_.leftBottom.x,spritePosition_.leftBottom.y,0.0f,1.0f};
-	leftTop_ = {spritePosition_.leftTop.x,spritePosition_.leftTop.y,0.0f,1.0f};
-	rightBottom_ = {spritePosition_.rightBottom.x,spritePosition_.rightBottom.y,0.0f,1.0f};
-	rightTop_ = {spritePosition_.rightTop.x,spritePosition_.rightTop.y,0.0f,1.0f};
-
 	
-	AssertInformation();
+	
+	//AssertInformation();
 
 	
 
@@ -207,20 +168,20 @@ void Sprite::DrawRect(Transform transform) {
 	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
 	//1枚目の三角形
 	//左下
-	vertexData_[0].position = {leftBottom_};
+	vertexData_[0].position = {originPosition_.x,originPosition_.y+size_.y,0.0f,1.0f};
 	vertexData_[0].texCoord = { 0.0f,1.0f };
 
 	//左上
-	vertexData_[1].position = {leftTop_};
+	vertexData_[1].position = {originPosition_.x,originPosition_.y,0.0f,1.0f};
 	vertexData_[1].texCoord = { 0.0f,0.0f };
 	
 	//右下
-	vertexData_[2].position = {rightBottom_} ;
+	vertexData_[2].position = {originPosition_.x+size_.x,originPosition_.y+size_.y,0.0f,1.0f} ;
 	vertexData_[2].texCoord = { 1.0f,1.0f };
 
 
 	//右上
-	vertexData_[3].position = { rightTop_ };
+	vertexData_[3].position = { originPosition_.x+size_.x,originPosition_.y,0.0f,1.0f };
 	vertexData_[3].texCoord = { 1.0f,0.0f };
 
 
@@ -245,7 +206,7 @@ void Sprite::DrawRect(Transform transform) {
 
 	//新しく引数作った方が良いかも
 	//3x3x3
-	Matrix4x4 worldMatrixSprite = MakeAffineMatrix(transform.scale,transform.rotate,transform.translate);
+	Matrix4x4 worldMatrixSprite = MakeAffineMatrix({ scale_.x,scale_.y,1.0f }, { rotate_.x,rotate_.y,0.0f }, {position_.x,position_.y,0.0f});
 	//遠視投影行列
 	Matrix4x4 viewMatrixSprite = MakeIdentity4x4();
 	

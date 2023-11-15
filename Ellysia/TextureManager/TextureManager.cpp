@@ -74,6 +74,14 @@ D3D12_CPU_DESCRIPTOR_HANDLE TextureManager::GetCPUDescriptorHandle(ComPtr<ID3D12
 	return handleCPU;
 }
 
+const D3D12_RESOURCE_DESC TextureManager::GetResourceDesc(uint32_t textureHandle) {
+	//テクスチャの情報を取得
+	D3D12_RESOURCE_DESC resourceDesc{};
+	resourceDesc = textureInformation_[textureHandle].resource_->GetDesc();
+
+	return resourceDesc;
+}
+
 
 //初期化
 void TextureManager::Initilalize() {

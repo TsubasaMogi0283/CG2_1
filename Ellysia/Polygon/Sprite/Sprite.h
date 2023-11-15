@@ -33,7 +33,7 @@ public:
 
 	//描画
 	//左上、右上、左下、右下
-	void DrawRect(Transform transform);
+	void DrawRect();
 
 
 	//解放
@@ -46,9 +46,7 @@ public:
 	
 public:
 #pragma region アクセッサ
-	void SetAllPosition(SpritePosition spritePosition) {
-		this->spritePosition_ = spritePosition;
-	}
+	
 
 
 
@@ -67,6 +65,27 @@ public:
 
 
 
+	//拡縮
+	void SetScale(Vector2 scale) {
+		this->scale_ = scale;
+	}
+
+	const Vector2 GetScale() {
+		return scale_;
+	}
+
+	//回転
+	void SetRotate(Vector2 rotate) {
+		this->rotate_ = rotate;
+	}
+
+	const Vector2 GetRotate() {
+		return rotate_;
+	}
+
+
+
+	//位置
 	void SetPosition(Vector2 position) {
 		this->position_ = position;
 	}
@@ -74,6 +93,8 @@ public:
 	const Vector2 GetPosition() {
 		return position_;
 	}
+
+
 
 
 #pragma endregion
@@ -93,8 +114,6 @@ private:
 	void CreateIndexBufferView();
 
 
-	//
-	void AssertInformation();
 
 private:
 	DirectXSetup* directXSetup_ = nullptr;
@@ -102,9 +121,7 @@ private:
 
 #pragma region リソース
 
-	//関数用
-	D3D12_HEAP_PROPERTIES uploadHeapProperties_{};
-	D3D12_RESOURCE_DESC vertexResourceDesc_{};
+	
 
 	//Sprite用
 	//三角形2枚
@@ -146,8 +163,7 @@ private:
 	ComPtr<ID3D12Resource> textureResource_ = nullptr;
 	ComPtr<ID3D12Resource> resource_ = nullptr;
 
-	D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU_;
-	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU_;
+	
 
 
 #pragma endregion
@@ -158,19 +174,19 @@ private:
 
 	int textureIndex_ = 0;
 	
-
-
-	//位置
-	SpritePosition spritePosition_ = {};
-
-	Vector4 leftBottom_ = {};
-	Vector4 leftTop_ = {};
-	Vector4 rightBottom_ = {};
-	Vector4 rightTop_ = {};
+	//テクスチャの情報
+	D3D12_RESOURCE_DESC resourceDesc_{};
 
 	Vector4 color_ = {};
 
+	Vector2 size_ = {};
+
+	Vector2 originPosition_ = { 0.0f,0.0f };
+	Vector2 scale_ = { 1.0f,1.0f };
+	Vector2 rotate_ = { 0.0f,0.0f };
 	Vector2 position_ = { 0.0f,0.0f };
+
+
 
 	uint32_t texturehandle_ = 0u;
 	bool isLoadTexture_ = false;

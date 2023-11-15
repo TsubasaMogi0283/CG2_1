@@ -22,12 +22,6 @@
     <Filter Include="ヘッダー ファイル\Common">
       <UniqueIdentifier>{489343cf-64f2-4e1a-99e3-9a53fd5598b4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\GamaScene">
-      <UniqueIdentifier>{6783ae0e-f5a0-4867-a365-1d65f9d0e07e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ヘッダー ファイル\GameScene">
-      <UniqueIdentifier>{d00a8998-a08f-48ce-850f-96c0eddb4980}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\Math">
       <UniqueIdentifier>{06a9a389-3fa9-4add-ab75-e624db9a3dd9}</UniqueIdentifier>
     </Filter>
@@ -93,6 +87,15 @@
     </Filter>
     <Filter Include="ソース ファイル\Polygone\NewFilter1">
       <UniqueIdentifier>{6bb5f514-6b37-417c-b884-05ad36ebda1e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project">
+      <UniqueIdentifier>{b6cfa1df-9916-48ad-8c18-f653946103ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project\GamaScene">
+      <UniqueIdentifier>{6783ae0e-f5a0-4867-a365-1d65f9d0e07e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project\GameScene">
+      <UniqueIdentifier>{d00a8998-a08f-48ce-850f-96c0eddb4980}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -163,10 +166,10 @@
       <Filter>ソース ファイル\Polygone</Filter>
     </ClCompile>
     <ClCompile Include="Project\AllGameScene\SampleScene\SampleScene.cpp">
-      <Filter>ソース ファイル\GamaScene</Filter>
+      <Filter>Project\GamaScene</Filter>
     </ClCompile>
     <ClCompile Include="Project\AllGameScene\GameManager\GameManager.cpp">
-      <Filter>ソース ファイル\GamaScene</Filter>
+      <Filter>Project\GamaScene</Filter>
     </ClCompile>
     <ClCompile Include="Ellysia\TextureManager\TextureManager.cpp">
       <Filter>ソース ファイル\TextureManager</Filter>
@@ -344,16 +347,16 @@
       <Filter>ヘッダー ファイル\Audio</Filter>
     </ClInclude>
     <ClInclude Include="Project\AllGameScene\GameManager\IGameScene.h">
-      <Filter>ヘッダー ファイル\GameScene</Filter>
+      <Filter>Project\GameScene</Filter>
     </ClInclude>
     <ClInclude Include="Project\AllGameScene\GameManager\GameManager.h">
-      <Filter>ヘッダー ファイル\GameScene</Filter>
+      <Filter>Project\GameScene</Filter>
     </ClInclude>
     <ClInclude Include="Ellysia\TextureManager\TextureManager.h">
       <Filter>ヘッダー ファイル\TextureManager</Filter>
     </ClInclude>
     <ClInclude Include="Project\AllGameScene\SampleScene\SampleScene.h">
-      <Filter>ヘッダー ファイル\GameScene</Filter>
+      <Filter>Project\GameScene</Filter>
     </ClInclude>
     <ClInclude Include="Ellysia\ResourceObject\ResourceObject.h">
       <Filter>ヘッダー ファイル</Filter>

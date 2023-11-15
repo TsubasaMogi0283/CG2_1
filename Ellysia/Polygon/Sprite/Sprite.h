@@ -226,6 +226,11 @@ private:
 	//上下フリップ
 	bool isFlipY_ = false;
 
+
+	//非表示
+	//いつ使うのだろうか・・・
+	bool isInvisible_ = false;
+
 	//テクスチャハンドル
 	uint32_t texturehandle_ = 0u;
 };

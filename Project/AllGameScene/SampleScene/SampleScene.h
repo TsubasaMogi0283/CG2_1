@@ -40,6 +40,11 @@ private:
 	Vector2 anchorPoint = { 0.0f,0.0f };
 	Sprite* sprite = nullptr;
 	Vector4 color_ = { 1.0f,1.0f,1.0f,1.0f };
+
+	bool flipX_ = false;
+	bool flipY_ = false;
+
+
 };
 
 

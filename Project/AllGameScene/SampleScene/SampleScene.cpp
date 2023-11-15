@@ -31,6 +31,10 @@ void SampleScene::Initialize(GameManager* gameManager) {
 /// </summary>
 void SampleScene::Update(GameManager* gameManager) {
 
+	sprite->SetFlipX(flipX_);
+	sprite->SetFlipY(flipY_);
+
+
 	sprite->SetAnchorPoint(anchorPoint);
 	sprite->SetScale(scale_);
 	sprite->SetRotate(rotate);
@@ -49,6 +53,8 @@ void SampleScene::Update(GameManager* gameManager) {
 	ImGui::SliderFloat("Rotate", &rotate, 0.0f,3.0f);
 	ImGui::SliderFloat2("Position", &position_.x, 0.0f,1000.0f);
 	ImGui::SliderFloat2("AnchorPoint", &anchorPoint.x, 0.0f,1.0f);
+	ImGui::Checkbox("FlipX", &flipX_);
+	ImGui::Checkbox("FlipY", &flipY_);
 
 
 	ImGui::End();

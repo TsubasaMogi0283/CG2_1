@@ -172,6 +172,17 @@ void Sprite::DrawRect() {
 	float top = (0.0f-anchorPoint_.y) * size_.y;
 	float bottom = (1.0f-anchorPoint_.y) * size_.y;
 
+	//左右反転
+	if (isFlipX_ == true) {
+		left = -left;
+		right = -right;
+	}
+	//上下反転
+	if (isFlipY_ == true) {
+		top = -top;
+		bottom = -bottom;
+	}
+
 
 	//1枚目の三角形
 	//左下
@@ -190,7 +201,6 @@ void Sprite::DrawRect() {
 	//右上
 	vertexData_[RIGHT_TOP].position = { right,top,0.0f,1.0f };
 	vertexData_[RIGHT_TOP].texCoord = { 1.0f,0.0f };
-
 
 
 	//IndexResourceにデータを書き込む

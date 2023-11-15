@@ -508,6 +508,8 @@ Matrix4x4 MakeOrthographicMatrix(float left, float top, float right, float botto
 //任意軸回転行列の作成関数
 Matrix4x4 MakeRotateAxisAngle(const Vector3& axis, float angle) {
 
+
+#pragma region 01_00
 	//angle...θ
 
 	//r'・・回転後の点
@@ -520,8 +522,13 @@ Matrix4x4 MakeRotateAxisAngle(const Vector3& axis, float angle) {
 	//p=(r・n)n
 	Vector3 n = Normalize(axis);
 	float dotP=DotVector3(axis, n);
+	
+
 	//p=(r・n)n
 	Vector3 p = { n.x * dotP,n.y * dotP,n.z * dotP };
+
+
+
 	Vector3 a = Subtract(axis, p);
 	Vector3 b = Cross(n, a);
 
@@ -532,7 +539,29 @@ Matrix4x4 MakeRotateAxisAngle(const Vector3& axis, float angle) {
 	};
 
 
-	Vector3 rotatedVector = {};
-	rotatedVector = Add(p, c);
+	Vector3 rotatedVectorOrigin = {};
+	rotatedVectorOrigin = Add(p, c);
+
+
+
+
+
+	Vector3 normalizeP = Normalize(axis);
+	Vector3 projectR = Project(axis, normalizeP);
+	
+
+	//ロドリゲスの回転公式
+	// nはRの単位ベクトル
+	//R'=r*cosθ+(1-cosθ)projnR+(n×R)sinθ
+	Vector3 rotatedVector = {
+		axis.x*std::cosf(angle) +(1-std::cosf(angle))*projectR.x + Cross(normalizeP,axis).x*std::sinf(angle),
+		axis.y*std::cosf(angle) +(1-std::cosf(angle))*projectR.y + Cross(normalizeP,axis).y*std::sinf(angle),
+		axis.z*std::cosf(angle) +(1-std::cosf(angle))*projectR.z + Cross(normalizeP,axis).z*std::sinf(angle),
+	};
+
+
+#pragma endregion
+
+
 
 }

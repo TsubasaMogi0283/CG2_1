@@ -21,7 +21,7 @@ Camera* Camera::GetInstance() {
 }
 
 void Camera::Initialize() {
-	cameraTransform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,-20.0f} };
+	cameraTransform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,-40.0f} };
 }
 
 

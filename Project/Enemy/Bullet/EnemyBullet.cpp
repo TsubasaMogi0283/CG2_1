@@ -13,7 +13,7 @@ void EnemyBullet::Initialzie(Vector3 position, Vector3 velocity){
 	model_->CreateObject("Resources/Sample/cube", "cube.obj");
 
 	const float SCALE_ = 0.3f;
-	transform_.scale = {SCALE_,SCALE_,SCALE_};
+	transform_.scale = {SCALE_,SCALE_,SCALE_*10.0f};
 	transform_.translate = position;
 
 	velocity_ = velocity;

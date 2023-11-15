@@ -45,8 +45,8 @@ void Player::Move() {
 		transform_.translate.x -= MOVE_AMOUNT_;
 	}
 
-	const float MOVE_LIMIT_X = 7.0f;
-	const float MOVE_LIMIT_Y = 3.0f;
+	const float MOVE_LIMIT_X = 17.0f;
+	const float MOVE_LIMIT_Y = 7.0f;
 
 	transform_.translate.x = max(transform_.translate.x, -MOVE_LIMIT_X);
 	transform_.translate.x = min(transform_.translate.x, MOVE_LIMIT_X);

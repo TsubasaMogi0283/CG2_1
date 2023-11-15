@@ -53,7 +53,7 @@ void Enemy::Fire() {
 	//弾
 	EnemyBullet* bullet_ = new EnemyBullet();
 	bullet_->Initialzie(transform_.translate,velocity);
-
+	bullet_->SetPlayer(player_);
 	//リストへ
 	bullets_.push_back(bullet_);
 	shotTime_ = FIRE_INTERVAL_;

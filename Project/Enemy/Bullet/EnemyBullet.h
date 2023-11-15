@@ -2,6 +2,10 @@
 #include "Math/Vector/Transform.h"
 #include <Polygon/Model/Model.h>
 
+
+
+class Player;
+
 class EnemyBullet{
 public:
 	EnemyBullet();
@@ -15,11 +19,18 @@ public:
 
 	~EnemyBullet();
 
+	Vector3 GetTranslate() {
+		return transform_.translate;
+	}
 
 
 	//アクセッサ
 	bool IsDead() const{
 		return isDead_;
+	}
+
+	void SetPlayer(Player* player) {
+		player_ = player;
 	}
 
 private:
@@ -31,5 +42,7 @@ private:
 	bool isDead_ = false;
 
 	int deathTimer_ = 120;
+
+	Player* player_ = nullptr;
 };
 

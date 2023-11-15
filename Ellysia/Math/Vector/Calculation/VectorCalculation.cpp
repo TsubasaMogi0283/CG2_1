@@ -1,5 +1,7 @@
 #include "VectorCalculation.h"
 #include <corecrt_math.h>
+#include <cmath>
+#include <iostream>
 
 Vector3 Add(Vector3 v1, Vector3 v2) {
 	Vector3 result = {};
@@ -63,6 +65,53 @@ Vector3 Leap(const Vector3& v1, const Vector3& v2, float t){
 	result.y = v1.x + t*(v2.y - v1.y) ;
 	result.z = v1.z + t*(v2.z - v1.z) ;
 
+
+	return result;
+}
+
+float Clamp(float t, float min, float max) {
+	if (t < min) {
+		return min;
+	}
+	else if (t > max) {
+		return max;
+	}
+
+	return t;
+
+
+}
+
+float DotVector3(Vector3 v1, Vector3 v2) {
+	return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+}
+
+float DotVector2(Vector3 v1, Vector3 v2) {
+	return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+}
+
+Vector3 Slerp(const Vector3& v1, const Vector3& v2, float t){
+	float newT = Clamp(t, 0.0f, 1.0f);
+
+	Vector3 normalizeV1 = Normalize(v1);
+	Vector3 normalizeV2 = Normalize(v2);
+
+
+	float dot = DotVector3(normalizeV1, normalizeV2);
+
+	float theta = std::acosf(dot) * newT;
+
+	Vector3 subtractVector3 = Subtract(v2, v1);
+	Vector3 relativeVector = Normalize(
+		{ subtractVector3.x * newT,
+		subtractVector3.y * newT,
+		subtractVector3.z * newT });
+
+	Vector3 result = {
+		v1.x*std::cos(theta)+relativeVector.x*std::sin(theta),
+		v1.y*std::cos(theta)+relativeVector.y*std::sin(theta),
+		v1.z*std::cos(theta)+relativeVector.z*std::sin(theta)
+	};
 
 	return result;
 }

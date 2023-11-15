@@ -1,4 +1,5 @@
 #include "VectorCalculation.h"
+#include <corecrt_math.h>
 
 Vector3 Add(Vector3 v1, Vector3 v2) {
 	Vector3 result = {};
@@ -26,6 +27,31 @@ Vector3 TransformNormal(Vector3 v, Matrix4x4 m){
 		v.x * m.m[0][2] + v.y * m.m[1][2] + v.z * m.m[2][2],
 	};
 	
+
+	return result;
+}
+
+Vector3 Normalize(Vector3 V1) {
+	Vector3 result = {};
+
+	float length = sqrtf(V1.x * V1.x + V1.y * V1.y+V1.z*V1.z);
+
+	float newX = V1.x;
+	float newY = V1.y;
+	float newZ = V1.z;
+
+
+	if (length != 0.0f) {
+		newX = V1.x / length;
+		newY = V1.y / length;
+		newZ = V1.z / length;
+
+	}
+
+	result.x = newX;
+	result.y = newY;
+	result.z = newZ;
+
 
 	return result;
 }

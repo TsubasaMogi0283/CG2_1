@@ -5,7 +5,7 @@ EnemyBullet::EnemyBullet(){
 
 }
 
-void EnemyBullet::Initialzie(Vector3 position){
+void EnemyBullet::Initialzie(Vector3 position, Vector3 velocity){
 	
 
 
@@ -16,7 +16,7 @@ void EnemyBullet::Initialzie(Vector3 position){
 	transform_.scale = {SCALE_,SCALE_,SCALE_};
 	transform_.translate = position;
 
-	velocity_ = { 0.0f,0.0f,-0.3f };
+	velocity_ = velocity;
 
 }
 

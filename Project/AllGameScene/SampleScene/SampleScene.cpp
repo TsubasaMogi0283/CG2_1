@@ -19,8 +19,9 @@ void SampleScene::Initialize(GameManager* gameManager) {
 
 
 	enemy_ = new Enemy();
-	enemy_->Initialize();
 	enemy_->SetPlayer(player_);
+	enemy_->Initialize();
+	
 
 	uint32_t textureHandle_ = TextureManager::LoadTexture("Resources/uvChecker.png");
 	cameraTranslate_ = Camera::GetInstance()->GetTranslate();

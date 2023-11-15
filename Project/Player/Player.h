@@ -28,6 +28,11 @@ public:
 	//デストラクタ
 	~Player();
 
+
+	Vector3 GetTranslate() {
+		return transform_.translate;
+	}
+
 private:
 	void Rotate();
 	void Move();

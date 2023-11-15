@@ -1,5 +1,9 @@
 #include "Enemy.h"
 #include "Enemy/State/EnemyApproach/EnemyApproach.h"
+#include "Player/Player.h"
+#include "Math/Matrix/Matrix/Matrix4x4.h"
+#include "Math/Vector/Calculation/VectorCalculation.h"
+
 
 Enemy::Enemy(){
 	
@@ -9,7 +13,7 @@ void Enemy::Initialize(){
 	model_ = new Model();
 	model_->CreateObject("Resources/Sample/Enemy", "enemy.obj");
 
-	transform_ = { {0.5f,0.5f,0.5f},{0.0f,0.0f,0.0f},{0.0f,1.0f,30.0f} };
+	transform_ = { {0.5f,0.5f,0.5f},{0.0f,0.0f,0.0f},{0.0f,1.0f,100.0f} };
 	
 	state_ = new EnemyApproach();
 
@@ -19,9 +23,36 @@ void Enemy::Initialize(){
 }
 
 void Enemy::Fire() {
+
+	assert(player_);
+	const float BULLET_SPEED = 0.1f;
+	//敵キャラのワールド座標を取得
+	
+	Vector3 playerPosition = player_->GetTranslate();
+	Vector3 enemyPosition = GetTranslate();
+	//敵と自キャラの差分ベクトル
+	Vector3 diffenrence = Subtract(playerPosition,enemyPosition);
+	//正規化
+	Vector3 velocity = Normalize(diffenrence);
+	//速さに合わせる
+	Vector3 afterVelocity = {
+	    velocity.x, 
+		velocity.y, 
+		velocity.z * BULLET_SPEED
+	};
+	Matrix4x4 worldTranslate = {};
+	worldTranslate = MakeTranslateMatrix(GetTranslate());
+
+	//速度ベクトルを自機の向きに合わせて回転させる
+	afterVelocity = TransformNormal(afterVelocity,worldTranslate );
+
+
+
+
+
 	//弾
 	EnemyBullet* bullet_ = new EnemyBullet();
-	bullet_->Initialzie(transform_.translate);
+	bullet_->Initialzie(transform_.translate,velocity);
 
 	//リストへ
 	bullets_.push_back(bullet_);

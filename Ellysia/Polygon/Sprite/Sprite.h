@@ -47,14 +47,6 @@ public:
 public:
 #pragma region アクセッサ
 	
-
-
-
-
-
-
-
-
 	//色
 	void SetTransparency(float transparency) {
 		this->color_.w = transparency;
@@ -69,17 +61,17 @@ public:
 	void SetScale(Vector2 scale) {
 		this->scale_ = scale;
 	}
-
 	const Vector2 GetScale() {
 		return scale_;
 	}
 
+
+
 	//回転
-	void SetRotate(Vector2 rotate) {
+	void SetRotate(float rotate) {
 		this->rotate_ = rotate;
 	}
-
-	const Vector2 GetRotate() {
+	const float GetRotate() {
 		return rotate_;
 	}
 
@@ -89,13 +81,20 @@ public:
 	void SetPosition(Vector2 position) {
 		this->position_ = position;
 	}
-
 	const Vector2 GetPosition() {
 		return position_;
 	}
 
 
 
+	//アンカーポイント
+	void SetAnchorPoint(Vector2 point) {
+		this->anchorPoint_ = point;
+	}
+	const Vector2 GetAnchorPoint() {
+		return anchorPoint_;
+	}
+	
 
 #pragma endregion
 
@@ -181,11 +180,13 @@ private:
 
 	Vector2 size_ = {};
 
-	Vector2 originPosition_ = { 0.0f,0.0f };
+	
 	Vector2 scale_ = { 1.0f,1.0f };
-	Vector2 rotate_ = { 0.0f,0.0f };
+	float rotate_ = 0.0f;
+	Vector2 originPosition_ = { 0.0f,0.0f };
 	Vector2 position_ = { 0.0f,0.0f };
 
+	Vector2 anchorPoint_ = { 0.0f,0.0f };
 
 
 	uint32_t texturehandle_ = 0u;

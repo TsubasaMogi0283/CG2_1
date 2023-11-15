@@ -20,9 +20,9 @@ void SampleScene::Initialize(GameManager* gameManager) {
 	modelTransform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
 
 	sprite = new Sprite();
-	uint32_t textureHandle = TextureManager::LoadTexture("Resources/monsterBall.png");
+	uint32_t textureHandle = TextureManager::LoadTexture("Resources/uvChecker.png");
 	sprite->LoadTextureHandle(textureHandle);
-	sprite->SetPosition({ 0.0f,0.0f });
+	
 
 }
 
@@ -31,6 +31,9 @@ void SampleScene::Initialize(GameManager* gameManager) {
 /// </summary>
 void SampleScene::Update(GameManager* gameManager) {
 
+	sprite->SetScale(scale_);
+	sprite->SetRotate(rotate);
+	sprite->SetPosition(position_);
 	modelTransform_.rotate.y += 0.05f;
 	sprite->SetColor(color_);
 	ImGui::Begin("Plane");
@@ -41,6 +44,10 @@ void SampleScene::Update(GameManager* gameManager) {
 
 	ImGui::Begin("Sprite");
 	ImGui::SliderFloat4("color", &color_.x, 0.0f, 1.0f);
+	ImGui::SliderFloat2("Scale", &scale_.x, 0.0f, 3.0f);
+	ImGui::SliderFloat("Rotate", &rotate, 0.0f,3.0f);
+	ImGui::SliderFloat2("Position", &position_.x, 0.0f,1000.0f);
+
 
 	ImGui::End();
 

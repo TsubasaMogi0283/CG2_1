@@ -206,7 +206,7 @@ void Sprite::DrawRect() {
 
 	//新しく引数作った方が良いかも
 	//3x3x3
-	Matrix4x4 worldMatrixSprite = MakeAffineMatrix({ scale_.x,scale_.y,1.0f }, { rotate_.x,rotate_.y,0.0f }, {position_.x,position_.y,0.0f});
+	Matrix4x4 worldMatrixSprite = MakeAffineMatrix({ scale_.x,scale_.y,1.0f }, { 0.0f,0.0f,rotate_ }, {position_.x,position_.y,0.0f});
 	//遠視投影行列
 	Matrix4x4 viewMatrixSprite = MakeIdentity4x4();
 	

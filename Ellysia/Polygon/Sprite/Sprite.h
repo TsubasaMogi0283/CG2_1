@@ -96,6 +96,22 @@ public:
 	}
 	
 
+
+	//フリップ
+	void SetFlipX(bool isFlipX){
+		this->isFlipX_=isFlipX;
+	}
+	const bool GetFlipX(){
+		return isFlipX_;
+	}
+
+	void SetFlipY(bool isFlipY){
+		this->isFlipY_=isFlipY;
+	}
+	const bool GetFlipY(){
+		return isFlipY_;
+	}
+
 #pragma endregion
 
 
@@ -204,6 +220,11 @@ private:
 	Vector2 anchorPoint_ = { 0.0f,0.0f };
 	//色
 	Vector4 color_ = {};
+
+	//左右フリップ
+	bool isFlipX_ = false;
+	//上下フリップ
+	bool isFlipY_ = false;
 
 	//テクスチャハンドル
 	uint32_t texturehandle_ = 0u;

@@ -34,6 +34,8 @@ public:
 	~Enemy();
 
 private:
+	void FireAndReset();
+	
 	void Fire();
 
 

@@ -15,6 +15,7 @@ void Enemy::Initialize(){
 
 	num = state_->GetState();
 
+	FireAndReset();
 }
 
 void Enemy::Fire() {
@@ -32,11 +33,17 @@ void Enemy::Fire() {
 void Enemy::ChangeState(IEnemy* newState) {
 	delete state_;
 	this->state_ = newState;
-
+	
 
 }
 
+void Enemy::FireAndReset() {
+	Fire();
+	//発射タイマーをセットする
+	timedCalls_.push_back(
+		new TimeCall(std::bind(&Enemy::FireAndReset, this), FIRE_INTERVAL_));
 
+}
 
 void Enemy::Update(){
 	ImGui::Begin("aaaa");
@@ -49,10 +56,13 @@ void Enemy::Update(){
 		shotTime_ -= 1;
 		if (shotTime_ == 0) {
 			Fire();
-
+			
 			
 		}
-		
+		//範囲forでリストの全要素について回す
+		for (TimeCall* timedCall : timedCalls_) {
+			timedCall->Update();
+		}
 		
 
 		//デスフラグの立った玉を削除
@@ -64,12 +74,26 @@ void Enemy::Update(){
 			return false;
 		});
 	}
+
+
+
 	//更新
 	for (EnemyBullet* bullet : bullets_) {
 		bullet->Update();
 		
 	}
 	
+	
+
+	//終了したタイマーを削除
+	//リストを削除するなら「remove_if」だよ！
+	timedCalls_.remove_if([](TimeCall* timedCall) {
+        if (timedCall->IsFinished()) {
+            delete timedCall;
+            return true;
+        }
+        return false;
+    });
 
 	state_->Update(this);
 
@@ -94,4 +118,10 @@ Enemy::~Enemy(){
 	delete model_;
 	delete state_;
 	
+
+	//timedCall_の解放
+	for (TimeCall* timedCall : timedCalls_) {
+		delete timedCall;
+	}
+
 }

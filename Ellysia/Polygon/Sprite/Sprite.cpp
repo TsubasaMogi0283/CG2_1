@@ -290,11 +290,7 @@ void Sprite::DrawRect() {
 
 }
 
-//解放
-void Sprite::Release() {
 
-	
-}
 
 //デストラクタ
 Sprite::~Sprite() {

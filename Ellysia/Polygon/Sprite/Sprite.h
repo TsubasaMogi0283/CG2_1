@@ -36,9 +36,6 @@ public:
 	void DrawRect();
 
 
-	//解放
-	void Release();
-
 	//デストラクタ
 	~Sprite();
 
@@ -121,6 +118,22 @@ public:
 		return isInvisible_;
 	}
 
+
+
+	void SetTextureLeftTop(Vector2 textureLeftTop) {
+		this->textureLeftTop_ = textureLeftTop;
+	}
+	const Vector2 GetTextureLeftTop() {
+		return textureLeftTop_;
+	}
+
+	void SetTextureSize(Vector2 textureSize) {
+		this->textureSize_ = textureSize;
+	}
+	const Vector2 GetTextureSize() {
+		return textureSize_;
+	}
+
 #pragma endregion
 
 
@@ -191,6 +204,8 @@ private:
 
 
 #pragma endregion
+
+
 	enum VERTEX_POSITION {
 		//左下
 		LEFT_BOTTOM,
@@ -239,6 +254,13 @@ private:
 	//非表示
 	//いつ使うのだろうか・・・
 	bool isInvisible_ = false;
+
+
+	//テクスチャ範囲設定
+	Vector2 textureLeftTop_ = { 0.0f,0.0f };
+	//テクスチャ切り出しサイズ
+	Vector2 textureSize_ = { 100.0f,100.0f };
+
 
 	//テクスチャハンドル
 	uint32_t texturehandle_ = 0u;

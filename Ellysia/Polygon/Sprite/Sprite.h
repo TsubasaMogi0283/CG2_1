@@ -166,7 +166,20 @@ private:
 
 
 #pragma endregion
+	enum VERTEX_POSITION {
+		//左下
+		LEFT_BOTTOM,
+	
+		//左上
+		LEFT_TOP,
+	
+		//右下
+		RIGHT_BOTTOM,
+	
+		//右上
+		RIGHT_TOP,
 
+	};
 
 
 	Transform uvTransformSprite_ = {};
@@ -176,19 +189,22 @@ private:
 	//テクスチャの情報
 	D3D12_RESOURCE_DESC resourceDesc_{};
 
-	Vector4 color_ = {};
-
+	//サイズ
 	Vector2 size_ = {};
 
-	
+	//S
 	Vector2 scale_ = { 1.0f,1.0f };
+	//R
 	float rotate_ = 0.0f;
+	//T
 	Vector2 originPosition_ = { 0.0f,0.0f };
 	Vector2 position_ = { 0.0f,0.0f };
 
+	//アンカーポイント
 	Vector2 anchorPoint_ = { 0.0f,0.0f };
+	//色
+	Vector4 color_ = {};
 
-
+	//テクスチャハンドル
 	uint32_t texturehandle_ = 0u;
-	bool isLoadTexture_ = false;
 };

@@ -166,23 +166,30 @@ void Sprite::DrawRect() {
 
 	//書き込むためのアドレスを取得
 	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
+
+	float left = (0.0f-anchorPoint_.x) * size_.x;
+	float right = (1.0f-anchorPoint_.x) * size_.x;
+	float top = (0.0f-anchorPoint_.y) * size_.y;
+	float bottom = (1.0f-anchorPoint_.y) * size_.y;
+
+
 	//1枚目の三角形
 	//左下
-	vertexData_[0].position = {originPosition_.x,originPosition_.y+size_.y,0.0f,1.0f};
-	vertexData_[0].texCoord = { 0.0f,1.0f };
+	vertexData_[LEFT_BOTTOM].position = {left,bottom,0.0f,1.0f};
+	vertexData_[LEFT_BOTTOM].texCoord = { 0.0f,1.0f };
 
 	//左上
-	vertexData_[1].position = {originPosition_.x,originPosition_.y,0.0f,1.0f};
-	vertexData_[1].texCoord = { 0.0f,0.0f };
+	vertexData_[LEFT_TOP].position = {left,top,0.0f,1.0f};
+	vertexData_[LEFT_TOP].texCoord = { 0.0f,0.0f };
 	
 	//右下
-	vertexData_[2].position = {originPosition_.x+size_.x,originPosition_.y+size_.y,0.0f,1.0f} ;
-	vertexData_[2].texCoord = { 1.0f,1.0f };
+	vertexData_[RIGHT_BOTTOM].position = {right,bottom,0.0f,1.0f} ;
+	vertexData_[RIGHT_BOTTOM].texCoord = { 1.0f,1.0f };
 
 
 	//右上
-	vertexData_[3].position = { originPosition_.x+size_.x,originPosition_.y,0.0f,1.0f };
-	vertexData_[3].texCoord = { 1.0f,0.0f };
+	vertexData_[RIGHT_TOP].position = { right,top,0.0f,1.0f };
+	vertexData_[RIGHT_TOP].texCoord = { 1.0f,0.0f };
 
 
 

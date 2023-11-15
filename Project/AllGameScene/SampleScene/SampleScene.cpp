@@ -31,6 +31,7 @@ void SampleScene::Initialize(GameManager* gameManager) {
 /// </summary>
 void SampleScene::Update(GameManager* gameManager) {
 
+	sprite->SetAnchorPoint(anchorPoint);
 	sprite->SetScale(scale_);
 	sprite->SetRotate(rotate);
 	sprite->SetPosition(position_);
@@ -47,6 +48,7 @@ void SampleScene::Update(GameManager* gameManager) {
 	ImGui::SliderFloat2("Scale", &scale_.x, 0.0f, 3.0f);
 	ImGui::SliderFloat("Rotate", &rotate, 0.0f,3.0f);
 	ImGui::SliderFloat2("Position", &position_.x, 0.0f,1000.0f);
+	ImGui::SliderFloat2("AnchorPoint", &anchorPoint.x, 0.0f,1.0f);
 
 
 	ImGui::End();

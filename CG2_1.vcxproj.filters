@@ -186,6 +186,9 @@
     <ClCompile Include="Ellysia\WorldTransform\WorldTransform.cpp">
       <Filter>ヘッダー ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Ellysia\Math\VectorMatrix.cpp">
+      <Filter>ソース ファイル\Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Object3d.PS.hlsl">
@@ -360,6 +363,9 @@
     </ClInclude>
     <ClInclude Include="Ellysia\WorldTransform\WorldTransform.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Math\VectorMatrix.h">
+      <Filter>ヘッダー ファイル\Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

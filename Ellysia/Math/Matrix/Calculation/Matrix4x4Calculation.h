@@ -1,7 +1,7 @@
 #pragma once
 #include "Math/Matrix/Matrix/Matrix4x4.h"
 #include "Math/Vector/Vector3.h"
-
+#include "Math/Matrix/Matrix/Matrix3x3.h"
 
 #include <cassert>
 #define _USE_MATH_DEFINES
@@ -23,6 +23,7 @@ Matrix4x4 Multiply(const Matrix4x4 m1, const Matrix4x4 m2);
 
 //Scale
 //拡縮
+Matrix3x3 MakeScaleMatrix3x3(const Vector3 scale);
 Matrix4x4 MakeScaleMatrix(const Vector3 scale);
 
 Matrix4x4 MakeRotateXMatrix(float radian);
@@ -57,5 +58,10 @@ Matrix4x4 MakeOrthographicMatrix(float left, float top, float right, float botto
 
 
 //MT4
+//内積を行列にする
+Matrix4x4 MakeDotMatrix(const Vector3& v1, const Vector3& v2);
+
 //任意軸回転行列の作成関数
 Matrix4x4 MakeRotateAxisAngle(const Vector3& axis, float angle);
+
+ 

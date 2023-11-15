@@ -1,5 +1,6 @@
 #include "Matrix4x4Calculation.h"
 #include "Math/Vector/Calculation/VectorCalculation.h"
+#include <Math/Matrix/Matrix/Matrix3x3.h>
 
 
 //クロス積
@@ -109,6 +110,25 @@ Matrix4x4 MakeScaleMatrix(const Vector3 scale) {
 	return result;
 }
 
+Matrix3x3 MakeScaleMatrix3x3(const Vector3 scale) {
+	Matrix3x3 result = {};
+	result.m[0][0] = scale.x;
+	result.m[0][1] = 0.0f;
+	result.m[0][2] = 0.0f;
+
+	result.m[1][0] = 0.0f;
+	result.m[1][1] = scale.y;
+	result.m[1][2] = 0.0f;
+
+	result.m[2][0] = 0.0f;
+	result.m[2][1] = 0.0f;
+	result.m[2][2] = scale.z;
+
+
+
+
+	return result;
+}
 
 //Rotate
 #pragma region XYZの個別の回転
@@ -505,13 +525,15 @@ Matrix4x4 MakeOrthographicMatrix(float left, float top, float right, float botto
 }
 
 //MT4
+
+ 
 //任意軸回転行列の作成関数
 Matrix4x4 MakeRotateAxisAngle(const Vector3& axis, float angle) {
 
 
-#pragma region 01_00
 	//angle...θ
 
+#pragma region ロドリゲスの中身
 	//r'・・回転後の点
 	//p..ProjnR rからnへの射影ベクトル
 	//a...r-p
@@ -520,31 +542,31 @@ Matrix4x4 MakeRotateAxisAngle(const Vector3& axis, float angle) {
 
 	//nはpの単位ベクトル
 	//p=(r・n)n
-	Vector3 n = Normalize(axis);
-	float dotP=DotVector3(axis, n);
-	
+	//Vector3 n = Normalize(axis);
+	//float dotP=DotVector3(axis, n);
+	//
 
-	//p=(r・n)n
-	Vector3 p = { n.x * dotP,n.y * dotP,n.z * dotP };
-
-
-
-	Vector3 a = Subtract(axis, p);
-	Vector3 b = Cross(n, a);
-
-	Vector3 c = {
-		a.x * std::cosf(angle) + b.x * std::sinf(angle),
-		a.y * std::cosf(angle) + b.y * std::sinf(angle),
-		a.z * std::cosf(angle + b.z * std::sinf(angle))
-	};
-
-
-	Vector3 rotatedVectorOrigin = {};
-	rotatedVectorOrigin = Add(p, c);
+	////p=(r・n)n
+	//Vector3 p = { n.x * dotP,n.y * dotP,n.z * dotP };
 
 
 
+	//Vector3 a = Subtract(axis, p);
+	//Vector3 b = Cross(n, a);
 
+	//Vector3 c = {
+	//	a.x * std::cosf(angle) + b.x * std::sinf(angle),
+	//	a.y * std::cosf(angle) + b.y * std::sinf(angle),
+	//	a.z * std::cosf(angle + b.z * std::sinf(angle))
+	//};
+
+
+	//Vector3 rotatedVectorOrigin = {};
+	//rotatedVectorOrigin = Add(p, c);
+
+
+
+#pragma endregion
 
 	Vector3 normalizeP = Normalize(axis);
 	Vector3 projectR = Project(axis, normalizeP);
@@ -559,8 +581,28 @@ Matrix4x4 MakeRotateAxisAngle(const Vector3& axis, float angle) {
 		axis.z*std::cosf(angle) +(1-std::cosf(angle))*projectR.z + Cross(normalizeP,axis).z*std::sinf(angle),
 	};
 
+#pragma region 01_01
+
+
+	//rRにまとめたい
+	//最終的にはrR=rS+rP+rC=r(S+P+C)という形
+
+
+	//ベクトルでは
+	//rR=r*cosθ
+	//拡縮の行列にすればいいだけ
+	Vector3 allCosVector = { std::cosf(angle),std::cosf(angle),std::cosf(angle) };
+	Matrix4x4 R = MakeScaleMatrix(allCosVector);
+
+
+	//P=(1-cosθ)projnR
+	//内積を行列にしたい
+
+
 
 #pragma endregion
+
+
 
 
 

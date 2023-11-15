@@ -508,6 +508,8 @@ Matrix4x4 MakeOrthographicMatrix(float left, float top, float right, float botto
 //任意軸回転行列の作成関数
 Matrix4x4 MakeRotateAxisAngle(const Vector3& axis, float angle) {
 
+	//angle...θ
+
 	//r'・・回転後の点
 	//p..ProjnR rからnへの射影ベクトル
 	//a...r-p
@@ -518,9 +520,15 @@ Matrix4x4 MakeRotateAxisAngle(const Vector3& axis, float angle) {
 	//p=(r・n)n
 	Vector3 n = Normalize(axis);
 	float dotP=DotVector3(axis, n);
+	//p=(r・n)n
 	Vector3 p = { n.x * dotP,n.y * dotP,n.z * dotP };
+	Vector3 a = Subtract(axis, p);
+	Vector3 b = Cross(n, a);
 
-
-
+	Vector3 c = {
+		a.x * std::cosf(angle) + b.x * std::sinf(angle),
+		a.y * std::cosf(angle) + b.y * std::sinf(angle),
+		a.z * std::cosf(angle + b.z * std::sinf(angle))
+	};
 
 }

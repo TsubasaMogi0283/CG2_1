@@ -11,6 +11,9 @@ enum class Phase {
 	Leave,
 };
 
+//前方宣言
+class Player;
+
 
 class Enemy{
 public:
@@ -54,6 +57,13 @@ public:
 		this->velocity_ = velocity;
 	}
 
+	//資料ではGameSecneだけど自分のではSampleSceneでやっているよ
+	//あまり変わらないでしょう
+	void SetPlayer(Player* player) {
+		player_ = player;
+	}
+
+
 private:
 	Model* model_ = nullptr;
 	Transform transform_ = {};
@@ -81,6 +91,10 @@ private:
 	TimeCall* timeCall_ = nullptr;
 	std::list<TimeCall*> timedCalls_;
 
+
+
+
+	Player* player_ = nullptr;
 
 };
 

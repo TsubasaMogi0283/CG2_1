@@ -135,9 +135,10 @@ void Sprite::DrawRect() {
 	//assert(device_ != nullptr);
 
 
-	
-	
-	//AssertInformation();
+	//非表示にするかどうか
+	if (isInvisible_ == true) {
+		return;
+	}
 
 	
 

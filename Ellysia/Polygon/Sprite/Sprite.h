@@ -112,6 +112,15 @@ public:
 		return isFlipY_;
 	}
 
+
+
+	void SetInvisible(bool isInvisible) {
+		this->isInvisible_ = isInvisible;
+	}
+	const bool GetInvisible() {
+		return isInvisible_;
+	}
+
 #pragma endregion
 
 

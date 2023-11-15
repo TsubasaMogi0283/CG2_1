@@ -44,7 +44,7 @@ private:
 	bool flipX_ = false;
 	bool flipY_ = false;
 
-
+	bool isInvisible_ = false;
 };
 
 

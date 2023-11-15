@@ -33,12 +33,15 @@ void SampleScene::Update(GameManager* gameManager) {
 
 	sprite->SetFlipX(flipX_);
 	sprite->SetFlipY(flipY_);
-
+	
 
 	sprite->SetAnchorPoint(anchorPoint);
 	sprite->SetScale(scale_);
 	sprite->SetRotate(rotate);
 	sprite->SetPosition(position_);
+	sprite->SetInvisible(isInvisible_);
+	
+	
 	modelTransform_.rotate.y += 0.05f;
 	sprite->SetColor(color_);
 	ImGui::Begin("Plane");
@@ -55,7 +58,7 @@ void SampleScene::Update(GameManager* gameManager) {
 	ImGui::SliderFloat2("AnchorPoint", &anchorPoint.x, 0.0f,1.0f);
 	ImGui::Checkbox("FlipX", &flipX_);
 	ImGui::Checkbox("FlipY", &flipY_);
-
+	ImGui::Checkbox("Invisible", &isInvisible_);
 
 	ImGui::End();
 

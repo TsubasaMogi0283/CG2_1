@@ -1,5 +1,5 @@
 #include "Matrix4x4Calculation.h"
-
+#include "Math/Vector/Calculation/VectorCalculation.h"
 
 
 //クロス積
@@ -507,5 +507,17 @@ Matrix4x4 MakeOrthographicMatrix(float left, float top, float right, float botto
 //MT4
 //任意軸回転行列の作成関数
 Matrix4x4 MakeRotateAxisAngle(const Vector3& axis, float angle) {
+
+	//r'・・回転後の点
+	//p..ProjnR rからnへの射影ベクトル
+	//a...r-p
+	//b..aと長さが同じで垂直をなす回転面上のベクトル
+	//c..r'-p
+
+	//p=(r・n)n
+	Vector3 p=DotVector3(axis,)
+
+
+
 
 }

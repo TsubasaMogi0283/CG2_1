@@ -119,10 +119,10 @@ void Sprite::Initialize() {
 }
 
 void Sprite::LoadTextureHandle(uint32_t textureHandle) {
-	this->texturehandle_ = textureHandle;
+	this->textureHandle_ = textureHandle;
 
 	//テクスチャの情報を取得
-	resourceDesc_ = TextureManager::GetInstance()->GetResourceDesc(texturehandle_);
+	resourceDesc_ = TextureManager::GetInstance()->GetResourceDesc(textureHandle_);
 	size_ = { float(resourceDesc_.Width),float(resourceDesc_.Height) };
 
 	Initialize();
@@ -172,6 +172,11 @@ void Sprite::DrawRect() {
 	float right = (1.0f-anchorPoint_.x) * size_.x;
 	float top = (0.0f-anchorPoint_.y) * size_.y;
 	float bottom = (1.0f-anchorPoint_.y) * size_.y;
+
+	float texLeft = textureLeftTop_.x / resourceDesc_.Width;
+	float texRight = (textureLeftTop_.x+textureSize_.x) / resourceDesc_.Width;
+	float texTop=
+
 
 	//左右反転
 	if (isFlipX_ == true) {
@@ -278,8 +283,8 @@ void Sprite::DrawRect() {
 	//directXSetup_->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureIndex());
 	
 	
-	if (texturehandle_ != 0) {
-		TextureManager::TexCommand(texturehandle_);
+	if (textureHandle_ != 0) {
+		TextureManager::TexCommand(textureHandle_);
 
 	}
 	

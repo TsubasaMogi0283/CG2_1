@@ -263,5 +263,5 @@ private:
 
 
 	//テクスチャハンドル
-	uint32_t texturehandle_ = 0u;
+	uint32_t textureHandle_ = 0u;
 };

@@ -531,4 +531,8 @@ Matrix4x4 MakeRotateAxisAngle(const Vector3& axis, float angle) {
 		a.z * std::cosf(angle + b.z * std::sinf(angle))
 	};
 
+
+	Vector3 rotatedVector = {};
+	rotatedVector = Add(p, c);
+
 }

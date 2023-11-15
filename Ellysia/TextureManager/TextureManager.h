@@ -1,6 +1,7 @@
 #pragma once
 #include <d3d12.h>
 #include <string>
+#include <array>
 
 #include "externals/DirectXTex/DirectXTex.h"
 #include <externals/DirectXTex/d3dx12.h>
@@ -74,10 +75,29 @@ private:
 	
 
 public:
-		static const int TEXTURE_MAX_AMOUNT_ = 256;
+		static const int TEXTURE_MAX_AMOUNT_ = 128;
+
+
+
+	struct TextureInformation {
+
+		//リソース
+		ComPtr<ID3D12Resource> resource_= nullptr;
+
+		//画像読み込み
+		D3D12_CPU_DESCRIPTOR_HANDLE srvHandleCPU_ = {};
+		D3D12_GPU_DESCRIPTOR_HANDLE srvHandleGPU_ = {};
+
+		//読み込んだテクスチャの名前
+		std::string name_={};
+
+		//テクスチャハンドル
+		uint32_t handle_ = 0;
+	};
+
 private:
 
-	
+	//新しく構造体を作った方がよさそう
 
 	ComPtr<ID3D12Resource> textureResource_[TEXTURE_MAX_AMOUNT_] = {nullptr};
 
@@ -85,6 +105,14 @@ private:
 	
 	D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU_[TEXTURE_MAX_AMOUNT_] = {};
 	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU_[TEXTURE_MAX_AMOUNT_] = {};
+
+
+
+
+
+	//構造体版
+	//array...stdの配列版。その名前の通り配列だよね
+	std::array<TextureInformation, TEXTURE_MAX_AMOUNT_> textureInformation_{};
 
 
 

@@ -104,6 +104,16 @@ D3D12_GPU_DESCRIPTOR_HANDLE TextureManager::GetGPUDescriptorHandle(ComPtr<ID3D12
 //統合させた関数
 uint32_t TextureManager::LoadTexture(const std::string& filePath) {
 
+	//一度読み込んだものはその値を返す
+	//新規は勿論読み込みをする
+	for (int i = 0; i < TEXTURE_MAX_AMOUNT_; i++) {
+		//同じテクスチャがあった場合そのテクスチャハンドルを返す
+		if (TextureManager::GetInstance()->textureInformation_[i].name_ == filePath) {
+			return TextureManager::GetInstance()->textureInformation_[i].handle_;
+		}
+	}
+
+
 	//読み込むたびにインデックスが増やし重複を防ごう
 	//同じ画像しか貼れなかったのはこれが原因
 	++textureIndex;
@@ -114,14 +124,21 @@ uint32_t TextureManager::LoadTexture(const std::string& filePath) {
 		textureIndex = 0;
 	}
 
-	//何も
+	//読み込んだデータを配列に保存
+	//テクスチャの名前
+	TextureManager::GetInstance()->textureInformation_[textureIndex].name_ = filePath;
+	//テクスチャハンドル
+	TextureManager::GetInstance()->textureInformation_[textureIndex].handle_ = textureIndex;
 
 	//Textureを読んで転送する
 	mipImages_[textureIndex] = LoadTextureData(filePath);
 
 	const DirectX::TexMetadata& metadata = mipImages_[textureIndex].GetMetadata();
-	TextureManager::GetInstance()->textureResource_[textureIndex] = CreateTextureResource(metadata);
-	UploadTextureData(TextureManager::GetInstance()->textureResource_[textureIndex].Get(), mipImages_[textureIndex]);
+	//TextureManager::GetInstance()->textureResource_[textureIndex] = CreateTextureResource(metadata);
+	//UploadTextureData(TextureManager::GetInstance()->textureResource_[textureIndex].Get(), mipImages_[textureIndex]);
+
+	TextureManager::GetInstance()->textureInformation_[textureIndex].resource_ = CreateTextureResource(metadata);
+	UploadTextureData(TextureManager::GetInstance()->textureInformation_[textureIndex].resource_.Get(), mipImages_[textureIndex]);
 
 
 	//ShaderResourceView
@@ -146,12 +163,22 @@ uint32_t TextureManager::LoadTexture(const std::string& filePath) {
 
 	//SRVを作成するDescriptorHeapの場所を決める
 	//後ろが1固定だったのでindex
-	TextureManager::GetInstance()->textureSrvHandleCPU_[textureIndex] = TextureManager::GetInstance()->GetCPUDescriptorHandle(DirectXSetup::GetInstance()->GetSrvDescriptorHeap(), descriptorSizeSRV_, textureIndex);
-	TextureManager::GetInstance()->textureSrvHandleGPU_[textureIndex] = TextureManager::GetInstance()->GetGPUDescriptorHandle(DirectXSetup::GetInstance()->GetSrvDescriptorHeap(), descriptorSizeSRV_, textureIndex);
+	//TextureManager::GetInstance()->textureSrvHandleCPU_[textureIndex] = TextureManager::GetInstance()->GetCPUDescriptorHandle(DirectXSetup::GetInstance()->GetSrvDescriptorHeap(), descriptorSizeSRV_, textureIndex);
+	//TextureManager::GetInstance()->textureSrvHandleGPU_[textureIndex] = TextureManager::GetInstance()->GetGPUDescriptorHandle(DirectXSetup::GetInstance()->GetSrvDescriptorHeap(), descriptorSizeSRV_, textureIndex);
+
+
+	TextureManager::GetInstance()->textureInformation_[textureIndex].srvHandleCPU_ = TextureManager::GetInstance()->GetCPUDescriptorHandle(DirectXSetup::GetInstance()->GetSrvDescriptorHeap(), descriptorSizeSRV_, textureIndex);
+	TextureManager::GetInstance()->textureInformation_[textureIndex].srvHandleGPU_ = TextureManager::GetInstance()->GetGPUDescriptorHandle(DirectXSetup::GetInstance()->GetSrvDescriptorHeap(), descriptorSizeSRV_, textureIndex);
 
 	//SRVの生成
-	DirectXSetup::GetInstance()->GetDevice()->CreateShaderResourceView(TextureManager::GetInstance()->textureResource_[textureIndex].Get(), &srvDesc[textureIndex], TextureManager::GetInstance()->textureSrvHandleCPU_[textureIndex]);
+	//DirectXSetup::GetInstance()->GetDevice()->CreateShaderResourceView(TextureManager::GetInstance()->textureResource_[textureIndex].Get(), &srvDesc[textureIndex], TextureManager::GetInstance()->textureSrvHandleCPU_[textureIndex]);
 	
+	DirectXSetup::GetInstance()->GetDevice()->CreateShaderResourceView(
+		TextureManager::GetInstance()->textureInformation_[textureIndex].resource_.Get(), 
+		&srvDesc[textureIndex], TextureManager::GetInstance()->textureInformation_[textureIndex].srvHandleCPU_);
+	
+
+
 
 	return textureIndex;
 }
@@ -278,8 +305,11 @@ void TextureManager::UploadTextureData(
 
 
 void TextureManager::TexCommand(uint32_t texHandle) {
+	//DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(
+	//	2, TextureManager::GetInstance()->textureSrvHandleGPU_[texHandle]);
 	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(
-		2, TextureManager::GetInstance()->textureSrvHandleGPU_[texHandle]);
+		2, TextureManager::GetInstance()->textureInformation_[texHandle].srvHandleGPU_);
+
 }
 
 void TextureManager::Release() {

@@ -1,5 +1,6 @@
 #include "EnemyBullet.h"
 #include <Math/Vector/Calculation/VectorCalculation.h>
+#include <cmath>
 
 EnemyBullet::EnemyBullet(){
 
@@ -17,6 +18,24 @@ void EnemyBullet::Initialzie(Vector3 position, Vector3 velocity){
 	transform_.translate = position;
 
 	velocity_ = velocity;
+
+
+	//アークタンジェント(atan2)の使い方
+	//1...高さ
+	//2...底辺
+
+
+	//Y軸回り角度(θy)
+	transform_.rotate.y = std::atan2(velocity_.x, velocity_.z);
+	//X軸回りの角度
+	//解法2の方が簡単だからこっちでやる
+	//XとZの2Dベクトル
+	float velocityXZ = sqrt(velocity_.x*velocity_.x + velocity_.z*velocity_.z);
+	float heightY = -velocity_.y;
+	//X軸回りの角度(θx)
+	transform_.rotate.x = std::atan2(heightY, velocityXZ);
+
+
 
 }
 

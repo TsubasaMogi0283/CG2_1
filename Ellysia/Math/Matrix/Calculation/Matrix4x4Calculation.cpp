@@ -503,3 +503,9 @@ Matrix4x4 MakeOrthographicMatrix(float left, float top, float right, float botto
 
 	return result;
 }
+
+//MT4
+//任意軸回転行列の作成関数
+Matrix4x4 MakeRotateAxisAngle(const Vector3& axis, float angle) {
+
+}

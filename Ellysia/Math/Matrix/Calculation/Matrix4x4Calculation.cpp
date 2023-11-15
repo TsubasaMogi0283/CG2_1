@@ -514,8 +514,11 @@ Matrix4x4 MakeRotateAxisAngle(const Vector3& axis, float angle) {
 	//b..aと長さが同じで垂直をなす回転面上のベクトル
 	//c..r'-p
 
+	//nはpの単位ベクトル
 	//p=(r・n)n
-	Vector3 p=DotVector3(axis,)
+	Vector3 n = Normalize(axis);
+	float dotP=DotVector3(axis, n);
+	Vector3 p = { n.x * dotP,n.y * dotP,n.z * dotP };
 
 
 

@@ -17,5 +17,10 @@ float DotVector2(const Vector3 v1, const Vector3 v2);
 float Length(Vector3 V1);
 Vector3 Normalize(Vector3 V1);
 
+float Cot(float theta);
+
+Vector3 Cross(const Vector3 v1, const Vector3 v2);
+
+
 Vector3 Project(const Vector3 v1, const Vector3 v2);
 

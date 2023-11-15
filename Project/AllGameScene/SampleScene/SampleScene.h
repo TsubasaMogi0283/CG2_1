@@ -36,7 +36,7 @@ private:
 
 	Sprite* sprite = nullptr;
 	Transform spriteTransform_ = {};
-
+	Vector4 color_ = { 1.0f,1.0f,1.0f,1.0f };
 };
 
 

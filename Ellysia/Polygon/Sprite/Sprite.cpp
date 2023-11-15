@@ -81,7 +81,7 @@ void Sprite::CreateIndexBufferView() {
 //初期化
 void Sprite::Initialize() {
 	directXSetup_ = DirectXSetup::GetInstance();
-	position_ = {};
+	spritePosition_ = {};
 	color_ = { 1.0f,1.0f,1.0f,1.0f };
 	
 	
@@ -170,10 +170,10 @@ void Sprite::DrawRect(Transform transform) {
 
 
 	//SetAllPosition
-	leftBottom_ = {position_.leftBottom.x,position_.leftBottom.y,0.0f,1.0f};
-	leftTop_ = {position_.leftTop.x,position_.leftTop.y,0.0f,1.0f};
-	rightBottom_ = {position_.rightBottom.x,position_.rightBottom.y,0.0f,1.0f};
-	rightTop_ = {position_.rightTop.x,position_.rightTop.y,0.0f,1.0f};
+	leftBottom_ = {spritePosition_.leftBottom.x,spritePosition_.leftBottom.y,0.0f,1.0f};
+	leftTop_ = {spritePosition_.leftTop.x,spritePosition_.leftTop.y,0.0f,1.0f};
+	rightBottom_ = {spritePosition_.rightBottom.x,spritePosition_.rightBottom.y,0.0f,1.0f};
+	rightTop_ = {spritePosition_.rightTop.x,spritePosition_.rightTop.y,0.0f,1.0f};
 
 	
 	AssertInformation();

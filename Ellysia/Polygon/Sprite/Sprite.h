@@ -7,6 +7,7 @@
 #include "PipelineManager/PipelineManager.h"
 
 #include "Math/Vector/Vector4.h"
+#include "Math/Vector/Vector2.h"
 #include "Math/Matrix/Matrix/Matrix4x4.h"
 #include "Math/Matrix/Calculation/Matrix4x4Calculation.h"
 #include "Math/Vector/Transform.h"
@@ -46,7 +47,7 @@ public:
 public:
 #pragma region アクセッサ
 	void SetAllPosition(SpritePosition spritePosition) {
-		this->position_ = spritePosition;
+		this->spritePosition_ = spritePosition;
 	}
 
 
@@ -64,6 +65,15 @@ public:
 		this->color_ = color;
 	}
 
+
+
+	void SetPosition(Vector2 position) {
+		this->position_ = position;
+	}
+
+	const Vector2 GetPosition() {
+		return position_;
+	}
 
 
 #pragma endregion
@@ -151,7 +161,7 @@ private:
 
 
 	//位置
-	SpritePosition position_ = {};
+	SpritePosition spritePosition_ = {};
 
 	Vector4 leftBottom_ = {};
 	Vector4 leftTop_ = {};
@@ -160,6 +170,7 @@ private:
 
 	Vector4 color_ = {};
 
+	Vector2 position_ = { 0.0f,0.0f };
 
 	uint32_t texturehandle_ = 0u;
 	bool isLoadTexture_ = false;

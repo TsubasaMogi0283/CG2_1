@@ -34,11 +34,19 @@ void SampleScene::Initialize(GameManager* gameManager) {
 void SampleScene::Update(GameManager* gameManager) {
 
 	modelTransform_.rotate.y += 0.05f;
-
+	sprite->SetColor(color_);
 	ImGui::Begin("Plane");
 	ImGui::SliderFloat3("Translate", &modelTransform_.translate.x, -10.0f, 10.0f);
+	
 	ImGui::End();
 	
+
+	ImGui::Begin("Sprite");
+	ImGui::SliderFloat4("color", &color_.x, 0.0f, 1.0f);
+
+	ImGui::End();
+
+
 }
 
 /// <summary>

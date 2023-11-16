@@ -45,6 +45,12 @@ private:
 	bool flipY_ = false;
 
 	bool isInvisible_ = false;
+
+
+	Vector2 leftTop_ = { 0.0f,0.0f };
+	Vector2 size_ = { 100.0f,100.0f };
+
+
 };
 
 

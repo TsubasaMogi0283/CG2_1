@@ -173,9 +173,12 @@ void Sprite::DrawRect() {
 	float top = (0.0f-anchorPoint_.y) * size_.y;
 	float bottom = (1.0f-anchorPoint_.y) * size_.y;
 
+	//uv
 	float texLeft = textureLeftTop_.x / resourceDesc_.Width;
 	float texRight = (textureLeftTop_.x+textureSize_.x) / resourceDesc_.Width;
-	float texTop=
+	float texTop= textureLeftTop_.y / resourceDesc_.Height;
+	float texBottom= (textureLeftTop_.y +textureSize_.y)/ resourceDesc_.Height;
+
 
 
 	//左右反転
@@ -193,20 +196,20 @@ void Sprite::DrawRect() {
 	//1枚目の三角形
 	//左下
 	vertexData_[LEFT_BOTTOM].position = {left,bottom,0.0f,1.0f};
-	vertexData_[LEFT_BOTTOM].texCoord = { 0.0f,1.0f };
+	vertexData_[LEFT_BOTTOM].texCoord = { texLeft,texBottom };
 
 	//左上
 	vertexData_[LEFT_TOP].position = {left,top,0.0f,1.0f};
-	vertexData_[LEFT_TOP].texCoord = { 0.0f,0.0f };
+	vertexData_[LEFT_TOP].texCoord = { texLeft,texTop };
 	
 	//右下
 	vertexData_[RIGHT_BOTTOM].position = {right,bottom,0.0f,1.0f} ;
-	vertexData_[RIGHT_BOTTOM].texCoord = { 1.0f,1.0f };
+	vertexData_[RIGHT_BOTTOM].texCoord = { texRight,texBottom };
 
 
 	//右上
 	vertexData_[RIGHT_TOP].position = { right,top,0.0f,1.0f };
-	vertexData_[RIGHT_TOP].texCoord = { 1.0f,0.0f };
+	vertexData_[RIGHT_TOP].texCoord = { texRight,texTop };
 
 
 	//IndexResourceにデータを書き込む

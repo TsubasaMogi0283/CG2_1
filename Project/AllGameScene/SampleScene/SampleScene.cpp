@@ -40,8 +40,11 @@ void SampleScene::Update(GameManager* gameManager) {
 	sprite->SetRotate(rotate);
 	sprite->SetPosition(position_);
 	sprite->SetInvisible(isInvisible_);
+
+	sprite->SetTextureLeftTop(leftTop_);
+	sprite->SetTextureSize(size_);
 	
-	
+
 	modelTransform_.rotate.y += 0.05f;
 	sprite->SetColor(color_);
 	ImGui::Begin("Plane");
@@ -56,6 +59,11 @@ void SampleScene::Update(GameManager* gameManager) {
 	ImGui::SliderFloat("Rotate", &rotate, 0.0f,3.0f);
 	ImGui::SliderFloat2("Position", &position_.x, 0.0f,1000.0f);
 	ImGui::SliderFloat2("AnchorPoint", &anchorPoint.x, 0.0f,1.0f);
+	
+	ImGui::SliderFloat2("LeftTop", &leftTop_.x, 0.0f,1000.0f);
+	ImGui::SliderFloat2("Size", &size_.x, 0.0f,1000.0f);
+	
+
 	ImGui::Checkbox("FlipX", &flipX_);
 	ImGui::Checkbox("FlipY", &flipY_);
 	ImGui::Checkbox("Invisible", &isInvisible_);

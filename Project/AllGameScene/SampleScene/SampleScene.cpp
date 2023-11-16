@@ -31,6 +31,8 @@ void SampleScene::Initialize(GameManager* gameManager) {
 /// </summary>
 void SampleScene::Update(GameManager* gameManager) {
 
+#pragma region Sprite
+
 	sprite->SetFlipX(flipX_);
 	sprite->SetFlipY(flipY_);
 	
@@ -43,15 +45,7 @@ void SampleScene::Update(GameManager* gameManager) {
 
 	sprite->SetTextureLeftTop(leftTop_);
 	sprite->SetTextureSize(size_);
-	
-
-	modelTransform_.rotate.y += 0.05f;
 	sprite->SetColor(color_);
-	ImGui::Begin("Plane");
-	ImGui::SliderFloat3("Translate", &modelTransform_.translate.x, -10.0f, 10.0f);
-	
-	ImGui::End();
-	
 
 	ImGui::Begin("Sprite");
 	ImGui::SliderFloat4("color", &color_.x, 0.0f, 1.0f);
@@ -69,6 +63,20 @@ void SampleScene::Update(GameManager* gameManager) {
 	ImGui::Checkbox("Invisible", &isInvisible_);
 
 	ImGui::End();
+
+
+#pragma endregion
+
+
+	modelTransform_.rotate.y += 0.05f;
+	
+	ImGui::Begin("Plane");
+	ImGui::SliderFloat3("Translate", &modelTransform_.translate.x, -10.0f, 10.0f);
+	
+	ImGui::End();
+	
+
+	
 
 
 }

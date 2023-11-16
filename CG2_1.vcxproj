@@ -188,14 +188,14 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Ellysia\Math\Vector\Vector4.h" />
     <ClInclude Include="Ellysia\Math\Vector\VertexData.h" />
     <ClInclude Include="Ellysia\PipelineManager\PipelineManager.h" />
+    <ClInclude Include="Ellysia\Polygon\Model\MaterialData\MaterialData.h" />
     <ClInclude Include="Ellysia\Polygon\Model\Model.h" />
+    <ClInclude Include="Ellysia\Polygon\Model\ModelData\ModelData.h" />
     <ClInclude Include="Ellysia\Polygon\Particle\3D\Particle3D.h" />
     <ClInclude Include="Ellysia\Polygon\Sphere\Sphere.h" />
     <ClInclude Include="Ellysia\Polygon\Sprite\Sprite.h" />
     <ClInclude Include="Ellysia\Polygon\Triangle\Triangle.h" />
     <ClInclude Include="Ellysia\ResourceObject\ResourceObject.h" />
-    <ClInclude Include="Ellysia\TextureManager\MaterialData\MaterialData.h" />
-    <ClInclude Include="Ellysia\TextureManager\ModelData\ModelData.h" />
     <ClInclude Include="Ellysia\TextureManager\TextureManager.h" />
     <ClInclude Include="Ellysia\ViewProjection\ViewProjection.h" />
     <ClInclude Include="Ellysia\WorldTransform\WorldTransform.h" />

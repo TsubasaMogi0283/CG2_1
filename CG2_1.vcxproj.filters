@@ -328,12 +328,6 @@
     <ClInclude Include="Ellysia\Polygon\Model\Model.h">
       <Filter>ヘッダー ファイル\Polygone\Model</Filter>
     </ClInclude>
-    <ClInclude Include="Ellysia\TextureManager\MaterialData\MaterialData.h">
-      <Filter>ヘッダー ファイル\Polygone\Model</Filter>
-    </ClInclude>
-    <ClInclude Include="Ellysia\TextureManager\ModelData\ModelData.h">
-      <Filter>ヘッダー ファイル\Polygone\Model</Filter>
-    </ClInclude>
     <ClInclude Include="Ellysia\PipelineManager\PipelineManager.h">
       <Filter>ヘッダー ファイル\Pipeline</Filter>
     </ClInclude>
@@ -372,6 +366,12 @@
     </ClInclude>
     <ClInclude Include="Ellysia\Polygon\Particle\3D\Particle3D.h">
       <Filter>ヘッダー ファイル\Polygone</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Polygon\Model\MaterialData\MaterialData.h">
+      <Filter>ヘッダー ファイル\Polygone\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Polygon\Model\ModelData\ModelData.h">
+      <Filter>ヘッダー ファイル\Polygone\Model</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

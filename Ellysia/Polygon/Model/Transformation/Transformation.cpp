@@ -17,17 +17,17 @@ void Transformation::SetInformation(Transform transform){
 
 
 	//新しく引数作った方が良いかも
-	Matrix4x4 worldMatrixSphere = MakeAffineMatrix(transform.scale,transform.rotate,transform.translate);
+	Matrix4x4 worldMatrix = MakeAffineMatrix(transform.scale,transform.rotate,transform.translate);
 	//遠視投影行列
-	Matrix4x4 viewMatrixSphere = MakeIdentity4x4();
+	Matrix4x4 viewMatrix = MakeIdentity4x4();
 	
-	Matrix4x4 projectionMatrixSphere = MakeOrthographicMatrix(0.0f, 0.0f, float(WinApp::GetInstance()->GetClientWidth()), float(WinApp::GetInstance()->GetClientHeight()), 0.0f, 100.0f);
+	Matrix4x4 projectionMatrix = MakeOrthographicMatrix(0.0f, 0.0f, float(WinApp::GetInstance()->GetClientWidth()), float(WinApp::GetInstance()->GetClientHeight()), 0.0f, 100.0f);
 	
 	//WVP行列を作成
-	Matrix4x4 worldViewProjectionMatrixSphere = Multiply(worldMatrixSphere, Multiply(Camera::GetInstance()->GetViewMatrix(), Camera::GetInstance()->GetProjectionMatrix_()));
+	Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(Camera::GetInstance()->GetViewMatrix(), Camera::GetInstance()->GetProjectionMatrix_()));
 
 
-	transformationMatrixData_->WVP = worldViewProjectionMatrixSphere;
+	transformationMatrixData_->WVP = worldViewProjectionMatrix;
 	transformationMatrixData_->World =MakeIdentity4x4();
 
 }

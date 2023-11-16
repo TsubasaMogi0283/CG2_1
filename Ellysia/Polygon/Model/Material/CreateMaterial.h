@@ -5,8 +5,6 @@
 
 class CreateMaterial{
 public:
-	//Resource作成の関数化
-	ComPtr<ID3D12Resource> CreateBufferResource(size_t sizeInBytes);
 
 	void Initialize();
 
@@ -15,14 +13,20 @@ public:
 	void SetGraphicsCommand();
 
 	
-
+	struct Material {
+	Vector4 color;
+	//boolの代わりにint32_t
+	int32_t enableLighting;
+	float padding[3];
+	Matrix4x4 uvTransform;
+};
 
 private:
 	//頂点リソースを作る
 	ComPtr<ID3D12Resource> materialResource_ = nullptr;
 		
 
-	Material* materialData_ = nullptr;
+	
 
 
 };

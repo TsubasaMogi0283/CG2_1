@@ -44,10 +44,10 @@ public:
 
 	//初期化
 	//Initializeも兼ねているよ
-	void CreateObject(const std::string& directoryPath,const std::string& fileName);
+	//void CreateObject(const std::string& directoryPath,const std::string& fileName);
 
 
-	Model* Create(const std::string& directoryPath,const std::string& fileName);
+	static Model* Create(const std::string& directoryPath,const std::string& fileName);
 
 
 private:
@@ -96,43 +96,25 @@ private:
 
 
 
-
-public:
 	
 
 
 private:
-	//モデルの読み込み
-	//ModelData modelData_;
-
 	//頂点リソースを作る
-	//ComPtr<ID3D12Resource> vertexResource_ = nullptr;
-	// 
 	//頂点バッファビューを作成する
-	//D3D12_VERTEX_BUFFER_VIEW vertexBufferView_;
-	
 	//頂点リソースにデータを書き込む
-	//VertexData* vertexData_;
 
 	//頂点データ
 	std::unique_ptr<Mesh> mesh_ = nullptr;
 
 
 	//Model用のTransformationMatrix用のリソースを作る。
-	ComPtr<ID3D12Resource> transformationMatrixResource_ = nullptr;
-	TransformationMatrix* transformationMatrixData_ = nullptr;
 	std::unique_ptr<Transformation> transformation_ = nullptr;
 
 	//マテリアル用のリソースを作る
-	//ComPtr<ID3D12Resource> materialResource_ = nullptr;
-	//Material* materialData_ = nullptr;
-
 	std::unique_ptr<CreateMaterial> material_ = nullptr;
 
 	//Lighting用
-	//ComPtr<ID3D12Resource> directionalLightResource_ = nullptr;
-	//DirectionalLight* directionalLightData_ = nullptr;
-
 	std::unique_ptr<CreateDirectionalLight> directionalLight_ = nullptr;
 
 
@@ -148,7 +130,5 @@ private:
 	
 
 	//TextureManagerを参考にする
-	static const int MODEL_MAX_AMOUNT_ = 512;
-	//std::array<ModelInformation, MODEL_MAX_AMOUNT_> modelInformation_{};
-	std::list<ModelData> modelInformationList_{};
+	static std::list<ModelData> modelInformationList_;
 };

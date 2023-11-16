@@ -15,8 +15,7 @@ SampleScene::SampleScene() {
 /// 初期化
 /// </summary>
 void SampleScene::Initialize(GameManager* gameManager) {
-	model_ = new Model();
-	model_->CreateObject("Resources/05_02", "plane.obj");
+	model_=Model::Create("Resources/05_02", "plane.obj");
 	modelTransform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
 
 	sprite = new Sprite();
@@ -93,6 +92,5 @@ void SampleScene::Draw(GameManager* gameManager) {
 /// デストラクタ
 /// </summary>
 SampleScene::~SampleScene() {
-	delete model_;
 	delete sprite;
 }

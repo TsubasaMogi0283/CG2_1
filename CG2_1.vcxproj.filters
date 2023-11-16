@@ -85,9 +85,6 @@
     <Filter Include="ソース ファイル\DebugCamera">
       <UniqueIdentifier>{6e47dfb1-b930-4c50-b9d8-f2c7d12decc5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\Polygone\NewFilter1">
-      <UniqueIdentifier>{6bb5f514-6b37-417c-b884-05ad36ebda1e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Project">
       <UniqueIdentifier>{b6cfa1df-9916-48ad-8c18-f653946103ba}</UniqueIdentifier>
     </Filter>
@@ -96,6 +93,9 @@
     </Filter>
     <Filter Include="Project\GameScene">
       <UniqueIdentifier>{d00a8998-a08f-48ce-850f-96c0eddb4980}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Polygone\ModelResource">
+      <UniqueIdentifier>{6bb5f514-6b37-417c-b884-05ad36ebda1e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -193,16 +193,16 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Ellysia\Polygon\Model\DirectionalLight\CreateDirectionalLight.cpp">
-      <Filter>ソース ファイル\Polygone\NewFilter1</Filter>
+      <Filter>ソース ファイル\Polygone\ModelResource</Filter>
     </ClCompile>
     <ClCompile Include="Ellysia\Polygon\Model\Material\CreateMaterial.cpp">
-      <Filter>ソース ファイル\Polygone\NewFilter1</Filter>
+      <Filter>ソース ファイル\Polygone\ModelResource</Filter>
     </ClCompile>
     <ClCompile Include="Ellysia\Polygon\Model\Mesh\Mesh.cpp">
-      <Filter>ソース ファイル\Polygone\NewFilter1</Filter>
+      <Filter>ソース ファイル\Polygone\ModelResource</Filter>
     </ClCompile>
     <ClCompile Include="Ellysia\Polygon\Model\Transformation\Transformation.cpp">
-      <Filter>ソース ファイル\Polygone\NewFilter1</Filter>
+      <Filter>ソース ファイル\Polygone\ModelResource</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -374,16 +374,16 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Ellysia\Polygon\Model\DirectionalLight\CreateDirectionalLight.h">
-      <Filter>ソース ファイル\Polygone\NewFilter1</Filter>
+      <Filter>ソース ファイル\Polygone\ModelResource</Filter>
     </ClInclude>
     <ClInclude Include="Ellysia\Polygon\Model\Material\CreateMaterial.h">
-      <Filter>ソース ファイル\Polygone\NewFilter1</Filter>
+      <Filter>ソース ファイル\Polygone\ModelResource</Filter>
     </ClInclude>
     <ClInclude Include="Ellysia\Polygon\Model\Mesh\Mesh.h">
-      <Filter>ソース ファイル\Polygone\NewFilter1</Filter>
+      <Filter>ソース ファイル\Polygone\ModelResource</Filter>
     </ClInclude>
     <ClInclude Include="Ellysia\Polygon\Model\Transformation\Transformation.h">
-      <Filter>ソース ファイル\Polygone\NewFilter1</Filter>
+      <Filter>ソース ファイル\Polygone\ModelResource</Filter>
     </ClInclude>
     <ClInclude Include="Ellysia\Polygon\Model\MaterialData\MaterialData.h">
       <Filter>ヘッダー ファイル\Polygone\Model</Filter>

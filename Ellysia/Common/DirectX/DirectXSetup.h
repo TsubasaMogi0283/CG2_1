@@ -89,10 +89,6 @@ private:
 #pragma region 初期化について
 	//初期化へ
 
-	
-
-
-
 	static void GenerateDXGIFactory();
 
 	static void SelectAdapter();
@@ -131,7 +127,8 @@ public:
 
 	static void Initialize();
 
-	
+	//Resource作成の関数化
+	ComPtr<ID3D12Resource> CreateBufferResource(size_t sizeInBytes);
 
 
 

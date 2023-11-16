@@ -5,6 +5,8 @@
 #include "Common/DirectX/DirectXSetup.h"
 
 static uint32_t modelIndex;
+std::list<ModelData> Model::modelInformationList_{};
+
 
 Model::Model() {
 
@@ -232,42 +234,82 @@ ComPtr<ID3D12Resource> Model::CreateBufferResource(size_t sizeInBytes) {
 }
 
 
-//Model* Model::Create(const std::string& directoryPath, const std::string& fileName) {
-//	Model* model = new Model();
-//	for (ModelData modelData : modelInformationList_) {
-//
-//	}
+Model* Model::Create(const std::string& directoryPath, const std::string& fileName) {
+	//新たなModel型のインスタンスのメモリを確保
+	Model* model = new Model();
+	//for (ModelData modelData : modelInformationList_) {
+	//
+	//}
+
+	//モデルの読み込み
+	ModelData modelDataNew = model->LoadObjectFile(directoryPath, fileName);
+	modelDataNew.name = fileName;
+	modelInformationList_.push_back(modelDataNew);
+	
+
+
+
+
+	////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
+	model->material_= std::make_unique<CreateMaterial>();
+	model->material_->Initialize();
+
+
+
+	//テクスチャの読み込み
+	model->textureHandle_ = TextureManager::GetInstance()->LoadTexture(modelDataNew.material.textureFilePath);
+
+
+	//頂点リソースを作る
+	model->mesh_ = std::make_unique<Mesh>();
+	model->mesh_->Initialize(modelDataNew.vertices);
+
+
+
+
+
+	//Sprite用のTransformationMatrix用のリソースを作る。
+	//Matrix4x4 1つ分サイズを用意する
+	model->transformation_=std::make_unique<Transformation>();
+	model->transformation_->Initialize();
+
+	//Lighting
+	model->directionalLight_=std::make_unique<CreateDirectionalLight>();
+	model->directionalLight_->Initialize();
+
+
+
+	//初期は白色
+	//モデル個別に色を変更できるようにこれは外に出しておく
+	model->color_ = { 1.0f,1.0f,1.0f,1.0f };
+
+	return model;
+
+}
+
+
+//void Model::CreateObject(const std::string& directoryPath,const std::string& fileName) {
 //
 //	//モデルの読み込み
-//	ModelData modelDataNew = model->LoadObjectFile(directoryPath, fileName);
+//	ModelData modelDataNew = LoadObjectFile(directoryPath, fileName);
 //	modelDataNew.name = fileName;
 //	modelInformationList_.push_back(modelDataNew);
 //	
+//
+//
+//
+//
 //	////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
-//	materialResource_=CreateBufferResource(sizeof(Material)).Get();
+//	material_= std::make_unique<CreateMaterial>();
+//	material_->Initialize();
+//
+//
 //
 //	//テクスチャの読み込み
 //	textureHandle_ = TextureManager::GetInstance()->LoadTexture(modelDataNew.material.textureFilePath);
 //
 //
-//
-//
-//
-//
 //	//頂点リソースを作る
-//	//モデルの頂点の数によって変わるよ
-//	vertexResource_ = CreateBufferResource(sizeof(VertexData) * modelDataNew.vertices.size()).Get();
-//	
-//	//読み込みのところでバッファインデックスを作った方がよさそう
-//	//vertexResourceがnullらしい
-//	//リソースの先頭のアドレスから使う
-//	vertexBufferView_.BufferLocation =vertexResource_->GetGPUVirtualAddress();
-//	//使用するリソースは頂点のサイズ
-//	vertexBufferView_.SizeInBytes = UINT(sizeof(VertexData) * modelDataNew.vertices.size());
-//	//１頂点あたりのサイズ
-//	vertexBufferView_.StrideInBytes = sizeof(VertexData);
-//	
-//
 //	mesh_ = std::make_unique<Mesh>();
 //	mesh_->Initialize(modelDataNew.vertices);
 //
@@ -277,84 +319,24 @@ ComPtr<ID3D12Resource> Model::CreateBufferResource(size_t sizeInBytes) {
 //
 //	//Sprite用のTransformationMatrix用のリソースを作る。
 //	//Matrix4x4 1つ分サイズを用意する
-//	transformationMatrixResource_ = CreateBufferResource(sizeof(TransformationMatrix)).Get();
-//	
+//	transformation_=std::make_unique<Transformation>();
+//	transformation_->Initialize();
+//
 //	//Lighting
-//	directionalLightResource_ = CreateBufferResource(sizeof(DirectionalLight)).Get();
-//	directionalLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightData_));
-//	directionalLightData_->color={ 1.0f,1.0f,1.0f,1.0f };
-//	directionalLightData_->direction = { 0.0f,-1.0f,0.0f };
-//	directionalLightData_->intensity = 3.0f;
+//	directionalLight_=std::make_unique<CreateDirectionalLight>();
+//	directionalLight_->Initialize();
+//
+//
 //
 //	//初期は白色
+//	//モデル個別に色を変更できるようにこれは外に出しておく
 //	color_ = { 1.0f,1.0f,1.0f,1.0f };
 //
 //
 //
+//	
 //
-//
-//	return model;
 //}
-
-
-void Model::CreateObject(const std::string& directoryPath,const std::string& fileName) {
-
-	//モデルの読み込み
-	ModelData modelDataNew = LoadObjectFile(directoryPath, fileName);
-	modelDataNew.name = fileName;
-	modelInformationList_.push_back(modelDataNew);
-	
-
-
-
-
-	////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
-	material_= std::make_unique<CreateMaterial>();
-	material_->Initialize();
-
-
-
-	//テクスチャの読み込み
-	textureHandle_ = TextureManager::GetInstance()->LoadTexture(modelDataNew.material.textureFilePath);
-
-
-	//頂点リソースを作る
-	mesh_ = std::make_unique<Mesh>();
-	mesh_->Initialize(modelDataNew.vertices);
-
-
-
-
-
-	//Sprite用のTransformationMatrix用のリソースを作る。
-	//Matrix4x4 1つ分サイズを用意する
-	//transformationMatrixResource_ = CreateBufferResource(sizeof(TransformationMatrix)).Get();
-	
-	transformation_=std::make_unique<Transformation>();
-	transformation_->Initialize();
-
-	//Lighting
-	//directionalLightResource_ = CreateBufferResource(sizeof(DirectionalLight)).Get();
-	//directionalLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightData_));
-	//directionalLightData_->color={ 1.0f,1.0f,1.0f,1.0f };
-	//directionalLightData_->direction = { 0.0f,-1.0f,0.0f };
-	//directionalLightData_->intensity = 3.0f;
-
-
-	directionalLight_=std::make_unique<CreateDirectionalLight>();
-	directionalLight_->Initialize();
-
-
-
-	//初期は白色
-	//モデル個別に色を変更できるようにこれは外に出しておく
-	color_ = { 1.0f,1.0f,1.0f,1.0f };
-
-
-
-	
-
-}
 
 
 
@@ -377,32 +359,7 @@ void Model::Draw(Transform transform) {
 
 
 	//書き込むためのデータを書き込む
-	
 	//頂点データをリソースにコピー
-	
-	//transformationMatrixResource_->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixData_));
-	//
-	//
-	//
-	//
-	////新しく引数作った方が良いかも
-	//Matrix4x4 worldMatrixSphere = MakeAffineMatrix(transform.scale,transform.rotate,transform.translate);
-	////遠視投影行列
-	//Matrix4x4 viewMatrixSphere = MakeIdentity4x4();
-	//
-	//Matrix4x4 projectionMatrixSphere = MakeOrthographicMatrix(0.0f, 0.0f, float(WinApp::GetInstance()->GetClientWidth()), float(WinApp::GetInstance()->GetClientHeight()), 0.0f, 100.0f);
-	//
-	////WVP行列を作成
-	//Matrix4x4 worldViewProjectionMatrixSphere = Multiply(worldMatrixSphere, Multiply(Camera::GetInstance()->GetViewMatrix(), Camera::GetInstance()->GetProjectionMatrix_()));
-	//
-	//
-	//transformationMatrixData_->WVP = worldViewProjectionMatrixSphere;
-	//transformationMatrixData_->World =MakeIdentity4x4();
-
-
-
-
-
 	transformation_->SetInformation(transform);
 
 
@@ -423,39 +380,10 @@ void Model::Draw(Transform transform) {
 	mesh_->SetGraphicsCommand();
 
 
-
-
-
-
-
-
-
-
 	//CBVを設定する
-	//DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
-
 	material_->SetGraphicsCommand();
 
-
-
-
-
-
-
-
-
-	//DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResource_->GetGPUVirtualAddress());
-
-
 	transformation_->SetGraphicCommand();
-
-
-
-
-
-
-
-
 
 
 
@@ -468,14 +396,9 @@ void Model::Draw(Transform transform) {
 	
 
 	//Light
-	//DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
-
 	directionalLight_->SetGraphicsCommand();
 
-
-
-	//DirectXSetup::GetInstance()->GetCommandList()->DrawInstanced(UINT(modelInformation_[modelIndex].modelData_.vertices.size()), 1, 0, 0);
-
+	//DrawCall
 	mesh_->DrawCall();
 }
 

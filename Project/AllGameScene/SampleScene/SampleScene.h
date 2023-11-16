@@ -29,8 +29,8 @@ public:
 	void Draw(GameManager* gameManager)override;
 
 private:
-
 	Model* model_ = nullptr;
+	//std::unique_ptr<Model> model_ = nullptr;
 	Transform modelTransform_ = {};
 
 	Vector2 position_ = { 0.0f,0.0f };

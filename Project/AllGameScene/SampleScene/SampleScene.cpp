@@ -16,7 +16,7 @@ SampleScene::SampleScene() {
 /// </summary>
 void SampleScene::Initialize(GameManager* gameManager) {
 	for (int i = 0; i < MODEL_AMOUNT_; i++) {
-		model_[i] = Model::Create("Resources/05_02", "plane.obj");
+		model_[i] = Model::Create("Resources/evaluationTaskResources", "bunny.obj");
 	
 	}
 	modelTransform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };

@@ -190,55 +190,49 @@ MaterialData Model::LoadMaterialTemplateFile(const std::string& directoryPath, c
 }
 
 
-//Resource作成の関数化
-ComPtr<ID3D12Resource> Model::CreateBufferResource(size_t sizeInBytes) {
-	//void返り値も忘れずに
-	ComPtr<ID3D12Resource> resource = nullptr;
-	
-	////VertexResourceを生成
-	//頂点リソース用のヒープを設定
-	//関数用
-	D3D12_HEAP_PROPERTIES uploadHeapProperties_{};
-	
-	uploadHeapProperties_.Type = D3D12_HEAP_TYPE_UPLOAD;
-
-	//頂点リソースの設定
-	D3D12_RESOURCE_DESC vertexResourceDesc_{};
-	//バッファリソース。テクスチャの場合はまた別の設定をする
-	vertexResourceDesc_.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-	vertexResourceDesc_.Width = sizeInBytes;
-	//バッファの場合はこれらは1にする決まり
-	vertexResourceDesc_.Height = 1;
-	vertexResourceDesc_.DepthOrArraySize = 1;
-	vertexResourceDesc_.MipLevels = 1;
-	vertexResourceDesc_.SampleDesc.Count = 1;
-
-	//バッファの場合はこれにする決まり
-	vertexResourceDesc_.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
-
-	//実際に頂点リソースを作る
-	//ID3D12Resource* vertexResource_ = nullptr;
-	
-	//次はここで問題
-	//hrは調査用
-	HRESULT hr;
-	hr = DirectXSetup::GetInstance()->GetDevice()->CreateCommittedResource(
-		&uploadHeapProperties_,
-		D3D12_HEAP_FLAG_NONE,
-		&vertexResourceDesc_,
-		D3D12_RESOURCE_STATE_GENERIC_READ,
-		nullptr, IID_PPV_ARGS(&resource));
-	assert(SUCCEEDED(hr));
-
-	return resource;
-}
-
 
 Model* Model::Create(const std::string& directoryPath, const std::string& fileName) {
 	//新たなModel型のインスタンスのメモリを確保
 	Model* model = new Model();
+
+	////すでにある場合はリストから取り出す
 	//for (ModelData modelData : modelInformationList_) {
-	//
+	//	if (modelData.name == fileName) {
+	//		////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
+	//		model->material_= std::make_unique<CreateMaterial>();
+	//		model->material_->Initialize();
+
+
+
+	//		//テクスチャの読み込み
+	//		model->textureHandle_ = TextureManager::GetInstance()->LoadTexture(modelData.material.textureFilePath);
+
+
+	//		//頂点リソースを作る
+	//		model->mesh_ = std::make_unique<Mesh>();
+	//		model->mesh_->Initialize(modelData.vertices);
+
+
+
+
+
+	//		//Sprite用のTransformationMatrix用のリソースを作る。
+	//		//Matrix4x4 1つ分サイズを用意する
+	//		model->transformation_=std::make_unique<Transformation>();
+	//		model->transformation_->Initialize();
+
+	//		//Lighting
+	//		model->directionalLight_=std::make_unique<CreateDirectionalLight>();
+	//		model->directionalLight_->Initialize();
+
+
+
+	//		//初期は白色
+	//		//モデル個別に色を変更できるようにこれは外に出しておく
+	//		model->color_ = { 1.0f,1.0f,1.0f,1.0f };
+
+	//		return model;
+	//	}
 	//}
 
 	//モデルの読み込み
@@ -288,55 +282,6 @@ Model* Model::Create(const std::string& directoryPath, const std::string& fileNa
 }
 
 
-//void Model::CreateObject(const std::string& directoryPath,const std::string& fileName) {
-//
-//	//モデルの読み込み
-//	ModelData modelDataNew = LoadObjectFile(directoryPath, fileName);
-//	modelDataNew.name = fileName;
-//	modelInformationList_.push_back(modelDataNew);
-//	
-//
-//
-//
-//
-//	////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
-//	material_= std::make_unique<CreateMaterial>();
-//	material_->Initialize();
-//
-//
-//
-//	//テクスチャの読み込み
-//	textureHandle_ = TextureManager::GetInstance()->LoadTexture(modelDataNew.material.textureFilePath);
-//
-//
-//	//頂点リソースを作る
-//	mesh_ = std::make_unique<Mesh>();
-//	mesh_->Initialize(modelDataNew.vertices);
-//
-//
-//
-//
-//
-//	//Sprite用のTransformationMatrix用のリソースを作る。
-//	//Matrix4x4 1つ分サイズを用意する
-//	transformation_=std::make_unique<Transformation>();
-//	transformation_->Initialize();
-//
-//	//Lighting
-//	directionalLight_=std::make_unique<CreateDirectionalLight>();
-//	directionalLight_->Initialize();
-//
-//
-//
-//	//初期は白色
-//	//モデル個別に色を変更できるようにこれは外に出しておく
-//	color_ = { 1.0f,1.0f,1.0f,1.0f };
-//
-//
-//
-//	
-//
-//}
 
 
 

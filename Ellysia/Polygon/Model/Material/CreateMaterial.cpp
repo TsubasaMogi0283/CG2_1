@@ -4,7 +4,7 @@
 
 
 void CreateMaterial::Initialize(){
-	materialResource_=DirectXSetup::GetInstance()->CreateBufferResource(sizeof(Material));
+	materialResource_=DirectXSetup::GetInstance()->CreateBufferResource(sizeof(Material)).Get();
 	Material* materialData_ = nullptr;
 	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 	materialData_->color = {1.0f,1.0f,1.0f,1.0f};

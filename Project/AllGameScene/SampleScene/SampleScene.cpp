@@ -15,7 +15,10 @@ SampleScene::SampleScene() {
 /// 初期化
 /// </summary>
 void SampleScene::Initialize(GameManager* gameManager) {
-	model_=Model::Create("Resources/05_02", "plane.obj");
+	for (int i = 0; i < MODEL_AMOUNT_; i++) {
+		model_[i] = Model::Create("Resources/05_02", "plane.obj");
+	
+	}
 	modelTransform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
 
 	sprite = new Sprite();
@@ -66,12 +69,15 @@ void SampleScene::Update(GameManager* gameManager) {
 
 #pragma endregion
 
+	//model_->SetColor(modelColor_);
 
 	modelTransform_.rotate.y += 0.05f;
 	
 	ImGui::Begin("Plane");
 	ImGui::SliderFloat3("Translate", &modelTransform_.translate.x, -10.0f, 10.0f);
+	ImGui::SliderFloat4("Color", &modelColor_.x, 0.0f, 1.0f);
 	
+
 	ImGui::End();
 	
 
@@ -84,7 +90,10 @@ void SampleScene::Update(GameManager* gameManager) {
 /// 描画
 /// </summary>
 void SampleScene::Draw(GameManager* gameManager) {
-	model_->Draw(modelTransform_);
+	for (int i = 0; i < MODEL_AMOUNT_; i++) {
+		model_[i]->Draw(modelTransform_);
+	
+	}
 	sprite->DrawRect();
 }
 
@@ -92,5 +101,8 @@ void SampleScene::Draw(GameManager* gameManager) {
 /// デストラクタ
 /// </summary>
 SampleScene::~SampleScene() {
+	for (int i = 0; i < MODEL_AMOUNT_; i++) {
+		delete model_[i];
+	}
 	delete sprite;
 }

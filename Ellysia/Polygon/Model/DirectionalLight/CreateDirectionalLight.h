@@ -4,8 +4,6 @@
 
 class CreateDirectionalLight{
 public:
-	//Resource作成の関数化
-	ComPtr<ID3D12Resource> CreateBufferResource(size_t sizeInBytes);
 
 	void Initialize();
 

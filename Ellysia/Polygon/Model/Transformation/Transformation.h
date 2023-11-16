@@ -7,7 +7,6 @@
 class Transformation{
 public:
 
-	ComPtr<ID3D12Resource> CreateBufferResource(size_t sizeInBytes);
 
 	void Initialize();
 

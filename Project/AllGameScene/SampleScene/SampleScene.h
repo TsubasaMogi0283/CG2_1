@@ -29,8 +29,9 @@ public:
 	void Draw(GameManager* gameManager)override;
 
 private:
-	Model* model_ = nullptr;
-	//std::unique_ptr<Model> model_ = nullptr;
+	static const int MODEL_AMOUNT_ = 32;
+
+	Model* model_[MODEL_AMOUNT_] = { nullptr };
 	Transform modelTransform_ = {};
 
 	Vector2 position_ = { 0.0f,0.0f };
@@ -40,6 +41,8 @@ private:
 	Vector2 anchorPoint = { 0.0f,0.0f };
 	Sprite* sprite = nullptr;
 	Vector4 color_ = { 1.0f,1.0f,1.0f,1.0f };
+
+	Vector4 modelColor_ = { 1.0f,1.0f,1.0f,1.0f };
 
 	bool flipX_ = false;
 	bool flipY_ = false;

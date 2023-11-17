@@ -36,6 +36,7 @@ void SampleScene::Initialize(GameManager* gameManager) {
 	
 	cameraPosition_ = {0.0f,3.7f,-8.0f};
 	cameraRotate_ = { 0.4f,0.0f,0.0f };
+
 }
 
 /// <summary>

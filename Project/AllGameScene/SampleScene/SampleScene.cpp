@@ -21,8 +21,7 @@ void SampleScene::Initialize(GameManager* gameManager) {
 	modelColor_ = {1.0f,1.0f,1.0f,1.0f};
 	
 	
-	model_ = Model::Create("Resources/05_02", "plane.obj",BlendModeMultiply);
-	//model_->SetBlendMode(BlendModeMultiply);
+	model_ = Model::Create("Resources/05_02", "plane.obj",BlendModeNormal);
 	modelTransform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
 
 	spriteTransform_ = { {0.5f,0.5f,0.5f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
@@ -30,8 +29,7 @@ void SampleScene::Initialize(GameManager* gameManager) {
 	uint32_t textureHandle = TextureManager::LoadTexture("Resources/uvChecker.png");
 
 	sprite->SetBlendMode(BlendModeMultiply);
-	sprite->LoadTextureHandle(textureHandle);
-	sprite->SetAllPosition({ { 0.0f,0.0f }, { 0.0f,512.0f }, { 512.0f,0.0f, }, { 512.0f,512.0f} });
+	sprite = Sprite::Create(textureHandle, {0.0f,0.0f});
 
 	
 	cameraPosition_ = {0.0f,3.7f,-8.0f};
@@ -78,7 +76,7 @@ void SampleScene::Update(GameManager* gameManager) {
 /// </summary>
 void SampleScene::Draw(GameManager* gameManager) {
 	model_->Draw(modelTransform_);
-	sprite->DrawRect(spriteTransform_);
+	sprite->Draw();
 }
 
 /// <summary>

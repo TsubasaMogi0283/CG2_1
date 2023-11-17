@@ -7,6 +7,7 @@
 #include "PipelineManager/PipelineManager.h"
 
 #include "Math/Vector/Vector4.h"
+#include "Math/Vector/Vector2.h"
 #include "Math/Matrix/Matrix/Matrix4x4.h"
 #include "Math/Matrix/Calculation/Matrix4x4Calculation.h"
 #include "Math/Vector/Transform.h"
@@ -18,25 +19,22 @@
 #include <format>
 #include <Math/Vector/DirectionalLight.h>
 #include <Math/Matrix/Matrix/TransformationMatrix.h>
-#include "Math/Vector/SpritePosition.h"
 
 class Sprite {
 public:
-
 	//コンストラクタ
 	Sprite();
 
-	
-	void LoadTextureHandle(uint32_t textureHandle);
+	//通常
+	static Sprite* Create(uint32_t textureHandle,Vector2 position);
 
+	//ブレンドモードあり
+	static Sprite* Create(uint32_t textureHandle,Vector2 position, uint32_t blendModeNumber);
 
 	//描画
 	//左上、右上、左下、右下
-	void DrawRect(Transform transform);
+	void Draw();
 
-
-	//解放
-	void Release();
 
 	//デストラクタ
 	~Sprite();
@@ -45,25 +43,105 @@ public:
 	
 public:
 #pragma region アクセッサ
-	void SetAllPosition(SpritePosition spritePosition) {
-		this->position_ = spritePosition;
-	}
-
-
-	void SetBlendMode(int32_t blendmode) {
-		blendModeNumber_ = blendmode;
-	}
-
-
-
-
-
+	
 	//色
 	void SetTransparency(float transparency) {
 		this->color_.w = transparency;
 	}
 	void SetColor(Vector4 color) {
 		this->color_ = color;
+	}
+
+	//ブレンドモードの選択
+	void SetBlendMode(uint32_t blendMode) {
+		this->blendModeNumber_ = blendMode;
+	}
+
+	//拡縮
+	void SetScale(Vector2 scale) {
+		this->scale_ = scale;
+	}
+	const Vector2 GetScale() {
+		return scale_;
+	}
+
+
+
+	//回転
+	void SetRotate(float rotate) {
+		this->rotate_ = rotate;
+	}
+	const float GetRotate() {
+		return rotate_;
+	}
+
+
+
+	//位置
+	void SetPosition(Vector2 position) {
+		this->position_ = position;
+	}
+	const Vector2 GetPosition() {
+		return position_;
+	}
+
+
+
+	//アンカーポイント
+	void SetAnchorPoint(Vector2 point) {
+		this->anchorPoint_ = point;
+	}
+	const Vector2 GetAnchorPoint() {
+		return anchorPoint_;
+	}
+	
+
+
+	//フリップ
+	void SetFlipX(bool isFlipX){
+		this->isFlipX_=isFlipX;
+	}
+	const bool GetFlipX(){
+		return isFlipX_;
+	}
+
+	void SetFlipY(bool isFlipY){
+		this->isFlipY_=isFlipY;
+	}
+	const bool GetFlipY(){
+		return isFlipY_;
+	}
+
+
+
+	void SetInvisible(bool isInvisible) {
+		this->isInvisible_ = isInvisible;
+	}
+	const bool GetInvisible() {
+		return isInvisible_;
+	}
+
+
+	//UV
+	void SetTextureLeftTop(Vector2 textureLeftTop) {
+		this->textureLeftTop_ = textureLeftTop;
+	}
+	const Vector2 GetTextureLeftTop() {
+		return textureLeftTop_;
+	}
+
+	void SetTextureSize(Vector2 textureSize) {
+		this->textureSize_ = textureSize;
+	}
+	const Vector2 GetTextureSize() {
+		return textureSize_;
+	}
+
+	void SetUVMode(bool isUVMode) {
+		this->isUVSetting_ = isUVMode;
+	}
+	const bool GetUVMode() {
+		return isUVSetting_;
 	}
 
 
@@ -74,8 +152,7 @@ public:
 
 private:
 	//初期化
-	void Initialize();
-	
+	void Initialize(uint32_t textureHandle,Vector2 position);
 	
 	//Vertex
 	void CreateVertexBufferView();
@@ -83,18 +160,13 @@ private:
 	void CreateIndexBufferView();
 
 
-	//
-	void AssertInformation();
 
 private:
-	DirectXSetup* directXSetup_ = nullptr;
 
 
 #pragma region リソース
 
-	//関数用
-	D3D12_HEAP_PROPERTIES uploadHeapProperties_{};
-	D3D12_RESOURCE_DESC vertexResourceDesc_{};
+	
 
 	//Sprite用
 	//三角形2枚
@@ -136,35 +208,76 @@ private:
 	ComPtr<ID3D12Resource> textureResource_ = nullptr;
 	ComPtr<ID3D12Resource> resource_ = nullptr;
 
-	D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU_;
-	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU_;
+	
 
 
 #pragma endregion
 
+
+	enum VERTEX_POSITION {
+		//左下
+		LEFT_BOTTOM,
+	
+		//左上
+		LEFT_TOP,
+	
+		//右下
+		RIGHT_BOTTOM,
+	
+		//右上
+		RIGHT_TOP,
+
+	};
 
 
 	Transform uvTransformSprite_ = {};
 
 	int textureIndex_ = 0;
 	
+	//テクスチャの情報
+	D3D12_RESOURCE_DESC resourceDesc_{};
 
+	//サイズ
+	Vector2 size_ = {};
 
-	//位置
-	SpritePosition position_ = {};
+	//S
+	Vector2 scale_ = { 1.0f,1.0f };
+	//R
+	float rotate_ = 0.0f;
+	//T
+	Vector2 originPosition_ = { 0.0f,0.0f };
+	Vector2 position_ = { 0.0f,0.0f };
 
-	Vector4 leftBottom_ = {};
-	Vector4 leftTop_ = {};
-	Vector4 rightBottom_ = {};
-	Vector4 rightTop_ = {};
-
+	//アンカーポイント
+	Vector2 anchorPoint_ = { 0.0f,0.0f };
+	//色
 	Vector4 color_ = {};
 
+	//左右フリップ
+	bool isFlipX_ = false;
+	//上下フリップ
+	bool isFlipY_ = false;
 
-	uint32_t texturehandle_ = 0u;
-	bool isLoadTexture_ = false;
 
-	//デフォルトはα加算
-	int32_t blendModeNumber_ = 1;
+	//非表示
+	//いつ使うのだろうか・・・
+	bool isInvisible_ = false;
+
+
+	//テクスチャ範囲設定
+	Vector2 textureLeftTop_ = { 0.0f,0.0f };
+	//テクスチャ切り出しサイズ
+	Vector2 textureSize_ = { 100.0f,100.0f };
+
+	bool isUVSetting_ = false;
+
+	//テクスチャハンドル
+	uint32_t textureHandle_ = 0u;
+
+	//ブレンドモード
+	uint32_t blendModeNumber_ = 1;
 
 };
+
+
+	

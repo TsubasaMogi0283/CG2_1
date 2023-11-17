@@ -55,10 +55,10 @@ public:
 		return modelPSO_.graphicsPipelineState_;
 	}
 
-	void SetSpriteBlendMode(int32_t blendmode) {
+	void SetSpriteBlendMode(uint32_t blendmode) {
 		selectSpriteBlendMode_ = blendmode;
 	}
-	void SetModelBlendMode(int32_t blendmode) {
+	void SetModelBlendMode(uint32_t blendmode) {
 		selectModelBlendMode_ = blendmode;
 	}
 

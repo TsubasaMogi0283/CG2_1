@@ -34,6 +34,7 @@
 #include "Polygon/Model/Material/CreateMaterial.h"
 #include "DirectionalLight/CreateDirectionalLight.h"
 #include "Transformation/Transformation.h"
+#include <Blend/BlendMode.h>
 
 
 class Model {
@@ -46,9 +47,11 @@ public:
 	//Initializeも兼ねているよ
 	//void CreateObject(const std::string& directoryPath,const std::string& fileName);
 
-
+	//通常の生成
 	static Model* Create(const std::string& directoryPath,const std::string& fileName);
 
+	//ブレンドありの生成
+	static Model* Create(const std::string& directoryPath, const std::string& fileName, uint32_t blendModeNumber_);
 
 private:
 #pragma region モデルの読み込み関係の関数
@@ -82,7 +85,10 @@ public:
 	void SetTransparency(float transparency) {
 		this->color_.w = transparency;
 	}
-
+	//アクセッサのまとめ
+	void SetBlendMode(int32_t blendmode) {
+		blendModeNumber_ = blendmode;
+	}
 
 
 private:
@@ -124,15 +130,11 @@ private:
 	//色関係のメンバ変数
 	Vector4 color_;
 
-
+	
+	//デフォルトはα加算
+	uint32_t blendModeNumber_ =BlendModeNormal;
 	
 
 	//TextureManagerを参考にする
 	static std::list<ModelData> modelInformationList_;
 };
-//アクセッサのまとめ
-	void SetBlendMode(int32_t blendmode) {
-		blendModeNumber_ = blendmode;
-	}
-	//デフォルトはα加算
-	int32_t blendModeNumber_ ;

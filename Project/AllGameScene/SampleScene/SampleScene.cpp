@@ -19,16 +19,17 @@ void SampleScene::Initialize(GameManager* gameManager) {
 
 	//BlendModeを使う時は各Initializeの前で使ってね
 	modelColor_ = {1.0f,1.0f,1.0f,1.0f};
-	model_ = new Model();
-	model_->SetBlendMode(BlendModeNormal);
-	model_->CreateObject("Resources/05_02","plane.obj");
+	
+	
+	model_ = Model:: Create("Resources/05_02", "plane.obj",BlendModeScreen);
+	//model_->SetBlendMode(BlendModeMultiply);
 	modelTransform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
 
 	spriteTransform_ = { {0.5f,0.5f,0.5f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
 	sprite = new Sprite();
 	uint32_t textureHandle = TextureManager::LoadTexture("Resources/uvChecker.png");
 
-	sprite->SetBlendMode(BlendModeNormal);
+	sprite->SetBlendMode(BlendModeMultiply);
 	sprite->LoadTextureHandle(textureHandle);
 	sprite->SetAllPosition({ { 0.0f,0.0f }, { 0.0f,512.0f }, { 512.0f,0.0f, }, { 512.0f,512.0f} });
 
@@ -57,6 +58,9 @@ void SampleScene::Update(GameManager* gameManager) {
 	ImGui::SliderFloat4("Color", &spriteColor_.x, 0.0f, 1.0f);
 	ImGui::End();
 
+	ImGui::Begin("Model");
+	ImGui::SliderFloat4("Color", &modelColor_.x, 0.0f, 1.0f);
+	ImGui::End();
 
 	//modelTransform_.rotate.y += 0.05f;
 	

@@ -15,44 +15,6 @@ Sprite::Sprite(){
 }
 
 
-//Resource作成の関数化
-ComPtr<ID3D12Resource> Sprite::CreateBufferResource(size_t sizeInBytes) {
-	//void返り値も忘れずに
-	ComPtr<ID3D12Resource> resource = nullptr;
-	
-	////VertexResourceを生成
-	//頂点リソース用のヒープを設定
-	
-	uploadHeapProperties_.Type = D3D12_HEAP_TYPE_UPLOAD;
-
-	//頂点リソースの設定
-	
-	//バッファリソース。テクスチャの場合はまた別の設定をする
-	vertexResourceDesc_.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-	vertexResourceDesc_.Width = sizeInBytes;
-	//バッファの場合はこれらは1にする決まり
-	vertexResourceDesc_.Height = 1;
-	vertexResourceDesc_.DepthOrArraySize = 1;
-	vertexResourceDesc_.MipLevels = 1;
-	vertexResourceDesc_.SampleDesc.Count = 1;
-
-	//バッファの場合はこれにする決まり
-	vertexResourceDesc_.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
-
-	//実際に頂点リソースを作る
-	//ID3D12Resource* vertexResource_ = nullptr;
-	//hrは調査用
-	HRESULT hr;
-	hr = directXSetup_->GetDevice()->CreateCommittedResource(
-		&uploadHeapProperties_,
-		D3D12_HEAP_FLAG_NONE,
-		&vertexResourceDesc_,
-		D3D12_RESOURCE_STATE_GENERIC_READ,
-		nullptr, IID_PPV_ARGS(&resource));
-	assert(SUCCEEDED(hr));
-
-	return resource;
-}
 
 //Vertex
 void Sprite::CreateVertexBufferView() {
@@ -92,14 +54,14 @@ void Sprite::Initialize() {
 	//ここでBufferResourceを作る
 	//Sprite用の頂点リソースを作る
 	//以前三角形二枚にしてたけど結合して四角一枚で良くなったので4で良いよね
-	vertexResource_ = CreateBufferResource(sizeof(VertexData) * 6).Get();
+	vertexResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(VertexData) * 6).Get();
 	//index用のリソースを作る
-	indexResource_ = CreateBufferResource(sizeof(uint32_t) * 6).Get();
+	indexResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(uint32_t) * 6).Get();
 	////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
-	materialResource_=CreateBufferResource(sizeof(Material));
+	materialResource_=DirectXSetup::GetInstance()->CreateBufferResource(sizeof(Material));
 	//Sprite用のTransformationMatrix用のリソースを作る。
 	//Matrix4x4 1つ分サイズを用意する
-	transformationMatrixResource_ = CreateBufferResource(sizeof(TransformationMatrix)).Get();
+	transformationMatrixResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(TransformationMatrix)).Get();
 	
 
 	//頂点バッファビューを作成する

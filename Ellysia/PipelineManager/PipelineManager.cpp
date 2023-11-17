@@ -168,8 +168,10 @@ void PipelineManager::GenerateSpritePSO() {
 	D3D12_BLEND_DESC blendDesc{};
 	//全ての色要素を書き込む
 	blendDesc.RenderTarget[0].RenderTargetWriteMask =D3D12_COLOR_WRITE_ENABLE_ALL;
-
-	
+	//透明度これはどのブレンドモードでも同じ
+	blendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
+	blendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
+	blendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
 
 	//ブレンドモードの選択
 	//switchでやった方が楽でしょう
@@ -187,9 +189,7 @@ void PipelineManager::GenerateSpritePSO() {
 		blendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
 		blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
 		blendDesc.RenderTarget[0].DestBlend=D3D12_BLEND_INV_SRC_ALPHA;
-		blendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
-		blendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
-		blendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
+		
 
 
 
@@ -204,11 +204,7 @@ void PipelineManager::GenerateSpritePSO() {
 		blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
 		blendDesc.RenderTarget[0].DestBlend=D3D12_BLEND_ONE;
 		
-		//透明度これはどのブレンドモードでも同じ
-		blendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
-		blendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
-		blendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
-
+		
 
 
 
@@ -223,9 +219,6 @@ void PipelineManager::GenerateSpritePSO() {
 		blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_REV_SUBTRACT;
 		blendDesc.RenderTarget[0].DestBlend=D3D12_BLEND_ONE;
 		
-		blendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
-		blendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
-		blendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
 
 		break;
 
@@ -236,10 +229,6 @@ void PipelineManager::GenerateSpritePSO() {
 		blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
 		blendDesc.RenderTarget[0].DestBlend=D3D12_BLEND_SRC_COLOR;
 
-		blendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
-		blendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
-		blendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
-
 		break;
 
 	case BlendModeScreen:
@@ -249,9 +238,6 @@ void PipelineManager::GenerateSpritePSO() {
 		blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
 		blendDesc.RenderTarget[0].DestBlend=D3D12_BLEND_ONE;
 
-		blendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
-		blendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
-		blendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
 
 
 
@@ -452,6 +438,7 @@ void PipelineManager::GenerateModelPSO() {
 	}
 
 	//バイナリを元に生成
+	//ID3D12RootSignature* rootSignature_ = nullptr;
 	hr = DirectXSetup::GetInstance()->GetDevice()->CreateRootSignature(0,PipelineManager::GetInstance()->modelPSO_.signatureBlob_->GetBufferPointer(),
 		PipelineManager::GetInstance()->modelPSO_.signatureBlob_->GetBufferSize(), IID_PPV_ARGS(&PipelineManager::GetInstance()->modelPSO_.rootSignature_));
 	assert(SUCCEEDED(hr));
@@ -499,6 +486,10 @@ void PipelineManager::GenerateModelPSO() {
 	//全ての色要素を書き込む
 	blendDesc.RenderTarget[0].RenderTargetWriteMask =D3D12_COLOR_WRITE_ENABLE_ALL;
 
+	//α
+	blendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
+	blendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
+	blendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
 	
 
 	//ブレンドモードの選択
@@ -508,6 +499,7 @@ void PipelineManager::GenerateModelPSO() {
 	case BlendModeNone:
 		//ブレンド無し
 		blendDesc.RenderTarget[0].BlendEnable = false;
+
 		break;
 
 	case BlendModeNormal:
@@ -516,10 +508,9 @@ void PipelineManager::GenerateModelPSO() {
 		blendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
 		blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
 		blendDesc.RenderTarget[0].DestBlend=D3D12_BLEND_INV_SRC_ALPHA;
-
-		blendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
-		blendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
-		blendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
+		//blendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
+		//blendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
+		//blendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
 
 
 
@@ -535,9 +526,10 @@ void PipelineManager::GenerateModelPSO() {
 		blendDesc.RenderTarget[0].DestBlend=D3D12_BLEND_ONE;
 		
 		//透明度これはどのブレンドモードでも同じ
-		blendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
-		blendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
-		blendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
+		//blendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
+		//blendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
+		//blendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
+
 
 
 
@@ -552,9 +544,10 @@ void PipelineManager::GenerateModelPSO() {
 		blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_REV_SUBTRACT;
 		blendDesc.RenderTarget[0].DestBlend=D3D12_BLEND_ONE;
 		
-		blendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
-		blendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
-		blendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
+		//blendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
+		//blendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
+		//blendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
+
 		break;
 
 	case BlendModeMultiply: 
@@ -564,9 +557,12 @@ void PipelineManager::GenerateModelPSO() {
 		blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
 		blendDesc.RenderTarget[0].DestBlend=D3D12_BLEND_SRC_COLOR;
 
-		blendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
-		blendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
-		blendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
+		//blendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
+		//blendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
+		//blendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
+
+
+		
 		break;
 
 	case BlendModeScreen:
@@ -576,10 +572,12 @@ void PipelineManager::GenerateModelPSO() {
 		blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
 		blendDesc.RenderTarget[0].DestBlend=D3D12_BLEND_ONE;
 
-		blendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
-		blendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
-		blendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
-		
+		//blendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
+		//blendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
+		//blendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
+
+
+
 
 
 		break;
@@ -595,6 +593,10 @@ void PipelineManager::GenerateModelPSO() {
 
 
 	}
+
+
+	
+	
 
 
 
@@ -670,6 +672,7 @@ void PipelineManager::GenerateModelPSO() {
 	
 
 }
+
 
 //3Dパーティクル用
 void PipelineManager::GenerateParticle3DPSO() {

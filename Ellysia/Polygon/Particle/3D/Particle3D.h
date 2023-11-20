@@ -132,6 +132,10 @@ private:
 	int32_t blendModeNumber_ ;
 	
 
+	//インスタンシングの数
+	int32_t instanceCount_ = 10;
+
+
 	//TextureManagerを参考にする
 	static std::list<ModelData> modelInformationList_;
 };

@@ -33,6 +33,6 @@ void Mesh::SetGraphicsCommand(){
 	DirectXSetup::GetInstance()->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
-void Mesh::DrawCall(){
-	DirectXSetup::GetInstance()->GetCommandList()->DrawInstanced(UINT(vertices_.size()), 1, 0, 0);
+void Mesh::DrawCall(uint32_t instanceCount){
+	DirectXSetup::GetInstance()->GetCommandList()->DrawInstanced(UINT(vertices_.size()), instanceCount, 0, 0);
 }

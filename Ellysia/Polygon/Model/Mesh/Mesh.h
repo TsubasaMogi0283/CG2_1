@@ -11,7 +11,7 @@ public:
 
 	void SetGraphicsCommand();
 
-	void DrawCall();
+	void DrawCall(uint32_t instanceCount);
 
 
 private:
@@ -23,6 +23,7 @@ private:
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_;
 
 	std::vector<VertexData> vertices_{};
+
 
 };
 

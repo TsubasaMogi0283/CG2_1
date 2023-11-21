@@ -204,6 +204,9 @@
     <ClCompile Include="Ellysia\Polygon\Model\Transformation\Transformation.cpp">
       <Filter>ソース ファイル\Polygone\ModelResource</Filter>
     </ClCompile>
+    <ClCompile Include="Ellysia\Math\BPMCalculation\BPMSetting.cpp">
+      <Filter>ソース ファイル\Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Object3d.PS.hlsl">
@@ -390,6 +393,9 @@
     </ClInclude>
     <ClInclude Include="Ellysia\Polygon\Model\ModelData\ModelData.h">
       <Filter>ヘッダー ファイル\Polygone\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Math\BPMCalculation\BPMSetting.h">
+      <Filter>ヘッダー ファイル\Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

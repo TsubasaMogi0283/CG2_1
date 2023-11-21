@@ -27,12 +27,9 @@ public:
 	//シングルインスタンス
 	static PipelineManager* GetInstance();
 
-	//コピーコンストラクタ禁止
-	PipelineManager(const PipelineManager& pipeline) = delete;
 
-	//代入演算子を無効にする
-	PipelineManager& operator=(const PipelineManager& pipeline) = delete;
 
+#pragma region アクセッサ
 
 	//コマンドに積む専用のGetter
 	ComPtr<ID3D12RootSignature> GetSpriteRootSignature() {
@@ -50,10 +47,16 @@ public:
 		return modelGraphicsPipelineState_;
 	}
 
-	void Release();
+	void SetSpriteBlendMode(int32_t blendmode) {
+		selectSpriteBlendMode_ = blendmode;
+	}
+	void SetModelBlendMode(int32_t blendmode) {
+		selectModelBlendMode_ = blendmode;
+	}
+
+#pragma endregion
 
 public:
-	//private関数
 	//アロー演算子の時邪魔になってしまうからここにいれよう
 
 	//スプライト用
@@ -81,5 +84,10 @@ private:
 	ComPtr<ID3D12PipelineState> modelGraphicsPipelineState_ = nullptr;
 
 
-};
+	//スプライト用
+	int32_t selectSpriteBlendMode_ = 1;
 
+	//モデル用の
+	int32_t selectModelBlendMode_ = 1;
+
+};

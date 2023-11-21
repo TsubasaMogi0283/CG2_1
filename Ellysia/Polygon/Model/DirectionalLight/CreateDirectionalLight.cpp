@@ -1,15 +1,17 @@
 #include "CreateDirectionalLight.h"
 
 
-
 void CreateDirectionalLight::Initialize(){
+	color_ = { 1.0f,1.0f,1.0f,1.0f };
+	direction_ = { 0.0f,-1.0f,0.0f };
+	intensity_ = 1.0f;
 
-	directionalLightResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(DirectionalLight)).Get();
-	directionalLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightData_));
-	directionalLightData_->color={ 1.0f,1.0f,1.0f,1.0f };
-	directionalLightData_->direction = { 0.0f,-1.0f,0.0f };
-	directionalLightData_->intensity = 3.0f;
-
+	resource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(DirectionalLight)).Get();
+	resource_->Map(0, nullptr, reinterpret_cast<void**>(&data_));
+	data_->color=color_;
+	data_->direction = direction_;
+	data_->intensity = intensity_;
+	resource_->Unmap(0,nullptr);
 
 
 
@@ -20,6 +22,14 @@ void CreateDirectionalLight::Initialize(){
 
 
 void CreateDirectionalLight::SetGraphicsCommand(){
-	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
+
+	//いつでも変更できるようにするにはUnMapも用意してね
+	resource_->Map(0, nullptr, reinterpret_cast<void**>(&data_));
+	data_->color=color_;
+	data_->direction = direction_;
+	data_->intensity = intensity_;
+	resource_->Unmap(0,nullptr);
+
+	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(3, resource_->GetGPUVirtualAddress());
 
 }

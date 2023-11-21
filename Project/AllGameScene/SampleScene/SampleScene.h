@@ -29,7 +29,7 @@ public:
 	void Draw(GameManager* gameManager)override;
 
 private:
-	static const int MODEL_AMOUNT_ = 10;
+	static const int MODEL_AMOUNT_ = 1;
 
 	Model* model_[MODEL_AMOUNT_] = { nullptr };
 	Transform modelTransform_ = {};

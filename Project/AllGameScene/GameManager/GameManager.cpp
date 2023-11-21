@@ -76,8 +76,6 @@ void GameManager::Release() {
 	//
 	textureManager_->Release();
 	//
-	pipelineManager_->Release();
-	//
 	imGuiManager_->Release();
 	//
 	directXSetup_->Release();

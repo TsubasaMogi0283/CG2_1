@@ -180,9 +180,6 @@
     <ClCompile Include="Ellysia\PipelineManager\PipelineManager.cpp">
       <Filter>ソース ファイル\Pipeline</Filter>
     </ClCompile>
-    <ClCompile Include="Ellysia\ResourceObject\ResourceObject.cpp">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Ellysia\DebugCamera\DebugCamera.cpp">
       <Filter>ソース ファイル\DebugCamera</Filter>
     </ClCompile>
@@ -360,9 +357,6 @@
     </ClInclude>
     <ClInclude Include="Project\AllGameScene\SampleScene\SampleScene.h">
       <Filter>Project\GameScene</Filter>
-    </ClInclude>
-    <ClInclude Include="Ellysia\ResourceObject\ResourceObject.h">
-      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Ellysia\Camera\Camera.h">
       <Filter>ヘッダー ファイル</Filter>

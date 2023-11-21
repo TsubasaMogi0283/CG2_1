@@ -21,7 +21,7 @@ void SampleScene::Initialize(GameManager* gameManager) {
 	modelColor_ = {1.0f,1.0f,1.0f,1.0f};
 	
 	
-	model_ = Model::Create("Resources/05_02", "plane.obj",BlendModeNormal);
+	model_ = Particle3D::Create("Resources/05_02", "plane.obj");
 	modelTransform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
 
 	spriteTransform_ = { {0.5f,0.5f,0.5f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };

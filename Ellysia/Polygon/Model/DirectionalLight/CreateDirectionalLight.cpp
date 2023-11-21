@@ -10,7 +10,7 @@ void CreateDirectionalLight::Initialize(){
 	directionalLightData_->direction = { 0.0f,-1.0f,0.0f };
 	directionalLightData_->intensity = 3.0f;
 
-
+	directionalLightResource_->Unmap(0, nullptr);
 
 
 
@@ -20,6 +20,14 @@ void CreateDirectionalLight::Initialize(){
 
 
 void CreateDirectionalLight::SetGraphicsCommand(){
+	directionalLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightData_));
+	directionalLightData_->color={ 1.0f,1.0f,1.0f,1.0f };
+	directionalLightData_->direction = { 0.0f,-1.0f,0.0f };
+	directionalLightData_->intensity = 3.0f;
+
+	directionalLightResource_->Unmap(0, nullptr);
+
+
 	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
 
 }

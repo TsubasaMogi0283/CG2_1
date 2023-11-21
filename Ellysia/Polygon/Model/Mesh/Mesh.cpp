@@ -31,8 +31,9 @@ void Mesh::SetGraphicsCommand(){
 	DirectXSetup::GetInstance()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);
 	//形状を設定。PSOに設定しているものとはまた別。同じものを設定すると考えよう
 	DirectXSetup::GetInstance()->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
 }
 
-void Mesh::DrawCall(uint32_t instanceCount){
-	DirectXSetup::GetInstance()->GetCommandList()->DrawInstanced(UINT(vertices_.size()), instanceCount, 0, 0);
+void Mesh::DrawCall(){
+	DirectXSetup::GetInstance()->GetCommandList()->DrawInstanced(UINT(vertices_.size()), 1, 0, 0);
 }

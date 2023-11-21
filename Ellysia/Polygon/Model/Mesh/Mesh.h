@@ -11,7 +11,7 @@ public:
 
 	void SetGraphicsCommand();
 
-	void DrawCall(uint32_t instanceCount);
+	void DrawCall();
 
 
 private:

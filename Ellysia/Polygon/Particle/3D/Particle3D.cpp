@@ -193,95 +193,183 @@ MaterialData Particle3D::LoadMaterialTemplateFile(const std::string& directoryPa
 
 Particle3D* Particle3D::Create(const std::string& directoryPath, const std::string& fileName) {
 	//新たなModel型のインスタンスのメモリを確保
-	Particle3D* model = new Particle3D();
-	//初期化の所でやってね、Update,Drawでやるのが好ましいけど凄く重くなった。
-	//ブレンドモードの設定
-	PipelineManager::GetInstance()->SetModelBlendMode(model->blendModeNumber_);
-	PipelineManager::GetInstance()->GenerateModelPSO();
+	Particle3D* particle3D = new Particle3D();
+	
 
 	//すでにある場合はリストから取り出す
 	for (ModelData modelData : modelInformationList_) {
 		if (modelData.name == fileName) {
-			////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
-			model->material_= std::make_unique<CreateMaterial>();
-			model->material_->Initialize();
+			//モデルの読み込み
+			ModelData modelDataNew = particle3D->LoadObjectFile(directoryPath, fileName);
+			modelDataNew.name = fileName;
+			modelInformationList_.push_back(modelDataNew);
+			
 
+			//初期化の所でやってね、Update,Drawでやるのが好ましいけど凄く重くなった。
+			//ブレンドモードの設定
+			PipelineManager::GetInstance()->SetModelBlendMode(particle3D->blendModeNumber_);
+			PipelineManager::GetInstance()->GenerateModelPSO();
+
+
+			////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
+			//particle3D->material_= std::make_unique<CreateMaterial>();
+			//particle3D->material_->Initialize();
+
+			particle3D->materialResource_=DirectXSetup::GetInstance()->CreateBufferResource(sizeof(Material)).Get();
+			Material* materialData_ = nullptr;
+			particle3D->materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
+			materialData_->color = {1.0f,1.0f,1.0f,1.0f};
+			materialData_->enableLighting=false;
+			
+			materialData_->uvTransform = MakeIdentity4x4();
+			
+			particle3D->materialResource_->Unmap(0, nullptr);
 
 
 			//テクスチャの読み込み
-			model->textureHandle_ = TextureManager::GetInstance()->LoadTexture(modelData.material.textureFilePath);
+			particle3D->textureHandle_ = TextureManager::GetInstance()->LoadTexture(modelDataNew.material.textureFilePath);
 
 
 			//頂点リソースを作る
-			model->mesh_ = std::make_unique<Mesh>();
-			model->mesh_->Initialize(modelData.vertices);
-
+			//particle3D->mesh_ = std::make_unique<Mesh>();
+			//particle3D->mesh_->Initialize(modelDataNew.vertices);
+			
+			
+			particle3D->vertexResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(VertexData) * particle3D->vertices_.size());
+			
+			//読み込みのところでバッファインデックスを作った方がよさそう
+			//vertexResourceがnullらしい
+			//リソースの先頭のアドレスから使う
+			particle3D->vertexBufferView_.BufferLocation =particle3D->vertexResource_->GetGPUVirtualAddress();
+			//使用するリソースは頂点のサイズ
+			particle3D->vertexBufferView_.SizeInBytes = UINT(sizeof(VertexData) * particle3D->vertices_.size());
+			//１頂点あたりのサイズ
+			particle3D->vertexBufferView_.StrideInBytes = sizeof(VertexData);
+			
+			
+			//頂点バッファにデータを書き込む
+			VertexData* vertexData = nullptr;
+			particle3D->vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));//書き込むためのアドレスを取得
+			std::memcpy(vertexData, particle3D->vertices_.data(), sizeof(VertexData) * particle3D->vertices_.size());
+			particle3D->vertexResource_->Unmap(0, nullptr);
 
 
 
 
 			//Sprite用のTransformationMatrix用のリソースを作る。
 			//Matrix4x4 1つ分サイズを用意する
-			model->transformation_=std::make_unique<Transformation>();
-			model->transformation_->Initialize();
+			//particle3D->transformation_=std::make_unique<Transformation>();
+			//particle3D->transformation_->Initialize();
+			particle3D->transformationMatrixResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(TransformationMatrix)).Get();
+
 
 			//Lighting
-			model->directionalLight_=std::make_unique<CreateDirectionalLight>();
-			model->directionalLight_->Initialize();
+			//particle3D->directionalLight_=std::make_unique<CreateDirectionalLight>();
+			//particle3D->directionalLight_->Initialize();
+
+			particle3D->directionalLightResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(DirectionalLight)).Get();
+			particle3D->directionalLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&particle3D->directionalLightData_));
+			particle3D->directionalLightData_->color={ 1.0f,1.0f,1.0f,1.0f };
+			particle3D->directionalLightData_->direction = { 0.0f,-1.0f,0.0f };
+			particle3D->directionalLightData_->intensity = 3.0f;
+			
+			particle3D->directionalLightResource_->Unmap(0, nullptr);
 
 
 
 			//初期は白色
 			//モデル個別に色を変更できるようにこれは外に出しておく
-			model->color_ = { 1.0f,1.0f,1.0f,1.0f };
+			particle3D->color_ = { 1.0f,1.0f,1.0f,1.0f };
 
-			return model;
+			return particle3D;
+
+
 		}
 	}
 
 	//モデルの読み込み
-	ModelData modelDataNew = model->LoadObjectFile(directoryPath, fileName);
+	ModelData modelDataNew = particle3D->LoadObjectFile(directoryPath, fileName);
 	modelDataNew.name = fileName;
 	modelInformationList_.push_back(modelDataNew);
 	
 
-
+	//初期化の所でやってね、Update,Drawでやるのが好ましいけど凄く重くなった。
+	//ブレンドモードの設定
+	PipelineManager::GetInstance()->SetModelBlendMode(particle3D->blendModeNumber_);
+	PipelineManager::GetInstance()->GenerateModelPSO();
 
 
 	////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
-	model->material_= std::make_unique<CreateMaterial>();
-	model->material_->Initialize();
+	//particle3D->material_= std::make_unique<CreateMaterial>();
+	//particle3D->material_->Initialize();
 
+	particle3D->materialResource_=DirectXSetup::GetInstance()->CreateBufferResource(sizeof(Material)).Get();
+	Material* materialData_ = nullptr;
+	particle3D->materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
+	materialData_->color = {1.0f,1.0f,1.0f,1.0f};
+	materialData_->enableLighting=false;
+	
+	materialData_->uvTransform = MakeIdentity4x4();
+	
+	particle3D->materialResource_->Unmap(0, nullptr);
 
 
 	//テクスチャの読み込み
-	model->textureHandle_ = TextureManager::GetInstance()->LoadTexture(modelDataNew.material.textureFilePath);
+	particle3D->textureHandle_ = TextureManager::GetInstance()->LoadTexture(modelDataNew.material.textureFilePath);
 
 
 	//頂点リソースを作る
-	model->mesh_ = std::make_unique<Mesh>();
-	model->mesh_->Initialize(modelDataNew.vertices);
-
+	//particle3D->mesh_ = std::make_unique<Mesh>();
+	//particle3D->mesh_->Initialize(modelDataNew.vertices);
+	
+	
+	particle3D->vertexResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(VertexData) * particle3D->vertices_.size());
+	
+	//読み込みのところでバッファインデックスを作った方がよさそう
+	//vertexResourceがnullらしい
+	//リソースの先頭のアドレスから使う
+	particle3D->vertexBufferView_.BufferLocation =particle3D->vertexResource_->GetGPUVirtualAddress();
+	//使用するリソースは頂点のサイズ
+	particle3D->vertexBufferView_.SizeInBytes = UINT(sizeof(VertexData) * particle3D->vertices_.size());
+	//１頂点あたりのサイズ
+	particle3D->vertexBufferView_.StrideInBytes = sizeof(VertexData);
+	
+	
+	//頂点バッファにデータを書き込む
+	VertexData* vertexData = nullptr;
+	particle3D->vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));//書き込むためのアドレスを取得
+	std::memcpy(vertexData, particle3D->vertices_.data(), sizeof(VertexData) * particle3D->vertices_.size());
+	particle3D->vertexResource_->Unmap(0, nullptr);
 
 
 
 
 	//Sprite用のTransformationMatrix用のリソースを作る。
 	//Matrix4x4 1つ分サイズを用意する
-	model->transformation_=std::make_unique<Transformation>();
-	model->transformation_->Initialize();
+	//particle3D->transformation_=std::make_unique<Transformation>();
+	//particle3D->transformation_->Initialize();
+	particle3D->transformationMatrixResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(TransformationMatrix)).Get();
+
 
 	//Lighting
-	model->directionalLight_=std::make_unique<CreateDirectionalLight>();
-	model->directionalLight_->Initialize();
+	//particle3D->directionalLight_=std::make_unique<CreateDirectionalLight>();
+	//particle3D->directionalLight_->Initialize();
+
+	particle3D->directionalLightResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(DirectionalLight)).Get();
+	particle3D->directionalLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&particle3D->directionalLightData_));
+	particle3D->directionalLightData_->color={ 1.0f,1.0f,1.0f,1.0f };
+	particle3D->directionalLightData_->direction = { 0.0f,-1.0f,0.0f };
+	particle3D->directionalLightData_->intensity = 3.0f;
+	
+	particle3D->directionalLightResource_->Unmap(0, nullptr);
 
 
 
 	//初期は白色
 	//モデル個別に色を変更できるようにこれは外に出しておく
-	model->color_ = { 1.0f,1.0f,1.0f,1.0f };
+	particle3D->color_ = { 1.0f,1.0f,1.0f,1.0f };
 
-	return model;
+	return particle3D;
 
 }
 
@@ -300,8 +388,15 @@ void Particle3D::Draw(Transform transform) {
 	////書き込むためのアドレスを取得
 	////reinterpret_cast...char* から int* へ、One_class* から Unrelated_class* へなどの変換に使用
 
-	material_->SetInformation(color_);
-
+	//material_->SetInformation(color_);
+	Material* materialData_ = nullptr;
+	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
+	materialData_->color = color_;
+	materialData_->enableLighting=false;
+	
+	materialData_->uvTransform = MakeIdentity4x4();
+	
+	materialResource_->Unmap(0, nullptr);
 
 
 
@@ -309,8 +404,24 @@ void Particle3D::Draw(Transform transform) {
 
 	//書き込むためのデータを書き込む
 	//頂点データをリソースにコピー
-	transformation_->SetInformation(transform);
+	//transformation_->SetInformation(transform);
 
+	transformationMatrixResource_->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixData_));
+	
+	
+	//新しく引数作った方が良いかも
+	Matrix4x4 worldMatrix = MakeAffineMatrix(transform.scale,transform.rotate,transform.translate);
+	//遠視投影行列
+	Matrix4x4 viewMatrix = MakeIdentity4x4();
+	
+	Matrix4x4 projectionMatrix = MakeOrthographicMatrix(0.0f, 0.0f, float(WinApp::GetInstance()->GetClientWidth()), float(WinApp::GetInstance()->GetClientHeight()), 0.0f, 100.0f);
+	
+	//WVP行列を作成
+	Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(Camera::GetInstance()->GetViewMatrix(), Camera::GetInstance()->GetProjectionMatrix_()));
+	
+	
+	transformationMatrixData_->WVP = worldViewProjectionMatrix;
+	transformationMatrixData_->World =MakeIdentity4x4();
 
 
 
@@ -322,17 +433,21 @@ void Particle3D::Draw(Transform transform) {
 	DirectXSetup::GetInstance()->GetCommandList()->SetPipelineState(PipelineManager::GetInstance()->GetModelGraphicsPipelineState().Get());
 
 
-	////RootSignatureを設定。PSOに設定しているけど別途設定が必要
-	//DirectXSetup::GetInstance()->GetCommandList()->IASetVertexBuffers(0, 1, &modelInformation_[modelIndex].vertexBufferView_);
-	////形状を設定。PSOに設定しているものとはまた別。同じものを設定すると考えよう
-	//DirectXSetup::GetInstance()->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	mesh_->SetGraphicsCommand();
+	//mesh_->SetGraphicsCommand();
+	//RootSignatureを設定。PSOに設定しているけど別途設定が必要
+	DirectXSetup::GetInstance()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);
+	//形状を設定。PSOに設定しているものとはまた別。同じものを設定すると考えよう
+	DirectXSetup::GetInstance()->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 
 	//CBVを設定する
-	material_->SetGraphicsCommand();
+	//material_->SetGraphicsCommand();
+	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
 
-	transformation_->SetGraphicCommand();
+
+
+	//transformation_->SetGraphicCommand();
+	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResource_->GetGPUVirtualAddress());
 
 
 
@@ -345,10 +460,15 @@ void Particle3D::Draw(Transform transform) {
 	
 
 	//Light
-	directionalLight_->SetGraphicsCommand();
+	//directionalLight_->SetGraphicsCommand();
+	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
+
 
 	//DrawCall
-	mesh_->DrawCall(instanceCount_);
+	//mesh_->DrawCall(instanceCount_);
+	//
+	DirectXSetup::GetInstance()->GetCommandList()->DrawInstanced(UINT(vertices_.size()), instanceCount_, 0, 0);
+
 }
 
 

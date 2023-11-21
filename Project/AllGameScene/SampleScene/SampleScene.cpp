@@ -24,13 +24,6 @@ void SampleScene::Initialize(GameManager* gameManager) {
 	model_ = Particle3D::Create("Resources/05_02", "plane.obj");
 	modelTransform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
 
-	spriteTransform_ = { {0.5f,0.5f,0.5f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
-	sprite = new Sprite();
-	uint32_t textureHandle = TextureManager::LoadTexture("Resources/uvChecker.png");
-
-	sprite->SetBlendMode(BlendModeMultiply);
-	sprite = Sprite::Create(textureHandle, {0.0f,0.0f});
-
 	
 	cameraPosition_ = {0.0f,3.7f,-8.0f};
 	cameraRotate_ = { 0.4f,0.0f,0.0f };
@@ -50,18 +43,13 @@ void SampleScene::Update(GameManager* gameManager) {
 	//particle_->Update();
 
 
-	sprite->SetColor(spriteColor_);
 	model_->SetColor(modelColor_);
 
-	ImGui::Begin("Sprite");
-	ImGui::SliderFloat4("Color", &spriteColor_.x, 0.0f, 1.0f);
-	ImGui::End();
 
 	ImGui::Begin("Model");
 	ImGui::SliderFloat4("Color", &modelColor_.x, 0.0f, 1.0f);
 	ImGui::End();
 
-	//modelTransform_.rotate.y += 0.05f;
 	
 	
 	ImGui::Begin("Camera");
@@ -76,7 +64,6 @@ void SampleScene::Update(GameManager* gameManager) {
 /// </summary>
 void SampleScene::Draw(GameManager* gameManager) {
 	model_->Draw(modelTransform_);
-	sprite->Draw();
 }
 
 /// <summary>
@@ -84,5 +71,4 @@ void SampleScene::Draw(GameManager* gameManager) {
 /// </summary>
 SampleScene::~SampleScene() {
 	delete model_;
-	delete sprite;
 }

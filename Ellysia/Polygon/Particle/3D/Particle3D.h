@@ -105,35 +105,21 @@ private:
 	//頂点バッファビューを作成する
 	//頂点リソースにデータを書き込む
 
+	//インスタンシングの数
+	static const int32_t instanceCount_ = 1;
+
 	//頂点データ
-	//std::unique_ptr<Mesh> mesh_ = nullptr;
+	std::unique_ptr<Mesh> mesh_ = nullptr;
 
-	//頂点リソースを作る
-	ComPtr<ID3D12Resource> vertexResource_ = nullptr;
-		
-
-	//頂点バッファビューを作成する
-	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_;
-
-	std::vector<VertexData> vertices_{};
-
-	//Model用のTransformationMatrix用のリソースを作る。
-	///std::unique_ptr<Transformation> transformation_ = nullptr;
-	ComPtr<ID3D12Resource> transformationMatrixResource_ = nullptr;
-	TransformationMatrix* transformationMatrixData_ = nullptr;
+	std::unique_ptr<Transformation> transformation_[instanceCount_] = { nullptr };
 
 
 	//マテリアル用のリソースを作る
-	//std::unique_ptr<CreateMaterial> material_ = nullptr;
+	std::unique_ptr<CreateMaterial> material_ = nullptr;
 
-	ComPtr<ID3D12Resource> materialResource_ = nullptr;
-	
 
 	//Lighting用
-	//std::unique_ptr<CreateDirectionalLight> directionalLight_ = nullptr;
-	ComPtr<ID3D12Resource> directionalLightResource_ = nullptr;
-	DirectionalLight* directionalLightData_ = nullptr;
-
+	std::unique_ptr<CreateDirectionalLight> directionalLight_ = nullptr;
 
 	uint32_t textureHandle_ = 0;
 
@@ -148,8 +134,7 @@ private:
 	int32_t blendModeNumber_ ;
 	
 
-	//インスタンシングの数
-	int32_t instanceCount_ = 10;
+	
 
 
 	//TextureManagerを参考にする

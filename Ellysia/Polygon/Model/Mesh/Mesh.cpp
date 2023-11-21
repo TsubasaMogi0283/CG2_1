@@ -34,6 +34,6 @@ void Mesh::SetGraphicsCommand(){
 
 }
 
-void Mesh::DrawCall(){
-	DirectXSetup::GetInstance()->GetCommandList()->DrawInstanced(UINT(vertices_.size()), 1, 0, 0);
+void Mesh::DrawCall(int32_t instanceCount){
+	DirectXSetup::GetInstance()->GetCommandList()->DrawInstanced(UINT(vertices_.size()), instanceCount, 0, 0);
 }

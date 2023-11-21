@@ -11,7 +11,7 @@ public:
 
 	void SetGraphicsCommand();
 
-	void DrawCall();
+	void DrawCall(int32_t instanceCount);
 
 
 private:
@@ -24,6 +24,6 @@ private:
 
 	std::vector<VertexData> vertices_{};
 
-
+	int32_t instanceCount_ = 1;
 };
 

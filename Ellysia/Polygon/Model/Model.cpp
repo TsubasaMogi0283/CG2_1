@@ -442,7 +442,7 @@ void Model::Draw(Transform transform) {
 	directionalLight_->SetGraphicsCommand();
 
 	//DrawCall
-	mesh_->DrawCall();
+	mesh_->DrawCall(1);
 }
 
 

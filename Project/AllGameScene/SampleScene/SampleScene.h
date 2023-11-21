@@ -36,10 +36,6 @@ private:
 	Vector4 modelColor_ = {1.0f,1.0f,1.0f,1.0f};
 
 
-	Sprite* sprite = nullptr;
-	Transform spriteTransform_ = {};
-	Vector4 spriteColor_ = {1.0f,1.0f,1.0f,1.0f};
-	int32_t blendmode_ = 5;
 
 	Vector3 cameraPosition_ = {};
 	Vector3 cameraRotate_ = {};

@@ -699,12 +699,25 @@ void PipelineManager::GenerateParticle3DPSO() {
 	rootParameters[0].Descriptor.ShaderRegister = 0;
 
 
-	//CBVを使う
-	rootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	D3D12_DESCRIPTOR_RANGE descriptorRangeForInstancing[1] = {};
+	//0から始まる
+	descriptorRangeForInstancing[0].BaseShaderRegister = 0;
+	//数は一つ
+	descriptorRangeForInstancing[0].NumDescriptors = 1;
+	//SRVを使う
+	descriptorRangeForInstancing[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	descriptorRangeForInstancing[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
+	//ここではDescriptorTableを使う
+	rootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	//VertwxShaderで使う
 	rootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
 	//register...Shader上のResource配置情報
-	rootParameters[1].Descriptor.ShaderRegister = 0;
+	//Tableの中身の配列を指定する
+	rootParameters[1].DescriptorTable.pDescriptorRanges = descriptorRangeForInstancing;
+	//Tableで利用する数
+	rootParameters[1].DescriptorTable.NumDescriptorRanges = _countof(descriptorRangeForInstancing);
+
 	//ルートパラメータ配列へのポイント
 	descriptionRootSignature_.pParameters = rootParameters;
 	//配列の長さ

@@ -12,7 +12,10 @@ void Player::Initialize() {
 	model_->CreateObject("Resources/Sample/Player", "playre.obj");
 
 	transform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
+	radius_ = 1.0f;
 	input_ = Input::GetInstance();
+
+
 }
 
 void Player::OnCollision(){
@@ -82,6 +85,21 @@ void Player::Attack() {
 	}
 }
 
+Matrix4x4 Player::GetMatrix() {
+	Matrix4x4 result = MakeAffineMatrix(transform_.scale, transform_.rotate, transform_.translate);
+	return result;
+}
+
+Vector3 Player::GetWorldPosition() {
+	Vector3 result = {};
+	//移動成分を取り出してね
+	//一番下の行ね
+	result.x = GetMatrix().m[3][0];
+	result.y = GetMatrix().m[3][1];
+	result.z = GetMatrix().m[3][2];
+
+	return result;
+}
 
 //更新
 void Player::Update() {

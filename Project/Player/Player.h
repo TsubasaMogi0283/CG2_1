@@ -2,7 +2,7 @@
 #include <Polygon/Model/Model.h>
 #include <Input/Input.h>
 #include <TextureManager/TextureManager.h>
-
+#include "Math/Matrix/Matrix/Matrix4x4.h"
 #include "Player/Bullet/PlayerBullet.h"
 
 #include <list>
@@ -31,12 +31,28 @@ public:
 
 #pragma region アクセッサ
 
+	float GetRadius() {
+		return radius_;
+	}
+	
+	Vector3 GetRotate() {
+		return transform_.rotate;
+	}
 	Vector3 GetTranslate() {
 		return transform_.translate;
 	}
+	
+	//アフィン行列を取得する
+	//KamataEngineではWorldTransformだったけど
+	//それに苦戦しまくったのでそれぞれのクラスで計算するようにする
+	//理解できないまま進めるのは危険すぎる
+	Matrix4x4 GetMatrix();
+
+	//ワールド座標
+	Vector3 GetWorldPosition();
 
 	//弾リストを取得
-	const std::list<PlayerBullet*> GetBullets() const {
+	const std::list<PlayerBullet*> GetBullets()  {
 		return bullets_;
 	}
 
@@ -58,6 +74,7 @@ private:
 	const float MOVE_AMOUNT_ = 0.1f;
 	const float ROTATE_AMOUNT_ = 0.02f;
 
+	float radius_;
 
 	//弾
 	std::list<PlayerBullet*>bullets_;

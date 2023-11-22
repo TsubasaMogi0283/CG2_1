@@ -35,6 +35,10 @@ public:
 	void Draw(GameManager* gameManager)override;
 
 private:
+	//衝突判定と応答
+	void CheckAllCollisions();
+
+private:
 	Player* player_ = nullptr;
 	Enemy* enemy_ = nullptr;
 

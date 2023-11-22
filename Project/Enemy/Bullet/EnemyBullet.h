@@ -42,6 +42,17 @@ public:
 		player_ = player;
 	}
 
+	//行列を作って返す
+	Matrix4x4 GetMatrix();
+
+	//ワールド座標
+	Vector3 GetWorldPosition();
+
+	//半径
+	float GetRadius() {
+		return radius_;
+	}
+
 #pragma endregion
 
 private:
@@ -49,6 +60,7 @@ private:
 
 	Transform transform_ = {};
 	Vector3 velocity_ = {};
+	float radius_;
 
 	bool isDead_ = false;
 

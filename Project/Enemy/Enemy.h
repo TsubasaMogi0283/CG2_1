@@ -65,6 +65,12 @@ public:
 		player_ = player;
 	}
 
+	//行列を作って返す
+	Matrix4x4 GetMatrix();
+
+	//ワールド座標
+	Vector3 GetWorldPosition();
+
 	//弾リストを取得
 	const std::list<EnemyBullet*> GetBullets() const {
 		return bullets_;

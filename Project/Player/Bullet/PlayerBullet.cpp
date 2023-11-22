@@ -18,6 +18,22 @@ void PlayerBullet::OnCollision(){
 	isDead_ = true;
 }
 
+Matrix4x4 PlayerBullet::GetMatrix() {
+	Matrix4x4 result = MakeAffineMatrix(transform_.scale, transform_.rotate, transform_.translate);
+	return result;
+}
+
+Vector3 PlayerBullet::GetWorldPosition() {
+	Vector3 result = {};
+	//移動成分を取り出してね
+	//一番下の行ね
+	result.x = GetMatrix().m[3][0];
+	result.y = GetMatrix().m[3][1];
+	result.z = GetMatrix().m[3][2];
+
+	return result;
+}
+
 void PlayerBullet::Update(){
 	ImGui::Begin("Bullet");
 	ImGui::SliderFloat3("Scale", &transform_.scale.x, 1.0f, 10.0f);

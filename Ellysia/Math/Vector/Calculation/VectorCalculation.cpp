@@ -58,6 +58,12 @@ Vector3 Normalize(Vector3 V1) {
 	return result;
 }
 
+float Length(Vector3 v1){
+	float result = sqrtf(v1.x * v1.x + v1.y * v1.y + v1.z * v1.z);
+	
+	return result;
+}
+
 Vector3 Leap(const Vector3& v1, const Vector3& v2, float t){
 	Vector3 result = {};
 

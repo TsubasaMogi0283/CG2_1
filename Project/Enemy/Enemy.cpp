@@ -80,6 +80,22 @@ void Enemy::FireAndReset() {
 
 }
 
+Matrix4x4 Enemy::GetMatrix() {
+	Matrix4x4 result = MakeAffineMatrix(transform_.scale, transform_.rotate, transform_.translate);
+	return result;
+}
+
+Vector3 Enemy::GetWorldPosition() {
+	Vector3 result = {};
+	//移動成分を取り出してね
+	//一番下の行ね
+	result.x = GetMatrix().m[3][0];
+	result.y = GetMatrix().m[3][1];
+	result.z = GetMatrix().m[3][2];
+
+	return result;
+}
+
 void Enemy::Update(){
 	ImGui::Begin("aaaa");
 	ImGui::InputInt("satet", &num);

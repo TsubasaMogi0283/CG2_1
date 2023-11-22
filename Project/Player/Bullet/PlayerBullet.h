@@ -12,6 +12,12 @@ public:
 	//コールバック関数
 	void OnCollision();
 
+	//行列を作って返す
+	Matrix4x4 GetMatrix();
+
+	//ワールド座標
+	Vector3 GetWorldPosition();
+
 	//更新
 	void Update();
 

@@ -41,6 +41,7 @@ struct DirectionalLight
 //SamplerState gSample:register : register(s0);
 
 ConstantBuffer<Material> gMaterial : register(b0);
+//出来たらgDirectinalLightとそれに関するRootSignatureも変えてね
 ConstantBuffer<DirectionalLight> gDirectionalLight : register(b1);
 Texture2D<float32_t4> gTexture : register(t0);
 SamplerState gSampler : register(s0);
@@ -68,39 +69,22 @@ PixelShaderOutput main(VertexShaderOutput input)
     float4 transformedUV = mul(float32_t4(input.texcoord, 0.0f, 1.0f), gMaterial.uvTransform);
     float32_t4 textureColor = gTexture.Sample(gSampler, transformedUV.xy);
 
-	//2値抜き
-	//textureのα値が0.5以下の時にPixelを棄却
-    if (textureColor.a <= 0.5f)
+    output.color = gMaterial.color * textureColor;
+    if (output.color.a == 0.0f)
     {
         discard;
     }
+    output.color = gMaterial.color * textureColor;
+    
+    
+	////2値抜き
+	////textureのα値が0.5以下の時にPixelを棄却
+    //if (textureColor.a <= 0.5f)
+    //{
+    //    discard;
+    //}
 	
-	//Lightingする場合
-    if (gMaterial.enableLighting != 0)
-    {
 	
-		//このままdotだと[-1,1]になる。
-		//光が当たらないところは「当たらない」のでもっと暗くなるわけではない。そこでsaturate関数を使う
-		//saturate関数は値を[0,1]にclampするもの。エフェクターにもSaturationってあるよね。
-		//float cos = saturate(dot(normalize(input.normal),-gDirectionalLight.direction));
-		
-
-		//Half Lambert
-        float NdotL = dot(normalize(input.normal), -gDirectionalLight.direction);
-        float cos = pow(NdotL * 0.5f + 0.5f, 2.0f);
-		
-		
-        
-		
-        output.color.rgb = gMaterial.color.rgb * textureColor.rgb * gDirectionalLight.color.rgb * cos * gDirectionalLight.intensity;
-        output.color.a = gMaterial.color.a * textureColor.a;
-
-    }
-    else
-    {
-		//Lightingしない場合
-        output.color = gMaterial.color * textureColor;
-    }
   
 	
 	

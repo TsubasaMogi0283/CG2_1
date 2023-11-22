@@ -10,7 +10,8 @@ struct TransformationMatrix
 };
 
 //CBuffer
-ConstantBuffer<TransformationMatrix> gTransformationMatrix : register(b0);
+//StructuredBuffer...簡単に言えば配列みたいなやつ
+StructuredBuffer<TransformationMatrix>gTransformationMatrices:register(t0);
 
 struct VertexShaderInput
 {
@@ -20,7 +21,7 @@ struct VertexShaderInput
 };
 
 
-VertexShaderOutput main(VertexShaderInput input)
+VertexShaderOutput main(VertexShaderInput input,uint32_t instanceId:SV_InstanceID)
 {
     VertexShaderOutput output;
 	//mul...組み込み関数

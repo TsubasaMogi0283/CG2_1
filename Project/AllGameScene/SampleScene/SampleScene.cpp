@@ -115,6 +115,27 @@ void SampleScene::CheckAllCollisions(){
 
 }
 
+//コライダー2つの衝突判定と応答
+void SampleScene::CheckCollisionPair(Collider* colliderA, Collider* colliderB) {
+	//コライダーAのワールド座標を取得
+	Vector3 colliderPosA = colliderA->GetWorldPosition();
+	
+	//コライダーBのワールド座標を取得
+	Vector3 colliderPosB = colliderB->GetWorldPosition();
+	
+	float distance = Length(Subtract(colliderPosA, colliderPosB));
+
+	//球と球の交差判定
+	if (distance < colliderA->GetRadius() + colliderB->GetRadius()) {
+		//コライダーAの衝突時コールバックを呼び出す
+		colliderA->OnCollision();
+		//コライダーBの衝突時コールバックを呼び出す
+		colliderB->OnCollision();
+
+	}
+}
+
+
 /// <summary>
 /// 更新
 /// </summary>

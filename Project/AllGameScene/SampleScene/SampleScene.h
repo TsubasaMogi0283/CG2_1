@@ -12,6 +12,7 @@
 #include "TextureManager/TextureManager.h"
 #include <Enemy/Enemy.h>
 #include "Enemy/Bullet/EnemyBullet.h"
+#include "Collider/Collider.h"
 
 //StatePatternを使う時は必ず前方宣言をするように
 class Gamemanager;
@@ -37,6 +38,9 @@ public:
 private:
 	//衝突判定と応答
 	void CheckAllCollisions();
+
+	//コライダー2つの衝突判定と応答
+	void CheckCollisionPair(Collider* colliderA, Collider* colliderB);
 
 private:
 	Player* player_ = nullptr;

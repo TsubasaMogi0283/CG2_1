@@ -1,4 +1,4 @@
-
+#include "Particle3D.hlsli"
 
 //座標返還を行うVS
 struct TransformationMatrix {
@@ -22,7 +22,7 @@ struct VertexShaderInput {
 };
 
 
-VertexShaderOutput main(VertexShaderInput input,uint32_t instancedId:SV_InstanceID) {
+VertexShaderOutput main(VertexShaderInput input, uint32_t instancedId:SV_InstanceID) {
 	VertexShaderOutput output;
 	//mul...組み込み関数
     output.position = mul(input.position, gTransformationMatrices[instancedId].WVP);

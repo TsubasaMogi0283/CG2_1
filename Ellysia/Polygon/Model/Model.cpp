@@ -386,17 +386,11 @@ Model* Model::Create(const std::string& directoryPath, const std::string& fileNa
 
 //描画
 void Model::Draw(Transform transform) {
-	
-	
-
-	
 	////マテリアルにデータを書き込む
 	////書き込むためのアドレスを取得
 	////reinterpret_cast...char* から int* へ、One_class* から Unrelated_class* へなどの変換に使用
 
 	material_->SetInformation(color_);
-
-
 
 
 
@@ -407,11 +401,7 @@ void Model::Draw(Transform transform) {
 
 
 
-
-
-
 	//コマンドを積む
-
 	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootSignature(PipelineManager::GetInstance()->GetModelRootSignature().Get());
 	DirectXSetup::GetInstance()->GetCommandList()->SetPipelineState(PipelineManager::GetInstance()->GetModelGraphicsPipelineState().Get());
 

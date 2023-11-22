@@ -230,10 +230,9 @@ Particle3D* Particle3D::Create(const std::string& directoryPath, const std::stri
 
 			//Sprite用のTransformationMatrix用のリソースを作る。
 			//Matrix4x4 1つ分サイズを用意する
-			for (int i = 0; i < instanceCount_; i++) {
-				particle3D->transformation_[i] = std::make_unique<Transformation>();
-				particle3D->transformation_[i]->Initialize();
-			}
+			particle3D->transformation_ = std::make_unique<Transformation>();
+			particle3D->transformation_->Initialize();
+			
 
 			//Lighting
 			particle3D->directionalLight_=std::make_unique<CreateDirectionalLight>();
@@ -279,10 +278,9 @@ Particle3D* Particle3D::Create(const std::string& directoryPath, const std::stri
 
 	//Sprite用のTransformationMatrix用のリソースを作る。
 	//Matrix4x4 1つ分サイズを用意する
-	for (int i = 0; i < instanceCount_; i++) {
-		particle3D->transformation_[i] = std::make_unique<Transformation>();
-		particle3D->transformation_[i]->Initialize();
-	}
+	particle3D->transformation_ = std::make_unique<Transformation>();
+	particle3D->transformation_->Initialize();
+	
 
 	//Lighting
 	particle3D->directionalLight_=std::make_unique<CreateDirectionalLight>();
@@ -320,9 +318,8 @@ void Particle3D::Draw(Transform transform) {
 
 	//書き込むためのデータを書き込む
 	//頂点データをリソースにコピー
-	for (int i = 0; i < instanceCount_; i++) {
-		transformation_[i]->SetInformation(transform);
-	}
+	transformation_->SetInformation(transform);
+	
 	
 
 	//コマンドを積む
@@ -339,10 +336,9 @@ void Particle3D::Draw(Transform transform) {
 	//DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
 
 
-	for (int i = 0; i < instanceCount_; i++) {
-		transformation_[i]->SetGraphicCommand();
+	transformation_->SetGraphicCommand();
 	
-	}
+	
 
 
 	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である

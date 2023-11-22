@@ -106,12 +106,12 @@ private:
 	//頂点リソースにデータを書き込む
 
 	//インスタンシングの数
-	static const int32_t instanceCount_ = 1;
+	static const int32_t instanceCount_ = 1000;
 
 	//頂点データ
 	std::unique_ptr<Mesh> mesh_ = nullptr;
 
-	std::unique_ptr<Transformation> transformation_[instanceCount_] = { nullptr };
+	std::unique_ptr<Transformation> transformation_= nullptr ;
 
 
 	//マテリアル用のリソースを作る
@@ -131,7 +131,7 @@ private:
 
 	
 	//デフォルトはα加算
-	int32_t blendModeNumber_ ;
+	int32_t blendModeNumber_=1 ;
 	
 
 	

@@ -46,7 +46,7 @@ public:
 	Matrix4x4 GetMatrix();
 
 	//ワールド座標
-	Vector3 GetWorldPosition();
+	Vector3 GetWorldPosition()override;
 
 	//半径
 	float GetRadius() {

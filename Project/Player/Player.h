@@ -50,7 +50,7 @@ public:
 	Matrix4x4 GetMatrix();
 
 	//ワールド座標
-	Vector3 GetWorldPosition();
+	Vector3 GetWorldPosition()override;
 
 	//弾リストを取得
 	const std::list<PlayerBullet*> GetBullets()  {

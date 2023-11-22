@@ -195,9 +195,6 @@
     <ClCompile Include="Ellysia\PipelineManager\PipelineManager.cpp">
       <Filter>ソース ファイル\Pipeline</Filter>
     </ClCompile>
-    <ClCompile Include="Ellysia\ResourceObject\ResourceObject.cpp">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Project\Player\Player.cpp">
       <Filter>Project\Player</Filter>
     </ClCompile>
@@ -219,11 +216,11 @@
     <ClCompile Include="Project\Enemy\Bullet\EnemyBullet.cpp">
       <Filter>Project\Enemy\Bullet</Filter>
     </ClCompile>
-    <ClCompile Include="Project\Enemy\TimeCall\TimeCall.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Project\Collider\Collider.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>Project</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Enemy\TimeCall\TimeCall.cpp">
+      <Filter>Project\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -385,9 +382,6 @@
     <ClInclude Include="Project\AllGameScene\SampleScene\SampleScene.h">
       <Filter>ヘッダー ファイル\GameScene</Filter>
     </ClInclude>
-    <ClInclude Include="Ellysia\ResourceObject\ResourceObject.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Ellysia\Camera\Camera.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -412,11 +406,11 @@
     <ClInclude Include="Project\Enemy\Bullet\EnemyBullet.h">
       <Filter>Project\Enemy\Bullet</Filter>
     </ClInclude>
-    <ClInclude Include="Project\Enemy\TimeCall\TimeCall.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Project\Collider\Collider.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>Project</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Enemy\TimeCall\TimeCall.h">
+      <Filter>Project\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

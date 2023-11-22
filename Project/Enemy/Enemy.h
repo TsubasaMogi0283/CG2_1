@@ -70,7 +70,7 @@ public:
 	Matrix4x4 GetMatrix();
 
 	//ワールド座標
-	Vector3 GetWorldPosition();
+	Vector3 GetWorldPosition()override;
 
 	float GetRadius() {
 		return radius_;

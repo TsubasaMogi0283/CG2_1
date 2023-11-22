@@ -8,3 +8,8 @@ Vector3 Add(Vector3 v1, Vector3 v2);
 
 //引き算
 Vector3 Subtract(Vector3 v1, Vector3 v2);
+
+//クロス積
+Vector3 Cross(const Vector3 v1, const Vector3 v2);
+
+

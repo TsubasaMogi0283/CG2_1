@@ -105,8 +105,7 @@ private:
 	//頂点バッファビューを作成する
 	//頂点リソースにデータを書き込む
 
-	//インスタンシングの数
-	static const int32_t instanceCount_ = 1000;
+	
 
 	//頂点データ
 	std::unique_ptr<Mesh> mesh_ = nullptr;
@@ -121,10 +120,12 @@ private:
 	//Lighting用
 	std::unique_ptr<CreateDirectionalLight> directionalLight_ = nullptr;
 
+	//インスタンシングの数
+	static const int32_t instanceCount_ = 10;
+	ComPtr<ID3D12Resource>instancingResource_ = nullptr;
+	TransformationMatrix* instancingData_ = nullptr;
+
 	uint32_t textureHandle_ = 0;
-
-	
-
 
 	//色関係のメンバ変数
 	Vector4 color_;

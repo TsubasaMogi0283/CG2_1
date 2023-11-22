@@ -285,6 +285,8 @@ Particle3D* Particle3D::Create(const std::string& directoryPath, const std::stri
 	particle3D->directionalLight_=std::make_unique<CreateDirectionalLight>();
 	particle3D->directionalLight_->Initialize();
 
+	//インスタンシング
+	particle3D->instancingResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(TransformationMatrix) * instanceCount_);
 
 	//初期は白色
 	//モデル個別に色を変更できるようにこれは外に出しておく
@@ -293,9 +295,6 @@ Particle3D* Particle3D::Create(const std::string& directoryPath, const std::stri
 	return particle3D;
 
 }
-
-
-
 
 
 
@@ -320,6 +319,16 @@ void Particle3D::Draw(Transform transform) {
 	transformation_->SetInformation(transform);
 	
 	
+	//インスタンシング
+	instancingResource_->Map(0, nullptr, reinterpret_cast<void**>(instancingData_));
+
+	for (uint32_t index = 0; index < instanceCount_; ++index) {
+		instancingData_[index].WVP = MakeIdentity4x4();
+		instancingData_[index].World = MakeIdentity4x4();
+	}
+
+
+
 
 	//コマンドを積む
 

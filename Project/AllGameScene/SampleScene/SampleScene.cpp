@@ -32,6 +32,28 @@ void SampleScene::Initialize(GameManager* gameManager) {
 	
 }
 
+
+//コライダー2つの衝突判定と応答
+void SampleScene::CheckCollisionPair(Collider* colliderA, Collider* colliderB) {
+	//コライダーAのワールド座標を取得
+	Vector3 colliderPosA = colliderA->GetWorldPosition();
+	
+	//コライダーBのワールド座標を取得
+	Vector3 colliderPosB = colliderB->GetWorldPosition();
+	
+	float distance = Length(Subtract(colliderPosA, colliderPosB));
+
+	//球と球の交差判定
+	if (distance < colliderA->GetRadius() + colliderB->GetRadius()) {
+		//コライダーAの衝突時コールバックを呼び出す
+		colliderA->OnCollision();
+		//コライダーBの衝突時コールバックを呼び出す
+		colliderB->OnCollision();
+
+	}
+}
+
+
 /// <summary>
 /// 衝突判定と応答
 /// </summary>
@@ -55,15 +77,7 @@ void SampleScene::CheckAllCollisions(){
 
 	//自キャラと敵弾全ての当たり判定
 	for (EnemyBullet* bullet : enemyBullets) {
-		//敵弾のワールド座標
-		enemyBulletPos = bullet->GetWorldPosition();
-
-		//座標AとBの距離を求める
-		float distanceAB = Length(Subtract(playerPos, enemyBulletPos));
-		if (distanceAB < player_->GetRadius() + bullet->GetRadius()) {
-			player_->OnCollision();
-			bullet->OnCollision();
-		}
+		CheckCollisionPair(player_, bullet);
 
 	}
 
@@ -75,15 +89,7 @@ void SampleScene::CheckAllCollisions(){
 	enemyPos = enemy_->GetWorldPosition();
 	//自弾と敵キャラ全ての当たり判定
 	for (PlayerBullet* bullet : playerBullets) {
-		//敵弾のワールド座標
-		playerBulletPos = bullet->GetWorldPosition();
-
-		//距離を求める
-		float distanceCD = Length(Subtract(playerBulletPos,enemyPos));
-		if (distanceCD < enemy_->GetRadius() + bullet->GetRadius()) {
-			enemy_->OnCollision();
-			bullet->OnCollision();
-		}
+		CheckCollisionPair(enemy_, bullet);
 
 	}
 
@@ -96,18 +102,8 @@ void SampleScene::CheckAllCollisions(){
 	//二重for文総当たりで
 	for (PlayerBullet* playerBullet : playerBullets) {
 		for (EnemyBullet* enemyBullet : enemyBullets) {
-			//敵弾のワールド座標
-			playerBulletPos = playerBullet->GetWorldPosition();
-			//敵弾のワールド座標
-			enemyBulletPos = enemyBullet->GetWorldPosition();
 			
-			//距離を求める
-			float distance = Length(Subtract(playerBulletPos,enemyBulletPos));
-			if (distance < playerBullet->GetRadius() + enemyBullet->GetRadius()) {
-				playerBullet->OnCollision();
-				enemyBullet->OnCollision();
-			}
-		
+			CheckCollisionPair(playerBullet, enemyBullet);
 		}
 	}
 #pragma endregion
@@ -115,25 +111,7 @@ void SampleScene::CheckAllCollisions(){
 
 }
 
-//コライダー2つの衝突判定と応答
-void SampleScene::CheckCollisionPair(Collider* colliderA, Collider* colliderB) {
-	//コライダーAのワールド座標を取得
-	Vector3 colliderPosA = colliderA->GetWorldPosition();
-	
-	//コライダーBのワールド座標を取得
-	Vector3 colliderPosB = colliderB->GetWorldPosition();
-	
-	float distance = Length(Subtract(colliderPosA, colliderPosB));
 
-	//球と球の交差判定
-	if (distance < colliderA->GetRadius() + colliderB->GetRadius()) {
-		//コライダーAの衝突時コールバックを呼び出す
-		colliderA->OnCollision();
-		//コライダーBの衝突時コールバックを呼び出す
-		colliderB->OnCollision();
-
-	}
-}
 
 
 /// <summary>

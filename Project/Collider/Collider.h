@@ -1,4 +1,6 @@
 #pragma once
+#include "Math/Vector/Vector3.h"
+
 class Collider{
 public:
 	//衝突時に呼ばれる関数

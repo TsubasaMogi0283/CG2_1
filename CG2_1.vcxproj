@@ -119,7 +119,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Ellysia\Polygon\Sphere\Sphere.cpp" />
     <ClCompile Include="Ellysia\Polygon\Sprite\Sprite.cpp" />
     <ClCompile Include="Ellysia\Polygon\Triangle\Triangle.cpp" />
-    <ClCompile Include="Ellysia\ResourceObject\ResourceObject.cpp" />
     <ClCompile Include="Ellysia\TextureManager\TextureManager.cpp" />
     <ClCompile Include="Ellysia\ViewProjection\ViewProjection.cpp" />
     <ClCompile Include="Ellysia\WorldTransform\WorldTransform.cpp" />
@@ -203,7 +202,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Ellysia\Polygon\Sphere\Sphere.h" />
     <ClInclude Include="Ellysia\Polygon\Sprite\Sprite.h" />
     <ClInclude Include="Ellysia\Polygon\Triangle\Triangle.h" />
-    <ClInclude Include="Ellysia\ResourceObject\ResourceObject.h" />
     <ClInclude Include="Ellysia\TextureManager\TextureManager.h" />
     <ClInclude Include="Ellysia\ViewProjection\ViewProjection.h" />
     <ClInclude Include="Ellysia\WorldTransform\WorldTransform.h" />

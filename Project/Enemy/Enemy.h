@@ -5,6 +5,7 @@
 
 #include "Enemy/Bullet/EnemyBullet.h"
 #include "Enemy/TimeCall/TimeCall.h"
+#include "Collider/Collider.h"
 
 enum class Phase {
 	Approach,
@@ -15,7 +16,7 @@ enum class Phase {
 class Player;
 
 
-class Enemy{
+class Enemy:public Collider{
 public:
 
 	//コンストラクタ
@@ -26,7 +27,7 @@ public:
 	void ChangeState(IEnemy* newState);
 	
 	//コールバック
-	void OnCollision();
+	void OnCollision()override;
 
 	//更新
 	void Update();

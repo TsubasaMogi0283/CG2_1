@@ -1,7 +1,8 @@
 #pragma once
 #include <Polygon/Model/Model.h>
+#include "Collider/Collider.h"
 
-class PlayerBullet{
+class PlayerBullet:public Collider{
 public:
 	//コンストラクタ
 	PlayerBullet();
@@ -10,7 +11,7 @@ public:
 	void Initialize(Vector3 position,Vector3 velocity);
 
 	//コールバック関数
-	void OnCollision();
+	void OnCollision()override;
 
 	//行列を作って返す
 	Matrix4x4 GetMatrix();

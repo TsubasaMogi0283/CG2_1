@@ -1,12 +1,12 @@
 #pragma once
 #include "Math/Vector/Transform.h"
 #include <Polygon/Model/Model.h>
-
+#include "Collider/Collider.h"
 
 
 class Player;
 
-class EnemyBullet{
+class EnemyBullet:public Collider{
 public:
 	//コンストラクタ
 	EnemyBullet();
@@ -15,7 +15,7 @@ public:
 	void Initialzie(Vector3 position, Vector3 velocity);
 
 	//コールバック関数
-	void OnCollision();
+	void OnCollision()override;
 
 	//更新
 	void Update();

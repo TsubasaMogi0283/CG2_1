@@ -6,9 +6,10 @@
 #include "Player/Bullet/PlayerBullet.h"
 
 #include <list>
+#include "Collider/Collider.h"
 
-
-class Player{
+//Colliderを継承
+class Player:public Collider{
 public:
 	//コンストラクタ
 	Player();
@@ -17,7 +18,7 @@ public:
 	void Initialize();
 
 	//コールバック関数
-	void OnCollision();
+	void OnCollision()override;
 
 	//更新
 	void Update();

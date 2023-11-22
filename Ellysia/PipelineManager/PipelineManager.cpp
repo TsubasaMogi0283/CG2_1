@@ -698,13 +698,29 @@ void PipelineManager::GenerateParticle3DPSO() {
 	//register...Shader上のResource配置情報
 	rootParameters[0].Descriptor.ShaderRegister = 0;
 
+	D3D12_DESCRIPTOR_RANGE descriptorRangeForInstancing[1] = {};
+	//0から始まる
+	descriptorRangeForInstancing[0].BaseShaderRegister = 0;
+	//数は一つ
+	descriptorRangeForInstancing[0].NumDescriptors = 1;
+	//SRVを使う
+	descriptorRangeForInstancing[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	descriptorRangeForInstancing[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
-	//CBVを使う
-	rootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	
+
+	//今回はDescriptorTableを使う
+	rootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	//VertwxShaderで使う
 	rootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
 	//register...Shader上のResource配置情報
 	rootParameters[1].Descriptor.ShaderRegister = 0;
+	//Tableの中身の配列を指定
+	rootParameters[1].DescriptorTable.pDescriptorRanges = descriptorRangeForInstancing;
+	//Tableで利用する数
+	rootParameters[1].DescriptorTable.NumDescriptorRanges = _countof(descriptorRangeForInstancing);
+	
+
 	//ルートパラメータ配列へのポイント
 	descriptionRootSignature_.pParameters = rootParameters;
 	//配列の長さ
@@ -842,11 +858,7 @@ void PipelineManager::GenerateParticle3DPSO() {
 		blendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
 		blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
 		blendDesc.RenderTarget[0].DestBlend=D3D12_BLEND_INV_SRC_ALPHA;
-		//blendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
-		//blendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
-		//blendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
-
-
+		
 
 
 		break;
@@ -859,12 +871,6 @@ void PipelineManager::GenerateParticle3DPSO() {
 		blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
 		blendDesc.RenderTarget[0].DestBlend=D3D12_BLEND_ONE;
 		
-		//透明度これはどのブレンドモードでも同じ
-		//blendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
-		//blendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
-		//blendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
-
-
 
 
 
@@ -878,10 +884,6 @@ void PipelineManager::GenerateParticle3DPSO() {
 		blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_REV_SUBTRACT;
 		blendDesc.RenderTarget[0].DestBlend=D3D12_BLEND_ONE;
 		
-		//blendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
-		//blendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
-		//blendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
-
 		break;
 
 	case BlendModeMultiply: 
@@ -890,10 +892,6 @@ void PipelineManager::GenerateParticle3DPSO() {
 		blendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_ZERO;
 		blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
 		blendDesc.RenderTarget[0].DestBlend=D3D12_BLEND_SRC_COLOR;
-
-		//blendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
-		//blendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
-		//blendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
 
 
 		
@@ -905,10 +903,6 @@ void PipelineManager::GenerateParticle3DPSO() {
 		blendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_INV_DEST_COLOR;
 		blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
 		blendDesc.RenderTarget[0].DestBlend=D3D12_BLEND_ONE;
-
-		//blendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
-		//blendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
-		//blendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
 
 
 

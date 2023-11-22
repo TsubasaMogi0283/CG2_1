@@ -104,9 +104,9 @@ void SampleScene::CheckAllCollisions(){
 			//距離を求める
 			float distance = Length(Subtract(playerBulletPos,enemyBulletPos));
 			if (distance < playerBullet->GetRadius() + enemyBullet->GetRadius()) {
-			playerBullet->OnCollision();
-			enemyBullet->OnCollision();
-		}
+				playerBullet->OnCollision();
+				enemyBullet->OnCollision();
+			}
 		
 		}
 	}

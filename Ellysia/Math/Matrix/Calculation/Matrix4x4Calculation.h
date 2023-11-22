@@ -10,20 +10,22 @@
 
 
 //クロス積
-Vector3 Cross(const Vector3 v1, const Vector3 v2);
+Matrix3x3 MakeCrossMatrix(Vector3 v1, Vector3 v2);
 
-//コタンジェント
-float Cot(float theta);
+Matrix3x3 MultiplyValueMatrix(float v1, Matrix3x3 m1);
+
+Matrix3x3 MultiplyVectorMatrix(Vector3 v1, Matrix3x3 m1);
 
 //単位行列を作成する
+Matrix3x3 MakeIdentity3x3();
 Matrix4x4 MakeIdentity4x4();
+
 
 //乗算
 Matrix4x4 Multiply(const Matrix4x4 m1, const Matrix4x4 m2);
 
 //Scale
 //拡縮
-Matrix3x3 MakeScaleMatrix3x3(const Vector3 scale);
 Matrix4x4 MakeScaleMatrix(const Vector3 scale);
 
 Matrix4x4 MakeRotateXMatrix(float radian);
@@ -59,7 +61,6 @@ Matrix4x4 MakeOrthographicMatrix(float left, float top, float right, float botto
 
 //MT4
 //内積を行列にする
-Matrix4x4 MakeDotMatrix(const Vector3& v1, const Vector3& v2);
 
 //任意軸回転行列の作成関数
 Matrix4x4 MakeRotateAxisAngle(const Vector3& axis, float angle);

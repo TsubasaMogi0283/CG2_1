@@ -1,23 +1,69 @@
 #include "Matrix4x4Calculation.h"
 #include "Math/Vector/Calculation/VectorCalculation.h"
 #include <Math/Matrix/Matrix/Matrix3x3.h>
+#include <Math/Vector/Vector4.h>
 
 
-//クロス積
-Vector3 Cross(const Vector3 v1, const Vector3 v2) {
-	Vector3 result = {0.0f,0.0f,0.0f};
-	result.x = v1.y * v2.z - v1.z * v2.y;
-	result.y = v1.z * v2.x - v1.x * v2.z;
-	result.z = v1.x * v2.y - v1.y * v2.x;
-
-	return result;
-}
 
 //コタンジェント
 float Cot(float theta) {
 	return (1.0f / tan(theta));
 }
 
+Matrix3x3 MultiplyValueMatrix(float v1, Matrix3x3 m1) {
+	Matrix3x3 result = {};
+	result.m[0][0] = v1 * m1.m[0][0];
+	result.m[0][1] = v1 * m1.m[0][1];
+	result.m[0][2] = v1 * m1.m[0][2];
+
+
+	result.m[1][0] = v1 * m1.m[0][1];
+	result.m[1][1] = v1 * m1.m[1][1];
+	result.m[1][2] = v1 * m1.m[1][2];
+	
+	result.m[2][0] = v1 * m1.m[2][0];
+	result.m[2][1] = v1 * m1.m[2][2];
+	result.m[2][2] = v1 * m1.m[2][2];
+
+	return result;
+}
+
+Matrix3x3 MultiplyVectorMatrix(Vector3 v1, Matrix3x3 m1) {
+	Matrix3x3 result = {};
+	result.m[0][0] = v1.x * m1.m[0][0];
+	result.m[0][1] = v1.y * m1.m[1][0];
+	result.m[0][2] = v1.z * m1.m[2][0];
+
+
+	result.m[1][0] = v1.x * m1.m[0][1];
+	result.m[1][1] = v1.y * m1.m[1][1];
+	result.m[1][2] = v1.z * m1.m[2][1];
+	
+	result.m[2][0] = v1.x * m1.m[0][2];
+	result.m[2][1] = v1.y * m1.m[1][2];
+	result.m[2][2] = v1.z* m1.m[2][2];
+
+	return result;
+}
+
+Matrix3x3 MakeIdentity3x3() {
+	Matrix3x3 result = {
+		result.m[0][0] = 1.0f,
+		result.m[0][1] = 0.0f,
+		result.m[0][2] = 0.0f,
+
+		result.m[1][0] = 0.0f,
+		result.m[1][1] = 1.0f,
+		result.m[1][2] = 0.0f,
+
+		result.m[2][0] = 0.0f,
+		result.m[2][1] = 0.0f,
+		result.m[2][2] = 1.0f,
+
+	};
+
+	return result;
+}
 
 //単位行列を作成する
 //斜めの1が並ぶやつ
@@ -110,25 +156,6 @@ Matrix4x4 MakeScaleMatrix(const Vector3 scale) {
 	return result;
 }
 
-Matrix3x3 MakeScaleMatrix3x3(const Vector3 scale) {
-	Matrix3x3 result = {};
-	result.m[0][0] = scale.x;
-	result.m[0][1] = 0.0f;
-	result.m[0][2] = 0.0f;
-
-	result.m[1][0] = 0.0f;
-	result.m[1][1] = scale.y;
-	result.m[1][2] = 0.0f;
-
-	result.m[2][0] = 0.0f;
-	result.m[2][1] = 0.0f;
-	result.m[2][2] = scale.z;
-
-
-
-
-	return result;
-}
 
 //Rotate
 #pragma region XYZの個別の回転
@@ -525,8 +552,58 @@ Matrix4x4 MakeOrthographicMatrix(float left, float top, float right, float botto
 }
 
 //MT4
+Matrix3x3 MakeCrossMatrix(Vector3 v1, Vector3 v2) {
+	Matrix3x3 a = {};
+	a.m[0][0] = v1.x;
+	a.m[0][1] = v1.y;
+	a.m[0][2] = v1.z;
 
- 
+	a.m[1][0] = 0.0f;
+	a.m[1][1] = 0.0f;
+	a.m[1][2] = 0.0f;
+
+	a.m[2][0] = 0.0f;
+	a.m[2][1] = 0.0f;
+	a.m[2][2] = 0.0f;
+
+
+	Matrix3x3 b = {};
+	b.m[0][0] = 0.0f;
+	b.m[0][1] = -v2.z;
+	b.m[0][2] = v2.y;
+
+	b.m[1][0] = v2.z;
+	b.m[1][1] = 0.0f;
+	b.m[1][2] = -v2.x;
+
+	b.m[2][0] = -v2.y;
+	b.m[2][1] = v2.x;
+	b.m[2][2] = 0.0f;
+
+
+	//掛け算3x3
+	Matrix3x3 result = {};
+	result.m[0][0] = a.m[0][0] * b.m[0][0];
+	result.m[0][1] = a.m[0][0] * b.m[0][0];
+	result.m[0][2] = a.m[0][0] * b.m[0][0];
+
+	result.m[1][0] = a.m[0][0] * b.m[0][0];
+	result.m[1][1] = a.m[0][0] * b.m[0][0];
+	result.m[1][2] = a.m[0][0] * b.m[0][0];
+
+	result.m[2][0] = a.m[0][0] * b.m[0][0];
+	result.m[2][1] = a.m[0][0] * b.m[0][0];
+	result.m[2][2] = a.m[0][0] * b.m[0][0];
+
+	
+
+
+	return result;
+
+}
+
+
+
 //任意軸回転行列の作成関数
 Matrix4x4 MakeRotateAxisAngle(const Vector3& axis, float angle) {
 
@@ -591,19 +668,71 @@ Matrix4x4 MakeRotateAxisAngle(const Vector3& axis, float angle) {
 	//ベクトルでは
 	//rR=r*cosθ
 	//拡縮の行列にすればいいだけ
-	Vector3 allCosVector = { std::cosf(angle),std::cosf(angle),std::cosf(angle) };
-	Matrix4x4 R = MakeScaleMatrix(allCosVector);
-
+	//単位行列を掛けてね
+	Matrix3x3 E = MakeIdentity3x3();
+	Matrix3x3 S = MultiplyValueMatrix(std::cosf(angle),E);
+	
 
 	//P=(1-cosθ)projnR
-	//内積を行列にしたい
+	Matrix3x3 tBB = {};
+	tBB.m[0][0] = normalizeP.x*normalizeP.x;
+	tBB.m[0][1] = normalizeP.x*normalizeP.y;
+	tBB.m[0][2] = normalizeP.x*normalizeP.z;
 
+	tBB.m[1][0] = normalizeP.y*normalizeP.x;
+	tBB.m[1][1] = normalizeP.y*normalizeP.y;
+	tBB.m[1][2] = normalizeP.y*normalizeP.z;
+
+	tBB.m[2][0] = normalizeP.z*normalizeP.x;
+	tBB.m[2][1] = normalizeP.z*normalizeP.y;
+	tBB.m[2][2] = normalizeP.z*normalizeP.z;
+
+	float t = 1.0f/(Length(axis) * Length(axis));
+	Matrix3x3 afterTBB = MultiplyValueMatrix(t, tBB);
+	Matrix3x3 P = MultiplyVectorMatrix(axis, afterTBB);
+
+
+	Matrix3x3 C = {};
+	C.m[0][0] = 0.0f;
+	C.m[0][1] = -normalizeP.z;
+	C.m[0][2] = normalizeP.y;
+
+	C.m[0][0] = normalizeP.z;
+	C.m[0][1] = 0.0f;
+	C.m[0][2] = -normalizeP.x;
+
+	C.m[0][0] = -normalizeP.y;
+	C.m[0][1] = normalizeP.x;
+	C.m[0][2] = 0.0f;
 
 
 #pragma endregion
 
+	Vector4 newAxis = {axis.x,axis.y,axis.z,0.0f};
 
+	Matrix4x4 resultR = {};
+	resultR.m[0][0] = normalizeP.x * normalizeP.x * (1 - std::cosf(angle)) + std::cosf(angle);
+	resultR.m[0][1] = normalizeP.x * normalizeP.y * (1 - std::cosf(angle)) + normalizeP.z*std::sinf(angle);
+	resultR.m[0][2] = normalizeP.x * normalizeP.z * (1 - std::cosf(angle)) - normalizeP.y*std::sinf(angle);
+	resultR.m[0][3] = 0.0f;
 
+	resultR.m[1][0] = normalizeP.y * normalizeP.x * (1 - std::cosf(angle)) - normalizeP.z*std::sinf(angle);
+	resultR.m[1][1] = normalizeP.y * normalizeP.y * (1 - std::cosf(angle)) + std::cosf(angle);
+	resultR.m[1][2] = normalizeP.y * normalizeP.z * (1 - std::cosf(angle)) + normalizeP.y*std::sinf(angle);
+	resultR.m[1][3] = 0.0f;
 
+	resultR.m[2][0] = normalizeP.z * normalizeP.x * (1 - std::cosf(angle)) + normalizeP.y*std::sinf(angle);
+	resultR.m[2][1] = normalizeP.z * normalizeP.y * (1 - std::cosf(angle)) - normalizeP.x*std::sinf(angle);
+	resultR.m[2][2] = normalizeP.z * normalizeP.z * (1 - std::cosf(angle)) +std::cosf(angle);
+	resultR.m[2][3] = 0.0f;
+
+	resultR.m[3][0] = 0.0f;
+	resultR.m[3][1] = 0.0f;
+	resultR.m[3][2] = 0.0f;
+	resultR.m[3][3] = 1.0f;
+
+	
+
+	return resultR;
 
 }

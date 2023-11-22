@@ -1,5 +1,6 @@
 #pragma once
 #include <Math/Vector/Vector3.h>
+#include "Math/Matrix/Matrix/Matrix4x4.h"
 
 //Vector3
 
@@ -24,4 +25,4 @@ Vector3 Cross(const Vector3 v1, const Vector3 v2);
 
 Vector3 Project(const Vector3 v1, const Vector3 v2);
 
-Vector3 Transform(const Vector3 vector, const Matrix4x4 matrix);
+Vector3 TransformCalculation(const Vector3 vector, const Matrix4x4 matrix);

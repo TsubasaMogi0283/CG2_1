@@ -43,13 +43,13 @@ float DotVector2(Vector3 v1, Vector3 v2) {
 }
 
 float Length(Vector3 V1) {
-	return sqrt(V1.x * V1.x + V1.y * V1.y+ V1.z * V1.z);
+	return sqrtf(V1.x * V1.x + V1.y * V1.y+ V1.z * V1.z);
 }
 
 Vector3 Normalize(Vector3 V1) {
 	Vector3 result = {};
 
-	float length = sqrt(V1.x * V1.x + V1.y * V1.y+V1.z*V1.z);
+	float length = sqrtf(V1.x * V1.x + V1.y * V1.y+V1.z*V1.z);
 
 	float newX = V1.x;
 	float newY = V1.y;
@@ -81,9 +81,7 @@ Vector3 Cross(const Vector3 v1, const Vector3 v2) {
 	return result;
 }
 
-float Cot(float theta) {
-	return (1.0f / tan(theta));
-}
+
 
 
 Vector3 Project(const Vector3 a, const Vector3 b) {
@@ -115,7 +113,7 @@ Vector3 Project(const Vector3 a, const Vector3 b) {
 
 
 //Transform
-Vector3 Transform(const Vector3 vector, const Matrix4x4 matrix) {
+Vector3 TransformCalculation(const Vector3 vector, const Matrix4x4 matrix) {
 	Vector3 result = {};
 
 	result.x = (vector.x * matrix.m[0][0]) + (vector.y * matrix.m[1][0]) + (vector.z * matrix.m[2][0]) + (1.0f * matrix.m[3][0]);

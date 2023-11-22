@@ -25,6 +25,8 @@ public:
 	void Initialize();
 	void ChangeState(IEnemy* newState);
 	
+	//コールバック
+	void OnCollision();
 
 	//更新
 	void Update();
@@ -63,6 +65,10 @@ public:
 		player_ = player;
 	}
 
+	//弾リストを取得
+	const std::list<EnemyBullet*> GetBullets() const {
+		return bullets_;
+	}
 
 private:
 	Model* model_ = nullptr;

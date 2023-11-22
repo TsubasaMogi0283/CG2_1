@@ -3,15 +3,22 @@
 
 class PlayerBullet{
 public:
-
+	//コンストラクタ
 	PlayerBullet();
 
+	//初期化
 	void Initialize(Vector3 position,Vector3 velocity);
 
+	//コールバック関数
+	void OnCollision();
+
+	//更新
 	void Update();
 
+	//描画
 	void Draw();
 
+	//デストラクタ
 	~PlayerBullet();
 
 

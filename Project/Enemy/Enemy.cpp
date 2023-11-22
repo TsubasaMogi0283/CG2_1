@@ -68,6 +68,10 @@ void Enemy::ChangeState(IEnemy* newState) {
 
 }
 
+void Enemy::OnCollision(){
+
+}
+
 void Enemy::FireAndReset() {
 	Fire();
 	//発射タイマーをセットする

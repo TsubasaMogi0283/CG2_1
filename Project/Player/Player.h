@@ -16,7 +16,8 @@ public:
 	//初期化
 	void Initialize();
 
-	
+	//コールバック関数
+	void OnCollision();
 
 	//更新
 	void Update();
@@ -28,10 +29,18 @@ public:
 	//デストラクタ
 	~Player();
 
+#pragma region アクセッサ
 
 	Vector3 GetTranslate() {
 		return transform_.translate;
 	}
+
+	//弾リストを取得
+	const std::list<PlayerBullet*> GetBullets() const {
+		return bullets_;
+	}
+
+#pragma endregion
 
 private:
 	void Rotate();
@@ -50,8 +59,7 @@ private:
 	const float ROTATE_AMOUNT_ = 0.02f;
 
 
-
-	PlayerBullet* bullet_ = nullptr;
+	//弾
 	std::list<PlayerBullet*>bullets_;
 
 };

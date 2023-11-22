@@ -13,6 +13,11 @@ void PlayerBullet::Initialize(Vector3 position,Vector3 velocity){
 	velocity_ = velocity;
 }
 
+void PlayerBullet::OnCollision(){
+	//デスフラグを立てる
+	isDead_ = true;
+}
+
 void PlayerBullet::Update(){
 	ImGui::Begin("Bullet");
 	ImGui::SliderFloat3("Scale", &transform_.scale.x, 1.0f, 10.0f);

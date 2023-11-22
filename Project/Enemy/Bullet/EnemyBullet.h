@@ -8,23 +8,32 @@ class Player;
 
 class EnemyBullet{
 public:
+	//コンストラクタ
 	EnemyBullet();
 
-
+	//初期化
 	void Initialzie(Vector3 position, Vector3 velocity);
 
+	//コールバック関数
+	void OnCollision();
+
+	//更新
 	void Update();
 
+	//描画
 	void Draw();
 
+	//デストラクタ
 	~EnemyBullet();
 
+	
+
+
+#pragma region アクセッサ
 	Vector3 GetTranslate() {
 		return transform_.translate;
 	}
 
-
-	//アクセッサ
 	bool IsDead() const{
 		return isDead_;
 	}
@@ -32,6 +41,8 @@ public:
 	void SetPlayer(Player* player) {
 		player_ = player;
 	}
+
+#pragma endregion
 
 private:
 	Model* model_ = nullptr;

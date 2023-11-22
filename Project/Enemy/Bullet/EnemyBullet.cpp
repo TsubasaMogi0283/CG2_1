@@ -43,6 +43,11 @@ void EnemyBullet::Initialzie(Vector3 position, Vector3 velocity){
 
 }
 
+void EnemyBullet::OnCollision(){
+	//デスフラグ立てる
+	isDead_ = true;
+}
+
 void EnemyBullet::Update(){
 #pragma region ホーミング。動作確認済
 	////敵弾から自キャラへのベクトルを計算

@@ -15,6 +15,10 @@ void Player::Initialize() {
 	input_ = Input::GetInstance();
 }
 
+void Player::OnCollision(){
+
+}
+
 
 void Player::Rotate() {
 	if (input_->IsPushKey(DIK_W) == true) {

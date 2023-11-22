@@ -78,7 +78,7 @@ void SampleScene::CheckAllCollisions(){
 		//敵弾のワールド座標
 		playerBulletPos = bullet->GetWorldPosition();
 
-		//座標AとBの距離を求める
+		//距離を求める
 		float distanceCD = Length(Subtract(playerBulletPos,enemyPos));
 		if (distanceCD < enemy_->GetRadius() + bullet->GetRadius()) {
 			enemy_->OnCollision();
@@ -92,7 +92,24 @@ void SampleScene::CheckAllCollisions(){
 #pragma endregion
 
 #pragma region 自弾と敵弾の当たり判定
-
+	//自弾と敵弾全ての当たり判定
+	//二重for文総当たりで
+	for (PlayerBullet* playerBullet : playerBullets) {
+		for (EnemyBullet* enemyBullet : enemyBullets) {
+			//敵弾のワールド座標
+			playerBulletPos = playerBullet->GetWorldPosition();
+			//敵弾のワールド座標
+			enemyBulletPos = enemyBullet->GetWorldPosition();
+			
+			//距離を求める
+			float distance = Length(Subtract(playerBulletPos,enemyBulletPos));
+			if (distance < playerBullet->GetRadius() + enemyBullet->GetRadius()) {
+			playerBullet->OnCollision();
+			enemyBullet->OnCollision();
+		}
+		
+		}
+	}
 #pragma endregion
 
 

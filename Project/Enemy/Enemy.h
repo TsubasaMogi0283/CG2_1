@@ -71,6 +71,10 @@ public:
 	//ワールド座標
 	Vector3 GetWorldPosition();
 
+	float GetRadius() {
+		return radius_;
+	}
+
 	//弾リストを取得
 	const std::list<EnemyBullet*> GetBullets() const {
 		return bullets_;
@@ -85,7 +89,7 @@ private:
 	Vector3 leaveVelocity_ = {};
 
 
-
+	float radius_;
 
 	IEnemy* state_ = nullptr;
 

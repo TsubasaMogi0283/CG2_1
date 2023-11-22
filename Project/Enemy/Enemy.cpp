@@ -16,7 +16,7 @@ void Enemy::Initialize(){
 	transform_ = { {0.5f,0.5f,0.5f},{0.0f,0.0f,0.0f},{0.0f,1.0f,100.0f} };
 	
 	state_ = new EnemyApproach();
-
+	radius_ = 1.0f;
 	num = state_->GetState();
 
 	FireAndReset();

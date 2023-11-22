@@ -10,6 +10,7 @@ void PlayerBullet::Initialize(Vector3 position,Vector3 velocity){
    	model_ = new Model();
    	model_->CreateObject("Resources/Sample/cube", "cube.obj");
 	transform_ = { {0.5f,0.5f,0.5f},{0.0f,0.0f,0.0f},position };
+	radius_ = 1.0f;
 	velocity_ = velocity;
 }
 

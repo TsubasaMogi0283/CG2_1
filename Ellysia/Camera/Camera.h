@@ -36,6 +36,9 @@ public:
 		this->cameraTransform_.translate = translate;
 	}
 
+	Vector3 GetRotate() {
+		return cameraTransform_.rotate;
+	}
 	Vector3 GetTranslate() {
 		return cameraTransform_.translate;
 	}

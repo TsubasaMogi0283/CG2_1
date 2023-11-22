@@ -44,8 +44,7 @@ private:
 
 
 	Vector3 cameraTranslate_ = {};
-
+	Vector3 cameraRotate_ = {};
 	
 
-	//EnemyBullet* enemyBullet_= nullptr;
 };

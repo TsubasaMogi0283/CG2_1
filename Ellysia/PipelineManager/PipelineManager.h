@@ -70,6 +70,9 @@ public:
 	void SetModelBlendMode(uint32_t blendmode) {
 		selectModelBlendMode_ = blendmode;
 	}
+	void SetParticle3DBlendMode(uint32_t blendmode) {
+		selectParticle3DBlendMode_ = blendmode;
+	}
 
 #pragma endregion
 

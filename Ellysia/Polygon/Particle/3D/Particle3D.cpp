@@ -207,9 +207,8 @@ Particle3D* Particle3D::Create(const std::string& directoryPath, const std::stri
 
 			//初期化の所でやってね、Update,Drawでやるのが好ましいけど凄く重くなった。
 			//ブレンドモードの設定
-			PipelineManager::GetInstance()->SetModelBlendMode(particle3D->blendModeNumber_);
-			PipelineManager::GetInstance()->GenerateModelPSO();
-
+			PipelineManager::GetInstance()->SetParticle3DBlendMode(particle3D->blendModeNumber_);
+			PipelineManager::GetInstance()->GenerateParticle3DPSO();
 
 			////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
 			particle3D->material_= std::make_unique<CreateMaterial>();
@@ -257,8 +256,8 @@ Particle3D* Particle3D::Create(const std::string& directoryPath, const std::stri
 
 	//初期化の所でやってね、Update,Drawでやるのが好ましいけど凄く重くなった。
 	//ブレンドモードの設定
-	PipelineManager::GetInstance()->SetModelBlendMode(particle3D->blendModeNumber_);
-	PipelineManager::GetInstance()->GenerateModelPSO();
+	PipelineManager::GetInstance()->SetParticle3DBlendMode(particle3D->blendModeNumber_);
+	PipelineManager::GetInstance()->GenerateParticle3DPSO();
 
 
 	////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
@@ -324,8 +323,8 @@ void Particle3D::Draw(Transform transform) {
 
 	//コマンドを積む
 
-	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootSignature(PipelineManager::GetInstance()->GetModelRootSignature().Get());
-	DirectXSetup::GetInstance()->GetCommandList()->SetPipelineState(PipelineManager::GetInstance()->GetModelGraphicsPipelineState().Get());
+	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootSignature(PipelineManager::GetInstance()->GetParticle3DRootSignature().Get());
+	DirectXSetup::GetInstance()->GetCommandList()->SetPipelineState(PipelineManager::GetInstance()->GetParticle3DGraphicsPipelineState().Get());
 
 
 	mesh_->SetGraphicsCommand();

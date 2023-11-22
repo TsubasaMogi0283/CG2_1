@@ -218,10 +218,10 @@
     <FxCompile Include="Resources\Shader\Object3d.VS.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
-    <FxCompile Include="Resources\Shader\Particle3D.VS.hlsl">
+    <FxCompile Include="Resources\Shader\Particle3d.VS.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
-    <FxCompile Include="Resources\Shader\Particle3D.PS.hlsl">
+    <FxCompile Include="Resources\Shader\Particle3d.PS.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
   </ItemGroup>
@@ -413,7 +413,7 @@
     <None Include="Resources\Shader\Object3d.hlsli">
       <Filter>リソース ファイル</Filter>
     </None>
-    <None Include="Resources\Shader\Particle3D.hlsli">
+    <None Include="Resources\Shader\Particle3d.hlsli">
       <Filter>リソース ファイル</Filter>
     </None>
   </ItemGroup>

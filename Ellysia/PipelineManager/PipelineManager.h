@@ -39,7 +39,7 @@ public:
 
 #pragma region アクセッサ
 
-	//コマンドに積む専用のGetter
+	//コマンドに積む専用のGetter(Sprite)
 	ComPtr<ID3D12RootSignature> GetSpriteRootSignature() {
 		return spritePSO_.rootSignature_;
 	}
@@ -47,13 +47,22 @@ public:
 		return spritePSO_.graphicsPipelineState_;
 	}
 
-	//コマンドに積む専用のGetter
+	//コマンドに積む専用のGetter(Model)
 	ComPtr<ID3D12RootSignature> GetModelRootSignature() {
 		return modelPSO_.rootSignature_;
 	}
 	ComPtr<ID3D12PipelineState> GetModelGraphicsPipelineState() {
 		return modelPSO_.graphicsPipelineState_;
 	}
+
+	//コマンドに積む専用のGetter(Particle3D)
+	ComPtr<ID3D12RootSignature> GetParticle3DRootSignature() {
+		return particle3DPSO_.rootSignature_;
+	}
+	ComPtr<ID3D12PipelineState> GetParticle3DGraphicsPipelineState() {
+		return particle3DPSO_.graphicsPipelineState_;
+	}
+
 
 	void SetSpriteBlendMode(uint32_t blendmode) {
 		selectSpriteBlendMode_ = blendmode;
@@ -92,6 +101,10 @@ private:
 
 	//モデル用の
 	int32_t selectModelBlendMode_ = 1;
+
+	//パーティクル用
+	int32_t selectParticle3DBlendMode_ = 1;
+
 
 };
 

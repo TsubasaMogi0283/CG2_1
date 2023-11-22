@@ -836,7 +836,7 @@ void PipelineManager::GenerateParticle3DPSO() {
 
 	//ブレンドモードの選択
 	//switchでやった方が楽でしょう
-	switch (PipelineManager::GetInstance()->selectModelBlendMode_) {
+	switch (PipelineManager::GetInstance()->selectParticle3DBlendMode_) {
 
 	case BlendModeNone:
 		//ブレンド無し

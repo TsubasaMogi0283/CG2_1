@@ -125,6 +125,9 @@ private:
 	ComPtr<ID3D12Resource>instancingResource_ = nullptr;
 	TransformationMatrix* instancingData_ = nullptr;
 
+	//SRVの作成
+	D3D12_SHADER_RESOURCE_VIEW_DESC instancingSrvDesc{};
+
 	uint32_t textureHandle_ = 0;
 
 	//色関係のメンバ変数

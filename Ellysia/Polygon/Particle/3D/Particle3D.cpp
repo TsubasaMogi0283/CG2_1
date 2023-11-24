@@ -6,7 +6,7 @@
 
 static uint32_t modelIndex;
 std::list<ModelData> Particle3D::modelInformationList_{};
-
+static uint32_t descriptorSizeSRV_ = 0u;
 
 Particle3D::Particle3D() {
 
@@ -287,6 +287,20 @@ Particle3D* Particle3D::Create(const std::string& directoryPath, const std::stri
 
 	//インスタンシング
 	particle3D->instancingResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(TransformationMatrix) * instanceCount_);
+	D3D12_SHADER_RESOURCE_VIEW_DESC instancingSrvDesc{};
+	instancingSrvDesc.Format = DXGI_FORMAT_UNKNOWN;
+	instancingSrvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+	instancingSrvDesc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
+	instancingSrvDesc.Buffer.FirstElement = 0;
+	instancingSrvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
+	instancingSrvDesc.Buffer.NumElements = instanceCount_;
+	instancingSrvDesc.Buffer.StructureByteStride = sizeof(TransformationMatrix);
+	D3D12_CPU_DESCRIPTOR_HANDLE instancingSrvHandleCPU = GetCPUDescriptorHandle(
+		DirectXSetup::GetInstance()->GetSrvDescriptorHeap(), particle3D->descriptorSizeSRV_, 3);
+
+
+
+
 
 	//初期は白色
 	//モデル個別に色を変更できるようにこれは外に出しておく

@@ -287,6 +287,7 @@ Particle3D* Particle3D::Create(const std::string& directoryPath, const std::stri
 
 	//インスタンシング
 	particle3D->instancingResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(TransformationMatrix) * instanceCount_);
+	
 	D3D12_SHADER_RESOURCE_VIEW_DESC instancingSrvDesc{};
 	instancingSrvDesc.Format = DXGI_FORMAT_UNKNOWN;
 	instancingSrvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
@@ -295,7 +296,8 @@ Particle3D* Particle3D::Create(const std::string& directoryPath, const std::stri
 	instancingSrvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
 	instancingSrvDesc.Buffer.NumElements = instanceCount_;
 	instancingSrvDesc.Buffer.StructureByteStride = sizeof(TransformationMatrix);
-	D3D12_CPU_DESCRIPTOR_HANDLE instancingSrvHandleCPU = GetCPUDescriptorHandle(
+
+	D3D12_CPU_DESCRIPTOR_HANDLE instancingSrvHandleCPU = particle3D->GetCPUDescriptorHandle(
 		DirectXSetup::GetInstance()->GetSrvDescriptorHeap(), particle3D->descriptorSizeSRV_, 3);
 
 

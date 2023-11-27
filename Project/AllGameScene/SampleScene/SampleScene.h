@@ -39,6 +39,9 @@ private:
 
 	Vector3 cameraPosition_ = {};
 	Vector3 cameraRotate_ = {};
+
+
+
 };
 
 

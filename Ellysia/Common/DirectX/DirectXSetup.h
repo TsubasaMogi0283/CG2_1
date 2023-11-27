@@ -136,7 +136,8 @@ public:
 	//Resourceの作成関数
 	ComPtr<ID3D12Resource> CreateBufferResource(size_t sizeInBytes);
 
-
+	static D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(ComPtr<ID3D12DescriptorHeap> descriptorHeap, uint32_t descriptorSize, uint32_t index);
+	static D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(ComPtr<ID3D12DescriptorHeap> descriptorHeap, uint32_t descriptorSize, uint32_t index);
 
 #pragma region whileの中身
 	//whileの中身

@@ -3,6 +3,7 @@
 #include <TextureManager/TextureManager.h>
 #include <PipelineManager/PipelineManager.h>
 #include "Common/DirectX/DirectXSetup.h"
+#include "Camera/Camera.h"
 
 static uint32_t modelIndex;
 std::list<ModelData> Particle3D::modelInformationList_{};
@@ -12,17 +13,7 @@ Particle3D::Particle3D() {
 
 }
 
-D3D12_CPU_DESCRIPTOR_HANDLE Particle3D::GetCPUDescriptorHandle(ComPtr<ID3D12DescriptorHeap> descriptorHeap, uint32_t descriptorSize, uint32_t index) {
-	D3D12_CPU_DESCRIPTOR_HANDLE handleCPU = descriptorHeap->GetCPUDescriptorHandleForHeapStart();
-	handleCPU.ptr += (descriptorSize * index);
-	return handleCPU;
-}
 
-D3D12_GPU_DESCRIPTOR_HANDLE Particle3D::GetGPUDescriptorHandle(ComPtr<ID3D12DescriptorHeap> descriptorHeap, uint32_t descriptorSize, uint32_t index) {
-	D3D12_GPU_DESCRIPTOR_HANDLE handleGPU = descriptorHeap->GetGPUDescriptorHandleForHeapStart();
-	handleGPU.ptr += (descriptorSize * index);
-	return handleGPU;
-}
 
 //モデルデータの読み込み
 ModelData Particle3D::LoadObjectFile(const std::string& directoryPath,const std::string& fileName) {
@@ -195,6 +186,14 @@ Particle3D* Particle3D::Create(const std::string& directoryPath, const std::stri
 	//新たなModel型のインスタンスのメモリを確保
 	Particle3D* particle3D = new Particle3D();
 	
+	descriptorSizeSRV_ =  DirectXSetup::GetInstance()->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	for (int i = 0; i < instanceCount_; i++) {
+		particle3D->transforms[i].scale = { 1.0f,1.0f,1.0f };
+		particle3D->transforms[i].rotate = { 0.0f,0.0f,0.0f };
+		particle3D->transforms[i].translate = { i*0.1f,i*0.1f,i+0.1f };
+		
+	}
+	
 
 	//すでにある場合はリストから取り出す
 	for (ModelData modelData : modelInformationList_) {
@@ -236,6 +235,26 @@ Particle3D* Particle3D::Create(const std::string& directoryPath, const std::stri
 			//Lighting
 			particle3D->directionalLight_=std::make_unique<CreateDirectionalLight>();
 			particle3D->directionalLight_->Initialize();
+
+			//インスタンシング
+			particle3D->instancingResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(TransformationMatrix) * instanceCount_);
+			
+			D3D12_SHADER_RESOURCE_VIEW_DESC instancingSrvDesc{};
+			instancingSrvDesc.Format = DXGI_FORMAT_UNKNOWN;
+			instancingSrvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+			instancingSrvDesc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
+			instancingSrvDesc.Buffer.FirstElement = 0;
+			instancingSrvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
+			instancingSrvDesc.Buffer.NumElements = instanceCount_;
+			instancingSrvDesc.Buffer.StructureByteStride = sizeof(TransformationMatrix);
+
+			D3D12_CPU_DESCRIPTOR_HANDLE instancingSrvHandleCPU = DirectXSetup::GetInstance()->GetCPUDescriptorHandle(
+				DirectXSetup::GetInstance()->GetSrvDescriptorHeap(), descriptorSizeSRV_, 3);
+			particle3D->instancingSrvHandleGPU = DirectXSetup::GetGPUDescriptorHandle(
+				DirectXSetup::GetInstance()->GetSrvDescriptorHeap(), descriptorSizeSRV_, 3);
+
+			DirectXSetup::GetInstance()->GetDevice()->CreateShaderResourceView(particle3D->instancingResource_.Get(), &instancingSrvDesc, instancingSrvHandleCPU);
+
 
 
 			//初期は白色
@@ -285,21 +304,24 @@ Particle3D* Particle3D::Create(const std::string& directoryPath, const std::stri
 	particle3D->directionalLight_=std::make_unique<CreateDirectionalLight>();
 	particle3D->directionalLight_->Initialize();
 
-	//インスタンシング
-	particle3D->instancingResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(TransformationMatrix) * instanceCount_);
-	
-	D3D12_SHADER_RESOURCE_VIEW_DESC instancingSrvDesc{};
-	instancingSrvDesc.Format = DXGI_FORMAT_UNKNOWN;
-	instancingSrvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-	instancingSrvDesc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
-	instancingSrvDesc.Buffer.FirstElement = 0;
-	instancingSrvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
-	instancingSrvDesc.Buffer.NumElements = instanceCount_;
-	instancingSrvDesc.Buffer.StructureByteStride = sizeof(TransformationMatrix);
+	////インスタンシング
+	//particle3D->instancingResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(TransformationMatrix) * instanceCount_);
+	//
+	//D3D12_SHADER_RESOURCE_VIEW_DESC instancingSrvDesc{};
+	//instancingSrvDesc.Format = DXGI_FORMAT_UNKNOWN;
+	//instancingSrvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+	//instancingSrvDesc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
+	//instancingSrvDesc.Buffer.FirstElement = 0;
+	//instancingSrvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
+	//instancingSrvDesc.Buffer.NumElements = instanceCount_;
+	//instancingSrvDesc.Buffer.StructureByteStride = sizeof(TransformationMatrix);
 
-	D3D12_CPU_DESCRIPTOR_HANDLE instancingSrvHandleCPU = particle3D->GetCPUDescriptorHandle(
-		DirectXSetup::GetInstance()->GetSrvDescriptorHeap(), particle3D->descriptorSizeSRV_, 3);
+	//D3D12_CPU_DESCRIPTOR_HANDLE instancingSrvHandleCPU = DirectXSetup::GetInstance()->GetCPUDescriptorHandle(
+	//	DirectXSetup::GetInstance()->GetSrvDescriptorHeap(), descriptorSizeSRV_, 3);
+	//particle3D->instancingSrvHandleGPU = DirectXSetup::GetGPUDescriptorHandle(
+	//	DirectXSetup::GetInstance()->GetSrvDescriptorHeap(), descriptorSizeSRV_, 3);
 
+	//DirectXSetup::GetInstance()->GetDevice()->CreateShaderResourceView(particle3D->instancingResource_.Get(), &instancingSrvDesc, instancingSrvHandleCPU);
 
 
 
@@ -335,13 +357,18 @@ void Particle3D::Draw(Transform transform) {
 	transformation_->SetInformation(transform);
 	
 	
-	//インスタンシング
-	instancingResource_->Map(0, nullptr, reinterpret_cast<void**>(instancingData_));
+	////インスタンシング
+	//instancingResource_->Map(0, nullptr, reinterpret_cast<void**>(instancingData_));
 
-	for (uint32_t index = 0; index < instanceCount_; ++index) {
-		instancingData_[index].WVP = MakeIdentity4x4();
-		instancingData_[index].World = MakeIdentity4x4();
-	}
+	//for (uint32_t index = 0; index < instanceCount_; ++index) {
+	//	Matrix4x4 worldMatrix = MakeAffineMatrix(transforms[index].scale, transforms[index].rotate, transforms[index].translate);
+	//	
+	//	//WVP行列を作成
+	//	Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(Camera::GetInstance()->GetViewMatrix(), Camera::GetInstance()->GetProjectionMatrix_()));
+
+	//	instancingData_[index].WVP = worldViewProjectionMatrix;
+	//	instancingData_[index].World = worldMatrix;
+	//}
 
 
 
@@ -377,6 +404,7 @@ void Particle3D::Draw(Transform transform) {
 	directionalLight_->SetGraphicsCommand();
 	//DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
 
+	/*DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(1, instancingSrvHandleGPU);*/
 
 	//DrawCall
 	mesh_->DrawCall(instanceCount_);

@@ -54,11 +54,6 @@ private:
 
 
 
-	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(ComPtr<ID3D12DescriptorHeap> descriptorHeap, uint32_t descriptorSize, uint32_t index);
-	D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(ComPtr<ID3D12DescriptorHeap> descriptorHeap, uint32_t descriptorSize, uint32_t index);
-
-
-
 #pragma region テクスチャの読み込み
 	//Textureデータを読む
 	//1.TextureデータそのものをCPUで読み込む
@@ -97,18 +92,6 @@ public:
 	};
 
 private:
-
-	//新しく構造体を作った方がよさそう
-
-	ComPtr<ID3D12Resource> textureResource_[TEXTURE_MAX_AMOUNT_] = {nullptr};
-
-	//画像読み込み
-	
-	D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU_[TEXTURE_MAX_AMOUNT_] = {};
-	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU_[TEXTURE_MAX_AMOUNT_] = {};
-
-
-
 
 
 	//構造体版

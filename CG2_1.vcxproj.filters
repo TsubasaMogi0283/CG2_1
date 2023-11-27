@@ -94,6 +94,15 @@
     <Filter Include="ソース ファイル\Polygone\Model">
       <UniqueIdentifier>{8db1fb95-0e4e-42a7-875e-47782905e0ba}</UniqueIdentifier>
     </Filter>
+    <Filter Include="リソース ファイル\Object2D">
+      <UniqueIdentifier>{f31cd7c4-f15b-40a1-b63e-2c0f2485be68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソース ファイル\Object3D">
+      <UniqueIdentifier>{3d006d0b-37c1-459e-992d-8bfcd79898c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソース ファイル\Particle3D">
+      <UniqueIdentifier>{c7621316-f5af-49ea-a8b9-bc244b9df4ed}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -201,25 +210,28 @@
     <ClCompile Include="Ellysia\Polygon\Model\Transformation\Transformation.cpp">
       <Filter>ソース ファイル\Polygone\Model</Filter>
     </ClCompile>
+    <ClCompile Include="Ellysia\Polygon\Model\Instancing\Instancing.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\Object2d.PS.hlsl">
-      <Filter>リソース ファイル</Filter>
+      <Filter>リソース ファイル\Object2D</Filter>
     </FxCompile>
     <FxCompile Include="Resources\Shader\Object2d.VS.hlsl">
-      <Filter>リソース ファイル</Filter>
+      <Filter>リソース ファイル\Object2D</Filter>
     </FxCompile>
     <FxCompile Include="Resources\Shader\Object3d.PS.hlsl">
-      <Filter>リソース ファイル</Filter>
+      <Filter>リソース ファイル\Object3D</Filter>
     </FxCompile>
     <FxCompile Include="Resources\Shader\Object3d.VS.hlsl">
-      <Filter>リソース ファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\Shader\Particle3d.VS.hlsl">
-      <Filter>リソース ファイル</Filter>
+      <Filter>リソース ファイル\Object3D</Filter>
     </FxCompile>
     <FxCompile Include="Resources\Shader\Particle3d.PS.hlsl">
-      <Filter>リソース ファイル</Filter>
+      <Filter>リソース ファイル\Particle3D</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\Particle3d.VS.hlsl">
+      <Filter>リソース ファイル\Particle3D</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
@@ -394,6 +406,9 @@
     <ClInclude Include="Ellysia\Polygon\Model\Transformation\Transformation.h">
       <Filter>ソース ファイル\Polygone\Model</Filter>
     </ClInclude>
+    <ClInclude Include="Ellysia\Polygon\Model\Instancing\Instancing.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Ellysia\externals\imGui\LICENSE.txt">
@@ -402,13 +417,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shader\Object2d.hlsli">
-      <Filter>リソース ファイル</Filter>
+      <Filter>リソース ファイル\Object2D</Filter>
     </None>
     <None Include="Resources\Shader\Object3d.hlsli">
-      <Filter>リソース ファイル</Filter>
+      <Filter>リソース ファイル\Object3D</Filter>
     </None>
     <None Include="Resources\Shader\Particle3d.hlsli">
-      <Filter>リソース ファイル</Filter>
+      <Filter>リソース ファイル\Particle3D</Filter>
     </None>
   </ItemGroup>
 </Project>

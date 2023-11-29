@@ -71,43 +71,19 @@ void SampleScene::CheckAllCollisions(){
 	//敵弾リストの取得
 	const std::list<EnemyBullet*>& enemyBullets = enemy_->GetBullets();
 
-#pragma region 自キャラと敵弾の当たり判定
-	//自キャラのワールド座標
-	playerPos = player_->GetWorldPosition();
-
-	//自キャラと敵弾全ての当たり判定
-	for (EnemyBullet* bullet : enemyBullets) {
-		CheckCollisionPair(player_, bullet);
-
-	}
-
-#pragma endregion
-
-
-#pragma region 自弾と敵キャラの当たり判定
-	//敵の座標
-	enemyPos = enemy_->GetWorldPosition();
-	//自弾と敵キャラ全ての当たり判定
+	//コライダー
+	std::list<Collider*> colliders;
+	//コライダーをリストに登録
+	colliders.push_back(player_);
+	colliders.push_back(enemy_);
+	//自弾全てについて
 	for (PlayerBullet* bullet : playerBullets) {
-		CheckCollisionPair(enemy_, bullet);
-
+		colliders.push_back(bullet);
 	}
-
-
-
-#pragma endregion
-
-#pragma region 自弾と敵弾の当たり判定
-	//自弾と敵弾全ての当たり判定
-	//二重for文総当たりで
-	for (PlayerBullet* playerBullet : playerBullets) {
-		for (EnemyBullet* enemyBullet : enemyBullets) {
-			
-			CheckCollisionPair(playerBullet, enemyBullet);
-		}
+	//敵弾全てについて
+	for (EnemyBullet* bullet : enemyBullets) {
+		colliders.push_back(bullet);
 	}
-#pragma endregion
-
 
 }
 

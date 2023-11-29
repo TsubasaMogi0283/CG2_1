@@ -13,6 +13,7 @@
 #include <Enemy/Enemy.h>
 #include "Enemy/Bullet/EnemyBullet.h"
 #include "Collider/Collider.h"
+#include <Collider/CollisionManager.h>
 
 //StatePatternを使う時は必ず前方宣言をするように
 class Gamemanager;
@@ -39,10 +40,7 @@ private:
 	//衝突判定と応答
 	void CheckAllCollisions();
 
-	//コライダー2つの衝突判定と応答
-	void CheckCollisionPair(Collider* colliderA, Collider* colliderB);
 
-	bool CheckBallCollosion(Vector3 v1, float v1Radious, Vector3 v2, float v2Radious);
 private:
 	Player* player_ = nullptr;
 	Enemy* enemy_ = nullptr;
@@ -51,5 +49,7 @@ private:
 	Vector3 cameraTranslate_ = {};
 	Vector3 cameraRotate_ = {};
 	
+
+	CollisionManager* collisionManager_ = nullptr;
 
 };

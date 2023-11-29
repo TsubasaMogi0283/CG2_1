@@ -26,58 +26,16 @@ void SampleScene::Initialize(GameManager* gameManager) {
 	enemy_->Initialize();
 	
 
+	collisionManager_ = new CollisionManager();
+
 	uint32_t textureHandle_ = TextureManager::LoadTexture("Resources/uvChecker.png");
 	cameraTranslate_ = {0.0f,20.0f,-40.0f};
 	cameraRotate_ = {0.4f,0.0f,0.0f};
 	
 }
 
-bool SampleScene::CheckBallCollosion(Vector3 v1, float v1Radious, Vector3 v2, float v2Radious) {
-
-	float x = (v2.x - v1.x);
-	float y = (v2.y - v1.y);
-	float z = (v2.z - v1.z);
-
-	float resultPos = (x* x) + (y* y) + (z* z);
-	
-	float resultRadious = v1Radious + v2Radious;
-
-	bool Flag = false;
 
 
-
-	if (resultPos<=(resultRadious*resultRadious))
-	{
-		Flag = true;
-	}
-
-	return Flag;
-}
-
-//コライダー2つの衝突判定と応答
-void SampleScene::CheckCollisionPair(Collider* colliderA, Collider* colliderB) {
-	//コライダーAのワールド座標を取得
-	Vector3 colliderPosA = colliderA->GetWorldPosition();
-	
-	//コライダーBのワールド座標を取得
-	Vector3 colliderPosB = colliderB->GetWorldPosition();
-	
-	//衝突フィルタリング
-	//ビット演算だから&で
-	if ((colliderA->GetCollisionAttribute() & colliderB->GetCollisionMask()) == 0 ||
-		(colliderB->GetCollisionAttribute() & colliderA->GetCollisionMask()) == 0) {
-		return;
-	}
-
-	bool isHit=CheckBallCollosion(colliderPosA, colliderA->GetRadius(), colliderPosB, colliderB->GetRadius());
-
-	if (isHit) 
-	{
-		colliderA->OnCollision();
-		colliderB->OnCollision();
-	}
-
-}
 
 
 /// <summary>
@@ -99,39 +57,30 @@ void SampleScene::CheckAllCollisions(){
 
 	//コライダー
 	std::list<Collider*> colliders;
-	//コライダーをリストに登録
-	colliders.push_back(player_);
-	colliders.push_back(enemy_);
+
+
+
+	//衝突マネージャのリストをクリアする
+	collisionManager_->ClearList();
+	//コライダーを全て衝突マネージャに登録する
+	collisionManager_->RegisterList(player_);
+	collisionManager_->RegisterList(enemy_);
+
+
 	//自弾全てについて
 	for (PlayerBullet* bullet : playerBullets) {
-		colliders.push_back(bullet);
+		//colliders.push_back(bullet);
+		collisionManager_->RegisterList(bullet);
 	}
 	//敵弾全てについて
 	for (EnemyBullet* bullet : enemyBullets) {
-		colliders.push_back(bullet);
+		//colliders.push_back(bullet);
+		collisionManager_->RegisterList(bullet);
 	}
 
-	//総当たりの判定
-	//総当たりだからそのままだと自機と自弾にも当たり判定が対応しちゃうよ
-	std::list<Collider*>::iterator itrA = colliders.begin();
-	for (; itrA != colliders.end(); ++itrA) {
-		
-		//itrAの*は「参照」
-		//itrAを全通りcolliderAに登録しているよ
-		Collider* colliderA = *itrA;
+	collisionManager_->CheckAllCollision();
 
-		//イテレータBはイテレータAの次の要素から回す(重複判定を回避)
-		std::list<Collider*>::iterator itrB = itrA;
-		itrB++;
-
-		for (; itrB != colliders.end(); ++itrB) {
-			Collider* colliderB = *itrB;
-
-			CheckCollisionPair(colliderA, colliderB);
-
-		}
-
-	}
+	
 
 
 
@@ -181,4 +130,6 @@ void SampleScene::Draw(GameManager* gameManager) {
 SampleScene::~SampleScene() {
 	delete player_;
 	delete enemy_;
+
+	delete collisionManager_;
 }

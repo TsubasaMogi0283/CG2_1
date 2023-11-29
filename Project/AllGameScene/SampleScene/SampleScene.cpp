@@ -57,14 +57,14 @@ void SampleScene::Update(GameManager* gameManager) {
 
 #pragma region RotateMatrix0
 
-	/*Matrix4x4 rotateMatrix0 = DirectionToDirection(
+	Matrix4x4 rotateMatrix0 = DirectionToDirection(
 		Normalize(Vector3{1.0f,0.0f,0.0f}), 
-		Normalize(Vector3{-1.0f,0.0f,0.0f}));*/
+		Normalize(Vector3{-1.0f,0.0f,0.0f}));
 
 
 
 
-	/*ImGui::Begin("Rotatematrix0");
+	ImGui::Begin("Rotatematrix0");
 	ImGui::InputFloat("m[0][0]", &rotateMatrix0.m[0][0]);
 	ImGui::InputFloat("m[0][1]", &rotateMatrix0.m[0][1]);
 	ImGui::InputFloat("m[0][2]", &rotateMatrix0.m[0][2]);
@@ -85,7 +85,7 @@ void SampleScene::Update(GameManager* gameManager) {
 	ImGui::InputFloat("m[3][2]", &rotateMatrix0.m[3][2]);
 	ImGui::InputFloat("m[3][3]", &rotateMatrix0.m[3][3]);
 
-	ImGui::End();*/
+	ImGui::End();
 
 #pragma endregion 
 

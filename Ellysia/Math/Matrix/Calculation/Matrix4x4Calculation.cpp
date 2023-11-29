@@ -740,18 +740,16 @@ Matrix4x4 MakeRotateAxisAngle(const Vector3& axis, float angle) {
 //ある方向からある方向への回転
 Matrix4x4 DirectionToDirection(const Vector3& from, const Vector3& to) {
 	
-	Vector3 normalizeFrom = Normalize(from);
-	Vector3 normalizeTo = Normalize(to);
 
 
-	Vector3 uvCross = Cross(normalizeFrom, normalizeTo);
+	Vector3 uvCross = Cross(from, to);
 	Vector3 n = Normalize(uvCross);
 
 	//内積で求めてね
-	float cos = DotVector3(normalizeFrom,normalizeTo);
+	float cos = DotVector3(from,to);
 
 	//外積で求めてね
-	float sin = Length(Cross(normalizeFrom,normalizeTo));
+	float sin = Length(Cross(from,to));
 
 	//形自体は前回とほぼ同じ
 	//見比べてみよう！

@@ -1,4 +1,5 @@
 #include "Player.h"
+#include <Collider/CollisionConfig.h>
 
 //コンストラクタ
 Player::Player() {
@@ -15,7 +16,8 @@ void Player::Initialize() {
 	radius_ = 1.0f;
 	input_ = Input::GetInstance();
 
-
+	SetCollisionAttribute(COLLISION_ATTRIBUTE_PLAYER);
+	SetCollisionMask(COLLISION_ATTRIBUTE_ENEMY);
 }
 
 void Player::OnCollision(){

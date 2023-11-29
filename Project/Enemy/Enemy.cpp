@@ -3,6 +3,8 @@
 #include "Player/Player.h"
 #include "Math/Matrix/Matrix/Matrix4x4.h"
 #include "Math/Vector/Calculation/VectorCalculation.h"
+#include <Collider/CollisionConfig.h>
+
 
 
 Enemy::Enemy(){
@@ -18,6 +20,9 @@ void Enemy::Initialize(){
 	state_ = new EnemyApproach();
 	radius_ = 1.0f;
 	num = state_->GetState();
+
+	SetCollisionAttribute(COLLISION_ATTRIBUTE_ENEMY);
+	SetCollisionMask(COLLISION_ATTRIBUTE_PLAYER);
 
 	FireAndReset();
 }

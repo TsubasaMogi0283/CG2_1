@@ -3,6 +3,7 @@
 #include <Player/Player.h>
 
 #include <cmath>
+#include <Collider/CollisionConfig.h>
 
 
 EnemyBullet::EnemyBullet(){
@@ -21,6 +22,9 @@ void EnemyBullet::Initialzie(Vector3 position, Vector3 velocity){
 	transform_.translate = position;
 	radius_=1.0f;
 	velocity_ = velocity;
+
+	SetCollisionAttribute(COLLISION_ATTRIBUTE_ENEMY);
+	SetCollisionMask(COLLISION_ATTRIBUTE_PLAYER);
 
 #pragma region 確認済み
 	//アークタンジェント(atan2)の使い方

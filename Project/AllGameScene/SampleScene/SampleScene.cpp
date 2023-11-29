@@ -32,6 +32,27 @@ void SampleScene::Initialize(GameManager* gameManager) {
 	
 }
 
+bool SampleScene::CheckBallCollosion(Vector3 v1, float v1Radious, Vector3 v2, float v2Radious) {
+
+	float x = (v2.x - v1.x);
+	float y = (v2.y - v1.y);
+	float z = (v2.z - v1.z);
+
+	float resultPos = (x* x) + (y* y) + (z* z);
+	
+	float resultRadious = v1Radious + v2Radious;
+
+	bool Flag = false;
+
+
+
+	if (resultPos<=(resultRadious*resultRadious))
+	{
+		Flag = true;
+	}
+
+	return Flag;
+}
 
 //コライダー2つの衝突判定と応答
 void SampleScene::CheckCollisionPair(Collider* colliderA, Collider* colliderB) {
@@ -41,16 +62,21 @@ void SampleScene::CheckCollisionPair(Collider* colliderA, Collider* colliderB) {
 	//コライダーBのワールド座標を取得
 	Vector3 colliderPosB = colliderB->GetWorldPosition();
 	
-	float distance = Length(Subtract(colliderPosA, colliderPosB));
-
-	//球と球の交差判定
-	if (distance < colliderA->GetRadius() + colliderB->GetRadius()) {
-		//コライダーAの衝突時コールバックを呼び出す
-		colliderA->OnCollision();
-		//コライダーBの衝突時コールバックを呼び出す
-		colliderB->OnCollision();
-
+	//衝突フィルタリング
+	//ビット演算だから&で
+	if ((colliderA->GetCollisionAttribute() & colliderB->GetCollisionMask()) == 0 ||
+		(colliderB->GetCollisionAttribute() & colliderA->GetCollisionMask()) == 0) {
+		return;
 	}
+
+	bool isHit=CheckBallCollosion(colliderPosA, colliderA->GetRadius(), colliderPosB, colliderB->GetRadius());
+
+	if (isHit) 
+	{
+		colliderA->OnCollision();
+		colliderB->OnCollision();
+	}
+
 }
 
 

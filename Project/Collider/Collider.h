@@ -1,5 +1,6 @@
 #pragma once
 #include "Math/Vector/Vector3.h"
+#include <cstdint>
 
 class Collider{
 public:
@@ -48,7 +49,7 @@ private:
 	float radius_ = 1.0f;
 
 	//衝突判定(自分)
-	uint32_t collisionAttribute_ = 0xffffffff;
+	uint32_t collisionAttribute_  = 0xffffffff;
 
 	//衝突判定(相手)
 	uint32_t collisionMask_ = 0xffffffff;

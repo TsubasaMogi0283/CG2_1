@@ -412,6 +412,9 @@
     <ClInclude Include="Project\Enemy\TimeCall\TimeCall.h">
       <Filter>Project\Enemy</Filter>
     </ClInclude>
+    <ClInclude Include="Project\Collider\CollisionConfig.h">
+      <Filter>Project</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Ellysia\externals\imGui\LICENSE.txt">

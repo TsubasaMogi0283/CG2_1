@@ -85,6 +85,30 @@ void SampleScene::CheckAllCollisions(){
 		colliders.push_back(bullet);
 	}
 
+	//総当たりの判定
+	//総当たりだからそのままだと自機と自弾にも当たり判定が対応しちゃうよ
+	std::list<Collider*>::iterator itrA = colliders.begin();
+	for (; itrA != colliders.end(); ++itrA) {
+		
+		//itrAの*は「参照」
+		//itrAを全通りcolliderAに登録しているよ
+		Collider* colliderA = *itrA;
+
+		//イテレータBはイテレータAの次の要素から回す(重複判定を回避)
+		std::list<Collider*>::iterator itrB = itrA;
+		itrB++;
+
+		for (; itrB != colliders.end(); ++itrB) {
+			Collider* colliderB = *itrB;
+
+			CheckCollisionPair(colliderA, colliderB);
+
+		}
+
+	}
+
+
+
 }
 
 

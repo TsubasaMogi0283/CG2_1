@@ -9,7 +9,7 @@ public:
 
 	void Initialize(const std::vector<VertexData>& vertices);
 
-	void SetGraphicsCommand();
+	void GraphicsCommand();
 
 	void DrawCall(int32_t instanceCount);
 

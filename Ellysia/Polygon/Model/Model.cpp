@@ -184,7 +184,7 @@ Model* Model::Create(const std::string& directoryPath, const std::string& fileNa
 	Model* model = new Model();
 	//初期化の所でやってね、Update,Drawでやるのが好ましいけど凄く重くなった。
 	//ブレンドモードの設定
-	PipelineManager::GetInstance()->SetModelBlendMode(model->blendModeNumber_);
+	PipelineManager::GetInstance()->SetModelBlendMode(BlendModeNormal);
 	PipelineManager::GetInstance()->GenerateModelPSO();
 
 	//すでにある場合はリストから取り出す
@@ -398,26 +398,26 @@ void Model::Draw(Transform transform) {
 	//DirectXSetup::GetInstance()->GetCommandList()->IASetVertexBuffers(0, 1, &modelInformation_[modelIndex].vertexBufferView_);
 	////形状を設定。PSOに設定しているものとはまた別。同じものを設定すると考えよう
 	//DirectXSetup::GetInstance()->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	mesh_->SetGraphicsCommand();
+	mesh_->GraphicsCommand();
 
 
 	//CBVを設定する
-	material_->SetGraphicsCommand();
+	material_->GraphicsCommand();
 
-	transformation_->SetGraphicCommand();
+	transformation_->GraphicCommand();
 
 
 
 	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である
 	
 	if (textureHandle_!= 0) {
-		TextureManager::TexCommand(textureHandle_ );
+		TextureManager::GraphicsCommand(textureHandle_ );
 
 	}
 	
 
 	//Light
-	directionalLight_->SetGraphicsCommand();
+	directionalLight_->GraphicsCommand();
 
 	//DrawCall
 	mesh_->DrawCall(1);

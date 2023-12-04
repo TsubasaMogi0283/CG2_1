@@ -8,7 +8,7 @@ public:
 	void Initialize();
 
 
-	void SetGraphicsCommand();
+	void GraphicsCommand();
 
 	
 

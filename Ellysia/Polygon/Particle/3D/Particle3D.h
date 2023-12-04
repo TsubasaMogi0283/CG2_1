@@ -34,6 +34,7 @@
 #include "Polygon/Model/Material/CreateMaterial.h"
 #include "Polygon/Model/DirectionalLight/CreateDirectionalLight.h"
 #include "Polygon/Model/Transformation/Transformation.h"
+#include <Polygon/Model/Instancing/Instancing.h>
 
 
 class Particle3D {
@@ -117,6 +118,9 @@ private:
 
 	//SRVの作成
 	D3D12_SHADER_RESOURCE_VIEW_DESC instancingSrvDesc{};
+
+	//インスタンシング
+	std::unique_ptr<Instancing> instancing_ = nullptr;
 
 	uint32_t textureHandle_ = 0;
 

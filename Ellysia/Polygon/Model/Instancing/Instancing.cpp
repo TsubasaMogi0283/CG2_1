@@ -2,10 +2,21 @@
 #include <Math/Matrix/Matrix/Matrix4x4.h>
 #include <Math/Matrix/Calculation/Matrix4x4Calculation.h>
 
+#include <Camera/Camera.h>
+
+static uint32_t descriptorSizeSRV_ = 0u;
+
+Instancing::Instancing(){
+
+}
+
 void Instancing::Initialize(){
 	//インスタンシング
 	instancingResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(TransformationMatrix) * instanceCount_);
 	
+	descriptorSizeSRV_ =  DirectXSetup::GetInstance()->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	
+
 	D3D12_SHADER_RESOURCE_VIEW_DESC instancingSrvDesc{};
 	instancingSrvDesc.Format = DXGI_FORMAT_UNKNOWN;
 	instancingSrvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
@@ -15,21 +26,30 @@ void Instancing::Initialize(){
 	instancingSrvDesc.Buffer.NumElements = instanceCount_;
 	instancingSrvDesc.Buffer.StructureByteStride = sizeof(TransformationMatrix);
 
-	D3D12_CPU_DESCRIPTOR_HANDLE instancingSrvHandleCPU = DirectXSetup::GetInstance()->GetCPUDescriptorHandle(
+	instancingSrvHandleCPU_ = DirectXSetup::GetInstance()->GetCPUDescriptorHandle(
 		DirectXSetup::GetInstance()->GetSrvDescriptorHeap(), descriptorSizeSRV_, 3);
-	instancingSrvHandleGPU = DirectXSetup::GetGPUDescriptorHandle(
+	instancingSrvHandleGPU_ = DirectXSetup::GetGPUDescriptorHandle(
 		DirectXSetup::GetInstance()->GetSrvDescriptorHeap(), descriptorSizeSRV_, 3);
 
-	DirectXSetup::GetInstance()->GetDevice()->CreateShaderResourceView(instancingResource_.Get(), &instancingSrvDesc, instancingSrvHandleCPU);
+	DirectXSetup::GetInstance()->GetDevice()->CreateShaderResourceView(
+		instancingResource_.Get(), &instancingSrvDesc, instancingSrvHandleCPU_);
 
+	
+	//SRTの設定
+	for (uint32_t index = 0; index < instanceCount_; ++index) {
+		transforms[index].scale = { 1.0f,1.0f,1.0f };
+		transforms[index].rotate = { 0.0f,0.0f,0.0f };
+		transforms[index].translate = { index*0.1f,index*0.1f,index*0.1f };
 
+	}
+	
 
 
 }
 
 void Instancing::SetGraphicsCommand(){
 	//インスタンシング
-	instancingResource_->Map(0, nullptr, reinterpret_cast<void**>(instancingData_));
+	instancingResource_->Map(0, nullptr, reinterpret_cast<void**>(&instancingData_));
 
 	for (uint32_t index = 0; index < instanceCount_; ++index) {
 		Matrix4x4 worldMatrix = MakeAffineMatrix(transforms[index].scale, transforms[index].rotate, transforms[index].translate);
@@ -43,7 +63,10 @@ void Instancing::SetGraphicsCommand(){
 
 }
 
-void Instancing::DrawCall(){
-	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(1, instancingSrvHandleGPU);
+void Instancing::GraphicsCommand(){
+	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(1, instancingSrvHandleGPU_);
+}
+
+Instancing::~Instancing(){
 
 }

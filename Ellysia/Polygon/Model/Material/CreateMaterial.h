@@ -10,7 +10,7 @@ public:
 
 	void SetInformation(Vector4 setColor);
 
-	void SetGraphicsCommand();
+	void GraphicsCommand();
 
 	
 	struct Material {

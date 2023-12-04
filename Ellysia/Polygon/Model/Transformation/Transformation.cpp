@@ -32,6 +32,7 @@ void Transformation::SetInformation(Transform transform){
 
 }
 
-void Transformation::SetGraphicCommand(){
-	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResource_->GetGPUVirtualAddress());
+void Transformation::GraphicCommand(){
+	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(
+		1, transformationMatrixResource_->GetGPUVirtualAddress());
 }

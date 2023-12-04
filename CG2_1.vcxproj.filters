@@ -103,6 +103,18 @@
     <Filter Include="リソース ファイル\Particle3D">
       <UniqueIdentifier>{c7621316-f5af-49ea-a8b9-bc244b9df4ed}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Polygone\Model\DirectionalLight">
+      <UniqueIdentifier>{724f3771-e7e3-4751-bab3-fc5c4edcf0a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Polygone\Model\Material">
+      <UniqueIdentifier>{c37f1406-e364-48cc-8d30-6f3f359ae30f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Polygone\Model\Mesh">
+      <UniqueIdentifier>{8fd1f496-0ee0-42bf-9812-0828da7ff773}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Polygone\Model\Transformation">
+      <UniqueIdentifier>{f464f9ae-f96f-4639-99bb-d38217fe319c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -159,9 +171,6 @@
     <ClCompile Include="Ellysia\Common\Windows\WinApp.cpp">
       <Filter>ソース ファイル\Common</Filter>
     </ClCompile>
-    <ClCompile Include="Ellysia\Polygon\Model\Model.cpp">
-      <Filter>ソース ファイル\Polygone</Filter>
-    </ClCompile>
     <ClCompile Include="Ellysia\ConvertFunction\CompileShader\CompileShaderManager.cpp">
       <Filter>ソース ファイル\ConvertFunction</Filter>
     </ClCompile>
@@ -199,15 +208,18 @@
       <Filter>ソース ファイル\Polygone</Filter>
     </ClCompile>
     <ClCompile Include="Ellysia\Polygon\Model\DirectionalLight\CreateDirectionalLight.cpp">
-      <Filter>ソース ファイル\Polygone\Model</Filter>
+      <Filter>ソース ファイル\Polygone\Model\DirectionalLight</Filter>
     </ClCompile>
     <ClCompile Include="Ellysia\Polygon\Model\Material\CreateMaterial.cpp">
-      <Filter>ソース ファイル\Polygone\Model</Filter>
+      <Filter>ソース ファイル\Polygone\Model\Material</Filter>
     </ClCompile>
     <ClCompile Include="Ellysia\Polygon\Model\Mesh\Mesh.cpp">
-      <Filter>ソース ファイル\Polygone\Model</Filter>
+      <Filter>ソース ファイル\Polygone\Model\Mesh</Filter>
     </ClCompile>
     <ClCompile Include="Ellysia\Polygon\Model\Transformation\Transformation.cpp">
+      <Filter>ソース ファイル\Polygone\Model\Transformation</Filter>
+    </ClCompile>
+    <ClCompile Include="Ellysia\Polygon\Model\Model.cpp">
       <Filter>ソース ファイル\Polygone\Model</Filter>
     </ClCompile>
     <ClCompile Include="Ellysia\Polygon\Model\Instancing\Instancing.cpp">
@@ -394,20 +406,20 @@
     <ClInclude Include="Ellysia\Polygon\Model\ModelData\ModelData.h">
       <Filter>ヘッダー ファイル\Polygone\Model</Filter>
     </ClInclude>
-    <ClInclude Include="Ellysia\Polygon\Model\DirectionalLight\CreateDirectionalLight.h">
-      <Filter>ソース ファイル\Polygone\Model</Filter>
-    </ClInclude>
-    <ClInclude Include="Ellysia\Polygon\Model\Material\CreateMaterial.h">
-      <Filter>ソース ファイル\Polygone\Model</Filter>
-    </ClInclude>
-    <ClInclude Include="Ellysia\Polygon\Model\Mesh\Mesh.h">
-      <Filter>ソース ファイル\Polygone\Model</Filter>
-    </ClInclude>
-    <ClInclude Include="Ellysia\Polygon\Model\Transformation\Transformation.h">
-      <Filter>ソース ファイル\Polygone\Model</Filter>
-    </ClInclude>
     <ClInclude Include="Ellysia\Polygon\Model\Instancing\Instancing.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Polygon\Model\DirectionalLight\CreateDirectionalLight.h">
+      <Filter>ソース ファイル\Polygone\Model\DirectionalLight</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Polygon\Model\Material\CreateMaterial.h">
+      <Filter>ソース ファイル\Polygone\Model\Material</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Polygon\Model\Mesh\Mesh.h">
+      <Filter>ソース ファイル\Polygone\Model\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Polygon\Model\Transformation\Transformation.h">
+      <Filter>ソース ファイル\Polygone\Model\Transformation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

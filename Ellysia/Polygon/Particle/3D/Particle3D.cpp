@@ -186,29 +186,19 @@ Particle3D* Particle3D::Create(const std::string& directoryPath, const std::stri
 	//新たなModel型のインスタンスのメモリを確保
 	Particle3D* particle3D = new Particle3D();
 	
-	descriptorSizeSRV_ =  DirectXSetup::GetInstance()->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-	for (int i = 0; i < instanceCount_; i++) {
-		particle3D->transforms[i].scale = { 1.0f,1.0f,1.0f };
-		particle3D->transforms[i].rotate = { 0.0f,0.0f,0.0f };
-		particle3D->transforms[i].translate = { i*0.1f,i*0.1f,i+0.1f };
-		
-	}
 	
+	//初期化の所でやってね、Update,Drawでやるのが好ましいけど凄く重くなった。
+	//ブレンドモードの設定
+	PipelineManager::GetInstance()->SetParticle3DBlendMode(particle3D->blendModeNumber_);
+	PipelineManager::GetInstance()->GenerateParticle3DPSO();
+
 
 	//すでにある場合はリストから取り出す
 	for (ModelData modelData : modelInformationList_) {
 		if (modelData.name == fileName) {
-			//モデルの読み込み
-			ModelData modelDataNew = particle3D->LoadObjectFile(directoryPath, fileName);
-			modelDataNew.name = fileName;
-			modelInformationList_.push_back(modelDataNew);
 			
 
-			//初期化の所でやってね、Update,Drawでやるのが好ましいけど凄く重くなった。
-			//ブレンドモードの設定
-			PipelineManager::GetInstance()->SetParticle3DBlendMode(particle3D->blendModeNumber_);
-			PipelineManager::GetInstance()->GenerateParticle3DPSO();
-
+			
 			////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
 			particle3D->material_= std::make_unique<CreateMaterial>();
 			particle3D->material_->Initialize();
@@ -216,47 +206,26 @@ Particle3D* Particle3D::Create(const std::string& directoryPath, const std::stri
 			
 
 			//テクスチャの読み込み
-			particle3D->textureHandle_ = TextureManager::GetInstance()->LoadTexture(modelDataNew.material.textureFilePath);
+			particle3D->textureHandle_ = TextureManager::GetInstance()->LoadTexture(modelData.material.textureFilePath);
 
 
 			//頂点リソースを作る
 			particle3D->mesh_ = std::make_unique<Mesh>();
-			particle3D->mesh_->Initialize(modelDataNew.vertices);
+			particle3D->mesh_->Initialize(modelData.vertices);
 			
-			
+			//Instancing
+			//Transformationいらなかったっす
+			particle3D->instancing_ = std::make_unique<Instancing>();
+			particle3D->instancing_->Initialize();
 
-
-			//Sprite用のTransformationMatrix用のリソースを作る。
-			//Matrix4x4 1つ分サイズを用意する
-			particle3D->transformation_ = std::make_unique<Transformation>();
-			particle3D->transformation_->Initialize();
-			
 
 			//Lighting
 			particle3D->directionalLight_=std::make_unique<CreateDirectionalLight>();
 			particle3D->directionalLight_->Initialize();
 
-			//インスタンシング
-			particle3D->instancingResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(TransformationMatrix) * instanceCount_);
 			
-			D3D12_SHADER_RESOURCE_VIEW_DESC instancingSrvDesc{};
-			instancingSrvDesc.Format = DXGI_FORMAT_UNKNOWN;
-			instancingSrvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-			instancingSrvDesc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
-			instancingSrvDesc.Buffer.FirstElement = 0;
-			instancingSrvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
-			instancingSrvDesc.Buffer.NumElements = instanceCount_;
-			instancingSrvDesc.Buffer.StructureByteStride = sizeof(TransformationMatrix);
 
-			D3D12_CPU_DESCRIPTOR_HANDLE instancingSrvHandleCPU = DirectXSetup::GetInstance()->GetCPUDescriptorHandle(
-				DirectXSetup::GetInstance()->GetSrvDescriptorHeap(), descriptorSizeSRV_, 3);
-			particle3D->instancingSrvHandleGPU = DirectXSetup::GetGPUDescriptorHandle(
-				DirectXSetup::GetInstance()->GetSrvDescriptorHeap(), descriptorSizeSRV_, 3);
-
-			DirectXSetup::GetInstance()->GetDevice()->CreateShaderResourceView(particle3D->instancingResource_.Get(), &instancingSrvDesc, instancingSrvHandleCPU);
-
-
-
+			
 			//初期は白色
 			//モデル個別に色を変更できるようにこれは外に出しておく
 			particle3D->color_ = { 1.0f,1.0f,1.0f,1.0f };
@@ -272,11 +241,6 @@ Particle3D* Particle3D::Create(const std::string& directoryPath, const std::stri
 	modelDataNew.name = fileName;
 	modelInformationList_.push_back(modelDataNew);
 	
-
-	//初期化の所でやってね、Update,Drawでやるのが好ましいけど凄く重くなった。
-	//ブレンドモードの設定
-	PipelineManager::GetInstance()->SetParticle3DBlendMode(particle3D->blendModeNumber_);
-	PipelineManager::GetInstance()->GenerateParticle3DPSO();
 
 
 	////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
@@ -294,36 +258,17 @@ Particle3D* Particle3D::Create(const std::string& directoryPath, const std::stri
 	
 	
 
-	//Sprite用のTransformationMatrix用のリソースを作る。
-	//Matrix4x4 1つ分サイズを用意する
-	particle3D->transformation_ = std::make_unique<Transformation>();
-	particle3D->transformation_->Initialize();
-	
+	//Instancing
+	//Transformationいらなかったっす
+	particle3D->instancing_ = std::make_unique<Instancing>();
+	particle3D->instancing_->Initialize();
 
 	//Lighting
 	particle3D->directionalLight_=std::make_unique<CreateDirectionalLight>();
 	particle3D->directionalLight_->Initialize();
 
-	////インスタンシング
-	//particle3D->instancingResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(TransformationMatrix) * instanceCount_);
-	//
-	//D3D12_SHADER_RESOURCE_VIEW_DESC instancingSrvDesc{};
-	//instancingSrvDesc.Format = DXGI_FORMAT_UNKNOWN;
-	//instancingSrvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-	//instancingSrvDesc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
-	//instancingSrvDesc.Buffer.FirstElement = 0;
-	//instancingSrvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
-	//instancingSrvDesc.Buffer.NumElements = instanceCount_;
-	//instancingSrvDesc.Buffer.StructureByteStride = sizeof(TransformationMatrix);
-
-	//D3D12_CPU_DESCRIPTOR_HANDLE instancingSrvHandleCPU = DirectXSetup::GetInstance()->GetCPUDescriptorHandle(
-	//	DirectXSetup::GetInstance()->GetSrvDescriptorHeap(), descriptorSizeSRV_, 3);
-	//particle3D->instancingSrvHandleGPU = DirectXSetup::GetGPUDescriptorHandle(
-	//	DirectXSetup::GetInstance()->GetSrvDescriptorHeap(), descriptorSizeSRV_, 3);
-
-	//DirectXSetup::GetInstance()->GetDevice()->CreateShaderResourceView(particle3D->instancingResource_.Get(), &instancingSrvDesc, instancingSrvHandleCPU);
-
-
+	
+	
 
 
 	//初期は白色
@@ -339,77 +284,47 @@ Particle3D* Particle3D::Create(const std::string& directoryPath, const std::stri
 //描画
 void Particle3D::Draw(Transform transform) {
 	
-	
-
-	
-	////マテリアルにデータを書き込む
-	////書き込むためのアドレスを取得
-	////reinterpret_cast...char* から int* へ、One_class* から Unrelated_class* へなどの変換に使用
+	//マテリアルにデータを書き込む
+	//書き込むためのアドレスを取得
+	//reinterpret_cast...char* から int* へ、One_class* から Unrelated_class* へなどの変換に使用
 
 	material_->SetInformation(color_);
 
-
-
-
-
 	//書き込むためのデータを書き込む
 	//頂点データをリソースにコピー
-	transformation_->SetInformation(transform);
 	
 	
-	////インスタンシング
-	//instancingResource_->Map(0, nullptr, reinterpret_cast<void**>(instancingData_));
-
-	//for (uint32_t index = 0; index < instanceCount_; ++index) {
-	//	Matrix4x4 worldMatrix = MakeAffineMatrix(transforms[index].scale, transforms[index].rotate, transforms[index].translate);
-	//	
-	//	//WVP行列を作成
-	//	Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(Camera::GetInstance()->GetViewMatrix(), Camera::GetInstance()->GetProjectionMatrix_()));
-
-	//	instancingData_[index].WVP = worldViewProjectionMatrix;
-	//	instancingData_[index].World = worldMatrix;
-	//}
-
-
-
+	instancing_->SetGraphicsCommand();
+	
 
 	//コマンドを積む
-
 	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootSignature(PipelineManager::GetInstance()->GetParticle3DRootSignature().Get());
 	DirectXSetup::GetInstance()->GetCommandList()->SetPipelineState(PipelineManager::GetInstance()->GetParticle3DGraphicsPipelineState().Get());
 
 
-	mesh_->SetGraphicsCommand();
+	mesh_->GraphicsCommand();
 	
-
 	//CBVを設定する
-	material_->SetGraphicsCommand();
-	//DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
-
-
-	transformation_->SetGraphicCommand();
+	material_->GraphicsCommand();
 	
-	
+	//Transformationいらなかったっす
+	instancing_->GraphicsCommand();
 
 
 	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である
 	
 	if (textureHandle_!= 0) {
-		TextureManager::TexCommand(textureHandle_ );
+		TextureManager::GraphicsCommand(textureHandle_ );
 
 	}
 	
 
 	//Light
-	directionalLight_->SetGraphicsCommand();
-	//DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
-
-	/*DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(1, instancingSrvHandleGPU);*/
-
+	directionalLight_->GraphicsCommand();
+	
 	//DrawCall
 	mesh_->DrawCall(instanceCount_);
-	//
-	//DirectXSetup::GetInstance()->GetCommandList()->DrawInstanced(UINT(vertices_.size()), instanceCount_, 0, 0);
+	
 
 }
 

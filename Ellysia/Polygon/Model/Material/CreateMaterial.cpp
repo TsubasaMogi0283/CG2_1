@@ -28,7 +28,7 @@ void CreateMaterial::SetInformation(Vector4 setColor){
 }
 
 
-void CreateMaterial::SetGraphicsCommand(){
+void CreateMaterial::GraphicsCommand(){
 	
 
 	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());

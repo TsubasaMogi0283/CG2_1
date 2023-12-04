@@ -1,6 +1,5 @@
 #pragma once
 #include <Math/Vector/Vector3.h>
-#include "ViewProjection/ViewProjection.h"
 #include "WorldTransform/WorldTransform.h"
 
 class DebugCamera {
@@ -40,8 +39,6 @@ private:
 	//ローカル座標
 	Vector3 translate_ = {};
 
-	//ビュー行列
-	ViewProjection viewProjection_ = {};
 
 	//ワールド座標
 	WorldTransform worldTransform_ = {};

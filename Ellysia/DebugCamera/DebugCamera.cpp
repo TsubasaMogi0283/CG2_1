@@ -42,16 +42,6 @@ void DebugCamera::Update() {
 	//worldTransform_.matWorld_ = Multiply(matRot_, translateMatrix);
 
 
-	#pragma region ビュー行列の更新
-	//viewProjection_.matView_ = Multiply(Inverse(translateMatrix), Inverse(matRot_));
-	//プロジェクション行列の計算
-	viewProjection_.matProjection_ = MakePerspectiveFovMatrix(
-		viewProjection_.fov_, viewProjection_.aspectRatio_, 
-		viewProjection_.nearClip_, viewProjection_.farClip_);
-
-
-	//ビュー行列の更新
-	viewProjection_.UpdateMatrix();
 
 	#pragma endregion
 

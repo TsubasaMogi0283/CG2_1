@@ -37,9 +37,14 @@ void Instancing::Initialize(){
 	
 	//SRTの設定
 	for (uint32_t index = 0; index < instanceCount_; ++index) {
-		transforms[index].scale = { 1.0f,1.0f,1.0f };
-		transforms[index].rotate = { 0.0f,0.0f,0.0f };
-		transforms[index].translate = { index*0.1f,index*0.1f,index*0.1f };
+		particles_[index].transform.scale = { 1.0f,1.0f,1.0f };
+		particles_[index].transform.rotate = { 0.0f,0.0f,0.0f };
+		particles_[index].transform.translate = { index*0.1f,index*0.1f,index*0.1f };
+
+		//速度の設定
+		particles_[index].velocity = {0.0f,1.0f,0.0f};
+
+
 
 	}
 	
@@ -52,7 +57,15 @@ void Instancing::SetGraphicsCommand(){
 	instancingResource_->Map(0, nullptr, reinterpret_cast<void**>(&instancingData_));
 
 	for (uint32_t index = 0; index < instanceCount_; ++index) {
-		Matrix4x4 worldMatrix = MakeAffineMatrix(transforms[index].scale, transforms[index].rotate, transforms[index].translate);
+
+		//後でSceneなどで変更できるようにしておく
+		const float DELTA_TIME = 1.0f / 60.0f;
+		particles_[index].transform.translate.x += particles_[index].velocity.x * DELTA_TIME;
+		particles_[index].transform.translate.y += particles_[index].velocity.y * DELTA_TIME;
+		particles_[index].transform.translate.z += particles_[index].velocity.z * DELTA_TIME;
+
+
+		Matrix4x4 worldMatrix = MakeAffineMatrix(particles_[index].transform.scale, particles_[index].transform.rotate, particles_[index].transform.translate);
 		
 		//WVP行列を作成
 		Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(Camera::GetInstance()->GetViewMatrix(), Camera::GetInstance()->GetProjectionMatrix_()));

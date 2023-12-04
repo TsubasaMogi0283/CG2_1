@@ -37,6 +37,7 @@
 #include <Polygon/Model/Instancing/Instancing.h>
 
 
+
 class Particle3D {
 public:
 
@@ -113,14 +114,14 @@ private:
 
 	//インスタンシングの数
 	static const int32_t instanceCount_ = 10;
-	ComPtr<ID3D12Resource>instancingResource_ = nullptr;
-	TransformationMatrix* instancingData_ = nullptr;
 
-	//SRVの作成
-	D3D12_SHADER_RESOURCE_VIEW_DESC instancingSrvDesc{};
 
 	//インスタンシング
 	std::unique_ptr<Instancing> instancing_ = nullptr;
+
+	
+
+
 
 	uint32_t textureHandle_ = 0;
 

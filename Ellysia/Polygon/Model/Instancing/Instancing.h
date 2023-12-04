@@ -3,6 +3,7 @@
 
 #include "Math/Vector/Transform.h"
 #include <Math/Matrix/Matrix/TransformationMatrix.h>
+#include "Polygon/Particle/3D/Particle.h"
 
 class Instancing{
 public:
@@ -34,7 +35,8 @@ private:
 	ComPtr<ID3D12Resource>instancingResource_ = nullptr;
 
 	static const int32_t instanceCount_ = 10;
-	Transform transforms[instanceCount_];
+	//パーティクル
+	Particle particles_[instanceCount_];
 	TransformationMatrix* instancingData_ = nullptr;
 };
 

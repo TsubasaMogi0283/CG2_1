@@ -103,7 +103,8 @@ void Instancing::SetGraphicsCommand(){
 		instancingData_[numInstance_].WVP = worldViewProjectionMatrix;
 		instancingData_[numInstance_].World = worldMatrix;
 		instancingData_[numInstance_].color = particles_[index].color;
-
+		float alpha = 1.0f - (particles_[index].currentTime / particles_[index].lifeTime);
+		instancingData_[numInstance_].color.w=alpha;
 
 		
 

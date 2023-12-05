@@ -3,6 +3,12 @@
 #include "TextureManager/TextureManager.h"
 #include <Blend/BlendMode.h>
 
+#include <random>
+
+//C++でいうsrandみたいなやつ
+std::random_device seedGenerator;
+std::mt19937 randomEngine(seedGenerator());
+
 /// <summary>
 	/// コンストラクタ
 	/// </summary>
@@ -21,7 +27,11 @@ void SampleScene::Initialize(GameManager* gameManager) {
 	modelColor_ = {1.0f,1.0f,1.0f,1.0f};
 	
 	
-	model_ = Particle3D::Create("Resources/05_02", "plane.obj");
+	//C++でいうsrandみたいなやつ
+	std::random_device seedGenerator;
+	std::mt19937 randomEngine(seedGenerator());
+	
+	model_ = Particle3D::CreateRandomParticle(randomEngine,"Resources/05_02", "plane.obj");
 	modelTransform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
 	
 
@@ -41,15 +51,6 @@ void SampleScene::Update(GameManager* gameManager) {
 	Camera::GetInstance()->SetRotate(cameraRotate_);
 	Camera::GetInstance()->SetTranslate(cameraPosition_);
 
-
-	//particle_->Update();
-	//後でSceneなどで変更できるようにしておく
-	const float DELTA_TIME = 1.0f / 60.0f;
-	traslate_.x += velocity_.x * DELTA_TIME;
-	traslate_.y += velocity_.y * DELTA_TIME;
-	traslate_.z += velocity_.z * DELTA_TIME;
-
-	model_->SetTranslate(traslate_);
 
 
 	model_->SetColor(modelColor_);

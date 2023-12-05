@@ -5,13 +5,15 @@
 #include <Math/Matrix/Matrix/TransformationMatrix.h>
 #include "Polygon/Particle/3D/Particle.h"
 
+#include <random>
+
 class Instancing{
 public:
 	//コンストラクタ
 	Instancing();
 
 	//初期化
-	void Initialize( );
+	void Initialize(std::mt19937& randomEngine);
 
 	//グラフィックコマンドの設定
 	void SetGraphicsCommand();
@@ -37,6 +39,6 @@ private:
 	static const int32_t instanceCount_ = 10;
 	//パーティクル
 	Particle particles_[instanceCount_];
-	TransformationMatrix* instancingData_ = nullptr;
+	ParticleForGPU* instancingData_ = nullptr;
 };
 

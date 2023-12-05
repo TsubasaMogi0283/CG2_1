@@ -49,7 +49,7 @@ public:
 	//void CreateObject(const std::string& directoryPath,const std::string& fileName);
 
 
-	static Particle3D* Create(const std::string& directoryPath,const std::string& fileName);
+	static Particle3D* CreateRandomParticle(std::mt19937 randomEngine, const std::string& directoryPath,const std::string& fileName);
 
 
 private:

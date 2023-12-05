@@ -7,7 +7,6 @@
 
 
 
-
 static uint32_t modelIndex;
 std::list<ModelData> Particle3D::modelInformationList_{};
 static uint32_t descriptorSizeSRV_ = 0u;
@@ -184,10 +183,12 @@ MaterialData Particle3D::LoadMaterialTemplateFile(const std::string& directoryPa
 }
 
 
+//RandomParticle用
 
-Particle3D* Particle3D::Create(const std::string& directoryPath, const std::string& fileName) {
+Particle3D* Particle3D::CreateRandomParticle(std::mt19937 randomEngine, const std::string& directoryPath, const std::string& fileName) {
 	//新たなModel型のインスタンスのメモリを確保
 	Particle3D* particle3D = new Particle3D();
+	
 	
 	
 
@@ -220,7 +221,7 @@ Particle3D* Particle3D::Create(const std::string& directoryPath, const std::stri
 			//Instancing
 			//Transformationいらなかったっす
 			particle3D->instancing_ = std::make_unique<Instancing>();
-			particle3D->instancing_->Initialize();
+			particle3D->instancing_->Initialize(randomEngine);
 
 
 			//Lighting
@@ -264,7 +265,7 @@ Particle3D* Particle3D::Create(const std::string& directoryPath, const std::stri
 	//Instancing
 	//Transformationいらなかったっす
 	particle3D->instancing_ = std::make_unique<Instancing>();
-	particle3D->instancing_->Initialize();
+	particle3D->instancing_->Initialize(randomEngine);
 
 
 	//Lighting

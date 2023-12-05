@@ -3,7 +3,7 @@
 #include <Math/Matrix/Calculation/Matrix4x4Calculation.h>
 
 #include <Camera/Camera.h>
-#include <random>
+
 
 static uint32_t descriptorSizeSRV_ = 0u;
 
@@ -11,9 +11,9 @@ Instancing::Instancing(){
 
 }
 
-void Instancing::Initialize(){
+void Instancing::Initialize(std::mt19937& randomEngine){
 	//インスタンシング
-	instancingResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(TransformationMatrix) * instanceCount_);
+	instancingResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(ParticleForGPU) * instanceCount_);
 	
 	descriptorSizeSRV_ =  DirectXSetup::GetInstance()->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	
@@ -25,7 +25,7 @@ void Instancing::Initialize(){
 	instancingSrvDesc.Buffer.FirstElement = 0;
 	instancingSrvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
 	instancingSrvDesc.Buffer.NumElements = instanceCount_;
-	instancingSrvDesc.Buffer.StructureByteStride = sizeof(TransformationMatrix);
+	instancingSrvDesc.Buffer.StructureByteStride = sizeof(ParticleForGPU);
 
 	instancingSrvHandleCPU_ = DirectXSetup::GetInstance()->GetCPUDescriptorHandle(
 		DirectXSetup::GetInstance()->GetSrvDescriptorHeap(), descriptorSizeSRV_, 3);
@@ -36,11 +36,11 @@ void Instancing::Initialize(){
 		instancingResource_.Get(), &instancingSrvDesc, instancingSrvHandleCPU_);
 
 	
-	//C++でいうsrandみたいなやつ
-	std::random_device seedGenerator;
-	std::mt19937 randomEngine(seedGenerator());
+	
 	//-1.0から1.0を指定
 	std::uniform_real_distribution<float> distributeion(-1.0f, 1.0f);
+	//Color番
+	std::uniform_real_distribution<float> distColor(0.0f, 1.0f);
 
 	//SRTの設定
 	for (uint32_t index = 0; index < instanceCount_; ++index) {
@@ -51,7 +51,8 @@ void Instancing::Initialize(){
 		//速度の設定
 		particles_[index].velocity = { distributeion(randomEngine),distributeion(randomEngine),distributeion(randomEngine)};
 
-
+		particles_[index].color = { distColor(randomEngine),distColor(randomEngine),distColor(randomEngine),1.0f };
+		//particles_[index].color = Vector4(1.0f,1.0f,1.0f,1.0f);
 
 	}
 	
@@ -65,10 +66,6 @@ void Instancing::SetGraphicsCommand(){
 
 	for (uint32_t index = 0; index < instanceCount_; ++index) {
 
-		///particles_[index].transform.scale =transform.scale;
-		///particles_[index].transform.rotate =transform.rotate;
-		///particles_[index].transform.translate =transform.translate;
-		
 
 		//後でSceneなどで変更できるようにしておく
 		const float DELTA_TIME = 1.0f / 60.0f;
@@ -84,6 +81,8 @@ void Instancing::SetGraphicsCommand(){
 
 		instancingData_[index].WVP = worldViewProjectionMatrix;
 		instancingData_[index].World = worldMatrix;
+		instancingData_[index].color = particles_[index].color;
+
 	}
 
 }

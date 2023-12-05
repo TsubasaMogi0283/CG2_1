@@ -31,7 +31,8 @@ void SampleScene::Initialize(GameManager* gameManager) {
 	std::random_device seedGenerator;
 	std::mt19937 randomEngine(seedGenerator());
 	
-	model_ = Particle3D::CreateRandomParticle(randomEngine,"Resources/05_02", "plane.obj");
+	model_ = new Particle3D();
+	model_->CreateRandomParticle(randomEngine,"Resources/05_02", "plane.obj");
 	modelTransform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
 	
 

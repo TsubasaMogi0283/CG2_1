@@ -5,6 +5,7 @@
 #include <sstream>
 #include <array>
 #include <memory>
+#include <list>
 
 #include "ConvertFunction/ConvertLog/LogConvert.h"
 #include "externals/DirectXTex/DirectXTex.h"
@@ -49,7 +50,7 @@ public:
 	//void CreateObject(const std::string& directoryPath,const std::string& fileName);
 
 
-	static Particle3D* CreateRandomParticle(std::mt19937 randomEngine, const std::string& directoryPath,const std::string& fileName);
+	void CreateRandomParticle(std::mt19937 randomEngine, const std::string& directoryPath,const std::string& fileName);
 
 
 private:
@@ -133,24 +134,13 @@ public:
 
 private:
 	//TextureManagerを参考にする
-	static std::list<ModelData> modelInformationList_;
+	std::list<ModelData> modelInformationList_;
 
 
 	//頂点データ
 	std::unique_ptr<Mesh> mesh_ = nullptr;
 	std::unique_ptr<Transformation> transformation_= nullptr ;
 	std::vector<VertexData> vertices;
-	//頂点リソースを作る
-	ComPtr<ID3D12Resource> vertexResource_ = nullptr;
-		
-
-	//頂点バッファビューを作成する
-	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_;
-
-	std::vector<VertexData> vertices_{};
-
-
-
 	//マテリアル用のリソースを作る
 	std::unique_ptr<CreateMaterial> material_ = nullptr;
 	//色関係のメンバ変数
@@ -169,17 +159,7 @@ private:
 	//static const int32_t instanceCount_ = 10;
 	//インスタンシング
 	std::unique_ptr<Instancing> instancing_ = nullptr;
-	D3D12_CPU_DESCRIPTOR_HANDLE instancingSrvHandleCPU_ = {};
-	D3D12_GPU_DESCRIPTOR_HANDLE instancingSrvHandleGPU_ = {};
 
-	ComPtr<ID3D12Resource>instancingResource_ = nullptr;
-
-	static const int32_t MAX_INSTANCE_NUMBER_ = 10;
-	//描画すべきインスタンス数
-	uint32_t numInstance_ = 0;
-	//パーティクル
-	Particle particles_[MAX_INSTANCE_NUMBER_];
-	ParticleForGPU* instancingData_ = nullptr;
 
 	//SRT
 	Vector3 scale_ = { 1.0f,1.0f,1.0f };

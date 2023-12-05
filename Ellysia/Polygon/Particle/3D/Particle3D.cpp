@@ -8,8 +8,9 @@
 
 #include "Polygon/Particle/3D/Particle.h"
 static uint32_t modelIndex;
-std::list<ModelData> Particle3D::modelInformationList_{};
 static uint32_t descriptorSizeSRV_ = 0u;
+
+
 Particle3D::Particle3D() {
 
 }
@@ -184,16 +185,16 @@ MaterialData Particle3D::LoadMaterialTemplateFile(const std::string& directoryPa
 
 //RandomParticle用
 
-Particle3D* Particle3D::CreateRandomParticle(std::mt19937 randomEngine, const std::string& directoryPath, const std::string& fileName) {
+void Particle3D::CreateRandomParticle(std::mt19937 randomEngine, const std::string& directoryPath, const std::string& fileName) {
 	//新たなModel型のインスタンスのメモリを確保
-	Particle3D* particle3D = new Particle3D();
+	//Particle3D* particle3D = new Particle3D();
 	
 	
 	
 
 	//初期化の所でやってね、Update,Drawでやるのが好ましいけど凄く重くなった。
 	//ブレンドモードの設定
-	PipelineManager::GetInstance()->SetParticle3DBlendMode(particle3D->blendModeNumber_);
+	PipelineManager::GetInstance()->SetParticle3DBlendMode(blendModeNumber_);
 	PipelineManager::GetInstance()->GenerateParticle3DPSO();
 
 
@@ -204,149 +205,77 @@ Particle3D* Particle3D::CreateRandomParticle(std::mt19937 randomEngine, const st
 
 			
 			////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
-			particle3D->material_= std::make_unique<CreateMaterial>();
-			particle3D->material_->Initialize();
+			material_= std::make_unique<CreateMaterial>();
+			material_->Initialize();
 
 			
 
 			//テクスチャの読み込み
-			particle3D->textureHandle_ = TextureManager::GetInstance()->LoadTexture(modelData.material.textureFilePath);
+			textureHandle_ = TextureManager::GetInstance()->LoadTexture(modelData.material.textureFilePath);
 
 
 			//頂点リソースを作る
-			particle3D->mesh_ = std::make_unique<Mesh>();
-			particle3D->mesh_->Initialize(modelData.vertices);
+			mesh_ = std::make_unique<Mesh>();
+			mesh_->Initialize(modelData.vertices);
 
 
-#pragma region 中身
-			particle3D->vertices = modelData.vertices;
-			
-
-			particle3D->vertexResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(VertexData) *  particle3D->vertices.size());
-
-			//読み込みのところでバッファインデックスを作った方がよさそう
-			//vertexResourceがnullらしい
-			//リソースの先頭のアドレスから使う
-			particle3D->vertexBufferView_.BufferLocation =particle3D->vertexResource_->GetGPUVirtualAddress();
-			//使用するリソースは頂点のサイズ
-			particle3D->vertexBufferView_.SizeInBytes = UINT(sizeof(VertexData) * particle3D->vertices.size());
-			//１頂点あたりのサイズ
-			particle3D->vertexBufferView_.StrideInBytes = sizeof(VertexData);
-
-
-			//頂点バッファにデータを書き込む
-			VertexData* vertexData = nullptr;
-			particle3D->vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));//書き込むためのアドレスを取得
-			std::memcpy(vertexData, particle3D->vertices.data(), sizeof(VertexData) * particle3D->vertices.size());
-			particle3D->vertexResource_->Unmap(0, nullptr);
-
-
-#pragma endregion
 
 			//Instancing
 			//Transformationいらなかったっす
-			particle3D->instancing_ = std::make_unique<Instancing>();
-			particle3D->instancing_->Initialize(randomEngine);
-			
-			//インスタンシング
-			particle3D->instancingResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(ParticleForGPU) * MAX_INSTANCE_NUMBER_);
-			
-			descriptorSizeSRV_ =  DirectXSetup::GetInstance()->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-			
-
-			D3D12_SHADER_RESOURCE_VIEW_DESC instancingSrvDesc{};
-			instancingSrvDesc.Format = DXGI_FORMAT_UNKNOWN;
-			instancingSrvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-			instancingSrvDesc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
-			instancingSrvDesc.Buffer.FirstElement = 0;
-			instancingSrvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
-			instancingSrvDesc.Buffer.NumElements = MAX_INSTANCE_NUMBER_;
-			instancingSrvDesc.Buffer.StructureByteStride = sizeof(ParticleForGPU);
-
-			particle3D->instancingSrvHandleCPU_ = DirectXSetup::GetInstance()->GetCPUDescriptorHandle(
-				DirectXSetup::GetInstance()->GetSrvDescriptorHeap(), descriptorSizeSRV_, 3);
-			particle3D->instancingSrvHandleGPU_ = DirectXSetup::GetGPUDescriptorHandle(
-				DirectXSetup::GetInstance()->GetSrvDescriptorHeap(), descriptorSizeSRV_, 3);
-
-			DirectXSetup::GetInstance()->GetDevice()->CreateShaderResourceView(
-				particle3D->instancingResource_.Get(), &instancingSrvDesc, particle3D->instancingSrvHandleCPU_);
-
+			instancing_ = std::make_unique<Instancing>();
+			instancing_->Initialize(randomEngine);
 			
 			
-			//-1.0から1.0を指定
-			std::uniform_real_distribution<float> distributeion(-1.0f, 1.0f);
-			//Color番
-			std::uniform_real_distribution<float> distColor(0.0f, 1.0f);
-
-			//SRTの設定
-			for (uint32_t index = 0; index < MAX_INSTANCE_NUMBER_; ++index) {
-				particle3D->particles_[index].transform.scale = {1.0f,1.0f,1.0f};
-				particle3D->particles_[index].transform.rotate = {0.0f,0.0f,0.0f};
-				particle3D->particles_[index].transform.translate = { distributeion(randomEngine),distributeion(randomEngine),distributeion(randomEngine) };
-
-				//速度の設定
-				particle3D->particles_[index].velocity = { distributeion(randomEngine),distributeion(randomEngine),distributeion(randomEngine)};
-
-				particle3D->particles_[index].color = { distColor(randomEngine),distColor(randomEngine),distColor(randomEngine),1.0f };
-				//particles_[index].color = Vector4(1.0f,1.0f,1.0f,1.0f);
-
-				//時間
-				//Color番
-				std::uniform_real_distribution<float> distTime(0.0f, 1.0f);
-				particle3D->particles_[index].lifeTime = distTime(randomEngine);
-				particle3D->particles_[index].currentTime = 0;
-			}
-	
 
 
 
 			//Lighting
-			particle3D->directionalLight_=std::make_unique<CreateDirectionalLight>();
-			particle3D->directionalLight_->Initialize();
+			directionalLight_=std::make_unique<CreateDirectionalLight>();
+			directionalLight_->Initialize();
 
 			
 			
 			
 			//初期は白色
 			//モデル個別に色を変更できるようにこれは外に出しておく
-			particle3D->color_ = { 1.0f,1.0f,1.0f,1.0f };
+			color_ = { 1.0f,1.0f,1.0f,1.0f };
 
-			return particle3D;
+			continue;
 
 
 		}
 	}
 
 	//モデルの読み込み
-	ModelData modelDataNew = particle3D->LoadObjectFile(directoryPath, fileName);
+	ModelData modelDataNew = LoadObjectFile(directoryPath, fileName);
 	modelDataNew.name = fileName;
 	modelInformationList_.push_back(modelDataNew);
 	
 
 
 	////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
-	particle3D->material_= std::make_unique<CreateMaterial>();
-	particle3D->material_->Initialize();
+	material_= std::make_unique<CreateMaterial>();
+	material_->Initialize();
 
 
 	//テクスチャの読み込み
-	particle3D->textureHandle_ = TextureManager::GetInstance()->LoadTexture(modelDataNew.material.textureFilePath);
+	textureHandle_ = TextureManager::GetInstance()->LoadTexture(modelDataNew.material.textureFilePath);
 
 
 	//頂点リソースを作る
-	particle3D->mesh_ = std::make_unique<Mesh>();
-	particle3D->mesh_->Initialize(modelDataNew.vertices);
+	mesh_ = std::make_unique<Mesh>();
+	mesh_->Initialize(modelDataNew.vertices);
 	
 
 	//Instancing
 	//Transformationいらなかったっす
-	particle3D->instancing_ = std::make_unique<Instancing>();
-	particle3D->instancing_->Initialize(randomEngine);
+	instancing_ = std::make_unique<Instancing>();
+	instancing_->Initialize(randomEngine);
 
 
 	//Lighting
-	particle3D->directionalLight_=std::make_unique<CreateDirectionalLight>();
-	particle3D->directionalLight_->Initialize();
+	directionalLight_=std::make_unique<CreateDirectionalLight>();
+	directionalLight_->Initialize();
 
 	
 	
@@ -354,9 +283,8 @@ Particle3D* Particle3D::CreateRandomParticle(std::mt19937 randomEngine, const st
 
 	//初期は白色
 	//モデル個別に色を変更できるようにこれは外に出しておく
-	particle3D->color_ = { 1.0f,1.0f,1.0f,1.0f };
+	color_ = { 1.0f,1.0f,1.0f,1.0f };
 
-	return particle3D;
 
 }
 
@@ -376,35 +304,8 @@ void Particle3D::Draw() {
 	
 	
 	
-	//instancing_->SetGraphicsCommand();
-	//インスタンシング
-	instancingResource_->Map(0, nullptr, reinterpret_cast<void**>(&instancingData_));
-
+	instancing_->SetGraphicsCommand();
 	
-	for (uint32_t index = 0; index < MAX_INSTANCE_NUMBER_; ++index) {
-
-		if (particles_[index].lifeTime <= particles_[index].currentTime) {
-			continue;
-		}
-
-		//後でSceneなどで変更できるようにしておく
-		const float DELTA_TIME = 1.0f / 60.0f;
-		particles_[index].transform.translate.x += particles_[index].velocity.x * DELTA_TIME;
-		particles_[index].transform.translate.y += particles_[index].velocity.y * DELTA_TIME;
-		particles_[index].transform.translate.z += particles_[index].velocity.z * DELTA_TIME;
-		particles_[index].currentTime += DELTA_TIME;
-
-		Matrix4x4 worldMatrix = MakeAffineMatrix(particles_[index].transform.scale, particles_[index].transform.rotate, particles_[index].transform.translate);
-		
-		//WVP行列を作成
-		Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(Camera::GetInstance()->GetViewMatrix(), Camera::GetInstance()->GetProjectionMatrix_()));
-
-		instancingData_[index].WVP = worldViewProjectionMatrix;
-		instancingData_[index].World = worldMatrix;
-		instancingData_[index].color = particles_[index].color;
-
-		++numInstance_;
-	}
 
 	//コマンドを積む
 	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootSignature(PipelineManager::GetInstance()->GetParticle3DRootSignature().Get());
@@ -427,8 +328,8 @@ void Particle3D::Draw() {
 	//Transformationいらなかったっす
 	//その代わりにInstancing
 	
-	//instancing_->GraphicsCommand();
-	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(1, instancingSrvHandleGPU_);
+	instancing_->GraphicsCommand();
+	//DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(1, instancingSrvHandleGPU_);
 
 	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である
 	
@@ -442,8 +343,8 @@ void Particle3D::Draw() {
 	directionalLight_->GraphicsCommand();
 	
 	//DrawCall
-	//mesh_->DrawCall(instancing_->GetCurrentInstanceNumber());
-	DirectXSetup::GetInstance()->GetCommandList()->DrawInstanced(UINT(vertices.size()), numInstance_, 0, 0);
+	mesh_->DrawCall(instancing_->GetCurrentInstanceNumber());
+	//DirectXSetup::GetInstance()->GetCommandList()->DrawInstanced(UINT(vertices.size()), numInstance_, 0, 0);
 
 }
 

@@ -106,7 +106,7 @@ private:
 	int32_t selectModelBlendMode_ = 1;
 
 	//パーティクル用
-	int32_t selectParticle3DBlendMode_ = 1;
+	int32_t selectParticle3DBlendMode_ = 2;
 
 
 };

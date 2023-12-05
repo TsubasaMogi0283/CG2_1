@@ -16,11 +16,11 @@ void CreateMaterial::Initialize(){
 
 }
 
-void CreateMaterial::SetInformation(Vector4 setColor){
+void CreateMaterial::SetInformation(Vector4 setColor, bool enableLighting){
 	Material* materialData_ = nullptr;
 	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 	materialData_->color = setColor;
-	materialData_->enableLighting=false;
+	materialData_->enableLighting=enableLighting;
 
 	materialData_->uvTransform = MakeIdentity4x4();
 

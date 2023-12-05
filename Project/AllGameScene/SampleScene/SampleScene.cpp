@@ -23,8 +23,8 @@ void SampleScene::Initialize(GameManager* gameManager) {
 	
 	model_ = Particle3D::Create("Resources/05_02", "plane.obj");
 	modelTransform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
-
 	
+
 	cameraPosition_ = {0.0f,3.7f,-8.0f};
 	cameraRotate_ = { 0.4f,0.0f,0.0f };
 
@@ -43,6 +43,13 @@ void SampleScene::Update(GameManager* gameManager) {
 
 
 	//particle_->Update();
+	//後でSceneなどで変更できるようにしておく
+	const float DELTA_TIME = 1.0f / 60.0f;
+	traslate_.x += velocity_.x * DELTA_TIME;
+	traslate_.y += velocity_.y * DELTA_TIME;
+	traslate_.z += velocity_.z * DELTA_TIME;
+
+	model_->SetTranslate(traslate_);
 
 
 	model_->SetColor(modelColor_);
@@ -65,7 +72,7 @@ void SampleScene::Update(GameManager* gameManager) {
 /// 描画
 /// </summary>
 void SampleScene::Draw(GameManager* gameManager) {
-	model_->Draw(modelTransform_);
+	model_->Draw();
 }
 
 /// <summary>

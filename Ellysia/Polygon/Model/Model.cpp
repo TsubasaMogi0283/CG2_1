@@ -373,18 +373,19 @@ Model* Model::Create(const std::string& directoryPath, const std::string& fileNa
 
 
 //描画
-void Model::Draw(Transform transform) {
+void Model::Draw() {
 	////マテリアルにデータを書き込む
 	////書き込むためのアドレスを取得
 	////reinterpret_cast...char* から int* へ、One_class* から Unrelated_class* へなどの変換に使用
 
-	material_->SetInformation(color_);
+	material_->SetInformation(color_,isEnableLighting_);
 
 
 
 
 	//書き込むためのデータを書き込む
 	//頂点データをリソースにコピー
+	Transform transform = { scale_,rotate_,translate_ };
 	transformation_->SetInformation(transform);
 
 

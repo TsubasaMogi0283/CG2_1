@@ -3,6 +3,7 @@
 #include <Math/Matrix/Calculation/Matrix4x4Calculation.h>
 
 #include <Camera/Camera.h>
+#include <random>
 
 static uint32_t descriptorSizeSRV_ = 0u;
 
@@ -35,14 +36,20 @@ void Instancing::Initialize(){
 		instancingResource_.Get(), &instancingSrvDesc, instancingSrvHandleCPU_);
 
 	
+	//C++でいうsrandみたいなやつ
+	std::random_device seedGenerator;
+	std::mt19937 randomEngine(seedGenerator());
+	//-1.0から1.0を指定
+	std::uniform_real_distribution<float> distributeion(-1.0f, 1.0f);
+
 	//SRTの設定
 	for (uint32_t index = 0; index < instanceCount_; ++index) {
-		particles_[index].transform.scale = { 1.0f,1.0f,1.0f };
-		particles_[index].transform.rotate = { 0.0f,0.0f,0.0f };
-		particles_[index].transform.translate = { index*0.1f,index*0.1f,index*0.1f };
+		particles_[index].transform.scale = {1.0f,1.0f,1.0f};
+		particles_[index].transform.rotate = {0.0f,0.0f,0.0f};
+		particles_[index].transform.translate = { distributeion(randomEngine),distributeion(randomEngine),distributeion(randomEngine) };
 
 		//速度の設定
-		particles_[index].velocity = {0.0f,1.0f,0.0f};
+		particles_[index].velocity = { distributeion(randomEngine),distributeion(randomEngine),distributeion(randomEngine)};
 
 
 
@@ -57,6 +64,11 @@ void Instancing::SetGraphicsCommand(){
 	instancingResource_->Map(0, nullptr, reinterpret_cast<void**>(&instancingData_));
 
 	for (uint32_t index = 0; index < instanceCount_; ++index) {
+
+		///particles_[index].transform.scale =transform.scale;
+		///particles_[index].transform.rotate =transform.rotate;
+		///particles_[index].transform.translate =transform.translate;
+		
 
 		//後でSceneなどで変更できるようにしておく
 		const float DELTA_TIME = 1.0f / 60.0f;

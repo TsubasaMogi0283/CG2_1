@@ -5,6 +5,9 @@
 #include "Common/DirectX/DirectXSetup.h"
 #include "Camera/Camera.h"
 
+
+
+
 static uint32_t modelIndex;
 std::list<ModelData> Particle3D::modelInformationList_{};
 static uint32_t descriptorSizeSRV_ = 0u;
@@ -187,6 +190,7 @@ Particle3D* Particle3D::Create(const std::string& directoryPath, const std::stri
 	Particle3D* particle3D = new Particle3D();
 	
 	
+
 	//初期化の所でやってね、Update,Drawでやるのが好ましいけど凄く重くなった。
 	//ブレンドモードの設定
 	PipelineManager::GetInstance()->SetParticle3DBlendMode(particle3D->blendModeNumber_);
@@ -224,7 +228,7 @@ Particle3D* Particle3D::Create(const std::string& directoryPath, const std::stri
 			particle3D->directionalLight_->Initialize();
 
 			
-
+			
 			
 			//初期は白色
 			//モデル個別に色を変更できるようにこれは外に出しておく
@@ -256,12 +260,12 @@ Particle3D* Particle3D::Create(const std::string& directoryPath, const std::stri
 	particle3D->mesh_ = std::make_unique<Mesh>();
 	particle3D->mesh_->Initialize(modelDataNew.vertices);
 	
-	
 
 	//Instancing
 	//Transformationいらなかったっす
 	particle3D->instancing_ = std::make_unique<Instancing>();
 	particle3D->instancing_->Initialize();
+
 
 	//Lighting
 	particle3D->directionalLight_=std::make_unique<CreateDirectionalLight>();
@@ -282,16 +286,17 @@ Particle3D* Particle3D::Create(const std::string& directoryPath, const std::stri
 
 
 //描画
-void Particle3D::Draw(Transform transform) {
+void Particle3D::Draw() {
 	
 	//マテリアルにデータを書き込む
 	//書き込むためのアドレスを取得
 	//reinterpret_cast...char* から int* へ、One_class* から Unrelated_class* へなどの変換に使用
 
-	material_->SetInformation(color_);
+	material_->SetInformation(color_,isEnableLighting_);
 
 	//書き込むためのデータを書き込む
 	//頂点データをリソースにコピー
+	
 	
 	
 	instancing_->SetGraphicsCommand();
@@ -302,12 +307,17 @@ void Particle3D::Draw(Transform transform) {
 	DirectXSetup::GetInstance()->GetCommandList()->SetPipelineState(PipelineManager::GetInstance()->GetParticle3DGraphicsPipelineState().Get());
 
 
+	
+
+
 	mesh_->GraphicsCommand();
 	
 	//CBVを設定する
 	material_->GraphicsCommand();
 	
 	//Transformationいらなかったっす
+	//その代わりにInstancing
+	
 	instancing_->GraphicsCommand();
 
 

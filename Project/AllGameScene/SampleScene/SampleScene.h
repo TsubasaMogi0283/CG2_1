@@ -36,6 +36,8 @@ private:
 	Vector4 modelColor_ = {1.0f,1.0f,1.0f,1.0f};
 
 
+	Vector3 traslate_ = {};
+	Vector3 velocity_ = {};
 
 	Vector3 cameraPosition_ = {};
 	Vector3 cameraRotate_ = {};

@@ -11,7 +11,7 @@ public:
 	Instancing();
 
 	//初期化
-	void Initialize();
+	void Initialize( );
 
 	//グラフィックコマンドの設定
 	void SetGraphicsCommand();

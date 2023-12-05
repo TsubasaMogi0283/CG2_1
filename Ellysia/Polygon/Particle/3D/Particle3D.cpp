@@ -194,7 +194,7 @@ void Particle3D::CreateRandomParticle(std::mt19937 randomEngine, const std::stri
 
 	//初期化の所でやってね、Update,Drawでやるのが好ましいけど凄く重くなった。
 	//ブレンドモードの設定
-	PipelineManager::GetInstance()->SetParticle3DBlendMode(blendModeNumber_);
+	//Addでやるべきとのこと
 	PipelineManager::GetInstance()->GenerateParticle3DPSO();
 
 
@@ -348,7 +348,61 @@ void Particle3D::Draw() {
 }
 
 
+//描画
+void Particle3D::Draw(uint32_t textureHandle) {
+	
+	//マテリアルにデータを書き込む
+	//書き込むためのアドレスを取得
+	//reinterpret_cast...char* から int* へ、One_class* から Unrelated_class* へなどの変換に使用
 
+	material_->SetInformation(color_,isEnableLighting_);
+
+	//書き込むためのデータを書き込む
+	//頂点データをリソースにコピー
+	
+	
+	
+	
+	
+
+	//コマンドを積む
+	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootSignature(PipelineManager::GetInstance()->GetParticle3DRootSignature().Get());
+	DirectXSetup::GetInstance()->GetCommandList()->SetPipelineState(PipelineManager::GetInstance()->GetParticle3DGraphicsPipelineState().Get());
+
+
+	
+
+
+	//mesh_->GraphicsCommand();
+	
+	////RootSignatureを設定。PSOに設定しているけど別途設定が必要
+	//DirectXSetup::GetInstance()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);
+	////形状を設定。PSOに設定しているものとはまた別。同じものを設定すると考えよう
+	//DirectXSetup::GetInstance()->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	//CBVを設定する
+	material_->GraphicsCommand();
+	
+	//Transformationいらなかったっす
+	//その代わりにInstancing
+	
+	
+	//DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(1, instancingSrvHandleGPU_);
+
+	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である
+	
+	if (textureHandle_!= 0) {
+		TextureManager::GraphicsCommand(textureHandle );
+
+	}
+	
+
+	//Light
+	directionalLight_->GraphicsCommand();
+	
+	//DrawCall
+	instancing_->SetGraphicsCommand();
+}
 
 //デストラクタ
 Particle3D::~Particle3D() {

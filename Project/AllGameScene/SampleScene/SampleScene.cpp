@@ -33,8 +33,9 @@ void SampleScene::Initialize(GameManager* gameManager) {
 	
 	model_ = new Particle3D();
 	model_->CreateRandomParticle(randomEngine,"Resources/05_02", "plane.obj");
-	modelTransform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
 	
+	particleTextureHandle_ = TextureManager::GetInstance()->LoadTexture("Resources/CG3/circle.png");
+
 
 	cameraPosition_ = {0.0f,3.7f,-8.0f};
 	cameraRotate_ = { 0.4f,0.0f,0.0f };
@@ -74,7 +75,7 @@ void SampleScene::Update(GameManager* gameManager) {
 /// 描画
 /// </summary>
 void SampleScene::Draw(GameManager* gameManager) {
-	model_->Draw();
+	model_->Draw(particleTextureHandle_);
 }
 
 /// <summary>

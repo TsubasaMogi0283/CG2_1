@@ -835,92 +835,18 @@ void PipelineManager::GenerateParticle3DPSO() {
 	D3D12_BLEND_DESC blendDesc{};
 	//全ての色要素を書き込む
 	blendDesc.RenderTarget[0].RenderTargetWriteMask =D3D12_COLOR_WRITE_ENABLE_ALL;
-
-	//α
+	//加算ブレンド
+	blendDesc.RenderTarget[0].BlendEnable = TRUE;
+	blendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
+	blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
+	blendDesc.RenderTarget[0].DestBlend=D3D12_BLEND_ONE;
+		
 	blendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
 	blendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
 	blendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
 	
 
-	//ブレンドモードの選択
-	//switchでやった方が楽でしょう
-	switch (PipelineManager::GetInstance()->selectModelBlendMode_) {
-
-	case BlendModeNone:
-		//ブレンド無し
-		blendDesc.RenderTarget[0].BlendEnable = false;
-
-		break;
-
-	case BlendModeNormal:
-		//通常ブレンド
-		blendDesc.RenderTarget[0].BlendEnable = TRUE;
-		blendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
-		blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
-		blendDesc.RenderTarget[0].DestBlend=D3D12_BLEND_INV_SRC_ALPHA;
-		
-
-
-		break;
-
-		
-	case BlendModeAdd: 
-		//加算ブレンド
-		blendDesc.RenderTarget[0].BlendEnable = TRUE;
-		blendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
-		blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
-		blendDesc.RenderTarget[0].DestBlend=D3D12_BLEND_ONE;
-		
-
-
-
-		break;
-
-
-	case BlendModeSubtract:
-		//減算ブレンド
-		blendDesc.RenderTarget[0].BlendEnable = TRUE;
-		blendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
-		blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_REV_SUBTRACT;
-		blendDesc.RenderTarget[0].DestBlend=D3D12_BLEND_ONE;
-		
-		break;
-
-	case BlendModeMultiply: 
-		//乗算ブレンド
-		blendDesc.RenderTarget[0].BlendEnable = TRUE;
-		blendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_ZERO;
-		blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
-		blendDesc.RenderTarget[0].DestBlend=D3D12_BLEND_SRC_COLOR;
-
-
-		
-		break;
-
-	case BlendModeScreen:
-		//スクリーンブレンド
-		blendDesc.RenderTarget[0].BlendEnable = TRUE;
-		blendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_INV_DEST_COLOR;
-		blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
-		blendDesc.RenderTarget[0].DestBlend=D3D12_BLEND_ONE;
-
-
-
-
-
-		break;
-
-	case CountOfBlendMode:
-		//利用してはいけない,
-
-
-
-
-
-		break;
-
-
-	}
+	
 
 
 	

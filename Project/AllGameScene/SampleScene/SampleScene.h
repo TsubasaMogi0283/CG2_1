@@ -32,7 +32,6 @@ public:
 private:
 
 	Particle3D* model_ = nullptr;
-	Transform modelTransform_ = {};
 	Vector4 modelColor_ = {1.0f,1.0f,1.0f,1.0f};
 
 
@@ -43,6 +42,7 @@ private:
 	Vector3 cameraRotate_ = {};
 
 
+	uint32_t particleTextureHandle_ = 0u;
 
 };
 

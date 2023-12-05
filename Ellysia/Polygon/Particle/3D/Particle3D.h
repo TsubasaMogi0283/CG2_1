@@ -65,9 +65,13 @@ private:
 
 public:
 
-	//描画
+	//通常の描画
 	void Draw();
 
+	//TextureHandleを上書きする描画
+	void Draw(uint32_t textureHandle);
+
+	
 
 	//デストラクタ
 	~Particle3D();
@@ -86,10 +90,7 @@ public:
 	void SetTransparency(float transparency) {
 		this->color_.w = transparency;
 	}
-	//アクセッサのまとめ
-	void SetBlendMode(int32_t blendmode) {
-		blendModeNumber_ = blendmode;
-	}
+	
 
 	
 	//アクセッサのまとめ
@@ -172,7 +173,5 @@ private:
 	//テクスチャハンドル
 	uint32_t textureHandle_ = 0;
 
-	//デフォルトはα加算
-	int32_t blendModeNumber_=1 ;
 
 };

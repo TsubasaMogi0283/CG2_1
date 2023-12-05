@@ -13,7 +13,7 @@ Instancing::Instancing(){
 
 void Instancing::Initialize(std::mt19937& randomEngine){
 	//インスタンシング
-	instancingResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(ParticleForGPU) * instanceCount_);
+	instancingResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(ParticleForGPU) * MAX_INSTANCE_NUMBER_);
 	
 	descriptorSizeSRV_ =  DirectXSetup::GetInstance()->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	
@@ -24,7 +24,7 @@ void Instancing::Initialize(std::mt19937& randomEngine){
 	instancingSrvDesc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
 	instancingSrvDesc.Buffer.FirstElement = 0;
 	instancingSrvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
-	instancingSrvDesc.Buffer.NumElements = instanceCount_;
+	instancingSrvDesc.Buffer.NumElements = MAX_INSTANCE_NUMBER_;
 	instancingSrvDesc.Buffer.StructureByteStride = sizeof(ParticleForGPU);
 
 	instancingSrvHandleCPU_ = DirectXSetup::GetInstance()->GetCPUDescriptorHandle(
@@ -43,7 +43,7 @@ void Instancing::Initialize(std::mt19937& randomEngine){
 	std::uniform_real_distribution<float> distColor(0.0f, 1.0f);
 
 	//SRTの設定
-	for (uint32_t index = 0; index < instanceCount_; ++index) {
+	for (uint32_t index = 0; index < MAX_INSTANCE_NUMBER_; ++index) {
 		particles_[index].transform.scale = {1.0f,1.0f,1.0f};
 		particles_[index].transform.rotate = {0.0f,0.0f,0.0f};
 		particles_[index].transform.translate = { distributeion(randomEngine),distributeion(randomEngine),distributeion(randomEngine) };
@@ -54,6 +54,11 @@ void Instancing::Initialize(std::mt19937& randomEngine){
 		particles_[index].color = { distColor(randomEngine),distColor(randomEngine),distColor(randomEngine),1.0f };
 		//particles_[index].color = Vector4(1.0f,1.0f,1.0f,1.0f);
 
+		//時間
+		//Color番
+		std::uniform_real_distribution<float> distTime(0.0f, 1.0f);
+		particles_[index].lifeTime = distTime(randomEngine);
+		particles_[index].currentTime = 0;
 	}
 	
 
@@ -64,15 +69,19 @@ void Instancing::SetGraphicsCommand(){
 	//インスタンシング
 	instancingResource_->Map(0, nullptr, reinterpret_cast<void**>(&instancingData_));
 
-	for (uint32_t index = 0; index < instanceCount_; ++index) {
+	
+	for (uint32_t index = 0; index < MAX_INSTANCE_NUMBER_; ++index) {
 
+		if (particles_[index].lifeTime <= particles_[index].currentTime) {
+			continue;
+		}
 
 		//後でSceneなどで変更できるようにしておく
 		const float DELTA_TIME = 1.0f / 60.0f;
 		particles_[index].transform.translate.x += particles_[index].velocity.x * DELTA_TIME;
 		particles_[index].transform.translate.y += particles_[index].velocity.y * DELTA_TIME;
 		particles_[index].transform.translate.z += particles_[index].velocity.z * DELTA_TIME;
-
+		particles_[index].currentTime += DELTA_TIME;
 
 		Matrix4x4 worldMatrix = MakeAffineMatrix(particles_[index].transform.scale, particles_[index].transform.rotate, particles_[index].transform.translate);
 		
@@ -83,6 +92,7 @@ void Instancing::SetGraphicsCommand(){
 		instancingData_[index].World = worldMatrix;
 		instancingData_[index].color = particles_[index].color;
 
+		++numInstance_;
 	}
 
 }

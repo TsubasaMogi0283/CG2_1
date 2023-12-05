@@ -334,7 +334,7 @@ void Particle3D::Draw() {
 	directionalLight_->GraphicsCommand();
 	
 	//DrawCall
-	mesh_->DrawCall(instanceCount_);
+	mesh_->DrawCall(instancing_->GetCurrentInstanceNumber());
 	
 
 }

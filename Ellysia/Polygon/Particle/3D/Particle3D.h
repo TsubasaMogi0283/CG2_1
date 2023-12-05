@@ -156,7 +156,7 @@ private:
 
 
 	//インスタンシングの数
-	static const int32_t instanceCount_ = 10;
+	//static const int32_t instanceCount_ = 10;
 	//インスタンシング
 	std::unique_ptr<Instancing> instancing_ = nullptr;
 

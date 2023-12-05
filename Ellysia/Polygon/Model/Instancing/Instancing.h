@@ -26,7 +26,11 @@ public:
 
 public:
 	int GetInstanceCount() {
-		return instanceCount_;
+		return MAX_INSTANCE_NUMBER_;
+	}
+
+	uint32_t GetCurrentInstanceNumber() {
+		return numInstance_;
 	}
 
 private:
@@ -36,9 +40,11 @@ private:
 
 	ComPtr<ID3D12Resource>instancingResource_ = nullptr;
 
-	static const int32_t instanceCount_ = 10;
+	static const int32_t MAX_INSTANCE_NUMBER_ = 10;
+	//描画すべきインスタンス数
+	uint32_t numInstance_ = 0;
 	//パーティクル
-	Particle particles_[instanceCount_];
+	Particle particles_[MAX_INSTANCE_NUMBER_];
 	ParticleForGPU* instancingData_ = nullptr;
 };
 

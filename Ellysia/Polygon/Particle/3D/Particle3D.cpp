@@ -215,15 +215,16 @@ void Particle3D::CreateRandomParticle(std::mt19937 randomEngine, const std::stri
 
 
 			//頂点リソースを作る
-			mesh_ = std::make_unique<Mesh>();
-			mesh_->Initialize(modelData.vertices);
+			//mesh_ = std::make_unique<Mesh>();
+			//mesh_->Initialize(modelData.vertices);
 
 
 
 			//Instancing
 			//Transformationいらなかったっす
+			//Meshも一緒に入っているよ
 			instancing_ = std::make_unique<Instancing>();
-			instancing_->Initialize(randomEngine);
+			instancing_->Initialize(randomEngine,modelData.vertices);
 			
 			
 
@@ -263,14 +264,14 @@ void Particle3D::CreateRandomParticle(std::mt19937 randomEngine, const std::stri
 
 
 	//頂点リソースを作る
-	mesh_ = std::make_unique<Mesh>();
-	mesh_->Initialize(modelDataNew.vertices);
+	//mesh_ = std::make_unique<Mesh>();
+	//mesh_->Initialize(modelDataNew.vertices);
 	
 
 	//Instancing
 	//Transformationいらなかったっす
 	instancing_ = std::make_unique<Instancing>();
-	instancing_->Initialize(randomEngine);
+	instancing_->Initialize(randomEngine,modelDataNew.vertices);
 
 
 	//Lighting
@@ -304,7 +305,7 @@ void Particle3D::Draw() {
 	
 	
 	
-	instancing_->SetGraphicsCommand();
+	
 	
 
 	//コマンドを積む
@@ -315,7 +316,7 @@ void Particle3D::Draw() {
 	
 
 
-	mesh_->GraphicsCommand();
+	//mesh_->GraphicsCommand();
 	
 	////RootSignatureを設定。PSOに設定しているけど別途設定が必要
 	//DirectXSetup::GetInstance()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);
@@ -328,7 +329,7 @@ void Particle3D::Draw() {
 	//Transformationいらなかったっす
 	//その代わりにInstancing
 	
-	instancing_->GraphicsCommand();
+	
 	//DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(1, instancingSrvHandleGPU_);
 
 	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である
@@ -343,9 +344,7 @@ void Particle3D::Draw() {
 	directionalLight_->GraphicsCommand();
 	
 	//DrawCall
-	mesh_->DrawCall(instancing_->GetCurrentInstanceNumber());
-	//DirectXSetup::GetInstance()->GetCommandList()->DrawInstanced(UINT(vertices.size()), numInstance_, 0, 0);
-
+	instancing_->SetGraphicsCommand();
 }
 
 

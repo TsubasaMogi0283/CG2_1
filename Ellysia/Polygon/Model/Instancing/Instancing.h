@@ -6,24 +6,32 @@
 #include "Polygon/Particle/3D/Particle.h"
 
 #include <random>
+#include <Polygon/Model/Mesh/Mesh.h>
 
+
+//インスタンシングクラスとメッシュクラス一緒にする
 class Instancing{
 public:
 	//コンストラクタ
 	Instancing();
 
 	//初期化
-	void Initialize(std::mt19937& randomEngine);
+	void Initialize(std::mt19937& randomEngine,const std::vector<VertexData>& vertices);
+
 
 	//グラフィックコマンドの設定
 	void SetGraphicsCommand();
 
-	//ドローコール
-	void GraphicsCommand();
-
 	//デストラクタ
 	~Instancing();
 
+
+
+private:
+	//ドローコール
+	void DrawCall();
+
+	
 public:
 	int GetInstanceCount() {
 		return MAX_INSTANCE_NUMBER_;
@@ -46,5 +54,11 @@ private:
 	//パーティクル
 	Particle particles_[MAX_INSTANCE_NUMBER_];
 	ParticleForGPU* instancingData_ = nullptr;
+
+
+	//メッシュクラスのやつ
+	//頂点リソースを作る
+	std::unique_ptr<Mesh> mesh_ = nullptr;
+
 };
 

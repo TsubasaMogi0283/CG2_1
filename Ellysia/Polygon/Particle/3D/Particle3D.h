@@ -64,6 +64,7 @@ private:
 #pragma endregion
 
 public:
+
 	//描画
 	void Draw();
 

@@ -189,6 +189,9 @@
     <ClCompile Include="Ellysia\Math\VectorMatrix.cpp">
       <Filter>ソース ファイル\Math</Filter>
     </ClCompile>
+    <ClCompile Include="Ellysia\Math\Quaternion\Quaternion.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Object3d.PS.hlsl">
@@ -366,6 +369,9 @@
     </ClInclude>
     <ClInclude Include="Ellysia\Math\VectorMatrix.h">
       <Filter>ヘッダー ファイル\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Math\Quaternion\Quaternion.h">
+      <Filter>ソース ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

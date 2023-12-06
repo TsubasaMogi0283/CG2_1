@@ -108,6 +108,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Ellysia\ImGuiManager\ImGuiManager.cpp" />
     <ClCompile Include="Ellysia\Input\Input.cpp" />
     <ClCompile Include="Ellysia\Math\Matrix\Calculation\Matrix4x4Calculation.cpp" />
+    <ClCompile Include="Ellysia\Math\Quaternion\Quaternion.cpp" />
     <ClCompile Include="Ellysia\Math\VectorMatrix.cpp" />
     <ClCompile Include="Ellysia\Math\Vector\Calculation\VectorCalculation.cpp" />
     <ClCompile Include="Ellysia\PipelineManager\PipelineManager.cpp" />
@@ -175,6 +176,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Ellysia\Math\Matrix\Matrix\Matrix4x4.h" />
     <ClInclude Include="Ellysia\Math\Matrix\Matrix\TransformationMatrix.h" />
     <ClInclude Include="Ellysia\Math\Matrix\Matrix\WorldViewMatrix.h" />
+    <ClInclude Include="Ellysia\Math\Quaternion\Quaternion.h" />
     <ClInclude Include="Ellysia\Math\VectorMatrix.h" />
     <ClInclude Include="Ellysia\Math\Vector\Calculation\VectorCalculation.h" />
     <ClInclude Include="Ellysia\Math\Vector\DirectionalLight.h" />

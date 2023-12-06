@@ -20,7 +20,9 @@ public:
 
 
 	//グラフィックコマンドの設定
-	void SetGraphicsCommand();
+	//基本オンにしておく
+	
+	void SetGraphicsCommand(bool isBillBordMode);
 
 	//デストラクタ
 	~Instancing();
@@ -41,9 +43,6 @@ public:
 		return numInstance_;
 	}
 
-	void SetIsBillBordMode(bool isBillBordMode) {
-		this->isBillBordMode_ = isBillBordMode;
-	}
 
 private:
 	
@@ -64,8 +63,7 @@ private:
 	//頂点リソースを作る
 	std::unique_ptr<Mesh> mesh_ = nullptr;
 
-	//基本オンにしておく
-	bool isBillBordMode_ = true;
+	
 
 };
 

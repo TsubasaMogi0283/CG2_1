@@ -163,7 +163,7 @@ private:
 
 	//インスタンシング
 	std::unique_ptr<Instancing> instancing_ = nullptr;
-	bool isBillBordMode_ = true;
+	bool isBillBordMode_ = false;
 
 
 	//SRT

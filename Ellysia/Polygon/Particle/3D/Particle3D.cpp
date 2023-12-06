@@ -335,8 +335,7 @@ void Particle3D::Draw() {
 	directionalLight_->GraphicsCommand();
 	
 	//DrawCall
-	instancing_->SetIsBillBordMode(isBillBordMode_);
-	instancing_->SetGraphicsCommand();
+	instancing_->SetGraphicsCommand(isBillBordMode_);
 }
 
 
@@ -393,7 +392,7 @@ void Particle3D::Draw(uint32_t textureHandle) {
 	directionalLight_->GraphicsCommand();
 	
 	//DrawCall
-	instancing_->SetGraphicsCommand();
+	instancing_->SetGraphicsCommand(isBillBordMode_);
 }
 
 //デストラクタ

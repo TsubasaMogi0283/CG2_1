@@ -68,7 +68,7 @@ void Instancing::Initialize(std::mt19937& randomEngine,const std::vector<VertexD
 
 }
 
-void Instancing::SetGraphicsCommand(){
+void Instancing::SetGraphicsCommand(bool isBillBordMode){
 	
 	//インスタンシング
 	instancingResource_->Map(0, nullptr, reinterpret_cast<void**>(&instancingData_));
@@ -92,35 +92,58 @@ void Instancing::SetGraphicsCommand(){
 		particles_[index].transform.translate.y += particles_[index].velocity.y * DELTA_TIME;
 		particles_[index].transform.translate.z += particles_[index].velocity.z * DELTA_TIME;
 		
-		//Y軸でπ/2回転
-		//これからはM_PIじゃなくてstd::numbers::pi_vを使おうね
-		Matrix4x4 backToFrontMatrix = MakeRotateYMatrix(std::numbers::pi_v<float>);
 
-		//カメラの回転を適用する
-		Matrix4x4 billBoardMatrix = Multiply(backToFrontMatrix, Camera::GetInstance()->GetAffineMatrix());
-		//平行成分はいらないよ
-		billBoardMatrix.m[3][0] = 0.0f;
-		billBoardMatrix.m[3][1] = 0.0f;
-		billBoardMatrix.m[3][2] = 0.0f;
+		if (isBillBordMode == true) {
+			//Y軸でπ/2回転
+			//これからはM_PIじゃなくてstd::numbers::pi_vを使おうね
+			Matrix4x4 backToFrontMatrix = MakeRotateYMatrix(std::numbers::pi_v<float>);
 
-		Matrix4x4 scaleMatrix = MakeScaleMatrix(particles_[index].transform.scale);
-		Matrix4x4 translateMatrix = MakeTranslateMatrix( particles_[index].transform.translate);
+			//カメラの回転を適用する
+			Matrix4x4 billBoardMatrix = Multiply(backToFrontMatrix, Camera::GetInstance()->GetAffineMatrix());
+			//平行成分はいらないよ
+			billBoardMatrix.m[3][0] = 0.0f;
+			billBoardMatrix.m[3][1] = 0.0f;
+			billBoardMatrix.m[3][2] = 0.0f;
+
+			Matrix4x4 scaleMatrix = MakeScaleMatrix(particles_[index].transform.scale);
+			Matrix4x4 translateMatrix = MakeTranslateMatrix( particles_[index].transform.translate);
+
+			//パーティクル個別のRotateは関係ないよ
+			Matrix4x4 worldMatrix = Multiply(scaleMatrix,Multiply(billBoardMatrix,translateMatrix));
+			
+			//WVP行列を作成
+			Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(Camera::GetInstance()->GetViewMatrix(), Camera::GetInstance()->GetProjectionMatrix_()));
+
+			instancingData_[numInstance_].WVP = worldViewProjectionMatrix;
+			instancingData_[numInstance_].World = worldMatrix;
+			instancingData_[numInstance_].color = particles_[index].color;
+
+			//アルファはVector4でいうwだね
+			float alpha = 1.0f - (particles_[index].currentTime / particles_[index].lifeTime);
+			instancingData_[numInstance_].color.w=alpha;
 
 
-		//パーティクル個別のRotateは関係ないよ
-		Matrix4x4 worldMatrix = Multiply(scaleMatrix,Multiply(billBoardMatrix,translateMatrix));
+		}
+		else if (isBillBordMode == false) {
+			//ビルボードやらない版
+			Matrix4x4 worldMatrix = MakeAffineMatrix(particles_[index].transform.scale,particles_[index].transform.rotate,particles_[index].transform.translate);
+			
+			//WVP行列を作成
+			Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(Camera::GetInstance()->GetViewMatrix(), Camera::GetInstance()->GetProjectionMatrix_()));
+
+			instancingData_[numInstance_].WVP = worldViewProjectionMatrix;
+			instancingData_[numInstance_].World = worldMatrix;
+			instancingData_[numInstance_].color = particles_[index].color;
+
+			//アルファはVector4でいうwだね
+			float alpha = 1.0f - (particles_[index].currentTime / particles_[index].lifeTime);
+			instancingData_[numInstance_].color.w=alpha;
+
+
+		}
 		
-		//WVP行列を作成
-		Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(Camera::GetInstance()->GetViewMatrix(), Camera::GetInstance()->GetProjectionMatrix_()));
 
-		instancingData_[numInstance_].WVP = worldViewProjectionMatrix;
-		instancingData_[numInstance_].World = worldMatrix;
-		instancingData_[numInstance_].color = particles_[index].color;
-
-		//アルファはVector4でいうwだね
-		float alpha = 1.0f - (particles_[index].currentTime / particles_[index].lifeTime);
-		instancingData_[numInstance_].color.w=alpha;
-
+		
 		
 
 		

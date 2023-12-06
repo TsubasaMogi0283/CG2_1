@@ -6,6 +6,8 @@
 #include "Polygon/Particle/3D/Particle.h"
 
 #include <random>
+#include <list>
+
 #include <Polygon/Model/Mesh/Mesh.h>
 
 
@@ -55,7 +57,8 @@ private:
 	//描画すべきインスタンス数
 	uint32_t numInstance_ = 0;
 	//パーティクル
-	Particle particles_[MAX_INSTANCE_NUMBER_];
+	//Particle particles_[MAX_INSTANCE_NUMBER_];
+	std::list<Particle>particles_;
 	ParticleForGPU* instancingData_ = nullptr;
 
 

@@ -112,6 +112,12 @@
     <Filter Include="Project\Enemy\Bullet">
       <UniqueIdentifier>{841e22fb-cd4b-4a9a-9d15-a8ea0b26c71c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Project\Collision">
+      <UniqueIdentifier>{8628e6b9-bb37-408e-9e16-17fb267e368d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project\Skydome">
+      <UniqueIdentifier>{30fc819b-27fb-40e3-ace9-a7bb16b732d3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -216,14 +222,17 @@
     <ClCompile Include="Project\Enemy\Bullet\EnemyBullet.cpp">
       <Filter>Project\Enemy\Bullet</Filter>
     </ClCompile>
-    <ClCompile Include="Project\Collider\Collider.cpp">
-      <Filter>Project</Filter>
-    </ClCompile>
     <ClCompile Include="Project\Enemy\TimeCall\TimeCall.cpp">
       <Filter>Project\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="Project\Collider\CollisionManager.cpp">
       <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Collider\Collider.cpp">
+      <Filter>Project\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Skydome\Skydome.cpp">
+      <Filter>Project\Skydome</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -409,17 +418,20 @@
     <ClInclude Include="Project\Enemy\Bullet\EnemyBullet.h">
       <Filter>Project\Enemy\Bullet</Filter>
     </ClInclude>
-    <ClInclude Include="Project\Collider\Collider.h">
-      <Filter>Project</Filter>
-    </ClInclude>
     <ClInclude Include="Project\Enemy\TimeCall\TimeCall.h">
       <Filter>Project\Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="Project\Collider\CollisionConfig.h">
-      <Filter>Project</Filter>
-    </ClInclude>
     <ClInclude Include="Project\Collider\CollisionManager.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Collider\Collider.h">
+      <Filter>Project\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Collider\CollisionConfig.h">
+      <Filter>Project\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Skydome\Skydome.h">
+      <Filter>Project\Skydome</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

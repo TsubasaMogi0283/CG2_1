@@ -52,7 +52,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalIncludeDirectories>$(ProjectDir)\Math;$(ProjectDir)\GameScene;$(ProjectDir)\Common;$(ProjectDir)\ConvertFunction;$(ProjectDir)\Ellysia;$(ProjectDir)\Project;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\Math;$(ProjectDir)\GameScene;$(ProjectDir)\Common;$(ProjectDir)\ConvertFunction;$(ProjectDir)\Ellysia;$(ProjectDir)\Project;$(ProjectDir)\Ellysia\Polygon;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -75,7 +75,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <LanguageStandard>stdcpp20</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalIncludeDirectories>$(ProjectDir)\Math;$(ProjectDir)\GameScene;$(ProjectDir)\Common;$(ProjectDir)\ConvertFunction;$(ProjectDir)\Ellysia;$(ProjectDir)\Project;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\Math;$(ProjectDir)\GameScene;$(ProjectDir)\Common;$(ProjectDir)\ConvertFunction;$(ProjectDir)\Ellysia;$(ProjectDir)\Project;$(ProjectDir)\Ellysia\Polygon;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -127,6 +127,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Project\Enemy\TimeCall\TimeCall.cpp" />
     <ClCompile Include="Project\Player\Bullet\PlayerBullet.cpp" />
     <ClCompile Include="Project\Player\Player.cpp" />
+    <ClCompile Include="Project\Skydome\Skydome.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\Object2d.PS.hlsl">
@@ -207,6 +208,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Project\Enemy\TimeCall\TimeCall.h" />
     <ClInclude Include="Project\Player\Bullet\PlayerBullet.h" />
     <ClInclude Include="Project\Player\Player.h" />
+    <ClInclude Include="Project\Skydome\Skydome.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Ellysia\externals\imGui\LICENSE.txt" />

@@ -26,6 +26,9 @@ void SampleScene::Initialize(GameManager* gameManager) {
 	enemy_->Initialize();
 	
 
+	skydome_ = new Skydome();
+	skydome_->Initialize();
+
 	collisionManager_ = new CollisionManager();
 
 	uint32_t textureHandle_ = TextureManager::LoadTexture("Resources/uvChecker.png");
@@ -110,15 +113,21 @@ void SampleScene::Update(GameManager* gameManager) {
 	player_->Update();
 	
 	enemy_->Update();
+
+	skydome_->Update();
 }
 
 /// <summary>
 /// 描画
 /// </summary>
 void SampleScene::Draw(GameManager* gameManager) {
+	
+	skydome_->Draw();
 	player_->Draw();
 
 	enemy_->Draw();
+
+
 }
 
 
@@ -131,5 +140,6 @@ SampleScene::~SampleScene() {
 	delete player_;
 	delete enemy_;
 
+	delete skydome_;
 	delete collisionManager_;
 }

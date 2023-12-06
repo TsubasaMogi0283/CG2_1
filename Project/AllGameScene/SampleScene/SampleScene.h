@@ -5,15 +5,18 @@
 #include <Math/Vector/SpritePosition.h>
 #include "Math/Vector/Transform.h"
 
-#include <Player/Player.h>
+
 
 #include "AllGameScene/GameManager/GameManager.h"
 #include "Polygon/Model/Model.h"
 #include "TextureManager/TextureManager.h"
+
+#include <Player/Player.h>
 #include <Enemy/Enemy.h>
 #include "Enemy/Bullet/EnemyBullet.h"
 #include "Collider/Collider.h"
 #include <Collider/CollisionManager.h>
+#include <Skydome/Skydome.h>
 
 //StatePatternを使う時は必ず前方宣言をするように
 class Gamemanager;
@@ -44,7 +47,7 @@ private:
 private:
 	Player* player_ = nullptr;
 	Enemy* enemy_ = nullptr;
-
+	Skydome* skydome_ = nullptr;
 
 	Vector3 cameraTranslate_ = {};
 	Vector3 cameraRotate_ = {};

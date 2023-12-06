@@ -120,6 +120,10 @@ public:
 
 
 
+	bool IsBillBordMode(bool isBillBordMode) {
+
+	}
+
 
 
 
@@ -146,7 +150,7 @@ private:
 	//マテリアル用のリソースを作る
 	std::unique_ptr<CreateMaterial> material_ = nullptr;
 	//色関係のメンバ変数
-	Vector4 color_;
+	Vector4 color_ = {};
 
 
 	//Lighting用
@@ -157,10 +161,9 @@ private:
 	Vector3 lightingDirection_ = {0.0f,-1.0f,0.0f};
 
 
-	//インスタンシングの数
-	//static const int32_t instanceCount_ = 10;
 	//インスタンシング
 	std::unique_ptr<Instancing> instancing_ = nullptr;
+	bool isBillBordMode_ = true;
 
 
 	//SRT

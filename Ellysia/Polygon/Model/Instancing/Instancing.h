@@ -41,6 +41,10 @@ public:
 		return numInstance_;
 	}
 
+	void SetIsBillBordMode(bool isBillBordMode) {
+		this->isBillBordMode_ = isBillBordMode;
+	}
+
 private:
 	
 	D3D12_CPU_DESCRIPTOR_HANDLE instancingSrvHandleCPU_ = {};
@@ -59,6 +63,9 @@ private:
 	//メッシュクラスのやつ
 	//頂点リソースを作る
 	std::unique_ptr<Mesh> mesh_ = nullptr;
+
+	//基本オンにしておく
+	bool isBillBordMode_ = true;
 
 };
 

@@ -163,7 +163,7 @@ private:
 	Vector3 rotate_ = { 0.0f,0.0f,0.0f };
 	Vector3 translate_ = { 0.0f,0.0f,0.0f };
 	//色関係のメンバ変数
-	Vector4 color_;
+	Vector4 color_ = {0.0f,0.0f,0.0f,0.0f};
 
 	
 	//デフォルトはα加算

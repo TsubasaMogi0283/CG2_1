@@ -4,7 +4,7 @@
 
 #include <Camera/Camera.h>
 
-#include "ImGuiManager/ImGuiManager.h"
+#include <numbers>
 
 static uint32_t descriptorSizeSRV_ = 0u;
 
@@ -59,7 +59,7 @@ void Instancing::Initialize(std::mt19937& randomEngine,const std::vector<VertexD
 
 		//時間
 		//Color
-		std::uniform_real_distribution<float> distTime(1.0f, 3.0f);
+		std::uniform_real_distribution<float> distTime(10.0f, 30.0f);
 		particles_[index].lifeTime = distTime(randomEngine);
 		particles_[index].currentTime = 0;
 	}
@@ -69,9 +69,7 @@ void Instancing::Initialize(std::mt19937& randomEngine,const std::vector<VertexD
 }
 
 void Instancing::SetGraphicsCommand(){
-	mesh_->GraphicsCommand();
-	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(1, instancingSrvHandleGPU_);
-
+	
 	//インスタンシング
 	instancingResource_->Map(0, nullptr, reinterpret_cast<void**>(&instancingData_));
 
@@ -94,8 +92,23 @@ void Instancing::SetGraphicsCommand(){
 		particles_[index].transform.translate.y += particles_[index].velocity.y * DELTA_TIME;
 		particles_[index].transform.translate.z += particles_[index].velocity.z * DELTA_TIME;
 		
+		//Y軸でπ/2回転
+		//これからはM_PIじゃなくてstd::numbers::pi_vを使おうね
+		Matrix4x4 backToFrontMatrix = MakeRotateYMatrix(std::numbers::pi_v<float>);
 
-		Matrix4x4 worldMatrix = MakeAffineMatrix(particles_[index].transform.scale, particles_[index].transform.rotate, particles_[index].transform.translate);
+		//カメラの回転を適用する
+		Matrix4x4 billBoardMatrix = Multiply(backToFrontMatrix, Camera::GetInstance()->GetAffineMatrix());
+		//平行成分はいらないよ
+		billBoardMatrix.m[3][0] = 0.0f;
+		billBoardMatrix.m[3][1] = 0.0f;
+		billBoardMatrix.m[3][2] = 0.0f;
+
+		Matrix4x4 scaleMatrix = MakeScaleMatrix(particles_[index].transform.scale);
+		Matrix4x4 translateMatrix = MakeTranslateMatrix( particles_[index].transform.translate);
+
+
+		//パーティクル個別のRotateは関係ないよ
+		Matrix4x4 worldMatrix = Multiply(scaleMatrix,Multiply(billBoardMatrix,translateMatrix));
 		
 		//WVP行列を作成
 		Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(Camera::GetInstance()->GetViewMatrix(), Camera::GetInstance()->GetProjectionMatrix_()));
@@ -103,6 +116,8 @@ void Instancing::SetGraphicsCommand(){
 		instancingData_[numInstance_].WVP = worldViewProjectionMatrix;
 		instancingData_[numInstance_].World = worldMatrix;
 		instancingData_[numInstance_].color = particles_[index].color;
+
+		//アルファはVector4でいうwだね
 		float alpha = 1.0f - (particles_[index].currentTime / particles_[index].lifeTime);
 		instancingData_[numInstance_].color.w=alpha;
 
@@ -114,6 +129,8 @@ void Instancing::SetGraphicsCommand(){
 		++numInstance_;
 		
 	}
+	mesh_->GraphicsCommand();
+	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(1, instancingSrvHandleGPU_);
 
 	DrawCall();
 	

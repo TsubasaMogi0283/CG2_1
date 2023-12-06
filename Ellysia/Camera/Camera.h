@@ -39,6 +39,8 @@ public:
 		return cameraTransform_.translate;
 	}
 
+	Matrix4x4 GetAffineMatrix();
+
 	Matrix4x4 GetViewMatrix();
 
 	Matrix4x4 GetProjectionMatrix_();

@@ -215,11 +215,6 @@ void Particle3D::CreateRandomParticle(std::mt19937 randomEngine, const std::stri
 
 
 			//頂点リソースを作る
-			//mesh_ = std::make_unique<Mesh>();
-			//mesh_->Initialize(modelData.vertices);
-
-
-
 			//Instancing
 			//Transformationいらなかったっす
 			//Meshも一緒に入っているよ
@@ -264,15 +259,11 @@ void Particle3D::CreateRandomParticle(std::mt19937 randomEngine, const std::stri
 
 
 	//頂点リソースを作る
-	//mesh_ = std::make_unique<Mesh>();
-	//mesh_->Initialize(modelDataNew.vertices);
-	
-
 	//Instancing
 	//Transformationいらなかったっす
 	instancing_ = std::make_unique<Instancing>();
 	instancing_->Initialize(randomEngine,modelDataNew.vertices);
-
+	isBillBordMode_ = true;
 
 	//Lighting
 	directionalLight_=std::make_unique<CreateDirectionalLight>();
@@ -344,6 +335,7 @@ void Particle3D::Draw() {
 	directionalLight_->GraphicsCommand();
 	
 	//DrawCall
+	instancing_->SetIsBillBordMode(isBillBordMode_);
 	instancing_->SetGraphicsCommand();
 }
 

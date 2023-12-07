@@ -12,6 +12,32 @@ Instancing::Instancing(){
 
 }
 
+Particle Instancing::MakeNewParticle(std::mt19937& randomEngine) {
+	std::uniform_real_distribution<float> distribute(-1.0f, 1.0f);
+	Particle particle;
+	particle.transform.scale = { 1.0f,1.0f,1.0f };
+	particle.transform.rotate = { 0.0f,0.0f,0.0f };
+	particle.transform.translate = {distribute(randomEngine),distribute(randomEngine),distribute(randomEngine)};
+	
+	//速度
+	particle.velocity = {distribute(randomEngine),distribute(randomEngine),distribute(randomEngine)};
+
+	//Color
+	std::uniform_real_distribution<float> distColor(0.0f, 1.0f);
+	particle.color = { distColor(randomEngine),distColor(randomEngine),distColor(randomEngine),1.0f };
+	
+
+	//時間
+	std::uniform_real_distribution<float> distTime(10.0f, 30.0f);
+	particle.lifeTime = distTime(randomEngine);
+	particle.currentTime = 0;
+
+
+
+	return particle;
+
+}
+
 void Instancing::Initialize(std::mt19937& randomEngine,const std::vector<VertexData>& vertices){
 	mesh_ = std::make_unique<Mesh>();
 	mesh_->Initialize(vertices);
@@ -46,22 +72,47 @@ void Instancing::Initialize(std::mt19937& randomEngine,const std::vector<VertexD
 	//Color
 	std::uniform_real_distribution<float> distColor(0.0f, 1.0f);
 
+	//for (std::list<Particle>::iterator particleIterator = particles_.begin();
+	//	particleIterator != particles_.end(); ++particleIterator) {
+
+
+	//	particleIterator->transform.scale = { 1.0f,1.0f,1.0f };
+	//	particleIterator->transform.rotate = {0.0f,0.0f,0.0f};
+	//	particleIterator->transform.translate = { distributeion(randomEngine),distributeion(randomEngine),distributeion(randomEngine) };
+
+	//	//速度の設定
+	//	particleIterator->velocity = { distributeion(randomEngine),distributeion(randomEngine),distributeion(randomEngine)};
+	//	particleIterator->color = { distColor(randomEngine),distColor(randomEngine),distColor(randomEngine),1.0f };
+	//	//particles_[index].color = Vector4(1.0f,1.0f,1.0f,1.0f);
+
+	//	//時間
+	//	//Color
+	//	std::uniform_real_distribution<float> distTime(10.0f, 30.0f);
+	//	particleIterator->lifeTime = distTime(randomEngine);
+	//	particleIterator->currentTime = 0;
+	//}
+
 	//SRTの設定
 	for (uint32_t index = 0; index < MAX_INSTANCE_NUMBER_; ++index) {
-		particles_[index].transform.scale = {1.0f,1.0f,1.0f};
-		particles_[index].transform.rotate = {0.0f,0.0f,0.0f};
-		particles_[index].transform.translate = { distributeion(randomEngine),distributeion(randomEngine),distributeion(randomEngine) };
+		//particles_[index].transform.scale = {1.0f,1.0f,1.0f};
+		//particles_[index].transform.rotate = {0.0f,0.0f,0.0f};
+		//particles_[index].transform.translate = { distributeion(randomEngine),distributeion(randomEngine),distributeion(randomEngine) };
 
-		//速度の設定
-		particles_[index].velocity = { distributeion(randomEngine),distributeion(randomEngine),distributeion(randomEngine)};
-		particles_[index].color = { distColor(randomEngine),distColor(randomEngine),distColor(randomEngine),1.0f };
-		//particles_[index].color = Vector4(1.0f,1.0f,1.0f,1.0f);
+		//
 
-		//時間
-		//Color
-		std::uniform_real_distribution<float> distTime(10.0f, 30.0f);
-		particles_[index].lifeTime = distTime(randomEngine);
-		particles_[index].currentTime = 0;
+		////速度の設定
+		//particles_[index].velocity = { distributeion(randomEngine),distributeion(randomEngine),distributeion(randomEngine)};
+		//particles_[index].color = { distColor(randomEngine),distColor(randomEngine),distColor(randomEngine),1.0f };
+		////particles_[index].color = Vector4(1.0f,1.0f,1.0f,1.0f);
+
+		////時間
+		////Color
+		//std::uniform_real_distribution<float> distTime(10.0f, 30.0f);
+		//particles_[index].lifeTime = distTime(randomEngine);
+		//particles_[index].currentTime = 0;
+
+
+		particles_[index] = MakeNewParticle(randomEngine);
 	}
 	
 
@@ -76,6 +127,82 @@ void Instancing::SetGraphicsCommand(bool isBillBordMode){
 	
 	numInstance_ = 0;
 	
+	//for (std::list<Particle>::iterator particleIterator = particles_.begin();
+	//	particleIterator != particles_.end();) {
+	//	//後でSceneなどで変更できるようにしておく
+	//	
+	//	if ((*particleIterator).lifeTime <=(*particleIterator).currentTime) {
+	//		
+	//		continue;
+	//	}
+	//	
+	//	const float DELTA_TIME = 1.0f / 60.0f;
+	//	particleIterator->currentTime += DELTA_TIME;
+	//	particleIterator->transform.translate.x += particleIterator->velocity.x * DELTA_TIME;
+	//	particleIterator->transform.translate.y += particleIterator->velocity.y * DELTA_TIME;
+	//	particleIterator->transform.translate.z += particleIterator->velocity.z * DELTA_TIME;
+	//	
+
+	//	if (isBillBordMode == true) {
+	//		//Y軸でπ/2回転
+	//		//これからはM_PIじゃなくてstd::numbers::pi_vを使おうね
+	//		Matrix4x4 backToFrontMatrix = MakeRotateYMatrix(std::numbers::pi_v<float>);
+
+	//		//カメラの回転を適用する
+	//		Matrix4x4 billBoardMatrix = Multiply(backToFrontMatrix, Camera::GetInstance()->GetAffineMatrix());
+	//		//平行成分はいらないよ
+	//		billBoardMatrix.m[3][0] = 0.0f;
+	//		billBoardMatrix.m[3][1] = 0.0f;
+	//		billBoardMatrix.m[3][2] = 0.0f;
+
+	//		Matrix4x4 scaleMatrix = MakeScaleMatrix(particleIterator->transform.scale);
+	//		Matrix4x4 translateMatrix = MakeTranslateMatrix( particleIterator->transform.translate);
+
+	//		//パーティクル個別のRotateは関係ないよ
+	//		Matrix4x4 worldMatrix = Multiply(scaleMatrix,Multiply(billBoardMatrix,translateMatrix));
+	//		
+	//		//WVP行列を作成
+	//		Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(Camera::GetInstance()->GetViewMatrix(), Camera::GetInstance()->GetProjectionMatrix_()));
+
+	//		instancingData_[numInstance_].WVP = worldViewProjectionMatrix;
+	//		instancingData_[numInstance_].World = worldMatrix;
+	//		instancingData_[numInstance_].color = particleIterator->color;
+
+	//		//アルファはVector4でいうwだね
+	//		float alpha = 1.0f - (particleIterator->currentTime / particleIterator->lifeTime);
+	//		instancingData_[numInstance_].color.w=alpha;
+
+
+	//	}
+	//	else if (isBillBordMode == false) {
+	//		//ビルボードやらない版
+	//		Matrix4x4 worldMatrix = MakeAffineMatrix(particleIterator->transform.scale,particleIterator->transform.rotate,particleIterator->transform.translate);
+	//		
+	//		//WVP行列を作成
+	//		Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(Camera::GetInstance()->GetViewMatrix(), Camera::GetInstance()->GetProjectionMatrix_()));
+
+	//		instancingData_[numInstance_].WVP = worldViewProjectionMatrix;
+	//		instancingData_[numInstance_].World = worldMatrix;
+	//		instancingData_[numInstance_].color = particleIterator->color;
+
+	//		//アルファはVector4でいうwだね
+	//		float alpha = 1.0f - (particleIterator->currentTime / particleIterator->lifeTime);
+	//		instancingData_[numInstance_].color.w=alpha;
+
+
+	//	}
+	//	
+
+	//	
+	//	
+
+	//	
+	//	
+
+	//	++numInstance_;
+
+	//}
+
 	for (uint32_t index = 0; index < MAX_INSTANCE_NUMBER_; ++index) {
 
 		

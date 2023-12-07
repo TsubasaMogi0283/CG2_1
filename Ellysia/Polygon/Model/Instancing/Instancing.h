@@ -59,8 +59,8 @@ private:
 	//描画すべきインスタンス数
 	uint32_t numInstance_ = 0;
 	//パーティクル
-	Particle particles_[MAX_INSTANCE_NUMBER_];
-	//std::list<Particle>particles_;
+	//Particle particles_[MAX_INSTANCE_NUMBER_];
+	std::list<Particle>particles_;
 	ParticleForGPU* instancingData_ = nullptr;
 
 

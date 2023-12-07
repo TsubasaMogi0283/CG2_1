@@ -36,7 +36,7 @@
 #include "Polygon/Model/DirectionalLight/CreateDirectionalLight.h"
 #include "Polygon/Model/Transformation/Transformation.h"
 #include <Polygon/Model/Instancing/Instancing.h>
-
+#include "Polygon/Particle/3D/Particle.h"
 
 
 class Particle3D {
@@ -60,6 +60,8 @@ private:
 
 	//mtlファイルの読み込み
 	MaterialData LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& fileName);
+
+	Particle MakeNewParticle(std::mt19937& randomEngine);
 
 #pragma endregion
 
@@ -165,6 +167,19 @@ private:
 	std::unique_ptr<Instancing> instancing_ = nullptr;
 	bool isBillBordMode_ = false;
 
+
+	D3D12_CPU_DESCRIPTOR_HANDLE instancingSrvHandleCPU_ = {};
+	D3D12_GPU_DESCRIPTOR_HANDLE instancingSrvHandleGPU_ = {};
+
+	ComPtr<ID3D12Resource>instancingResource_ = nullptr;
+
+	static const int32_t MAX_INSTANCE_NUMBER_ = 10;
+	//描画すべきインスタンス数
+	uint32_t numInstance_ = 0;
+	//パーティクル
+	Particle particles_[MAX_INSTANCE_NUMBER_];
+	//std::list<Particle>particles_;
+	ParticleForGPU* instancingData_ = nullptr;
 
 	//SRT
 	Vector3 scale_ = { 1.0f,1.0f,1.0f };

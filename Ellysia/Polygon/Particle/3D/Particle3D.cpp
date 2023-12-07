@@ -182,6 +182,33 @@ MaterialData Particle3D::LoadMaterialTemplateFile(const std::string& directoryPa
 
 }
 
+//生成関数
+Particle Instancing::MakeNewParticle(std::mt19937& randomEngine) {
+	std::uniform_real_distribution<float> distribute(-1.0f, 1.0f);
+	Particle particle;
+	particle.transform.scale = { 1.0f,1.0f,1.0f };
+	particle.transform.rotate = { 0.0f,0.0f,0.0f };
+	particle.transform.translate = {distribute(randomEngine),distribute(randomEngine),distribute(randomEngine)};
+	
+	//速度
+	particle.velocity = {distribute(randomEngine),distribute(randomEngine),distribute(randomEngine)};
+
+	//Color
+	std::uniform_real_distribution<float> distColor(0.0f, 1.0f);
+	particle.color = { distColor(randomEngine),distColor(randomEngine),distColor(randomEngine),1.0f };
+	
+
+	//時間
+	std::uniform_real_distribution<float> distTime(10.0f, 30.0f);
+	particle.lifeTime = distTime(randomEngine);
+	particle.currentTime = 0;
+
+
+
+	return particle;
+
+}
+
 
 //RandomParticle用
 
@@ -218,10 +245,95 @@ void Particle3D::CreateRandomParticle(std::mt19937 randomEngine, const std::stri
 			//Instancing
 			//Transformationいらなかったっす
 			//Meshも一緒に入っているよ
-			instancing_ = std::make_unique<Instancing>();
+			/*instancing_ = std::make_unique<Instancing>();
 			instancing_->Initialize(randomEngine,modelData.vertices);
+			*/
+			
+			mesh_ = std::make_unique<Mesh>();
+			mesh_->Initialize(vertices);
+
+			//インスタンシング
+			instancingResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(ParticleForGPU) * MAX_INSTANCE_NUMBER_);
+			
+			descriptorSizeSRV_ =  DirectXSetup::GetInstance()->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+			
+
+			D3D12_SHADER_RESOURCE_VIEW_DESC instancingSrvDesc{};
+			instancingSrvDesc.Format = DXGI_FORMAT_UNKNOWN;
+			instancingSrvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+			instancingSrvDesc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
+			instancingSrvDesc.Buffer.FirstElement = 0;
+			instancingSrvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
+			instancingSrvDesc.Buffer.NumElements = MAX_INSTANCE_NUMBER_;
+			instancingSrvDesc.Buffer.StructureByteStride = sizeof(ParticleForGPU);
+
+			instancingSrvHandleCPU_ = DirectXSetup::GetInstance()->GetCPUDescriptorHandle(
+				DirectXSetup::GetInstance()->GetSrvDescriptorHeap(), descriptorSizeSRV_, 3);
+			instancingSrvHandleGPU_ = DirectXSetup::GetGPUDescriptorHandle(
+				DirectXSetup::GetInstance()->GetSrvDescriptorHeap(), descriptorSizeSRV_, 3);
+
+			DirectXSetup::GetInstance()->GetDevice()->CreateShaderResourceView(
+				instancingResource_.Get(), &instancingSrvDesc, instancingSrvHandleCPU_);
+
 			
 			
+
+
+			
+
+			//for (std::list<Particle>::iterator particleIterator = particles_.begin();
+			//	particleIterator != particles_.end(); ++particleIterator) {
+
+			//	//(*particleIterator).particles_.push_back(MakeNewParticle(randomEngine));
+			//	//(*particleIterator).particles_.push_back(MakeNewParticle(randomEngine));
+			//	//(*particleIterator).particles_.push_back(MakeNewParticle(randomEngine));
+			//	
+			//	std::uniform_real_distribution<float> distribute(-1.0f, 1.0f);
+			//	(*particleIterator).transform.scale = {1.0f,1.0f,1.0f};
+			//	(*particleIterator).transform.rotate = {0.0f,0.0f,0.0f};
+			//	(*particleIterator).transform.translate = { distribute(randomEngine),distribute(randomEngine),distribute(randomEngine) };
+
+			//	
+
+			//	//速度の設定
+			//	std::uniform_real_distribution<float> distColor(0.0f, 1.0f);
+			//	(*particleIterator).velocity = { distribute(randomEngine),distribute(randomEngine),distribute(randomEngine)};
+			//	(*particleIterator).color = { distColor(randomEngine),distColor(randomEngine),distColor(randomEngine),1.0f };
+			//	//particles_[index].color = Vector4(1.0f,1.0f,1.0f,1.0f);
+
+			//	//時間
+			//	//Color
+			//	std::uniform_real_distribution<float> distTime(10.0f, 30.0f);
+			//	(*particleIterator).lifeTime = distTime(randomEngine);
+			//	(*particleIterator).currentTime = 0;
+
+			//}
+
+			//SRTの設定
+			for (uint32_t index = 0; index < MAX_INSTANCE_NUMBER_; ++index) {
+				std::uniform_real_distribution<float> distribution(-1.0f, 1.0f);
+				particles_[index].transform.scale = {1.0f,1.0f,1.0f};
+				particles_[index].transform.rotate = {0.0f,0.0f,0.0f};
+				particles_[index].transform.translate = { distribution(randomEngine),distribution(randomEngine),distribution(randomEngine) };
+
+				
+
+				//速度の設定
+				std::uniform_real_distribution<float> distColor(0.0f, 1.0f);
+				particles_[index].velocity = { distribution(randomEngine),distribution(randomEngine),distribution(randomEngine)};
+				particles_[index].color = { distColor(randomEngine),distColor(randomEngine),distColor(randomEngine),1.0f };
+				//particles_[index].color = Vector4(1.0f,1.0f,1.0f,1.0f);
+
+				//時間
+				//Color
+				std::uniform_real_distribution<float> distTime(10.0f, 30.0f);
+				particles_[index].lifeTime = distTime(randomEngine);
+				particles_[index].currentTime = 0;
+
+
+				particles_[index] = MakeNewParticle(randomEngine);
+			}
+	
 
 
 

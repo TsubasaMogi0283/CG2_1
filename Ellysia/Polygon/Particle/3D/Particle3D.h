@@ -35,8 +35,9 @@
 #include "Polygon/Model/Material/CreateMaterial.h"
 #include "Polygon/Model/DirectionalLight/CreateDirectionalLight.h"
 #include "Polygon/Model/Transformation/Transformation.h"
-#include <Polygon/Model/Instancing/Instancing.h>
+//#include <Polygon/Model/Instancing/Instancing.h>
 #include "Polygon/Particle/3D/Particle.h"
+#include <random>
 
 
 class Particle3D {
@@ -164,7 +165,7 @@ private:
 
 
 	//インスタンシング
-	std::unique_ptr<Instancing> instancing_ = nullptr;
+	//std::unique_ptr<Instancing> instancing_ = nullptr;
 	bool isBillBordMode_ = false;
 
 
@@ -180,6 +181,9 @@ private:
 	Particle particles_[MAX_INSTANCE_NUMBER_];
 	//std::list<Particle>particles_;
 	ParticleForGPU* instancingData_ = nullptr;
+
+	//ビルボード
+	bool isBillBordMode = true;
 
 	//SRT
 	Vector3 scale_ = { 1.0f,1.0f,1.0f };

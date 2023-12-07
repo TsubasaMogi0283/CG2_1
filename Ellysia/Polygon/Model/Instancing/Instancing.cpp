@@ -290,8 +290,9 @@ void Instancing::SetGraphicsCommand(bool isBillBordMode){
 	//}
 	mesh_->GraphicsCommand();
 	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(1, instancingSrvHandleGPU_);
-
-	DrawCall();
+	
+	//DrawCall
+	mesh_->DrawCall(numInstance_);
 	
 
 }

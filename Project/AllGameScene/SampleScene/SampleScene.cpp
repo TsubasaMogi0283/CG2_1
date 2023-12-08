@@ -76,6 +76,8 @@ void SampleScene::Update(GameManager* gameManager) {
 /// </summary>
 void SampleScene::Draw(GameManager* gameManager) {
 	model_->Draw(particleTextureHandle_);
+
+
 }
 
 /// <summary>

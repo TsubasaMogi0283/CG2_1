@@ -283,7 +283,9 @@ void Particle3D::CreateRandomParticle(std::mt19937 randomEngine, const std::stri
 			
 			}*/
 			particles_.push_back(MakeNewParticle(randomEngine));
-	
+			particles_.push_back(MakeNewParticle(randomEngine));
+			particles_.push_back(MakeNewParticle(randomEngine));
+
 			/*for (std::list<Particle>::iterator particleIterator = particles_.begin();
 				particleIterator != particles_.end(); ++particleIterator) {
 				particles_.push_back(MakeNewParticle(randomEngine));
@@ -687,7 +689,7 @@ void Particle3D::Draw(uint32_t textureHandle){
 #pragma endregion
 
 	for (std::list<Particle>::iterator particleIterator = particles_.begin();
-		particleIterator != particles_.end();) {
+		particleIterator != particles_.end();++particleIterator) {
 		if ((*particleIterator).lifeTime <= (*particleIterator).currentTime) {
 			
 			continue;
@@ -721,14 +723,20 @@ void Particle3D::Draw(uint32_t textureHandle){
 			//WVP行列を作成
 			Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(Camera::GetInstance()->GetViewMatrix(), Camera::GetInstance()->GetProjectionMatrix_()));
 
-			instancingData_[numInstance_].WVP = worldViewProjectionMatrix;
-			instancingData_[numInstance_].World = worldMatrix;
-			instancingData_[numInstance_].color = particleIterator->color;
+			//最大値を超えて描画しないようにする
+			if (numInstance_ < MAX_INSTANCE_NUMBER_) {
+				instancingData_[numInstance_].WVP = worldViewProjectionMatrix;
+				instancingData_[numInstance_].World = worldMatrix;
+				instancingData_[numInstance_].color = particleIterator->color;
 
-			//アルファはVector4でいうwだね
-			float alpha = 1.0f - (particleIterator->currentTime / particleIterator->lifeTime);
-			instancingData_[numInstance_].color.w=alpha;
+				//アルファはVector4でいうwだね
+				float alpha = 1.0f - (particleIterator->currentTime / particleIterator->lifeTime);
+				instancingData_[numInstance_].color.w=alpha;
 
+				++numInstance_;
+			}
+
+			
 
 		}
 		else if (isBillBordMode == false) {
@@ -741,15 +749,18 @@ void Particle3D::Draw(uint32_t textureHandle){
 			//WVP行列を作成
 			Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(Camera::GetInstance()->GetViewMatrix(), Camera::GetInstance()->GetProjectionMatrix_()));
 
-			instancingData_[numInstance_].WVP = worldViewProjectionMatrix;
-			instancingData_[numInstance_].World = worldMatrix;
-			instancingData_[numInstance_].color = particleIterator->color;
+			//最大値を超えて描画しないようにする
+			if (numInstance_ < MAX_INSTANCE_NUMBER_) {
+				instancingData_[numInstance_].WVP = worldViewProjectionMatrix;
+				instancingData_[numInstance_].World = worldMatrix;
+				instancingData_[numInstance_].color = particleIterator->color;
 
-			//アルファはVector4でいうwだね
-			float alpha = 1.0f - (particleIterator->currentTime /particleIterator->lifeTime);
-			instancingData_[numInstance_].color.w=alpha;
+				//アルファはVector4でいうwだね
+				float alpha = 1.0f - (particleIterator->currentTime / particleIterator->lifeTime);
+				instancingData_[numInstance_].color.w = alpha;
 
-
+				++numInstance_;
+			}
 		}
 		
 
@@ -757,9 +768,9 @@ void Particle3D::Draw(uint32_t textureHandle){
 		
 
 		
-		++numInstance_;
-		//particleIterator++;
-		++particleIterator;
+		
+		
+		
 
 		mesh_->GraphicsCommand();
 		DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(1, instancingSrvHandleGPU_);

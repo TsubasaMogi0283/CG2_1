@@ -37,7 +37,7 @@ void SampleScene::Initialize(GameManager* gameManager) {
 	particleTextureHandle_ = TextureManager::GetInstance()->LoadTexture("Resources/CG3/circle.png");
 
 
-	cameraPosition_ = {0.0f,10.0f,-7.0f};
+	cameraPosition_ = {0.0f,7.0f,-7.0f};
 	cameraRotate_ = { 0.8f,0.0f,0.0f };
 
 

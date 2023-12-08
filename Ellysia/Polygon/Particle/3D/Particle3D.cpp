@@ -278,44 +278,15 @@ void Particle3D::CreateRandomParticle(std::mt19937 randomEngine, const std::stri
 
 			
 
-			//for (std::list<Particle>::iterator particleIterator = particles_.begin();
-			//	particleIterator != particles_.end(); ++particleIterator) {
-
-			//	//(*particleIterator).particles_.push_back(MakeNewParticle(randomEngine));
-			//	//(*particleIterator).particles_.push_back(MakeNewParticle(randomEngine));
-			//	//(*particleIterator).particles_.push_back(MakeNewParticle(randomEngine));
-			//	
-			//	std::uniform_real_distribution<float> distribute(-1.0f, 1.0f);
-			//	(*particleIterator).transform.scale = {1.0f,1.0f,1.0f};
-			//	(*particleIterator).transform.rotate = {0.0f,0.0f,0.0f};
-			//	(*particleIterator).transform.translate = { distribute(randomEngine),distribute(randomEngine),distribute(randomEngine) };
-
-			//	
-
-			//	//速度の設定
-			//	std::uniform_real_distribution<float> distColor(0.0f, 1.0f);
-			//	(*particleIterator).velocity = { distribute(randomEngine),distribute(randomEngine),distribute(randomEngine)};
-			//	(*particleIterator).color = { distColor(randomEngine),distColor(randomEngine),distColor(randomEngine),1.0f };
-			//	//particles_[index].color = Vector4(1.0f,1.0f,1.0f,1.0f);
-
-			//	//時間
-			//	//Color
-			//	std::uniform_real_distribution<float> distTime(10.0f, 30.0f);
-			//	(*particleIterator).lifeTime = distTime(randomEngine);
-			//	(*particleIterator).currentTime = 0;
-
-			//}
-
-			//SRTの設定
-			/*for (uint32_t index = 0; index < MAX_INSTANCE_NUMBER_; ++index) {
-				
-				particles_.push_back(MakeNewParticle(randomEngine));
-			}*/
+			for (uint32_t index = 0; index < MAX_INSTANCE_NUMBER_; ++index) {
+				particles_[index] = MakeNewParticle(randomEngine);
+			
+			}
 	
-			for (std::list<Particle>::iterator particleIterator = particles_.begin();
+			/*for (std::list<Particle>::iterator particleIterator = particles_.begin();
 				particleIterator != particles_.end(); ++particleIterator) {
 				particles_.push_back(MakeNewParticle(randomEngine));
-			}
+			}*/
 
 
 			//Lighting
@@ -390,10 +361,10 @@ void Particle3D::CreateRandomParticle(std::mt19937 randomEngine, const std::stri
 
 	//頂点リソースを作る
 	//SRTの設定
-	/*for (uint32_t index = 0; index < MAX_INSTANCE_NUMBER_; ++index) {
+	for (uint32_t index = 0; index < MAX_INSTANCE_NUMBER_; ++index) {
 		particles_[index] = MakeNewParticle(randomEngine);
 		
-	}*/
+	}
 
 	//particles_.push_back(MakeNewParticle(randomEngine));
 	//そもそもここにはいっていない
@@ -404,7 +375,7 @@ void Particle3D::CreateRandomParticle(std::mt19937 randomEngine, const std::stri
 	}*/
 
 
-	particles_.push_back(MakeNewParticle(randomEngine));
+	//particles_.push_back(MakeNewParticle(randomEngine));
 
 	isBillBordMode_ = true;
 
@@ -479,20 +450,17 @@ void Particle3D::Draw() {
 	
 	
 	numInstance_ = 0;
-	for (std::list<Particle>::iterator particleIterator = particles_.begin();
-		particleIterator != particles_.end();++particleIterator) {
-		//後でSceneなどで変更できるようにしておく
-		
-		if ((*particleIterator).lifeTime <= (*particleIterator).currentTime) {
+	for (int index = 0; index < MAX_INSTANCE_NUMBER_; ++index) {
+		if (particles_[index].lifeTime <= particles_[index].currentTime) {
 			
 			continue;
 		}
 		
 		const float DELTA_TIME = 1.0f / 60.0f;
-		(*particleIterator).currentTime += DELTA_TIME;
-		(*particleIterator).transform.translate.x += (*particleIterator).velocity.x * DELTA_TIME;
-		(*particleIterator).transform.translate.y += (*particleIterator).velocity.y * DELTA_TIME;
-		(*particleIterator).transform.translate.z += (*particleIterator).velocity.z * DELTA_TIME;
+		particles_[index].currentTime += DELTA_TIME;
+		particles_[index].transform.translate.x += particles_[index].velocity.x * DELTA_TIME;
+		particles_[index].transform.translate.y += particles_[index].velocity.y * DELTA_TIME;
+		particles_[index].transform.translate.z += particles_[index].velocity.z * DELTA_TIME;
 		
 
 		if (isBillBordMode == true) {
@@ -507,8 +475,8 @@ void Particle3D::Draw() {
 			billBoardMatrix.m[3][1] = 0.0f;
 			billBoardMatrix.m[3][2] = 0.0f;
 
-			Matrix4x4 scaleMatrix = MakeScaleMatrix((*particleIterator).transform.scale);
-			Matrix4x4 translateMatrix = MakeTranslateMatrix((*particleIterator).transform.translate);
+			Matrix4x4 scaleMatrix = MakeScaleMatrix(particles_[index].transform.scale);
+			Matrix4x4 translateMatrix = MakeTranslateMatrix(particles_[index].transform.translate);
 
 			//パーティクル個別のRotateは関係ないよ
 			Matrix4x4 worldMatrix = Multiply(scaleMatrix,Multiply(billBoardMatrix,translateMatrix));
@@ -518,10 +486,10 @@ void Particle3D::Draw() {
 
 			instancingData_[numInstance_].WVP = worldViewProjectionMatrix;
 			instancingData_[numInstance_].World = worldMatrix;
-			instancingData_[numInstance_].color = (*particleIterator).color;
+			instancingData_[numInstance_].color = particles_[index].color;
 
 			//アルファはVector4でいうwだね
-			float alpha = 1.0f - ((*particleIterator).currentTime / (*particleIterator).lifeTime);
+			float alpha = 1.0f - (particles_[index].currentTime / particles_[index].lifeTime);
 			instancingData_[numInstance_].color.w=alpha;
 
 
@@ -529,19 +497,19 @@ void Particle3D::Draw() {
 		else if (isBillBordMode == false) {
 			//ビルボードやらない版
 			Matrix4x4 worldMatrix = MakeAffineMatrix(
-				(*particleIterator).transform.scale,
-				(*particleIterator).transform.rotate,
-				(*particleIterator).transform.translate);
+				particles_[index].transform.scale,
+				particles_[index].transform.rotate,
+				particles_[index].transform.translate);
 			
 			//WVP行列を作成
 			Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(Camera::GetInstance()->GetViewMatrix(), Camera::GetInstance()->GetProjectionMatrix_()));
 
 			instancingData_[numInstance_].WVP = worldViewProjectionMatrix;
 			instancingData_[numInstance_].World = worldMatrix;
-			instancingData_[numInstance_].color = (*particleIterator).color;
+			instancingData_[numInstance_].color = particles_[index].color;
 
 			//アルファはVector4でいうwだね
-			float alpha = 1.0f - ((*particleIterator).currentTime / (*particleIterator).lifeTime);
+			float alpha = 1.0f - (particles_[index].currentTime /particles_[index].lifeTime);
 			instancingData_[numInstance_].color.w=alpha;
 
 
@@ -561,14 +529,18 @@ void Particle3D::Draw() {
 	
 		//DrawCall
 		mesh_->DrawCall(numInstance_);
-
 	}
+
+	//for (std::list<Particle>::iterator particleIterator = particles_.begin();
+	//	particleIterator != particles_.end();++particleIterator) {
+	//	//後でSceneなどで変更できるようにしておく
+	//	
+	//	
+
+	//}
 }
 
-
-//描画
-void Particle3D::Draw(uint32_t textureHandle) {
-	
+void Particle3D::Draw(uint32_t textureHandle){
 	//マテリアルにデータを書き込む
 	//書き込むためのアドレスを取得
 	//reinterpret_cast...char* から int* へ、One_class* から Unrelated_class* へなどの変換に使用
@@ -620,104 +592,19 @@ void Particle3D::Draw(uint32_t textureHandle) {
 	instancingResource_->Map(0, nullptr, reinterpret_cast<void**>(&instancingData_));
 
 	
-	//numInstance_ = 0;
-	//for (uint32_t index = 0; index < MAX_INSTANCE_NUMBER_; ++index) {
-
-	//	
-	//	//後でSceneなどで変更できるようにしておく
-	//	
-	//	if (particles_[index].lifeTime <= particles_[index].currentTime) {
-	//		
-	//		continue;
-	//	}
-	//	
-	//	const float DELTA_TIME = 1.0f / 60.0f;
-	//	particles_[index].currentTime += DELTA_TIME;
-	//	particles_[index].transform.translate.x += particles_[index].velocity.x * DELTA_TIME;
-	//	particles_[index].transform.translate.y += particles_[index].velocity.y * DELTA_TIME;
-	//	particles_[index].transform.translate.z += particles_[index].velocity.z * DELTA_TIME;
-	//	
-
-	//	if (isBillBordMode == true) {
-	//		//Y軸でπ/2回転
-	//		//これからはM_PIじゃなくてstd::numbers::pi_vを使おうね
-	//		Matrix4x4 backToFrontMatrix = MakeRotateYMatrix(std::numbers::pi_v<float>);
-
-	//		//カメラの回転を適用する
-	//		Matrix4x4 billBoardMatrix = Multiply(backToFrontMatrix, Camera::GetInstance()->GetAffineMatrix());
-	//		//平行成分はいらないよ
-	//		billBoardMatrix.m[3][0] = 0.0f;
-	//		billBoardMatrix.m[3][1] = 0.0f;
-	//		billBoardMatrix.m[3][2] = 0.0f;
-
-	//		Matrix4x4 scaleMatrix = MakeScaleMatrix(particles_[index].transform.scale);
-	//		Matrix4x4 translateMatrix = MakeTranslateMatrix( particles_[index].transform.translate);
-
-	//		//パーティクル個別のRotateは関係ないよ
-	//		Matrix4x4 worldMatrix = Multiply(scaleMatrix,Multiply(billBoardMatrix,translateMatrix));
-	//		
-	//		//WVP行列を作成
-	//		Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(Camera::GetInstance()->GetViewMatrix(), Camera::GetInstance()->GetProjectionMatrix_()));
-
-	//		instancingData_[numInstance_].WVP = worldViewProjectionMatrix;
-	//		instancingData_[numInstance_].World = worldMatrix;
-	//		instancingData_[numInstance_].color = particles_[index].color;
-
-	//		//アルファはVector4でいうwだね
-	//		float alpha = 1.0f - (particles_[index].currentTime / particles_[index].lifeTime);
-	//		instancingData_[numInstance_].color.w=alpha;
-
-
-	//	}
-	//	else if (isBillBordMode == false) {
-	//		//ビルボードやらない版
-	//		Matrix4x4 worldMatrix = MakeAffineMatrix(particles_[index].transform.scale,particles_[index].transform.rotate,particles_[index].transform.translate);
-	//		
-	//		//WVP行列を作成
-	//		Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(Camera::GetInstance()->GetViewMatrix(), Camera::GetInstance()->GetProjectionMatrix_()));
-
-	//		instancingData_[numInstance_].WVP = worldViewProjectionMatrix;
-	//		instancingData_[numInstance_].World = worldMatrix;
-	//		instancingData_[numInstance_].color = particles_[index].color;
-
-	//		//アルファはVector4でいうwだね
-	//		float alpha = 1.0f - (particles_[index].currentTime / particles_[index].lifeTime);
-	//		instancingData_[numInstance_].color.w=alpha;
-
-
-	//	}
-	//	
-
-	//	
-
-
-	//	mesh_->GraphicsCommand();
-	//	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(1, instancingSrvHandleGPU_);
-	//
-	//	//DrawCall
-	//	mesh_->DrawCall(numInstance_);
-
-	//	
-	//	++numInstance_;
-
-	//	
-	//}
 	
 	numInstance_ = 0;
-	for (std::list<Particle>::iterator particleIterator = particles_.begin();
-		particleIterator != particles_.end();) {
-		//後でSceneなどで変更できるようにしておく
-		
-		/*if ((*particleIterator).lifeTime <= (*particleIterator).currentTime) {
+	for (int index = 0; index < MAX_INSTANCE_NUMBER_; ++index) {
+		if (particles_[index].lifeTime <= particles_[index].currentTime) {
 			
 			continue;
-		}*/
+		}
 		
 		const float DELTA_TIME = 1.0f / 60.0f;
-		(*particleIterator).currentTime += DELTA_TIME;
-		(*particleIterator).transform.translate.x += (*particleIterator).velocity.x * DELTA_TIME;
-		(*particleIterator).transform.translate.y += (*particleIterator).velocity.y * DELTA_TIME;
-		(*particleIterator).transform.translate.z += (*particleIterator).velocity.z * DELTA_TIME;
+		particles_[index].currentTime += DELTA_TIME;
+		particles_[index].transform.translate.x += particles_[index].velocity.x * DELTA_TIME;
+		particles_[index].transform.translate.y += particles_[index].velocity.y * DELTA_TIME;
+		particles_[index].transform.translate.z += particles_[index].velocity.z * DELTA_TIME;
 		
 
 		if (isBillBordMode == true) {
@@ -732,8 +619,8 @@ void Particle3D::Draw(uint32_t textureHandle) {
 			billBoardMatrix.m[3][1] = 0.0f;
 			billBoardMatrix.m[3][2] = 0.0f;
 
-			Matrix4x4 scaleMatrix = MakeScaleMatrix((*particleIterator).transform.scale);
-			Matrix4x4 translateMatrix = MakeTranslateMatrix((*particleIterator).transform.translate);
+			Matrix4x4 scaleMatrix = MakeScaleMatrix(particles_[index].transform.scale);
+			Matrix4x4 translateMatrix = MakeTranslateMatrix(particles_[index].transform.translate);
 
 			//パーティクル個別のRotateは関係ないよ
 			Matrix4x4 worldMatrix = Multiply(scaleMatrix,Multiply(billBoardMatrix,translateMatrix));
@@ -743,10 +630,10 @@ void Particle3D::Draw(uint32_t textureHandle) {
 
 			instancingData_[numInstance_].WVP = worldViewProjectionMatrix;
 			instancingData_[numInstance_].World = worldMatrix;
-			instancingData_[numInstance_].color = (*particleIterator).color;
+			instancingData_[numInstance_].color = particles_[index].color;
 
 			//アルファはVector4でいうwだね
-			float alpha = 1.0f - ((*particleIterator).currentTime / (*particleIterator).lifeTime);
+			float alpha = 1.0f - (particles_[index].currentTime / particles_[index].lifeTime);
 			instancingData_[numInstance_].color.w=alpha;
 
 
@@ -754,19 +641,19 @@ void Particle3D::Draw(uint32_t textureHandle) {
 		else if (isBillBordMode == false) {
 			//ビルボードやらない版
 			Matrix4x4 worldMatrix = MakeAffineMatrix(
-				(*particleIterator).transform.scale,
-				(*particleIterator).transform.rotate,
-				(*particleIterator).transform.translate);
+				particles_[index].transform.scale,
+				particles_[index].transform.rotate,
+				particles_[index].transform.translate);
 			
 			//WVP行列を作成
 			Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(Camera::GetInstance()->GetViewMatrix(), Camera::GetInstance()->GetProjectionMatrix_()));
 
 			instancingData_[numInstance_].WVP = worldViewProjectionMatrix;
 			instancingData_[numInstance_].World = worldMatrix;
-			instancingData_[numInstance_].color = (*particleIterator).color;
+			instancingData_[numInstance_].color = particles_[index].color;
 
 			//アルファはVector4でいうwだね
-			float alpha = 1.0f - ((*particleIterator).currentTime / (*particleIterator).lifeTime);
+			float alpha = 1.0f - (particles_[index].currentTime /particles_[index].lifeTime);
 			instancingData_[numInstance_].color.w=alpha;
 
 
@@ -778,7 +665,7 @@ void Particle3D::Draw(uint32_t textureHandle) {
 
 		
 		++numInstance_;
-		particleIterator++;
+		//particleIterator++;
 
 
 		mesh_->GraphicsCommand();
@@ -786,13 +673,10 @@ void Particle3D::Draw(uint32_t textureHandle) {
 	
 		//DrawCall
 		mesh_->DrawCall(numInstance_);
-
 	}
 
-	
-
-	
 }
+
 
 //デストラクタ
 Particle3D::~Particle3D() {

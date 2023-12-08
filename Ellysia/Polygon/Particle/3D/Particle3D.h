@@ -63,6 +63,7 @@ private:
 
 	Particle MakeNewParticle(std::mt19937& randomEngine);
 
+
 #pragma endregion
 
 public:
@@ -70,10 +71,9 @@ public:
 	//通常の描画
 	void Draw();
 
-	//TextureHandleを上書きする描画
-	void Draw(uint32_t textureHandle);
+	//テクスチャを上書きをする描画
+	void Draw(uint32_t textureHandle_ );
 
-	
 
 	//デストラクタ
 	~Particle3D();
@@ -177,7 +177,8 @@ private:
 	//描画すべきインスタンス数
 	uint32_t numInstance_ = 0;
 	//パーティクル
-	std::list<Particle>particles_;
+	Particle particles_[MAX_INSTANCE_NUMBER_] = {};
+	//std::list<Particle>particles_;
 	ParticleForGPU* instancingData_ = nullptr;
 
 	//ビルボード

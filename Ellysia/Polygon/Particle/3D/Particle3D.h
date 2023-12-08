@@ -6,6 +6,7 @@
 #include <array>
 #include <memory>
 #include <list>
+#include <random>
 
 #include "ConvertFunction/ConvertLog/LogConvert.h"
 #include "externals/DirectXTex/DirectXTex.h"
@@ -35,9 +36,7 @@
 #include "Polygon/Model/Material/CreateMaterial.h"
 #include "Polygon/Model/DirectionalLight/CreateDirectionalLight.h"
 #include "Polygon/Model/Transformation/Transformation.h"
-//#include <Polygon/Model/Instancing/Instancing.h>
 #include "Polygon/Particle/3D/Particle.h"
-#include <random>
 
 
 class Particle3D {
@@ -178,8 +177,7 @@ private:
 	//描画すべきインスタンス数
 	uint32_t numInstance_ = 0;
 	//パーティクル
-	Particle particles_[MAX_INSTANCE_NUMBER_];
-	//std::list<Particle>particles_;
+	std::list<Particle>particles_;
 	ParticleForGPU* instancingData_ = nullptr;
 
 	//ビルボード

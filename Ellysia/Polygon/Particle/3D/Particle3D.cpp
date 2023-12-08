@@ -278,10 +278,11 @@ void Particle3D::CreateRandomParticle(std::mt19937 randomEngine, const std::stri
 
 			
 
-			for (uint32_t index = 0; index < MAX_INSTANCE_NUMBER_; ++index) {
-				particles_[index] = MakeNewParticle(randomEngine);
+			/*for (uint32_t index = 0; index < MAX_INSTANCE_NUMBER_; ++index) {
+				particleIterator->MakeNewParticle(randomEngine);
 			
-			}
+			}*/
+			particles_.push_back(MakeNewParticle(randomEngine));
 	
 			/*for (std::list<Particle>::iterator particleIterator = particles_.begin();
 				particleIterator != particles_.end(); ++particleIterator) {
@@ -361,10 +362,14 @@ void Particle3D::CreateRandomParticle(std::mt19937 randomEngine, const std::stri
 
 	//頂点リソースを作る
 	//SRTの設定
-	for (uint32_t index = 0; index < MAX_INSTANCE_NUMBER_; ++index) {
+	/*for (uint32_t index = 0; index < MAX_INSTANCE_NUMBER_; ++index) {
 		particles_[index] = MakeNewParticle(randomEngine);
 		
 	}
+
+	
+
+	particles_.push_back(MakeNewParticle(randomEngine));
 
 	//particles_.push_back(MakeNewParticle(randomEngine));
 	//そもそもここにはいっていない
@@ -375,7 +380,10 @@ void Particle3D::CreateRandomParticle(std::mt19937 randomEngine, const std::stri
 	}*/
 
 
-	//particles_.push_back(MakeNewParticle(randomEngine));
+	particles_.push_back(MakeNewParticle(randomEngine));
+	particles_.push_back(MakeNewParticle(randomEngine));
+	particles_.push_back(MakeNewParticle(randomEngine));
+
 
 	isBillBordMode_ = true;
 
@@ -395,150 +403,150 @@ void Particle3D::CreateRandomParticle(std::mt19937 randomEngine, const std::stri
 }
 
 //描画
-void Particle3D::Draw() {
-	
-	//マテリアルにデータを書き込む
-	//書き込むためのアドレスを取得
-	//reinterpret_cast...char* から int* へ、One_class* から Unrelated_class* へなどの変換に使用
-
-	material_->SetInformation(color_,isEnableLighting_);
-
-	//書き込むためのデータを書き込む
-	//頂点データをリソースにコピー
-	
-	//コマンドを積む
-	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootSignature(PipelineManager::GetInstance()->GetParticle3DRootSignature().Get());
-	DirectXSetup::GetInstance()->GetCommandList()->SetPipelineState(PipelineManager::GetInstance()->GetParticle3DGraphicsPipelineState().Get());
-
-
-	//mesh_->GraphicsCommand();
-	
-	////RootSignatureを設定。PSOに設定しているけど別途設定が必要
-	//DirectXSetup::GetInstance()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);
-	////形状を設定。PSOに設定しているものとはまた別。同じものを設定すると考えよう
-	//DirectXSetup::GetInstance()->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-	//CBVを設定する
-	material_->GraphicsCommand();
-	
-	//Transformationいらなかったっす
-	//その代わりにInstancing
-	
-	
-	//DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(1, instancingSrvHandleGPU_);
-
-	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である
-	
-	if (textureHandle_!= 0) {
-		TextureManager::GraphicsCommand(textureHandle_ );
-
-	}
-	
-
-	//Light
-	directionalLight_->GraphicsCommand();
-	
-	//DrawCall
-	//instancing_->SetGraphicsCommand(isBillBordMode_);
-
-
-
-
-	//インスタンシング
-	instancingResource_->Map(0, nullptr, reinterpret_cast<void**>(&instancingData_));
-
-	
-	
-	numInstance_ = 0;
-	for (int index = 0; index < MAX_INSTANCE_NUMBER_; ++index) {
-		if (particles_[index].lifeTime <= particles_[index].currentTime) {
-			
-			continue;
-		}
-		
-		const float DELTA_TIME = 1.0f / 60.0f;
-		particles_[index].currentTime += DELTA_TIME;
-		particles_[index].transform.translate.x += particles_[index].velocity.x * DELTA_TIME;
-		particles_[index].transform.translate.y += particles_[index].velocity.y * DELTA_TIME;
-		particles_[index].transform.translate.z += particles_[index].velocity.z * DELTA_TIME;
-		
-
-		if (isBillBordMode == true) {
-			//Y軸でπ/2回転
-			//これからはM_PIじゃなくてstd::numbers::pi_vを使おうね
-			Matrix4x4 backToFrontMatrix = MakeRotateYMatrix(std::numbers::pi_v<float>);
-
-			//カメラの回転を適用する
-			Matrix4x4 billBoardMatrix = Multiply(backToFrontMatrix, Camera::GetInstance()->GetAffineMatrix());
-			//平行成分はいらないよ
-			billBoardMatrix.m[3][0] = 0.0f;
-			billBoardMatrix.m[3][1] = 0.0f;
-			billBoardMatrix.m[3][2] = 0.0f;
-
-			Matrix4x4 scaleMatrix = MakeScaleMatrix(particles_[index].transform.scale);
-			Matrix4x4 translateMatrix = MakeTranslateMatrix(particles_[index].transform.translate);
-
-			//パーティクル個別のRotateは関係ないよ
-			Matrix4x4 worldMatrix = Multiply(scaleMatrix,Multiply(billBoardMatrix,translateMatrix));
-			
-			//WVP行列を作成
-			Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(Camera::GetInstance()->GetViewMatrix(), Camera::GetInstance()->GetProjectionMatrix_()));
-
-			instancingData_[numInstance_].WVP = worldViewProjectionMatrix;
-			instancingData_[numInstance_].World = worldMatrix;
-			instancingData_[numInstance_].color = particles_[index].color;
-
-			//アルファはVector4でいうwだね
-			float alpha = 1.0f - (particles_[index].currentTime / particles_[index].lifeTime);
-			instancingData_[numInstance_].color.w=alpha;
-
-
-		}
-		else if (isBillBordMode == false) {
-			//ビルボードやらない版
-			Matrix4x4 worldMatrix = MakeAffineMatrix(
-				particles_[index].transform.scale,
-				particles_[index].transform.rotate,
-				particles_[index].transform.translate);
-			
-			//WVP行列を作成
-			Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(Camera::GetInstance()->GetViewMatrix(), Camera::GetInstance()->GetProjectionMatrix_()));
-
-			instancingData_[numInstance_].WVP = worldViewProjectionMatrix;
-			instancingData_[numInstance_].World = worldMatrix;
-			instancingData_[numInstance_].color = particles_[index].color;
-
-			//アルファはVector4でいうwだね
-			float alpha = 1.0f - (particles_[index].currentTime /particles_[index].lifeTime);
-			instancingData_[numInstance_].color.w=alpha;
-
-
-		}
-		
-
-		
-		
-
-		
-		++numInstance_;
-		//particleIterator++;
-
-
-		mesh_->GraphicsCommand();
-		DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(1, instancingSrvHandleGPU_);
-	
-		//DrawCall
-		mesh_->DrawCall(numInstance_);
-	}
-
-	//for (std::list<Particle>::iterator particleIterator = particles_.begin();
-	//	particleIterator != particles_.end();++particleIterator) {
-	//	//後でSceneなどで変更できるようにしておく
-	//	
-	//	
-
-	//}
-}
+//void Particle3D::Draw() {
+//	
+//	//マテリアルにデータを書き込む
+//	//書き込むためのアドレスを取得
+//	//reinterpret_cast...char* から int* へ、One_class* から Unrelated_class* へなどの変換に使用
+//
+//	material_->SetInformation(color_,isEnableLighting_);
+//
+//	//書き込むためのデータを書き込む
+//	//頂点データをリソースにコピー
+//	
+//	//コマンドを積む
+//	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootSignature(PipelineManager::GetInstance()->GetParticle3DRootSignature().Get());
+//	DirectXSetup::GetInstance()->GetCommandList()->SetPipelineState(PipelineManager::GetInstance()->GetParticle3DGraphicsPipelineState().Get());
+//
+//
+//	//mesh_->GraphicsCommand();
+//	
+//	////RootSignatureを設定。PSOに設定しているけど別途設定が必要
+//	//DirectXSetup::GetInstance()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);
+//	////形状を設定。PSOに設定しているものとはまた別。同じものを設定すると考えよう
+//	//DirectXSetup::GetInstance()->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+//
+//	//CBVを設定する
+//	material_->GraphicsCommand();
+//	
+//	//Transformationいらなかったっす
+//	//その代わりにInstancing
+//	
+//	
+//	//DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(1, instancingSrvHandleGPU_);
+//
+//	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である
+//	
+//	if (textureHandle_!= 0) {
+//		TextureManager::GraphicsCommand(textureHandle_ );
+//
+//	}
+//	
+//
+//	//Light
+//	directionalLight_->GraphicsCommand();
+//	
+//	//DrawCall
+//	//instancing_->SetGraphicsCommand(isBillBordMode_);
+//
+//
+//
+//
+//	//インスタンシング
+//	instancingResource_->Map(0, nullptr, reinterpret_cast<void**>(&instancingData_));
+//
+//	
+//	
+//	numInstance_ = 0;
+//	for (int index = 0; index < MAX_INSTANCE_NUMBER_; ++index) {
+//		if (particles_[index].lifeTime <= particles_[index].currentTime) {
+//			
+//			continue;
+//		}
+//		
+//		const float DELTA_TIME = 1.0f / 60.0f;
+//		particles_[index].currentTime += DELTA_TIME;
+//		particles_[index].transform.translate.x += particles_[index].velocity.x * DELTA_TIME;
+//		particles_[index].transform.translate.y += particles_[index].velocity.y * DELTA_TIME;
+//		particles_[index].transform.translate.z += particles_[index].velocity.z * DELTA_TIME;
+//		
+//
+//		if (isBillBordMode == true) {
+//			//Y軸でπ/2回転
+//			//これからはM_PIじゃなくてstd::numbers::pi_vを使おうね
+//			Matrix4x4 backToFrontMatrix = MakeRotateYMatrix(std::numbers::pi_v<float>);
+//
+//			//カメラの回転を適用する
+//			Matrix4x4 billBoardMatrix = Multiply(backToFrontMatrix, Camera::GetInstance()->GetAffineMatrix());
+//			//平行成分はいらないよ
+//			billBoardMatrix.m[3][0] = 0.0f;
+//			billBoardMatrix.m[3][1] = 0.0f;
+//			billBoardMatrix.m[3][2] = 0.0f;
+//
+//			Matrix4x4 scaleMatrix = MakeScaleMatrix(particles_[index].transform.scale);
+//			Matrix4x4 translateMatrix = MakeTranslateMatrix(particles_[index].transform.translate);
+//
+//			//パーティクル個別のRotateは関係ないよ
+//			Matrix4x4 worldMatrix = Multiply(scaleMatrix,Multiply(billBoardMatrix,translateMatrix));
+//			
+//			//WVP行列を作成
+//			Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(Camera::GetInstance()->GetViewMatrix(), Camera::GetInstance()->GetProjectionMatrix_()));
+//
+//			instancingData_[numInstance_].WVP = worldViewProjectionMatrix;
+//			instancingData_[numInstance_].World = worldMatrix;
+//			instancingData_[numInstance_].color = particles_[index].color;
+//
+//			//アルファはVector4でいうwだね
+//			float alpha = 1.0f - (particles_[index].currentTime / particles_[index].lifeTime);
+//			instancingData_[numInstance_].color.w=alpha;
+//
+//
+//		}
+//		else if (isBillBordMode == false) {
+//			//ビルボードやらない版
+//			Matrix4x4 worldMatrix = MakeAffineMatrix(
+//				particles_[index].transform.scale,
+//				particles_[index].transform.rotate,
+//				particles_[index].transform.translate);
+//			
+//			//WVP行列を作成
+//			Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(Camera::GetInstance()->GetViewMatrix(), Camera::GetInstance()->GetProjectionMatrix_()));
+//
+//			instancingData_[numInstance_].WVP = worldViewProjectionMatrix;
+//			instancingData_[numInstance_].World = worldMatrix;
+//			instancingData_[numInstance_].color = particles_[index].color;
+//
+//			//アルファはVector4でいうwだね
+//			float alpha = 1.0f - (particles_[index].currentTime /particles_[index].lifeTime);
+//			instancingData_[numInstance_].color.w=alpha;
+//
+//
+//		}
+//		
+//
+//		
+//		
+//
+//		
+//		++numInstance_;
+//		//particleIterator++;
+//
+//
+//		mesh_->GraphicsCommand();
+//		DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(1, instancingSrvHandleGPU_);
+//	
+//		//DrawCall
+//		mesh_->DrawCall(numInstance_);
+//	}
+//
+//	//for (std::list<Particle>::iterator particleIterator = particles_.begin();
+//	//	particleIterator != particles_.end();++particleIterator) {
+//	//	//後でSceneなどで変更できるようにしておく
+//	//	
+//	//	
+//
+//	//}
+//}
 
 void Particle3D::Draw(uint32_t textureHandle){
 	//マテリアルにデータを書き込む
@@ -594,17 +602,102 @@ void Particle3D::Draw(uint32_t textureHandle){
 	
 	
 	numInstance_ = 0;
-	for (int index = 0; index < MAX_INSTANCE_NUMBER_; ++index) {
-		if (particles_[index].lifeTime <= particles_[index].currentTime) {
+#pragma region メモ
+	//for (int index = 0; index < MAX_INSTANCE_NUMBER_; ++index) {
+	//	if (particles_[index].lifeTime <= particles_[index].currentTime) {
+	//		
+	//		continue;
+	//	}
+	//	
+	//	const float DELTA_TIME = 1.0f / 60.0f;
+	//	particles_[index].currentTime += DELTA_TIME;
+	//	particles_[index].transform.translate.x += particles_[index].velocity.x * DELTA_TIME;
+	//	particles_[index].transform.translate.y += particles_[index].velocity.y * DELTA_TIME;
+	//	particles_[index].transform.translate.z += particles_[index].velocity.z * DELTA_TIME;
+	//	
+
+	//	if (isBillBordMode == true) {
+	//		//Y軸でπ/2回転
+	//		//これからはM_PIじゃなくてstd::numbers::pi_vを使おうね
+	//		Matrix4x4 backToFrontMatrix = MakeRotateYMatrix(std::numbers::pi_v<float>);
+
+	//		//カメラの回転を適用する
+	//		Matrix4x4 billBoardMatrix = Multiply(backToFrontMatrix, Camera::GetInstance()->GetAffineMatrix());
+	//		//平行成分はいらないよ
+	//		billBoardMatrix.m[3][0] = 0.0f;
+	//		billBoardMatrix.m[3][1] = 0.0f;
+	//		billBoardMatrix.m[3][2] = 0.0f;
+
+	//		Matrix4x4 scaleMatrix = MakeScaleMatrix(particles_[index].transform.scale);
+	//		Matrix4x4 translateMatrix = MakeTranslateMatrix(particles_[index].transform.translate);
+
+	//		//パーティクル個別のRotateは関係ないよ
+	//		Matrix4x4 worldMatrix = Multiply(scaleMatrix,Multiply(billBoardMatrix,translateMatrix));
+	//		
+	//		//WVP行列を作成
+	//		Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(Camera::GetInstance()->GetViewMatrix(), Camera::GetInstance()->GetProjectionMatrix_()));
+
+	//		instancingData_[numInstance_].WVP = worldViewProjectionMatrix;
+	//		instancingData_[numInstance_].World = worldMatrix;
+	//		instancingData_[numInstance_].color = particles_[index].color;
+
+	//		//アルファはVector4でいうwだね
+	//		float alpha = 1.0f - (particles_[index].currentTime / particles_[index].lifeTime);
+	//		instancingData_[numInstance_].color.w=alpha;
+
+
+	//	}
+	//	else if (isBillBordMode == false) {
+	//		//ビルボードやらない版
+	//		Matrix4x4 worldMatrix = MakeAffineMatrix(
+	//			particles_[index].transform.scale,
+	//			particles_[index].transform.rotate,
+	//			particles_[index].transform.translate);
+	//		
+	//		//WVP行列を作成
+	//		Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(Camera::GetInstance()->GetViewMatrix(), Camera::GetInstance()->GetProjectionMatrix_()));
+
+	//		instancingData_[numInstance_].WVP = worldViewProjectionMatrix;
+	//		instancingData_[numInstance_].World = worldMatrix;
+	//		instancingData_[numInstance_].color = particles_[index].color;
+
+	//		//アルファはVector4でいうwだね
+	//		float alpha = 1.0f - (particles_[index].currentTime /particles_[index].lifeTime);
+	//		instancingData_[numInstance_].color.w=alpha;
+
+
+	//	}
+	//	
+
+	//	
+	//	
+
+	//	
+	//	++numInstance_;
+	//	//particleIterator++;
+
+
+	//	mesh_->GraphicsCommand();
+	//	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(1, instancingSrvHandleGPU_);
+	//
+	//	//DrawCall
+	//	mesh_->DrawCall(numInstance_);
+	//}
+
+#pragma endregion
+
+	for (std::list<Particle>::iterator particleIterator = particles_.begin();
+		particleIterator != particles_.end();) {
+		if ((*particleIterator).lifeTime <= (*particleIterator).currentTime) {
 			
 			continue;
 		}
 		
 		const float DELTA_TIME = 1.0f / 60.0f;
-		particles_[index].currentTime += DELTA_TIME;
-		particles_[index].transform.translate.x += particles_[index].velocity.x * DELTA_TIME;
-		particles_[index].transform.translate.y += particles_[index].velocity.y * DELTA_TIME;
-		particles_[index].transform.translate.z += particles_[index].velocity.z * DELTA_TIME;
+		particleIterator->currentTime += DELTA_TIME;
+		particleIterator->transform.translate.x += particleIterator->velocity.x * DELTA_TIME;
+		particleIterator->transform.translate.y += particleIterator->velocity.y * DELTA_TIME;
+		particleIterator->transform.translate.z += particleIterator->velocity.z * DELTA_TIME;
 		
 
 		if (isBillBordMode == true) {
@@ -619,8 +712,8 @@ void Particle3D::Draw(uint32_t textureHandle){
 			billBoardMatrix.m[3][1] = 0.0f;
 			billBoardMatrix.m[3][2] = 0.0f;
 
-			Matrix4x4 scaleMatrix = MakeScaleMatrix(particles_[index].transform.scale);
-			Matrix4x4 translateMatrix = MakeTranslateMatrix(particles_[index].transform.translate);
+			Matrix4x4 scaleMatrix = MakeScaleMatrix(particleIterator->transform.scale);
+			Matrix4x4 translateMatrix = MakeTranslateMatrix(particleIterator->transform.translate);
 
 			//パーティクル個別のRotateは関係ないよ
 			Matrix4x4 worldMatrix = Multiply(scaleMatrix,Multiply(billBoardMatrix,translateMatrix));
@@ -630,10 +723,10 @@ void Particle3D::Draw(uint32_t textureHandle){
 
 			instancingData_[numInstance_].WVP = worldViewProjectionMatrix;
 			instancingData_[numInstance_].World = worldMatrix;
-			instancingData_[numInstance_].color = particles_[index].color;
+			instancingData_[numInstance_].color = particleIterator->color;
 
 			//アルファはVector4でいうwだね
-			float alpha = 1.0f - (particles_[index].currentTime / particles_[index].lifeTime);
+			float alpha = 1.0f - (particleIterator->currentTime / particleIterator->lifeTime);
 			instancingData_[numInstance_].color.w=alpha;
 
 
@@ -641,19 +734,19 @@ void Particle3D::Draw(uint32_t textureHandle){
 		else if (isBillBordMode == false) {
 			//ビルボードやらない版
 			Matrix4x4 worldMatrix = MakeAffineMatrix(
-				particles_[index].transform.scale,
-				particles_[index].transform.rotate,
-				particles_[index].transform.translate);
+				particleIterator->transform.scale,
+				particleIterator->transform.rotate,
+				particleIterator->transform.translate);
 			
 			//WVP行列を作成
 			Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(Camera::GetInstance()->GetViewMatrix(), Camera::GetInstance()->GetProjectionMatrix_()));
 
 			instancingData_[numInstance_].WVP = worldViewProjectionMatrix;
 			instancingData_[numInstance_].World = worldMatrix;
-			instancingData_[numInstance_].color = particles_[index].color;
+			instancingData_[numInstance_].color = particleIterator->color;
 
 			//アルファはVector4でいうwだね
-			float alpha = 1.0f - (particles_[index].currentTime /particles_[index].lifeTime);
+			float alpha = 1.0f - (particleIterator->currentTime /particleIterator->lifeTime);
 			instancingData_[numInstance_].color.w=alpha;
 
 
@@ -666,7 +759,7 @@ void Particle3D::Draw(uint32_t textureHandle){
 		
 		++numInstance_;
 		//particleIterator++;
-
+		++particleIterator;
 
 		mesh_->GraphicsCommand();
 		DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(1, instancingSrvHandleGPU_);

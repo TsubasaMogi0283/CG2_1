@@ -16,9 +16,7 @@ SampleScene::SampleScene() {
 /// </summary>
 void SampleScene::Initialize(GameManager* gameManager) {
 	for (int i = 0; i < MODEL_AMOUNT_; i++) {
-		model_[i] = Model::Create("Resources/fence", "fence.obj");
-	
-		
+		model_[i] = Model::Create("Resources/CG3/fence", "fence.obj");
 	}
 	modelTransform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
 

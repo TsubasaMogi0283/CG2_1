@@ -20,10 +20,10 @@ void SampleScene::Initialize(GameManager* gameManager) {
 	}
 	modelTransform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
 
-	sprite = new Sprite();
+	sprite = std::make_unique<Sprite>();
 	uint32_t textureHandle = TextureManager::LoadTexture("Resources/uvChecker.png");
-	sprite->LoadTextureHandle(textureHandle);
 	
+	sprite.reset(Sprite::Create(textureHandle, { 0.0f,0.0f }));
 
 }
 
@@ -58,7 +58,7 @@ void SampleScene::Draw(GameManager* gameManager) {
 		model_[i]->Draw();
 	
 	}
-	sprite->DrawRect();
+	sprite->Draw();
 }
 
 /// <summary>
@@ -68,5 +68,4 @@ SampleScene::~SampleScene() {
 	for (int i = 0; i < MODEL_AMOUNT_; i++) {
 		delete model_[i];
 	}
-	delete sprite;
 }

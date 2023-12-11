@@ -6,7 +6,7 @@
 #include "Math/Vector/Transform.h"
 
 #include "Polygon/Model/Model.h"
-
+#include <memory>
 //StatePatternをル買う時は必ず前方宣言をするように
 class Gamemanager;
 
@@ -38,8 +38,7 @@ private:
 	Vector2 scale_ = { 1.0f,1.0f };
 	float rotate = 0.0f;
 
-	Vector2 anchorPoint = { 0.0f,0.0f };
-	Sprite* sprite = nullptr;
+	std::unique_ptr<Sprite> sprite = nullptr;
 	Vector4 color_ = { 1.0f,1.0f,1.0f,1.0f };
 
 	Vector4 modelColor_ = { 1.0f,1.0f,1.0f,1.0f };

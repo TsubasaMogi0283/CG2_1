@@ -1,5 +1,4 @@
 #pragma once
-#include "WindowsSetup.h"
 
 #include <Math/Vector/Transform.h>
 #include <Math/Matrix/Matrix/Matrix4x4.h>
@@ -27,6 +26,9 @@ public:
 
 public:
 
+
+
+
 	//基本はアクセッサだけにする
 	void SetRotate(Vector3 rotate) {
 		this->cameraTransform_.rotate = rotate;
@@ -36,6 +38,8 @@ public:
 		this->cameraTransform_.translate = translate;
 	}
 
+	
+	
 	Matrix4x4 GetViewMatrix();
 
 	Matrix4x4 GetProjectionMatrix_();
@@ -45,6 +49,7 @@ private:
 
 	Matrix4x4 cameraMatrix_ = {};
 	Matrix4x4 viewMatrix_ = {};
+
 
 	//遠視投影行列
 	Transform cameraTransform_ = {};

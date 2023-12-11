@@ -4,6 +4,7 @@
 
 //動的配列
 #include <vector>
+#include <Camera/Camera.h>
 
 
 
@@ -14,46 +15,6 @@ Sprite::Sprite(){
 }
 
 
-//Resource作成の関数化
-ComPtr<ID3D12Resource> Sprite::CreateBufferResource(size_t sizeInBytes) {
-	//void返り値も忘れずに
-	ComPtr<ID3D12Resource> resource = nullptr;
-	
-	////VertexResourceを生成
-	//頂点リソース用のヒープを設定
-	//関数用
-	D3D12_HEAP_PROPERTIES uploadHeapProperties_{};
-	D3D12_RESOURCE_DESC vertexResourceDesc_{};
-	uploadHeapProperties_.Type = D3D12_HEAP_TYPE_UPLOAD;
-
-	//頂点リソースの設定
-	
-	//バッファリソース。テクスチャの場合はまた別の設定をする
-	vertexResourceDesc_.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-	vertexResourceDesc_.Width = sizeInBytes;
-	//バッファの場合はこれらは1にする決まり
-	vertexResourceDesc_.Height = 1;
-	vertexResourceDesc_.DepthOrArraySize = 1;
-	vertexResourceDesc_.MipLevels = 1;
-	vertexResourceDesc_.SampleDesc.Count = 1;
-
-	//バッファの場合はこれにする決まり
-	vertexResourceDesc_.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
-
-	//実際に頂点リソースを作る
-	//ID3D12Resource* vertexResource_ = nullptr;
-	//hrは調査用
-	HRESULT hr;
-	hr = directXSetup_->GetDevice()->CreateCommittedResource(
-		&uploadHeapProperties_,
-		D3D12_HEAP_FLAG_NONE,
-		&vertexResourceDesc_,
-		D3D12_RESOURCE_STATE_GENERIC_READ,
-		nullptr, IID_PPV_ARGS(&resource));
-	assert(SUCCEEDED(hr));
-
-	return resource;
-}
 
 //Vertex
 void Sprite::CreateVertexBufferView() {
@@ -81,24 +42,28 @@ void Sprite::CreateIndexBufferView() {
 
 
 //初期化
-void Sprite::Initialize() {
-	directXSetup_ = DirectXSetup::GetInstance();
+void Sprite::Initialize(uint32_t textureHandle,Vector2 position) {
+	this->textureHandle_ = textureHandle;
+	this->position_ = position;
 	color_ = { 1.0f,1.0f,1.0f,1.0f };
 	
-	
+	//テクスチャの情報を取得
+	resourceDesc_ = TextureManager::GetInstance()->GetResourceDesc(textureHandle_);
+	size_ = { float(resourceDesc_.Width),float(resourceDesc_.Height) };
+
 
 	
 	//ここでBufferResourceを作る
 	//Sprite用の頂点リソースを作る
 	//以前三角形二枚にしてたけど結合して四角一枚で良くなったので4で良いよね
-	vertexResource_ = CreateBufferResource(sizeof(VertexData) * 6).Get();
+	vertexResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(VertexData) * 6).Get();
 	//index用のリソースを作る
-	indexResource_ = CreateBufferResource(sizeof(uint32_t) * 6).Get();
+	indexResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(uint32_t) * 6).Get();
 	////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
-	materialResource_=CreateBufferResource(sizeof(Material));
+	materialResource_=DirectXSetup::GetInstance()->CreateBufferResource(sizeof(Material));
 	//Sprite用のTransformationMatrix用のリソースを作る。
 	//Matrix4x4 1つ分サイズを用意する
-	transformationMatrixResource_ = CreateBufferResource(sizeof(TransformationMatrix)).Get();
+	transformationMatrixResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(TransformationMatrix)).Get();
 	
 
 	//頂点バッファビューを作成する
@@ -118,18 +83,20 @@ void Sprite::Initialize() {
 	
 }
 
-void Sprite::LoadTextureHandle(uint32_t textureHandle) {
-	this->textureHandle_ = textureHandle;
+Sprite* Sprite::Create(uint32_t textureHandle,Vector2 position) {
+	Sprite* sprite = new Sprite();
+	
+	//初期化の所でやってね、Update,Drawでやるのが好ましいけど凄く重くなった。
+	//ブレンドモードの設定
+	PipelineManager::GetInstance()->SetSpriteBlendMode(sprite->blendModeNumber_);
+	PipelineManager::GetInstance()->GenerateSpritePSO();
+	sprite->Initialize(textureHandle,position);
 
-	//テクスチャの情報を取得
-	resourceDesc_ = TextureManager::GetInstance()->GetResourceDesc(textureHandle_);
-	size_ = { float(resourceDesc_.Width),float(resourceDesc_.Height) };
-
-	Initialize();
+	return sprite;
 
 }
 //描画
-void Sprite::DrawRect() {
+void Sprite::Draw() {
 	
 	//参考
 	//assert(device_ != nullptr);
@@ -173,11 +140,21 @@ void Sprite::DrawRect() {
 	float top = (0.0f-anchorPoint_.y) * size_.y;
 	float bottom = (1.0f-anchorPoint_.y) * size_.y;
 
-	//uv
-	float texLeft = textureLeftTop_.x / resourceDesc_.Width;
-	float texRight = (textureLeftTop_.x+textureSize_.x) / resourceDesc_.Width;
-	float texTop= textureLeftTop_.y / resourceDesc_.Height;
-	float texBottom= (textureLeftTop_.y +textureSize_.y)/ resourceDesc_.Height;
+
+	float texLeft =0.0f;
+	float texRight = 1.0f;
+	float texTop= 0.0f;
+	float texBottom= 1.0f;
+
+	//UVをいじりたいときにオンにして設定するもの
+	if (isUVSetting_ == true) {
+		//uv
+		texLeft = textureLeftTop_.x / resourceDesc_.Width;
+		texRight = (textureLeftTop_.x+textureSize_.x) / resourceDesc_.Width;
+		texTop= textureLeftTop_.y / resourceDesc_.Height;
+		texBottom= (textureLeftTop_.y +textureSize_.y)/ resourceDesc_.Height;
+	}
+	
 
 
 
@@ -266,21 +243,21 @@ void Sprite::DrawRect() {
 	//パイプラインはここに引っ越したい
 
 	//参考
-	directXSetup_->GetCommandList()->SetGraphicsRootSignature(PipelineManager::GetInstance()->GetSpriteRootSignature().Get());
-	directXSetup_->GetCommandList()->SetPipelineState(PipelineManager::GetInstance()->GetSpriteGraphicsPipelineState().Get());
+	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootSignature(PipelineManager::GetInstance()->GetSpriteRootSignature().Get());
+	DirectXSetup::GetInstance()->GetCommandList()->SetPipelineState(PipelineManager::GetInstance()->GetSpriteGraphicsPipelineState().Get());
 
 
 	//RootSignatureを設定。PSOに設定しているけど別途設定が必要
-	directXSetup_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);
+	DirectXSetup::GetInstance()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);
 	//IBVを設定
-	directXSetup_->GetCommandList()->IASetIndexBuffer(&indexBufferView_);
+	DirectXSetup::GetInstance()->GetCommandList()->IASetIndexBuffer(&indexBufferView_);
 	
 	//形状を設定。PSOに設定しているものとはまた別。同じものを設定すると考えよう
-	directXSetup_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	DirectXSetup::GetInstance()->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	
 	//CBVを設定する
-	directXSetup_->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
-	directXSetup_->GetCommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResource_->GetGPUVirtualAddress());
+	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResource_->GetGPUVirtualAddress());
 	
 	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である
 	//directXSetup_->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetTextureIndex());
@@ -293,7 +270,7 @@ void Sprite::DrawRect() {
 	
 	//今度はこっちでドローコールをするよ
 	//描画(DrawCall)6個のインデックスを使用し1つのインスタンスを描画。
-	directXSetup_->GetCommandList()->DrawIndexedInstanced(6, 1, 0, 0, 0);
+	DirectXSetup::GetInstance()->GetCommandList()->DrawIndexedInstanced(6, 1, 0, 0, 0);
 
 
 }

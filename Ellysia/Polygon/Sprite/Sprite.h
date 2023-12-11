@@ -1,5 +1,5 @@
 #pragma once
-#include "Common/DirectX/DirectXSetup.h"
+#include "DirectXSetup.h"
 #include "TextureManager/TextureManager.h"
 
 #include "ConvertFunction/ConvertLog/LogConvert.h"
@@ -19,21 +19,19 @@
 #include <format>
 #include <Math/Vector/DirectionalLight.h>
 #include <Math/Matrix/Matrix/TransformationMatrix.h>
-#include "Math/Vector/SpritePosition.h"
 
 class Sprite {
 public:
-
 	//コンストラクタ
 	Sprite();
 
 	
-	void LoadTextureHandle(uint32_t textureHandle);
+	static Sprite* Create(uint32_t textureHandle,Vector2 position);
 
 
 	//描画
 	//左上、右上、左下、右下
-	void DrawRect();
+	void Draw();
 
 
 	//デストラクタ
@@ -119,7 +117,7 @@ public:
 	}
 
 
-
+	//UV
 	void SetTextureLeftTop(Vector2 textureLeftTop) {
 		this->textureLeftTop_ = textureLeftTop;
 	}
@@ -134,17 +132,23 @@ public:
 		return textureSize_;
 	}
 
+	void SetUVMode(bool isUVMode) {
+		this->isUVSetting_ = isUVMode;
+	}
+	const bool GetUVMode() {
+		return isUVSetting_;
+	}
+
+
+
 #pragma endregion
 
 
 
 private:
 	//初期化
-	void Initialize();
+	void Initialize(uint32_t textureHandle,Vector2 position);
 	
-	//Resource作成の関数化
-	//Buffer
-	ComPtr<ID3D12Resource> CreateBufferResource(size_t sizeInBytes);
 	//Vertex
 	void CreateVertexBufferView();
 	//Index
@@ -153,7 +157,6 @@ private:
 
 
 private:
-	DirectXSetup* directXSetup_ = nullptr;
 
 
 #pragma region リソース
@@ -261,7 +264,11 @@ private:
 	//テクスチャ切り出しサイズ
 	Vector2 textureSize_ = { 100.0f,100.0f };
 
+	bool isUVSetting_ = false;
 
 	//テクスチャハンドル
 	uint32_t textureHandle_ = 0u;
+
+	//ブレンドモード
+	uint32_t blendModeNumber_ = 1;
 };

@@ -1,6 +1,6 @@
 #include "Camera.h"
 #include <Math/Matrix/Calculation/Matrix4x4Calculation.h>
-
+#include "WindowsSetup.h"
 
 
 //コンストラクタ

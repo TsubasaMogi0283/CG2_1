@@ -38,6 +38,7 @@ ModelData Model::LoadObjectFile(const std::string& directoryPath,const std::stri
 	std::string line;
 
 
+
 	//2.ファイルを開く
 	std::ifstream file(directoryPath + "/" + fileName);
 	assert(file.is_open());

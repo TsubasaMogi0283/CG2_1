@@ -10,7 +10,7 @@ using namespace Microsoft::WRL;
 
 
 #include <WindowsSetup.h>
-#include "Input/Mouse/MouseInformation.h"
+#include "Mouse/MouseInformation.h"
 
 #pragma comment(lib,"dinput8.lib")
 #pragma comment(lib,"dxguid.lib")

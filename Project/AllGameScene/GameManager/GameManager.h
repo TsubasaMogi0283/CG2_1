@@ -14,7 +14,7 @@
 #include <Polygon/Model/Model.h>
 
 #include "Audio/Audio.h"
-#include <Input/Input.h>
+#include <Input.h>
 #include "IGameScene.h"
 #include "Camera/Camera.h"
 #include "TextureManager/TextureManager.h"

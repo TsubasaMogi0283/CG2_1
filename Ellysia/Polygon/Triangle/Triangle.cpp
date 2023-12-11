@@ -1,6 +1,5 @@
 #include "Triangle.h"
 #include "Math/Vector/Transform.h"
-#include "Math/Matrix/Matrix/WorldViewMatrix.h"
 
 
 //補助ライブラリ

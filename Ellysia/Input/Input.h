@@ -10,14 +10,18 @@ using namespace Microsoft::WRL;
 
 
 #include <WindowsSetup.h>
-#include "Mouse/MouseInformation.h"
 
 #pragma comment(lib,"dinput8.lib")
 #pragma comment(lib,"dxguid.lib")
 #pragma comment(lib,"xinput.lib")
 
 
-
+//0,1,2,3とか分かりにくいのでenumで分かりやすくしたい
+enum MouseInformation{
+	LeftButton,
+	RightButton,
+	MouseWheel,
+};
 
 class Input {
 private:

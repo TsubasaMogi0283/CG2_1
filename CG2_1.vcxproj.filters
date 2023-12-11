@@ -307,9 +307,6 @@
     <ClInclude Include="Ellysia\Input\Input.h">
       <Filter>Ellysia\ヘッダー ファイル\Input</Filter>
     </ClInclude>
-    <ClInclude Include="Ellysia\Input\Mouse\MouseInformation.h">
-      <Filter>Ellysia\ヘッダー ファイル\Input</Filter>
-    </ClInclude>
     <ClInclude Include="Ellysia\Math\Vector\SpritePosition.h">
       <Filter>Ellysia\ヘッダー ファイル\Math\Vector</Filter>
     </ClInclude>

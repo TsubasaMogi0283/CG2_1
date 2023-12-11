@@ -9,7 +9,7 @@ GameManager::GameManager() {
 	//コンストラクタ
 	//GameManager.cpp側ではwinApp=GetInstanceでやってるけど他のクラスでは直接GetInstanceってやった方が楽かも
 
-	winApp_ = WinApp::GetInstance();
+	winApp_ = WindowsSetup::GetInstance();
 	directXSetup_ = DirectXSetup::GetInstance();
 	imGuiManager_ = ImGuiManager::GetInstance();
 	input_ = Input::GetInstance();

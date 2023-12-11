@@ -52,7 +52,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalIncludeDirectories>$(ProjectDir)\Math;$(ProjectDir)\GameScene;$(ProjectDir)\Common;$(ProjectDir)\ConvertFunction;$(ProjectDir)\Ellysia;$(ProjectDir)\Project;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\Math;$(ProjectDir)\GameScene;$(ProjectDir)\Common;$(ProjectDir)\ConvertFunction;$(ProjectDir)\Ellysia;$(ProjectDir)\Project;$(ProjectDir)\Ellysia\Common\DirectX;$(ProjectDir)\Ellysia\Common\Windows;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -75,7 +75,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <LanguageStandard>stdcpp20</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalIncludeDirectories>$(ProjectDir)\Math;$(ProjectDir)\GameScene;$(ProjectDir)\Common;$(ProjectDir)\ConvertFunction;$(ProjectDir)\Ellysia;$(ProjectDir)\Project;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\Math;$(ProjectDir)\GameScene;$(ProjectDir)\Common;$(ProjectDir)\ConvertFunction;$(ProjectDir)\Ellysia;$(ProjectDir)\Project;$(ProjectDir)\Ellysia\Common\DirectX;$(ProjectDir)\Ellysia\Common\Windows;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -93,11 +93,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Ellysia\Audio\Audio.cpp" />
     <ClCompile Include="Ellysia\Camera\Camera.cpp" />
     <ClCompile Include="Ellysia\Common\DirectX\DirectXSetup.cpp" />
-    <ClCompile Include="Ellysia\Common\Windows\WinApp.cpp" />
+    <ClCompile Include="Ellysia\Common\Windows\WindowsSetup.cpp" />
     <ClCompile Include="Ellysia\ConvertFunction\CompileShader\CompileShaderManager.cpp" />
     <ClCompile Include="Ellysia\ConvertFunction\ConvertColor\ColorConvert.cpp" />
     <ClCompile Include="Ellysia\ConvertFunction\ConvertLog\LogConvert.cpp" />
-    <ClCompile Include="Ellysia\DebugCamera\DebugCamera.cpp" />
     <ClCompile Include="Ellysia\externals\imGui\imgui.cpp" />
     <ClCompile Include="Ellysia\externals\imGui\imgui_demo.cpp" />
     <ClCompile Include="Ellysia\externals\imGui\imgui_draw.cpp" />
@@ -120,7 +119,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Ellysia\Polygon\Sprite\Sprite.cpp" />
     <ClCompile Include="Ellysia\Polygon\Triangle\Triangle.cpp" />
     <ClCompile Include="Ellysia\TextureManager\TextureManager.cpp" />
-    <ClCompile Include="Ellysia\ViewProjection\ViewProjection.cpp" />
     <ClCompile Include="Ellysia\WorldTransform\WorldTransform.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Project\AllGameScene\GameManager\GameManager.cpp" />
@@ -157,11 +155,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Ellysia\Blend\BlendMode.h" />
     <ClInclude Include="Ellysia\Camera\Camera.h" />
     <ClInclude Include="Ellysia\Common\DirectX\DirectXSetup.h" />
-    <ClInclude Include="Ellysia\Common\Windows\WinApp.h" />
+    <ClInclude Include="Ellysia\Common\Windows\WindowsSetup.h" />
     <ClInclude Include="Ellysia\ConvertFunction\CompileShader\CompileShaderManager.h" />
     <ClInclude Include="Ellysia\ConvertFunction\ConvertColor\ColorConvert.h" />
     <ClInclude Include="Ellysia\ConvertFunction\ConvertLog\LogConvert.h" />
-    <ClInclude Include="Ellysia\DebugCamera\DebugCamera.h" />
     <ClInclude Include="Ellysia\externals\imGui\imconfig.h" />
     <ClInclude Include="Ellysia\externals\imGui\imgui.h" />
     <ClInclude Include="Ellysia\externals\imGui\imgui_impl_dx12.h" />
@@ -201,7 +198,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Ellysia\Polygon\Sprite\Sprite.h" />
     <ClInclude Include="Ellysia\Polygon\Triangle\Triangle.h" />
     <ClInclude Include="Ellysia\TextureManager\TextureManager.h" />
-    <ClInclude Include="Ellysia\ViewProjection\ViewProjection.h" />
     <ClInclude Include="Ellysia\WorldTransform\WorldTransform.h" />
     <ClInclude Include="Project\AllGameScene\GameManager\GameManager.h" />
     <ClInclude Include="Project\AllGameScene\GameManager\IGameScene.h" />

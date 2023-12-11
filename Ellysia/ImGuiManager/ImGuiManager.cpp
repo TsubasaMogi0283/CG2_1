@@ -25,7 +25,7 @@ void ImGuiManager::Initialize() {
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGui::StyleColorsDark();
-	ImGui_ImplWin32_Init(WinApp::GetInstance()->GetHwnd());
+	ImGui_ImplWin32_Init(WindowsSetup::GetInstance()->GetHwnd());
 	ImGui_ImplDX12_Init(
 		directXSetup_->GetDevice().Get(),
 		directXSetup_->GetswapChain().swapChainDesc.BufferCount,

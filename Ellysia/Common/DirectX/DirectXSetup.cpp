@@ -310,10 +310,10 @@ void DirectXSetup::GenerateSwapChain() {
 	//描画(フロントバッファ)と表示(バックバッファ、プライマリバッファ)に分ける。
 	//このことをダブルバッファリングという。
 	SwapChain swapChain = {};
-	HWND hwnd = WinApp::GetInstance()->GetHwnd();
+	HWND hwnd = WindowsSetup::GetInstance()->GetHwnd();
 	DXGI_SWAP_CHAIN_DESC1 swapChainDesc{};
-	swapChainDesc.Width = WinApp::GetInstance()->GetClientWidth();		//画面の幅。ウィンドウのクライアント領域を同じものにしておく
-	swapChainDesc.Height = WinApp::GetInstance()->GetClientHeight();	//画面の高さ。ウィンドウのクライアント領域を同じものにしておく
+	swapChainDesc.Width = WindowsSetup::GetInstance()->GetClientWidth();		//画面の幅。ウィンドウのクライアント領域を同じものにしておく
+	swapChainDesc.Height = WindowsSetup::GetInstance()->GetClientHeight();	//画面の高さ。ウィンドウのクライアント領域を同じものにしておく
 	swapChainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;					//色の形式
 	swapChainDesc.SampleDesc.Count = 1;								//マルチサンプルしない
 	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;		//描画のターゲットとして利用する
@@ -358,8 +358,8 @@ void DirectXSetup::MakeDescriptorHeap() {
 	srvDescriptorHeap_ = GenarateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 128, true);
 
 	depthStencilResource_ = CreateDepthStencilTextureResource( 
-		WinApp::GetInstance()->GetClientWidth(),
-		WinApp::GetInstance()->GetClientHeight());
+		WindowsSetup::GetInstance()->GetClientWidth(),
+		WindowsSetup::GetInstance()->GetClientHeight());
 
 	dsvDescriptorHeap_ = GenarateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_DSV, 1, false);
 
@@ -461,8 +461,8 @@ void DirectXSetup::GenarateViewport() {
 	
 	D3D12_VIEWPORT viewport{};
 	//クライアント領域のサイズと一緒にして画面全体に表示
-	viewport.Width = float(WinApp::GetInstance()->GetClientWidth());
-	viewport.Height = float(WinApp::GetInstance()->GetClientHeight());
+	viewport.Width = float(WindowsSetup::GetInstance()->GetClientWidth());
+	viewport.Height = float(WindowsSetup::GetInstance()->GetClientHeight());
 	viewport.TopLeftX = 0;
 	viewport.TopLeftY = 0;
 	viewport.MinDepth = 0.0f;
@@ -477,9 +477,9 @@ void DirectXSetup::GenerateScissor() {
 	D3D12_RECT scissorRect{};
 	//基本的にビューポートと同じ矩形が構成されるようにする
 	scissorRect.left = 0;
-	scissorRect.right = WinApp::GetInstance()->GetClientWidth();
+	scissorRect.right = WindowsSetup::GetInstance()->GetClientWidth();
 	scissorRect.top = 0;
-	scissorRect.bottom = WinApp::GetInstance()->GetClientHeight();
+	scissorRect.bottom = WindowsSetup::GetInstance()->GetClientHeight();
 
 
 	DirectXSetup::GetInstance()->scissorRect_ = scissorRect;

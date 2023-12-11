@@ -13,29 +13,29 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd,UINT msg,
 
 //シングルでやりたい
 //finalで継承禁止
-class WinApp final{
+class WindowsSetup final{
 private:
 	//インスタンスを作れないようにする
 	//コンストラクタをprivateに
-	WinApp();
+	WindowsSetup();
 
 	//デストラクタも
-	~WinApp();
+	~WindowsSetup();
 
 public:
 
 	#pragma region 禁止事項
 	//コピーコンストラクタ禁止
-	WinApp(const WinApp& winApp) = delete;
+	WindowsSetup(const WindowsSetup& winApp) = delete;
 
 	//代入演算子を無効にする
-	WinApp& operator=(const WinApp& winApp) = delete;
+	WindowsSetup& operator=(const WindowsSetup& winApp) = delete;
 
 	#pragma endregion
 
 	//インスタンスにアクセス可能な関数を追加
 	//静的メンバ関数にする。クラス名を指定すればアクセスできる
-	static WinApp* GetInstance();
+	static WindowsSetup* GetInstance();
 
 	//デストラクタ代わり
 	void DeleteInstance();

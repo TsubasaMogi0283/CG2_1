@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Common/Windows/WinApp.h"
-#include "Common/DirectX/DirectXSetup.h"
+#include "WindowsSetup.h"
+#include "DirectXSetup.h"
 #include "Polygon/Triangle/Triangle.h"
 #include <ImGuiManager/ImGuiManager.h>
 
@@ -65,7 +65,7 @@ private:
 	
 
 
-	WinApp* winApp_ = nullptr;
+	WindowsSetup* winApp_ = nullptr;
 	DirectXSetup* directXSetup_ = nullptr;
 
 	PipelineManager* pipelineManager_ = nullptr;

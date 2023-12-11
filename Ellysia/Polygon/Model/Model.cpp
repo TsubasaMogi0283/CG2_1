@@ -2,7 +2,8 @@
 #include <Camera/Camera.h>
 #include <TextureManager/TextureManager.h>
 #include <PipelineManager/PipelineManager.h>
-#include "Common/DirectX/DirectXSetup.h"
+#include "DirectXSetup.h"
+
 
 static uint32_t modelIndex;
 std::list<ModelData> Model::modelInformationList_{};

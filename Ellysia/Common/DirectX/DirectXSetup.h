@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ConvertFunction/ConvertLog/LogConvert.h"
-#include "Common/Windows/WinApp.h"
+#include "WindowsSetup.h"
 #include "Math/Vector/Vector4.h"
 
 

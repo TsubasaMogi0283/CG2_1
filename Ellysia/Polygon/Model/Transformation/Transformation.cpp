@@ -1,7 +1,7 @@
 #include "Polygon/Model/Transformation/Transformation.h"
 #include <Math/Matrix/Matrix/Matrix4x4.h>
 #include <Math/Matrix/Calculation/Matrix4x4Calculation.h>
-#include <Common/Windows/WinApp.h>
+#include <WindowsSetup.h>
 #include <Camera/Camera.h>
 
 
@@ -21,7 +21,7 @@ void Transformation::SetInformation(Transform transform){
 	//遠視投影行列
 	Matrix4x4 viewMatrix = MakeIdentity4x4();
 	
-	Matrix4x4 projectionMatrix = MakeOrthographicMatrix(0.0f, 0.0f, float(WinApp::GetInstance()->GetClientWidth()), float(WinApp::GetInstance()->GetClientHeight()), 0.0f, 100.0f);
+	Matrix4x4 projectionMatrix = MakeOrthographicMatrix(0.0f, 0.0f, float(WindowsSetup::GetInstance()->GetClientWidth()), float(WindowsSetup::GetInstance()->GetClientHeight()), 0.0f, 100.0f);
 	
 	//WVP行列を作成
 	Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(Camera::GetInstance()->GetViewMatrix(), Camera::GetInstance()->GetProjectionMatrix_()));

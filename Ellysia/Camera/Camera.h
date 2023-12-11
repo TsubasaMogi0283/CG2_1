@@ -1,5 +1,5 @@
 #pragma once
-#include "Common/Windows/WinApp.h"
+#include "WindowsSetup.h"
 
 #include <Math/Vector/Transform.h>
 #include <Math/Matrix/Matrix/Matrix4x4.h>

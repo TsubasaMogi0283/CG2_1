@@ -1,17 +1,17 @@
-#include "Common/Windows/WinApp.h"
+#include "WindowsSetup.h"
 
 #pragma comment(lib,"winmm.lib")
 
 
 //コンストラクタ
-WinApp::WinApp() {
+WindowsSetup::WindowsSetup() {
 	
 
 }
 
 
-WinApp* WinApp::GetInstance() {
-	static WinApp instance;
+WindowsSetup* WindowsSetup::GetInstance() {
+	static WindowsSetup instance;
 
 	return &instance;
 }
@@ -19,7 +19,7 @@ WinApp* WinApp::GetInstance() {
 
 
 //
-LRESULT WinApp::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam){
+LRESULT WindowsSetup::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam){
 	if (ImGui_ImplWin32_WndProcHandler(hwnd, msg, wparam, lparam)) {
 		return true;
 	}
@@ -39,7 +39,7 @@ LRESULT WinApp::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam){
 #pragma region Initializeに入れる関数
 
 //ウィンドウに情報を入れる
-void  WinApp::RegisterWindowsClass() {
+void  WindowsSetup::RegisterWindowsClass() {
 	
 	
 	//ウィンドウプロシャージャ
@@ -80,7 +80,7 @@ void  WinApp::RegisterWindowsClass() {
 }
 
 //ウィンドウを表示
-void WinApp::DisplayWindow() {
+void WindowsSetup::DisplayWindow() {
 	//ウィンドウを表示
 	ShowWindow(hwnd_, SW_SHOW);
 }
@@ -88,7 +88,7 @@ void WinApp::DisplayWindow() {
 #pragma endregion
 
 //初期化
-void WinApp::Initialize(const wchar_t* title, int32_t clientWidth,int32_t clientHeight) {
+void WindowsSetup::Initialize(const wchar_t* title, int32_t clientWidth,int32_t clientHeight) {
 	this->title_ = title;
 	this->clientWidth_ = clientWidth;
 	this->clientHeight_ = clientHeight;
@@ -108,7 +108,7 @@ void WinApp::Initialize(const wchar_t* title, int32_t clientWidth,int32_t client
 
 
 //メッセージを送る
-void WinApp::WindowsMSG(MSG& msg) {
+void WindowsSetup::WindowsMSG(MSG& msg) {
 	TranslateMessage(&msg);
 	DispatchMessage(&msg);
 }
@@ -116,13 +116,13 @@ void WinApp::WindowsMSG(MSG& msg) {
 
 
 //ウィンドウを閉じる
-void WinApp::Close() {
+void WindowsSetup::Close() {
 	
 	CloseWindow(hwnd_);
 }
 
 
 //デストラクタも
-WinApp::~WinApp() {
+WindowsSetup::~WindowsSetup() {
 
 }

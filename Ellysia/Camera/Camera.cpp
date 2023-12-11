@@ -30,7 +30,7 @@ Matrix4x4 Camera::GetViewMatrix() {
 
 Matrix4x4 Camera::GetProjectionMatrix_() {
 	//遠視投影行列
-	projectionMatrix_ = MakePerspectiveFovMatrix(0.45f, float(WinApp::GetInstance()->GetClientWidth()) / float(WinApp::GetInstance()->GetClientHeight()), 0.1f, 100.0f);
+	projectionMatrix_ = MakePerspectiveFovMatrix(0.45f, float(WindowsSetup::GetInstance()->GetClientWidth()) / float(WindowsSetup::GetInstance()->GetClientHeight()), 0.1f, 100.0f);
 	
 	return projectionMatrix_;
 }

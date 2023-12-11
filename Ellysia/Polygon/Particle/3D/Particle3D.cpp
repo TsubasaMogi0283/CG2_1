@@ -224,12 +224,6 @@ std::list<Particle> Particle3D::Emission(const Emitter& emmitter, std::mt19937& 
 	return particles;
 }
 
-//ファイルの一時保存
-void Particle3D::LoadObject(const std::string& directoryPath, const std::string& fileName){
-	directoryPath_ = directoryPath;
-	fileName_ = fileName;
-	CreateRandomParticle();
-}
 
 
 void Particle3D::Update(std::mt19937 randomEngine,const std::string& directoryPath, const std::string& fileName){
@@ -366,13 +360,7 @@ void Particle3D::Update(std::mt19937 randomEngine,const std::string& directoryPa
 
 
 	//時刻を進める
-	emitter_.frequency += DELTA_TIME;
-	//頻度より大きさなら発生
-	if (emitter_.frequency <= emitter_.frequencyTime) {
-		//パーティクルを作る
-		particles_.splice(particles_.end(), Emission(emitter_, randomEngine));
-		emitter_.frequencyTime -= emitter_.frequency;
-	}
+
 
 	isBillBordMode_ = true;
 
@@ -395,13 +383,15 @@ void Particle3D::Update(std::mt19937 randomEngine,const std::string& directoryPa
 
 //RandomParticle用
 ///パーティクルだけはvoid型で初期化する
-void Particle3D::CreateRandomParticle() {
+void Particle3D::CreateRandomParticle(const std::string& directoryPath, const std::string& fileName) {
 	
 	//初期化の所でやってね、Update,Drawでやるのが好ましいけど凄く重くなった。
 	//ブレンドだけに仕様と思う
 	//ブレンドモードの設定
 	//Addでやるべきとのこと
 	PipelineManager::GetInstance()->GenerateParticle3DPSO();
+	directoryPath_ = directoryPath;
+	fileName_ = fileName;
 
 	//C++でいうsrandみたいなやつ
 	std::random_device seedGenerator;

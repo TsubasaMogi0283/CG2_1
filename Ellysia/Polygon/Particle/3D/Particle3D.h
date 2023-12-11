@@ -47,10 +47,7 @@ public:
 	Particle3D();
 
 	//初期化
-	void CreateRandomParticle();
-
-	//ファイルの読み込み
-	void LoadObject(const std::string& directoryPath, const std::string& fileName);
+	void CreateRandomParticle(const std::string& directoryPath, const std::string& fileName);
 
 private:
 #pragma region モデルの読み込み関係の関数

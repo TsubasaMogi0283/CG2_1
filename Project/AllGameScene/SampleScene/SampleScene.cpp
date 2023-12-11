@@ -69,16 +69,16 @@ void SampleScene::Update(GameManager* gameManager) {
 	model_->SetTranslate(traslate_);
 
 
+	model_->Update(randomEngine,"Resources/05_02", "plane.obj");
+	
+	
 	ImGui::Begin("Model");
 	ImGui::SliderFloat3("Scale", &scale_.x, 0.0f, 3.0f);
 	ImGui::SliderFloat3("Translate", &traslate_.x, -3.0f, 3.0f);
-	if (ImGui::Button("AddParticle")) {
-		
-	}
+	
 	ImGui::SliderFloat4("Color", &modelColor_.x, 0.0f, 1.0f);
 	ImGui::End();
-	model_->Update(randomEngine,"Resources/05_02", "plane.obj");
-	
+
 	
 	ImGui::Begin("Camera");
 	ImGui::SliderFloat3("Translate", &cameraPosition_.x, -20.0f, 10.0f);

@@ -26,17 +26,24 @@ void SampleScene::Initialize(GameManager* gameManager) {
 	//BlendModeを使う時は各Initializeの前で使ってね
 	modelColor_ = {1.0f,1.0f,1.0f,1.0f};
 	
-	
-	//C++でいうsrandみたいなやつ
 	std::random_device seedGenerator;
 	std::mt19937 randomEngine(seedGenerator());
 	
-	model_ = new Particle3D();
-	model_->CreateRandomParticle(randomEngine,"Resources/05_02", "plane.obj");
 	
+	model_ = std::make_unique<Particle3D>();
+	
+	emitter_.count = 3;
+	
+	//0.5秒ごとに発生
+	emitter_.frequency = 0.5f;
+	//発生頻度用の時刻。0.0で初期化
+	emitter_.frequencyTime = 0.0f;
+
+
+
 	particleTextureHandle_ = TextureManager::GetInstance()->LoadTexture("Resources/CG3/circle.png");
 
-
+	model_->SetEmitter(emitter_);
 	cameraPosition_ = {0.0f,7.0f,-7.0f};
 	cameraRotate_ = { 0.8f,0.0f,0.0f };
 
@@ -48,20 +55,29 @@ void SampleScene::Initialize(GameManager* gameManager) {
 /// 更新
 /// </summary>
 void SampleScene::Update(GameManager* gameManager) {
-	
+	std::random_device seedGenerator;
+	std::mt19937 randomEngine(seedGenerator());
 	//カメラ
 	Camera::GetInstance()->SetRotate(cameraRotate_);
 	Camera::GetInstance()->SetTranslate(cameraPosition_);
 
-
+	
 
 	model_->SetColor(modelColor_);
 
+	model_->SetScale(scale_);
+	model_->SetTranslate(traslate_);
+
 
 	ImGui::Begin("Model");
+	ImGui::SliderFloat3("Scale", &scale_.x, 0.0f, 3.0f);
+	ImGui::SliderFloat3("Translate", &traslate_.x, -3.0f, 3.0f);
+	if (ImGui::Button("AddParticle")) {
+		
+	}
 	ImGui::SliderFloat4("Color", &modelColor_.x, 0.0f, 1.0f);
 	ImGui::End();
-
+	model_->Update(randomEngine,"Resources/05_02", "plane.obj");
 	
 	
 	ImGui::Begin("Camera");
@@ -84,5 +100,5 @@ void SampleScene::Draw(GameManager* gameManager) {
 /// デストラクタ
 /// </summary>
 SampleScene::~SampleScene() {
-	delete model_;
+	
 }

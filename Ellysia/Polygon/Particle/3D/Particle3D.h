@@ -11,8 +11,7 @@
 #include "ConvertFunction/ConvertLog/LogConvert.h"
 #include "externals/DirectXTex/DirectXTex.h"
 #include "ImGuiManager/ImGuiManager.h"
-#include <Math/Matrix/Matrix/Matrix4x4.h>
-#include <Math/Vector/Transform.h>
+#include "Matrix/Matrix4x4.h"
 #include <Math/Vector/Material.h>
 #include <Math/Matrix/Matrix/TransformationMatrix.h>
 #include <Math/Vector/DirectionalLight.h>
@@ -21,7 +20,7 @@
 
 
 
-#include "Math/Vector/Vector4.h"
+#include "Vector4.h"
 #include "Math/Matrix/Calculation/Matrix4x4Calculation.h"
 #include <Math/Vector/VertexData.h>
 #include "Math/Matrix/Matrix/WorldViewMatrix.h"
@@ -36,7 +35,9 @@
 #include "Polygon/Model/Material/CreateMaterial.h"
 #include "Polygon/Model/DirectionalLight/CreateDirectionalLight.h"
 #include "Polygon/Model/Transformation/Transformation.h"
-#include "Polygon/Particle/3D/Particle.h"
+#include "Transform.h"
+#include "Particle.h"
+#include "Emitter.h"
 
 
 class Particle3D {
@@ -46,12 +47,10 @@ public:
 	Particle3D();
 
 	//初期化
-	//Initializeも兼ねているよ
-	//void CreateObject(const std::string& directoryPath,const std::string& fileName);
+	void CreateRandomParticle();
 
-
-	void CreateRandomParticle(std::mt19937 randomEngine, const std::string& directoryPath,const std::string& fileName);
-
+	//ファイルの読み込み
+	void LoadObject(const std::string& directoryPath, const std::string& fileName);
 
 private:
 #pragma region モデルの読み込み関係の関数
@@ -61,15 +60,26 @@ private:
 	//mtlファイルの読み込み
 	MaterialData LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& fileName);
 
+	
+
+#pragma endregion
+
+#pragma region パーティクルの設定で使う関数
+
+	//パーティクルの初期化をする関数
 	Particle MakeNewParticle(std::mt19937& randomEngine);
 
+	//Emitterで発生させる
+	std::list<Particle> Emission(const Emitter& emmitter, std::mt19937& randomEngine);
 
 #pragma endregion
 
 public:
 
+	void Update(std::mt19937 randomEngine, const std::string& directoryPath, const std::string& fileName);
+
 	//通常の描画
-	void Draw();
+	//void Draw();
 
 	//テクスチャを上書きをする描画
 	void Draw(uint32_t textureHandle_ );
@@ -96,38 +106,45 @@ public:
 
 	
 	//アクセッサのまとめ
-
-	//SRT
 	//Scale
 	void SetScale(Vector3 scale) {
-		this->scale_ = scale;
+		this->emitter_.transform.scale = scale;
 	}
-	const Vector3 GetScale() {
-		return scale_;
-	}
+
 	//Rotate
 	void SetRotate(Vector3 rotate) {
-		this->rotate_ = rotate;
+		this->emitter_.transform.rotate = rotate;
 	}
-	const Vector3 GetRotate() {
-		return rotate_;
-	}
-	//Translate
+	//Rotate
 	void SetTranslate(Vector3 translate) {
-		this->translate_ = translate;
-	}
-	const Vector3 GetTranslate() {
-		return translate_;
+		this->emitter_.transform.translate = translate;
 	}
 
 
-
+	//ビルボードにするかどうか
 	bool IsBillBordMode(bool isBillBordMode) {
-
+		this->isBillBordMode_ = isBillBordMode;
 	}
 
 
+#pragma region エミッタの中の設定
+	
+	void SetEmitter(Emitter emitter) {
+		this->emitter_ = emitter;
+	}
 
+	//発生数
+	void SetCount(uint32_t count) {
+		this->emitter_.count = count;
+	}
+	//発生頻度
+	void SetFrequency(float frequency){
+		this->emitter_.frequency = frequency;
+	}
+	//発生頻度を設定
+	void SetFrequencyTime(float frequencyTime){
+		this->emitter_.frequencyTime = frequencyTime;
+	}
 
 #pragma region Lightingの設定
 	void SetLighting(bool enableLighting) {
@@ -143,7 +160,8 @@ public:
 private:
 	//TextureManagerを参考にする
 	std::list<ModelData> modelInformationList_;
-
+	std::string directoryPath_;
+	std::string fileName_;
 
 	//頂点データ
 	std::unique_ptr<Mesh> mesh_ = nullptr;
@@ -163,9 +181,6 @@ private:
 	Vector3 lightingDirection_ = {0.0f,-1.0f,0.0f};
 
 
-	//インスタンシング
-	//std::unique_ptr<Instancing> instancing_ = nullptr;
-	bool isBillBordMode_ = false;
 
 
 	D3D12_CPU_DESCRIPTOR_HANDLE instancingSrvHandleCPU_ = {};
@@ -182,8 +197,7 @@ private:
 	ParticleForGPU* instancingData_ = nullptr;
 
 	//ビルボード
-	bool isBillBordMode = true;
-
+	bool isBillBordMode_ = true;
 	//SRT
 	Vector3 scale_ = { 1.0f,1.0f,1.0f };
 	Vector3 rotate_ = { 0.0f,0.0f,0.0f };
@@ -194,5 +208,9 @@ private:
 	//テクスチャハンドル
 	uint32_t textureHandle_ = 0;
 
+
+	//エミッタの設定
+	Emitter emitter_ = {};
+	const float DELTA_TIME = 1.0f / 60.0f;
 
 };

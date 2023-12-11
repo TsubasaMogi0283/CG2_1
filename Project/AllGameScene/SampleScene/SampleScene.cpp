@@ -32,44 +32,7 @@ void SampleScene::Initialize(GameManager* gameManager) {
 /// </summary>
 void SampleScene::Update(GameManager* gameManager) {
 
-#pragma region Sprite
 
-	sprite->SetFlipX(flipX_);
-	sprite->SetFlipY(flipY_);
-	
-
-	sprite->SetAnchorPoint(anchorPoint);
-	sprite->SetScale(scale_);
-	sprite->SetRotate(rotate);
-	sprite->SetPosition(position_);
-	sprite->SetInvisible(isInvisible_);
-
-	sprite->SetTextureLeftTop(leftTop_);
-	sprite->SetTextureSize(size_);
-	sprite->SetColor(color_);
-
-	ImGui::Begin("Sprite");
-	ImGui::SliderFloat4("color", &color_.x, 0.0f, 1.0f);
-	ImGui::SliderFloat2("Scale", &scale_.x, 0.0f, 3.0f);
-	ImGui::SliderFloat("Rotate", &rotate, 0.0f,3.0f);
-	ImGui::SliderFloat2("Position", &position_.x, 0.0f,1000.0f);
-	ImGui::SliderFloat2("AnchorPoint", &anchorPoint.x, 0.0f,1.0f);
-	
-	ImGui::SliderFloat2("LeftTop", &leftTop_.x, 0.0f,1000.0f);
-	ImGui::SliderFloat2("Size", &size_.x, 0.0f,1000.0f);
-	
-
-	ImGui::Checkbox("FlipX", &flipX_);
-	ImGui::Checkbox("FlipY", &flipY_);
-	ImGui::Checkbox("Invisible", &isInvisible_);
-
-	ImGui::End();
-
-
-#pragma endregion
-
-	//model_->SetColor(modelColor_);
-	
 	modelTransform_.rotate.y += 0.05f;
 	model_[0]->SetColor(modelColor_);
 	model_[0]->SetTranslate(modelTransform_.translate);

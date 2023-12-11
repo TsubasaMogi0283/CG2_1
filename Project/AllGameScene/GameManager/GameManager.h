@@ -13,7 +13,7 @@
 #include <Polygon/Sphere/Sphere.h>
 #include <Polygon/Model/Model.h>
 
-#include "Audio/Audio.h"
+#include "Audio.h"
 #include <Input.h>
 #include "IGameScene.h"
 #include "Camera/Camera.h"

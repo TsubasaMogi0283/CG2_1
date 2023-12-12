@@ -115,6 +115,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Ellysia\Polygon\3D\Model\Mesh\Mesh.cpp" />
     <ClCompile Include="Ellysia\Polygon\3D\Model\Model.cpp" />
     <ClCompile Include="Ellysia\Polygon\3D\Model\Transformation\Transformation.cpp" />
+    <ClCompile Include="Ellysia\Polygon\3D\Particle3D\Particle3D.cpp" />
     <ClCompile Include="Ellysia\Polygon\Sphere\Sphere.cpp" />
     <ClCompile Include="Ellysia\Polygon\Sprite\Sprite.cpp" />
     <ClCompile Include="Ellysia\Polygon\Triangle\Triangle.cpp" />
@@ -193,6 +194,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Ellysia\Polygon\3D\Model\Model.h" />
     <ClInclude Include="Ellysia\Polygon\3D\Model\ModelData\ModelData.h" />
     <ClInclude Include="Ellysia\Polygon\3D\Model\Transformation\Transformation.h" />
+    <ClInclude Include="Ellysia\Polygon\3D\Particle3D\Particle.h" />
+    <ClInclude Include="Ellysia\Polygon\3D\Particle3D\Particle3D.h" />
     <ClInclude Include="Ellysia\Polygon\Sphere\Sphere.h" />
     <ClInclude Include="Ellysia\Polygon\Sprite\Sprite.h" />
     <ClInclude Include="Ellysia\Polygon\Triangle\Triangle.h" />

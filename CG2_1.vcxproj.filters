@@ -228,6 +228,9 @@
     <ClCompile Include="Ellysia\PipelineManager\PipelineManager.cpp">
       <Filter>Ellysia\ソース ファイル\Pipeline</Filter>
     </ClCompile>
+    <ClCompile Include="Ellysia\Polygon\3D\Particle3D\Particle3D.cpp">
+      <Filter>Ellysia\ソース ファイル\Polygone\3D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\Object2d.PS.hlsl">
@@ -405,6 +408,12 @@
     </ClInclude>
     <ClInclude Include="Ellysia\PipelineManager\PipelineManager.h">
       <Filter>Ellysia\ヘッダー ファイル\Pipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Polygon\3D\Particle3D\Particle3D.h">
+      <Filter>Ellysia\ヘッダー ファイル\Polygone</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Polygon\3D\Particle3D\Particle.h">
+      <Filter>Ellysia\ヘッダー ファイル\Polygone\3D</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

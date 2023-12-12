@@ -14,8 +14,8 @@
 #include <Material.h>
 #include <Math/Matrix/Matrix/TransformationMatrix.h>
 #include <DirectionalLight.h>
-#include "Polygon/Model/MaterialData/MaterialData.h"
-#include "Polygon/Model/ModelData/ModelData.h"
+#include "Polygon/3D/Model/MaterialData/MaterialData.h"
+#include "Polygon/3D/Model/ModelData/ModelData.h"
 
 
 
@@ -29,8 +29,8 @@
 
 
 
-#include "Polygon/Model/Mesh/Mesh.h"
-#include "Polygon/Model/Material/CreateMaterial.h"
+#include "Polygon/3D/Model/Mesh/Mesh.h"
+#include "Polygon/3D/Model/Material/CreateMaterial.h"
 #include "DirectionalLight/CreateDirectionalLight.h"
 #include "Transformation/Transformation.h"
 

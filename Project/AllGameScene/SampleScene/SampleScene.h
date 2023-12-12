@@ -4,7 +4,7 @@
 #include "Polygon/Sprite/Sprite.h"
 #include "Transform.h"
 
-#include "Polygon/Model/Model.h"
+#include "Polygon/3D/Model/Model.h"
 #include <memory>
 //StatePatternを使う時は必ず前方宣言をするように
 class Gamemanager;

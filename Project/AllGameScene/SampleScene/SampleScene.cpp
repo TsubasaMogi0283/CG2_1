@@ -25,6 +25,9 @@ void SampleScene::Initialize(GameManager* gameManager) {
 	
 	sprite.reset(Sprite::Create(textureHandle, { 0.0f,0.0f }));
 
+	audio_ = Audio::GetInstance();
+	uint32_t audioHandle_ = audio_->LoadWave("Resources/Audio/Sample/Win.wav");
+	audio_->PlayWave(audioHandle_, true);
 }
 
 /// <summary>

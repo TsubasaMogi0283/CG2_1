@@ -8,14 +8,11 @@
 
 #include "ConvertFunction/ConvertLog/LogConvert.h"
 #include "externals/DirectXTex/DirectXTex.h"
-#include "ImGuiManager.h"
 #include <Math/Matrix/Matrix/Matrix4x4.h>
 #include <Transform.h>
 #include <Material.h>
 #include <Math/Matrix/Matrix/TransformationMatrix.h>
-#include <DirectionalLight.h>
-#include "Polygon/3D/Model/MaterialData/MaterialData.h"
-#include "Polygon/3D/Model/ModelData/ModelData.h"
+
 
 
 
@@ -31,6 +28,11 @@
 
 #include "Polygon/3D/Model/Mesh/Mesh.h"
 #include "Polygon/3D/Model/Material/CreateMaterial.h"
+
+#include "Polygon/3D/Model/MaterialData/MaterialData.h"
+#include "Polygon/3D/Model/ModelData/ModelData.h"
+
+#include <DirectionalLight.h>
 #include "DirectionalLight/CreateDirectionalLight.h"
 #include "Transformation/Transformation.h"
 

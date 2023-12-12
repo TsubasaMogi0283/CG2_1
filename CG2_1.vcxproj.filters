@@ -186,9 +186,6 @@
     <ClCompile Include="Ellysia\Audio\Audio.cpp">
       <Filter>Ellysia\ソース ファイル\Audio</Filter>
     </ClCompile>
-    <ClCompile Include="Ellysia\PipelineManager\PipelineManager.cpp">
-      <Filter>Ellysia\ソース ファイル\Pipeline</Filter>
-    </ClCompile>
     <ClCompile Include="Ellysia\Math\BPMCalculation\BPMSetting.cpp">
       <Filter>Ellysia\ソース ファイル\Math</Filter>
     </ClCompile>
@@ -227,6 +224,9 @@
     </ClCompile>
     <ClCompile Include="Ellysia\Polygon\3D\Model\Model.cpp">
       <Filter>Ellysia\ソース ファイル\Polygone\3D\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Ellysia\PipelineManager\PipelineManager.cpp">
+      <Filter>Ellysia\ソース ファイル\Pipeline</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -343,9 +343,6 @@
     <ClInclude Include="Ellysia\Audio\SoundData\SoundData.h">
       <Filter>Ellysia\ヘッダー ファイル\Audio</Filter>
     </ClInclude>
-    <ClInclude Include="Ellysia\PipelineManager\PipelineManager.h">
-      <Filter>Ellysia\ヘッダー ファイル\Pipeline</Filter>
-    </ClInclude>
     <ClInclude Include="Ellysia\Blend\BlendMode.h">
       <Filter>Ellysia\ヘッダー ファイル\Blend</Filter>
     </ClInclude>
@@ -405,6 +402,9 @@
     </ClInclude>
     <ClInclude Include="Ellysia\Polygon\3D\Model\Model.h">
       <Filter>Ellysia\ヘッダー ファイル\Polygone\3D\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\PipelineManager\PipelineManager.h">
+      <Filter>Ellysia\ヘッダー ファイル\Pipeline</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

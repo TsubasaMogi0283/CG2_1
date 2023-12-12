@@ -46,7 +46,7 @@ private:
 
 
 	Audio* audio_ = nullptr;
-
+	uint32_t audioHandle_ = 0u;
 };
 
 

@@ -1,8 +1,5 @@
 #pragma once
 
-
-
-
 #include "Math/Matrix/Matrix/Matrix4x4.h"
 #include "ConvertFunction/ConvertColor/ColorConvert.h"
 #include "Math/Matrix/Calculation/Matrix4x4Calculation.h"
@@ -63,7 +60,6 @@ private:
 	PipelineManager* pipelineManager_ = nullptr;
 	Input* input_ = nullptr;
 	Camera* camera_ = nullptr;
-	TextureManager* textureManager_ = nullptr;
 
 #pragma region サンプル
 	

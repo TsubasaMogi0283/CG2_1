@@ -15,7 +15,6 @@ GameManager::GameManager() {
 
 	input_ = Input::GetInstance();
 	camera_ = Camera::GetInstance();
-	textureManager_ = TextureManager::GetInstance();
 	pipelineManager_ = PipelineManager::GetInstance();
 }
 	
@@ -30,7 +29,7 @@ void GameManager::Initialize() {
 	pipelineManager_->GenerateModelPSO();
 	ImGuiManager::GetInstance()->Initialize();
 	input_->Initialize();
-	textureManager_->Initilalize();
+	TextureManager::GetInstance()->Initilalize();
 	Audio::GetInstance()->Initialize();
 
 	//シーンごとに動作確認したいときはここを変えてね
@@ -74,7 +73,7 @@ void GameManager::Release() {
 
 	Audio::GetInstance()->Release();
 	//
-	textureManager_->Release();
+	TextureManager::GetInstance()->Release();
 	//
 	ImGuiManager::GetInstance()->Release();
 	//

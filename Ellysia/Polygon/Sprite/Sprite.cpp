@@ -1,10 +1,11 @@
 #include "Sprite.h"
 
 #include "TextureManager.h"
+#include <Camera.h>
 
 //動的配列
 #include <vector>
-#include <Camera/Camera.h>
+
 
 
 

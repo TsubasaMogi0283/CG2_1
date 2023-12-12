@@ -138,7 +138,7 @@ void Triangle::Draw(Vector4 left, Vector4 top, Vector4 right, Transform transfor
 	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である
 	
 	if (textureHandle_ != 0) {
-		TextureManager::TexCommand(textureHandle_);
+		TextureManager::GraphicsCommand(textureHandle_);
 
 	}
 	//directXSetup_->GetCommandList()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU_);

@@ -265,7 +265,7 @@ void Sprite::Draw() {
 	
 	
 	if (textureHandle_ != 0) {
-		TextureManager::TexCommand(textureHandle_);
+		TextureManager::GraphicsCommand(textureHandle_);
 
 	}
 	

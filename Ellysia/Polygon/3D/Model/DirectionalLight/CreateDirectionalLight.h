@@ -5,38 +5,31 @@
 class CreateDirectionalLight{
 public:
 
+	//初期化
 	void Initialize();
 
+	//コマンド
+	void GraphicsCommand();
 
-	void SetGraphicsCommand();
 
-	
 #pragma region アクセッサ
-	Vector3 GetDirection() {
-		return direction_;
-	}
+	void SetColor(Vector4 color) {
+		this->color_ = color;
+	};
 	void SetDirection(Vector3 direction) {
 		this->direction_ = direction;
 	}
-
-	void SetColor(Vector4 color) {
-		this->color_ = color;
-	}
-	void SetIntensity(float intensity) {
-		this->intensity_ = intensity;
+	void SetIntensity(float intencity) {
+		this->intensity_ = intencity;
 	}
 
 #pragma endregion
 
 private:
-	ComPtr<ID3D12Resource> resource_ = nullptr;
-	DirectionalLight* data_ = nullptr;
+	ComPtr<ID3D12Resource> directionalLightResource_ = nullptr;
+	DirectionalLight* directionalLightData_ = nullptr;
 
-
-	Vector3 direction_ = {};
-	Vector4 color_ = {};
-	float intensity_ = {};
-
+	Vector4 color_={ 1.0f,1.0f,1.0f,1.0f };
+	Vector3 direction_ = { 0.0f,-1.0f,0.0f };
+	float intensity_ = 3.0f;
 };
-
-

@@ -424,11 +424,11 @@ void Model::Draw() {
 	//DirectXSetup::GetInstance()->GetCommandList()->IASetVertexBuffers(0, 1, &modelInformation_[modelIndex].vertexBufferView_);
 	////形状を設定。PSOに設定しているものとはまた別。同じものを設定すると考えよう
 	//DirectXSetup::GetInstance()->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	mesh_->SetGraphicsCommand();
+	mesh_->GraphicsCommand();
 
 
 	//CBVを設定する
-	material_->SetGraphicsCommand();
+	material_->GraphicsCommand();
 
 	transformation_->SetGraphicCommand();
 
@@ -437,19 +437,19 @@ void Model::Draw() {
 	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である
 	
 	if (textureHandle_!= 0) {
-		TextureManager::TexCommand(textureHandle_ );
+		TextureManager::GraphicsCommand(textureHandle_ );
 
 	}
 	
 
 	//Light
 	directionalLight_->SetDirection(lightingDirection_);
-	directionalLight_->SetGraphicsCommand();
+	directionalLight_->GraphicsCommand();
 	
 
 
 	//DrawCall
-	mesh_->DrawCall();
+	mesh_->DrawCall(1);
 }
 
 

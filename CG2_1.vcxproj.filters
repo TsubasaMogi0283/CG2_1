@@ -109,9 +109,6 @@
     <Filter Include="Ellysia\ヘッダー ファイル\Polygone\3D">
       <UniqueIdentifier>{f7f05086-715d-489d-9568-38cf742858b0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Ellysia\ヘッダー ファイル\Polygone\3D\Model">
-      <UniqueIdentifier>{e5a13ab7-8f0d-4526-bba9-e90030f8a6d6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Ellysia\ソース ファイル\Camera">
       <UniqueIdentifier>{87a8506f-b468-4ee9-a25f-edaaa2092b76}</UniqueIdentifier>
     </Filter>
@@ -126,6 +123,9 @@
     </Filter>
     <Filter Include="Ellysia\ソース ファイル\Polygone\3D\Model\ModelResource">
       <UniqueIdentifier>{6bb5f514-6b37-417c-b884-05ad36ebda1e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Ellysia\ヘッダー ファイル\Polygone\3D\Particle">
+      <UniqueIdentifier>{d3eb6c6b-887b-4ad2-b25a-d06e1be2d5be}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -403,17 +403,17 @@
     <ClInclude Include="Ellysia\Polygon\3D\Model\DirectionalLight\CreateDirectionalLight.h">
       <Filter>Ellysia\ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Ellysia\Polygon\3D\Model\Model.h">
-      <Filter>Ellysia\ヘッダー ファイル\Polygone\3D\Model</Filter>
-    </ClInclude>
     <ClInclude Include="Ellysia\PipelineManager\PipelineManager.h">
       <Filter>Ellysia\ヘッダー ファイル\Pipeline</Filter>
     </ClInclude>
-    <ClInclude Include="Ellysia\Polygon\3D\Particle3D\Particle3D.h">
-      <Filter>Ellysia\ヘッダー ファイル\Polygone</Filter>
+    <ClInclude Include="Ellysia\Polygon\3D\Model\Model.h">
+      <Filter>Ellysia\ヘッダー ファイル\Polygone\3D</Filter>
     </ClInclude>
     <ClInclude Include="Ellysia\Polygon\3D\Particle3D\Particle.h">
-      <Filter>Ellysia\ヘッダー ファイル\Polygone\3D</Filter>
+      <Filter>Ellysia\ヘッダー ファイル\Polygone\3D\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Polygon\3D\Particle3D\Particle3D.h">
+      <Filter>Ellysia\ヘッダー ファイル\Polygone\3D\Particle</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

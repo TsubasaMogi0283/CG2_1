@@ -5,6 +5,7 @@
 #include "Transform.h"
 
 #include "Polygon/3D/Model/Model.h"
+#include "Polygon/3D/Particle3D/Particle3D.h"
 #include "Audio.h"
 #include <memory>
 
@@ -41,8 +42,9 @@ private:
 
 	std::unique_ptr<Sprite> sprite = nullptr;
 	Vector4 color_ = { 1.0f,1.0f,1.0f,1.0f };
-
 	Vector4 modelColor_ = { 1.0f,1.0f,1.0f,1.0f };
+
+	std::unique_ptr<Particle3D> particle_ = nullptr;
 
 
 	Audio* audio_ = nullptr;

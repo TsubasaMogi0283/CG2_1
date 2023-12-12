@@ -19,6 +19,7 @@ public:
 	
 	//基本の動作
 	void Operate();
+
 	//デストラクタ
 	~Ellysia();
 

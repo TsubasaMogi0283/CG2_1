@@ -4,10 +4,10 @@
 #include "Polygon/Sprite/Sprite.h"
 #include "Transform.h"
 
-#include "Polygon/3D/Model/Model.h"
 #include "Polygon/3D/Particle3D/Particle3D.h"
 #include "Audio.h"
 #include <memory>
+#include <Model.h>
 
 //StatePatternを使う時は必ず前方宣言をするように
 class Gamemanager;
@@ -22,13 +22,13 @@ public:
 	~SampleScene();
 
 	/// 初期化
-	void Initialize(GameManager* gameManager)override;
+	void Initialize()override;
 
 	/// 更新
 	void Update(GameManager* gameManager)override;
 
 	/// 描画
-	void Draw(GameManager* gameManager)override;
+	void Draw()override;
 
 private:
 	static const int MODEL_AMOUNT_ = 1;

@@ -44,7 +44,7 @@ void Triangle::Initialize() {
 
 
 //描画
-void Triangle::Draw(Vector4 left, Vector4 top, Vector4 right, Transform transform, Vector4 color) {
+void Triangle::Draw(Transform transform, Vector4 color) {
 
 	//TextureCoordinate(テクスチャ座標系)
 	//TexCoord,UV座標系とも呼ばれている

@@ -86,6 +86,6 @@ private:
 	SoundData soundData[SOUND_DATE_MAX_] = {};
 
 
-	uint32_t audioHandle_ = -1;
+	uint32_t audioHandle_ = 0;
 
 };

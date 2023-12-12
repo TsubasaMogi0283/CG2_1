@@ -14,7 +14,7 @@ SampleScene::SampleScene() {
 /// <summary>
 /// 初期化
 /// </summary>
-void SampleScene::Initialize(GameManager* gameManager) {
+void SampleScene::Initialize() {
 	for (int i = 0; i < MODEL_AMOUNT_; i++) {
 		model_[i] = Model::Create("Resources/CG3/fence", "fence.obj");
 	}
@@ -82,7 +82,7 @@ void SampleScene::Update(GameManager* gameManager) {
 /// <summary>
 /// 描画
 /// </summary>
-void SampleScene::Draw(GameManager* gameManager) {
+void SampleScene::Draw() {
 	for (int i = 0; i < MODEL_AMOUNT_; i++) {
 		model_[i]->Draw();
 	

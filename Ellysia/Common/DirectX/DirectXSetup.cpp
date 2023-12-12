@@ -168,7 +168,6 @@ void DirectXSetup::SelectAdapter() {
 		DXGI_ERROR_NOT_FOUND; i++) {
 
 		//アダプターの情報を取得する
-		HRESULT hr = {};
 		DXGI_ADAPTER_DESC3 adapterDesc{};
 		hr = useAdapter->GetDesc3(&adapterDesc);
 		assert(SUCCEEDED(hr));

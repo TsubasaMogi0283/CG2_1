@@ -9,7 +9,7 @@ GameManager::GameManager() {
 void GameManager::Initialize() {
 	//シーンごとに動作確認したいときはここを変えてね
 	currentGamaScene_ = new SampleScene();
-	currentGamaScene_->Initialize(this);
+	currentGamaScene_->Initialize();
 
 }
 
@@ -19,7 +19,7 @@ void GameManager::Update() {
 }
 
 void GameManager::Draw() {
-	currentGamaScene_->Draw(this);
+	currentGamaScene_->Draw();
 }
 
 
@@ -29,7 +29,7 @@ void GameManager::ChangeScene(IGameScene* newGameScene) {
 	delete currentGamaScene_;
 	currentGamaScene_ = newGameScene;
 	//今は言っているシーンが引数
-	currentGamaScene_->Initialize(this);
+	currentGamaScene_->Initialize();
 }
 
 

@@ -22,7 +22,7 @@ public:
 	void Initialize();
 
 	//描画
-	void Draw(Vector4 left,Vector4 top,  Vector4 right,Transform transform,Vector4 color);
+	void Draw(Transform transform,Vector4 color);
 
 
 

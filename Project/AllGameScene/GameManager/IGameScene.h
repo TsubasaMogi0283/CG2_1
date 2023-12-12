@@ -8,9 +8,9 @@ public:
 	virtual ~IGameScene() {
 	
 	};
-	virtual void Initialize(GameManager* gamaManager)=0;
+	virtual void Initialize()=0;
 	virtual void Update(GameManager* gamaManager)=0;
-	virtual void Draw(GameManager* gamaManager)=0;
+	virtual void Draw()=0;
 
 
 };

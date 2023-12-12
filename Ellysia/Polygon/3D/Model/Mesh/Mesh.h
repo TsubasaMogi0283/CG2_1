@@ -9,9 +9,9 @@ public:
 
 	void Initialize(const std::vector<VertexData>& vertices);
 
-	void SetGraphicsCommand();
+	void GraphicsCommand();
 
-	void DrawCall();
+	void DrawCall(int32_t instanceCount);
 
 
 private:
@@ -24,5 +24,5 @@ private:
 
 	std::vector<VertexData> vertices_{};
 
+	int32_t instanceCount_ = 1;
 };
-

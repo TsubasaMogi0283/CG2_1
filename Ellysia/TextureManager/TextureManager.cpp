@@ -269,7 +269,7 @@ void TextureManager::UploadTextureData(
 #pragma endregion
 
 
-void TextureManager::TexCommand(uint32_t texHandle) {
+void TextureManager::GraphicsCommand(uint32_t texHandle) {
 	//DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(
 	//	2, TextureManager::GetInstance()->textureSrvHandleGPU_[texHandle]);
 	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(

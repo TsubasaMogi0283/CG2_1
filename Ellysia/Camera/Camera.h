@@ -13,9 +13,8 @@ private:
 
 
 public:
+	//シングルインスタンス
 	static Camera* GetInstance();
-
-
 
 	//コピーコンストラクタ禁止
 	Camera(const Camera& camera) = delete;
@@ -26,9 +25,6 @@ public:
 
 public:
 
-
-
-
 	//基本はアクセッサだけにする
 	void SetRotate(Vector3 rotate) {
 		this->cameraTransform_.rotate = rotate;
@@ -38,10 +34,13 @@ public:
 		this->cameraTransform_.translate = translate;
 	}
 
+	//アフィン行列を取得
+	Matrix4x4 GetAffineMatrix();
 	
-	
+	//ビュー行列を取得
 	Matrix4x4 GetViewMatrix();
 
+	//射影行列を取得
 	Matrix4x4 GetProjectionMatrix_();
 
 private:

@@ -20,6 +20,10 @@ Camera* Camera::GetInstance() {
 	
 }
 
+Matrix4x4 Camera::GetAffineMatrix() {
+	cameraMatrix_ = MakeAffineMatrix(cameraTransform_.scale, cameraTransform_.rotate, cameraTransform_.translate);
+	return cameraMatrix_;
+}
 
 Matrix4x4 Camera::GetViewMatrix() {
 	//カメラ行列

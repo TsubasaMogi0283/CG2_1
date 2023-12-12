@@ -47,7 +47,8 @@ public:
 	Particle3D();
 
 	//初期化
-	void CreateRandomParticle(const std::string& directoryPath, const std::string& fileName);
+	void Create(const std::string& directoryPath, const std::string& fileName);
+
 
 private:
 #pragma region モデルの読み込み関係の関数
@@ -73,7 +74,7 @@ private:
 
 public:
 
-	void Update(std::mt19937 randomEngine, const std::string& directoryPath, const std::string& fileName);
+	void Update();
 
 	//通常の描画
 	//void Draw();
@@ -185,7 +186,7 @@ private:
 
 	ComPtr<ID3D12Resource>instancingResource_ = nullptr;
 
-	static const int32_t MAX_INSTANCE_NUMBER_ = 10;
+	static const int32_t MAX_INSTANCE_NUMBER_ = 100;
 	//描画すべきインスタンス数
 	uint32_t numInstance_ = 0;
 	//パーティクル

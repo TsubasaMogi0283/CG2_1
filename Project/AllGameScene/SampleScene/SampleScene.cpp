@@ -5,9 +5,6 @@
 
 #include <random>
 
-//C++でいうsrandみたいなやつ
-std::random_device seedGenerator;
-std::mt19937 randomEngine(seedGenerator());
 
 /// <summary>
 	/// コンストラクタ
@@ -26,12 +23,10 @@ void SampleScene::Initialize(GameManager* gameManager) {
 	//BlendModeを使う時は各Initializeの前で使ってね
 	modelColor_ = {1.0f,1.0f,1.0f,1.0f};
 	
-	std::random_device seedGenerator;
-	std::mt19937 randomEngine(seedGenerator());
 	
 	
 	model_ = std::make_unique<Particle3D>();
-	
+	model_->Create("Resources/05_02", "plane.obj");
 	emitter_.count = 3;
 	
 	//0.5秒ごとに発生
@@ -69,14 +64,14 @@ void SampleScene::Update(GameManager* gameManager) {
 	model_->SetTranslate(traslate_);
 
 
-	model_->Update(randomEngine,"Resources/05_02", "plane.obj");
+	model_->Update();
 	
 	
 	ImGui::Begin("Model");
 	ImGui::SliderFloat3("Scale", &scale_.x, 0.0f, 3.0f);
 	ImGui::SliderFloat3("Translate", &traslate_.x, -3.0f, 3.0f);
-	
 	ImGui::SliderFloat4("Color", &modelColor_.x, 0.0f, 1.0f);
+	
 	ImGui::End();
 
 	

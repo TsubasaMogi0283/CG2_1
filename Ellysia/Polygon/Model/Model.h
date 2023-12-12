@@ -10,21 +10,20 @@
 #include "externals/DirectXTex/DirectXTex.h"
 #include "ImGuiManager/ImGuiManager.h"
 #include <Math/Matrix/Matrix/Matrix4x4.h>
-#include <Math/Vector/Transform.h>
-#include <Math/Vector/Material.h>
+#include <Transform.h>
+#include <Material.h>
 #include <Math/Matrix/Matrix/TransformationMatrix.h>
-#include <Math/Vector/DirectionalLight.h>
+#include <DirectionalLight.h>
 #include "Polygon/Model/MaterialData/MaterialData.h"
 #include "Polygon/Model/ModelData/ModelData.h"
 
 
 
-#include "Math/Vector/Vector4.h"
+#include "Vector4.h"
 #include "Math/Matrix/Calculation/Matrix4x4Calculation.h"
-#include <Math/Vector/VertexData.h>
-#include "Math/Matrix/Matrix/WorldViewMatrix.h"
+#include <VertexData.h>
 
-#include <Math/Vector/Calculation/VectorCalculation.h>
+#include <Calculation/VectorCalculation.h>
 #include <externals/DirectXTex/d3dx12.h>
 
 

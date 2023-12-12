@@ -1,6 +1,6 @@
 #include "Sprite.h"
 
-#include "TextureManager/TextureManager.h"
+#include "TextureManager.h"
 
 //動的配列
 #include <vector>

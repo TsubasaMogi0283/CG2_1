@@ -1,6 +1,6 @@
 #include "SampleScene.h"
 #include "AllGameScene/GameManager/GameManager.h"
-#include "TextureManager/TextureManager.h"
+#include "TextureManager.h"
 
 /// <summary>
 	/// コンストラクタ

@@ -2,8 +2,7 @@
 #include "AllGameScene/GameManager/IGameScene.h"
 
 #include "Polygon/Sprite/Sprite.h"
-#include <Math/Vector/SpritePosition.h>
-#include "Math/Vector/Transform.h"
+#include "Transform.h"
 
 #include "Polygon/Model/Model.h"
 #include <memory>

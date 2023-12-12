@@ -42,6 +42,8 @@ void SampleScene::Initialize(GameManager* gameManager) {
 	particle_->SetCount(count);
 	particle_->SetFrequency(frequency);
 	particle_->SetFrequencyTime(frequencyTime);
+	particleTranslate_ = { 0.0f,0.0f,0.0f };
+
 	audio_ = Audio::GetInstance();
 	uint32_t audioHandle_ = audio_->LoadWave("Resources/Audio/Sample/Win.wav");
 	audio_->PlayWave(audioHandle_, true);
@@ -57,6 +59,8 @@ void SampleScene::Update(GameManager* gameManager) {
 	model_[0]->SetColor(modelColor_);
 	model_[0]->SetTranslate(modelTranslate_);
 
+	particle_->SetTranslate(particleTranslate_);
+
 	particle_->Update();
 
 	ImGui::Begin("Plane");
@@ -67,6 +71,9 @@ void SampleScene::Update(GameManager* gameManager) {
 	ImGui::End();
 	
 
+	ImGui::Begin("Particle");
+	ImGui::SliderFloat3("Translate", &particleTranslate_.x, -3.0f, 3.0f);
+	ImGui::End();
 	
 
 

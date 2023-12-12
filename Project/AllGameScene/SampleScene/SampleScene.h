@@ -46,6 +46,8 @@ private:
 
 	std::unique_ptr<Particle3D> particle_ = nullptr;
 	uint32_t particleTextureHandle_ = 0u;
+	Vector3 particleTranslate_ = {};
+
 
 	Audio* audio_ = nullptr;
 	uint32_t audioHandle_ = 0u;

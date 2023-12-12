@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include <Math/Vector/VertexData.h>
+#include <VertexData.h>
 #include "Polygon/Model/MaterialData/MaterialData.h"
 
 

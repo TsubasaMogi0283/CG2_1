@@ -1,6 +1,5 @@
 #pragma once
-#include "WindowsSetup.h"
-#include "DirectXSetup.h"
+
 
 class ImGuiManager final{
 private:
@@ -12,7 +11,7 @@ private:
 
 public:
 	
-		//コピーコンストラクタ禁止
+	//コピーコンストラクタ禁止
 	ImGuiManager(const ImGuiManager& imGui) = delete;
 
 	//代入演算子を無効にする
@@ -50,7 +49,5 @@ public:
 	
 
 private:
-	//WindowsInitialization* winSetup_ = nullptr;
-	DirectXSetup* directXSetup_ = nullptr;
 
 };

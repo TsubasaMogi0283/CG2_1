@@ -1,5 +1,6 @@
 #include "ImGuiManager.h"
-
+#include "WindowsSetup.h"
+#include "DirectXSetup.h"
 
 //コンストラクタ
 ImGuiManager::ImGuiManager() {
@@ -19,20 +20,18 @@ ImGuiManager* ImGuiManager::GetInstance() {
 //メインループ前に
 //初期化
 void ImGuiManager::Initialize() {
-	//Getterを使いたい
-	this->directXSetup_ = DirectXSetup::GetInstance();
 
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGui::StyleColorsDark();
 	ImGui_ImplWin32_Init(WindowsSetup::GetInstance()->GetHwnd());
 	ImGui_ImplDX12_Init(
-		directXSetup_->GetDevice().Get(),
-		directXSetup_->GetswapChain().swapChainDesc.BufferCount,
-		directXSetup_->GetRtvDesc().Format,
-		directXSetup_->GetSrvDescriptorHeap().Get(),
-		directXSetup_->GetSrvDescriptorHeap()->GetCPUDescriptorHandleForHeapStart(),
-		directXSetup_->GetSrvDescriptorHeap()->GetGPUDescriptorHandleForHeapStart());
+		DirectXSetup::GetInstance()->GetDevice().Get(),
+		DirectXSetup::GetInstance()->GetswapChain().swapChainDesc.BufferCount,
+		DirectXSetup::GetInstance()->GetRtvDesc().Format,
+		DirectXSetup::GetInstance()->GetSrvDescriptorHeap().Get(),
+		DirectXSetup::GetInstance()->GetSrvDescriptorHeap()->GetCPUDescriptorHandleForHeapStart(),
+		DirectXSetup::GetInstance()->GetSrvDescriptorHeap()->GetGPUDescriptorHandleForHeapStart());
 
 }
 
@@ -62,8 +61,8 @@ void ImGuiManager::PreDraw() {
 //描画
 void ImGuiManager::Draw() {
 	//描画用のDescriptorの設定
-	ID3D12DescriptorHeap* descriptorHeaps[] = { directXSetup_->GetSrvDescriptorHeap().Get()};
-	directXSetup_->GetCommandList()->SetDescriptorHeaps(1, descriptorHeaps);
+	ID3D12DescriptorHeap* descriptorHeaps[] = { DirectXSetup::GetInstance()->GetSrvDescriptorHeap().Get()};
+	DirectXSetup::GetInstance()->GetCommandList()->SetDescriptorHeaps(1, descriptorHeaps);
 }
 
 
@@ -71,7 +70,7 @@ void ImGuiManager::Draw() {
 void ImGuiManager::EndFrame() {
 	//コマンドを積む
 	//実際のcommandListのImGuiの描画コマンドを積む
-	ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), directXSetup_->GetCommandList().Get());
+	ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), DirectXSetup::GetInstance()->GetCommandList().Get());
 }
 
 

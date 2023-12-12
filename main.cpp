@@ -1,16 +1,15 @@
-#include "Project/AllGameScene/GameManager/GameManager.h"
+#include "Ellysia.h"
 
 //staticはdeleteの後に解放されるよ
 static D3DResourceLeakChecker checker;
 
 //Winodwsアプリでもエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
-	GameManager* gameManager = new GameManager();
+	Ellysia* myEngine = new Ellysia();
 
+	myEngine->Operate();
 
-	gameManager->Operate();
-
-	delete gameManager;
+	delete myEngine;
 	
 	return 0;
 }

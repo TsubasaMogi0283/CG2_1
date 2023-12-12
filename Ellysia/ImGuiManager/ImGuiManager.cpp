@@ -46,7 +46,7 @@ void ImGuiManager::BeginFrame() {
 
 //更新
 //パラメータを変更したいタイミングで処理を行う
-void ImGuiManager::UpDate() {
+void ImGuiManager::Update() {
 	//これはデモ用のUI
 	//使う予定が無いのでコメントアウトします
 	//ImGui::ShowDemoWindow();

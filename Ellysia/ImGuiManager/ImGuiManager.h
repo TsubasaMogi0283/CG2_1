@@ -30,7 +30,7 @@ public:
 	void BeginFrame();
 
 	//更新
-	void UpDate();
+	void Update();
 
 
 	//描画前の処理

@@ -97,6 +97,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Ellysia\ConvertFunction\CompileShader\CompileShaderManager.cpp" />
     <ClCompile Include="Ellysia\ConvertFunction\ConvertColor\ColorConvert.cpp" />
     <ClCompile Include="Ellysia\ConvertFunction\ConvertLog\LogConvert.cpp" />
+    <ClCompile Include="Ellysia\Ellysia.cpp" />
     <ClCompile Include="Ellysia\externals\imGui\imgui.cpp" />
     <ClCompile Include="Ellysia\externals\imGui\imgui_demo.cpp" />
     <ClCompile Include="Ellysia\externals\imGui\imgui_draw.cpp" />
@@ -164,6 +165,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Ellysia\ConvertFunction\CompileShader\CompileShaderManager.h" />
     <ClInclude Include="Ellysia\ConvertFunction\ConvertColor\ColorConvert.h" />
     <ClInclude Include="Ellysia\ConvertFunction\ConvertLog\LogConvert.h" />
+    <ClInclude Include="Ellysia\Ellysia.h" />
     <ClInclude Include="Ellysia\externals\imGui\imconfig.h" />
     <ClInclude Include="Ellysia\externals\imGui\imgui.h" />
     <ClInclude Include="Ellysia\externals\imGui\imgui_impl_dx12.h" />

@@ -121,9 +121,6 @@
     <Filter Include="Ellysia\ソース ファイル\Polygone\3D\Model">
       <UniqueIdentifier>{bc061468-3fa2-4b64-a612-cab1c2939851}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Ellysia\ソース ファイル\Polygone\3D\Model\ModelResource">
-      <UniqueIdentifier>{6bb5f514-6b37-417c-b884-05ad36ebda1e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Ellysia\ヘッダー ファイル\Polygone\3D\Particle">
       <UniqueIdentifier>{d3eb6c6b-887b-4ad2-b25a-d06e1be2d5be}</UniqueIdentifier>
     </Filter>
@@ -204,9 +201,6 @@
     <ClCompile Include="Ellysia\Camera\Camera.cpp">
       <Filter>Ellysia\ソース ファイル\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="Ellysia\Polygon\3D\Model\Mesh\Mesh.cpp">
-      <Filter>Ellysia\ヘッダー ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Ellysia\Polygon\Sprite\Sprite.cpp">
       <Filter>Ellysia\ソース ファイル\Polygone\2D</Filter>
     </ClCompile>
@@ -225,13 +219,19 @@
     <ClCompile Include="Ellysia\Polygon\3D\Particle3D\Particle3D.cpp">
       <Filter>Ellysia\ソース ファイル\Polygone\3D</Filter>
     </ClCompile>
-    <ClCompile Include="Ellysia\Polygon\3D\Model\DirectionalLight\CreateDirectionalLight.cpp">
-      <Filter>Ellysia\ソース ファイル\Polygone\3D</Filter>
-    </ClCompile>
     <ClCompile Include="Ellysia\Polygon\3D\Model\Material\CreateMaterial.cpp">
       <Filter>Ellysia\ソース ファイル\Polygone\3D</Filter>
     </ClCompile>
     <ClCompile Include="Ellysia\Polygon\3D\Model\Transformation\Transformation.cpp">
+      <Filter>Ellysia\ソース ファイル\Polygone\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Ellysia\Ellysia.cpp">
+      <Filter>Ellysia\ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Ellysia\Polygon\3D\Model\Mesh\Mesh.cpp">
+      <Filter>Ellysia\ソース ファイル\Polygone\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Ellysia\Polygon\3D\Model\DirectionalLight\CreateDirectionalLight.cpp">
       <Filter>Ellysia\ソース ファイル\Polygone\3D</Filter>
     </ClCompile>
   </ItemGroup>
@@ -423,6 +423,9 @@
     </ClInclude>
     <ClInclude Include="Ellysia\Polygon\3D\Model\ModelData\ModelData.h">
       <Filter>Ellysia\ヘッダー ファイル\Polygone\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Ellysia.h">
+      <Filter>Ellysia\ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

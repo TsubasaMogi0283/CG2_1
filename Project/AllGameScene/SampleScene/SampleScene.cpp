@@ -24,10 +24,7 @@ void SampleScene::Initialize(GameManager* gameManager) {
 	uint32_t textureHandle = TextureManager::LoadTexture("Resources/uvChecker.png");
 	sprite.reset(Sprite::Create(textureHandle, { 0.0f,0.0f }));
 
-	audio_ = Audio::GetInstance();
-	uint32_t audioHandle_ = audio_->LoadWave("Resources/Audio/Sample/Win.wav");
-	audio_->PlayWave(audioHandle_, true);
-
+	
 
 	particle_ = std::make_unique<Particle3D>();
 	particle_->Create("Resources/05_02", "plane.obj");
@@ -45,6 +42,9 @@ void SampleScene::Initialize(GameManager* gameManager) {
 	particle_->SetCount(count);
 	particle_->SetFrequency(frequency);
 	particle_->SetFrequencyTime(frequencyTime);
+	audio_ = Audio::GetInstance();
+	uint32_t audioHandle_ = audio_->LoadWave("Resources/Audio/Sample/Win.wav");
+	audio_->PlayWave(audioHandle_, true);
 
 }
 

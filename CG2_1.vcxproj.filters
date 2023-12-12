@@ -127,6 +127,9 @@
     <Filter Include="Ellysia\ヘッダー ファイル\Polygone\3D\Particle">
       <UniqueIdentifier>{d3eb6c6b-887b-4ad2-b25a-d06e1be2d5be}</UniqueIdentifier>
     </Filter>
+    <Filter Include="リソース ファイル\Particle3D">
+      <UniqueIdentifier>{b41805c9-84ac-4738-9010-423926ba4b89}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -233,16 +236,22 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Resources\Shader\Object2d.PS.hlsl">
+    <FxCompile Include="Resources\Shader\Particle3D\Particle3d.PS.hlsl">
+      <Filter>リソース ファイル\Particle3D</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\Particle3D\Particle3d.VS.hlsl">
+      <Filter>リソース ファイル\Particle3D</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\Object2D\Object2d.PS.hlsl">
       <Filter>リソース ファイル\Object2d</Filter>
     </FxCompile>
-    <FxCompile Include="Resources\Shader\Object2d.VS.hlsl">
+    <FxCompile Include="Resources\Shader\Object2D\Object2d.VS.hlsl">
       <Filter>リソース ファイル\Object2d</Filter>
     </FxCompile>
-    <FxCompile Include="Object3d.PS.hlsl">
+    <FxCompile Include="Resources\Shader\Object3D\Object3d.PS.hlsl">
       <Filter>リソース ファイル\Object3d</Filter>
     </FxCompile>
-    <FxCompile Include="Object3d.VS.hlsl">
+    <FxCompile Include="Resources\Shader\Object3D\Object3d.VS.hlsl">
       <Filter>リソース ファイル\Object3d</Filter>
     </FxCompile>
   </ItemGroup>
@@ -422,10 +431,13 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Shader\Object2d.hlsli">
+    <None Include="Resources\Shader\Particle3D\Particle3D.hlsli">
+      <Filter>リソース ファイル\Particle3D</Filter>
+    </None>
+    <None Include="Resources\Shader\Object2D\Object2d.hlsli">
       <Filter>リソース ファイル\Object2d</Filter>
     </None>
-    <None Include="Object3d.hlsli">
+    <None Include="Resources\Shader\Object3D\Object3d.hlsli">
       <Filter>リソース ファイル\Object3d</Filter>
     </None>
   </ItemGroup>

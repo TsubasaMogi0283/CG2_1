@@ -278,12 +278,12 @@ void PipelineManager::GenerateSpritePSO() {
 
 
 	//ShaderをCompileする
-	PipelineManager::GetInstance()->spritePSO_.vertexShaderBlob_ = CompileShaderManager::GetInstance()->CompileShader(L"Resources/Shader/Object2d.VS.hlsl", L"vs_6_0");
+	PipelineManager::GetInstance()->spritePSO_.vertexShaderBlob_ = CompileShaderManager::GetInstance()->CompileShader(L"Resources/Shader/Object2D/Object2d.VS.hlsl", L"vs_6_0");
 	assert(PipelineManager::GetInstance()->spritePSO_.vertexShaderBlob_ != nullptr);
 
 
 
-	PipelineManager::GetInstance()->spritePSO_.pixelShaderBlob_ = CompileShaderManager::GetInstance()->CompileShader(L"Resources/Shader/Object2d.PS.hlsl", L"ps_6_0");
+	PipelineManager::GetInstance()->spritePSO_.pixelShaderBlob_ = CompileShaderManager::GetInstance()->CompileShader(L"Resources/Shader/Object2D/Object2d.PS.hlsl", L"ps_6_0");
 	assert(PipelineManager::GetInstance()->spritePSO_.pixelShaderBlob_ != nullptr);
 
 
@@ -508,9 +508,6 @@ void PipelineManager::GenerateModelPSO() {
 		blendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
 		blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
 		blendDesc.RenderTarget[0].DestBlend=D3D12_BLEND_INV_SRC_ALPHA;
-		//blendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
-		//blendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
-		//blendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
 
 
 
@@ -525,10 +522,6 @@ void PipelineManager::GenerateModelPSO() {
 		blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
 		blendDesc.RenderTarget[0].DestBlend=D3D12_BLEND_ONE;
 		
-		//透明度これはどのブレンドモードでも同じ
-		//blendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
-		//blendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
-		//blendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
 
 
 
@@ -543,10 +536,6 @@ void PipelineManager::GenerateModelPSO() {
 		blendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
 		blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_REV_SUBTRACT;
 		blendDesc.RenderTarget[0].DestBlend=D3D12_BLEND_ONE;
-		
-		//blendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
-		//blendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
-		//blendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
 
 		break;
 
@@ -557,9 +546,6 @@ void PipelineManager::GenerateModelPSO() {
 		blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
 		blendDesc.RenderTarget[0].DestBlend=D3D12_BLEND_SRC_COLOR;
 
-		//blendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
-		//blendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
-		//blendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
 
 
 		
@@ -571,10 +557,6 @@ void PipelineManager::GenerateModelPSO() {
 		blendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_INV_DEST_COLOR;
 		blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
 		blendDesc.RenderTarget[0].DestBlend=D3D12_BLEND_ONE;
-
-		//blendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
-		//blendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
-		//blendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
 
 
 
@@ -615,12 +597,12 @@ void PipelineManager::GenerateModelPSO() {
 
 
 	//ShaderをCompileする
-	PipelineManager::GetInstance()->modelPSO_.vertexShaderBlob_ = CompileShaderManager::GetInstance()->CompileShader(L"Resources/Shader/Object3d.VS.hlsl", L"vs_6_0");
+	PipelineManager::GetInstance()->modelPSO_.vertexShaderBlob_ = CompileShaderManager::GetInstance()->CompileShader(L"Resources/Shader/Object3D/Object3d.VS.hlsl", L"vs_6_0");
 	assert(PipelineManager::GetInstance()->modelPSO_.vertexShaderBlob_ != nullptr);
 
 
 
-	PipelineManager::GetInstance()->modelPSO_.pixelShaderBlob_ = CompileShaderManager::GetInstance()->CompileShader(L"Resources/Shader/Object3d.PS.hlsl", L"ps_6_0");
+	PipelineManager::GetInstance()->modelPSO_.pixelShaderBlob_ = CompileShaderManager::GetInstance()->CompileShader(L"Resources/Shader/Object3D/Object3d.PS.hlsl", L"ps_6_0");
 	assert(PipelineManager::GetInstance()->modelPSO_.pixelShaderBlob_ != nullptr);
 
 
@@ -869,12 +851,12 @@ void PipelineManager::GenerateParticle3DPSO() {
 
 
 	//ShaderをCompileする
-	PipelineManager::GetInstance()->particle3DPSO_.vertexShaderBlob_ = CompileShaderManager::GetInstance()->CompileShader(L"Resources/Shader/Particle3d.VS.hlsl", L"vs_6_0");
+	PipelineManager::GetInstance()->particle3DPSO_.vertexShaderBlob_ = CompileShaderManager::GetInstance()->CompileShader(L"Resources/Shader/Particle3D/Particle3d.VS.hlsl", L"vs_6_0");
 	assert(PipelineManager::GetInstance()->particle3DPSO_.vertexShaderBlob_ != nullptr);
 
 
 
-	PipelineManager::GetInstance()->particle3DPSO_.pixelShaderBlob_ = CompileShaderManager::GetInstance()->CompileShader(L"Resources/Shader/Particle3d.PS.hlsl", L"ps_6_0");
+	PipelineManager::GetInstance()->particle3DPSO_.pixelShaderBlob_ = CompileShaderManager::GetInstance()->CompileShader(L"Resources/Shader/Particle3D/Particle3d.PS.hlsl", L"ps_6_0");
 	assert(PipelineManager::GetInstance()->particle3DPSO_.pixelShaderBlob_ != nullptr);
 
 

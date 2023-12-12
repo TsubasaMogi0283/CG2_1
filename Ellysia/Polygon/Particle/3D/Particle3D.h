@@ -37,8 +37,18 @@
 #include "Polygon/Model/Transformation/Transformation.h"
 #include "Transform.h"
 #include "Particle.h"
-#include "Emitter.h"
 
+
+struct Emitter {
+	//エミッタのTransform;
+	Transform transform;
+	//発生数
+	uint32_t count;
+	//発生頻度
+	float frequency;
+	//頻度用時刻
+	float frequencyTime;
+};
 
 class Particle3D {
 public:
@@ -101,25 +111,8 @@ public:
 		this->color_.w = transparency;
 	}
 	
-
-	
-	//アクセッサのまとめ
-	//Scale
-	void SetScale(Vector3 scale) {
-		this->emitter_.transform.scale = scale;
-	}
-
-	//Rotate
-	void SetRotate(Vector3 rotate) {
-		this->emitter_.transform.rotate = rotate;
-	}
-	//Rotate
-	void SetTranslate(Vector3 translate) {
-		this->emitter_.transform.translate = translate;
-	}
-
-
 	//ビルボードにするかどうか
+	//デフォルトではするようにしている
 	bool IsBillBordMode(bool isBillBordMode) {
 		this->isBillBordMode_ = isBillBordMode;
 	}
@@ -127,9 +120,30 @@ public:
 
 #pragma region エミッタの中の設定
 	
-	void SetEmitter(Emitter emitter) {
-		this->emitter_ = emitter;
+
+	#pragma region SRT
+	//Scale
+	void SetScale(Vector3 scale) {
+		this->emitter_.transform.scale = scale;
 	}
+	
+	//Rotate
+	void SetRotate(Vector3 rotate) {
+		this->emitter_.transform.rotate = rotate;
+	}
+	Vector3 GetRotate() {
+		return emitter_.transform.rotate;
+	}
+
+	//Translate
+	void SetTranslate(Vector3 translate) {
+		this->emitter_.transform.translate = translate;
+	}
+	Vector3 GetTranslate() {
+		return emitter_.transform.translate;
+	}
+
+	#pragma endregion
 
 	//発生数
 	void SetCount(uint32_t count) {
@@ -143,6 +157,8 @@ public:
 	void SetFrequencyTime(float frequencyTime){
 		this->emitter_.frequencyTime = frequencyTime;
 	}
+
+#pragma endregion
 
 #pragma region Lightingの設定
 	void SetLighting(bool enableLighting) {
@@ -158,8 +174,6 @@ public:
 private:
 	//TextureManagerを参考にする
 	std::list<ModelData> modelInformationList_;
-	std::string directoryPath_;
-	std::string fileName_;
 
 	//頂点データ
 	std::unique_ptr<Mesh> mesh_ = nullptr;
@@ -179,12 +193,11 @@ private:
 	Vector3 lightingDirection_ = {0.0f,-1.0f,0.0f};
 
 
-
-
 	D3D12_CPU_DESCRIPTOR_HANDLE instancingSrvHandleCPU_ = {};
 	D3D12_GPU_DESCRIPTOR_HANDLE instancingSrvHandleGPU_ = {};
 
 	ComPtr<ID3D12Resource>instancingResource_ = nullptr;
+
 
 	static const int32_t MAX_INSTANCE_NUMBER_ = 100;
 	//描画すべきインスタンス数
@@ -196,10 +209,6 @@ private:
 
 	//ビルボード
 	bool isBillBordMode_ = true;
-	//SRT
-	Vector3 scale_ = { 1.0f,1.0f,1.0f };
-	Vector3 rotate_ = { 0.0f,0.0f,0.0f };
-	Vector3 translate_ = { 0.0f,0.0f,0.0f };
 
 
 

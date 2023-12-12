@@ -183,48 +183,6 @@ MaterialData Particle3D::LoadMaterialTemplateFile(const std::string& directoryPa
 
 }
 
-//生成関数
-Particle Particle3D::MakeNewParticle(std::mt19937& randomEngine) {
-	std::uniform_real_distribution<float> distribute(-1.0f, 1.0f);
-	Particle particle;
-	particle.transform.scale = { 1.0f,1.0f,1.0f };
-	particle.transform.rotate = { 0.0f,0.0f,0.0f };
-	particle.transform.translate = {distribute(randomEngine),distribute(randomEngine),distribute(randomEngine)};
-	
-	//速度
-	std::uniform_real_distribution<float>distVelocity(-1.0f, 1.0f);
-	particle.velocity = {distVelocity(randomEngine),distVelocity(randomEngine),distVelocity(randomEngine)};
-
-	//Color
-	std::uniform_real_distribution<float> distColor(0.0f, 1.0f);
-	particle.color = { distColor(randomEngine),distColor(randomEngine),distColor(randomEngine),1.0f };
-	
-
-	//時間
-	std::uniform_real_distribution<float> distTime(1.0f, 3.0f);
-	particle.lifeTime = distTime(randomEngine);
-	particle.currentTime = 0;
-
-
-
-	return particle;
-
-}
-
-//エミッタ
-std::list<Particle> Particle3D::Emission(const Emitter& emmitter, std::mt19937& randomEngine){
-	std::list<Particle> particles;
-
-	for (uint32_t count = 0; count < emmitter.count; ++count) {
-
-		particles.push_back(MakeNewParticle(randomEngine));
-	}
-
-	return particles;
-}
-
-
-
 
 //RandomParticle用
 ///パーティクルだけはvoid型で初期化する
@@ -235,17 +193,25 @@ void Particle3D::Create(const std::string& directoryPath, const std::string& fil
 	//ブレンドモードの設定
 	//Addでやるべきとのこと
 	PipelineManager::GetInstance()->GenerateParticle3DPSO();
-	directoryPath_ = directoryPath;
-	fileName_ = fileName;
-
+	
 
 	//デフォルトの設定
 	//Setterで変えてね
-	
+	emitter_.count = 100;
+	//0.5秒ごとに発生
+	emitter_.frequency = 0.5f;
+	//発生頻度用の時刻。0.0で初期化
+	emitter_.frequencyTime = 0.0f;
+	//SRT
+	emitter_.transform.scale = { 1.0f,1.0f,1.0f };
+	emitter_.transform.rotate = { 0.0f,0.0f,0.0f };
+	emitter_.transform.translate = { 0.0f,0.0f,0.0f };
+
+
 
 	//モデルの読み込み
-	ModelData modelDataNew = LoadObjectFile(directoryPath_, fileName_);
-	modelDataNew.name = fileName_;
+	ModelData modelDataNew = LoadObjectFile(directoryPath, fileName);
+	modelDataNew.name = fileName;
 	modelInformationList_.push_back(modelDataNew);
 	
 
@@ -308,6 +274,49 @@ void Particle3D::Create(const std::string& directoryPath, const std::string& fil
 
 
 
+//生成関数
+Particle Particle3D::MakeNewParticle(std::mt19937& randomEngine) {
+	std::uniform_real_distribution<float> distribute(-1.0f, 1.0f);
+	Particle particle;
+	particle.transform.scale = { 1.0f,1.0f,1.0f };
+	particle.transform.rotate = { 0.0f,0.0f,0.0f };
+	//ランダムの値
+	Vector3 randomTranslate = { distribute(randomEngine),distribute(randomEngine),distribute(randomEngine) };
+	particle.transform.translate = Add(emitter_.transform.translate,randomTranslate);
+	
+	//速度
+	std::uniform_real_distribution<float>distVelocity(-1.0f, 1.0f);
+	particle.velocity = {distVelocity(randomEngine),distVelocity(randomEngine),distVelocity(randomEngine)};
+
+	//Color
+	std::uniform_real_distribution<float> distColor(0.0f, 1.0f);
+	particle.color = { distColor(randomEngine),distColor(randomEngine),distColor(randomEngine),1.0f };
+	
+
+	//時間
+	std::uniform_real_distribution<float> distTime(1.0f, 3.0f);
+	particle.lifeTime = distTime(randomEngine);
+	particle.currentTime = 0;
+
+
+
+	return particle;
+
+}
+
+//エミッタ
+std::list<Particle> Particle3D::Emission(const Emitter& emmitter, std::mt19937& randomEngine){
+	std::list<Particle> particles;
+
+	for (uint32_t count = 0; count < emmitter.count; ++count) {
+
+		particles.push_back(MakeNewParticle(randomEngine));
+	}
+
+	return particles;
+}
+
+
 //更新
 void Particle3D::Update(){
 	
@@ -327,6 +336,7 @@ void Particle3D::Update(){
 	}
 
 
+	//座標の計算など
 	numInstance_ = 0;
 	for (std::list<Particle>::iterator particleIterator = particles_.begin();
 		particleIterator != particles_.end();++particleIterator) {
@@ -345,7 +355,7 @@ void Particle3D::Update(){
 		
 
 
-
+		//ビルボード有り
 		if (isBillBordMode_ == true) {
 			//Y軸でπ/2回転
 			//これからはM_PIじゃなくてstd::numbers::pi_vを使おうね
@@ -384,6 +394,7 @@ void Particle3D::Update(){
 			
 
 		}
+		//ビルボード無し
 		else if (isBillBordMode_ == false) {
 			//ビルボードやらない版
 			Matrix4x4 worldMatrix = MakeAffineMatrix(
@@ -416,8 +427,7 @@ void Particle3D::Update(){
 
 }
 
-
-
+//描画
 void Particle3D::Draw(uint32_t textureHandle){
 	//マテリアルにデータを書き込む
 	//書き込むためのアドレスを取得
@@ -460,10 +470,6 @@ void Particle3D::Draw(uint32_t textureHandle){
 	//Light
 	directionalLight_->GraphicsCommand();
 	
-
-
-
-
 	//インスタンシング
 	instancingResource_->Map(0, nullptr, reinterpret_cast<void**>(&instancingData_));
 

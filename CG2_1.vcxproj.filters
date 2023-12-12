@@ -424,9 +424,6 @@
     <ClInclude Include="Ellysia\Polygon\Particle\3D\Particle.h">
       <Filter>ヘッダー ファイル\Polygone\Particle3D</Filter>
     </ClInclude>
-    <ClInclude Include="Ellysia\Polygon\Particle\3D\Emitter.h">
-      <Filter>ヘッダー ファイル\Polygone\Particle3D</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Ellysia\externals\imGui\LICENSE.txt">

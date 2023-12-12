@@ -27,18 +27,22 @@ void SampleScene::Initialize(GameManager* gameManager) {
 	
 	model_ = std::make_unique<Particle3D>();
 	model_->Create("Resources/05_02", "plane.obj");
-	emitter_.count = 3;
+	int count = 3;
 	
 	//0.5秒ごとに発生
-	emitter_.frequency = 0.5f;
+	float frequency = 0.5f;
 	//発生頻度用の時刻。0.0で初期化
-	emitter_.frequencyTime = 0.0f;
+	float frequencyTime = 0.0f;
 
 
 
 	particleTextureHandle_ = TextureManager::GetInstance()->LoadTexture("Resources/CG3/circle.png");
 
-	model_->SetEmitter(emitter_);
+	model_->SetCount(count);
+	model_->SetFrequency(frequency);
+	model_->SetFrequencyTime(frequencyTime);
+
+
 	cameraPosition_ = {0.0f,7.0f,-7.0f};
 	cameraRotate_ = { 0.8f,0.0f,0.0f };
 

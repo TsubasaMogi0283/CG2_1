@@ -199,7 +199,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Ellysia\Polygon\Model\Model.h" />
     <ClInclude Include="Ellysia\Polygon\Model\ModelData\ModelData.h" />
     <ClInclude Include="Ellysia\Polygon\Model\Transformation\Transformation.h" />
-    <ClInclude Include="Ellysia\Polygon\Particle\3D\Emitter.h" />
     <ClInclude Include="Ellysia\Polygon\Particle\3D\Particle.h" />
     <ClInclude Include="Ellysia\Polygon\Particle\3D\Particle3D.h" />
     <ClInclude Include="Ellysia\Polygon\Sphere\Sphere.h" />

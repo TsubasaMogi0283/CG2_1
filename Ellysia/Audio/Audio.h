@@ -63,11 +63,14 @@ public:
 	void ChangeVolume(uint32_t audiohandle,float volume);
 
 
+	
+	//解放
+	void Release();
+
+private:
 	//音声データの開放
 	void SoundUnload(uint32_t soundDataHandle);
 
-	//解放
-	void Release();
 
 private:
 

@@ -8,7 +8,7 @@
 
 #include "ConvertFunction/ConvertLog/LogConvert.h"
 #include "externals/DirectXTex/DirectXTex.h"
-#include "ImGuiManager/ImGuiManager.h"
+#include "ImGuiManager.h"
 #include <Math/Matrix/Matrix/Matrix4x4.h>
 #include <Transform.h>
 #include <Material.h>

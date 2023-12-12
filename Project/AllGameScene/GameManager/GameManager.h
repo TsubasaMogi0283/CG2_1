@@ -2,7 +2,7 @@
 
 
 #include "Polygon/Triangle/Triangle.h"
-#include <ImGuiManager/ImGuiManager.h>
+
 
 
 #include "Math/Matrix/Matrix/Matrix4x4.h"
@@ -63,11 +63,9 @@ private:
 
 
 	PipelineManager* pipelineManager_ = nullptr;
-	ImGuiManager* imGuiManager_ = nullptr;
 	Input* input_ = nullptr;
 	Camera* camera_ = nullptr;
 	TextureManager* textureManager_ = nullptr;
-	Audio* audio_ = nullptr;
 
 #pragma region サンプル
 	

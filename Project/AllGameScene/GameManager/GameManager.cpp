@@ -2,6 +2,7 @@
 
 #include "WindowsSetup.h"
 #include "DirectXSetup.h"
+#include <ImGuiManager.h>
 
 #include "SampleScene/SampleScene.h"
 
@@ -12,11 +13,9 @@ GameManager::GameManager() {
 	//コンストラクタ
 	//GameManager.cpp側ではwinApp=GetInstanceでやってるけど他のクラスでは直接GetInstanceってやった方が楽かも
 
-	imGuiManager_ = ImGuiManager::GetInstance();
 	input_ = Input::GetInstance();
 	camera_ = Camera::GetInstance();
 	textureManager_ = TextureManager::GetInstance();
-	audio_ = Audio::GetInstance();
 	pipelineManager_ = PipelineManager::GetInstance();
 }
 	
@@ -29,10 +28,10 @@ void GameManager::Initialize() {
 	DirectXSetup::GetInstance()->Initialize();
 	pipelineManager_->GenerateSpritePSO();
 	pipelineManager_->GenerateModelPSO();
-	imGuiManager_->Initialize();
+	ImGuiManager::GetInstance()->Initialize();
 	input_->Initialize();
 	textureManager_->Initilalize();
-	audio_->Initialize();
+	Audio::GetInstance()->Initialize();
 
 	//シーンごとに動作確認したいときはここを変えてね
 	currentGamaScene_ = new SampleScene();
@@ -42,13 +41,13 @@ void GameManager::Initialize() {
 
 void GameManager::BeginFrame() {
 	DirectXSetup::GetInstance()->BeginFrame();
-	imGuiManager_->BeginFrame();
+	ImGuiManager::GetInstance()->BeginFrame();
 
 }
 
 
 void GameManager::Update() {
-	imGuiManager_->UpDate();
+	ImGuiManager::GetInstance()->UpDate();
 
 	//入力の更新
 	input_->Update();
@@ -56,8 +55,8 @@ void GameManager::Update() {
 }
 
 void GameManager::Draw() {
-	imGuiManager_->PreDraw();	
-	imGuiManager_->Draw();
+	ImGuiManager::GetInstance()->PreDraw();	
+	ImGuiManager::GetInstance()->Draw();
 	
 	currentGamaScene_->Draw(this);
 
@@ -66,18 +65,18 @@ void GameManager::Draw() {
 
 void GameManager::EndFrame() {
 
-	imGuiManager_->EndFrame();
+	ImGuiManager::GetInstance()->EndFrame();
 	DirectXSetup::GetInstance()->EndFrame();
 			
 }
 
 void GameManager::Release() {
 
-	audio_->Release();
+	Audio::GetInstance()->Release();
 	//
 	textureManager_->Release();
 	//
-	imGuiManager_->Release();
+	ImGuiManager::GetInstance()->Release();
 	//
 	DirectXSetup::GetInstance()->Release();
 	//

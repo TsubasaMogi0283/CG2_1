@@ -52,7 +52,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalIncludeDirectories>$(ProjectDir)\Math;$(ProjectDir)\GameScene;$(ProjectDir)\Common;$(ProjectDir)\ConvertFunction;$(ProjectDir)\Ellysia;$(ProjectDir)\Project;$(ProjectDir)\Ellysia\Common\DirectX;$(ProjectDir)\Ellysia\Common\Windows;$(ProjectDir)\Ellysia\Input;$(ProjectDir)\Ellysia\Audio;$(ProjectDir)\Ellysia\TextureManager;$(ProjectDir)\Ellysia\Math\Matrix;$(ProjectDir)\Ellysia\Math\Vector;$(ProjectDir)\Project\AllGameScene\GameManager;$(ProjectDir)\Ellysia\Camera;$(ProjectDir)\Project\AllGameScene;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\Ellysia;$(ProjectDir)\Project;$(ProjectDir)\Ellysia\Common\DirectX;$(ProjectDir)\Ellysia\Common\Windows;$(ProjectDir)\Ellysia\Input;$(ProjectDir)\Ellysia\Audio;$(ProjectDir)\Ellysia\TextureManager;$(ProjectDir)\Ellysia\Math\Matrix;$(ProjectDir)\Ellysia\Math\Vector;$(ProjectDir)\Project\AllGameScene\GameManager;$(ProjectDir)\Ellysia\Camera;$(ProjectDir)\Project\AllGameScene;$(ProjectDir)\Ellysia\ImGuiManager;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -75,7 +75,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <LanguageStandard>stdcpp20</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalIncludeDirectories>$(ProjectDir)\Math;$(ProjectDir)\GameScene;$(ProjectDir)\Common;$(ProjectDir)\ConvertFunction;$(ProjectDir)\Ellysia;$(ProjectDir)\Project;$(ProjectDir)\Ellysia\Common\DirectX;$(ProjectDir)\Ellysia\Common\Windows;$(ProjectDir)\Ellysia\Input;$(ProjectDir)\Ellysia\Audio;$(ProjectDir)\Ellysia\TextureManager;$(ProjectDir)\Ellysia\Math\Matrix;$(ProjectDir)\Ellysia\Math\Vector;$(ProjectDir)\Project\AllGameScene\GameManager;$(ProjectDir)\Ellysia\Camera;$(ProjectDir)\Project\AllGameScene;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\Ellysia;$(ProjectDir)\Project;$(ProjectDir)\Ellysia\Common\DirectX;$(ProjectDir)\Ellysia\Common\Windows;$(ProjectDir)\Ellysia\Input;$(ProjectDir)\Ellysia\Audio;$(ProjectDir)\Ellysia\TextureManager;$(ProjectDir)\Ellysia\Math\Matrix;$(ProjectDir)\Ellysia\Math\Vector;$(ProjectDir)\Project\AllGameScene\GameManager;$(ProjectDir)\Ellysia\Camera;$(ProjectDir)\Project\AllGameScene;$(ProjectDir)\Ellysia\ImGuiManager;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

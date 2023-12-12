@@ -11,9 +11,6 @@ Audio* Audio::GetInstance() {
 	return &instance;
 }
 
-
-
-
 //初期化
 //これはDirecX初期化の後に入れてね
 void Audio::Initialize() {
@@ -28,6 +25,7 @@ void Audio::Initialize() {
 
 }
 
+#pragma region 実際に使う関数
 //読み込み
 uint32_t Audio::LoadWave(const char* fileName) {
 	audioHandle_++;
@@ -144,6 +142,7 @@ void Audio::PlayWave(uint32_t audioHandle,bool isLoop) {
 	
 }
 
+//音量を変える
 void Audio::ChangeVolume(uint32_t audiohandle, float volume) {
 	HRESULT hr = {};
 	hr = pSourceVoice_[audiohandle]->SetVolume(volume);
@@ -155,10 +154,14 @@ void Audio::StopWave(uint32_t audioHandle) {
 	hr = pSourceVoice_[audioHandle]->Stop();
 }
 
+#pragma endregion
+
 
 //音声データの開放
+//後ろにあるReleaseで使っているよ
 void Audio::SoundUnload(uint32_t soundDataHandle) {
 	//バッファのメモリを解放
+
 	delete[] soundData[soundDataHandle].pBuffer;
 	soundData[soundDataHandle].pBuffer = 0;
 	soundData[soundDataHandle].bufferSize = 0;

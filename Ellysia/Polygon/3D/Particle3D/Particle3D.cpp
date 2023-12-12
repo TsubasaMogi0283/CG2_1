@@ -1,12 +1,10 @@
-#include "Polygon/Particle/3D/Particle3D.h" 
-#include <Camera/Camera.h>
-#include <TextureManager/TextureManager.h>
-#include <PipelineManager/PipelineManager.h>
-#include "Common/DirectX/DirectXSetup.h"
-#include "Camera/Camera.h"
+#include "Particle3D.h" 
+#include <Camera.h>
+#include <TextureManager.h>
+#include <PipelineManager.h>
+#include "DirectXSetup.h"
 
 
-#include "Polygon/Particle/3D/Particle.h"
 #include <numbers>
 static uint32_t modelIndex;
 static uint32_t descriptorSizeSRV_ = 0u;

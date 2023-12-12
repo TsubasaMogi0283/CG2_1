@@ -30,7 +30,21 @@ void SampleScene::Initialize(GameManager* gameManager) {
 
 
 	particle_ = std::make_unique<Particle3D>();
+	particle_->Create("Resources/05_02", "plane.obj");
+	int count = 3;
+	
+	//0.5秒ごとに発生
+	float frequency = 0.5f;
+	//発生頻度用の時刻。0.0で初期化
+	float frequencyTime = 0.0f;
 
+
+
+	particleTextureHandle_ = TextureManager::GetInstance()->LoadTexture("Resources/CG3/circle.png");
+
+	particle_->SetCount(count);
+	particle_->SetFrequency(frequency);
+	particle_->SetFrequencyTime(frequencyTime);
 
 }
 
@@ -42,6 +56,8 @@ void SampleScene::Update(GameManager* gameManager) {
 
 	model_[0]->SetColor(modelColor_);
 	model_[0]->SetTranslate(modelTranslate_);
+
+	particle_->Update();
 
 	ImGui::Begin("Plane");
 	ImGui::SliderFloat3("Translate", &modelTranslate_.x, -10.0f, 10.0f);
@@ -64,6 +80,7 @@ void SampleScene::Draw(GameManager* gameManager) {
 		model_[i]->Draw();
 	
 	}
+	particle_->Draw(particleTextureHandle_);
 	sprite->Draw();
 }
 

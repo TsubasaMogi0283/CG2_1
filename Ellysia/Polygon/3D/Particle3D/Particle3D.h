@@ -10,31 +10,28 @@
 
 #include "ConvertFunction/ConvertLog/LogConvert.h"
 #include "externals/DirectXTex/DirectXTex.h"
-#include "ImGuiManager/ImGuiManager.h"
 #include "Matrix/Matrix4x4.h"
-#include <Math/Vector/Material.h>
+#include <Material.h>
 #include <Math/Matrix/Matrix/TransformationMatrix.h>
-#include <Math/Vector/DirectionalLight.h>
-#include "Polygon/Model/MaterialData/MaterialData.h"
-#include "Polygon/Model/ModelData/ModelData.h"
-
+#include <DirectionalLight.h>
+#include "Polygon/3D/Model/MaterialData/MaterialData.h"
+#include "Polygon/3D/Model/ModelData/ModelData.h"
 
 
 #include "Vector4.h"
 #include "Math/Matrix/Calculation/Matrix4x4Calculation.h"
-#include <Math/Vector/VertexData.h>
-#include "Math/Matrix/Matrix/WorldViewMatrix.h"
+#include <VertexData.h>
 
-#include <Math/Vector/Calculation/VectorCalculation.h>
+#include <Calculation/VectorCalculation.h>
 #include <externals/DirectXTex/d3dx12.h>
 
 
 
 
-#include "Polygon/Model/Mesh/Mesh.h"
-#include "Polygon/Model/Material/CreateMaterial.h"
-#include "Polygon/Model/DirectionalLight/CreateDirectionalLight.h"
-#include "Polygon/Model/Transformation/Transformation.h"
+#include "Polygon/3D/Model/Mesh/Mesh.h"
+#include "Polygon/3D/Model/Material/CreateMaterial.h"
+#include "Polygon/3D/Model/DirectionalLight/CreateDirectionalLight.h"
+#include "Polygon/3D/Model/Transformation/Transformation.h"
 #include "Transform.h"
 #include "Particle.h"
 

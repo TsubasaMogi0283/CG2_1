@@ -45,7 +45,7 @@ private:
 	Vector4 modelColor_ = { 1.0f,1.0f,1.0f,1.0f };
 
 	std::unique_ptr<Particle3D> particle_ = nullptr;
-
+	uint32_t particleTextureHandle_ = 0u;
 
 	Audio* audio_ = nullptr;
 	uint32_t audioHandle_ = 0u;

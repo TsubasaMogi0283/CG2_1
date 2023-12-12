@@ -14,7 +14,7 @@
 
 
 
-class PipelineManager {
+class PipelineManager final{
 private:
 
 	//コンストラクタ
@@ -27,32 +27,46 @@ public:
 	//シングルインスタンス
 	static PipelineManager* GetInstance();
 
+	//コピーコンストラクタ禁止
+	PipelineManager(const PipelineManager& pipelineManager) = delete;
 
+	//代入演算子を無効にする
+	PipelineManager& operator=(const PipelineManager& pipelineManager) = delete;
 
 #pragma region アクセッサ
 
-	//コマンドに積む専用のGetter
+	//コマンドに積む専用のGetter(Sprite)
 	ComPtr<ID3D12RootSignature> GetSpriteRootSignature() {
-		return spriteRootSignature_;
+		return spritePSO_.rootSignature_;
 	}
 	ComPtr<ID3D12PipelineState> GetSpriteGraphicsPipelineState() {
-		return spriteGraphicsPipelineState_;
+		return spritePSO_.graphicsPipelineState_;
 	}
 
-	//コマンドに積む専用のGetter
+	//コマンドに積む専用のGetter(Model)
 	ComPtr<ID3D12RootSignature> GetModelRootSignature() {
-		return modelRootSignature_;
+		return modelPSO_.rootSignature_;
 	}
 	ComPtr<ID3D12PipelineState> GetModelGraphicsPipelineState() {
-		return modelGraphicsPipelineState_;
+		return modelPSO_.graphicsPipelineState_;
 	}
 
-	void SetSpriteBlendMode(int32_t blendmode) {
+	//コマンドに積む専用のGetter(Particle3D)
+	ComPtr<ID3D12RootSignature> GetParticle3DRootSignature() {
+		return particle3DPSO_.rootSignature_;
+	}
+	ComPtr<ID3D12PipelineState> GetParticle3DGraphicsPipelineState() {
+		return particle3DPSO_.graphicsPipelineState_;
+	}
+
+
+	void SetSpriteBlendMode(uint32_t blendmode) {
 		selectSpriteBlendMode_ = blendmode;
 	}
-	void SetModelBlendMode(int32_t blendmode) {
+	void SetModelBlendMode(uint32_t blendmode) {
 		selectModelBlendMode_ = blendmode;
 	}
+
 
 #pragma endregion
 
@@ -65,23 +79,28 @@ public:
 	//モデル用
 	static void GenerateModelPSO();
 
+	//3Dパーティクル用
+	static void GenerateParticle3DPSO();
+
 private:
 
+	struct PSOInformation {
+		ComPtr<ID3DBlob> signatureBlob_ = nullptr;
+		ComPtr<ID3DBlob> errorBlob_ = nullptr;
+		ComPtr<ID3D12RootSignature> rootSignature_ = nullptr;
+		ComPtr<IDxcBlob> pixelShaderBlob_ = nullptr;
+		ComPtr<IDxcBlob> vertexShaderBlob_ = nullptr;
+		ComPtr<ID3D12PipelineState> graphicsPipelineState_ = nullptr;
 
-	ComPtr<ID3DBlob> spriteSignatureBlob_ = nullptr;
-	ComPtr<ID3DBlob> spriteErrorBlob_ = nullptr;
-	ComPtr<ID3D12RootSignature> spriteRootSignature_ = nullptr;
-	ComPtr<IDxcBlob> spritePixelShaderBlob_ = nullptr;
-	ComPtr<IDxcBlob> spriteVertexShaderBlob_ = nullptr;
-	ComPtr<ID3D12PipelineState> spriteGraphicsPipelineState_ = nullptr;
+	};
 
+	//スプライト用
+	PSOInformation spritePSO_ = {};
+	//モデル用の変数
+	PSOInformation modelPSO_ = {};
+	//モデル用の変数
+	PSOInformation particle3DPSO_ = {};
 
-	ComPtr<ID3DBlob> modelSignatureBlob_ = nullptr;
-	ComPtr<ID3DBlob> modelErrorBlob_ = nullptr;
-	ComPtr<ID3D12RootSignature> modelRootSignature_ = nullptr;
-	ComPtr<IDxcBlob> modelPixelShaderBlob_ = nullptr;
-	ComPtr<IDxcBlob> modelVertexShaderBlob_ = nullptr;
-	ComPtr<ID3D12PipelineState> modelGraphicsPipelineState_ = nullptr;
 
 
 	//スプライト用
@@ -89,5 +108,7 @@ private:
 
 	//モデル用の
 	int32_t selectModelBlendMode_ = 1;
+
+
 
 };

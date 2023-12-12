@@ -48,10 +48,6 @@ public:
 	//読み込み
 	uint32_t LoadWave(const char* fileName);
 
-	//読み込み
-	//void LoadWave(const char* fileName);
-
-
 	//音声再生
 	void PlayWave(uint32_t audioHandle,bool isLoop);
 

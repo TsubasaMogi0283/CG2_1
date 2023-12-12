@@ -18,7 +18,7 @@ void SampleScene::Initialize(GameManager* gameManager) {
 	for (int i = 0; i < MODEL_AMOUNT_; i++) {
 		model_[i] = Model::Create("Resources/CG3/fence", "fence.obj");
 	}
-	modelTransform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
+	modelTranslate_ = {0.0f,0.0f,0.0f};
 
 	sprite = std::make_unique<Sprite>();
 	uint32_t textureHandle = TextureManager::LoadTexture("Resources/uvChecker.png");
@@ -33,12 +33,11 @@ void SampleScene::Initialize(GameManager* gameManager) {
 void SampleScene::Update(GameManager* gameManager) {
 
 
-	modelTransform_.rotate.y += 0.05f;
 	model_[0]->SetColor(modelColor_);
-	model_[0]->SetTranslate(modelTransform_.translate);
+	model_[0]->SetTranslate(modelTranslate_);
 
 	ImGui::Begin("Plane");
-	ImGui::SliderFloat3("Translate", &modelTransform_.translate.x, -10.0f, 10.0f);
+	ImGui::SliderFloat3("Translate", &modelTranslate_.x, -10.0f, 10.0f);
 	ImGui::SliderFloat4("Color", &modelColor_.x, 0.0f, 1.0f);
 	
 

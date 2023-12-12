@@ -5,7 +5,9 @@
 #include "Transform.h"
 
 #include "Polygon/3D/Model/Model.h"
+#include "Audio.h"
 #include <memory>
+
 //StatePatternを使う時は必ず前方宣言をするように
 class Gamemanager;
 
@@ -31,7 +33,7 @@ private:
 	static const int MODEL_AMOUNT_ = 1;
 
 	Model* model_[MODEL_AMOUNT_] = { nullptr };
-	Transform modelTransform_ = {};
+	Vector3 modelTranslate_ = {};
 
 	Vector2 position_ = { 0.0f,0.0f };
 	Vector2 scale_ = { 1.0f,1.0f };
@@ -42,15 +44,8 @@ private:
 
 	Vector4 modelColor_ = { 1.0f,1.0f,1.0f,1.0f };
 
-	bool flipX_ = false;
-	bool flipY_ = false;
 
-	bool isInvisible_ = false;
-
-
-	Vector2 leftTop_ = { 0.0f,0.0f };
-	Vector2 size_ = { 100.0f,100.0f };
-
+	Audio* audio_ = nullptr;
 
 };
 

@@ -1,8 +1,6 @@
 #pragma once
 
 
-#include "Polygon/Triangle/Triangle.h"
-
 
 
 #include "Math/Matrix/Matrix/Matrix4x4.h"

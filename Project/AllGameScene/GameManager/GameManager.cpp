@@ -1,6 +1,9 @@
 #include "GameManager.h"
 
-#include "AllGameScene/SampleScene/SampleScene.h"
+#include "WindowsSetup.h"
+#include "DirectXSetup.h"
+
+#include "SampleScene/SampleScene.h"
 
 //コンストラクタ
 GameManager::GameManager() {
@@ -9,8 +12,6 @@ GameManager::GameManager() {
 	//コンストラクタ
 	//GameManager.cpp側ではwinApp=GetInstanceでやってるけど他のクラスでは直接GetInstanceってやった方が楽かも
 
-	winApp_ = WindowsSetup::GetInstance();
-	directXSetup_ = DirectXSetup::GetInstance();
 	imGuiManager_ = ImGuiManager::GetInstance();
 	input_ = Input::GetInstance();
 	camera_ = Camera::GetInstance();
@@ -24,8 +25,8 @@ void GameManager::Initialize() {
 	const wchar_t* titleBarName = L"Ellysia";
 
 	//初期化
-	winApp_->Initialize(titleBarName,WINDOW_SIZE_WIDTH_,WINDOW_SIZE_HEIGHT_);
-	directXSetup_->Initialize();
+	WindowsSetup::GetInstance()->Initialize(titleBarName,WINDOW_SIZE_WIDTH_,WINDOW_SIZE_HEIGHT_);
+	DirectXSetup::GetInstance()->Initialize();
 	pipelineManager_->GenerateSpritePSO();
 	pipelineManager_->GenerateModelPSO();
 	imGuiManager_->Initialize();
@@ -40,7 +41,7 @@ void GameManager::Initialize() {
 }
 
 void GameManager::BeginFrame() {
-	directXSetup_->BeginFrame();
+	DirectXSetup::GetInstance()->BeginFrame();
 	imGuiManager_->BeginFrame();
 
 }
@@ -66,7 +67,7 @@ void GameManager::Draw() {
 void GameManager::EndFrame() {
 
 	imGuiManager_->EndFrame();
-	directXSetup_->EndFrame();
+	DirectXSetup::GetInstance()->EndFrame();
 			
 }
 
@@ -78,10 +79,10 @@ void GameManager::Release() {
 	//
 	imGuiManager_->Release();
 	//
-	directXSetup_->Release();
+	DirectXSetup::GetInstance()->Release();
 	//
 
-	winApp_->Close();
+	WindowsSetup::GetInstance()->Close();
 }
 
 void GameManager::ChangeScene(IGameScene* newGameScene) {
@@ -107,7 +108,7 @@ void GameManager::Operate() {
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
 			
 			//common_->WinMSG(msg);
-			winApp_->WindowsMSG(msg);
+			WindowsSetup::GetInstance()->WindowsMSG(msg);
 
 		}
 		else {

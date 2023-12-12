@@ -1,6 +1,6 @@
 #pragma once
 #include "Math/Matrix/Matrix/Matrix4x4.h"
-#include "Math/Vector/Vector3.h"
+#include "Vector3.h"
 
 
 #include <cassert>

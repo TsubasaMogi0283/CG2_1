@@ -1,8 +1,8 @@
 #pragma once
 
 #include <vector>
-#include <Math/Vector/VertexData.h>
-#include "Common/DirectX/DirectXSetup.h"
+#include <VertexData.h>
+#include "DirectXSetup.h"
 
 class Mesh{
 public:

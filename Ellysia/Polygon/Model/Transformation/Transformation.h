@@ -1,7 +1,7 @@
 #pragma once
-#include "Common/DirectX/DirectXSetup.h"
+#include "DirectXSetup.h"
 
-#include <Math/Vector/Transform.h>
+#include <Transform.h>
 #include <Math/Matrix/Matrix/TransformationMatrix.h>
 
 class Transformation{

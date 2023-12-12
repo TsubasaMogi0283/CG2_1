@@ -3,7 +3,7 @@
 #include "Transform.h"
 #include "Matrix/Matrix4x4.h"
 
-class Camera {
+class Camera final{
 private:
 	//コンストラクタ
 	Camera();

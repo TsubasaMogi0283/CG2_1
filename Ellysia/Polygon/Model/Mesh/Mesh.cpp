@@ -1,5 +1,5 @@
 #include "Mesh.h"
-#include "Common/DirectX/DirectXSetup.h"
+#include "DirectXSetup.h"
 
 
 

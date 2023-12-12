@@ -1,6 +1,6 @@
 #pragma once
-#include "Common/DirectX/DirectXSetup.h"
-#include <Math/Vector/DirectionalLight.h>
+#include "DirectXSetup.h"
+#include <DirectionalLight.h>
 
 class CreateDirectionalLight{
 public:

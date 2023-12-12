@@ -1,7 +1,6 @@
 #pragma once
 
-#include "WindowsSetup.h"
-#include "DirectXSetup.h"
+
 #include "Polygon/Triangle/Triangle.h"
 #include <ImGuiManager/ImGuiManager.h>
 
@@ -9,15 +8,12 @@
 #include "Math/Matrix/Matrix/Matrix4x4.h"
 #include "ConvertFunction/ConvertColor/ColorConvert.h"
 #include "Math/Matrix/Calculation/Matrix4x4Calculation.h"
-#include <Polygon/Sprite/Sprite.h>
-#include <Polygon/Sphere/Sphere.h>
-#include <Polygon/Model/Model.h>
 
 #include "Audio.h"
 #include <Input.h>
 #include "IGameScene.h"
-#include "Camera/Camera.h"
-#include "TextureManager/TextureManager.h"
+#include "Camera.h"
+#include "TextureManager.h"
 #include "PipelineManager/PipelineManager.h"
 
 
@@ -65,8 +61,6 @@ private:
 	
 
 
-	WindowsSetup* winApp_ = nullptr;
-	DirectXSetup* directXSetup_ = nullptr;
 
 	PipelineManager* pipelineManager_ = nullptr;
 	ImGuiManager* imGuiManager_ = nullptr;

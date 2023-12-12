@@ -4,7 +4,7 @@
 
 #include <ConvertFunction/CompileShader/CompileShaderManager.h>
 #include <ConvertFunction/ConvertLog/LogConvert.h>
-#include <Common/DirectX/DirectXSetup.h>
+#include <DirectXSetup.h>
 
 //透明化を解決するためにPSOをクラス化しよう
 //後ブレンドの時大変だからswitch文で切り替えできるようにしたら楽かも

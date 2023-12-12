@@ -1,5 +1,5 @@
 #include "SampleScene.h"
-#include "AllGameScene/GameManager/GameManager.h"
+#include "GameManager.h"
 #include "TextureManager.h"
 
 /// <summary>

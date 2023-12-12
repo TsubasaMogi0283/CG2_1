@@ -1,7 +1,7 @@
 #pragma once
-#include "Math/Vector/Material.h"
-#include "Common/DirectX/DirectXSetup.h"
-#include "Math/Vector/Vector4.h"
+#include "Material.h"
+#include "DirectXSetup.h"
+#include "Vector4.h"
 
 class CreateMaterial{
 public:

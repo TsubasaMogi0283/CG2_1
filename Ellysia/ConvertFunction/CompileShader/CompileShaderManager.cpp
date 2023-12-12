@@ -1,6 +1,6 @@
 #include "CompileShaderManager.h"
 
-#include "Common/DirectX/DirectXSetup.h"
+#include "DirectXSetup.h"
 //コンストラクタ
 CompileShaderManager::CompileShaderManager() {
 

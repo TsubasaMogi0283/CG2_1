@@ -1,12 +1,12 @@
 #pragma once
-#include "AllGameScene/GameManager/IGameScene.h"
+#include "IGameScene.h"
 
 #include "Polygon/Sprite/Sprite.h"
 #include "Transform.h"
 
 #include "Polygon/Model/Model.h"
 #include <memory>
-//StatePatternをル買う時は必ず前方宣言をするように
+//StatePatternを使う時は必ず前方宣言をするように
 class Gamemanager;
 
 class SampleScene : public IGameScene {

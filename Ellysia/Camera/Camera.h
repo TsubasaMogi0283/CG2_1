@@ -3,7 +3,7 @@
 #include "Transform.h"
 #include "Matrix4x4.h"
 
-class Camera final{
+class Camera {
 private:
 	//コンストラクタ
 	Camera();
@@ -13,8 +13,9 @@ private:
 
 
 public:
-	//シングルインスタンス
 	static Camera* GetInstance();
+
+
 
 	//コピーコンストラクタ禁止
 	Camera(const Camera& camera) = delete;
@@ -34,13 +35,17 @@ public:
 		this->cameraTransform_.translate = translate;
 	}
 
-	//アフィン行列を取得
-	Matrix4x4 GetAffineMatrix();
-	
-	//ビュー行列を取得
+	Vector3 GetRotate() {
+		return cameraTransform_.rotate;
+	}
+	Vector3 GetTranslate() {
+		return cameraTransform_.translate;
+	}
+
+	void Initialize();
+
 	Matrix4x4 GetViewMatrix();
 
-	//射影行列を取得
 	Matrix4x4 GetProjectionMatrix_();
 
 private:
@@ -48,7 +53,6 @@ private:
 
 	Matrix4x4 cameraMatrix_ = {};
 	Matrix4x4 viewMatrix_ = {};
-
 
 	//遠視投影行列
 	Transform cameraTransform_ = {};

@@ -46,7 +46,7 @@ private:
 
 private:
 	Player* player_ = nullptr;
-	static const int amount_ = 1;
+	static const int amount_ = 2;
 
 	Enemy* enemy_[amount_] = { nullptr };
 	std::unique_ptr<Skydome> skydome_ = nullptr;

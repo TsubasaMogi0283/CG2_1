@@ -1,17 +1,17 @@
 #pragma once
 #include "DirectXSetup.h"
-#include "ConvertFunction/ConvertLog/LogConvert.h"
+#include "ConvertLog.h"
 #include "externals/DirectXTex/DirectXTex.h"
 
 #include "Vector4.h"
-#include "Math/Matrix/Matrix/Matrix4x4.h"
-#include "Math/Matrix/Calculation/Matrix4x4Calculation.h"
+#include "Matrix4x4.h"
+#include "Matrix4x4Calculation.h"
 #include "Transform.h"
 #include <VertexData.h>
 
 #include <string>
 #include <Material.h>
-#include <Math/Matrix/Matrix/TransformationMatrix.h>
+#include <TransformationMatrix.h>
 
 class Triangle {
 public:
@@ -32,7 +32,7 @@ public:
 
 private:
 
-	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_;
+	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_ = {};
 
 	//Resource
 	ComPtr<ID3D12Resource> vertexResouce_;

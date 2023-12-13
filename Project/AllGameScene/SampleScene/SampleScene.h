@@ -1,10 +1,10 @@
 #pragma once
 #include "IGameScene.h"
 
-#include "Polygon/Sprite/Sprite.h"
+#include "Sprite.h"
 #include "Transform.h"
 
-#include "Polygon/3D/Particle3D/Particle3D.h"
+#include "Particle3D.h"
 #include "Audio.h"
 #include <memory>
 #include <Model.h>

@@ -82,9 +82,6 @@
     <Filter Include="Ellysia\ヘッダー ファイル\Pipeline">
       <UniqueIdentifier>{960690e0-f2d3-4f0a-a7e9-81f206ff3f49}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Ellysia\ヘッダー ファイル\Blend">
-      <UniqueIdentifier>{41250f08-3f73-4c50-a28e-c98adcfbb3f3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Ellysia\ヘッダー ファイル\TextureManager">
       <UniqueIdentifier>{923fe313-40bb-48ce-aa0b-eb17ee0b5333}</UniqueIdentifier>
     </Filter>
@@ -127,6 +124,18 @@
     <Filter Include="リソース ファイル\Particle3D">
       <UniqueIdentifier>{b41805c9-84ac-4738-9010-423926ba4b89}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Ellysia\ソース ファイル\Polygone\3D\Sphere">
+      <UniqueIdentifier>{c3da23d8-f671-4592-aa90-b00a4373331a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Ellysia\ヘッダー ファイル\Polygone\3D\Sphere">
+      <UniqueIdentifier>{e202b27b-4fd4-47d6-917f-053ff7d7086c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Ellysia\ソース ファイル\Polygone\3D\Particle">
+      <UniqueIdentifier>{5ce2def9-4d37-4049-bbcb-73c42cd3469d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Ellysia\ヘッダー ファイル\Polygone\3D\Model">
+      <UniqueIdentifier>{fafdcfea-8c0f-4b2e-a2c4-892975276f5f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -158,12 +167,6 @@
     </ClCompile>
     <ClCompile Include="Ellysia\ImGuiManager\ImGuiManager.cpp">
       <Filter>Ellysia\ソース ファイル\ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="Ellysia\ConvertFunction\ConvertColor\ColorConvert.cpp">
-      <Filter>Ellysia\ソース ファイル\ConvertFunction</Filter>
-    </ClCompile>
-    <ClCompile Include="Ellysia\ConvertFunction\ConvertLog\LogConvert.cpp">
-      <Filter>Ellysia\ソース ファイル\ConvertFunction</Filter>
     </ClCompile>
     <ClCompile Include="Ellysia\Math\Vector\Calculation\VectorCalculation.cpp">
       <Filter>Ellysia\ソース ファイル\Math</Filter>
@@ -201,37 +204,43 @@
     <ClCompile Include="Ellysia\Camera\Camera.cpp">
       <Filter>Ellysia\ソース ファイル\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="Ellysia\Polygon\Sprite\Sprite.cpp">
-      <Filter>Ellysia\ソース ファイル\Polygone\2D</Filter>
-    </ClCompile>
-    <ClCompile Include="Ellysia\Polygon\Triangle\Triangle.cpp">
-      <Filter>Ellysia\ソース ファイル\Polygone\2D</Filter>
-    </ClCompile>
-    <ClCompile Include="Ellysia\Polygon\Sphere\Sphere.cpp">
-      <Filter>Ellysia\ソース ファイル\Polygone\3D</Filter>
-    </ClCompile>
     <ClCompile Include="Ellysia\Polygon\3D\Model\Model.cpp">
       <Filter>Ellysia\ソース ファイル\Polygone\3D\Model</Filter>
     </ClCompile>
     <ClCompile Include="Ellysia\PipelineManager\PipelineManager.cpp">
       <Filter>Ellysia\ソース ファイル\Pipeline</Filter>
     </ClCompile>
-    <ClCompile Include="Ellysia\Polygon\3D\Particle3D\Particle3D.cpp">
-      <Filter>Ellysia\ソース ファイル\Polygone\3D</Filter>
-    </ClCompile>
-    <ClCompile Include="Ellysia\Polygon\3D\Model\Material\CreateMaterial.cpp">
-      <Filter>Ellysia\ソース ファイル\Polygone\3D</Filter>
-    </ClCompile>
-    <ClCompile Include="Ellysia\Polygon\3D\Model\Transformation\Transformation.cpp">
-      <Filter>Ellysia\ソース ファイル\Polygone\3D</Filter>
-    </ClCompile>
     <ClCompile Include="Ellysia\Ellysia.cpp">
       <Filter>Ellysia\ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Ellysia\Polygon\3D\Model\Mesh\Mesh.cpp">
+    <ClCompile Include="Ellysia\ConvertFunction\ConvertColor\ConvertColor.cpp">
+      <Filter>Ellysia\ソース ファイル\ConvertFunction</Filter>
+    </ClCompile>
+    <ClCompile Include="Ellysia\ConvertFunction\ConvertLog\ConvertLog.cpp">
+      <Filter>Ellysia\ソース ファイル\ConvertFunction</Filter>
+    </ClCompile>
+    <ClCompile Include="Ellysia\Polygon\2D\Sprite\Sprite.cpp">
+      <Filter>Ellysia\ソース ファイル\Polygone\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Ellysia\Polygon\3D\Sphere\Sphere.cpp">
+      <Filter>Ellysia\ソース ファイル\Polygone\3D\Sphere</Filter>
+    </ClCompile>
+    <ClCompile Include="Ellysia\Polygon\2D\Triangle\Triangle.cpp">
+      <Filter>Ellysia\ソース ファイル\Polygone\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Ellysia\Polygon\3D\Particle3D\Particle3D.cpp">
+      <Filter>Ellysia\ソース ファイル\Polygone\3D\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="Ellysia\Polygon\3D\BufferResource\DirectionalLight\CreateDirectionalLight.cpp">
       <Filter>Ellysia\ソース ファイル\Polygone\3D</Filter>
     </ClCompile>
-    <ClCompile Include="Ellysia\Polygon\3D\Model\DirectionalLight\CreateDirectionalLight.cpp">
+    <ClCompile Include="Ellysia\Polygon\3D\BufferResource\Material\CreateMaterial.cpp">
+      <Filter>Ellysia\ソース ファイル\Polygone\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Ellysia\Polygon\3D\BufferResource\Transformation\Transformation.cpp">
+      <Filter>Ellysia\ソース ファイル\Polygone\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Ellysia\Polygon\3D\BufferResource\Mesh\Mesh.cpp">
       <Filter>Ellysia\ソース ファイル\Polygone\3D</Filter>
     </ClCompile>
   </ItemGroup>
@@ -286,26 +295,11 @@
     <ClInclude Include="Ellysia\Math\Vector\Vector4.h">
       <Filter>Ellysia\ヘッダー ファイル\Math\Vector</Filter>
     </ClInclude>
-    <ClInclude Include="Ellysia\Math\Matrix\Matrix\Matrix3x3.h">
-      <Filter>Ellysia\ヘッダー ファイル\Math\Matrix</Filter>
-    </ClInclude>
-    <ClInclude Include="Ellysia\Math\Matrix\Matrix\Matrix4x4.h">
-      <Filter>Ellysia\ヘッダー ファイル\Math\Matrix</Filter>
-    </ClInclude>
     <ClInclude Include="Ellysia\Math\Matrix\Calculation\Matrix4x4Calculation.h">
-      <Filter>Ellysia\ヘッダー ファイル\Math\Matrix</Filter>
-    </ClInclude>
-    <ClInclude Include="Ellysia\Math\Matrix\Matrix\WorldViewMatrix.h">
       <Filter>Ellysia\ヘッダー ファイル\Math\Matrix</Filter>
     </ClInclude>
     <ClInclude Include="Ellysia\ImGuiManager\ImGuiManager.h">
       <Filter>Ellysia\ヘッダー ファイル\ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="Ellysia\ConvertFunction\ConvertColor\ColorConvert.h">
-      <Filter>Ellysia\ヘッダー ファイル\ConvertFunction</Filter>
-    </ClInclude>
-    <ClInclude Include="Ellysia\ConvertFunction\ConvertLog\LogConvert.h">
-      <Filter>Ellysia\ヘッダー ファイル\ConvertFunction</Filter>
     </ClInclude>
     <ClInclude Include="Ellysia\Math\Vector\Transform.h">
       <Filter>Ellysia\ヘッダー ファイル\Math\Vector</Filter>
@@ -325,9 +319,6 @@
     <ClInclude Include="Ellysia\Math\Vector\Material.h">
       <Filter>Ellysia\ヘッダー ファイル\Math\Vector</Filter>
     </ClInclude>
-    <ClInclude Include="Ellysia\Math\Matrix\Matrix\TransformationMatrix.h">
-      <Filter>Ellysia\ヘッダー ファイル\Math\Matrix</Filter>
-    </ClInclude>
     <ClInclude Include="Ellysia\Math\Vector\DirectionalLight.h">
       <Filter>Ellysia\ヘッダー ファイル\Math\Vector</Filter>
     </ClInclude>
@@ -342,21 +333,6 @@
     </ClInclude>
     <ClInclude Include="Ellysia\Math\Vector\SpritePosition.h">
       <Filter>Ellysia\ヘッダー ファイル\Math\Vector</Filter>
-    </ClInclude>
-    <ClInclude Include="Ellysia\Audio\ChunkHeader\ChunkHeader.h">
-      <Filter>Ellysia\ヘッダー ファイル\Audio</Filter>
-    </ClInclude>
-    <ClInclude Include="Ellysia\Audio\FormatChunk\FormatChunk.h">
-      <Filter>Ellysia\ヘッダー ファイル\Audio</Filter>
-    </ClInclude>
-    <ClInclude Include="Ellysia\Audio\RiffHeader\RiffHeader.h">
-      <Filter>Ellysia\ヘッダー ファイル\Audio</Filter>
-    </ClInclude>
-    <ClInclude Include="Ellysia\Audio\SoundData\SoundData.h">
-      <Filter>Ellysia\ヘッダー ファイル\Audio</Filter>
-    </ClInclude>
-    <ClInclude Include="Ellysia\Blend\BlendMode.h">
-      <Filter>Ellysia\ヘッダー ファイル\Blend</Filter>
     </ClInclude>
     <ClInclude Include="Ellysia\Audio\Audio.h">
       <Filter>Ellysia\ヘッダー ファイル\Audio</Filter>
@@ -385,20 +361,8 @@
     <ClInclude Include="Ellysia\Camera\Camera.h">
       <Filter>Ellysia\ヘッダー ファイル\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="Ellysia\Polygon\Sprite\Sprite.h">
-      <Filter>Ellysia\ヘッダー ファイル\Polygone\2D</Filter>
-    </ClInclude>
-    <ClInclude Include="Ellysia\Polygon\Triangle\Triangle.h">
-      <Filter>Ellysia\ヘッダー ファイル\Polygone\2D</Filter>
-    </ClInclude>
-    <ClInclude Include="Ellysia\Polygon\Sphere\Sphere.h">
-      <Filter>Ellysia\ヘッダー ファイル\Polygone\3D</Filter>
-    </ClInclude>
     <ClInclude Include="Ellysia\PipelineManager\PipelineManager.h">
       <Filter>Ellysia\ヘッダー ファイル\Pipeline</Filter>
-    </ClInclude>
-    <ClInclude Include="Ellysia\Polygon\3D\Model\Model.h">
-      <Filter>Ellysia\ヘッダー ファイル\Polygone\3D</Filter>
     </ClInclude>
     <ClInclude Include="Ellysia\Polygon\3D\Particle3D\Particle.h">
       <Filter>Ellysia\ヘッダー ファイル\Polygone\3D\Particle</Filter>
@@ -406,26 +370,53 @@
     <ClInclude Include="Ellysia\Polygon\3D\Particle3D\Particle3D.h">
       <Filter>Ellysia\ヘッダー ファイル\Polygone\3D\Particle</Filter>
     </ClInclude>
-    <ClInclude Include="Ellysia\Polygon\3D\Model\DirectionalLight\CreateDirectionalLight.h">
-      <Filter>Ellysia\ヘッダー ファイル\Polygone\3D</Filter>
-    </ClInclude>
-    <ClInclude Include="Ellysia\Polygon\3D\Model\Material\CreateMaterial.h">
-      <Filter>Ellysia\ヘッダー ファイル\Polygone\3D</Filter>
-    </ClInclude>
-    <ClInclude Include="Ellysia\Polygon\3D\Model\MaterialData\MaterialData.h">
-      <Filter>Ellysia\ヘッダー ファイル\Polygone\3D</Filter>
-    </ClInclude>
-    <ClInclude Include="Ellysia\Polygon\3D\Model\Mesh\Mesh.h">
-      <Filter>Ellysia\ヘッダー ファイル\Polygone\3D</Filter>
-    </ClInclude>
-    <ClInclude Include="Ellysia\Polygon\3D\Model\Transformation\Transformation.h">
-      <Filter>Ellysia\ヘッダー ファイル\Polygone\3D</Filter>
-    </ClInclude>
-    <ClInclude Include="Ellysia\Polygon\3D\Model\ModelData\ModelData.h">
-      <Filter>Ellysia\ヘッダー ファイル\Polygone\3D</Filter>
-    </ClInclude>
     <ClInclude Include="Ellysia\Ellysia.h">
       <Filter>Ellysia\ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Math\Matrix\Matrix3x3.h">
+      <Filter>Ellysia\ヘッダー ファイル\Math\Matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Math\Matrix\Matrix4x4.h">
+      <Filter>Ellysia\ヘッダー ファイル\Math\Matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Math\Matrix\TransformationMatrix.h">
+      <Filter>Ellysia\ヘッダー ファイル\Math\Matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\ConvertFunction\ConvertLog\ConvertLog.h">
+      <Filter>Ellysia\ヘッダー ファイル\ConvertFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\ConvertFunction\ConvertColor\ConvertColor.h">
+      <Filter>Ellysia\ヘッダー ファイル\ConvertFunction</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Polygon\2D\Sprite\Sprite.h">
+      <Filter>Ellysia\ヘッダー ファイル\Polygone\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Polygon\3D\Sphere\Sphere.h">
+      <Filter>Ellysia\ヘッダー ファイル\Polygone\3D\Sphere</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Polygon\2D\Triangle\Triangle.h">
+      <Filter>Ellysia\ヘッダー ファイル\Polygone\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Polygon\3D\BufferResource\DirectionalLight\CreateDirectionalLight.h">
+      <Filter>Ellysia\ヘッダー ファイル\Polygone\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Polygon\3D\BufferResource\Material\CreateMaterial.h">
+      <Filter>Ellysia\ヘッダー ファイル\Polygone\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Polygon\3D\BufferResource\MaterialData\MaterialData.h">
+      <Filter>Ellysia\ヘッダー ファイル\Polygone\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Polygon\3D\BufferResource\Mesh\Mesh.h">
+      <Filter>Ellysia\ヘッダー ファイル\Polygone\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Polygon\3D\BufferResource\ModelData\ModelData.h">
+      <Filter>Ellysia\ヘッダー ファイル\Polygone\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Polygon\3D\BufferResource\Transformation\Transformation.h">
+      <Filter>Ellysia\ヘッダー ファイル\Polygone\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Polygon\3D\Model\Model.h">
+      <Filter>Ellysia\ヘッダー ファイル\Polygone\3D\Model</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

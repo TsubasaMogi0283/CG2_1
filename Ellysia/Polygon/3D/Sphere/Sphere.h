@@ -1,18 +1,18 @@
 #pragma once
 
-#include "Common/DirectX/DirectXSetup.h"
-#include "ConvertFunction/ConvertLog/LogConvert.h"
+#include "DirectXSetup.h"
+#include "ConvertLog.h"
 #include "externals/DirectXTex/DirectXTex.h"
 
-#include "Math/Vector/Vector4.h"
-#include "Math/Matrix/Matrix/Matrix4x4.h"
-#include "Math/Matrix/Calculation/Matrix4x4Calculation.h"
-#include "Math/Vector/Transform.h"
-#include <Math/Vector/VertexData.h>
-#include <Math/Vector/SphereStruct.h>
-#include <Math/Vector/Material.h>
-#include <Math/Matrix/Matrix/TransformationMatrix.h>
-#include <Math/Vector/DirectionalLight.h>
+#include "Vector4.h"
+#include "Matrix4x4.h"
+#include "Matrix4x4Calculation.h"
+#include "Transform.h"
+#include <VertexData.h>
+#include <SphereStruct.h>
+#include <Material.h>
+#include <TransformationMatrix.h>
+#include <DirectionalLight.h>
 
 class Sphere {
 public:

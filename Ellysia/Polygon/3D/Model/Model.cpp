@@ -1,7 +1,7 @@
 #include "Model.h"
-#include <Camera/Camera.h>
-#include <TextureManager/TextureManager.h>
-#include <PipelineManager/PipelineManager.h>
+#include <Camera.h>
+#include <TextureManager.h>
+#include <PipelineManager.h>
 #include "DirectXSetup.h"
 
 

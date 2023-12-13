@@ -1,8 +1,7 @@
-#include "LogConvert.h"
-
+#include "ConvertLog.h"
 //使い方はこんな感じ
-	//出力にちゃんと「WSTRING」が出る
-	//Log(ConvertString(std::format(L"wstring\n", wstringValue)));
+//出力にちゃんと「WSTRING」が出る
+//Log(ConvertString(std::format(L"wstring\n", wstringValue)));
 
 
 

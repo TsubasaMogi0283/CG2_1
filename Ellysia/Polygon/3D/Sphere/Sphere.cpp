@@ -5,7 +5,7 @@
 //動的配列
 #include <vector>
 #include <numbers>
-#include <Math/Vector/Calculation/VectorCalculation.h>
+#include <VectorCalculation.h>
 
 
 

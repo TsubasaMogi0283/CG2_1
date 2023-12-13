@@ -2,7 +2,7 @@
 #include <string>
 
 #include <dxgidebug.h>
-#include <ConvertFunction/ConvertLog/LogConvert.h>
+#include "ConvertLog.h"
 #include <cassert>
 
 

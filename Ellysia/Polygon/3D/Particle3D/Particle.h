@@ -1,6 +1,6 @@
 #pragma once
-#include <Math/Vector/Transform.h>
-#include "Math/Vector/Vector4.h"
+#include <Transform.h>
+#include "Vector4.h"
 
 //CPU側
 struct Particle {

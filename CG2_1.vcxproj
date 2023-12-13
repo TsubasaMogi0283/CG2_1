@@ -52,7 +52,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalIncludeDirectories>$(ProjectDir)\Ellysia;$(ProjectDir)\Project;$(ProjectDir)\Ellysia\Common\DirectX;$(ProjectDir)\Ellysia\Common\Windows;$(ProjectDir)\Ellysia\Input;$(ProjectDir)\Ellysia\Audio;$(ProjectDir)\Ellysia\TextureManager;$(ProjectDir)\Ellysia\Math\Matrix;$(ProjectDir)\Ellysia\Math\Vector;$(ProjectDir)\Project\AllGameScene\GameManager;$(ProjectDir)\Ellysia\Camera;$(ProjectDir)\Project\AllGameScene;$(ProjectDir)\Ellysia\ImGuiManager;$(ProjectDir)\Ellysia\PipelineManager;$(ProjectDir)\Ellysia\Polygon\3D\Model;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\Ellysia;$(ProjectDir)\Project;$(ProjectDir)\Ellysia\Common\DirectX;$(ProjectDir)\Ellysia\Common\Windows;$(ProjectDir)\Ellysia\Input;$(ProjectDir)\Ellysia\Audio;$(ProjectDir)\Ellysia\TextureManager;$(ProjectDir)\Ellysia\Math\Matrix;$(ProjectDir)\Ellysia\Math\Vector;$(ProjectDir)\Project\AllGameScene\GameManager;$(ProjectDir)\Ellysia\Camera;$(ProjectDir)\Project\AllGameScene;$(ProjectDir)\Ellysia\ImGuiManager;$(ProjectDir)\Ellysia\PipelineManager;$(ProjectDir)\Ellysia\Polygon\3D\Model;$(ProjectDir)\Ellysia\Math\Matrix\Calculation;$(ProjectDir)\Ellysia\Math\Vector\Calculation;$(ProjectDir)\Ellysia\ConvertFunction\ConvertLog;$(ProjectDir)\Ellysia\ConvertFunction\ConvertColor;$(ProjectDir)\Ellysia\Polygon\3D\BufferResource\Mesh;$(ProjectDir)\Ellysia\Polygon\3D\BufferResource\MaterialData;$(ProjectDir)\Ellysia\Polygon\3D\BufferResource\Material;$(ProjectDir)\Ellysia\Polygon\3D\BufferResource\Transformation;$(ProjectDir)\Ellysia\Polygon\3D\BufferResource\ModelData;$(ProjectDir)\Ellysia\Polygon\3D\BufferResource\DirectionalLight;$(ProjectDir)\Ellysia\Polygon\2D\Sprite;$(ProjectDir)\Ellysia\Polygon\3D\Particle3D;$(ProjectDir)\Ellysia\ConvertFunction\CompileShader;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -75,7 +75,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <LanguageStandard>stdcpp20</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalIncludeDirectories>$(ProjectDir)\Ellysia;$(ProjectDir)\Project;$(ProjectDir)\Ellysia\Common\DirectX;$(ProjectDir)\Ellysia\Common\Windows;$(ProjectDir)\Ellysia\Input;$(ProjectDir)\Ellysia\Audio;$(ProjectDir)\Ellysia\TextureManager;$(ProjectDir)\Ellysia\Math\Matrix;$(ProjectDir)\Ellysia\Math\Vector;$(ProjectDir)\Project\AllGameScene\GameManager;$(ProjectDir)\Ellysia\Camera;$(ProjectDir)\Project\AllGameScene;$(ProjectDir)\Ellysia\ImGuiManager;$(ProjectDir)\Ellysia\PipelineManager;$(ProjectDir)\Ellysia\Polygon\3D\Model;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\Ellysia;$(ProjectDir)\Project;$(ProjectDir)\Ellysia\Common\DirectX;$(ProjectDir)\Ellysia\Common\Windows;$(ProjectDir)\Ellysia\Input;$(ProjectDir)\Ellysia\Audio;$(ProjectDir)\Ellysia\TextureManager;$(ProjectDir)\Ellysia\Math\Matrix;$(ProjectDir)\Ellysia\Math\Vector;$(ProjectDir)\Project\AllGameScene\GameManager;$(ProjectDir)\Ellysia\Camera;$(ProjectDir)\Project\AllGameScene;$(ProjectDir)\Ellysia\ImGuiManager;$(ProjectDir)\Ellysia\PipelineManager;$(ProjectDir)\Ellysia\Polygon\3D\Model;$(ProjectDir)\Ellysia\Math\Matrix\Calculation;$(ProjectDir)\Ellysia\Math\Vector\Calculation;$(ProjectDir)\Ellysia\ConvertFunction\ConvertLog;$(ProjectDir)\Ellysia\ConvertFunction\ConvertColor;$(ProjectDir)\Ellysia\Polygon\3D\BufferResource\Mesh;$(ProjectDir)\Ellysia\Polygon\3D\BufferResource\MaterialData;$(ProjectDir)\Ellysia\Polygon\3D\BufferResource\Material;$(ProjectDir)\Ellysia\Polygon\3D\BufferResource\Transformation;$(ProjectDir)\Ellysia\Polygon\3D\BufferResource\ModelData;$(ProjectDir)\Ellysia\Polygon\3D\BufferResource\DirectionalLight;$(ProjectDir)\Ellysia\Polygon\2D\Sprite;$(ProjectDir)\Ellysia\Polygon\3D\Particle3D;$(ProjectDir)\Ellysia\ConvertFunction\CompileShader;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -95,8 +95,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Ellysia\Common\DirectX\DirectXSetup.cpp" />
     <ClCompile Include="Ellysia\Common\Windows\WindowsSetup.cpp" />
     <ClCompile Include="Ellysia\ConvertFunction\CompileShader\CompileShaderManager.cpp" />
-    <ClCompile Include="Ellysia\ConvertFunction\ConvertColor\ColorConvert.cpp" />
-    <ClCompile Include="Ellysia\ConvertFunction\ConvertLog\LogConvert.cpp" />
+    <ClCompile Include="Ellysia\ConvertFunction\ConvertColor\ConvertColor.cpp" />
+    <ClCompile Include="Ellysia\ConvertFunction\ConvertLog\ConvertLog.cpp" />
     <ClCompile Include="Ellysia\Ellysia.cpp" />
     <ClCompile Include="Ellysia\externals\imGui\imgui.cpp" />
     <ClCompile Include="Ellysia\externals\imGui\imgui_demo.cpp" />
@@ -111,15 +111,15 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Ellysia\Math\Matrix\Calculation\Matrix4x4Calculation.cpp" />
     <ClCompile Include="Ellysia\Math\Vector\Calculation\VectorCalculation.cpp" />
     <ClCompile Include="Ellysia\PipelineManager\PipelineManager.cpp" />
-    <ClCompile Include="Ellysia\Polygon\3D\Model\DirectionalLight\CreateDirectionalLight.cpp" />
-    <ClCompile Include="Ellysia\Polygon\3D\Model\Material\CreateMaterial.cpp" />
-    <ClCompile Include="Ellysia\Polygon\3D\Model\Mesh\Mesh.cpp" />
+    <ClCompile Include="Ellysia\Polygon\2D\Sprite\Sprite.cpp" />
+    <ClCompile Include="Ellysia\Polygon\2D\Triangle\Triangle.cpp" />
+    <ClCompile Include="Ellysia\Polygon\3D\BufferResource\DirectionalLight\CreateDirectionalLight.cpp" />
+    <ClCompile Include="Ellysia\Polygon\3D\BufferResource\Material\CreateMaterial.cpp" />
+    <ClCompile Include="Ellysia\Polygon\3D\BufferResource\Mesh\Mesh.cpp" />
+    <ClCompile Include="Ellysia\Polygon\3D\BufferResource\Transformation\Transformation.cpp" />
     <ClCompile Include="Ellysia\Polygon\3D\Model\Model.cpp" />
-    <ClCompile Include="Ellysia\Polygon\3D\Model\Transformation\Transformation.cpp" />
     <ClCompile Include="Ellysia\Polygon\3D\Particle3D\Particle3D.cpp" />
-    <ClCompile Include="Ellysia\Polygon\Sphere\Sphere.cpp" />
-    <ClCompile Include="Ellysia\Polygon\Sprite\Sprite.cpp" />
-    <ClCompile Include="Ellysia\Polygon\Triangle\Triangle.cpp" />
+    <ClCompile Include="Ellysia\Polygon\3D\Sphere\Sphere.cpp" />
     <ClCompile Include="Ellysia\TextureManager\TextureManager.cpp" />
     <ClCompile Include="Ellysia\WorldTransform\WorldTransform.cpp" />
     <ClCompile Include="main.cpp" />
@@ -154,17 +154,12 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Ellysia\Audio\Audio.h" />
-    <ClInclude Include="Ellysia\Audio\ChunkHeader\ChunkHeader.h" />
-    <ClInclude Include="Ellysia\Audio\FormatChunk\FormatChunk.h" />
-    <ClInclude Include="Ellysia\Audio\RiffHeader\RiffHeader.h" />
-    <ClInclude Include="Ellysia\Audio\SoundData\SoundData.h" />
-    <ClInclude Include="Ellysia\Blend\BlendMode.h" />
     <ClInclude Include="Ellysia\Camera\Camera.h" />
     <ClInclude Include="Ellysia\Common\DirectX\DirectXSetup.h" />
     <ClInclude Include="Ellysia\Common\Windows\WindowsSetup.h" />
     <ClInclude Include="Ellysia\ConvertFunction\CompileShader\CompileShaderManager.h" />
-    <ClInclude Include="Ellysia\ConvertFunction\ConvertColor\ColorConvert.h" />
-    <ClInclude Include="Ellysia\ConvertFunction\ConvertLog\LogConvert.h" />
+    <ClInclude Include="Ellysia\ConvertFunction\ConvertColor\ConvertColor.h" />
+    <ClInclude Include="Ellysia\ConvertFunction\ConvertLog\ConvertLog.h" />
     <ClInclude Include="Ellysia\Ellysia.h" />
     <ClInclude Include="Ellysia\externals\imGui\imconfig.h" />
     <ClInclude Include="Ellysia\externals\imGui\imgui.h" />
@@ -178,10 +173,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Ellysia\Input\Input.h" />
     <ClInclude Include="Ellysia\Math\BPMCalculation\BPMSetting.h" />
     <ClInclude Include="Ellysia\Math\Matrix\Calculation\Matrix4x4Calculation.h" />
-    <ClInclude Include="Ellysia\Math\Matrix\Matrix\Matrix3x3.h" />
-    <ClInclude Include="Ellysia\Math\Matrix\Matrix\Matrix4x4.h" />
-    <ClInclude Include="Ellysia\Math\Matrix\Matrix\TransformationMatrix.h" />
-    <ClInclude Include="Ellysia\Math\Matrix\Matrix\WorldViewMatrix.h" />
+    <ClInclude Include="Ellysia\Math\Matrix\Matrix3x3.h" />
+    <ClInclude Include="Ellysia\Math\Matrix\Matrix4x4.h" />
+    <ClInclude Include="Ellysia\Math\Matrix\TransformationMatrix.h" />
     <ClInclude Include="Ellysia\Math\Vector\Calculation\VectorCalculation.h" />
     <ClInclude Include="Ellysia\Math\Vector\DirectionalLight.h" />
     <ClInclude Include="Ellysia\Math\Vector\Material.h" />
@@ -193,18 +187,18 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Ellysia\Math\Vector\Vector4.h" />
     <ClInclude Include="Ellysia\Math\Vector\VertexData.h" />
     <ClInclude Include="Ellysia\PipelineManager\PipelineManager.h" />
-    <ClInclude Include="Ellysia\Polygon\3D\Model\DirectionalLight\CreateDirectionalLight.h" />
-    <ClInclude Include="Ellysia\Polygon\3D\Model\MaterialData\MaterialData.h" />
-    <ClInclude Include="Ellysia\Polygon\3D\Model\Material\CreateMaterial.h" />
-    <ClInclude Include="Ellysia\Polygon\3D\Model\Mesh\Mesh.h" />
+    <ClInclude Include="Ellysia\Polygon\2D\Sprite\Sprite.h" />
+    <ClInclude Include="Ellysia\Polygon\2D\Triangle\Triangle.h" />
+    <ClInclude Include="Ellysia\Polygon\3D\BufferResource\DirectionalLight\CreateDirectionalLight.h" />
+    <ClInclude Include="Ellysia\Polygon\3D\BufferResource\MaterialData\MaterialData.h" />
+    <ClInclude Include="Ellysia\Polygon\3D\BufferResource\Material\CreateMaterial.h" />
+    <ClInclude Include="Ellysia\Polygon\3D\BufferResource\Mesh\Mesh.h" />
+    <ClInclude Include="Ellysia\Polygon\3D\BufferResource\ModelData\ModelData.h" />
+    <ClInclude Include="Ellysia\Polygon\3D\BufferResource\Transformation\Transformation.h" />
     <ClInclude Include="Ellysia\Polygon\3D\Model\Model.h" />
-    <ClInclude Include="Ellysia\Polygon\3D\Model\ModelData\ModelData.h" />
-    <ClInclude Include="Ellysia\Polygon\3D\Model\Transformation\Transformation.h" />
     <ClInclude Include="Ellysia\Polygon\3D\Particle3D\Particle.h" />
     <ClInclude Include="Ellysia\Polygon\3D\Particle3D\Particle3D.h" />
-    <ClInclude Include="Ellysia\Polygon\Sphere\Sphere.h" />
-    <ClInclude Include="Ellysia\Polygon\Sprite\Sprite.h" />
-    <ClInclude Include="Ellysia\Polygon\Triangle\Triangle.h" />
+    <ClInclude Include="Ellysia\Polygon\3D\Sphere\Sphere.h" />
     <ClInclude Include="Ellysia\TextureManager\TextureManager.h" />
     <ClInclude Include="Ellysia\WorldTransform\WorldTransform.h" />
     <ClInclude Include="Project\AllGameScene\GameManager\GameManager.h" />

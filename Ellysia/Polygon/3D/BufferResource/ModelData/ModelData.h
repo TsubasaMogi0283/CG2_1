@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 #include <VertexData.h>
-#include "Polygon/3D/Model/MaterialData/MaterialData.h"
+#include "MaterialData.h"
 
 
 struct ModelData {

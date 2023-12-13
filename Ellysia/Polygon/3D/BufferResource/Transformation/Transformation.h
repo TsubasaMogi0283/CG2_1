@@ -2,7 +2,7 @@
 #include "DirectXSetup.h"
 
 #include <Transform.h>
-#include <Math/Matrix/Matrix/TransformationMatrix.h>
+#include <TransformationMatrix.h>
 
 class Transformation{
 public:

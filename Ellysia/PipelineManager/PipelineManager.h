@@ -2,8 +2,8 @@
 #include <d3d12.h>
 #include <cassert>
 
-#include <ConvertFunction/CompileShader/CompileShaderManager.h>
-#include <ConvertFunction/ConvertLog/LogConvert.h>
+#include <CompileShaderManager.h>
+#include "ConvertLog.h"
 #include <DirectXSetup.h>
 
 //透明化を解決するためにPSOをクラス化しよう
@@ -12,7 +12,35 @@
 //同様にモデルも
 
 
+enum BlemdMode {
+	//ブレンド無し
+	BlendModeNone,
 
+	//通常ブレンド
+	//Src*SrcA+Dest*(1-SrcA)
+	BlendModeNormal,
+
+	//加算ブレンド
+	//Src*SrcA+Dest*1
+	BlendModeAdd,
+
+	//減算ブレンド
+	//Dest*1-Src*SrcA
+	BlendModeSubtract,
+
+	//乗算ブレンド
+	//Src*0+Dest*Src
+	BlendModeMultiply,
+
+	//スクリーンブレンド
+	//Src*(1-Dest)+Dest*1
+	BlendModeScreen,
+
+	//利用してはいけない
+	CountOfBlendMode,
+
+
+};
 
 class PipelineManager final{
 private:

@@ -8,30 +8,29 @@
 #include <list>
 #include <random>
 
-#include "ConvertFunction/ConvertLog/LogConvert.h"
 #include "externals/DirectXTex/DirectXTex.h"
-#include "Matrix/Matrix4x4.h"
+#include "Matrix4x4.h"
 #include <Material.h>
-#include <Math/Matrix/Matrix/TransformationMatrix.h>
+#include <TransformationMatrix.h>
 #include <DirectionalLight.h>
-#include "Polygon/3D/Model/MaterialData/MaterialData.h"
-#include "Polygon/3D/Model/ModelData/ModelData.h"
+#include "MaterialData.h"
+#include "ModelData.h"
 
 
 #include "Vector4.h"
-#include "Math/Matrix/Calculation/Matrix4x4Calculation.h"
+#include "Matrix4x4Calculation.h"
 #include <VertexData.h>
 
-#include <Calculation/VectorCalculation.h>
+#include <VectorCalculation.h>
 #include <externals/DirectXTex/d3dx12.h>
 
 
 
 
-#include "Polygon/3D/Model/Mesh/Mesh.h"
-#include "Polygon/3D/Model/Material/CreateMaterial.h"
-#include "Polygon/3D/Model/DirectionalLight/CreateDirectionalLight.h"
-#include "Polygon/3D/Model/Transformation/Transformation.h"
+#include "Mesh.h"
+#include "CreateMaterial.h"
+#include "CreateDirectionalLight.h"
+#include "Transformation.h"
 #include "Transform.h"
 #include "Particle.h"
 

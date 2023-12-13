@@ -7,8 +7,8 @@
 #include <externals/DirectXTex/d3dx12.h>
 
 
-#include "Common/DirectX/DirectXSetup.h"
-#include <ConvertFunction/ConvertLog/LogConvert.h>
+#include "DirectXSetup.h"
+#include "ConvertLog.h"
 
 //テクスチャに関するクラス
 class TextureManager {

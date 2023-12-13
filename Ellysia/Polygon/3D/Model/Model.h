@@ -6,35 +6,27 @@
 #include <array>
 #include <memory>
 
-#include "ConvertFunction/ConvertLog/LogConvert.h"
 #include "externals/DirectXTex/DirectXTex.h"
-#include <Math/Matrix/Matrix/Matrix4x4.h>
+#include <Matrix4x4.h>
 #include <Transform.h>
 #include <Material.h>
-#include <Math/Matrix/Matrix/TransformationMatrix.h>
-
-
+#include <TransformationMatrix.h>
 
 
 #include "Vector4.h"
-#include "Math/Matrix/Calculation/Matrix4x4Calculation.h"
+#include "Matrix4x4Calculation.h"
 #include <VertexData.h>
 
-#include <Calculation/VectorCalculation.h>
 #include <externals/DirectXTex/d3dx12.h>
 
 
-
-
-#include "Polygon/3D/Model/Mesh/Mesh.h"
-#include "Polygon/3D/Model/Material/CreateMaterial.h"
-
-#include "Polygon/3D/Model/MaterialData/MaterialData.h"
-#include "Polygon/3D/Model/ModelData/ModelData.h"
-
+#include "Mesh.h"
+#include "CreateMaterial.h"
+#include "MaterialData.h"
+#include "ModelData.h"
 #include <DirectionalLight.h>
-#include "DirectionalLight/CreateDirectionalLight.h"
-#include "Transformation/Transformation.h"
+#include "CreateDirectionalLight.h"
+#include "Transformation.h"
 
 
 class Model {
@@ -45,8 +37,6 @@ public:
 
 	//初期化
 	//Initializeも兼ねているよ
-	//void CreateObject(const std::string& directoryPath,const std::string& fileName);
-
 	//通常
 	static Model* Create(const std::string& directoryPath,const std::string& fileName);
 	//ブレンドあり

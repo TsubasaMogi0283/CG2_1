@@ -1,5 +1,5 @@
 #include "WorldTransform.h"
-#include <Math/Matrix/Calculation/Matrix4x4Calculation.h>
+#include <Matrix4x4Calculation.h>
 
 /// 行列を計算・転送する
 void WorldTransform::UpdateMatrix() {

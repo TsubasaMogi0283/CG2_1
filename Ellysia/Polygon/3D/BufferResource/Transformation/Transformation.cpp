@@ -1,6 +1,6 @@
 #include "Transformation.h"
-#include <Math/Matrix/Matrix/Matrix4x4.h>
-#include <Math/Matrix/Calculation/Matrix4x4Calculation.h>
+#include <Matrix4x4.h>
+#include <Matrix4x4Calculation.h>
 #include <WindowsSetup.h>
 #include "Camera.h"
 

@@ -26,17 +26,17 @@ void SampleScene::Initialize() {
 
 	player_->SetParent(&railCamera_->GetWorldmatrix());
 
-
-	enemy_ =new Enemy();
-	enemy_->SetPlayer(player_);
-	enemy_->Initialize();
+	for (int i = 0; i < amount_; i++) {
+		enemy_[i] =new Enemy();
+		enemy_[i]->SetPlayer(player_);
+		enemy_[i]->Initialize();
+	
+	}
 	
 
 	skydome_ = std::make_unique<Skydome>();
 	skydome_->Initialize();
 
-
-	
 
 	collisionManager_ = std::make_unique <CollisionManager>();
 
@@ -65,33 +65,35 @@ void SampleScene::CheckAllCollisions(){
 	const std::list<PlayerBullet*>& playerBullets = player_->GetBullets();
 
 	//敵弾リストの取得
-	const std::list<EnemyBullet*>& enemyBullets = enemy_->GetBullets();
+	for (int i = 0; i < amount_; i++) {
+		const std::list<EnemyBullet*>& enemyBullets = enemy_[i]->GetBullets();
 
-	//コライダー
-	std::list<Collider*> colliders;
-
-
-
-	//衝突マネージャのリストをクリアする
-	collisionManager_->ClearList();
-	//コライダーを全て衝突マネージャに登録する
-	collisionManager_->RegisterList(player_);
-	collisionManager_->RegisterList(enemy_);
+		//コライダー
+		std::list<Collider*> colliders;
 
 
-	//自弾全てについて
-	for (PlayerBullet* bullet : playerBullets) {
-		//colliders.push_back(bullet);
-		collisionManager_->RegisterList(bullet);
+
+		//衝突マネージャのリストをクリアする
+		collisionManager_->ClearList();
+		//コライダーを全て衝突マネージャに登録する
+		collisionManager_->RegisterList(player_);
+		for (int i = 0; i < amount_; i++) {
+			collisionManager_->RegisterList(enemy_[i]);
+		}
+
+		//自弾全てについて
+		for (PlayerBullet* bullet : playerBullets) {
+			//colliders.push_back(bullet);
+			collisionManager_->RegisterList(bullet);
+		}
+		//敵弾全てについて
+		for (EnemyBullet* bullet : enemyBullets) {
+			//colliders.push_back(bullet);
+			collisionManager_->RegisterList(bullet);
+		}
+
+		collisionManager_->CheckAllCollision();
 	}
-	//敵弾全てについて
-	for (EnemyBullet* bullet : enemyBullets) {
-		//colliders.push_back(bullet);
-		collisionManager_->RegisterList(bullet);
-	}
-
-	collisionManager_->CheckAllCollision();
-
 	
 	
 }
@@ -108,7 +110,7 @@ void SampleScene::Update(GameManager* gameManager) {
 	Camera::GetInstance()->SetRotate(cameraRotate_);
 
 	ImGui::Begin("Camera");
-	ImGui::SliderFloat3("Tranlate", &cameraTranslate_.x, -20.0f, 10.0f);
+	ImGui::SliderFloat3("Tranlate", &cameraTranslate_.x, -20.0f, 20.0f);
 	ImGui::SliderFloat3("Rotate", &cameraRotate_.x, -7.0f, 7.0f);
 	ImGui::End();
 
@@ -117,13 +119,13 @@ void SampleScene::Update(GameManager* gameManager) {
 
 	player_->Update();
 	
-	enemy_->Update();
-
+	for (int i = 0; i < amount_; i++) {
+		enemy_[i]->Update();
+	}
 	skydome_->Update();
 
 	//railCamera_->Update();
 
-	
 
 }
 
@@ -135,8 +137,9 @@ void SampleScene::Draw() {
 	skydome_->Draw();
 	player_->Draw();
 
-	enemy_->Draw();
-
+	for (int i = 0; i < amount_; i++) {
+		enemy_[i]->Draw();
+	}
 
 }
 
@@ -148,6 +151,9 @@ void SampleScene::Draw() {
 /// </summary>
 SampleScene::~SampleScene() {
 	delete player_;
-	delete enemy_;
+	for (int i = 0; i < amount_; i++) {
+		delete enemy_[i];
+	}
 	delete railCamera_;
+
 }

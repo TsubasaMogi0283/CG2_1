@@ -46,15 +46,15 @@ private:
 
 private:
 	Player* player_ = nullptr;
-	Enemy* enemy_ = nullptr;
+	static const int amount_ = 50;
+
+	Enemy* enemy_[amount_] = { nullptr };
 	std::unique_ptr<Skydome> skydome_ = nullptr;
 	RailCamera* railCamera_ = nullptr;
 
 	Vector3 cameraTranslate_ = {};
 	Vector3 cameraRotate_ = {};
 	
-
-
 
 	std::unique_ptr<CollisionManager> collisionManager_ = nullptr;
 

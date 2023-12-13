@@ -10,7 +10,7 @@ Camera::Camera() {
 	//コンストラクタの所で値を入れる
 	//わざわざInitialize関数を作るのは面倒だから
 	//デフォルト
-	
+	cameraTransform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,-9.8f} };
 }
 
 //インスタンス
@@ -22,6 +22,7 @@ Camera* Camera::GetInstance() {
 	
 }
 
+//シーンを変えて初期化したいときはこれを使う
 void Camera::Initialize() {
 	cameraTransform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,-40.0f} };
 }

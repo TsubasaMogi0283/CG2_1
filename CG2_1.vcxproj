@@ -121,6 +121,13 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Ellysia\Polygon\3D\Sphere\Sphere.cpp" />
     <ClCompile Include="Ellysia\TextureManager\TextureManager.cpp" />
     <ClCompile Include="Ellysia\WorldTransform\WorldTransform.cpp" />
+    <ClCompile Include="External\ImGui\imgui.cpp" />
+    <ClCompile Include="External\ImGui\imgui_demo.cpp" />
+    <ClCompile Include="External\ImGui\imgui_draw.cpp" />
+    <ClCompile Include="External\ImGui\imgui_impl_dx12.cpp" />
+    <ClCompile Include="External\ImGui\imgui_impl_win32.cpp" />
+    <ClCompile Include="External\ImGui\imgui_tables.cpp" />
+    <ClCompile Include="External\ImGui\imgui_widgets.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Project\AllGameScene\GameManager\GameManager.cpp" />
     <ClCompile Include="Project\AllGameScene\SampleScene\SampleScene.cpp" />
@@ -192,6 +199,14 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Ellysia\Polygon\3D\Sphere\Sphere.h" />
     <ClInclude Include="Ellysia\TextureManager\TextureManager.h" />
     <ClInclude Include="Ellysia\WorldTransform\WorldTransform.h" />
+    <ClInclude Include="External\ImGui\imconfig.h" />
+    <ClInclude Include="External\ImGui\imgui.h" />
+    <ClInclude Include="External\ImGui\imgui_impl_dx12.h" />
+    <ClInclude Include="External\ImGui\imgui_impl_win32.h" />
+    <ClInclude Include="External\ImGui\imgui_internal.h" />
+    <ClInclude Include="External\ImGui\imstb_rectpack.h" />
+    <ClInclude Include="External\ImGui\imstb_textedit.h" />
+    <ClInclude Include="External\ImGui\imstb_truetype.h" />
     <ClInclude Include="Project\AllGameScene\GameManager\GameManager.h" />
     <ClInclude Include="Project\AllGameScene\GameManager\IGameScene.h" />
     <ClInclude Include="Project\AllGameScene\SampleScene\SampleScene.h" />
@@ -200,6 +215,14 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <None Include="Resources\Shader\Object2D\Object2d.hlsli" />
     <None Include="Resources\Shader\Object3D\Object3d.hlsli" />
     <None Include="Resources\Shader\Particle3D\Particle3D.hlsli" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="External\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">
+      <Project>{371b9fa9-4c90-4ac6-a123-aced756d6c77}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="External\ImGui\LICENSE.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

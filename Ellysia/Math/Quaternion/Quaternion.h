@@ -43,7 +43,7 @@ Quaternion Inverse(const Quaternion& quaternion);
 Quaternion MakeRotateAxisAngleQuaternion(const Vector3& axis, float angle);
 
 //ベクトルをQuaternionで回転させた結果のベクトルを求める
-Quaternion RotateVector(const Vector3& vector, const Quaternion& quaternion);
+Vector3 RotateVector(const Vector3& vector, const Quaternion& quaternion);
 
 //Quaternion版の回転行列を求める
 Matrix4x4 MakeRotateMatrix(const Quaternion& quaternion);

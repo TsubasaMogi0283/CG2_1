@@ -1,6 +1,7 @@
 #include "Quaternion.h"
 #include <cmath>
 #include <Math/Vector/Vector3.h>
+#include "Math/Vector/Calculation/VectorCalculation.h"
 
 Quaternion Multiply(const Quaternion& lhs, const Quaternion& rhs){
     Quaternion result = {};
@@ -132,13 +133,28 @@ Quaternion Inverse(const Quaternion& quaternion){
 //任意軸回転を表すQuaternionの生成
 Quaternion MakeRotateAxisAngleQuaternion(const Vector3& axis, float angle) {
     Quaternion result = {};
+    //q=(cosθ/2,n*sinθ/2)
+    Vector3 n = Normalize(axis);
+
+    Quaternion qAxis = {};
+    qAxis.w = axis.x + axis.y + axis.z;
+
+
+    Quaternion q = {};
+    q.w = std::cosf(angle / 2.0f);
+    q.x = n.x * std::sinf(angle / 2.0f);
+    q.y = n.y * std::sinf(angle / 2.0f);
+    q.z = n.z * std::sinf(angle / 2.0f);
+
+
+    result = Multiply(q, Multiply(qAxis, Conjugate(q)));
 
     return result;
 }
 
 //ベクトルをQuaternionで回転させた結果のベクトルを求める
-Quaternion RotateVector(const Vector3& vector, const Quaternion& quaternion){
-    Quaternion result = {};
+Vector3 RotateVector(const Vector3& vector, const Quaternion& quaternion){
+    Vector3 result = {};
 
     return result;
 }
@@ -156,11 +172,20 @@ Matrix4x4 MakeRotateMatrix(const Quaternion& quaternion){
     result.m[0][2] = 2.0f*(x*z-w*y);
     result.m[0][3] = 0.0f;
     
-    result.m[0][1] = 2.0f*(x*y+w*z);
-    result.m[0][1] = 2.0f*(x*y+w*z);
-    result.m[0][2] = 2.0f*(x*z-w*y);
-    result.m[0][3] = 0.0f;
+    result.m[1][1] = 2.0f*(x*y-w*z);
+    result.m[1][1] = (w * w) - (x * x) + (y * y) - (z * z);
+    result.m[1][2] = 2.0f*(y*z+w*x);
+    result.m[1][3] = 0.0f;
 
+    result.m[2][1] = 2.0f*(x*z+w*y);
+    result.m[2][1] = 2.0f*(y*z-w*x);
+    result.m[2][2] = (w * w) - (x * x) - (y * y) + (z * z);
+    result.m[2][3] = 0.0f;
+
+    result.m[2][1] = 0.0f;
+    result.m[2][1] = 0.0f;
+    result.m[2][2] = 0.0f;
+    result.m[2][3] = 0.0f;
 
 
     return result;

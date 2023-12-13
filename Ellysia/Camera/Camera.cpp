@@ -3,12 +3,14 @@
 #include "WindowsSetup.h"
 
 
+
+
 //コンストラクタ
 Camera::Camera() {
 	//コンストラクタの所で値を入れる
 	//わざわざInitialize関数を作るのは面倒だから
 	//デフォルト
-	cameraTransform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,-9.8f} };
+	
 }
 
 //インスタンス
@@ -20,10 +22,10 @@ Camera* Camera::GetInstance() {
 	
 }
 
-Matrix4x4 Camera::GetAffineMatrix() {
-	cameraMatrix_ = MakeAffineMatrix(cameraTransform_.scale, cameraTransform_.rotate, cameraTransform_.translate);
-	return cameraMatrix_;
+void Camera::Initialize() {
+	cameraTransform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,-40.0f} };
 }
+
 
 Matrix4x4 Camera::GetViewMatrix() {
 	//カメラ行列
@@ -34,7 +36,7 @@ Matrix4x4 Camera::GetViewMatrix() {
 
 Matrix4x4 Camera::GetProjectionMatrix_() {
 	//遠視投影行列
-	projectionMatrix_ = MakePerspectiveFovMatrix(0.45f, float(WindowsSetup::GetInstance()->GetClientWidth()) / float(WindowsSetup::GetInstance()->GetClientHeight()), 0.1f, 100.0f);
+	projectionMatrix_ = MakePerspectiveFovMatrix(0.45f, float(WinApp::GetInstance()->GetClientWidth()) / float(WinApp::GetInstance()->GetClientHeight()), 0.1f, 100.0f);
 	
 	return projectionMatrix_;
 }

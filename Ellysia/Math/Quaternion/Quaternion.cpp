@@ -147,6 +147,7 @@ Quaternion MakeRotateAxisAngleQuaternion(const Vector3& axis, float angle) {
     q.z = n.z * std::sinf(angle / 2.0f);
 
 
+
     result = Multiply(q, Multiply(qAxis, Conjugate(q)));
 
     return result;

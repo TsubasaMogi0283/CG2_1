@@ -1,5 +1,6 @@
 #include "Quaternion.h"
 #include <cmath>
+#include <Math/Vector/Vector3.h>
 
 Quaternion Multiply(const Quaternion& lhs, const Quaternion& rhs){
     Quaternion result = {};
@@ -122,6 +123,44 @@ Quaternion Inverse(const Quaternion& quaternion){
     result.y = conjugate.y / t;
     result.z = conjugate.z / t;
     result.w = conjugate.w / t;
+
+
+    return result;
+}
+
+
+//任意軸回転を表すQuaternionの生成
+Quaternion MakeRotateAxisAngleQuaternion(const Vector3& axis, float angle) {
+    Quaternion result = {};
+
+    return result;
+}
+
+//ベクトルをQuaternionで回転させた結果のベクトルを求める
+Quaternion RotateVector(const Vector3& vector, const Quaternion& quaternion){
+    Quaternion result = {};
+
+    return result;
+}
+
+//Quaternion版の回転行列を求める
+Matrix4x4 MakeRotateMatrix(const Quaternion& quaternion){
+    Matrix4x4 result = {};
+    float w = quaternion.w;
+    float x = quaternion.x;
+    float y = quaternion.y;
+    float z = quaternion.z;
+
+    result.m[0][0] = (w * w) + (x * x) - (y * y) - (z * z);
+    result.m[0][1] = 2.0f*(x*y+w*z);
+    result.m[0][2] = 2.0f*(x*z-w*y);
+    result.m[0][3] = 0.0f;
+    
+    result.m[0][1] = 2.0f*(x*y+w*z);
+    result.m[0][1] = 2.0f*(x*y+w*z);
+    result.m[0][2] = 2.0f*(x*z-w*y);
+    result.m[0][3] = 0.0f;
+
 
 
     return result;

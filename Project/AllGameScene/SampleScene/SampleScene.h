@@ -4,12 +4,8 @@
 #include "Sprite.h"
 #include "SpritePosition.h"
 #include "Transform.h"
-
-
-
-
 #include "Model.h"
-#include "TextureManager.h"
+
 
 #include "Player/Player.h"
 #include "Enemy/Enemy.h"
@@ -19,6 +15,8 @@
 #include "Collider/CollisionManager.h"
 #include "Skydome/Skydome.h"
 #include "RailCamera/RailCamera.h"
+
+#include <memory>
 
 //StatePatternを使う時は必ず前方宣言をするように
 class Gamemanager;
@@ -49,7 +47,7 @@ private:
 private:
 	Player* player_ = nullptr;
 	Enemy* enemy_ = nullptr;
-	Skydome* skydome_ = nullptr;
+	std::unique_ptr<Skydome> skydome_ = nullptr;
 	RailCamera* railCamera_ = nullptr;
 
 	Vector3 cameraTranslate_ = {};
@@ -58,6 +56,6 @@ private:
 
 
 
-	CollisionManager* collisionManager_ = nullptr;
+	std::unique_ptr<CollisionManager> collisionManager_ = nullptr;
 
 };

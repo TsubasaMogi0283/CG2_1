@@ -17,9 +17,9 @@ void Skydome::Initialize(){
 //更新
 void Skydome::Update(){
 
-	model_->SetScale(transform_.scale_);
-	model_->SetRotate(transform_.rotate_);
-	model_->SetTranslate(transform_.translate_);
+	model_->SetScale(transform_.scale);
+	model_->SetRotate(transform_.rotate);
+	model_->SetTranslate(transform_.translate);
 
 
 }

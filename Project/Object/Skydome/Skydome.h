@@ -28,7 +28,7 @@ private:
 	std::unique_ptr<Model> model_ = nullptr;
 
 	//位置
-	WorldTransform transform_ = {};
+	Transform transform_ = {};
 
 };
 

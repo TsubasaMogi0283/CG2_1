@@ -1,7 +1,7 @@
 #include "SampleScene.h"
 #include "GameManager.h"
 #include <list>
-
+#include "TextureManager.h"
 
 /// <summary>
 	/// コンストラクタ
@@ -21,24 +21,24 @@ void SampleScene::Initialize() {
 	player_->Initialize();
 
 	Vector3 radian = { 0.0f,0.0f,0.0f };
-	railCamera_ = new RailCamera();
-	railCamera_->Initialize(player_->GetWorldPosition(), radian);
+	//railCamera_ = new RailCamera();
+	//railCamera_->Initialize(player_->GetWorldPosition(), radian);
 
 	player_->SetParent(&railCamera_->GetWorldmatrix());
 
 
-	enemy_ = new Enemy();
+	enemy_ =new Enemy();
 	enemy_->SetPlayer(player_);
 	enemy_->Initialize();
 	
 
-	skydome_ = new Skydome();
+	skydome_ = std::make_unique<Skydome>();
 	skydome_->Initialize();
 
 
 	
 
-	collisionManager_ = new CollisionManager();
+	collisionManager_ = std::make_unique <CollisionManager>();
 
 	uint32_t textureHandle_ = TextureManager::LoadTexture("Resources/uvChecker.png");
 	cameraTranslate_ = {0.0f,20.0f,-40.0f};
@@ -93,9 +93,7 @@ void SampleScene::CheckAllCollisions(){
 	collisionManager_->CheckAllCollision();
 
 	
-
-
-
+	
 }
 
 
@@ -106,15 +104,13 @@ void SampleScene::CheckAllCollisions(){
 /// </summary>
 void SampleScene::Update(GameManager* gameManager) {
 
-	//Camera::GetInstance()->Camera::SetTranslate(cameraTranslate_);
-	//Camera::GetInstance()->Camera::SetRotate(cameraRotate_);
+	Camera::GetInstance()->SetTranslate(cameraTranslate_);
+	Camera::GetInstance()->SetRotate(cameraRotate_);
 
-
-	//ImGui::Begin("Camera");
-	//ImGui::SliderFloat3("Tranlate", &cameraTranslate_.x, -20.0f, 10.0f);
-	//ImGui::SliderFloat3("Rotate", &cameraRotate_.x, -7.0f, 7.0f);
-
-	//ImGui::End();
+	ImGui::Begin("Camera");
+	ImGui::SliderFloat3("Tranlate", &cameraTranslate_.x, -20.0f, 10.0f);
+	ImGui::SliderFloat3("Rotate", &cameraRotate_.x, -7.0f, 7.0f);
+	ImGui::End();
 
 	//当たり判定
 	CheckAllCollisions();
@@ -125,7 +121,10 @@ void SampleScene::Update(GameManager* gameManager) {
 
 	skydome_->Update();
 
-	railCamera_->Update();
+	//railCamera_->Update();
+
+	
+
 }
 
 /// <summary>
@@ -150,7 +149,5 @@ void SampleScene::Draw() {
 SampleScene::~SampleScene() {
 	delete player_;
 	delete enemy_;
-
-	delete skydome_;
-	delete collisionManager_;
+	delete railCamera_;
 }

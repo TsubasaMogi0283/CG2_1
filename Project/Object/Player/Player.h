@@ -39,10 +39,10 @@ public:
 	}
 	
 	Vector3 GetRotate() {
-		return transform_.rotate_;
+		return transform_.rotate;
 	}
 	Vector3 GetTranslate() {
-		return transform_.translate_;
+		return transform_.translate;
 	}
 	
 
@@ -83,7 +83,7 @@ private:
 
 	std::unique_ptr<Model> model_ = nullptr;
 
-	WorldTransform transform_ = {};
+	Transform transform_ = {};
 	const float MOVE_AMOUNT_ = 0.1f;
 	const float ROTATE_AMOUNT_ = 0.02f;
 

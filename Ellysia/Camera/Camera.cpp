@@ -26,6 +26,12 @@ void Camera::Initialize() {
 	cameraTransform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,-40.0f} };
 }
 
+Matrix4x4 Camera::GetAffineMatrix(){
+	Matrix4x4 result = {};
+	result = MakeAffineMatrix(cameraTransform_.scale, cameraTransform_.rotate, cameraTransform_.translate);
+	return result;
+}
+
 
 Matrix4x4 Camera::GetViewMatrix() {
 	//カメラ行列

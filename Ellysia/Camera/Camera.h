@@ -44,9 +44,17 @@ public:
 
 	void Initialize();
 
+	Matrix4x4 GetAffineMatrix();
+
 	Matrix4x4 GetViewMatrix();
 
+	void SetViewMatrix(Matrix4x4 matrix) {
+		this->viewMatrix_ = viewMatrix_;
+	}
+
 	Matrix4x4 GetProjectionMatrix_();
+
+
 
 private:
 	static Camera* instance_;

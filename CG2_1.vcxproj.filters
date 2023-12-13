@@ -252,6 +252,9 @@
     <ClCompile Include="Ellysia\main.cpp">
       <Filter>Ellysia\Source File</Filter>
     </ClCompile>
+    <ClCompile Include="Ellysia\Polygon\3D\Object3D\Object3D.cpp">
+      <Filter>Ellysia\Source File</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\Particle3D\Particle3d.PS.hlsl">
@@ -426,6 +429,9 @@
     </ClInclude>
     <ClInclude Include="External\ImGui\imstb_truetype.h">
       <Filter>External\ImGui\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Polygon\3D\Object3D\Object3D.h">
+      <Filter>Ellysia\Header File</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

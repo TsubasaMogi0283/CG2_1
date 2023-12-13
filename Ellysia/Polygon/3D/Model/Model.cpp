@@ -212,9 +212,12 @@ Model* Model::Create(const std::string& directoryPath, const std::string& fileNa
 			//model->textureHandle_ = TextureManager::GetInstance()->LoadTexture(modelData.material.textureFilePath);
 
 
-			////頂点リソースを作る
+			
+			//頂点リソースを作る
 			model->mesh_ = std::make_unique<Mesh>();
 			model->mesh_->Initialize(modelData.vertices);
+
+
 
 			
 			

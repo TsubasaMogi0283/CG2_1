@@ -1,4 +1,5 @@
 #include "VectorCalculation.h"
+#include <cmath>
 
 Vector3 Add(Vector3 v1, Vector3 v2) {
 	Vector3 result = {};

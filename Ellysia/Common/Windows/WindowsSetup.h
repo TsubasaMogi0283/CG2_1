@@ -3,10 +3,15 @@
  #include <Windows.h>
 #include <cstdint>
 
-#include "externals/imGui/imgui.h"
-#include "externals/imGui/imgui_impl_dx12.h"
-#include "externals/imGui/imgui_impl_win32.h"
+#include <imgui.h>
+#include <imgui_impl_dx12.h>
+#include <imgui_impl_win32.h>
 
+
+//外部のつまり自分が作ったものではないファイルなどは
+//<>でインクルードさせた方が良いよ
+
+//その他自分で作ったものは""でインクルードさせてね
 
 //extern...グローバル変数を共有する
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd,UINT msg,WPARAM wParam,LPARAM lParam);
@@ -36,9 +41,6 @@ public:
 	//インスタンスにアクセス可能な関数を追加
 	//静的メンバ関数にする。クラス名を指定すればアクセスできる
 	static WindowsSetup* GetInstance();
-
-	//デストラクタ代わり
-	void DeleteInstance();
 
 
 	//Window Procedure

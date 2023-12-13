@@ -2,9 +2,8 @@
 #include <d3d12.h>
 #include <string>
 #include <array>
-
-#include "externals/DirectXTex/DirectXTex.h"
-#include <externals/DirectXTex/d3dx12.h>
+#include <DirectXTex.h>
+#include <d3dx12.h>
 
 
 #include "DirectXSetup.h"

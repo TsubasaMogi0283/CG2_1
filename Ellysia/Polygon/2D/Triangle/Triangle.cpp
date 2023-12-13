@@ -2,7 +2,7 @@
 #include "Transform.h"
 
 //補助ライブラリ
-#include "externals/DirectXTex/d3dx12.h"
+#include <d3dx12.h>
 //動的配列
 #include <vector>
 #include <TextureManager.h>

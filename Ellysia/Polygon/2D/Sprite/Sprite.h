@@ -1,7 +1,7 @@
 #pragma once
 #include "DirectXSetup.h"
 #include "ConvertLog.h"
-#include "externals/DirectXTex/DirectXTex.h"
+#include <DirectXTex.h>
 #include "PipelineManager.h"
 
 #include "Vector4.h"

@@ -5,26 +5,24 @@
 #include <sstream>
 #include <array>
 #include <memory>
+#include <DirectXTex.h>
+#include <d3dx12.h>
 
-#include "externals/DirectXTex/DirectXTex.h"
-#include <Matrix4x4.h>
-#include <Transform.h>
-#include <Material.h>
-#include <TransformationMatrix.h>
-
-
+#include "Matrix4x4.h"
 #include "Vector4.h"
-#include "Matrix4x4Calculation.h"
-#include <VertexData.h>
+#include "Transform.h"
+#include "Material.h"
+#include "TransformationMatrix.h"
 
-#include <externals/DirectXTex/d3dx12.h>
+#include "Matrix4x4Calculation.h"
+#include "VertexData.h"
 
 
 #include "Mesh.h"
 #include "CreateMaterial.h"
 #include "MaterialData.h"
 #include "ModelData.h"
-#include <DirectionalLight.h>
+#include "DirectionalLight.h"
 #include "CreateDirectionalLight.h"
 #include "Transformation.h"
 

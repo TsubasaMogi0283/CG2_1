@@ -1,17 +1,17 @@
 #pragma once
 #include "DirectXSetup.h"
 #include "ConvertLog.h"
-#include "externals/DirectXTex/DirectXTex.h"
+#include <DirectXTex.h>
 
 #include "Vector4.h"
 #include "Matrix4x4.h"
 #include "Matrix4x4Calculation.h"
 #include "Transform.h"
-#include <VertexData.h>
+#include "VertexData.h"
 
 #include <string>
-#include <Material.h>
-#include <TransformationMatrix.h>
+#include "Material.h"
+#include "TransformationMatrix.h"
 
 class Triangle {
 public:

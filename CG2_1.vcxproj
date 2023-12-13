@@ -43,6 +43,12 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>$(SolutionDir)\External;$(SolutionDir)\External\ImGui;$(SolutionDir)\External\DirectXTex;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>$(SolutionDir)\External;$(SolutionDir)\External\ImGui;$(SolutionDir)\External\DirectXTex;$(IncludePath)</IncludePath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -98,13 +104,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Ellysia\ConvertFunction\ConvertColor\ConvertColor.cpp" />
     <ClCompile Include="Ellysia\ConvertFunction\ConvertLog\ConvertLog.cpp" />
     <ClCompile Include="Ellysia\Ellysia.cpp" />
-    <ClCompile Include="Ellysia\externals\imGui\imgui.cpp" />
-    <ClCompile Include="Ellysia\externals\imGui\imgui_demo.cpp" />
-    <ClCompile Include="Ellysia\externals\imGui\imgui_draw.cpp" />
-    <ClCompile Include="Ellysia\externals\imGui\imgui_impl_dx12.cpp" />
-    <ClCompile Include="Ellysia\externals\imGui\imgui_impl_win32.cpp" />
-    <ClCompile Include="Ellysia\externals\imGui\imgui_tables.cpp" />
-    <ClCompile Include="Ellysia\externals\imGui\imgui_widgets.cpp" />
     <ClCompile Include="Ellysia\ImGuiManager\ImGuiManager.cpp" />
     <ClCompile Include="Ellysia\Input\Input.cpp" />
     <ClCompile Include="Ellysia\Math\BPMCalculation\BPMSetting.cpp" />
@@ -161,14 +160,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Ellysia\ConvertFunction\ConvertColor\ConvertColor.h" />
     <ClInclude Include="Ellysia\ConvertFunction\ConvertLog\ConvertLog.h" />
     <ClInclude Include="Ellysia\Ellysia.h" />
-    <ClInclude Include="Ellysia\externals\imGui\imconfig.h" />
-    <ClInclude Include="Ellysia\externals\imGui\imgui.h" />
-    <ClInclude Include="Ellysia\externals\imGui\imgui_impl_dx12.h" />
-    <ClInclude Include="Ellysia\externals\imGui\imgui_impl_win32.h" />
-    <ClInclude Include="Ellysia\externals\imGui\imgui_internal.h" />
-    <ClInclude Include="Ellysia\externals\imGui\imstb_rectpack.h" />
-    <ClInclude Include="Ellysia\externals\imGui\imstb_textedit.h" />
-    <ClInclude Include="Ellysia\externals\imGui\imstb_truetype.h" />
     <ClInclude Include="Ellysia\ImGuiManager\ImGuiManager.h" />
     <ClInclude Include="Ellysia\Input\Input.h" />
     <ClInclude Include="Ellysia\Math\BPMCalculation\BPMSetting.h" />
@@ -204,14 +195,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Project\AllGameScene\GameManager\GameManager.h" />
     <ClInclude Include="Project\AllGameScene\GameManager\IGameScene.h" />
     <ClInclude Include="Project\AllGameScene\SampleScene\SampleScene.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="Ellysia\externals\imGui\LICENSE.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="Ellysia\externals\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">
-      <Project>{371b9fa9-4c90-4ac6-a123-aced756d6c77}</Project>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shader\Object2D\Object2d.hlsli" />

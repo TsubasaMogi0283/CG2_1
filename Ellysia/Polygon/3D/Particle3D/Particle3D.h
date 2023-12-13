@@ -8,7 +8,7 @@
 #include <list>
 #include <random>
 
-#include "externals/DirectXTex/DirectXTex.h"
+#include <DirectXTeX.h>
 #include "Matrix4x4.h"
 #include <Material.h>
 #include <TransformationMatrix.h>
@@ -22,7 +22,7 @@
 #include <VertexData.h>
 
 #include <VectorCalculation.h>
-#include <externals/DirectXTex/d3dx12.h>
+#include <d3dx12.h>
 
 
 

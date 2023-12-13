@@ -10,7 +10,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	myEngine->Operate();
 
 	delete myEngine;
-	
 	return 0;
 }
 

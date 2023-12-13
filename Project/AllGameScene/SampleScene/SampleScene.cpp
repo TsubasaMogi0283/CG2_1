@@ -53,10 +53,10 @@ void SampleScene::Update(GameManager* gameManager) {
 
 
 	ImGui::Begin("Rotation");
-	ImGui::InputFloat("w", &rotation.w);
 	ImGui::InputFloat("x", &rotation.x);
 	ImGui::InputFloat("y", &rotation.y);
 	ImGui::InputFloat("z", &rotation.z);
+	ImGui::InputFloat("w", &rotation.w);
 	ImGui::End();
 
 }

@@ -132,23 +132,18 @@ Quaternion Inverse(const Quaternion& quaternion){
 
 //任意軸回転を表すQuaternionの生成
 Quaternion MakeRotateAxisAngleQuaternion(const Vector3& axis, float angle) {
-    Quaternion result = {};
+   
     //q=(cosθ/2,n*sinθ/2)
     Vector3 n = Normalize(axis);
 
-    Quaternion qAxis = {};
-    qAxis.w = axis.x + axis.y + axis.z;
-
-
-    Quaternion q = {};
-    q.w = std::cosf(angle / 2.0f);
-    q.x = n.x * std::sinf(angle / 2.0f);
-    q.y = n.y * std::sinf(angle / 2.0f);
-    q.z = n.z * std::sinf(angle / 2.0f);
+    Quaternion result = {};
+    result.w = std::cosf(angle / 2.0f);
+    result.x = n.x * std::sinf(angle / 2.0f);
+    result.y = n.y * std::sinf(angle / 2.0f);
+    result.z = n.z * std::sinf(angle / 2.0f);
 
 
 
-    result = Multiply(q, Multiply(qAxis, Conjugate(q)));
 
     return result;
 }

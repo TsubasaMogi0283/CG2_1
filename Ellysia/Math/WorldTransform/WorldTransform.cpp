@@ -2,7 +2,7 @@
 #include <Math/Matrix/Calculation/Matrix4x4Calculation.h>
 
 void WorldTransform::Initialize(){
-	scale_ = {1.0f, 1, 1};
+	scale_ = {1.0f, 1.0f,1.0f};
 	rotate_ = { 0.0f, 0.0f, 0.0f };
 	translate_ = {0.0f, 0.0f, 0.0f};
 }
@@ -15,4 +15,8 @@ void WorldTransform::Update(){
 	if (parent_) {
 		matWorld_ = Multiply(matWorld_, parent_->matWorld_);
 	}
+}
+
+void WorldTransform::Transfer(){
+
 }

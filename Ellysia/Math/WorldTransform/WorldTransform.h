@@ -24,6 +24,10 @@ struct WorldTransform {
 	
 	/// 行列を計算・転送する
 	void Update();
-	 
+	
+	//転送
+	void Transfer();
+
+
 };
 

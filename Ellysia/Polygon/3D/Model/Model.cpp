@@ -400,18 +400,10 @@ void Model::Draw() {
 	material_->SetInformation(color_,isEnableLighting_);
 
 
-
-
-
-
 	//書き込むためのデータを書き込む
 	//頂点データをリソースにコピー
 	Transform transform = {scale_,rotate_,translate_};
 	transformation_->SetInformation(transform);
-
-
-
-
 
 
 	//コマンドを積む

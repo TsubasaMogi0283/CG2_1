@@ -125,8 +125,7 @@ Quaternion Inverse(const Quaternion& quaternion){
     result.z = conjugate.z / t;
     result.w = conjugate.w / t;
 
-
-    return result;
+    return result;   
 }
 
 
@@ -150,8 +149,21 @@ Quaternion MakeRotateAxisAngleQuaternion(const Vector3& axis, float angle) {
 
 //ベクトルをQuaternionで回転させた結果のベクトルを求める
 Vector3 RotateVector(const Vector3& vector, const Quaternion& quaternion){
-    Vector3 result = {};
+    //一番下の行はいらないね
 
+    Quaternion convertQ = {};
+    convertQ.w = 0.0f;
+    convertQ.x = vector.x;
+    convertQ.y = vector.y;
+    convertQ.z = vector.z;
+
+
+    Quaternion conjugate = Conjugate(quaternion);
+
+    Quaternion preResult = {};
+    preResult = Multiply(quaternion, Multiply(convertQ, conjugate));
+
+    Vector3 result = {preResult.x,preResult.y,preResult.z};
     return result;
 }
 
@@ -168,20 +180,20 @@ Matrix4x4 MakeRotateMatrix(const Quaternion& quaternion){
     result.m[0][2] = 2.0f*(x*z-w*y);
     result.m[0][3] = 0.0f;
     
-    result.m[1][1] = 2.0f*(x*y-w*z);
+    result.m[1][0] = 2.0f*(x*y-w*z);
     result.m[1][1] = (w * w) - (x * x) + (y * y) - (z * z);
     result.m[1][2] = 2.0f*(y*z+w*x);
     result.m[1][3] = 0.0f;
 
-    result.m[2][1] = 2.0f*(x*z+w*y);
+    result.m[2][0] = 2.0f*(x*z+w*y);
     result.m[2][1] = 2.0f*(y*z-w*x);
     result.m[2][2] = (w * w) - (x * x) - (y * y) + (z * z);
     result.m[2][3] = 0.0f;
 
-    result.m[2][1] = 0.0f;
-    result.m[2][1] = 0.0f;
-    result.m[2][2] = 0.0f;
-    result.m[2][3] = 0.0f;
+    result.m[3][0] = 0.0f;
+    result.m[3][1] = 0.0f;
+    result.m[3][2] = 0.0f;
+    result.m[3][3] = 1.0f;
 
 
     return result;

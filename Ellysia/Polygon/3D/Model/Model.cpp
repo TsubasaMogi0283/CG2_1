@@ -196,6 +196,8 @@ MaterialData Model::LoadMaterialTemplateFile(const std::string& directoryPath, c
 Model* Model::Create(const std::string& directoryPath, const std::string& fileName) {
 	//新たなModel型のインスタンスのメモリを確保
 	Model* model = new Model();
+	PipelineManager::GetInstance()->SetModelBlendMode(1);
+	PipelineManager::GetInstance()->GenerateModelPSO();	
 
 	//すでにある場合はリストから取り出す
 	for (ModelData modelData : modelInformationList_) {
@@ -207,14 +209,15 @@ Model* Model::Create(const std::string& directoryPath, const std::string& fileNa
 
 
 			//テクスチャの読み込み
-			model->textureHandle_ = TextureManager::GetInstance()->LoadTexture(modelData.material.textureFilePath);
+			//model->textureHandle_ = TextureManager::GetInstance()->LoadTexture(modelData.material.textureFilePath);
 
 
-			//頂点リソースを作る
+			////頂点リソースを作る
 			model->mesh_ = std::make_unique<Mesh>();
 			model->mesh_->Initialize(modelData.vertices);
 
-
+			
+			
 
 
 
@@ -231,10 +234,6 @@ Model* Model::Create(const std::string& directoryPath, const std::string& fileNa
 			//初期は白色
 			//モデル個別に色を変更できるようにこれは外に出しておく
 			model->color_ = { 1.0f,1.0f,1.0f,1.0f };
-			//初期化の所でやってね、Update,Drawでやるのが好ましいけど凄く重くなった。
-			//ブレンドモードの設定
-			PipelineManager::GetInstance()->SetModelBlendMode(1);
-			PipelineManager::GetInstance()->GenerateModelPSO();	
 
 			return model;
 		}
@@ -281,8 +280,7 @@ Model* Model::Create(const std::string& directoryPath, const std::string& fileNa
 	//モデル個別に色を変更できるようにこれは外に出しておく
 	model->color_ = { 1.0f,1.0f,1.0f,1.0f };
 
-	PipelineManager::GetInstance()->SetModelBlendMode(1);
-	PipelineManager::GetInstance()->GenerateModelPSO();		
+		
 
 	return model;
 

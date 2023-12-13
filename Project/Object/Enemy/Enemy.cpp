@@ -51,10 +51,6 @@ void Enemy::Fire() {
 	//速度ベクトルを自機の向きに合わせて回転させる
 	afterVelocity = TransformNormal(afterVelocity,worldTranslate );
 
-
-
-
-
 	//弾
 	EnemyBullet* bullet_ = new EnemyBullet();
 	bullet_->Initialzie(transform_.translate_,velocity);

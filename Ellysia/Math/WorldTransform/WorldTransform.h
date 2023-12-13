@@ -3,9 +3,7 @@
 #include "Matrix4x4.h"
 #include "Vector3.h"
 
-using Microsoft::WRL::ComPtr;
-#include <wrl.h>
-#include <d3d12.h>
+#include "DirectXSetup.h"
 
 
 //KAMATA ENGINEを参考にしたがこれを作る意味が分からない

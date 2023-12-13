@@ -115,7 +115,7 @@ void SampleScene::Update(GameManager* gameManager) {
 	ImGui::End();
 
 	//当たり判定
-	CheckAllCollisions();
+	//CheckAllCollisions();
 
 	player_->Update();
 	

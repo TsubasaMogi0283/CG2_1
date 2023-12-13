@@ -52,11 +52,11 @@ void Enemy::Fire() {
 	afterVelocity = TransformNormal(afterVelocity,worldTranslate );
 
 	//弾
-	EnemyBullet* bullet_ = new EnemyBullet();
-	bullet_->Initialzie(transform_.translate_,velocity);
-	bullet_->SetPlayer(player_);
-	//リストへ
-	bullets_.push_back(bullet_);
+	//EnemyBullet* bullet_ = new EnemyBullet();
+	//bullet_->Initialzie(transform_.translate_,velocity);
+	//bullet_->SetPlayer(player_);
+	////リストへ
+	//bullets_.push_back(bullet_);
 	shotTime_ = FIRE_INTERVAL_;
 
 }
@@ -130,10 +130,10 @@ void Enemy::Update(){
 
 
 	//更新
-	for (EnemyBullet* bullet : bullets_) {
+	/*for (EnemyBullet* bullet : bullets_) {
 		bullet->Update();
 		
-	}
+	}*/
 	
 	model_->SetScale(transform_.scale_);
 	model_->SetRotate(transform_.rotate_);
@@ -157,9 +157,9 @@ void Enemy::Update(){
 void Enemy::Draw(){
 	model_->Draw();
 	
-	for (EnemyBullet* bullet : bullets_) {
+	/*for (EnemyBullet* bullet : bullets_) {
 		bullet->Draw();
-	}
+	}*/
 
 	//弾も
 	state_->Draw(this);

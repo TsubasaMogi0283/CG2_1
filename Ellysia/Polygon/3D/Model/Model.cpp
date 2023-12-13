@@ -158,8 +158,6 @@ MaterialData Model::LoadMaterialTemplateFile(const std::string& directoryPath, c
 
 	#pragma endregion
 
-	
-
 
 	#pragma region  実際にファイルを読みMaterialDataを構築していく
 	while (std::getline(file,line)){

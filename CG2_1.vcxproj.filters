@@ -431,7 +431,7 @@
       <Filter>External\ImGui\Header</Filter>
     </ClInclude>
     <ClInclude Include="Ellysia\Polygon\3D\Object3D\Object3D.h">
-      <Filter>Ellysia\Header File</Filter>
+      <Filter>Ellysia\Header File\Polygone\3D\Model</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

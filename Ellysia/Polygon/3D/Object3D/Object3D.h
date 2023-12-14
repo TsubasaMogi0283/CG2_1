@@ -7,6 +7,9 @@ public:
 
 	static void StaticInitialize();
 
+
+	static Object3D* Create();
+
 	void Update();
 
 
@@ -15,6 +18,12 @@ public:
 
 
 	~Object3D();
+
+
+
+private:
+	void Initialize();
+
 
 
 private:

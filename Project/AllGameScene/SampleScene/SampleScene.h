@@ -39,23 +39,13 @@ public:
 	/// 描画
 	void Draw()override;
 
-private:
-	//衝突判定と応答
-	void CheckAllCollisions();
-
 
 private:
 	Player* player_ = nullptr;
-	static const int amount_ = 30;
-
-	Enemy* enemy_[amount_] = { nullptr };
-	std::unique_ptr<Skydome> skydome_ = nullptr;
-	RailCamera* railCamera_ = nullptr;
 
 	Vector3 cameraTranslate_ = {};
 	Vector3 cameraRotate_ = {};
 	
 
-	std::unique_ptr<CollisionManager> collisionManager_ = nullptr;
 
 };

@@ -102,6 +102,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   <ItemGroup>
     <ClCompile Include="Ellysia\Audio\Audio.cpp" />
     <ClCompile Include="Ellysia\Camera\Camera.cpp" />
+    <ClCompile Include="Ellysia\Camera\MainCamera.cpp" />
     <ClCompile Include="Ellysia\Common\DirectX\DirectXSetup.cpp" />
     <ClCompile Include="Ellysia\Common\Windows\WindowsSetup.cpp" />
     <ClCompile Include="Ellysia\ConvertFunction\CompileShader\CompileShaderManager.cpp" />
@@ -177,6 +178,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   <ItemGroup>
     <ClInclude Include="Ellysia\Audio\Audio.h" />
     <ClInclude Include="Ellysia\Camera\Camera.h" />
+    <ClInclude Include="Ellysia\Camera\MainCamera.h" />
     <ClInclude Include="Ellysia\Common\DirectX\DirectXSetup.h" />
     <ClInclude Include="Ellysia\Common\Windows\WindowsSetup.h" />
     <ClInclude Include="Ellysia\ConvertFunction\CompileShader\CompileShaderManager.h" />

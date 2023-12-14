@@ -25,6 +25,7 @@
 #include "DirectionalLight.h"
 #include "CreateDirectionalLight.h"
 #include "Transformation.h"
+#include <WorldTransform.h>
 
 
 class Model {
@@ -54,6 +55,8 @@ public:
 	//描画
 	void Draw();
 
+	//WorldTransformつき
+	void Draw(WorldTransform& worldTransform);
 
 	//デストラクタ
 	~Model();

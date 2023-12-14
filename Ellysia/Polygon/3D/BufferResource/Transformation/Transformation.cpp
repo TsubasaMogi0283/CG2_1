@@ -18,6 +18,7 @@ void Transformation::SetInformation(Transform transform){
 
 	//新しく引数作った方が良いかも
 	Matrix4x4 worldMatrix = MakeAffineMatrix(transform.scale,transform.rotate,transform.translate);
+
 	//遠視投影行列
 	Matrix4x4 viewMatrix = MakeIdentity4x4();
 	
@@ -30,6 +31,8 @@ void Transformation::SetInformation(Transform transform){
 	transformationMatrixData_->WVP = worldViewProjectionMatrix;
 	transformationMatrixData_->World =MakeIdentity4x4();
 
+
+	transformationMatrixResource_->Unmap(0, nullptr);
 }
 
 void Transformation::SetGraphicCommand(){

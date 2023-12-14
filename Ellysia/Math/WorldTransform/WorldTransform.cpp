@@ -24,10 +24,11 @@ void WorldTransform::Update(){
 	WorldTransform::Transfer();
 }
 
+
 void WorldTransform::Transfer(){
 	//Resourceに書き込む
-	ConstBuffDataWorldTransform* worldTransformData = nullptr;
-	constBuffer_->Map(0, nullptr, reinterpret_cast<void**>(&worldTransformData));
-	worldTransformData->world = matWorld_;
+	//今までTransformationに書いていたものをこっちに引っ越す
+	constBuffer_->Map(0, nullptr, reinterpret_cast<void**>(&tranceformationData_));
+	tranceformationData_->world = matWorld_;
 	constBuffer_->Unmap(0, nullptr);
 }

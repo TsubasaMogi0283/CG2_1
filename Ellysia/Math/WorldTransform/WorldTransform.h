@@ -7,11 +7,16 @@
 
 
 //KAMATA ENGINEを参考にしたがこれを作る意味が分からない
+//TransformationMatrixだといらないもののWVPがあるかかなと思った。
+//一つだけなの意味あるの？
 struct ConstBuffDataWorldTransform {
 	Matrix4x4 world;
 };
 
+
+//Transformationクラスのものをこっちに移動させた方が良いかも
 struct WorldTransform {
+public:
 #pragma region メンバ関数
 
 	//初期化
@@ -20,13 +25,22 @@ struct WorldTransform {
 	//行列を計算・転送する
 	void Update();
 	
+	//ペアレントの設定
+	void SetParent(const WorldTransform* parent) {
+		parent = parent_;
+	}
+
+private:
 	//転送
 	void Transfer();
+
 
 #pragma endregion
 
 #pragma region メンバ変数
 
+
+public:
 	//スケール
 	Vector3 scale_ = {1.0f, 1.0f, 1.0f};
 	//回転
@@ -36,6 +50,8 @@ struct WorldTransform {
 
 	//定数バッファ
 	ComPtr<ID3D12Resource> constBuffer_;
+
+	ConstBuffDataWorldTransform* tranceformationData_ = nullptr;
 
 	//ワールド行列へ
 	Matrix4x4 matWorld_ = {};

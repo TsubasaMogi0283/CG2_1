@@ -327,6 +327,9 @@
     <ClCompile Include="Project\Object\Skydome\Skydome.cpp">
       <Filter>Ellysia\Project\Object\Skydome</Filter>
     </ClCompile>
+    <ClCompile Include="Ellysia\Camera\MainCamera.cpp">
+      <Filter>Ellysia\Engine\Source File</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\Particle3D\Particle3d.PS.hlsl">
@@ -540,6 +543,9 @@
     </ClInclude>
     <ClInclude Include="Project\Object\Skydome\Skydome.h">
       <Filter>Ellysia\Project\Object\Skydome</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Camera\MainCamera.h">
+      <Filter>Ellysia\Engine\Header File</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

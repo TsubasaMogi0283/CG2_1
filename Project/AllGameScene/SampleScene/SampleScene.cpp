@@ -20,6 +20,7 @@ void SampleScene::Initialize() {
 	player_ = new Player();
 	player_->Initialize();
 
+
 	
 
 	cameraTranslate_ = { 0.0f,0.0f,-20.0f };

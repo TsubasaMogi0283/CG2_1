@@ -64,10 +64,7 @@ public:
 	//ワールド座標
 	Vector3 GetWorldPosition()override;
 
-	//弾リストを取得
-	const std::list<PlayerBullet*> GetBullets()  {
-		return bullets_;
-	}
+	
 
 #pragma endregion
 
@@ -92,9 +89,6 @@ private:
 
 	Matrix4x4 worldMatrix_ = {};
 	const Matrix4x4* parentedMatrix_ = {};
-	//弾
-	std::list<PlayerBullet*>bullets_;
-
 
 
 };

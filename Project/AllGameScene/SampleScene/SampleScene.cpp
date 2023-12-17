@@ -22,7 +22,7 @@ void SampleScene::Initialize() {
 
 	
 
-
+	cameraTranslate_ = { 0.0f,0.0f,-20.0f };
 	
 }
 

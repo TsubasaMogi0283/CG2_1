@@ -70,22 +70,7 @@ void Player::Move() {
 
 
 void Player::Attack() {
-	if (input_->IsTriggerKey(DIK_SPACE)) {
-		
-
-		Vector3 velocity = { 0.0f,0.0f,0.8f };
-
-		
-		Matrix4x4 worldmatrix = MakeAffineMatrix(transform_.scale, transform_.rotate, transform_.translate);
-
-		//プレイヤーの向きに合わせて回転させる
-		velocity = TransformNormal(velocity,worldmatrix );
-
-		PlayerBullet* newBullet = new PlayerBullet();
-		newBullet->Initialize(transform_.translate,velocity);
-		
-		bullets_.push_back(newBullet);
-	}
+	
 }
 
 
@@ -118,22 +103,11 @@ void Player::Update() {
 	//transform_.Update();
 
 
-	//デスフラグの立った玉を削除
-	bullets_.remove_if([](PlayerBullet* bullet) {
-		if (bullet->IsDead()) {
-			delete bullet;
-			return true;
-		}
-		return false;
-	});
 
 	Rotate();
 	Move();
 	Attack();
 
-	for (PlayerBullet* bullet : bullets_) {
-		bullet->Update();
-	}
 	
 }
 
@@ -142,17 +116,13 @@ void Player::Draw() {
 	
 	model_->Draw();
 	
-	for (PlayerBullet* bullet : bullets_) {
-		bullet->Draw();
-	}
+	
 	
 }
 
 
 //デストラクタ
 Player::~Player() {
-	for (PlayerBullet* bullet : bullets_) {
-		delete bullet;
-	}
+	
 }
 

@@ -18,8 +18,9 @@ void EnemyBullet::Initialzie(Vector3 position, Vector3 velocity){
 	model_.reset(Model::Create("Resources/Sample/cube", "cube.obj"));
 
 	const float SCALE_ = 0.3f;
-	transform_.scale_ = {SCALE_,SCALE_,SCALE_*SCALE_};
-	transform_.translate_ = position;
+	worldTransform_.scale_ = {SCALE_,SCALE_,SCALE_};
+	worldTransform_.rotate_ = { 0.0f,0.0f,0.0f };
+	worldTransform_.translate_ = position;
 	radius_=1.0f;
 	velocity_ = velocity;
 
@@ -51,20 +52,15 @@ void EnemyBullet::OnCollision(){
 	isDead_ = true;
 }
 
-//行列を作って返す
-Matrix4x4 EnemyBullet::GetMatrix() {
-	Matrix4x4 result = MakeAffineMatrix(transform_.scale_, transform_.rotate_, transform_.translate_);
-	return result;
-}
 
 //ワールド座標
 Vector3 EnemyBullet::GetWorldPosition() {
 	Vector3 result = {};
 	//移動成分を取り出してね
 	//一番下の行ね
-	result.x = GetMatrix().m[3][0];
-	result.y = GetMatrix().m[3][1];
-	result.z = GetMatrix().m[3][2];
+	result.x = worldTransform_.matWorld_.m[3][0];
+	result.y = worldTransform_.matWorld_.m[3][1];
+	result.z = worldTransform_.matWorld_.m[3][2];
 
 	return result;
 }
@@ -94,7 +90,7 @@ void EnemyBullet::Update(){
 
 #pragma endregion
 
-	transform_.translate_ = Add(transform_.translate_, velocity_);
+	worldTransform_.translate_ = Add(worldTransform_.translate_, velocity_);
 	model_->SetColor({ 1.0f,0.0f,0.0f,1.0f });
 
 
@@ -103,17 +99,17 @@ void EnemyBullet::Update(){
 	}
 
 
-	model_->SetTranslate(transform_.translate_);
-	model_->SetScale(transform_.scale_);
+	model_->SetTranslate(worldTransform_.translate_);
+	model_->SetScale(worldTransform_.scale_);
 
 	ImGui::Begin("EnemyBullet");
-	ImGui::InputFloat3("Translate", &transform_.translate_.x);
+	ImGui::InputFloat3("Translate", &worldTransform_.translate_.x);
 	ImGui::End();
 
 }
 
 void EnemyBullet::Draw(){
-	model_->Draw();
+	model_->Draw(worldTransform_);
 }
 
 EnemyBullet::~EnemyBullet(){

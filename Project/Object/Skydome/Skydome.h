@@ -1,6 +1,5 @@
 #pragma once
 #include "Model.h"
-#include "Transform.h"
 
 #include <memory>
 #include <WorldTransform.h>
@@ -28,7 +27,7 @@ private:
 	std::unique_ptr<Model> model_ = nullptr;
 
 	//位置
-	Transform transform_ = {};
+	WorldTransform worldTransform_ = {};
 
 };
 

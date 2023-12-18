@@ -24,7 +24,7 @@ void SampleScene::Initialize() {
 	//railCamera_ = new RailCamera();
 	//railCamera_->Initialize(player_->GetWorldPosition(), radian);
 
-	player_->SetParent(&railCamera_->GetWorldmatrix());
+	//player_->SetParent(&railCamera_->GetWorldmatrix());
 
 	for (int i = 0; i < amount_; i++) {
 		enemy_[i] =new Enemy();

@@ -39,24 +39,15 @@ public:
 	}
 	
 	Vector3 GetRotate() {
-		return transform_.rotate;
+		return worldTransform_.rotate_;
 	}
 	Vector3 GetTranslate() {
-		return transform_.translate;
+		return worldTransform_.translate_;
 	}
 	
 
 
-	//アフィン行列を取得する
-	//KamataEngineではWorldTransformだったけど
-	//それに苦戦しまくったのでそれぞれのクラスで計算するようにする
-	//理解できないまま進めるのは危険すぎる
-	
-	Matrix4x4& GetWorldMatrix() {
-		return worldMatrix_;
-	}
-
-	void SetParent(const Matrix4x4* parent) {
+	void SetParent(const WorldTransform* parent) {
 		parentedMatrix_ = parent;
 	}
 
@@ -83,7 +74,8 @@ private:
 
 	std::unique_ptr<Model> model_ = nullptr;
 
-	Transform transform_ = {};
+	//Transform transform_ = {};
+	WorldTransform worldTransform_ = {};
 	const float MOVE_AMOUNT_ = 0.1f;
 	const float ROTATE_AMOUNT_ = 0.02f;
 
@@ -91,7 +83,7 @@ private:
 
 
 	Matrix4x4 worldMatrix_ = {};
-	const Matrix4x4* parentedMatrix_ = {};
+	const WorldTransform* parentedMatrix_ = {};
 	//弾
 	std::list<PlayerBullet*>bullets_;
 

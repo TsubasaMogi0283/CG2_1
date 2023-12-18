@@ -15,9 +15,6 @@ public:
 	//コールバック関数
 	void OnCollision()override;
 
-	//行列を作って返す
-	Matrix4x4 GetMatrix();
-
 	//ワールド座標
 	Vector3 GetWorldPosition()override;
 
@@ -42,7 +39,7 @@ public:
 
 private:
 	std::unique_ptr<Model> model_ = nullptr;
-	WorldTransform transform_;
+	WorldTransform worldTransform_;
 
 	Vector3 velocity_ = {};
 

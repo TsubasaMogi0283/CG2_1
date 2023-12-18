@@ -15,8 +15,12 @@ void Enemy::Initialize(){
 	model_ = std::make_unique<Model>();
 	model_.reset(Model::Create("Resources/Sample/Enemy", "enemy.obj"));
 
-	transform_ = { {0.5f,0.5f,0.5f},{0.0f,0.0f,0.0f},{0.0f,1.0f,100.0f} };
-	
+	worldTransform_.Initialize();
+	worldTransform_.scale_ = { 0.5f,0.5f,0.5f };
+	worldTransform_.rotate_ = { 0.0f,0.0f,0.0f };
+	worldTransform_.translate_ = { 0.0f,0.0f,100.0f };
+
+
 	state_ = new EnemyApproach();
 	radius_ = 1.0f;
 	num = state_->GetState();
@@ -33,8 +37,8 @@ void Enemy::Fire() {
 	const float BULLET_SPEED = 0.1f;
 	//敵キャラのワールド座標を取得
 	
-	Vector3 playerPosition = player_->GetTranslate();
-	Vector3 enemyPosition = GetTranslate();
+	Vector3 playerPosition = player_->GetWorldPosition();
+	Vector3 enemyPosition = GetWorldPosition();
 	//敵と自キャラの差分ベクトル
 	Vector3 diffenrence = Subtract(playerPosition,enemyPosition);
 	//正規化
@@ -49,7 +53,7 @@ void Enemy::Fire() {
 	worldTranslate = MakeTranslateMatrix(GetTranslate());
 
 	//速度ベクトルを自機の向きに合わせて回転させる
-	afterVelocity = TransformNormal(afterVelocity,worldTranslate );
+	afterVelocity = TransformNormal(afterVelocity,worldTransform_.matWorld_ );
 
 	//弾
 	//EnemyBullet* bullet_ = new EnemyBullet();
@@ -81,18 +85,14 @@ void Enemy::FireAndReset() {
 
 }
 
-Matrix4x4 Enemy::GetMatrix() {
-	Matrix4x4 result = MakeAffineMatrix(transform_.scale_, transform_.rotate_, transform_.translate_);
-	return result;
-}
 
 Vector3 Enemy::GetWorldPosition() {
 	Vector3 result = {};
 	//移動成分を取り出してね
 	//一番下の行ね
-	result.x = GetMatrix().m[3][0];
-	result.y = GetMatrix().m[3][1];
-	result.z = GetMatrix().m[3][2];
+	result.x = worldTransform_.matWorld_.m[3][0];
+	result.y = worldTransform_.matWorld_.m[3][1];
+	result.z = worldTransform_.matWorld_.m[3][2];
 
 	return result;
 }
@@ -134,10 +134,7 @@ void Enemy::Update(){
 		bullet->Update();
 		
 	}*/
-	
-	model_->SetScale(transform_.scale_);
-	model_->SetRotate(transform_.rotate_);
-	model_->SetTranslate(transform_.translate_);
+	worldTransform_.Update();
 	
 
 	//終了したタイマーを削除
@@ -155,11 +152,11 @@ void Enemy::Update(){
 }
 
 void Enemy::Draw(){
-	model_->Draw();
+	model_->Draw(worldTransform_);
 	
-	/*for (EnemyBullet* bullet : bullets_) {
-		bullet->Draw();
-	}*/
+	//for (EnemyBullet* bullet : bullets_) {
+	//	bullet->Draw();
+	//}
 
 	//弾も
 	state_->Draw(this);

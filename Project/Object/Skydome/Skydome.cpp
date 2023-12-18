@@ -11,22 +11,25 @@ void Skydome::Initialize(){
 	model_.reset(Model::Create("Resources/Sample/CelestialSphere", "CelestialSphere.obj"));
 	
 	const float SCALE_SIZE = 30.0f;
-	transform_ = { {SCALE_SIZE,SCALE_SIZE,SCALE_SIZE},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
+	//worldTransform_ = { {SCALE_SIZE,SCALE_SIZE,SCALE_SIZE},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
+	worldTransform_.Initialize();
+	worldTransform_.scale_ = { SCALE_SIZE, SCALE_SIZE, SCALE_SIZE };
+	worldTransform_.rotate_ = {0.0f,0.0f,0.0f};
+	worldTransform_.translate_ = {0.0f,0.0f,0.0f};
+
+
 }
 
 //更新
 void Skydome::Update(){
 
-	model_->SetScale(transform_.scale);
-	model_->SetRotate(transform_.rotate);
-	model_->SetTranslate(transform_.translate);
-
+	worldTransform_.Update();
 
 }
 
 //描画
 void Skydome::Draw(){
-	model_->Draw();
+	model_->Draw(worldTransform_);
 }
 
 //デストラクタ

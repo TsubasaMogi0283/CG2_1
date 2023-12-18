@@ -209,7 +209,7 @@ Model* Model::Create(const std::string& directoryPath, const std::string& fileNa
 
 
 			//テクスチャの読み込み
-			//model->textureHandle_ = TextureManager::GetInstance()->LoadTexture(modelData.material.textureFilePath);
+			model->textureHandle_ = TextureManager::GetInstance()->LoadTexture(modelData.material.textureFilePath);
 
 
 			
@@ -379,13 +379,7 @@ void Model::Draw(WorldTransform& worldTransform) {
 	material_->SetInformation(color_,isEnableLighting_);
 
 
-	//書き込むためのデータを書き込む
-	//頂点データをリソースにコピー
-	Transform transform = {scale_,rotate_,translate_};
-	//transformation_->SetInformation(transform);
-	//DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(1, worldTransform.constBufferResource_->GetGPUVirtualAddress());
-	//DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView()
-
+	
 	//コマンドを積む
 
 	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootSignature(PipelineManager::GetInstance()->GetModelRootSignature().Get());

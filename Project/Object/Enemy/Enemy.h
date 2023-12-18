@@ -51,11 +51,11 @@ private:
 public:
 	//アクセッサ
 	void SetTranslate(Vector3 translate) {
-		this->transform_.translate_ = translate;
+		this->worldTransform_.translate_ = translate;
 	}
 
 	Vector3 GetTranslate() {
-		return transform_.translate_;
+		return worldTransform_.translate_;
 	}
 	
 	void SetVelocity(Vector3 velocity) {
@@ -68,8 +68,6 @@ public:
 		player_ = player;
 	}
 
-	//行列を作って返す
-	Matrix4x4 GetMatrix();
 
 	//ワールド座標
 	Vector3 GetWorldPosition()override;
@@ -85,7 +83,7 @@ public:
 
 private:
 	std::unique_ptr<Model> model_ = nullptr;
-	WorldTransform transform_ = {};
+	WorldTransform worldTransform_ = {};
 
 	Vector3 velocity_ = {};
 	Vector3 approachVelocity_ = {};

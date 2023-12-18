@@ -155,7 +155,7 @@ void Enemy::Update(){
 }
 
 void Enemy::Draw(){
-	model_->Draw();
+	//model_->Draw();
 	
 	/*for (EnemyBullet* bullet : bullets_) {
 		bullet->Draw();

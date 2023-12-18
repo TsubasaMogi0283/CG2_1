@@ -26,7 +26,7 @@ void Skydome::Update(){
 
 //描画
 void Skydome::Draw(){
-	model_->Draw();
+	//model_->Draw();
 }
 
 //デストラクタ

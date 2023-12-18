@@ -60,7 +60,7 @@ void PlayerBullet::Update(){
 }
 
 void PlayerBullet::Draw(){
-	model_->Draw();
+	//model_->Draw();
 }
 
 PlayerBullet::~PlayerBullet(){

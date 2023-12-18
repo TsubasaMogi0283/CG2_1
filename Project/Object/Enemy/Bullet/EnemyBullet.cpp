@@ -113,7 +113,7 @@ void EnemyBullet::Update(){
 }
 
 void EnemyBullet::Draw(){
-	model_->Draw();
+	//model_->Draw();
 }
 
 EnemyBullet::~EnemyBullet(){

@@ -135,7 +135,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="External\ImGui\imgui_impl_win32.cpp" />
     <ClCompile Include="External\ImGui\imgui_tables.cpp" />
     <ClCompile Include="External\ImGui\imgui_widgets.cpp" />
-    <ClCompile Include="ModelManager.cpp" />
     <ClCompile Include="Project\AllGameScene\GameManager\GameManager.cpp" />
     <ClCompile Include="Project\AllGameScene\SampleScene\SampleScene.cpp" />
     <ClCompile Include="Project\Object\Collider\Collider.cpp" />
@@ -205,6 +204,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Ellysia\Math\Vector\Vector4.h" />
     <ClInclude Include="Ellysia\Math\Vector\VertexData.h" />
     <ClInclude Include="Ellysia\Math\WorldTransform\WorldTransform.h" />
+    <ClInclude Include="Ellysia\ModelManager\ModelManager.h" />
     <ClInclude Include="Ellysia\PipelineManager\PipelineManager.h" />
     <ClInclude Include="Ellysia\Polygon\2D\Sprite\Sprite.h" />
     <ClInclude Include="Ellysia\Polygon\2D\Triangle\Triangle.h" />

@@ -330,9 +330,6 @@
     <ClCompile Include="Ellysia\Camera\MainCamera.cpp">
       <Filter>Ellysia\Engine\Source File</Filter>
     </ClCompile>
-    <ClCompile Include="ModelManager.cpp">
-      <Filter>Ellysia\Engine\Source File</Filter>
-    </ClCompile>
     <ClCompile Include="Ellysia\ModelManager\ModelManager.cpp">
       <Filter>Ellysia\Engine\Source File</Filter>
     </ClCompile>
@@ -552,6 +549,9 @@
     </ClInclude>
     <ClInclude Include="Ellysia\Camera\MainCamera.h">
       <Filter>Ellysia\Engine\Header File</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\ModelManager\ModelManager.h">
+      <Filter>Ellysia\Engine\Source File</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

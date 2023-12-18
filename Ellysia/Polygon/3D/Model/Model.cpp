@@ -310,16 +310,7 @@ Model* Model::Create(const std::string& directoryPath, const std::string& fileNa
 			//頂点リソースを作る
 			model->mesh_ = std::make_unique<Mesh>();
 			model->mesh_->Initialize(modelData.vertices);
-
-
-
-
-
-			//Sprite用のTransformationMatrix用のリソースを作る。
-			//Matrix4x4 1つ分サイズを用意する
-			//model->transformation_=std::make_unique<Transformation>();
-			//model->transformation_->Initialize();
-
+			
 			//Lighting
 			model->directionalLight_=std::make_unique<CreateDirectionalLight>();
 			model->directionalLight_->Initialize();
@@ -362,13 +353,6 @@ Model* Model::Create(const std::string& directoryPath, const std::string& fileNa
 
 
 
-
-
-	//Sprite用のTransformationMatrix用のリソースを作る。
-	//Matrix4x4 1つ分サイズを用意する
-	//model->transformation_=std::make_unique<Transformation>();
-	//model->transformation_->Initialize();
-
 	//Lighting
 	model->directionalLight_=std::make_unique<CreateDirectionalLight>();
 	model->directionalLight_->Initialize();
@@ -385,6 +369,7 @@ Model* Model::Create(const std::string& directoryPath, const std::string& fileNa
 }
 
 
+
 //描画
 void Model::Draw(WorldTransform& worldTransform) {
 	////マテリアルにデータを書き込む
@@ -396,9 +381,9 @@ void Model::Draw(WorldTransform& worldTransform) {
 
 	//書き込むためのデータを書き込む
 	//頂点データをリソースにコピー
-	//Transform transform = {scale_,rotate_,translate_};
+	Transform transform = {scale_,rotate_,translate_};
 	//transformation_->SetInformation(transform);
-	//DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(1, worldTransform.constBuffer_->GetGPUVirtualAddress());
+	//DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(1, worldTransform.constBufferResource_->GetGPUVirtualAddress());
 	//DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView()
 
 	//コマンドを積む
@@ -418,7 +403,7 @@ void Model::Draw(WorldTransform& worldTransform) {
 	material_->GraphicsCommand();
 
 	//transformation_->SetGraphicCommand();
-
+	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(1, worldTransform.constBufferResource_->GetGPUVirtualAddress());
 
 
 	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である

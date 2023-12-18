@@ -52,7 +52,6 @@ private:
 #pragma endregion
 
 public:
-	
 	//WorldTransformつき
 	void Draw(WorldTransform& worldTransform);
 
@@ -137,8 +136,6 @@ private:
 	//頂点データ
 	std::unique_ptr<Mesh> mesh_ = nullptr;
 
-
-	
 	//マテリアル用のリソースを作る
 	std::unique_ptr<CreateMaterial> material_ = nullptr;
 	

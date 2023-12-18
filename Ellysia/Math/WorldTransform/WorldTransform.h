@@ -10,6 +10,7 @@
 //TransformationMatrixだといらないもののWVPがあるかかなと思った。
 //一つだけなの意味あるの？
 struct ConstBuffDataWorldTransform {
+	Matrix4x4 wvp;
 	Matrix4x4 world;
 };
 
@@ -49,7 +50,7 @@ public:
 	Vector3 translate_ = {0.0f, 0.0f, 0.0f};
 
 	//定数バッファ
-	ComPtr<ID3D12Resource> constBuffer_;
+	ComPtr<ID3D12Resource> constBufferResource_;
 
 	ConstBuffDataWorldTransform* tranceformationData_ = nullptr;
 

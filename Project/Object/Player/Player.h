@@ -84,6 +84,8 @@ private:
 	const float MOVE_AMOUNT_ = 0.1f;
 	const float ROTATE_AMOUNT_ = 0.02f;
 
+	WorldTransform worldTransform_ = {};
+
 	float radius_;
 
 

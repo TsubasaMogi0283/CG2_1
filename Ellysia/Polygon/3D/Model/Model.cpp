@@ -271,8 +271,8 @@ Model* Model::Create(const std::string& directoryPath, const std::string& fileNa
 
 	//Sprite用のTransformationMatrix用のリソースを作る。
 	//Matrix4x4 1つ分サイズを用意する
-	model->transformation_=std::make_unique<Transformation>();
-	model->transformation_->Initialize();
+	//model->transformation_=std::make_unique<Transformation>();
+	//model->transformation_->Initialize();
 
 	//Lighting
 	model->directionalLight_=std::make_unique<CreateDirectionalLight>();
@@ -450,8 +450,8 @@ void Model::Draw(WorldTransform& worldTransform) {
 	//書き込むためのデータを書き込む
 	//頂点データをリソースにコピー
 	Transform transform = {scale_,rotate_,translate_};
-	transformation_->SetInformation(transform);
-	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(1, worldTransform.constBuffer_->GetGPUVirtualAddress());
+	//transformation_->SetInformation(transform);
+	//DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(1, worldTransform.constBufferResource_->GetGPUVirtualAddress());
 	//DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView()
 
 	//コマンドを積む
@@ -470,8 +470,8 @@ void Model::Draw(WorldTransform& worldTransform) {
 	//CBVを設定する
 	material_->GraphicsCommand();
 
-	transformation_->SetGraphicCommand();
-
+	//transformation_->SetGraphicCommand();
+	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(1, worldTransform.constBufferResource_->GetGPUVirtualAddress());
 
 
 	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である

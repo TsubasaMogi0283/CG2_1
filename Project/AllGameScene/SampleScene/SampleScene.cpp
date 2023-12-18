@@ -21,7 +21,7 @@ void SampleScene::Initialize() {
 	player_->Initialize();
 
 	Vector3 radian = { 0.0f,0.0f,0.0f };
-	//railCamera_ = new RailCamera();
+	railCamera_ = new RailCamera();
 	//railCamera_->Initialize(player_->GetWorldPosition(), radian);
 
 	//player_->SetParent(&railCamera_->GetWorldmatrix());
@@ -95,7 +95,8 @@ void SampleScene::CheckAllCollisions(){
 		collisionManager_->CheckAllCollision();
 	}
 	
-	
+	//衝突マネージャのリストをクリアする
+	collisionManager_->ClearList();
 }
 
 
@@ -115,7 +116,7 @@ void SampleScene::Update(GameManager* gameManager) {
 	ImGui::End();
 
 	//当たり判定
-	//CheckAllCollisions();
+	CheckAllCollisions();
 
 	player_->Update();
 	

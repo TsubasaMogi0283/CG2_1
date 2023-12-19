@@ -184,6 +184,9 @@
     <Filter Include="Ellysia\Project\Object\Skydome">
       <UniqueIdentifier>{462994a9-a05e-46fe-b9bb-5bceaadeca63}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Ellysia\Engine\Source File\Polygone\3D\Model\ModelObj">
+      <UniqueIdentifier>{29f0ebf5-8895-4718-85e0-e6d876a238f7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Ellysia\Math\Matrix\Calculation\Matrix4x4Calculation.cpp">
@@ -331,6 +334,9 @@
       <Filter>Ellysia\Engine\Source File</Filter>
     </ClCompile>
     <ClCompile Include="Ellysia\ModelManager\ModelManager.cpp">
+      <Filter>Ellysia\Engine\Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="Ellysia\Polygon\3D\Model\ModelObj\ModelObj.cpp">
       <Filter>Ellysia\Engine\Source File</Filter>
     </ClCompile>
   </ItemGroup>
@@ -552,6 +558,9 @@
     </ClInclude>
     <ClInclude Include="Ellysia\ModelManager\ModelManager.h">
       <Filter>Ellysia\Engine\Source File</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Polygon\3D\Model\ModelObj\ModelObj.h">
+      <Filter>Ellysia\Engine\Header File</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,4 +1,5 @@
 #pragma once
+
 #include <string>
 #include <cassert>
 #include <fstream>
@@ -27,40 +28,20 @@
 #include "Transformation.h"
 #include <WorldTransform.h>
 
-
-
-
-//ModelObjに全部移すつもり
-//ここでは頂点データなどを取り入れるだけのクラスにしたい
-class Model {
+//Objの描画
+class ModelObj {
 public:
 
 	//コンストラクタ
-	Model();
+	ModelObj();
 
-	//初期化
-	//Initializeも兼ねているよ
-	//通常
-	static Model* Create(const std::string& directoryPath,const std::string& fileName);
-	//ブレンドあり
-	static Model* Create(const std::string& directoryPath,const std::string& fileName ,int32_t blendModeNumber );
-
-private:
-#pragma region モデルの読み込み関係の関数
-	//モデルデータの読み込み
-	ModelData LoadObjectFile(const std::string& directoryPath, const std::string& fileName);
-
-	//mtlファイルの読み込み
-	MaterialData LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& fileName);
-
-#pragma endregion
-
+	
 public:
 	//WorldTransformつき
 	void Draw(WorldTransform& worldTransform);
 
 	//デストラクタ
-	~Model();
+	~ModelObj();
 
 
 
@@ -120,16 +101,13 @@ public:
 
 #pragma endregion
 
-
-
-	
-
-
 private:
+	//読みこんだModel
+
+
 	//頂点リソースを作る
 	//頂点バッファビューを作成する
 	//頂点リソースにデータを書き込む
-
 	//頂点データ
 	std::unique_ptr<Mesh> mesh_ = nullptr;
 
@@ -170,4 +148,7 @@ private:
 	//デフォルトはα加算
 	int32_t blendModeNumber_ ;
 
+
+
 };
+

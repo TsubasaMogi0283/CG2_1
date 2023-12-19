@@ -43,11 +43,13 @@ Vector3 PlayerBullet::GetWorldPosition() {
 }
 
 void PlayerBullet::Update(){
+
+	model_->SetColor(color_);
 	ImGui::Begin("Bullet");
 	ImGui::SliderFloat3("Scale", &worldTransform_.scale_.x, 1.0f, 10.0f);
 	ImGui::SliderFloat3("Rotate", &worldTransform_.rotate_.x, 0.0f, 10.0f);
 	ImGui::SliderFloat3("Translate", &worldTransform_.translate_.x, -10.0f, 10.0f);
-
+	ImGui::SliderFloat4("Color", &color_.x, 0.0f, 1.0f);
 	ImGui::End();
 
 	worldTransform_.translate_ = Add(worldTransform_.translate_, velocity_);

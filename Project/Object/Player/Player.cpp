@@ -109,11 +109,13 @@ Vector3 Player::GetWorldPosition() {
 
 //更新
 void Player::Update() {
+
+	model_->SetColor(color_);
 	ImGui::Begin("Model");
 	ImGui::SliderFloat3("Scale", &worldTransform_.scale_.x, 1.0f, 10.0f);
 	ImGui::SliderFloat3("Rotate", &worldTransform_.rotate_.x, 0.0f, 10.0f);
 	ImGui::SliderFloat3("Translate", &worldTransform_.translate_.x, -10.0f, 10.0f);
-
+	ImGui::SliderFloat4("Color", &color_.x, 0.0f, 1.0f);
 	ImGui::End();
 
 	model_->SetScale(worldTransform_.scale_);
@@ -140,7 +142,7 @@ void Player::Update() {
 	for (PlayerBullet* bullet : bullets_) {
 		bullet->Update();
 	}
-	
+
 }
 
 //描画

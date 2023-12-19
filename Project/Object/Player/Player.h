@@ -87,7 +87,7 @@ private:
 	//弾
 	std::list<PlayerBullet*>bullets_;
 
-
+	Vector4 color_ = { 1.0f,1.0f,1.0f,1.0f };
 
 };
 

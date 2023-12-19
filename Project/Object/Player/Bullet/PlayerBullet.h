@@ -50,6 +50,7 @@ private:
 	int32_t deathTimer_ = LIFE_TIME_;
 	//デスフラグ
 	bool isDead_ = false;
+	Vector4 color_ = { 1.0f,1.0f,1.0f,1.0f };
 
 };
 

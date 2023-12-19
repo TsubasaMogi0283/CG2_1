@@ -120,7 +120,8 @@ ModelData Model::LoadObjectFile(const std::string& directoryPath,const std::stri
 	}
 
 	
-	
+	PipelineManager::GetInstance()->SetModelBlendMode(1);
+	PipelineManager::GetInstance()->GenerateModelPSO();	
 	
 
 	//4.ModelDataを返す
@@ -180,13 +181,104 @@ MaterialData Model::LoadMaterialTemplateFile(const std::string& directoryPath, c
 
 }
 
+void  Model::CreateObj(const std::string& directoryPath, const std::string& fileName) {
+	//新たなModel型のインスタンスのメモリを確保
+	PipelineManager::GetInstance()->SetModelBlendMode(1);
+	//PipelineManager::GetInstance()->GenerateModelPSO();	
+
+	//すでにある場合はリストから取り出す
+	for (ModelData modelData : modelInformationList_) {
+		if (modelData.name == fileName) {
+			////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
+			material_= std::make_unique<CreateMaterial>();
+			material_->Initialize();
+
+
+
+			//テクスチャの読み込み
+			textureHandle_ = TextureManager::GetInstance()->LoadTexture(modelData.material.textureFilePath);
+
+
+			
+			//頂点リソースを作る
+			mesh_ = std::make_unique<Mesh>();
+			mesh_->Initialize(modelData.vertices);
+
+
+
+			
+			
+
+
+
+			//Sprite用のTransformationMatrix用のリソースを作る。
+			//Matrix4x4 1つ分サイズを用意する
+			//model->transformation_=std::make_unique<Transformation>();
+			//model->transformation_->Initialize();
+
+			//Lighting
+			directionalLight_=std::make_unique<CreateDirectionalLight>();
+			directionalLight_->Initialize();
+
+
+			//初期は白色
+			//モデル個別に色を変更できるようにこれは外に出しておく
+			color_ = { 1.0f,1.0f,1.0f,1.0f };
+
+			return;
+		}
+	}
+
+	//モデルの読み込み
+	ModelData modelDataNew = LoadObjectFile(directoryPath, fileName);
+	modelDataNew.name = fileName;
+	modelInformationList_.push_back(modelDataNew);
+	
+
+
+
+
+	////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
+	material_= std::make_unique<CreateMaterial>();
+	material_->Initialize();
+
+
+
+	//テクスチャの読み込み
+	textureHandle_ = TextureManager::GetInstance()->LoadTexture(modelDataNew.material.textureFilePath);
+
+
+	//頂点リソースを作る
+	mesh_ = std::make_unique<Mesh>();
+	mesh_->Initialize(modelDataNew.vertices);
+
+
+
+
+
+	//Sprite用のTransformationMatrix用のリソースを作る。
+	//Matrix4x4 1つ分サイズを用意する
+	//model->transformation_=std::make_unique<Transformation>();
+	//model->transformation_->Initialize();
+
+	//Lighting
+	directionalLight_=std::make_unique<CreateDirectionalLight>();
+	directionalLight_->Initialize();
+
+
+	//初期は白色
+	//モデル個別に色を変更できるようにこれは外に出しておく
+	color_ = { 1.0f,1.0f,1.0f,1.0f };
+
+		
+
+}
 
 
 Model* Model::Create(const std::string& directoryPath, const std::string& fileName) {
 	//新たなModel型のインスタンスのメモリを確保
 	Model* model = new Model();
-	PipelineManager::GetInstance()->SetModelBlendMode(1);
-	PipelineManager::GetInstance()->GenerateModelPSO();	
+	
 
 	//すでにある場合はリストから取り出す
 	for (ModelData modelData : modelInformationList_) {

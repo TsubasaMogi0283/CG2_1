@@ -41,6 +41,8 @@ public:
 	//初期化
 	//Initializeも兼ねているよ
 	//通常
+	void CreateObj(const std::string& directoryPath,const std::string& fileName);
+	//通常
 	static Model* Create(const std::string& directoryPath,const std::string& fileName);
 	//ブレンドあり
 	static Model* Create(const std::string& directoryPath,const std::string& fileName ,int32_t blendModeNumber );

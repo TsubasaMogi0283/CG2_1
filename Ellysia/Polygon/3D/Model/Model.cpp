@@ -490,6 +490,7 @@ void Model::Draw(WorldTransform& worldTransform) {
 	
 
 
+
 	//Light
 	directionalLight_->SetDirection(lightingDirection_);
 	directionalLight_->GraphicsCommand();

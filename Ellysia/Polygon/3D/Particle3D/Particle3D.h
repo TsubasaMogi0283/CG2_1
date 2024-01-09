@@ -33,6 +33,7 @@
 #include "Transformation.h"
 #include "Transform.h"
 #include "Particle.h"
+#include <AccelerationField.h>
 
 
 struct Emitter {
@@ -86,7 +87,7 @@ public:
 	//void Draw();
 
 	//テクスチャを上書きをする描画
-	void Draw(uint32_t textureHandle_ );
+	void Draw(uint32_t textureHandle);
 
 
 	//デストラクタ
@@ -154,6 +155,15 @@ public:
 		this->emitter_.frequencyTime = frequencyTime;
 	}
 
+
+	//以下の2つはセットで使ってね
+	void SetField(bool isSetField) {
+		this->isSetField_ = isSetField;
+	}
+	void SetAccelerationField(AccelerationField accelerationField) {
+		this->accelerationField_ = accelerationField;
+	}
+
 #pragma endregion
 
 #pragma region Lightingの設定
@@ -215,5 +225,9 @@ private:
 	//エミッタの設定
 	Emitter emitter_ = {};
 	const float DELTA_TIME = 1.0f / 60.0f;
+
+	//フィールド
+	bool isSetField_ = false;
+	AccelerationField accelerationField_ = {};
 
 };

@@ -44,10 +44,13 @@ private:
 	Vector4 color_ = { 1.0f,1.0f,1.0f,1.0f };
 	Vector4 modelColor_ = { 1.0f,1.0f,1.0f,1.0f };
 
+
+	//パーティクル
 	std::unique_ptr<Particle3D> particle_ = nullptr;
 	uint32_t particleTextureHandle_ = 0u;
 	Vector3 particleTranslate_ = {};
-
+	AccelerationField accelerationField_ = {};
+	bool isSetField_ = false;
 
 	Audio* audio_ = nullptr;
 	uint32_t audioHandle_ = 0u;

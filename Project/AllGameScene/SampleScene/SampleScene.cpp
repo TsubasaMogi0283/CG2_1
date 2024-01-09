@@ -39,6 +39,14 @@ void SampleScene::Initialize() {
 
 	particleTextureHandle_ = TextureManager::GetInstance()->LoadTexture("Resources/CG3/circle.png");
 
+	accelerationField_.acceleration = { 5.0f,0.0f,0.0, };
+	accelerationField_.area.min = { -1.0f,-1.0f,-1.0f };
+	accelerationField_.area.max = { 1.0f,1.0f,1.0f };
+
+	isSetField_ = true;
+	particle_->SetField(isSetField_);
+	particle_->SetAccelerationField(accelerationField_);
+
 	particle_->SetCount(count);
 	particle_->SetFrequency(frequency);
 	particle_->SetFrequencyTime(frequencyTime);
@@ -61,12 +69,13 @@ void SampleScene::Update(GameManager* gameManager) {
 
 	particle_->SetTranslate(particleTranslate_);
 
+	particle_->SetField(isSetField_);
 	particle_->Update();
 
 	ImGui::Begin("Plane");
 	ImGui::SliderFloat3("Translate", &modelTranslate_.x, -10.0f, 10.0f);
 	ImGui::SliderFloat4("Color", &modelColor_.x, 0.0f, 1.0f);
-	
+	ImGui::Checkbox("isSetField;", &isSetField_);
 
 	ImGui::End();
 	

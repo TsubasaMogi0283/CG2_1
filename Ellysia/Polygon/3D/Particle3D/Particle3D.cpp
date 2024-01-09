@@ -6,6 +6,7 @@
 
 
 #include <numbers>
+#include <Collision.h>
 static uint32_t modelIndex;
 static uint32_t descriptorSizeSRV_ = 0u;
 
@@ -343,6 +344,18 @@ void Particle3D::Update(){
 			continue;
 		}
 		
+		//フィールド設定すると風の影響を受ける
+		//
+		if (isSetField_ == true) {
+			if (IsCollisionAABBAndPoint(accelerationField_.area,(*particleIterator).transform.translate)) {
+				(*particleIterator).velocity.x += accelerationField_.acceleration.x * DELTA_TIME;
+				(*particleIterator).velocity.y += accelerationField_.acceleration.y * DELTA_TIME;
+				(*particleIterator).velocity.z += accelerationField_.acceleration.z * DELTA_TIME;
+			}
+
+
+		}
+
 		
 		particleIterator->currentTime += DELTA_TIME;
 		particleIterator->transform.translate.x += particleIterator->velocity.x * DELTA_TIME;

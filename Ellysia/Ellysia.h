@@ -4,7 +4,7 @@
 #include "DirectXSetup.h"
 
 //Ellysia(エリシア・エレシア)
-//Aile + Sheer...「自分の名前」と「シア」
+//Aile + Sheer...「エイル・エル(フランス語で自分の名前になる)」と「シア」
 //sheer・・・全くの、完全な。混じりけのない、純粋な
 //「Ellysia Engine」というように、後ろにEngine加えても自然だと思う
 

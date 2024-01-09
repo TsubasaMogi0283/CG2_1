@@ -27,7 +27,7 @@ void SampleScene::Initialize(GameManager* gameManager) {
 	
 	model_ = std::make_unique<Particle3D>();
 	model_->Create("Resources/05_02", "plane.obj");
-	int count = 3;
+	int count = 10;
 	
 	//0.5秒ごとに発生
 	float frequency = 0.5f;

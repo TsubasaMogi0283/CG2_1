@@ -3,6 +3,7 @@
 #include <Math/Vector/Vector3.h>
 #include "Math/Vector/Calculation/VectorCalculation.h"
 
+
 Quaternion Multiply(const Quaternion& lhs, const Quaternion& rhs){
     Quaternion result = {};
     Quaternion q = lhs;
@@ -194,6 +195,50 @@ Matrix4x4 MakeRotateMatrix(const Quaternion& quaternion){
     result.m[3][1] = 0.0f;
     result.m[3][2] = 0.0f;
     result.m[3][3] = 1.0f;
+
+
+    return result;
+}
+
+//回転の補間
+Quaternion QuaternionSlerp(Quaternion q0, Quaternion q1, float t){
+    
+    //q0・q1=||q0||・||q1||*cosθ
+    //今は単位Quaternionを求めたいのでノルムは1なので
+    //q0・q1 = cosθでOK!!
+    float dot = 
+        q0.x * q1.x + 
+        q0.y * q1.y + 
+        q0.z * q1.z +
+        q0.w * q1.w;
+
+
+    //2通りあることから
+    //詳しくは資料の14ページで
+    if (dot < 0.0f) {
+        //もう片方の回転を利用する
+        q0.x = -q0.x;
+        q0.y = -q0.y;
+        q0.z = -q0.z;
+        q0.w = -q0.w;
+
+        //内積も反転
+        dot = -dot;
+    }
+
+    //最短が良いよね
+    //角度を求める
+    float theta = std::acosf(dot);
+
+    //Quaternionの前にある係数
+    float scale0 = std::sinf((1 - t) * theta) / std::sinf(theta);
+    float scale1 = std::sinf(t * theta) / std::sinf(theta);
+    
+    Quaternion result = {};
+    result.x = scale0 * q0.x + scale1 * q1.x;
+    result.y = scale0 * q0.y + scale1 * q1.y;
+    result.z = scale0 * q0.z + scale1 * q1.z;
+    result.w = scale0 * q0.w + scale1 * q1.w;
 
 
     return result;

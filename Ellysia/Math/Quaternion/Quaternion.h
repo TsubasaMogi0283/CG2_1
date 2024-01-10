@@ -48,3 +48,5 @@ Vector3 RotateVector(const Vector3& vector, const Quaternion& quaternion);
 //Quaternion版の回転行列を求める
 Matrix4x4 MakeRotateMatrix(const Quaternion& quaternion);
 
+//回転の補間
+Quaternion QuaternionSlerp(Quaternion q0, Quaternion q1,float t);

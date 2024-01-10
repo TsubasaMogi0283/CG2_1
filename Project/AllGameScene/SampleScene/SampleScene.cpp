@@ -25,59 +25,22 @@ void SampleScene::Initialize(GameManager* gameManager) {
 /// 更新
 /// </summary>
 void SampleScene::Update(GameManager* gameManager) {
-	
+	Quaternion rotation0 = MakeRotateAxisAngleQuaternion({ 0.71f,0.71f,0.0f }, 0.3f);
+	Quaternion rotation1 = MakeRotateAxisAngleQuaternion({ 0.71f,0.0f,0.71f }, 3.141592f);
 
+	Quaternion interpolate0 = QuaternionSlerp(rotation0, rotation1, 0.0f);
+	Quaternion interpolate1 = QuaternionSlerp(rotation0, rotation1, 0.3f);
+	Quaternion interpolate2 = QuaternionSlerp(rotation0, rotation1, 0.5f);
+	Quaternion interpolate3 = QuaternionSlerp(rotation0, rotation1, 0.7f);
+	Quaternion interpolate4 = QuaternionSlerp(rotation0, rotation1, 1.0f);
 
-	Quaternion rotation = MakeRotateAxisAngleQuaternion(Normalize(Vector3{ 1.0f,0.4f,-0.2f }), 0.45f);
-	Vector3 pointY = { 2.1f,-0.9f,1.3f };
-	Matrix4x4 rotateMatrix = MakeRotateMatrix(rotation);
-	Vector3 rotateByQuaternion = RotateVector(pointY, rotation);
-	Vector3 rotationByMatrix = TransformCalculation(pointY, rotateMatrix);
+	ImGui::Begin("interpolate");
+	ImGui::InputFloat4("interpolate0", &interpolate0.x);
+	ImGui::InputFloat4("interpolate1", &interpolate1.x);
+	ImGui::InputFloat4("interpolate2", &interpolate2.x);
+	ImGui::InputFloat4("interpolate3", &interpolate3.x);
+	ImGui::InputFloat4("interpolate4", &interpolate4.x);
 
-	ImGui::Begin("Rotation");
-	ImGui::InputFloat("x", &rotation.x, 0.01f, 1.0f, "%.2f");
-	ImGui::InputFloat("y", &rotation.y, 0.01f, 1.0f, "%.2f");
-	ImGui::InputFloat("z", &rotation.z, 0.01f, 1.0f, "%.2f");
-	ImGui::InputFloat("w", &rotation.w, 0.01f, 1.0f, "%.2f");
-	ImGui::End();
-
-
-	ImGui::Begin("RotateMatrix");
-	ImGui::InputFloat("m.[0][0]", &rotateMatrix.m[0][0],0.0f, 1.0f, "%.3f");
-	ImGui::InputFloat("m.[0][1]", &rotateMatrix.m[0][1],0.0f, 1.0f, "%.3f");
-	ImGui::InputFloat("m.[0][2]", &rotateMatrix.m[0][2],0.0f, 1.0f, "%.3f");
-	ImGui::InputFloat("m.[0][3]", &rotateMatrix.m[0][3],0.0f, 1.0f, "%.3f");
-
-	ImGui::InputFloat("m.[1][0]", &rotateMatrix.m[1][0],0.0f, 1.0f, "%.3f");
-	ImGui::InputFloat("m.[1][1]", &rotateMatrix.m[1][1],0.0f, 1.0f, "%.3f");
-	ImGui::InputFloat("m.[1][2]", &rotateMatrix.m[1][2],0.0f, 1.0f, "%.3f");
-	ImGui::InputFloat("m.[1][3]", &rotateMatrix.m[1][3],0.0f, 1.0f, "%.3f");
-
-	ImGui::InputFloat("m.[2][0]", &rotateMatrix.m[2][0], 0.01f, 1.0f, "%.3f");
-	ImGui::InputFloat("m.[2][1]", &rotateMatrix.m[2][1], 0.01f, 1.0f, "%.3f");
-	ImGui::InputFloat("m.[2][2]", &rotateMatrix.m[2][2], 0.01f, 1.0f, "%.3f");
-	ImGui::InputFloat("m.[2][3]", &rotateMatrix.m[2][3], 0.01f, 1.0f, "%.3f");
-
-	ImGui::InputFloat("m.[3][0]", &rotateMatrix.m[3][0], 0.01f, 1.0f, "%.3f");
-	ImGui::InputFloat("m.[3][1]", &rotateMatrix.m[3][1], 0.01f, 1.0f, "%.3f");
-	ImGui::InputFloat("m.[3][2]", &rotateMatrix.m[3][2], 0.01f, 1.0f, "%.3f");
-	ImGui::InputFloat("m.[3][3]", &rotateMatrix.m[3][3], 0.01f, 1.0f, "%.3f");
-
-
-	ImGui::End();
-
-
-
-	ImGui::Begin("RotateByQuaternion");
-	ImGui::InputFloat("x", &rotateByQuaternion.x, 0.01f, 1.0f, "%.2f");
-	ImGui::InputFloat("y", &rotateByQuaternion.y, 0.01f, 1.0f, "%.2f");
-	ImGui::InputFloat("z", &rotateByQuaternion.z, 0.01f, 1.0f, "%.2f");
-	ImGui::End();
-
-	ImGui::Begin("RotateByMatrix");
-	ImGui::InputFloat("x", &rotationByMatrix.x, 0.01f, 1.0f, "%.2f");
-	ImGui::InputFloat("y", &rotationByMatrix.y, 0.01f, 1.0f, "%.2f");
-	ImGui::InputFloat("z", &rotationByMatrix.z, 0.01f, 1.0f, "%.2f");
 	ImGui::End();
 }
 

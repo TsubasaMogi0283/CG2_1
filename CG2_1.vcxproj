@@ -86,6 +86,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalIncludeDirectories>$(ProjectDir)\Ellysia;$(ProjectDir)\Project;$(ProjectDir)\Ellysia\Common\DirectX;$(ProjectDir)\Ellysia\Common\Windows;$(ProjectDir)\Ellysia\Input;$(ProjectDir)\Ellysia\Audio;$(ProjectDir)\Ellysia\TextureManager;$(ProjectDir)\Ellysia\Math\Matrix;$(ProjectDir)\Ellysia\Math\Vector;$(ProjectDir)\Project\AllGameScene\GameManager;$(ProjectDir)\Ellysia\Camera;$(ProjectDir)\Project\AllGameScene;$(ProjectDir)\Ellysia\ImGuiManager;$(ProjectDir)\Ellysia\PipelineManager;$(ProjectDir)\Ellysia\Polygon\3D\Model;$(ProjectDir)\Ellysia\Math\Matrix\Calculation;$(ProjectDir)\Ellysia\Math\Vector\Calculation;$(ProjectDir)\Ellysia\ConvertFunction\ConvertLog;$(ProjectDir)\Ellysia\ConvertFunction\ConvertColor;$(ProjectDir)\Ellysia\Polygon\3D\BufferResource\Mesh;$(ProjectDir)\Ellysia\Polygon\3D\BufferResource\MaterialData;$(ProjectDir)\Ellysia\Polygon\3D\BufferResource\Material;$(ProjectDir)\Ellysia\Polygon\3D\BufferResource\Transformation;$(ProjectDir)\Ellysia\Polygon\3D\BufferResource\ModelData;$(ProjectDir)\Ellysia\Polygon\3D\BufferResource\DirectionalLight;$(ProjectDir)\Ellysia\Polygon\2D\Sprite;$(ProjectDir)\Ellysia\Polygon\3D\Particle3D;$(ProjectDir)\Ellysia\ConvertFunction\CompileShader;$(ProjectDir)\Ellysia\Math\Shape;$(ProjectDir)\Ellysia\Math\Collision;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -127,13 +128,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Ellysia\Polygon\3D\Sphere\Sphere.cpp" />
     <ClCompile Include="Ellysia\TextureManager\TextureManager.cpp" />
     <ClCompile Include="Ellysia\WorldTransform\WorldTransform.cpp" />
-    <ClCompile Include="External\ImGui\imgui.cpp" />
-    <ClCompile Include="External\ImGui\imgui_demo.cpp" />
-    <ClCompile Include="External\ImGui\imgui_draw.cpp" />
-    <ClCompile Include="External\ImGui\imgui_impl_dx12.cpp" />
-    <ClCompile Include="External\ImGui\imgui_impl_win32.cpp" />
-    <ClCompile Include="External\ImGui\imgui_tables.cpp" />
-    <ClCompile Include="External\ImGui\imgui_widgets.cpp" />
     <ClCompile Include="Project\AllGameScene\GameManager\GameManager.cpp" />
     <ClCompile Include="Project\AllGameScene\SampleScene\SampleScene.cpp" />
   </ItemGroup>
@@ -207,14 +201,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Ellysia\Polygon\3D\Sphere\Sphere.h" />
     <ClInclude Include="Ellysia\TextureManager\TextureManager.h" />
     <ClInclude Include="Ellysia\WorldTransform\WorldTransform.h" />
-    <ClInclude Include="External\ImGui\imconfig.h" />
-    <ClInclude Include="External\ImGui\imgui.h" />
-    <ClInclude Include="External\ImGui\imgui_impl_dx12.h" />
-    <ClInclude Include="External\ImGui\imgui_impl_win32.h" />
-    <ClInclude Include="External\ImGui\imgui_internal.h" />
-    <ClInclude Include="External\ImGui\imstb_rectpack.h" />
-    <ClInclude Include="External\ImGui\imstb_textedit.h" />
-    <ClInclude Include="External\ImGui\imstb_truetype.h" />
     <ClInclude Include="Project\AllGameScene\GameManager\GameManager.h" />
     <ClInclude Include="Project\AllGameScene\GameManager\IGameScene.h" />
     <ClInclude Include="Project\AllGameScene\SampleScene\SampleScene.h" />
@@ -228,9 +214,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ProjectReference Include="External\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">
       <Project>{371b9fa9-4c90-4ac6-a123-aced756d6c77}</Project>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="External\ImGui\LICENSE.txt" />
+    <ProjectReference Include="External\ImGui\ImGui.vcxproj">
+      <Project>{820dca8b-e255-4a35-8788-4177e29a4687}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -44,12 +44,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir)\External;$(SolutionDir)\External\ImGui;$(SolutionDir)\External\DirectXTex;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\External;$(SolutionDir)\External\DirectXTex;$(SolutionDir)\External\ImGui;$(IncludePath)</IncludePath>
     <IntDir>$(SolutionDir)..\Generated\Obj\$(ProjectName)\$(Configuration)\</IntDir>
     <OutDir>$(SolutionDir)..\Generated\Outputs\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(SolutionDir)\External;$(SolutionDir)\External\ImGui;$(SolutionDir)\External\DirectXTex;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\External;$(SolutionDir)\External\DirectXTex;$(SolutionDir)\External\ImGui;$(IncludePath)</IncludePath>
     <IntDir>$(SolutionDir)..\Generated\Obj\$(ProjectName)\$(Configuration)\</IntDir>
     <OutDir>$(SolutionDir)..\Generated\Outputs\$(Configuration)\</OutDir>
   </PropertyGroup>
@@ -65,6 +65,7 @@
       <AdditionalIncludeDirectories>$(ProjectDir)\Ellysia;$(ProjectDir)\Project;$(ProjectDir)\Ellysia\Common\DirectX;$(ProjectDir)\Ellysia\Common\Windows;$(ProjectDir)\Ellysia\Input;$(ProjectDir)\Ellysia\Audio;$(ProjectDir)\Ellysia\TextureManager;$(ProjectDir)\Ellysia\Math\Matrix;$(ProjectDir)\Ellysia\Math\Vector;$(ProjectDir)\Project\AllGameScene\GameManager;$(ProjectDir)\Ellysia\Camera;$(ProjectDir)\Project\AllGameScene;$(ProjectDir)\Ellysia\ImGuiManager;$(ProjectDir)\Ellysia\PipelineManager;$(ProjectDir)\Ellysia\Polygon\3D\Model;$(ProjectDir)\Ellysia\Math\Matrix\Calculation;$(ProjectDir)\Ellysia\Math\Vector\Calculation;$(ProjectDir)\Ellysia\ConvertFunction\ConvertLog;$(ProjectDir)\Ellysia\ConvertFunction\ConvertColor;$(ProjectDir)\Ellysia\Polygon\3D\BufferResource\Mesh;$(ProjectDir)\Ellysia\Polygon\3D\BufferResource\MaterialData;$(ProjectDir)\Ellysia\Polygon\3D\BufferResource\Material;$(ProjectDir)\Ellysia\Polygon\3D\BufferResource\Transformation;$(ProjectDir)\Ellysia\Polygon\3D\BufferResource\ModelData;$(ProjectDir)\Ellysia\Polygon\3D\BufferResource\DirectionalLight;$(ProjectDir)\Ellysia\Polygon\2D\Sprite;$(ProjectDir)\Ellysia\Polygon\3D\Particle3D;$(ProjectDir)\Ellysia\ConvertFunction\CompileShader;$(ProjectDir)\Ellysia\Math\Shape;$(ProjectDir)\Ellysia\Math\Collision;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -87,7 +88,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <LanguageStandard>stdcpp20</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalIncludeDirectories>$(ProjectDir)\Ellysia;$(ProjectDir)\Project;$(ProjectDir)\Ellysia\Common\DirectX;$(ProjectDir)\Ellysia\Common\Windows;$(ProjectDir)\Ellysia\Input;$(ProjectDir)\Ellysia\Audio;$(ProjectDir)\Ellysia\TextureManager;$(ProjectDir)\Ellysia\Math\Matrix;$(ProjectDir)\Ellysia\Math\Vector;$(ProjectDir)\Project\AllGameScene\GameManager;$(ProjectDir)\Ellysia\Camera;$(ProjectDir)\Project\AllGameScene;$(ProjectDir)\Ellysia\ImGuiManager;$(ProjectDir)\Ellysia\PipelineManager;$(ProjectDir)\Ellysia\Polygon\3D\Model;$(ProjectDir)\Ellysia\Math\Matrix\Calculation;$(ProjectDir)\Ellysia\Math\Vector\Calculation;$(ProjectDir)\Ellysia\ConvertFunction\ConvertLog;$(ProjectDir)\Ellysia\ConvertFunction\ConvertColor;$(ProjectDir)\Ellysia\Polygon\3D\BufferResource\Mesh;$(ProjectDir)\Ellysia\Polygon\3D\BufferResource\MaterialData;$(ProjectDir)\Ellysia\Polygon\3D\BufferResource\Material;$(ProjectDir)\Ellysia\Polygon\3D\BufferResource\Transformation;$(ProjectDir)\Ellysia\Polygon\3D\BufferResource\ModelData;$(ProjectDir)\Ellysia\Polygon\3D\BufferResource\DirectionalLight;$(ProjectDir)\Ellysia\Polygon\2D\Sprite;$(ProjectDir)\Ellysia\Polygon\3D\Particle3D;$(ProjectDir)\Ellysia\ConvertFunction\CompileShader;$(ProjectDir)\Ellysia\Math\Shape;$(ProjectDir)\Ellysia\Math\Collision;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\Ellysia;$(ProjectDir)\Project;$(ProjectDir)\Ellysia\Common\DirectX;$(ProjectDir)\Ellysia\Common\Windows;$(ProjectDir)\Ellysia\Input;$(ProjectDir)\Ellysia\Audio;$(ProjectDir)\Ellysia\TextureManager;$(ProjectDir)\Ellysia\Math\Matrix;$(ProjectDir)\Ellysia\Math\Vector;$(ProjectDir)\Project\AllGameScene\GameManager;$(ProjectDir)\Ellysia\Camera;$(ProjectDir)\Project\AllGameScene;$(ProjectDir)\Ellysia\ImGuiManager;$(ProjectDir)\Ellysia\PipelineManager;$(ProjectDir)\Ellysia\Polygon\3D\Model;$(ProjectDir)\Ellysia\Math\Matrix\Calculation;$(ProjectDir)\Ellysia\Math\Vector\Calculation;$(ProjectDir)\Ellysia\ConvertFunction\ConvertLog;$(ProjectDir)\Ellysia\ConvertFunction\ConvertColor;$(ProjectDir)\Ellysia\Polygon\3D\BufferResource\Mesh;$(ProjectDir)\Ellysia\Polygon\3D\BufferResource\MaterialData;$(ProjectDir)\Ellysia\Polygon\3D\BufferResource\Material;$(ProjectDir)\Ellysia\Polygon\3D\BufferResource\Transformation;$(ProjectDir)\Ellysia\Polygon\3D\BufferResource\ModelData;$(ProjectDir)\Ellysia\Polygon\3D\BufferResource\DirectionalLight;$(ProjectDir)\Ellysia\Polygon\2D\Sprite;$(ProjectDir)\Ellysia\Polygon\3D\Particle3D;$(ProjectDir)\Ellysia\ConvertFunction\CompileShader;$(ProjectDir)\Ellysia\Math\Shape;$(ProjectDir)\Ellysia\Math\Collision;$(SolutionDir)\Ellysia\External\ImGui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
@@ -218,7 +219,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <Project>{371b9fa9-4c90-4ac6-a123-aced756d6c77}</Project>
     </ProjectReference>
     <ProjectReference Include="External\ImGui\ImGui.vcxproj">
-      <Project>{820dca8b-e255-4a35-8788-4177e29a4687}</Project>
+      <Project>{4a762db2-1e1d-47d2-851f-de22b87c24d0}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

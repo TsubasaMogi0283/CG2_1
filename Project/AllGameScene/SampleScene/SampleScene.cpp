@@ -35,11 +35,11 @@ void SampleScene::Update(GameManager* gameManager) {
 	Quaternion interpolate4 = QuaternionSlerp(rotation0, rotation1, 1.0f);
 
 	ImGui::Begin("interpolate");
-	ImGui::InputFloat4("interpolate0", &interpolate0.x);
-	ImGui::InputFloat4("interpolate1", &interpolate1.x);
-	ImGui::InputFloat4("interpolate2", &interpolate2.x);
-	ImGui::InputFloat4("interpolate3", &interpolate3.x);
-	ImGui::InputFloat4("interpolate4", &interpolate4.x);
+	ImGui::InputFloat4("interpolate0", &interpolate0.x,"%.2f");
+	ImGui::InputFloat4("interpolate1", &interpolate1.x,"%.2f");
+	ImGui::InputFloat4("interpolate2", &interpolate2.x,"%.2f");
+	ImGui::InputFloat4("interpolate3", &interpolate3.x,"%.2f");
+	ImGui::InputFloat4("interpolate4", &interpolate4.x,"%.2f");
 
 	ImGui::End();
 }

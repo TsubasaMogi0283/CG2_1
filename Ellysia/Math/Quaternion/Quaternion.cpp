@@ -1,5 +1,6 @@
 #include "Quaternion.h"
 #include <cmath>
+#include <numbers>
 #include <Math/Vector/Vector3.h>
 #include "Math/Vector/Calculation/VectorCalculation.h"
 
@@ -8,7 +9,6 @@ Quaternion Multiply(const Quaternion& lhs, const Quaternion& rhs){
     Quaternion result = {};
     Quaternion q = lhs;
     Quaternion r = rhs;
-    
     
     //wはそのまま
     //xはi部分
@@ -211,7 +211,7 @@ Quaternion QuaternionSlerp(Quaternion q0, Quaternion q1, float t){
         q0.y * q1.y + 
         q0.z * q1.z +
         q0.w * q1.w;
-
+   
 
     //2通りあることから
     //詳しくは資料の14ページで
@@ -224,6 +224,18 @@ Quaternion QuaternionSlerp(Quaternion q0, Quaternion q1, float t){
 
         //内積も反転
         dot = -dot;
+    }
+
+    //dotが限りなく1に近い場合
+    const float EPSILON = 0.0005f;
+    if (dot > 1.0f - EPSILON) {
+        // 直線補間を行う
+        Quaternion result = {};
+        result.x = (1.0f - t) * q0.x + t * q1.x;
+        result.y = (1.0f - t) * q0.y + t * q1.y;
+        result.z = (1.0f - t) * q0.z + t * q1.z;
+        result.w = (1.0f - t) * q0.w + t * q1.w;
+        return result;
     }
 
     //最短が良いよね
@@ -239,7 +251,6 @@ Quaternion QuaternionSlerp(Quaternion q0, Quaternion q1, float t){
     result.y = scale0 * q0.y + scale1 * q1.y;
     result.z = scale0 * q0.z + scale1 * q1.z;
     result.w = scale0 * q0.w + scale1 * q1.w;
-
 
     return result;
 }

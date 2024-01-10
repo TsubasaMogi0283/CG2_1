@@ -26,7 +26,7 @@ void SampleScene::Initialize(GameManager* gameManager) {
 /// </summary>
 void SampleScene::Update(GameManager* gameManager) {
 	Quaternion rotation0 = MakeRotateAxisAngleQuaternion({ 0.71f,0.71f,0.0f }, 0.3f);
-	Quaternion rotation1 = MakeRotateAxisAngleQuaternion({ 0.71f,0.0f,0.71f }, 3.141592f);
+	Quaternion rotation1 = { -rotation0.x,-rotation0.y,-rotation0.z ,-rotation0.w };
 
 	Quaternion interpolate0 = QuaternionSlerp(rotation0, rotation1, 0.0f);
 	Quaternion interpolate1 = QuaternionSlerp(rotation0, rotation1, 0.3f);
@@ -40,7 +40,7 @@ void SampleScene::Update(GameManager* gameManager) {
 	ImGui::InputFloat4("interpolate2", &interpolate2.x,"%.2f");
 	ImGui::InputFloat4("interpolate3", &interpolate3.x,"%.2f");
 	ImGui::InputFloat4("interpolate4", &interpolate4.x,"%.2f");
-
+	
 	ImGui::End();
 }
 

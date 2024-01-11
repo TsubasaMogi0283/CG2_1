@@ -56,6 +56,7 @@ void SampleScene::Initialize() {
 	particle_->SetFrequencyTime(frequencyTime);
 	particleTranslate_ = { 0.0f,0.0f,0.0f };
 
+
 	audio_ = Audio::GetInstance();
 	uint32_t audioHandle_ = audio_->LoadWave("Resources/Audio/Sample/Win.wav");
 	audio_->PlayWave(audioHandle_, true);

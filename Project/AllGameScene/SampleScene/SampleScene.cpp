@@ -30,6 +30,7 @@ void SampleScene::Initialize() {
 	particle_->Create("Resources/05_02", "plane.obj");
 	int count = 3;
 	
+
 	//0.5秒ごとに発生
 	float frequency = 0.5f;
 	//発生頻度用の時刻。0.0で初期化

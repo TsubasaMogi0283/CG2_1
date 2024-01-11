@@ -12,7 +12,7 @@
 //StatePatternを使う時は必ず前方宣言をするように
 class Gamemanager;
 
-class SampleScene : public IGameScene {
+class SampleScene : public IGameScene{
 public:
 
 	//コンストラクタ

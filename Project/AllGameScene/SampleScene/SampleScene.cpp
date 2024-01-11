@@ -22,7 +22,8 @@ void SampleScene::Initialize() {
 
 	sprite = std::make_unique<Sprite>();
 	uint32_t textureHandle = TextureManager::LoadTexture("Resources/uvChecker.png");
-	sprite.reset(Sprite::Create(textureHandle, { 0.0f,0.0f }));
+	spritePosition_ = { 100.0f,100.0f };
+	sprite.reset(Sprite::Create(textureHandle, spritePosition_));
 
 	
 
@@ -74,7 +75,7 @@ void SampleScene::Update(GameManager* gameManager) {
 	particle_->SetField(isSetField_);
 	particle_->Update();
 
-	ImGui::Begin("Plane");
+	/*ImGui::Begin("Plane");
 	ImGui::SliderFloat3("Translate", &modelTranslate_.x, -10.0f, 10.0f);
 	ImGui::SliderFloat4("Color", &modelColor_.x, 0.0f, 1.0f);
 	ImGui::Checkbox("isSetField;", &isSetField_);
@@ -85,7 +86,16 @@ void SampleScene::Update(GameManager* gameManager) {
 	ImGui::Begin("Particle");
 	ImGui::SliderFloat3("Translate", &particleTranslate_.x, -3.0f, 3.0f);
 	ImGui::End();
-	
+	*/
+
+	sprite->SetPosition(spritePosition_);
+
+	//ウィンドウサイズの設定は↓でやるよ
+	ImGui::SetNextWindowSize(ImVec2(500, 100));
+	ImGui::Begin("Sprite");
+	ImGui::SliderFloat2("Position", &spritePosition_.x, 0.0f, 500.0f,"%.1f");
+	ImGui::End();
+
 
 
 }

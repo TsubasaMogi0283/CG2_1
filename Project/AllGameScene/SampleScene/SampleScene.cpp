@@ -1,6 +1,7 @@
 #include "SampleScene.h"
 #include "GameManager.h"
 #include "TextureManager.h"
+#include <imgui.h>
 
 /// <summary>
 	/// コンストラクタ
@@ -91,12 +92,13 @@ void SampleScene::Update(GameManager* gameManager) {
 	sprite->SetPosition(spritePosition_);
 
 	//ウィンドウサイズの設定は↓でやるよ
+#ifdef _DEBUG
 	ImGui::SetNextWindowSize(ImVec2(500, 100));
 	ImGui::Begin("Sprite");
 	ImGui::SliderFloat2("Position", &spritePosition_.x, 0.0f, 500.0f,"%.1f");
 	ImGui::End();
 
-
+#endif
 
 }
 

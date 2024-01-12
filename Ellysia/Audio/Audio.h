@@ -5,6 +5,7 @@
 #include<x3daudio.h>
 #include <mmsystem.h>
 #include<cassert>
+#include <array>
 
 #pragma comment(lib, "winmm.lib")
 #pragma comment(lib,"xaudio2.lib")
@@ -66,6 +67,7 @@ private:
 
 private:
 
+	//チャンク...データの塊みたいなもの
 	//チャンクヘッダ
 	struct ChunkHeader {
 		//チャンク毎のID
@@ -102,6 +104,25 @@ private:
 		unsigned int bufferSize;
 	};
 
+
+	struct AudioInformation {
+
+		//読み込んだテクスチャの名前
+		std::string name_ = {};
+
+		//サウンドデータ
+		SoundData soundData_ = {};
+
+		//波形フォーマットを基にSourceVoiceの生成
+		IXAudio2SourceVoice* pSourceVoice_ = nullptr ;
+
+		//ハンドル
+		uint32_t audioHandle_ = 0;
+
+		//テクスチャハンドル
+		uint32_t handle_ = 0;
+	};
+
 	//音声データの最大数
 	static const int SOUND_DATE_MAX_ = 256;
 
@@ -110,14 +131,18 @@ private:
 	IXAudio2MasteringVoice* masterVoice_=nullptr;
 
 	//波形フォーマットを基にSourceVoiceの生成
-	IXAudio2SourceVoice* pSourceVoice_[SOUND_DATE_MAX_] = {nullptr};
+	//IXAudio2SourceVoice* pSourceVoice_[SOUND_DATE_MAX_] = {nullptr};
 
 
 	XAUDIO2_BUFFER buf_{};
 
-	SoundData soundData[SOUND_DATE_MAX_] = {};
+	/*SoundData soundData[SOUND_DATE_MAX_] = {};
 
 
-	uint32_t audioHandle_ = 0;
+	uint32_t audioHandle_ = 0;*/
+
+	//構造体版
+	//Texturemanagerとだいたい同じ感じにした
+	std::array<AudioInformation, SOUND_DATE_MAX_> audioInformation_{};
 
 };

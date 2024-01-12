@@ -1,6 +1,9 @@
 #include "Audio.h"
 
 
+
+static uint32_t audioIndex;
+
 //コンストラクタ
 Audio::Audio() {
 
@@ -28,7 +31,20 @@ void Audio::Initialize() {
 #pragma region 実際に使う関数
 //読み込み
 uint32_t Audio::LoadWave(const char* fileName) {
-	audioHandle_++;
+
+	//一度読み込んだものは２度読み込まず返すだけ
+	for (int i = 0; i < SOUND_DATE_MAX_; i++) {
+		if (audioInformation_[i].name_ == fileName) {
+			return audioInformation_[i].handle_;
+		}
+	}
+	//audioHandle_++;
+	audioIndex++;
+
+	//記録
+	audioInformation_[audioIndex].name_=fileName;
+	audioInformation_[audioIndex].handle_ = audioIndex;
+
 
 	#pragma region １,ファイルオープン
 	//ファイル入力ストリームのインスタンス
@@ -99,11 +115,16 @@ uint32_t Audio::LoadWave(const char* fileName) {
 
 	#pragma region 読み込んだ音声データを返す
 	
-	soundData[audioHandle_].wfex = format.fmt;
-	soundData[audioHandle_].pBuffer = reinterpret_cast<BYTE*>(pBuffer);
-	soundData[audioHandle_].bufferSize = data.size;
+	audioInformation_[audioIndex].soundData_.wfex = format.fmt;
+	audioInformation_[audioIndex].soundData_.pBuffer = reinterpret_cast<BYTE*>(pBuffer);
+	audioInformation_[audioIndex].soundData_.bufferSize = data.size;
 
-	return audioHandle_;
+
+	//soundData[audioHandle_].wfex = format.fmt;
+	//soundData[audioHandle_].pBuffer = reinterpret_cast<BYTE*>(pBuffer);
+	//soundData[audioHandle_].bufferSize = data.size;
+
+	return audioIndex;
 
 	#pragma endregion
 
@@ -118,13 +139,15 @@ void Audio::PlayWave(uint32_t audioHandle,bool isLoop) {
 	
 	//波形フォーマットを基にSourceVoiceの生成
 	//IXAudio2SourceVoice* pSourceVoice = nullptr;
-	hr = xAudio2_->CreateSourceVoice(&pSourceVoice_[audioHandle], &soundData[audioHandle].wfex);
+	//hr = xAudio2_->CreateSourceVoice(&pSourceVoice_[audioHandle], &soundData[audioHandle].wfex);
+	hr = xAudio2_->CreateSourceVoice(&audioInformation_[audioHandle].pSourceVoice_, &audioInformation_[audioHandle].soundData_.wfex);
+
 	assert(SUCCEEDED(hr));
 
 	//再生する波形データの設定
 	
-	buf_.pAudioData = soundData[audioHandle].pBuffer;
-	buf_.AudioBytes = soundData[audioHandle].bufferSize;
+	buf_.pAudioData = audioInformation_[audioHandle].soundData_.pBuffer;
+	buf_.AudioBytes = audioInformation_[audioHandle].soundData_.bufferSize;
 	buf_.Flags = XAUDIO2_END_OF_STREAM;
 	if (isLoop == true) {
 		//ずっとループさせたいならLoopCountにXAUDIO2_LOOP_INFINITEをいれよう
@@ -135,23 +158,25 @@ void Audio::PlayWave(uint32_t audioHandle,bool isLoop) {
 	}
 
 	//波形データの再生
-	hr = pSourceVoice_[audioHandle]->SubmitSourceBuffer(&buf_);
-	hr = pSourceVoice_[audioHandle]->Start();
+	hr = audioInformation_[audioHandle].pSourceVoice_->SubmitSourceBuffer(&buf_);
+	hr = audioInformation_[audioHandle].pSourceVoice_->Start();
 
 
-	
+	assert(SUCCEEDED(hr));
 }
 
 //音量を変える
 void Audio::ChangeVolume(uint32_t audiohandle, float volume) {
 	HRESULT hr = {};
-	hr = pSourceVoice_[audiohandle]->SetVolume(volume);
+	hr = audioInformation_[audiohandle].pSourceVoice_->SetVolume(volume);
+	assert(SUCCEEDED(hr));
 }
 
 //音声停止
 void Audio::StopWave(uint32_t audioHandle) {
 	HRESULT hr{};
-	hr = pSourceVoice_[audioHandle]->Stop();
+	hr = audioInformation_[audioHandle].pSourceVoice_->Stop();
+	assert(SUCCEEDED(hr));
 }
 
 #pragma endregion
@@ -162,10 +187,10 @@ void Audio::StopWave(uint32_t audioHandle) {
 void Audio::SoundUnload(uint32_t soundDataHandle) {
 	//バッファのメモリを解放
 
-	delete[] soundData[soundDataHandle].pBuffer;
-	soundData[soundDataHandle].pBuffer = 0;
-	soundData[soundDataHandle].bufferSize = 0;
-	soundData[soundDataHandle].wfex = {};
+	delete[] audioInformation_[soundDataHandle].soundData_.pBuffer;
+	audioInformation_[soundDataHandle].soundData_.pBuffer = 0;
+	audioInformation_[soundDataHandle].soundData_.bufferSize = 0;
+	audioInformation_[soundDataHandle].soundData_.wfex = {};
 
 	
 }
@@ -173,8 +198,8 @@ void Audio::SoundUnload(uint32_t soundDataHandle) {
 //解放
 void Audio::Release() {
 	for (int i = 0; i < SOUND_DATE_MAX_; i++) {
-		if (pSourceVoice_[i] != nullptr) {
-			pSourceVoice_[i]->DestroyVoice();
+		if (audioInformation_[i].pSourceVoice_ != nullptr) {
+			audioInformation_[i].pSourceVoice_->DestroyVoice();
 		}
 	}
 

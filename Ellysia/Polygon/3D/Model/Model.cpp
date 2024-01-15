@@ -394,10 +394,28 @@ void Model::Draw(WorldTransform& worldTransform, Camera& camera) {
 	//CBVを設定する
 	material_->GraphicsCommand();
 
-	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(1, worldTransform.bufferResource_->GetGPUVirtualAddress());
 
-	//カメラ
-	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(2, camera.bufferResource_->GetGPUVirtualAddress());
+	//Resourceに書き込む
+	//今までTransformationに書いていたものをこっちに引っ越す
+	worldTransform.bufferResource_->Map(0, nullptr, reinterpret_cast<void**>(&worldTransform.tranceformationData_));
+
+	Matrix4x4 worldMatrix = worldTransform.worldMatrix_;
+	Matrix4x4 viewMatrix = camera.viewMatrix_;
+
+
+	Matrix4x4 projectionMatrix_ = MakePerspectiveFovMatrix(0.45f,
+		float(WindowsSetup::GetInstance()->GetClientWidth()) /
+		float(WindowsSetup::GetInstance()->GetClientHeight()), 0.1f, 100.0f);
+
+	//WVP行列を作成
+	Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, 
+		Multiply(viewMatrix,projectionMatrix_));
+
+	worldTransform.tranceformationData_->WVP = worldViewProjectionMatrix;
+	worldTransform.tranceformationData_->world = MakeIdentity4x4();
+	worldTransform.bufferResource_->Unmap(0, nullptr);
+
+	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(1, worldTransform.bufferResource_->GetGPUVirtualAddress());
 
 
 	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である

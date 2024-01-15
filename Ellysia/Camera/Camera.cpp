@@ -31,7 +31,7 @@ void Camera::Update() {
 	orthographicMatrix_ = MakeOrthographicMatrix(0, 0, float(WindowsSetup::GetInstance()->GetClientWidth()), float(WindowsSetup::GetInstance()->GetClientHeight()), 0.0f, 100.0f);
 
 	//転送
-	Camera::Transfer();
+	//Camera::Transfer();
 }
 
 

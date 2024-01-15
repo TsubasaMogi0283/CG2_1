@@ -9,7 +9,7 @@
 //TransformationMatrixだといらないもののWVPがあるかかなと思った。
 //一つだけなの意味あるの？
 struct WorldTransformData {
-	Matrix4x4 wvp;
+	Matrix4x4 WVP;
 	Matrix4x4 world;
 };
 

@@ -61,7 +61,7 @@ void SampleScene::Initialize() {
 
 
 	camera_.Initialize();
-	
+	camera_.translate_ = { 0.0f,0.0f,-9.8f };
 
 	audio_ = Audio::GetInstance();
 	audioHandle_ = Audio::LoadWave("Resources/Audio/Sample/Win.wav");
@@ -80,7 +80,7 @@ void SampleScene::Initialize() {
 /// </summary>
 void SampleScene::Update(GameManager* gameManager) {
 	ImGui::Begin("Camera");
-	ImGui::SliderFloat3("Rotate", &cameraRotate_.x, -3.0f, 3.0f);
+	ImGui::SliderFloat3("Translate", &camera_.translate_.x, -20.0f, 20.0f);
 	ImGui::End();
 	modelWorldTransform_.Update();
 	camera_.Update();

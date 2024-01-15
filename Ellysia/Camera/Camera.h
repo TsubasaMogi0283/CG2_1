@@ -23,6 +23,7 @@ public:
 	Camera& operator=(const Camera& camera) = delete;
 
 
+
 public:
 
 	//基本はアクセッサだけにする

@@ -2,6 +2,7 @@
 #include "GameManager.h"
 #include "TextureManager.h"
 #include <imgui.h>
+#include "Camera.h"
 
 /// <summary>
 	/// コンストラクタ
@@ -65,13 +66,18 @@ void SampleScene::Initialize() {
 	audioHandle2_ = Audio::LoadWave("Resources/Audio/Sample/Win.wav");
 	audio2_->PlayWave(audioHandle2_, false);
 
+	cameraRotate_ = {};
+	Camera::GetInstance()->SetRotate(cameraRotate_);
 }
 
 /// <summary>
 /// 更新
 /// </summary>
 void SampleScene::Update(GameManager* gameManager) {
-
+	ImGui::Begin("Camera");
+	ImGui::SliderFloat3("Rotate", &cameraRotate_.x, -3.0f, 3.0f);
+	ImGui::End();
+	Camera::GetInstance()->SetRotate(cameraRotate_);
 
 	model_[0]->SetColor(modelColor_);
 	model_[0]->SetTranslate(modelTranslate_);

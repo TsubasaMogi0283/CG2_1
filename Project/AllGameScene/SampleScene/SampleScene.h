@@ -57,6 +57,9 @@ private:
 
 	Audio* audio2_ = nullptr;
 	uint32_t audioHandle2_ = 0u;
+
+
+	Vector3 cameraRotate_ = {};
 };
 
 

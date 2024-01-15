@@ -225,9 +225,6 @@
     <ClCompile Include="Ellysia\Math\Collision\Collision.cpp">
       <Filter>Ellysia\Source File</Filter>
     </ClCompile>
-    <ClCompile Include="Ellysia\Audio\AudioManager\AudioManager.cpp">
-      <Filter>Ellysia\Source File\Audio\AudioManager</Filter>
-    </ClCompile>
     <ClCompile Include="Ellysia\Math\WorldTransform\WorldTransform.cpp">
       <Filter>Ellysia\Source File\Math</Filter>
     </ClCompile>
@@ -387,9 +384,6 @@
     </ClInclude>
     <ClInclude Include="Ellysia\Math\Collision\Collision.h">
       <Filter>Ellysia\Header File</Filter>
-    </ClInclude>
-    <ClInclude Include="Ellysia\Audio\AudioManager\AudioManager.h">
-      <Filter>Ellysia\Header File\Audio\AudioManager</Filter>
     </ClInclude>
     <ClInclude Include="Ellysia\Math\WorldTransform\WorldTransform.h">
       <Filter>Ellysia\Header File\Math</Filter>

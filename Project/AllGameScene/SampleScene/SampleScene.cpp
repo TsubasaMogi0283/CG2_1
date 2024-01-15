@@ -31,8 +31,8 @@ void SampleScene::Initialize() {
 
 	
 
-	particle_ = std::make_unique<Particle3D>();
-	particle_->Create("Resources/05_02", "plane.obj");
+	//particle_ = std::make_unique<Particle3D>();
+	//particle_->Create("Resources/05_02", "plane.obj");
 	int count = 3;
 	
 
@@ -46,7 +46,7 @@ void SampleScene::Initialize() {
 
 	particleTextureHandle_ = TextureManager::GetInstance()->LoadTexture("Resources/CG3/circle.png");
 
-	accelerationField_.acceleration = { 5.0f,0.0f,0.0, };
+	/*accelerationField_.acceleration = { 5.0f,0.0f,0.0, };
 	accelerationField_.area.min = { -1.0f,-1.0f,-1.0f };
 	accelerationField_.area.max = { 1.0f,1.0f,1.0f };
 
@@ -57,8 +57,11 @@ void SampleScene::Initialize() {
 	particle_->SetCount(count);
 	particle_->SetFrequency(frequency);
 	particle_->SetFrequencyTime(frequencyTime);
-	particleTranslate_ = { 0.0f,0.0f,0.0f };
+	particleTranslate_ = { 0.0f,0.0f,0.0f };*/
 
+
+	camera_.Initialize();
+	
 
 	audio_ = Audio::GetInstance();
 	audioHandle_ = Audio::LoadWave("Resources/Audio/Sample/Win.wav");
@@ -79,15 +82,15 @@ void SampleScene::Update(GameManager* gameManager) {
 	ImGui::Begin("Camera");
 	ImGui::SliderFloat3("Rotate", &cameraRotate_.x, -3.0f, 3.0f);
 	ImGui::End();
-	//Camera::GetInstance()->SetRotate(cameraRotate_);
 	modelWorldTransform_.Update();
+	camera_.Update();
 
 	model_[0]->SetColor(modelColor_);
 	//model_[0]->SetTranslate(modelTranslate_);
 
-	particle_->SetTranslate(particleTranslate_);
+	/*particle_->SetTranslate(particleTranslate_);
 	particle_->SetField(isSetField_);
-	particle_->Update();
+	particle_->Update();*/
 
 	/*ImGui::Begin("Plane");
 	ImGui::SliderFloat3("Translate", &modelTranslate_.x, -10.0f, 10.0f);
@@ -120,10 +123,10 @@ void SampleScene::Update(GameManager* gameManager) {
 /// </summary>
 void SampleScene::Draw() {
 	for (int i = 0; i < MODEL_AMOUNT_; i++) {
-		model_[i]->Draw(modelWorldTransform_);
+		model_[i]->Draw(modelWorldTransform_,camera_);
 	
 	}
-	particle_->Draw(particleTextureHandle_);
+	//particle_->Draw(particleTextureHandle_);
 	sprite->Draw();
 }
 

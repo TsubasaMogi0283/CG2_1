@@ -99,7 +99,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
-      <AdditionalOptions>/ignore:4020 %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <PostBuildEvent>
       <Command>copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxcompiler.dll" "$(TargetDir)dxcompiler.dll
@@ -130,9 +129,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Ellysia\Polygon\3D\BufferResource\DirectionalLight\CreateDirectionalLight.cpp" />
     <ClCompile Include="Ellysia\Polygon\3D\BufferResource\Material\CreateMaterial.cpp" />
     <ClCompile Include="Ellysia\Polygon\3D\BufferResource\Mesh\Mesh.cpp" />
-    <ClCompile Include="Ellysia\Polygon\3D\BufferResource\Transformation\Transformation.cpp" />
     <ClCompile Include="Ellysia\Polygon\3D\Model\Model.cpp" />
-    <ClCompile Include="Ellysia\Polygon\3D\Particle3D\Particle3D.cpp" />
+    <ClCompile Include="Ellysia\Polygon\3D\Particle3D\Particle3D.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="Ellysia\Polygon\3D\Sphere\Sphere.cpp" />
     <ClCompile Include="Ellysia\TextureManager\TextureManager.cpp" />
     <ClCompile Include="Project\AllGameScene\GameManager\GameManager.cpp" />

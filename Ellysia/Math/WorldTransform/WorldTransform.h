@@ -5,11 +5,10 @@
 
 #include "DirectXSetup.h"
 
-
-//KAMATA ENGINEを参考にしたがこれを作る意味が分からない
+//KAMATA ENGINE参考
 //TransformationMatrixだといらないもののWVPがあるかかなと思った。
 //一つだけなの意味あるの？
-struct ConstBuffDataWorldTransform {
+struct WorldTransformData {
 	Matrix4x4 wvp;
 	Matrix4x4 world;
 };
@@ -50,12 +49,12 @@ public:
 	Vector3 translate_ = { 0.0f, 0.0f, 0.0f };
 
 	//定数バッファ
-	ComPtr<ID3D12Resource> constBufferResource_;
+	ComPtr<ID3D12Resource> bufferResource_;
 
-	ConstBuffDataWorldTransform* tranceformationData_ = nullptr;
+	WorldTransformData* tranceformationData_ = nullptr;
 
 	//ワールド行列へ
-	Matrix4x4 matWorld_ = {};
+	Matrix4x4 worldMatrix_ = {};
 
 	//親となるワールド変換へのポインタ
 	const WorldTransform* parent_ = nullptr;

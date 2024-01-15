@@ -216,9 +216,6 @@
     <ClCompile Include="Ellysia\Polygon\3D\BufferResource\Material\CreateMaterial.cpp">
       <Filter>Ellysia\Source File\Polygone\3D</Filter>
     </ClCompile>
-    <ClCompile Include="Ellysia\Polygon\3D\BufferResource\Transformation\Transformation.cpp">
-      <Filter>Ellysia\Source File\Polygone\3D</Filter>
-    </ClCompile>
     <ClCompile Include="Ellysia\Polygon\3D\BufferResource\Mesh\Mesh.cpp">
       <Filter>Ellysia\Source File\Polygone\3D</Filter>
     </ClCompile>
@@ -232,7 +229,7 @@
       <Filter>Ellysia\Source File\Audio\AudioManager</Filter>
     </ClCompile>
     <ClCompile Include="Ellysia\Math\WorldTransform\WorldTransform.cpp">
-      <Filter>Ellysia</Filter>
+      <Filter>Ellysia\Source File\Math</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -395,7 +392,7 @@
       <Filter>Ellysia\Header File\Audio\AudioManager</Filter>
     </ClInclude>
     <ClInclude Include="Ellysia\Math\WorldTransform\WorldTransform.h">
-      <Filter>Ellysia</Filter>
+      <Filter>Ellysia\Header File\Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

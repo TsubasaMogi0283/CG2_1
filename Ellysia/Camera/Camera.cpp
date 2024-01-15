@@ -3,11 +3,6 @@
 #include "WindowsSetup.h"
 
 
-//コンストラクタ
-Camera::Camera() {
-	
-}
-
 
 //初期化
 void Camera::Initialize() {
@@ -52,12 +47,11 @@ void Camera::Transfer() {
 	//データ書き込み
 	bufferData_->viewMatrix = viewMatrix_;
 	bufferData_->projectionMatrix = matProjection_;
-	bufferData_->orthographicMatrix_ = orthographicMatrix_;
+	bufferData_->orthographicMatrix = orthographicMatrix_;
+	bufferData_->position = translate_;
+
+	//KAMATA ENGINEにorthographicが無かったので追加しておく
+
 	bufferResource_->Unmap(0, nullptr);
-}
-
-//デストラクタ
-Camera::~Camera() {
-
 }
 

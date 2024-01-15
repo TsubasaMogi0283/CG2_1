@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Matrix4x4.h"
-
+#include "Vector3.h"
 #include "DirectXSetup.h"
 
 struct Camera {
@@ -22,7 +22,8 @@ public:
 	struct CameraBufferData {
 		Matrix4x4 viewMatrix;       
 		Matrix4x4 projectionMatrix;
-		Matrix4x4 orthographicMatrix_;
+		Matrix4x4 orthographicMatrix;
+		Vector3 position;
 	};
 
 	//リソース
@@ -42,9 +43,7 @@ public:
 	float farClip_ = 1000.0f;
 
 
-	//スケールはっきり言って意味ない
-	//だけどMakeAffineにするときこれの方が楽だから入れてる
-	Vector3 scale_ = { 0.0f,0.0f,0.0f };
+	
 	//回転
 	Vector3 rotate_ = { 0.0f,0.0f,0.0f };
 	//移動
@@ -58,6 +57,12 @@ public:
 	Matrix4x4 viewMatrix_ = {};
 	//射影行列
 	Matrix4x4 matProjection_ = {};
-
+	//正射影行列
 	Matrix4x4 orthographicMatrix_{};
+
+private:
+	//スケールはっきり言って意味ない
+	//だけどMakeAffineにするときこれの方が楽だから入れてる
+	Vector3 scale_ = { 1.0f,1.0f,1.0f };
+
 };

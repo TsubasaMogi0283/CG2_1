@@ -371,7 +371,7 @@ Model* Model::Create(const std::string& directoryPath, const std::string& fileNa
 
 
 //描画
-void Model::Draw(WorldTransform& worldTransform) {
+void Model::Draw(WorldTransform& worldTransform, Camera& camera) {
 	////マテリアルにデータを書き込む
 	////書き込むためのアドレスを取得
 	////reinterpret_cast...char* から int* へ、One_class* から Unrelated_class* へなどの変換に使用
@@ -387,17 +387,17 @@ void Model::Draw(WorldTransform& worldTransform) {
 
 
 	////RootSignatureを設定。PSOに設定しているけど別途設定が必要
-	//DirectXSetup::GetInstance()->GetCommandList()->IASetVertexBuffers(0, 1, &modelInformation_[modelIndex].vertexBufferView_);
 	////形状を設定。PSOに設定しているものとはまた別。同じものを設定すると考えよう
-	//DirectXSetup::GetInstance()->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	mesh_->GraphicsCommand();
 
 
 	//CBVを設定する
 	material_->GraphicsCommand();
 
-	//transformation_->SetGraphicCommand();
-	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(1, worldTransform.constBufferResource_->GetGPUVirtualAddress());
+	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(1, worldTransform.bufferResource_->GetGPUVirtualAddress());
+
+	//カメラ
+	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(2, camera.bufferResource_->GetGPUVirtualAddress());
 
 
 	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である

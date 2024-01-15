@@ -26,7 +26,7 @@
 #include "CreateDirectionalLight.h"
 #include "Transformation.h"
 #include <WorldTransform.h>
-
+#include "Camera.h"
 
 class Model {
 public:
@@ -53,7 +53,7 @@ private:
 
 public:
 	//WorldTransformつき
-	void Draw(WorldTransform& worldTransform);
+	void Draw(WorldTransform& worldTransform, Camera& camera);
 
 	//デストラクタ
 	~Model();

@@ -13,23 +13,10 @@ public:
 	void Update();
 
 
-private:
-	//転送
-	void Transfer();
 
 public:
-	// 定数バッファ用データ構造体
-	struct CameraBufferData {
-		Matrix4x4 viewMatrix;       
-		Matrix4x4 projectionMatrix;
-		Matrix4x4 orthographicMatrix;
-		Vector3 position;
-	};
-
 	//リソース
 	ComPtr<ID3D12Resource> bufferResource_;
-	//
-	CameraBufferData* bufferData_ = nullptr;
 
 
 	//詳しくはMT3で
@@ -56,7 +43,7 @@ public:
 	//ビュー行列
 	Matrix4x4 viewMatrix_ = {};
 	//射影行列
-	Matrix4x4 matProjection_ = {};
+	Matrix4x4 projectionMatrix_ = {};
 	//正射影行列
 	Matrix4x4 orthographicMatrix_{};
 

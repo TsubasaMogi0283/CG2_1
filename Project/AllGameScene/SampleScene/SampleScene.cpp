@@ -31,10 +31,10 @@ void SampleScene::Initialize() {
 
 	
 
-	//particle_ = std::make_unique<Particle3D>();
-	//particle_->Create("Resources/05_02", "plane.obj");
+	particle_ = std::make_unique<Particle3D>();
+	particle_->Create("Resources/05_02", "plane.obj");
 	int count = 3;
-	
+	particleWorldTransform_.Initialize();
 
 
 	//0.5秒ごとに発生
@@ -46,7 +46,7 @@ void SampleScene::Initialize() {
 
 	particleTextureHandle_ = TextureManager::GetInstance()->LoadTexture("Resources/CG3/circle.png");
 
-	/*accelerationField_.acceleration = { 5.0f,0.0f,0.0, };
+	accelerationField_.acceleration = { 5.0f,0.0f,0.0, };
 	accelerationField_.area.min = { -1.0f,-1.0f,-1.0f };
 	accelerationField_.area.max = { 1.0f,1.0f,1.0f };
 
@@ -57,7 +57,7 @@ void SampleScene::Initialize() {
 	particle_->SetCount(count);
 	particle_->SetFrequency(frequency);
 	particle_->SetFrequencyTime(frequencyTime);
-	particleTranslate_ = { 0.0f,0.0f,0.0f };*/
+	particleTranslate_ = { 0.0f,0.0f,0.0f };
 
 
 	camera_.Initialize();
@@ -82,15 +82,16 @@ void SampleScene::Update(GameManager* gameManager) {
 	ImGui::Begin("Camera");
 	ImGui::SliderFloat3("Translate", &camera_.translate_.x, -20.0f, 20.0f);
 	ImGui::End();
+
+
 	modelWorldTransform_.Update();
 	camera_.Update();
 
 	model_[0]->SetColor(modelColor_);
-	//model_[0]->SetTranslate(modelTranslate_);
 
-	/*particle_->SetTranslate(particleTranslate_);
 	particle_->SetField(isSetField_);
-	particle_->Update();*/
+	particle_->SetTranslate(particleTranslate_);
+	particleWorldTransform_.Update();
 
 	/*ImGui::Begin("Plane");
 	ImGui::SliderFloat3("Translate", &modelTranslate_.x, -10.0f, 10.0f);
@@ -99,11 +100,11 @@ void SampleScene::Update(GameManager* gameManager) {
 
 	ImGui::End();
 	
-
+	*/
 	ImGui::Begin("Particle");
 	ImGui::SliderFloat3("Translate", &particleTranslate_.x, -3.0f, 3.0f);
 	ImGui::End();
-	*/
+	
 
 	sprite->SetPosition(spritePosition_);
 
@@ -126,7 +127,7 @@ void SampleScene::Draw() {
 		model_[i]->Draw(modelWorldTransform_,camera_);
 	
 	}
-	//particle_->Draw(particleTextureHandle_);
+	particle_->Draw(camera_,particleTextureHandle_);
 	sprite->Draw();
 }
 

@@ -48,10 +48,11 @@ private:
 	Vector2 spritePosition_ = {};
 
 	//パーティクル
-	//std::unique_ptr<Particle3D> particle_ = nullptr;
+	std::unique_ptr<Particle3D> particle_ = nullptr;
 	uint32_t particleTextureHandle_ = 0u;
 	Vector3 particleTranslate_ = {};
-	//AccelerationField accelerationField_ = {};
+	WorldTransform particleWorldTransform_ = {};
+	AccelerationField accelerationField_ = {};
 	bool isSetField_ = false;
 
 	Audio* audio_ = nullptr;

@@ -396,13 +396,12 @@ void Model::Draw(WorldTransform& worldTransform, Camera& camera) {
 
 
 	//Resourceに書き込む
-	//今までTransformationに書いていたものをこっちに引っ越す
 	worldTransform.bufferResource_->Map(0, nullptr, reinterpret_cast<void**>(&worldTransform.tranceformationData_));
 
 	Matrix4x4 worldMatrix = worldTransform.worldMatrix_;
 	Matrix4x4 viewMatrix = camera.viewMatrix_;
 
-
+	//基本これは変わらない
 	Matrix4x4 projectionMatrix_ = MakePerspectiveFovMatrix(0.45f,
 		float(WindowsSetup::GetInstance()->GetClientWidth()) /
 		float(WindowsSetup::GetInstance()->GetClientHeight()), 0.1f, 100.0f);

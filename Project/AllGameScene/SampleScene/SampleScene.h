@@ -8,6 +8,7 @@
 #include "Audio.h"
 #include <memory>
 #include <Model.h>
+#include "WorldTransform.h"
 
 //StatePatternを使う時は必ず前方宣言をするように
 class Gamemanager;
@@ -35,6 +36,7 @@ private:
 
 	Model* model_[MODEL_AMOUNT_] = { nullptr };
 	Vector3 modelTranslate_ = {};
+	WorldTransform modelWorldTransform_ = {};
 
 	Vector2 position_ = { 0.0f,0.0f };
 	Vector2 scale_ = { 1.0f,1.0f };

@@ -25,6 +25,7 @@
 #include "DirectionalLight.h"
 #include "CreateDirectionalLight.h"
 #include "Transformation.h"
+#include <WorldTransform.h>
 
 
 class Model {
@@ -36,9 +37,9 @@ public:
 	//初期化
 	//Initializeも兼ねているよ
 	//通常
-	static Model* Create(const std::string& directoryPath,const std::string& fileName);
+	static Model* Create(const std::string& directoryPath, const std::string& fileName);
 	//ブレンドあり
-	static Model* Create(const std::string& directoryPath,const std::string& fileName ,int32_t blendModeNumber );
+	static Model* Create(const std::string& directoryPath, const std::string& fileName, int32_t blendModeNumber);
 
 private:
 #pragma region モデルの読み込み関係の関数
@@ -51,9 +52,8 @@ private:
 #pragma endregion
 
 public:
-	//描画
-	void Draw();
-
+	//WorldTransformつき
+	void Draw(WorldTransform& worldTransform);
 
 	//デストラクタ
 	~Model();
@@ -89,7 +89,7 @@ public:
 
 
 
-	
+
 	//透明度の変更
 	void SetColor(Vector4 color) {
 		this->color_ = color;
@@ -118,14 +118,14 @@ public:
 
 private:
 
-	
+
 
 	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(ComPtr<ID3D12DescriptorHeap> descriptorHeap, uint32_t descriptorSize, uint32_t index);
 	D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(ComPtr<ID3D12DescriptorHeap> descriptorHeap, uint32_t descriptorSize, uint32_t index);
 
 
 
-	
+
 
 
 private:
@@ -136,13 +136,9 @@ private:
 	//頂点データ
 	std::unique_ptr<Mesh> mesh_ = nullptr;
 
-
-	//Model用のTransformationMatrix用のリソースを作る。
-	std::unique_ptr<Transformation> transformation_ = nullptr;
-
 	//マテリアル用のリソースを作る
 	std::unique_ptr<CreateMaterial> material_ = nullptr;
-	
+
 
 	//Lighting用
 	std::unique_ptr<CreateDirectionalLight> directionalLight_ = nullptr;
@@ -150,7 +146,7 @@ private:
 	bool isEnableLighting_ = true;
 
 	//方向
-	Vector3 lightingDirection_ = {0.0f,-1.0f,0.0f};
+	Vector3 lightingDirection_ = { 0.0f,-1.0f,0.0f };
 
 
 
@@ -165,16 +161,16 @@ private:
 
 
 	//色関係のメンバ変数
-	Vector4 color_ = {1.0f,1.0f,1.0f,1.0f};
+	Vector4 color_ = { 1.0f,1.0f,1.0f,1.0f };
 
 
-	
+
 
 	//TextureManagerを参考にする
 	static std::list<ModelData> modelInformationList_;
 
 
 	//デフォルトはα加算
-	int32_t blendModeNumber_ ;
+	int32_t blendModeNumber_;
 
 };

@@ -20,7 +20,9 @@ void SampleScene::Initialize() {
 	for (int i = 0; i < MODEL_AMOUNT_; i++) {
 		model_[i] = Model::Create("Resources/CG3/fence", "fence.obj");
 	}
-	modelTranslate_ = {0.0f,0.0f,0.0f};
+	modelWorldTransform_.Initialize();
+	modelWorldTransform_.scale_ = { 1.0f,1.0f,1.0f };
+	
 
 	sprite = std::make_unique<Sprite>();
 	uint32_t textureHandle = TextureManager::LoadTexture("Resources/uvChecker.png");
@@ -67,7 +69,7 @@ void SampleScene::Initialize() {
 	audio2_->PlayWave(audioHandle2_, false);
 
 	cameraRotate_ = {};
-	Camera::GetInstance()->SetRotate(cameraRotate_);
+	//Camera::GetInstance()->SetRotate(cameraRotate_);
 }
 
 /// <summary>
@@ -77,13 +79,13 @@ void SampleScene::Update(GameManager* gameManager) {
 	ImGui::Begin("Camera");
 	ImGui::SliderFloat3("Rotate", &cameraRotate_.x, -3.0f, 3.0f);
 	ImGui::End();
-	Camera::GetInstance()->SetRotate(cameraRotate_);
+	//Camera::GetInstance()->SetRotate(cameraRotate_);
+	modelWorldTransform_.Update();
 
 	model_[0]->SetColor(modelColor_);
-	model_[0]->SetTranslate(modelTranslate_);
+	//model_[0]->SetTranslate(modelTranslate_);
 
 	particle_->SetTranslate(particleTranslate_);
-
 	particle_->SetField(isSetField_);
 	particle_->Update();
 
@@ -118,7 +120,7 @@ void SampleScene::Update(GameManager* gameManager) {
 /// </summary>
 void SampleScene::Draw() {
 	for (int i = 0; i < MODEL_AMOUNT_; i++) {
-		model_[i]->Draw();
+		model_[i]->Draw(modelWorldTransform_);
 	
 	}
 	particle_->Draw(particleTextureHandle_);

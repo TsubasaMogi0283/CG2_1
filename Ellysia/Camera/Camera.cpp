@@ -5,42 +5,56 @@
 
 //コンストラクタ
 Camera::Camera() {
-	//コンストラクタの所で値を入れる
-	//わざわざInitialize関数を作るのは面倒だから
-	//デフォルト
-	cameraTransform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,-9.8f} };
-}
-
-//インスタンス
-Camera* Camera::GetInstance() {
-	//関数内static変数として宣言する
-	static Camera instance;
-
-	return &instance;
 	
 }
 
-Matrix4x4 Camera::GetAffineMatrix() {
-	cameraMatrix_ = MakeAffineMatrix(cameraTransform_.scale, cameraTransform_.rotate, cameraTransform_.translate);
-	return cameraMatrix_;
+
+//初期化
+void Camera::Initialize() {
+	//Resource作成
+	bufferResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(CameraBufferData)).Get();
+
+	aspectRatio_ = float(WindowsSetup::GetInstance()->GetClientWidth()) / float(WindowsSetup::GetInstance()->GetClientHeight());
+
+	//初期
+	scale_ = { 1.0f, 1.0f,1.0f };
+	rotate_ = { 0.0f, 0.0f, 0.0f };
+	translate_ = { 0.0f, 0.0f, 0.0f };
 }
 
-Matrix4x4 Camera::GetViewMatrix() {
-	//カメラ行列
-	cameraMatrix_ = MakeAffineMatrix(cameraTransform_.scale, cameraTransform_.rotate, cameraTransform_.translate);
-	viewMatrix_ = Inverse(cameraMatrix_);
-	return viewMatrix_;
-}
-
-Matrix4x4 Camera::GetProjectionMatrix_() {
-	//遠視投影行列
-	projectionMatrix_ = MakePerspectiveFovMatrix(0.45f, float(WindowsSetup::GetInstance()->GetClientWidth()) / float(WindowsSetup::GetInstance()->GetClientHeight()), 0.1f, 100.0f);
+//行列を計算・転送する
+void Camera::Update() {
 	
-	return projectionMatrix_;
+	//アフィン行列を計算
+	affineMatrix_ = MakeAffineMatrix(scale_, rotate_, translate_);
+	
+	//カメラと言えば逆行列
+	viewMatrix_ = Inverse(affineMatrix_);
+	//射影を計算
+	matProjection_ = MakePerspectiveFovMatrix(fov_, aspectRatio_, nearClip_, farClip_);
+	//正射影行列(正規化)を計算
+	orthographicMatrix_ = MakeOrthographicMatrix(0, 0, float(WindowsSetup::GetInstance()->GetClientWidth()), float(WindowsSetup::GetInstance()->GetClientHeight()), 0.0f, 100.0f);
+
+	//転送
+	Camera::Transfer();
 }
 
 
+//転送
+void Camera::Transfer() {
+	//Resourceに書き込む
+	bufferResource_->Map(0, nullptr, reinterpret_cast<void**>(&bufferData_));
 
+
+	//WVP行列を作成
+	//Matrix4x4 worldViewProjectionMatrix = Multiply(matWorld_, Multiply(Camera::GetInstance()->GetViewMatrix(), Camera::GetInstance()->GetProjectionMatrix_()));
+
+	//データ書き込み
+	bufferData_->viewMatrix = viewMatrix_;
+	bufferData_->projectionMatrix = matProjection_;
+	bufferData_->orthographicMatrix_ = orthographicMatrix_;
+	bufferResource_->Unmap(0, nullptr);
+}
 
 //デストラクタ
 Camera::~Camera() {

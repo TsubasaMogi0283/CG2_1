@@ -34,16 +34,16 @@ uint32_t Audio::LoadWave(const char* fileName) {
 
 	//一度読み込んだものは２度読み込まず返すだけ
 	for (int i = 0; i < SOUND_DATE_MAX_; i++) {
-		if (audioInformation_[i].name_ == fileName) {
-			return audioInformation_[i].handle_;
+		if (Audio::GetInstance()->audioInformation_[i].name_ == fileName) {
+			return Audio::GetInstance()->audioInformation_[i].handle_;
 		}
 	}
 	//audioHandle_++;
 	audioIndex++;
 
 	//記録
-	audioInformation_[audioIndex].name_=fileName;
-	audioInformation_[audioIndex].handle_ = audioIndex;
+	Audio::GetInstance()->audioInformation_[audioIndex].name_=fileName;
+	Audio::GetInstance()->audioInformation_[audioIndex].handle_ = audioIndex;
 
 
 	#pragma region １,ファイルオープン
@@ -115,9 +115,9 @@ uint32_t Audio::LoadWave(const char* fileName) {
 
 	#pragma region 読み込んだ音声データを返す
 	
-	audioInformation_[audioIndex].soundData_.wfex = format.fmt;
-	audioInformation_[audioIndex].soundData_.pBuffer = reinterpret_cast<BYTE*>(pBuffer);
-	audioInformation_[audioIndex].soundData_.bufferSize = data.size;
+	Audio::GetInstance()->audioInformation_[audioIndex].soundData_.wfex = format.fmt;
+	Audio::GetInstance()->audioInformation_[audioIndex].soundData_.pBuffer = reinterpret_cast<BYTE*>(pBuffer);
+	Audio::GetInstance()->audioInformation_[audioIndex].soundData_.bufferSize = data.size;
 
 
 	//soundData[audioHandle_].wfex = format.fmt;
@@ -135,7 +135,6 @@ uint32_t Audio::LoadWave(const char* fileName) {
 //音声再生
 void Audio::PlayWave(uint32_t audioHandle,bool isLoop) {
 	HRESULT hr{};
-	
 	
 	//波形フォーマットを基にSourceVoiceの生成
 	//IXAudio2SourceVoice* pSourceVoice = nullptr;
@@ -166,9 +165,10 @@ void Audio::PlayWave(uint32_t audioHandle,bool isLoop) {
 }
 
 //音量を変える
-void Audio::ChangeVolume(uint32_t audiohandle, float volume) {
+void Audio::ChangeVolume(uint32_t audioHandle, float volume) {
+
 	HRESULT hr = {};
-	hr = audioInformation_[audiohandle].pSourceVoice_->SetVolume(volume);
+	hr = audioInformation_[audioHandle].pSourceVoice_->SetVolume(volume);
 	assert(SUCCEEDED(hr));
 }
 

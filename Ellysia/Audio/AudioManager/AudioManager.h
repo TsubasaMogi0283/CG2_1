@@ -1,10 +1,11 @@
 #pragma once
+#include <cstdint>
 #include <xaudio2.h>
 #include <fstream>
 
-#include<x3daudio.h>
+#include <x3daudio.h>
 #include <mmsystem.h>
-#include<cassert>
+#include <cassert>
 #include <array>
 
 #pragma comment(lib, "winmm.lib")
@@ -13,60 +14,33 @@
 #include <wrl.h>
 using Microsoft::WRL::ComPtr;
 
-
-
-
-
-class Audio {
+class AudioManager{
 private:
 	//コンストラクタ
-	Audio();
+	AudioManager();
 
 	//デストラクタ
-	~Audio();
+	~AudioManager();
 public:
 	//インスタンスの取得
-	static Audio* GetInstance();
-
+	static AudioManager* GetInstance();
 
 	//コピーコンストラクタ禁止
-	Audio(const Audio& obj) = delete;
+	AudioManager(const AudioManager& audio) = delete;
 
 	//代入演算子を無効にする
-	Audio& operator=(const Audio& obj) = delete;
+	AudioManager& operator=(const AudioManager& audio) = delete;
+
 
 public:
 
-	
-
-	//初期化
-	void Initialize();
-
 	//読み込み
+	//全体で共有したいからstaticにしているよ
 	static uint32_t LoadWave(const char* fileName);
 
-	//音声再生
-	void PlayWave(uint32_t audioHandle,bool isLoop);
-
-	//音声停止
-	void StopWave(uint32_t audioHandle);
-
-	
-	//音量調節
-	void ChangeVolume(uint32_t audioHandle,float volume);
-
-
-	
-	//解放
-	void Release();
-
-private:
-	//音声データの開放
-	void SoundUnload(uint32_t soundDataHandle);
 
 
 private:
-
 	//チャンク...データの塊みたいなもの
 	//チャンクヘッダ
 	struct ChunkHeader {
@@ -75,35 +49,34 @@ private:
 		//チャンクサイズ
 		int32_t size;
 	};
-	
+
 	//FMTチャンク
 	struct FormatChunk {
 		//fmt
 		ChunkHeader chunk;
 		//波形フォーマット
 		WAVEFORMATEX fmt;
-	
+
 	};
-	
+
 	struct RiffHeader {
 		//RIFF
 		ChunkHeader chunk;
 		//WAVE
 		char type[4];
 	};
-	
+
 	//音声データ
 	struct SoundData {
 		//波形フォーマット
 		WAVEFORMATEX wfex;
-	
+
 		//バッファの先頭アドレス
 		BYTE* pBuffer;
-	
+
 		//バッファのサイズ
 		unsigned int bufferSize;
 	};
-
 
 	struct AudioInformation {
 
@@ -114,7 +87,7 @@ private:
 		SoundData soundData_ = {};
 
 		//波形フォーマットを基にSourceVoiceの生成
-		IXAudio2SourceVoice* pSourceVoice_ = nullptr ;
+		IXAudio2SourceVoice* pSourceVoice_ = nullptr;
 
 		//ハンドル
 		uint32_t audioHandle_ = 0;
@@ -126,23 +99,6 @@ private:
 	//音声データの最大数
 	static const int SOUND_DATE_MAX_ = 256;
 
-	//IXAudio2はCOMオブジェクトなのでComPtr管理
-	ComPtr<IXAudio2> xAudio2_=nullptr;
-	IXAudio2MasteringVoice* masterVoice_=nullptr;
-
-	//波形フォーマットを基にSourceVoiceの生成
-	//IXAudio2SourceVoice* pSourceVoice_[SOUND_DATE_MAX_] = {nullptr};
-
-
-	XAUDIO2_BUFFER buf_{};
-
-	/*SoundData soundData[SOUND_DATE_MAX_] = {};
-
-
-	uint32_t audioHandle_ = 0;*/
-
-	//構造体版
-	//Texturemanagerとだいたい同じ感じにした
-	std::array<AudioInformation, SOUND_DATE_MAX_> audioInformation_{};
 
 };
+

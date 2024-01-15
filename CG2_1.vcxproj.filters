@@ -136,6 +136,12 @@
     <Filter Include="Ellysia\Header File\Math\Shape">
       <UniqueIdentifier>{4de1d903-5e8b-49b9-b9c0-f0d9591a86c2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Ellysia\Header File\Audio\AudioManager">
+      <UniqueIdentifier>{e37b7b3f-8c02-4b1b-88a0-82c80efc2949}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Ellysia\Source File\Audio\AudioManager">
+      <UniqueIdentifier>{0d9d75e6-3fd5-47e5-8eef-26c805f201f0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Ellysia\Math\Matrix\Calculation\Matrix4x4Calculation.cpp">
@@ -224,6 +230,9 @@
     </ClCompile>
     <ClCompile Include="Ellysia\Math\Collision\Collision.cpp">
       <Filter>Ellysia\Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="Ellysia\Audio\AudioManager\AudioManager.cpp">
+      <Filter>Ellysia\Source File\Audio\AudioManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -384,6 +393,9 @@
     </ClInclude>
     <ClInclude Include="Ellysia\Math\Collision\Collision.h">
       <Filter>Ellysia\Header File</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Audio\AudioManager\AudioManager.h">
+      <Filter>Ellysia\Header File\Audio\AudioManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

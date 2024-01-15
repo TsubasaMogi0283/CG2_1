@@ -2,6 +2,7 @@
 #include <cstdint>
 #include <xaudio2.h>
 #include <fstream>
+#include <cassert>
 
 #include <x3daudio.h>
 #include <mmsystem.h>
@@ -15,31 +16,6 @@
 using Microsoft::WRL::ComPtr;
 
 class AudioManager{
-private:
-	//コンストラクタ
-	AudioManager();
-
-	//デストラクタ
-	~AudioManager();
-public:
-	//インスタンスの取得
-	static AudioManager* GetInstance();
-
-	//コピーコンストラクタ禁止
-	AudioManager(const AudioManager& audio) = delete;
-
-	//代入演算子を無効にする
-	AudioManager& operator=(const AudioManager& audio) = delete;
-
-
-public:
-
-	//読み込み
-	//全体で共有したいからstaticにしているよ
-	static uint32_t LoadWave(const char* fileName);
-
-
-
 private:
 	//チャンク...データの塊みたいなもの
 	//チャンクヘッダ
@@ -96,9 +72,66 @@ private:
 		uint32_t handle_ = 0;
 	};
 
+
+	
+
+private:
+	//コンストラクタ
+	AudioManager();
+
+	//デストラクタ
+	~AudioManager();
+public:
+	//インスタンスの取得
+	static AudioManager* GetInstance();
+
+	//コピーコンストラクタ禁止
+	AudioManager(const AudioManager& audio) = delete;
+
+	//代入演算子を無効にする
+	AudioManager& operator=(const AudioManager& audio) = delete;
+
+
+public:
+
+	//オーディオ情報のゲッター
+	//これをAudioクラスに持っていく
+	const AudioInformation& GetAudioInformation(int index) {
+		if (index >= 0 && index < SOUND_DATE_MAX_) {
+			return audioInformation_[index];
+		}
+		else {
+			//停止
+			assert(index >= 0 && index < SOUND_DATE_MAX_);
+		}
+
+	}
+
+	//読み込み
+	//全体で共有したいからstaticにしているよ
+	static uint32_t LoadWave(const char* fileName);
+
+
+
+private:
+	////読み込んだテクスチャの名前
+	//std::string name_ = {};
+
+	////サウンドデータ
+	//SoundData soundData_ = {};
+
+	////波形フォーマットを基にSourceVoiceの生成
+	//IXAudio2SourceVoice* pSourceVoice_ = nullptr;
+
+	////ハンドル
+	//uint32_t audioHandle_ = 0;
+
+	////テクスチャハンドル
+	//uint32_t handle_ = 0;
+
 	//音声データの最大数
 	static const int SOUND_DATE_MAX_ = 256;
 
-
+	const AudioInformation audioInformation_[SOUND_DATE_MAX_]= {};
 };
 

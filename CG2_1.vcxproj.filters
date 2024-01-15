@@ -394,6 +394,9 @@
     <ClInclude Include="Ellysia\Math\WorldTransform\WorldTransform.h">
       <Filter>Ellysia\Header File\Math</Filter>
     </ClInclude>
+    <ClInclude Include="Ellysia\Audio\AudioStruct.h">
+      <Filter>Ellysia\Header File\Audio</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shader\Particle3D\Particle3D.hlsli">

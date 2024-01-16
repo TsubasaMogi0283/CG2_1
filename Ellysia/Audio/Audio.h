@@ -14,7 +14,7 @@
 using Microsoft::WRL::ComPtr;
 
 
-
+#include "Audio/AudioStruct.h"
 
 
 class Audio {
@@ -82,13 +82,15 @@ private:
 
 	XAUDIO2_BUFFER buf_{};
 
-	/*SoundData soundData[SOUND_DATE_MAX_] = {};
+	//SoundData soundData[SOUND_DATE_MAX_] = {};
 
 
-	uint32_t audioHandle_ = 0;*/
+	uint32_t audioHandle_ = 0;
 
 	//構造体版
 	//Texturemanagerとだいたい同じ感じにした
-	
+	static const int SOUND_DATE_MAX_ = 256;
+
+	const AudioInformation audioInformation_[SOUND_DATE_MAX_] = {};
 
 };

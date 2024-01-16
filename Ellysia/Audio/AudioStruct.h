@@ -44,7 +44,7 @@ struct SoundData {
 struct AudioInformation {
 
 	//読み込んだテクスチャの名前
-	std::string name_ = {};
+	const char* name_ = {};
 
 	//サウンドデータ
 	SoundData soundData_ = {};

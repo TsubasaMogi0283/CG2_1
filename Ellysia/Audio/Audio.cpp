@@ -34,16 +34,16 @@ uint32_t Audio::LoadWave(const char* fileName) {
 
 	//一度読み込んだものは２度読み込まず返すだけ
 	for (int i = 0; i < SOUND_DATE_MAX_; i++) {
-		if (audioInformation_[i].name_ == fileName) {
-			return audioInformation_[i].handle_;
+		if (Audio::GetInstance()->audioInformation_[i].name_ == fileName) {
+			return Audio::GetInstance()->audioInformation_[i].handle_;
 		}
 	}
 	//audioHandle_++;
 	audioIndex++;
 
 	//記録
-	audioInformation_[audioIndex].name_ = fileName;
-	audioInformation_[audioIndex].handle_ = audioIndex;
+	Audio::GetInstance()->audioInformation_[audioIndex].name_ = fileName;
+	Audio::GetInstance()->audioInformation_[audioIndex].handle_ = audioIndex;
 
 
 #pragma region １,ファイルオープン
@@ -115,9 +115,9 @@ uint32_t Audio::LoadWave(const char* fileName) {
 
 #pragma region 読み込んだ音声データを返す
 
-	audioInformation_[audioIndex].soundData_.wfex = format.fmt;
-	audioInformation_[audioIndex].soundData_.pBuffer = reinterpret_cast<BYTE*>(pBuffer);
-	audioInformation_[audioIndex].soundData_.bufferSize = data.size;
+	Audio::GetInstance()->audioInformation_[audioIndex].soundData_.wfex = format.fmt;
+	Audio::GetInstance()->audioInformation_[audioIndex].soundData_.pBuffer = reinterpret_cast<BYTE*>(pBuffer);
+	Audio::GetInstance()->audioInformation_[audioIndex].soundData_.bufferSize = data.size;
 
 
 	//soundData[audioHandle_].wfex = format.fmt;
@@ -188,10 +188,10 @@ void Audio::StopWave(uint32_t audioHandle) {
 void Audio::SoundUnload(uint32_t soundDataHandle) {
 	//バッファのメモリを解放
 
-	delete[] audioInformation_[soundDataHandle].soundData_.pBuffer;
-	audioInformation_[soundDataHandle].soundData_.pBuffer = 0;
-	audioInformation_[soundDataHandle].soundData_.bufferSize = 0;
-	audioInformation_[soundDataHandle].soundData_.wfex = {};
+	delete[] Audio::GetInstance()->audioInformation_[soundDataHandle].soundData_.pBuffer;
+	Audio::GetInstance()->audioInformation_[soundDataHandle].soundData_.pBuffer = 0;
+	Audio::GetInstance()->audioInformation_[soundDataHandle].soundData_.bufferSize = 0;
+	Audio::GetInstance()->audioInformation_[soundDataHandle].soundData_.wfex = {};
 
 	
 }

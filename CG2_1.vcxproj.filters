@@ -142,6 +142,9 @@
     <Filter Include="Ellysia\Source File\Audio\AudioManager">
       <UniqueIdentifier>{0d9d75e6-3fd5-47e5-8eef-26c805f201f0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Ellysia\Header File\Polygone\3D\Light">
+      <UniqueIdentifier>{ba621614-2f89-4956-9cdf-f9f3b7a97783}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Ellysia\Math\Matrix\Calculation\Matrix4x4Calculation.cpp">
@@ -206,9 +209,6 @@
     </ClCompile>
     <ClCompile Include="Ellysia\Polygon\2D\Triangle\Triangle.cpp">
       <Filter>Ellysia\Source File\Polygone\2D</Filter>
-    </ClCompile>
-    <ClCompile Include="Ellysia\Polygon\3D\Particle3D\Particle3D.cpp">
-      <Filter>Ellysia\Source File\Polygone\3D\Particle</Filter>
     </ClCompile>
     <ClCompile Include="Ellysia\Polygon\3D\BufferResource\DirectionalLight\CreateDirectionalLight.cpp">
       <Filter>Ellysia\Source File\Polygone\3D</Filter>
@@ -325,9 +325,6 @@
     <ClInclude Include="Ellysia\Polygon\3D\Particle3D\Particle.h">
       <Filter>Ellysia\Header File\Polygone\3D\Particle</Filter>
     </ClInclude>
-    <ClInclude Include="Ellysia\Polygon\3D\Particle3D\Particle3D.h">
-      <Filter>Ellysia\Header File\Polygone\3D\Particle</Filter>
-    </ClInclude>
     <ClInclude Include="Ellysia\Ellysia.h">
       <Filter>Ellysia\Header File</Filter>
     </ClInclude>
@@ -390,6 +387,9 @@
     </ClInclude>
     <ClInclude Include="Ellysia\Audio\AudioStruct.h">
       <Filter>Ellysia\Header File\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Camera\CameraForGPU.h">
+      <Filter>Ellysia\Header File\Camera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

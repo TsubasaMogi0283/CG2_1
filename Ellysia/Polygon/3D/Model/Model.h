@@ -27,6 +27,7 @@
 #include "Transformation.h"
 #include <WorldTransform.h>
 #include "Camera.h"
+#include <CameraForGPU.h>
 
 class Model {
 public:
@@ -38,9 +39,6 @@ public:
 	//Initializeも兼ねているよ
 	//通常
 	static Model* Create(const std::string& directoryPath, const std::string& fileName);
-	//ブレンドあり
-	static Model* Create(const std::string& directoryPath, const std::string& fileName, int32_t blendModeNumber);
-
 private:
 #pragma region モデルの読み込み関係の関数
 	//モデルデータの読み込み
@@ -139,7 +137,15 @@ private:
 	//Lighting用
 	std::unique_ptr<CreateDirectionalLight> directionalLight_ = nullptr;
 	//基本はtrueで
-	bool isEnableLighting_ = true;
+	bool isEnableLighting_ = false;
+	
+	//カメラ
+	ComPtr<ID3D12Resource> cameraResource_ = nullptr;
+	CameraForGPU* cameraForGPU_ = {};
+	//フォンの反射
+	bool isEnablePhongReflection_ = true;
+	//光沢度
+	float shiness_ = 1.0f;
 
 	//方向
 	Vector3 lightingDirection_ = { 0.0f,-1.0f,0.0f };

@@ -1,4 +1,5 @@
 #include "Particle3d.hlsli"
+
 ///PixelShader
 //ここからの出力は色で、OutputManagerに送られて
 //ブレンド処理も行い画面に色が打ち込まれる
@@ -53,10 +54,7 @@ SamplerState gSampler : register(s0);
 //Textureの各PixelのことはTexelという
 //Excelみたいだね()
 
-struct PixelShaderOutput
-{
-    float32_t4 color : SV_TARGET0;
-};
+
 
 
 

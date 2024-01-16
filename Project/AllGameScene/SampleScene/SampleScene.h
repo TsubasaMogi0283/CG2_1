@@ -56,7 +56,7 @@ private:
 	Vector2 spritePosition_ = {};
 
 	//パーティクル
-	std::unique_ptr<Particle3D> particle_ = nullptr;
+	//std::unique_ptr<Particle3D> particle_ = nullptr;
 	uint32_t particleTextureHandle_ = 0u;
 	Vector3 particleTranslate_ = {};
 	WorldTransform particleWorldTransform_ = {};

@@ -8,7 +8,7 @@ public:
 
 	void Initialize();
 
-	void SetInformation(Vector4 setColor, bool enableLighting);
+	void SetInformation(Vector4 setColor, bool enableLighting, bool enablePhongReflection, float shiness);
 
 	void GraphicsCommand();
 

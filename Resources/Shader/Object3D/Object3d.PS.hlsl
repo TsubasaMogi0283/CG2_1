@@ -16,10 +16,15 @@
 
 
 
-//Material...色など三角形の表面の材質をけっていするもの
+//Material...色など三角形の表面の材質を決定するもの
 struct Material {
 	float32_t4 color;
+	//通常
 	int32_t enableLighting;///
+	//フォンの反射モデル
+    int32_t enablePhongReflection;
+	//光沢度
+    float32_t shiness;
 	float32_t4x4 uvTransform;
 };
 
@@ -33,6 +38,14 @@ struct DirectionalLight {
 	float intensity;
 };
 
+
+//カメラ
+struct Camera{
+	//ワールド座標
+    float32_t3 worldPosition;
+	
+};
+
 //
 ////ConstantBuffer<構造体>変数名:register(b0);
 //ConstantBuffer<Material>gMaterial:register(b0);
@@ -43,6 +56,9 @@ ConstantBuffer<Material> gMaterial : register(b0);
 ConstantBuffer<DirectionalLight> gDirectionalLight : register(b1);
 Texture2D<float32_t4> gTexture : register(t0);
 SamplerState gSampler : register(s0);
+//後でrootparameterで追加してあげる
+ConstantBuffer<Camera> gCamera : register(b2);
+
 
 //Textureは基本的にそのまま読まずSamplerを介して読む
 //処理方法を記述している
@@ -71,34 +87,60 @@ PixelShaderOutput main(VertexShaderOutput input) {
     }
 	
 	//Lightingする場合
-        if (gMaterial.enableLighting != 0)
-        {
+    if (gMaterial.enableLighting != 0){
 	
 		//このままdotだと[-1,1]になる。
 		//光が当たらないところは「当たらない」のでもっと暗くなるわけではない。そこでsaturate関数を使う
 		//saturate関数は値を[0,1]にclampするもの。エフェクターにもSaturationってあるよね。
 		//float cos = saturate(dot(normalize(input.normal),-gDirectionalLight.direction));
-		
+	
 
 		//Half Lambert
-            float NdotL = dot(normalize(input.normal), -gDirectionalLight.direction);
-            float cos = pow(NdotL * 0.5f + 0.5f, 2.0f);
+        float NdotL = dot(normalize(input.normal), -gDirectionalLight.direction);
+        float cos = pow(NdotL * 0.5f + 0.5f, 2.0f);
 
-            if (textureColor.a == 0)
-            {
-                discard;
-            }
-
-		//output.color = gMaterial.color * textureColor * gDirectionalLight.color * cos * gDirectionalLight.intensity;
-            output.color.rgb = gMaterial.color.rgb * textureColor.rgb * gDirectionalLight.color.rgb * cos * gDirectionalLight.intensity;
-            output.color.a = gMaterial.color.a * textureColor.a;
-
-        }
-        else
+        if (textureColor.a == 0)
         {
-		//Lightingしない場合
-            output.color = gMaterial.color * textureColor;
+            discard;
         }
+		
+        output.color.rgb = gMaterial.color.rgb * textureColor.rgb * gDirectionalLight.color.rgb * cos * gDirectionalLight.intensity;
+        output.color.a = gMaterial.color.a * textureColor.a;
+
+    }
+    //PhongReflectionする場合
+	else if (gMaterial.enablePhongReflection!=0){
+		//カメラへの方向を算出
+        float32_t3 toEye = normalize(gCamera.worldPosition - input.worldPosition);
+		//入射光反射ベクトルを求める
+        float32_t3 reflectLight = reflect(gDirectionalLight.direction, normalize(input.normal));
+
+		//
+        float RdotE = dot(reflectLight, toEye);
+		//鏡面反射の強度が求まる
+        float specularPow = pow(saturate(RdotE), gMaterial.shiness);
+		
+        float NdotL = dot(normalize(input.normal), -gDirectionalLight.direction);
+        float cos = pow(NdotL * 0.5f + 0.5f, 2.0f);
+		//全てを一つにする
+		//拡散反射
+        float32_t3 diffuse =
+		gMaterial.color.rgb * textureColor.rgb * gDirectionalLight.color.rgb * cos * gDirectionalLight.intensity;
+		//鏡面反射
+		//float32_t3のところは鏡面反射の色あとで自由に変更できるようにしておく
+        float32_t3 specular = 
+		gDirectionalLight.color.rgb * gDirectionalLight.intensity * specularPow * float32_t3(1.0f, 1.0f, 1.0f);
+
+		//拡散反射+鏡面反射
+        output.color.rgb = diffuse + specular;
+		//アルファは今までと同じ
+        output.color.a = gMaterial.color.a * textureColor.a;
+    }
+    else
+    {
+	//Lightingしない場合
+        output.color = gMaterial.color * textureColor;
+    }
 
 	
 	

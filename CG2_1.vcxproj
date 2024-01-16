@@ -129,9 +129,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Ellysia\Polygon\3D\BufferResource\Material\CreateMaterial.cpp" />
     <ClCompile Include="Ellysia\Polygon\3D\BufferResource\Mesh\Mesh.cpp" />
     <ClCompile Include="Ellysia\Polygon\3D\Model\Model.cpp" />
-    <ClCompile Include="Ellysia\Polygon\3D\Particle3D\Particle3D.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="Ellysia\Polygon\3D\Sphere\Sphere.cpp" />
     <ClCompile Include="Ellysia\TextureManager\TextureManager.cpp" />
     <ClCompile Include="Project\AllGameScene\GameManager\GameManager.cpp" />
@@ -167,6 +164,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Ellysia\Audio\Audio.h" />
     <ClInclude Include="Ellysia\Audio\AudioStruct.h" />
     <ClInclude Include="Ellysia\Camera\Camera.h" />
+    <ClInclude Include="Ellysia\Camera\CameraForGPU.h" />
     <ClInclude Include="Ellysia\Common\DirectX\DirectXSetup.h" />
     <ClInclude Include="Ellysia\Common\Windows\WindowsSetup.h" />
     <ClInclude Include="Ellysia\ConvertFunction\CompileShader\CompileShaderManager.h" />
@@ -205,7 +203,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Ellysia\Polygon\3D\Model\Model.h" />
     <ClInclude Include="Ellysia\Polygon\3D\Particle3D\AccelerationField.h" />
     <ClInclude Include="Ellysia\Polygon\3D\Particle3D\Particle.h" />
-    <ClInclude Include="Ellysia\Polygon\3D\Particle3D\Particle3D.h" />
     <ClInclude Include="Ellysia\Polygon\3D\Sphere\Sphere.h" />
     <ClInclude Include="Ellysia\TextureManager\TextureManager.h" />
     <ClInclude Include="Project\AllGameScene\GameManager\GameManager.h" />
@@ -213,9 +210,15 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Project\AllGameScene\SampleScene\SampleScene.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Shader\Object2D\Object2d.hlsli" />
-    <None Include="Resources\Shader\Object3D\Object3d.hlsli" />
-    <None Include="Resources\Shader\Particle3D\Particle3D.hlsli" />
+    <None Include="Resources\Shader\Object2D\Object2d.hlsli">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
+    <None Include="Resources\Shader\Object3D\Object3d.hlsli">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
+    <None Include="Resources\Shader\Particle3D\Particle3D.hlsli">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="External\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">

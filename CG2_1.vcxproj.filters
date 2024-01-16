@@ -352,9 +352,6 @@
     <ClInclude Include="Ellysia\Polygon\2D\Triangle\Triangle.h">
       <Filter>Ellysia\Header File\Polygone\2D</Filter>
     </ClInclude>
-    <ClInclude Include="Ellysia\Polygon\3D\BufferResource\DirectionalLight\CreateDirectionalLight.h">
-      <Filter>Ellysia\Header File\Polygone\3D</Filter>
-    </ClInclude>
     <ClInclude Include="Ellysia\Polygon\3D\BufferResource\Material\CreateMaterial.h">
       <Filter>Ellysia\Header File\Polygone\3D</Filter>
     </ClInclude>
@@ -390,6 +387,9 @@
     </ClInclude>
     <ClInclude Include="Ellysia\Camera\CameraForGPU.h">
       <Filter>Ellysia\Header File\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Polygon\3D\BufferResource\DirectionalLight\CreateDirectionalLight.h">
+      <Filter>Ellysia\Header File\Polygone\3D\Light</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

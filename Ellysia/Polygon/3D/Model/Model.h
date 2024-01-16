@@ -111,6 +111,14 @@ public:
 	void SetDirection(Vector3 direction) {
 		this->lightingDirection_ = direction;
 	}
+	//PhongReflection
+	void SetIsEnablePhongReflection(bool isEnablePhongReflection) {
+		this->isEnablePhongReflection_ = isEnablePhongReflection;
+	}
+	//光沢
+	void SetShiness(float shiness) {
+		this->shiness_ = shiness;
+	}
 
 #pragma endregion
 
@@ -137,15 +145,15 @@ private:
 	//Lighting用
 	std::unique_ptr<CreateDirectionalLight> directionalLight_ = nullptr;
 	//基本はtrueで
-	bool isEnableLighting_ = false;
+	bool isEnableLighting_ = true;
 	
 	//カメラ
 	ComPtr<ID3D12Resource> cameraResource_ = nullptr;
 	CameraForGPU* cameraForGPU_ = {};
 	//フォンの反射
-	bool isEnablePhongReflection_ = true;
+	bool isEnablePhongReflection_ = false;
 	//光沢度
-	float shiness_ = 1.0f;
+	float shiness_ = 40.0f;
 
 	//方向
 	Vector3 lightingDirection_ = { 0.0f,-1.0f,0.0f };

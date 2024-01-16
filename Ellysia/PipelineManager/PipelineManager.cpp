@@ -413,8 +413,10 @@ void PipelineManager::GenerateModelPSO() {
 	rootParameters[4].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	//PixelShaderで使う
 	rootParameters[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	//レジスタ番号2を使う
-	rootParameters[4].Descriptor.ShaderRegister = 2;
+	//レジスタ番号3を使う
+	//DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(4, cameraResource_->GetGPUVirtualAddress());
+	//ConstantBuffer<Camera> gCamera : register(b3);
+	rootParameters[4].Descriptor.ShaderRegister = 3;
 
 
 

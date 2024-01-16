@@ -24,7 +24,7 @@ struct Material {
 	//フォンの反射モデル
     int32_t enablePhongReflection;
 	//光沢度
-    float32_t shiness;
+    float32_t shininess;
 	float32_t4x4 uvTransform;
 };
 
@@ -57,7 +57,7 @@ ConstantBuffer<DirectionalLight> gDirectionalLight : register(b1);
 Texture2D<float32_t4> gTexture : register(t0);
 SamplerState gSampler : register(s0);
 //後でrootparameterで追加してあげる
-ConstantBuffer<Camera> gCamera : register(b2);
+ConstantBuffer<Camera> gCamera : register(b3);
 
 
 //Textureは基本的にそのまま読まずSamplerを介して読む
@@ -118,7 +118,7 @@ PixelShaderOutput main(VertexShaderOutput input) {
 		//
         float RdotE = dot(reflectLight, toEye);
 		//鏡面反射の強度が求まる
-        float specularPow = pow(saturate(RdotE), gMaterial.shiness);
+        float specularPow = pow(saturate(RdotE), gMaterial.shininess);
 		
         float NdotL = dot(normalize(input.normal), -gDirectionalLight.direction);
         float cos = pow(NdotL * 0.5f + 0.5f, 2.0f);

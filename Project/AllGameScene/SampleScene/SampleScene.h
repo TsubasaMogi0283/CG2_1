@@ -42,6 +42,7 @@ private:
 	Vector3 enemyTranslate_ = {};
 	WorldTransform enemyWorldTransform_ = {};
 
+	Vector3 lightDirectional_ = {};
 
 	//Model*sphere_= nullptr;
 	//WorldTransform sphereWorldTransform_ = {};

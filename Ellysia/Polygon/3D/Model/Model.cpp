@@ -196,7 +196,7 @@ Model* Model::Create(const std::string& directoryPath, const std::string& fileNa
 			model->material_->Initialize();
 
 			//カメラ
-			model->cameraResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(Camera)).Get();
+			model->cameraResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(CameraForGPU)).Get();
 
 			//テクスチャの読み込み
 			model->textureHandle_ = TextureManager::GetInstance()->LoadTexture(modelData.material.textureFilePath);
@@ -239,7 +239,7 @@ Model* Model::Create(const std::string& directoryPath, const std::string& fileNa
 
 
 	//カメラ
-	model->cameraResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(Camera)).Get();
+	model->cameraResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(CameraForGPU)).Get();
 
 	////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
 	model->material_ = std::make_unique<CreateMaterial>();
@@ -288,8 +288,22 @@ void Model::Draw(WorldTransform& worldTransform, Camera& camera) {
 	////書き込むためのアドレスを取得
 	////reinterpret_cast...char* から int* へ、One_class* から Unrelated_class* へなどの変換に使用
 
-	material_->SetInformation(color_, isEnableLighting_, isEnablePhongReflection_, shiness_);
+	//通常のLighting
+	if ((isEnableLighting_ == true)|| (isEnableLighting_ == false&& isEnableLighting_ == false)) {
+		isEnablePhongReflection_ = false;
+		isEnableLighting_ = true;
+		material_->SetInformation(color_, isEnableLighting_, isEnablePhongReflection_, shiness_);
 
+	}
+
+	//PhongReflection
+	if (isEnablePhongReflection_ == true) {
+		isEnableLighting_ = false;
+		material_->SetInformation(color_, isEnableLighting_, isEnablePhongReflection_, shiness_);
+
+	}
+
+	
 	
 
 	//コマンドを積む
@@ -343,7 +357,9 @@ void Model::Draw(WorldTransform& worldTransform, Camera& camera) {
 	//資料見返してみたがhlsl(GPU)に計算を任せているわけだった
 	//コマンド送ってGPUで計算
 	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(1, worldTransform.bufferResource_->GetGPUVirtualAddress());
-	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(2, cameraResource_->GetGPUVirtualAddress());
+
+	//rootParameters[4]
+	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(4, cameraResource_->GetGPUVirtualAddress());
 
 
 	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である

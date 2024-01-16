@@ -29,6 +29,10 @@ void SampleScene::Initialize() {
 	enemyWorldTransform_.scale_ = { 2.0f,2.0f,2.0f };
 	enemyWorldTransform_.translate_ = { 2.0f,2.0f,0.0f };
 
+
+	//
+	lightDirectional_ = { 0.0f,-1.0f,0.0f };
+
 	sprite = std::make_unique<Sprite>();
 	uint32_t textureHandle = TextureManager::LoadTexture("Resources/uvChecker.png");
 	spritePosition_ = { 100.0f,100.0f };
@@ -85,6 +89,7 @@ void SampleScene::Initialize() {
 /// </summary>
 void SampleScene::Update(GameManager* gameManager) {
 	ImGui::Begin("Camera");
+	ImGui::SliderFloat3("Rotate", &camera_.rotate_.x, -3.0f, 3.0f);
 	ImGui::SliderFloat3("Translate", &camera_.translate_.x, -20.0f, 20.0f);
 	ImGui::End();
 
@@ -93,10 +98,16 @@ void SampleScene::Update(GameManager* gameManager) {
 	ImGui::End();
 
 
+	ImGui::Begin("Light");
+	ImGui::SliderFloat3("DirectionalLight", &lightDirectional_.x, -1.0f, 1.0f);
+	ImGui::End();
+
 	modelWorldTransform_.Update();
 	enemyWorldTransform_.Update();
 	camera_.Update();
 
+	model_[0]->SetDirection(lightDirectional_);
+	model_[0]->SetIsEnablePhongReflection(true);
 	model_[0]->SetColor(modelColor_);
 
 	//particle_->SetField(isSetField_);
@@ -135,7 +146,7 @@ void SampleScene::Update(GameManager* gameManager) {
 void SampleScene::Draw() {
 	for (int i = 0; i < MODEL_AMOUNT_; i++) {
 		model_[i]->Draw(modelWorldTransform_,camera_);
-		enemyModel_[i]->Draw(enemyWorldTransform_, camera_);
+		//enemyModel_[i]->Draw(enemyWorldTransform_, camera_);
 	}
 
 	//particle_->Draw(camera_,particleTextureHandle_);

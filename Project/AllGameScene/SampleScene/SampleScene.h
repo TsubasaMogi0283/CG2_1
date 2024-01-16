@@ -38,6 +38,10 @@ private:
 	Vector3 modelTranslate_ = {};
 	WorldTransform modelWorldTransform_ = {};
 
+	Model* enemyModel_[MODEL_AMOUNT_] = { nullptr };
+	Vector3 enemyTranslate_ = {};
+	WorldTransform enemyWorldTransform_ = {};
+
 
 	//Model*sphere_= nullptr;
 	//WorldTransform sphereWorldTransform_ = {};

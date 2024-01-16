@@ -69,9 +69,6 @@ private:
 
 	
 
-	//音声データの最大数
-	static const int SOUND_DATE_MAX_ = 256;
-
 	//IXAudio2はCOMオブジェクトなのでComPtr管理
 	ComPtr<IXAudio2> xAudio2_=nullptr;
 	IXAudio2MasteringVoice* masterVoice_=nullptr;
@@ -83,14 +80,16 @@ private:
 	XAUDIO2_BUFFER buf_{};
 
 	//SoundData soundData[SOUND_DATE_MAX_] = {};
+	////ハンドル
+	//static uint32_t audioHandle_;
 
+	
 
-	uint32_t audioHandle_ = 0;
 
 	//構造体版
 	//Texturemanagerとだいたい同じ感じにした
+	//音声データの最大数
 	static const int SOUND_DATE_MAX_ = 256;
 
-	const AudioInformation audioInformation_[SOUND_DATE_MAX_] = {};
-
+	std::array<AudioInformation, SOUND_DATE_MAX_> audioInformation_{};
 };

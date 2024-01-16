@@ -120,9 +120,6 @@ uint32_t Audio::LoadWave(const char* fileName) {
 	Audio::GetInstance()->audioInformation_[audioIndex].soundData_.bufferSize = data.size;
 
 
-	//soundData[audioHandle_].wfex = format.fmt;
-	//soundData[audioHandle_].pBuffer = reinterpret_cast<BYTE*>(pBuffer);
-	//soundData[audioHandle_].bufferSize = data.size;
 
 	return audioIndex;
 

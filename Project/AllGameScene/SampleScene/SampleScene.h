@@ -38,6 +38,10 @@ private:
 	Vector3 modelTranslate_ = {};
 	WorldTransform modelWorldTransform_ = {};
 
+
+	//Model*sphere_= nullptr;
+	//WorldTransform sphereWorldTransform_ = {};
+
 	Vector2 position_ = { 0.0f,0.0f };
 	Vector2 scale_ = { 1.0f,1.0f };
 	float rotate = 0.0f;

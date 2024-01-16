@@ -345,7 +345,7 @@ void PipelineManager::GenerateModelPSO() {
 	
 	//PSO
 	////RootSignatureを作成
-	//RootSignature・・ShaderとResourceをどのように間レンズけるかを示したオブジェクトである
+	//RootSignature・・ShaderとResourceをどのように関連付けるかを示したオブジェクトである
 	D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature_{};
 	descriptionRootSignature_.Flags =
 		D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;

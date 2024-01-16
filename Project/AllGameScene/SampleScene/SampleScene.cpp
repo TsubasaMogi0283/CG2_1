@@ -18,11 +18,13 @@ SampleScene::SampleScene() {
 /// </summary>
 void SampleScene::Initialize() {
 	for (int i = 0; i < MODEL_AMOUNT_; i++) {
-		model_[i] = Model::Create("Resources/CG3/fence", "fence.obj");
+		model_[i] = Model::Create("Resources/CG3/Sphere", "Sphere.obj");
 	}
 	modelWorldTransform_.Initialize();
-	modelWorldTransform_.scale_ = { 1.0f,1.0f,1.0f };
+	modelWorldTransform_.scale_ = { 0.5f,0.5f,0.5f };
 	
+
+
 
 	sprite = std::make_unique<Sprite>();
 	uint32_t textureHandle = TextureManager::LoadTexture("Resources/uvChecker.png");
@@ -69,7 +71,7 @@ void SampleScene::Initialize() {
 
 	audio2_ = Audio::GetInstance();;
 	audioHandle2_ = Audio::LoadWave("Resources/Audio/Sample/Win.wav");
-	audio2_->PlayWave(audioHandle2_, false);
+	//audio2_->PlayWave(audioHandle2_, false);
 
 	cameraRotate_ = {};
 	//Camera::GetInstance()->SetRotate(cameraRotate_);
@@ -127,6 +129,7 @@ void SampleScene::Draw() {
 		model_[i]->Draw(modelWorldTransform_,camera_);
 	
 	}
+
 	particle_->Draw(camera_,particleTextureHandle_);
 	sprite->Draw();
 }

@@ -148,8 +148,6 @@ private:
 	bool isEnableLighting_ = true;
 	
 	//カメラ
-	ComPtr<ID3D12Resource> cameraResource_ = nullptr;
-	CameraForGPU* cameraForGPU_ = {};
 	//フォンの反射
 	bool isEnablePhongReflection_ = false;
 	//光沢度

@@ -355,7 +355,7 @@ void PipelineManager::GenerateModelPSO() {
 	//今回は結果一つだけなので長さ１の配列
 
 	//VSでもCBufferを利用することになったので設定を追加
-	D3D12_ROOT_PARAMETER rootParameters[5] = {};
+	D3D12_ROOT_PARAMETER rootParameters[4] = {};
 	//CBVを使う
 	rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	////PixelShaderで使う
@@ -408,15 +408,6 @@ void PipelineManager::GenerateModelPSO() {
 	//レジスタ番号1を使う
 	rootParameters[3].Descriptor.ShaderRegister = 1;
 	
-	//カメラ用
-	//D3D12_ROOT_PARAMETER_TYPE_CBV...定数バッファ用
-	rootParameters[4].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-	//PixelShaderで使う
-	rootParameters[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	//レジスタ番号3を使う
-	//DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(4, cameraResource_->GetGPUVirtualAddress());
-	//ConstantBuffer<Camera> gCamera : register(b3);
-	rootParameters[4].Descriptor.ShaderRegister = 3;
 
 
 

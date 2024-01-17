@@ -21,7 +21,6 @@ void Player::Initialize(Vector3 position) {
 	
 
 	radius_ = 1.0f;
-	input_ = Input::GetInstance();
 
 	SetCollisionAttribute(COLLISION_ATTRIBUTE_PLAYER);
 	SetCollisionMask(COLLISION_ATTRIBUTE_ENEMY);
@@ -33,31 +32,31 @@ void Player::OnCollision(){
 
 
 void Player::Rotate() {
-	if (input_->IsPushKey(DIK_W) == true) {
+	if (Input::GetInstance()->IsPushKey(DIK_W) == true) {
 		worldTransform_.rotate_.z += ROTATE_AMOUNT_;
 	}
-	if (input_->IsPushKey(DIK_S) == true) {
+	if (Input::GetInstance()->IsPushKey(DIK_S) == true) {
 		worldTransform_.rotate_.z -= ROTATE_AMOUNT_;
 	}
-	if (input_->IsPushKey(DIK_D) == true) {
+	if (Input::GetInstance()->IsPushKey(DIK_D) == true) {
 		worldTransform_.rotate_.y += ROTATE_AMOUNT_;
 	}
-	if (input_->IsPushKey(DIK_A) == true) {
+	if (Input::GetInstance()->IsPushKey(DIK_A) == true) {
 		worldTransform_.rotate_.y -= ROTATE_AMOUNT_;
 	}
 }
 
 void Player::Move() {
-	if (input_->IsPushKey(DIK_UP) == true) {
+	if (Input::GetInstance()->IsPushKey(DIK_UP) == true) {
 		worldTransform_.translate_.y += MOVE_AMOUNT_;
 	}
-	if (input_->IsPushKey(DIK_DOWN) == true) {
+	if (Input::GetInstance()->IsPushKey(DIK_DOWN) == true) {
 		worldTransform_.translate_.y -= MOVE_AMOUNT_;
 	}
-	if (input_->IsPushKey(DIK_RIGHT) == true) {
+	if (Input::GetInstance()->IsPushKey(DIK_RIGHT) == true) {
 		worldTransform_.translate_.x += MOVE_AMOUNT_;
 	}
-	if (input_->IsPushKey(DIK_LEFT) == true) {
+	if (Input::GetInstance()->IsPushKey(DIK_LEFT) == true) {
 		worldTransform_.translate_.x -= MOVE_AMOUNT_;
 	}
 
@@ -76,13 +75,10 @@ void Player::Move() {
 
 
 void Player::Attack() {
-	if (input_->IsTriggerKey(DIK_SPACE)) {
+	if (Input::GetInstance()->IsTriggerKey(DIK_SPACE)) {
 		
 
 		Vector3 velocity = { 0.0f,0.0f,0.8f };
-
-		
-		//Matrix4x4 worldmatrix = MakeAffineMatrix(transform_.scale, transform_.rotate, transform_.translate);
 
 		//プレイヤーの向きに合わせて回転させる
 		velocity = TransformNormal(velocity,worldTransform_.worldMatrix_);

@@ -48,7 +48,7 @@ public:
 
 
 	void SetParent(const WorldTransform* parent) {
-		worldTransform_.parent_ = parent;
+		this->worldTransform_.parent_ = parent;
 	}
 
 
@@ -69,8 +69,6 @@ private:
 
 private:
 	
-	//Input
-	Input* input_ = nullptr;
 
 	std::unique_ptr<Model> model_ = nullptr;
 
@@ -82,7 +80,6 @@ private:
 	float radius_;
 
 
-	Matrix4x4 worldMatrix_ = {};
 	//弾
 	std::list<PlayerBullet*>bullets_;
 

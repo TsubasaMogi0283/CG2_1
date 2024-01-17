@@ -88,7 +88,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <LanguageStandard>stdcpp20</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalIncludeDirectories>$(ProjectDir)\Ellysia;$(ProjectDir)\Project;$(ProjectDir)\Ellysia\Common\DirectX;$(ProjectDir)\Ellysia\Common\Windows;$(ProjectDir)\Ellysia\Input;$(ProjectDir)\Ellysia\Audio;$(ProjectDir)\Ellysia\TextureManager;$(ProjectDir)\Ellysia\Math\Matrix;$(ProjectDir)\Ellysia\Math\Vector;$(ProjectDir)\Project\AllGameScene\GameManager;$(ProjectDir)\Ellysia\Camera;$(ProjectDir)\Project\AllGameScene;$(ProjectDir)\Ellysia\ImGuiManager;$(ProjectDir)\Ellysia\PipelineManager;$(ProjectDir)\Ellysia\Polygon\3D\Model;$(ProjectDir)\Ellysia\Math\Matrix\Calculation;$(ProjectDir)\Ellysia\Math\Vector\Calculation;$(ProjectDir)\Ellysia\ConvertFunction\ConvertLog;$(ProjectDir)\Ellysia\ConvertFunction\ConvertColor;$(ProjectDir)\Ellysia\Polygon\3D\BufferResource\Mesh;$(ProjectDir)\Ellysia\Polygon\3D\BufferResource\MaterialData;$(ProjectDir)\Ellysia\Polygon\3D\BufferResource\Material;$(ProjectDir)\Ellysia\Polygon\3D\BufferResource\Transformation;$(ProjectDir)\Ellysia\Polygon\3D\BufferResource\ModelData;$(ProjectDir)\Ellysia\Polygon\3D\BufferResource\DirectionalLight;$(ProjectDir)\Ellysia\Polygon\2D\Sprite;$(ProjectDir)\Ellysia\Polygon\3D\Particle3D;$(ProjectDir)\Ellysia\ConvertFunction\CompileShader;$(ProjectDir)\Ellysia\Math\Shape;$(ProjectDir)\Ellysia\Math\WorldTransform;$(ProjectDir)\Ellysia\Math\Collision;$(SolutionDir)\Ellysia\External\ImGui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\Ellysia;$(ProjectDir)\Project;$(ProjectDir)\Ellysia\Common\DirectX;$(ProjectDir)\Ellysia\Common\Windows;$(ProjectDir)\Ellysia\Input;$(ProjectDir)\Ellysia\Audio;$(ProjectDir)\Ellysia\TextureManager;$(ProjectDir)\Ellysia\Math\Matrix;$(ProjectDir)\Ellysia\Math\Vector;$(ProjectDir)\Project\AllGameScene\GameManager;$(ProjectDir)\Ellysia\Camera;$(ProjectDir)\Project\AllGameScene;$(ProjectDir)\Ellysia\ImGuiManager;$(ProjectDir)\Ellysia\PipelineManager;$(ProjectDir)\Ellysia\Polygon\3D\Model;$(ProjectDir)\Ellysia\Math\Matrix\Calculation;$(ProjectDir)\Ellysia\Math\Vector\Calculation;$(ProjectDir)\Ellysia\ConvertFunction\ConvertLog;$(ProjectDir)\Ellysia\ConvertFunction\ConvertColor;$(ProjectDir)\Ellysia\Polygon\3D\BufferResource\Mesh;$(ProjectDir)\Ellysia\Polygon\3D\BufferResource\MaterialData;$(ProjectDir)\Ellysia\Polygon\3D\BufferResource\Material;$(ProjectDir)\Ellysia\Polygon\3D\BufferResource\Transformation;$(ProjectDir)\Ellysia\Polygon\3D\BufferResource\ModelData;$(ProjectDir)\Ellysia\Polygon\3D\BufferResource\DirectionalLight;$(ProjectDir)\Ellysia\Polygon\2D\Sprite;$(ProjectDir)\Ellysia\Polygon\3D\Particle3D;$(ProjectDir)\Ellysia\ConvertFunction\CompileShader;$(ProjectDir)\Ellysia\Math\Shape;$(ProjectDir)\Ellysia\Math\WorldTransform;$(ProjectDir)\Ellysia\Math\Collision;$(ProjectDir)\Project\Object;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <Optimization>MinSpace</Optimization>
@@ -133,6 +133,18 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Ellysia\TextureManager\TextureManager.cpp" />
     <ClCompile Include="Project\AllGameScene\GameManager\GameManager.cpp" />
     <ClCompile Include="Project\AllGameScene\SampleScene\SampleScene.cpp" />
+    <ClCompile Include="Project\Object\Collider\Collider.cpp" />
+    <ClCompile Include="Project\Object\Collider\CollisionManager.cpp" />
+    <ClCompile Include="Project\Object\Enemy\Bullet\EnemyBullet.cpp" />
+    <ClCompile Include="Project\Object\Enemy\Enemy.cpp" />
+    <ClCompile Include="Project\Object\Enemy\State\EnemyApproach\EnemyApproach.cpp" />
+    <ClCompile Include="Project\Object\Enemy\State\EnemyLeave\EnemyLeave.cpp" />
+    <ClCompile Include="Project\Object\Enemy\State\IEnemy\IEnemy.cpp" />
+    <ClCompile Include="Project\Object\Enemy\TimeCall\TimeCall.cpp" />
+    <ClCompile Include="Project\Object\Player\Bullet\PlayerBullet.cpp" />
+    <ClCompile Include="Project\Object\Player\Player.cpp" />
+    <ClCompile Include="Project\Object\RailCamera\RailCamera.cpp" />
+    <ClCompile Include="Project\Object\Skydome\Skydome.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\Object2D\Object2d.PS.hlsl">
@@ -208,6 +220,19 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Project\AllGameScene\GameManager\GameManager.h" />
     <ClInclude Include="Project\AllGameScene\GameManager\IGameScene.h" />
     <ClInclude Include="Project\AllGameScene\SampleScene\SampleScene.h" />
+    <ClInclude Include="Project\Object\Collider\Collider.h" />
+    <ClInclude Include="Project\Object\Collider\CollisionConfig.h" />
+    <ClInclude Include="Project\Object\Collider\CollisionManager.h" />
+    <ClInclude Include="Project\Object\Enemy\Bullet\EnemyBullet.h" />
+    <ClInclude Include="Project\Object\Enemy\Enemy.h" />
+    <ClInclude Include="Project\Object\Enemy\State\EnemyApproach\EnemyApproach.h" />
+    <ClInclude Include="Project\Object\Enemy\State\EnemyLeave\EnemyLeave.h" />
+    <ClInclude Include="Project\Object\Enemy\State\IEnemy\IEnemy.h" />
+    <ClInclude Include="Project\Object\Enemy\TimeCall\TimeCall.h" />
+    <ClInclude Include="Project\Object\Player\Bullet\PlayerBullet.h" />
+    <ClInclude Include="Project\Object\Player\Player.h" />
+    <ClInclude Include="Project\Object\RailCamera\RailCamera.h" />
+    <ClInclude Include="Project\Object\Skydome\Skydome.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shader\Object2D\Object2d.hlsli">

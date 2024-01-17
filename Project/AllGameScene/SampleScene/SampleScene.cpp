@@ -1,8 +1,7 @@
 #include "SampleScene.h"
-#include "GameManager.h"
-#include "TextureManager.h"
-#include <imgui.h>
-#include "Camera.h"
+
+#include <list>
+
 
 /// <summary>
 	/// コンストラクタ
@@ -17,148 +16,130 @@ SampleScene::SampleScene() {
 /// 初期化
 /// </summary>
 void SampleScene::Initialize() {
-	for (int i = 0; i < MODEL_AMOUNT_; i++) {
-		model_[i] = Model::Create("Resources/CG3/Sphere", "Sphere.obj");
-
-		enemyModel_[i] = Model::Create("Resources/Sample/Enemy", "enemy.obj");;
-	}
-	modelWorldTransform_.Initialize();
-	modelWorldTransform_.scale_ = { 0.5f,0.5f,0.5f };
-	
-	enemyWorldTransform_.Initialize();
-	enemyWorldTransform_.scale_ = { 2.0f,2.0f,2.0f };
-	enemyWorldTransform_.translate_ = { 2.0f,2.0f,0.0f };
-
-
-	//
-	lightDirectional_ = { 0.0f,-1.0f,0.0f };
-
-	sprite = std::make_unique<Sprite>();
-	uint32_t textureHandle = TextureManager::LoadTexture("Resources/uvChecker.png");
-	spritePosition_ = { 100.0f,100.0f };
-	sprite.reset(Sprite::Create(textureHandle, spritePosition_));
-
-	
-
-	//particle_ = std::make_unique<Particle3D>();
-	//particle_->Create("Resources/05_02", "plane.obj");
-	int count = 3;
-	//particleWorldTransform_.Initialize();
-
-
-	//0.5秒ごとに発生
-	float frequency = 0.5f;
-	//発生頻度用の時刻。0.0で初期化
-	float frequencyTime = 0.0f;
+	player_ = new Player();
+	player_->Initialize();
 
 
 
-	/*particleTextureHandle_ = TextureManager::GetInstance()->LoadTexture("Resources/CG3/circle.png");
-
-	accelerationField_.acceleration = { 5.0f,0.0f,0.0, };
-	accelerationField_.area.min = { -1.0f,-1.0f,-1.0f };
-	accelerationField_.area.max = { 1.0f,1.0f,1.0f };
-
-	isSetField_ = true;
-	particle_->SetField(isSetField_);
-	particle_->SetAccelerationField(accelerationField_);
-
-	particle_->SetCount(count);
-	particle_->SetFrequency(frequency);
-	particle_->SetFrequencyTime(frequencyTime);
-	particleTranslate_ = { 0.0f,0.0f,0.0f };*/
+	enemy_ = new Enemy();
+	enemy_->SetPlayer(player_);
+	enemy_->Initialize();
 
 
-	camera_.Initialize();
-	camera_.translate_ = { 0.0f,0.0f,-9.8f };
+	skydome_ = new Skydome();
+	skydome_->Initialize();
 
-	audio_ = Audio::GetInstance();
-	audioHandle_ = Audio::LoadWave("Resources/Audio/Sample/Win.wav");
-	audio_->PlayWave(audioHandle_, true);
+	collisionManager_ = new CollisionManager();
 
-	audio2_ = Audio::GetInstance();;
-	audioHandle2_ = Audio::LoadWave("Resources/Audio/Sample/Win.wav");
-	//audio2_->PlayWave(audioHandle2_, false);
+	uint32_t textureHandle_ = TextureManager::LoadTexture("Resources/uvChecker.png");
+	cameraTranslate_ = { 0.0f,20.0f,-40.0f };
+	cameraRotate_ = { 0.4f,0.0f,0.0f };
 
-	cameraRotate_ = {};
-	//Camera::GetInstance()->SetRotate(cameraRotate_);
 }
+
+
+
+
+
+/// <summary>
+/// 衝突判定と応答
+/// </summary>
+void SampleScene::CheckAllCollisions() {
+	//判定対象AとBの座標
+	//資料ではpoAとかやっていたけど分かりずらいから具体的は変数名にする
+	Vector3 playerPos = {};
+	Vector3 enemyPos = {};
+	Vector3 enemyBulletPos = {};
+	Vector3 playerBulletPos = {};
+
+	//自弾リストの取得
+	const std::list<PlayerBullet*>& playerBullets = player_->GetBullets();
+
+	//敵弾リストの取得
+	const std::list<EnemyBullet*>& enemyBullets = enemy_->GetBullets();
+
+	//コライダー
+	std::list<Collider*> colliders;
+
+
+
+	//衝突マネージャのリストをクリアする
+	collisionManager_->ClearList();
+	//コライダーを全て衝突マネージャに登録する
+	collisionManager_->RegisterList(player_);
+	collisionManager_->RegisterList(enemy_);
+
+
+	//自弾全てについて
+	for (PlayerBullet* bullet : playerBullets) {
+		//colliders.push_back(bullet);
+		collisionManager_->RegisterList(bullet);
+	}
+	//敵弾全てについて
+	for (EnemyBullet* bullet : enemyBullets) {
+		//colliders.push_back(bullet);
+		collisionManager_->RegisterList(bullet);
+	}
+
+	collisionManager_->CheckAllCollision();
+
+
+
+
+
+}
+
+
+
 
 /// <summary>
 /// 更新
 /// </summary>
 void SampleScene::Update(GameManager* gameManager) {
+
+	Camera::GetInstance()->Camera::SetTranslate(cameraTranslate_);
+	Camera::GetInstance()->Camera::SetRotate(cameraRotate_);
+
+
 	ImGui::Begin("Camera");
-	ImGui::SliderFloat3("Rotate", &camera_.rotate_.x, -3.0f, 3.0f);
-	ImGui::SliderFloat3("Translate", &camera_.translate_.x, -20.0f, 20.0f);
-	ImGui::End();
-
-	ImGui::Begin("Sphere");
-	ImGui::SliderFloat3("Translate", &modelWorldTransform_.translate_.x, -20.0f, 20.0f);
-	ImGui::End();
-
-
-	ImGui::Begin("Light");
-	ImGui::SliderFloat3("DirectionalLight", &lightDirectional_.x, -1.0f, 1.0f);
-	ImGui::End();
-
-	modelWorldTransform_.Update();
-	enemyWorldTransform_.Update();
-	camera_.Update();
-
-	model_[0]->SetDirection(lightDirectional_);
-	model_[0]->SetIsEnablePhongReflection(true);
-	model_[0]->SetColor(modelColor_);
-
-	//particle_->SetField(isSetField_);
-	//particle_->SetTranslate(particleTranslate_);
-	//particleWorldTransform_.Update();
-
-	/*ImGui::Begin("Plane");
-	ImGui::SliderFloat3("Translate", &modelTranslate_.x, -10.0f, 10.0f);
-	ImGui::SliderFloat4("Color", &modelColor_.x, 0.0f, 1.0f);
-	ImGui::Checkbox("isSetField;", &isSetField_);
+	ImGui::SliderFloat3("Tranlate", &cameraTranslate_.x, -20.0f, 10.0f);
+	ImGui::SliderFloat3("Rotate", &cameraRotate_.x, -7.0f, 7.0f);
 
 	ImGui::End();
-	
-	*/
-	/*ImGui::Begin("Particle");
-	ImGui::SliderFloat3("Translate", &particleTranslate_.x, -3.0f, 3.0f);
-	ImGui::End();*/
-	
 
-	sprite->SetPosition(spritePosition_);
+	//当たり判定
+	CheckAllCollisions();
 
-	//ウィンドウサイズの設定は↓でやるよ
-#ifdef _DEBUG
-	ImGui::SetNextWindowSize(ImVec2(500, 100));
-	ImGui::Begin("Sprite");
-	ImGui::SliderFloat2("Position", &spritePosition_.x, 0.0f, 500.0f,"%.1f");
-	ImGui::End();
+	player_->Update();
 
-#endif
+	enemy_->Update();
 
+	skydome_->Update();
 }
 
 /// <summary>
 /// 描画
 /// </summary>
 void SampleScene::Draw() {
-	for (int i = 0; i < MODEL_AMOUNT_; i++) {
-		model_[i]->Draw(modelWorldTransform_,camera_);
-		//enemyModel_[i]->Draw(enemyWorldTransform_, camera_);
-	}
 
-	//particle_->Draw(camera_,particleTextureHandle_);
-	//sprite->Draw();
+	skydome_->Draw();
+	player_->Draw();
+
+	enemy_->Draw();
+
+
 }
+
+
+
 
 /// <summary>
 /// デストラクタ
 /// </summary>
 SampleScene::~SampleScene() {
-	for (int i = 0; i < MODEL_AMOUNT_; i++) {
-		delete model_[i];
-		delete enemyModel_[i];
-	}
+	delete player_;
+	delete enemy_;
+
+	delete skydome_;
+	delete collisionManager_;
 }

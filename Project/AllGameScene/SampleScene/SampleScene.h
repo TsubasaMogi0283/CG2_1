@@ -1,19 +1,28 @@
 #pragma once
-#include "IGameScene.h"
+#include "AllGameScene/GameManager/IGameScene.h"
 
-#include "Sprite.h"
-#include "Transform.h"
+#include "Polygon/Sprite/Sprite.h"
+#include <Math/Vector/SpritePosition.h>
+#include "Math/Vector/Transform.h"
 
-#include "Particle3D.h"
-#include "Audio.h"
-#include <memory>
-#include <Model.h>
-#include "WorldTransform.h"
+
+
+#include "AllGameScene/GameManager/GameManager.h"
+#include "Polygon/Model/Model.h"
+#include "TextureManager/TextureManager.h"
+
+#include <Player/Player.h>
+
+#include <Enemy/Enemy.h>
+#include "Enemy/Bullet/EnemyBullet.h"
+#include "Collider/Collider.h"
+#include <Collider/CollisionManager.h>
+#include <Skydome/Skydome.h>
 
 //StatePatternを使う時は必ず前方宣言をするように
 class Gamemanager;
 
-class SampleScene : public IGameScene{
+class SampleScene : public IGameScene {
 public:
 
 	//コンストラクタ
@@ -32,48 +41,20 @@ public:
 	void Draw()override;
 
 private:
-	static const int MODEL_AMOUNT_ = 1;
+	//衝突判定と応答
+	void CheckAllCollisions();
 
-	Model* model_[MODEL_AMOUNT_] = { nullptr };
-	Vector3 modelTranslate_ = {};
-	WorldTransform modelWorldTransform_ = {};
 
-	Model* enemyModel_[MODEL_AMOUNT_] = { nullptr };
-	Vector3 enemyTranslate_ = {};
-	WorldTransform enemyWorldTransform_ = {};
+private:
+	Player* player_ = nullptr;
+	Enemy* enemy_ = nullptr;
+	Skydome* skydome_ = nullptr;
 
-	Vector3 lightDirectional_ = {};
-
-	//Model*sphere_= nullptr;
-	//WorldTransform sphereWorldTransform_ = {};
-
-	Vector2 position_ = { 0.0f,0.0f };
-	Vector2 scale_ = { 1.0f,1.0f };
-	float rotate = 0.0f;
-
-	std::unique_ptr<Sprite> sprite = nullptr;
-	Vector4 color_ = { 1.0f,1.0f,1.0f,1.0f };
-	Vector4 modelColor_ = { 1.0f,1.0f,1.0f,1.0f };
-	Vector2 spritePosition_ = {};
-
-	//パーティクル
-	//std::unique_ptr<Particle3D> particle_ = nullptr;
-	uint32_t particleTextureHandle_ = 0u;
-	Vector3 particleTranslate_ = {};
-	WorldTransform particleWorldTransform_ = {};
-	AccelerationField accelerationField_ = {};
-	bool isSetField_ = false;
-
-	Audio* audio_ = nullptr;
-	uint32_t audioHandle_ = 0u;
-
-	Audio* audio2_ = nullptr;
-	uint32_t audioHandle2_ = 0u;
-
-	Camera camera_ = {};
+	Vector3 cameraTranslate_ = {};
 	Vector3 cameraRotate_ = {};
+
+
+	CollisionManager* collisionManager_ = nullptr;
+
 };
-
-
-
 

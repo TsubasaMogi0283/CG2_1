@@ -145,6 +145,42 @@
     <Filter Include="Ellysia\Header File\Polygone\3D\Light">
       <UniqueIdentifier>{ba621614-2f89-4956-9cdf-f9f3b7a97783}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Project\Object">
+      <UniqueIdentifier>{60c3d806-bea6-417d-9514-3d2a8a5c20cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project\Object\Collider">
+      <UniqueIdentifier>{be37a743-83ae-4691-af1d-2546052e10b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project\Object\Enemy">
+      <UniqueIdentifier>{b91ab9c0-6ecb-4f49-87d2-293f525a58d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project\Object\Enemy\Bullet">
+      <UniqueIdentifier>{596376d3-aa34-455b-a594-a49284728b2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project\Object\Enemy\Condition">
+      <UniqueIdentifier>{f519d246-1c08-467d-8163-c08f228c6df6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project\Object\Enemy\Condition\Approach">
+      <UniqueIdentifier>{056ed2b4-983e-45ce-b4a7-9639a9d8f67f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project\Object\Enemy\Condition\Leave">
+      <UniqueIdentifier>{cf17766f-3a05-40ee-8643-89f795c41198}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project\Object\Player">
+      <UniqueIdentifier>{bdeccc0e-4f5a-40a8-84cb-fbd526da42cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project\Object\Player\Bullet">
+      <UniqueIdentifier>{c0effac3-9767-4095-804e-51073a85c2e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project\Object\RailCamera">
+      <UniqueIdentifier>{ac3ec745-b5f1-4fa3-b7da-1e546c05b29b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project\Object\Skydome">
+      <UniqueIdentifier>{76a97668-eba9-4aff-831c-e33ca87c65a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project\Object\Enemy\TimeCall">
+      <UniqueIdentifier>{61380499-7aa5-4892-8891-c698b3196e01}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Ellysia\Math\Matrix\Calculation\Matrix4x4Calculation.cpp">
@@ -227,6 +263,42 @@
     </ClCompile>
     <ClCompile Include="Ellysia\Math\WorldTransform\WorldTransform.cpp">
       <Filter>Ellysia\Source File\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Object\Collider\Collider.cpp">
+      <Filter>Project\Object\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Object\Collider\CollisionManager.cpp">
+      <Filter>Project\Object\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Object\Enemy\Enemy.cpp">
+      <Filter>Project\Object\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Object\Enemy\State\EnemyApproach\EnemyApproach.cpp">
+      <Filter>Project\Object\Enemy\Condition\Approach</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Object\Enemy\Bullet\EnemyBullet.cpp">
+      <Filter>Project\Object\Enemy\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Object\Enemy\State\EnemyLeave\EnemyLeave.cpp">
+      <Filter>Project\Object\Enemy\Condition\Leave</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Object\Enemy\State\IEnemy\IEnemy.cpp">
+      <Filter>Project\Object\Enemy\Condition</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Object\Player\Player.cpp">
+      <Filter>Project\Object\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Object\Player\Bullet\PlayerBullet.cpp">
+      <Filter>Project\Object\Player\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Object\RailCamera\RailCamera.cpp">
+      <Filter>Project\Object\RailCamera</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Object\Skydome\Skydome.cpp">
+      <Filter>Project\Object\Skydome</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Object\Enemy\TimeCall\TimeCall.cpp">
+      <Filter>Project\Object\Enemy\TimeCall</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -390,6 +462,45 @@
     </ClInclude>
     <ClInclude Include="Ellysia\Polygon\3D\BufferResource\DirectionalLight\CreateDirectionalLight.h">
       <Filter>Ellysia\Header File\Polygone\3D\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Object\Collider\Collider.h">
+      <Filter>Project\Object\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Object\Collider\CollisionConfig.h">
+      <Filter>Project\Object\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Object\Collider\CollisionManager.h">
+      <Filter>Project\Object\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Object\Enemy\Enemy.h">
+      <Filter>Project\Object\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Object\Enemy\State\EnemyApproach\EnemyApproach.h">
+      <Filter>Project\Object\Enemy\Condition\Approach</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Object\Enemy\Bullet\EnemyBullet.h">
+      <Filter>Project\Object\Enemy\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Object\Enemy\State\EnemyLeave\EnemyLeave.h">
+      <Filter>Project\Object\Enemy\Condition\Leave</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Object\Enemy\State\IEnemy\IEnemy.h">
+      <Filter>Project\Object\Enemy\Condition</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Object\Player\Player.h">
+      <Filter>Project\Object\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Object\Player\Bullet\PlayerBullet.h">
+      <Filter>Project\Object\Player\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Object\RailCamera\RailCamera.h">
+      <Filter>Project\Object\RailCamera</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Object\Skydome\Skydome.h">
+      <Filter>Project\Object\Skydome</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Object\Enemy\TimeCall\TimeCall.h">
+      <Filter>Project\Object\Enemy\TimeCall</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

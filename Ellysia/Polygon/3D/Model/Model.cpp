@@ -289,7 +289,7 @@ void Model::Draw(WorldTransform& worldTransform, Camera& camera) {
 	////reinterpret_cast...char* から int* へ、One_class* から Unrelated_class* へなどの変換に使用
 
 	//通常のLighting
-	if ((isEnableLighting_ == true)|| (isEnableLighting_ == false&& isEnableLighting_ == false)) {
+	if ((isEnableLighting_ == true)|| (isEnableLighting_ == false&& isEnablePhongReflection_ == false)) {
 		isEnablePhongReflection_ = false;
 		isEnableLighting_ = true;
 		material_->SetInformation(color_, isEnableLighting_, isEnablePhongReflection_, shiness_);
@@ -298,7 +298,7 @@ void Model::Draw(WorldTransform& worldTransform, Camera& camera) {
 
 	//PhongReflection
 	if (isEnablePhongReflection_ == true) {
-		isEnableLighting_ = false;
+		isEnableLighting_ = true;
 		material_->SetInformation(color_, isEnableLighting_, isEnablePhongReflection_, shiness_);
 
 	}

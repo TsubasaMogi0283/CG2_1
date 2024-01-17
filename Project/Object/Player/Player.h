@@ -11,7 +11,7 @@
 
 
 //Colliderを継承
-class Player:public Collider{
+class Player{
 public:
 	//コンストラクタ
 	Player();
@@ -19,8 +19,6 @@ public:
 	//初期化
 	void Initialize(Vector3 position);
 
-	//コールバック関数
-	void OnCollision()override;
 
 	//更新
 	void Update();
@@ -53,19 +51,14 @@ public:
 
 
 	//ワールド座標
-	Vector3 GetWorldPosition()override;
+	Vector3 GetWorldPosition();
 
-	//弾リストを取得
-	const std::list<PlayerBullet*> GetBullets()  {
-		return bullets_;
-	}
 
 #pragma endregion
 
 private:
 	void Rotate();
 	void Move();
-	void Attack();
 
 private:
 	
@@ -80,8 +73,6 @@ private:
 	float radius_;
 
 
-	//弾
-	std::list<PlayerBullet*>bullets_;
 
 
 };

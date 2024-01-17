@@ -22,13 +22,8 @@ void Player::Initialize(Vector3 position) {
 
 	radius_ = 1.0f;
 
-	SetCollisionAttribute(COLLISION_ATTRIBUTE_PLAYER);
-	SetCollisionMask(COLLISION_ATTRIBUTE_ENEMY);
 }
 
-void Player::OnCollision(){
-
-}
 
 
 void Player::Rotate() {
@@ -74,23 +69,6 @@ void Player::Move() {
 }
 
 
-void Player::Attack() {
-	if (Input::GetInstance()->IsTriggerKey(DIK_SPACE)) {
-		
-
-		Vector3 velocity = { 0.0f,0.0f,0.8f };
-
-		//プレイヤーの向きに合わせて回転させる
-		velocity = TransformNormal(velocity,worldTransform_.worldMatrix_);
-
-		PlayerBullet* newBullet = new PlayerBullet();
-		newBullet->Initialize(GetWorldPosition(), velocity);
-		
-		bullets_.push_back(newBullet);
-	}
-}
-
-
 
 Vector3 Player::GetWorldPosition() {
 	Vector3 result = {};
@@ -120,23 +98,9 @@ void Player::Update() {
 	worldTransform_.Update();
 
 
-	//デスフラグの立った玉を削除
-	bullets_.remove_if([](PlayerBullet* bullet) {
-		if (bullet->IsDead()) {
-			delete bullet;
-			return true;
-		}
-		return false;
-	});
-
 	Rotate();
 	Move();
-	Attack();
 
-	for (PlayerBullet* bullet : bullets_) {
-		bullet->Update();
-	}
-	
 }
 
 //描画
@@ -144,17 +108,12 @@ void Player::Draw(Camera& camera) {
 	
 	model_->Draw(worldTransform_, camera);
 	
-	for (PlayerBullet* bullet : bullets_) {
-		bullet->Draw(camera);
-	}
 	
 }
 
 
 //デストラクタ
 Player::~Player() {
-	for (PlayerBullet* bullet : bullets_) {
-		delete bullet;
-	}
+
 }
 

@@ -15,6 +15,7 @@
 
 #include <memory>
 
+
 //StatePatternを使う時は必ず前方宣言をするように
 class Gamemanager;
 
@@ -36,24 +37,14 @@ public:
 	/// 描画
 	void Draw()override;
 
-private:
-	//衝突判定と応答
-	void CheckAllCollisions();
 
 
 private:
 	Player* player_ = nullptr;
-	Enemy* enemy_ = nullptr;
-	std::unique_ptr<Skydome> skydome_ = nullptr;
 
 	Vector3 cameraTranslate_ = {};
 	Vector3 cameraRotate_ = {};
 
-
-	std::unique_ptr < CollisionManager> collisionManager_ = nullptr;
-
-	//カメラ
 	Camera camera_ = {};
-	RailCamera* railCamera_ = nullptr;
 };
 

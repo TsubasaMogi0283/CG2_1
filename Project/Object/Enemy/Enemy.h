@@ -3,9 +3,9 @@
 #include "Transform.h"
 #include "State/IEnemy/IEnemy.h"
 
-#include "Enemy/Bullet/EnemyBullet.h"
-#include "Enemy/TimeCall/TimeCall.h"
-#include "Collider/Collider.h"
+#include "Object/Enemy/Bullet/EnemyBullet.h"
+#include "Object/Enemy/TimeCall/TimeCall.h"
+#include "Object/Collider/Collider.h"
 #include "WorldTransform.h"
 
 #include <memory>

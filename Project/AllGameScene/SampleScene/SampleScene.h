@@ -1,23 +1,16 @@
 #pragma once
 #include "AllGameScene/GameManager/IGameScene.h"
 
-#include "Polygon/Sprite/Sprite.h"
-#include <Math/Vector/SpritePosition.h>
-#include "Math/Vector/Transform.h"
+#include "Sprite.h"
+#include "GameManager.h"
+#include "Model.h"
+#include "TextureManager.h"
 
 
-
-#include "AllGameScene/GameManager/GameManager.h"
-#include "Polygon/Model/Model.h"
-#include "TextureManager/TextureManager.h"
-
-#include <Player/Player.h>
-
-#include <Enemy/Enemy.h>
-#include "Enemy/Bullet/EnemyBullet.h"
-#include "Collider/Collider.h"
-#include <Collider/CollisionManager.h>
-#include <Skydome/Skydome.h>
+#include <Object/Player/Player.h>
+#include <Object/Enemy/Enemy.h>
+#include <Object/Skydome/Skydome.h>
+#include <Object/Collider/CollisionManager.h>
 
 //StatePatternを使う時は必ず前方宣言をするように
 class Gamemanager;

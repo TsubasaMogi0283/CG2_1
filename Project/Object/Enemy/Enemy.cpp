@@ -1,9 +1,9 @@
 #include "Enemy.h"
-#include "Enemy/State/EnemyApproach/EnemyApproach.h"
-#include "Player/Player.h"
+#include "Object/Enemy/State/EnemyApproach/EnemyApproach.h"
+#include "Object/Player/Player.h"
 #include "Matrix4x4.h"
 #include "VectorCalculation.h"
-#include <Collider/CollisionConfig.h>
+#include <Object/Collider/CollisionConfig.h>
 
 
 

@@ -195,27 +195,13 @@ Model* Model::Create(const std::string& directoryPath, const std::string& fileNa
 			model->material_ = std::make_unique<CreateMaterial>();
 			model->material_->Initialize();
 
-
 			//テクスチャの読み込み
 			model->textureHandle_ = TextureManager::GetInstance()->LoadTexture(modelData.material.textureFilePath);
-
-
 
 			//頂点リソースを作る
 			model->mesh_ = std::make_unique<Mesh>();
 			model->mesh_->Initialize(modelData.vertices);
 
-
-
-
-
-
-
-
-			//Sprite用のTransformationMatrix用のリソースを作る。
-			//Matrix4x4 1つ分サイズを用意する
-			//model->transformation_=std::make_unique<Transformation>();
-			//model->transformation_->Initialize();
 
 			//Lighting
 			model->directionalLight_ = std::make_unique<CreateDirectionalLight>();

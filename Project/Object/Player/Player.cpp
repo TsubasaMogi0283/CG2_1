@@ -8,7 +8,7 @@ Player::Player() {
 }
 
 //初期化
-void Player::Initialize() {
+void Player::Initialize(Vector3 position) {
 
 	model_ = std::unique_ptr<Model>();
 	model_.reset(Model::Create("Resources/Sample/Player", "playre.obj"));
@@ -16,7 +16,7 @@ void Player::Initialize() {
 	worldTransform_.Initialize();
 	worldTransform_.scale_ = { 1.0f,1.0f,1.0f };
 	worldTransform_.rotate_ = { 0.0f,0.0f,0.0f };
-	worldTransform_.translate_ = { 0.0f,0.0f,0.0f };
+	worldTransform_.translate_ = {0.0f,0.0f,0.0f};
 
 	
 
@@ -88,7 +88,7 @@ void Player::Attack() {
 		velocity = TransformNormal(velocity,worldTransform_.worldMatrix_);
 
 		PlayerBullet* newBullet = new PlayerBullet();
-		newBullet->Initialize(worldTransform_.translate_,velocity);
+		newBullet->Initialize({1.0f,0.0f,0.0f}, velocity);
 		
 		bullets_.push_back(newBullet);
 	}

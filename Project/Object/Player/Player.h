@@ -17,7 +17,7 @@ public:
 	Player();
 
 	//初期化
-	void Initialize();
+	void Initialize(Vector3 position);
 
 	//コールバック関数
 	void OnCollision()override;
@@ -48,7 +48,7 @@ public:
 
 
 	void SetParent(const WorldTransform* parent) {
-		parentedMatrix_ = parent;
+		worldTransform_.parent_ = parent;
 	}
 
 
@@ -83,7 +83,6 @@ private:
 
 
 	Matrix4x4 worldMatrix_ = {};
-	const WorldTransform* parentedMatrix_ = {};
 	//弾
 	std::list<PlayerBullet*>bullets_;
 

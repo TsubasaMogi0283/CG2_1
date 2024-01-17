@@ -10,13 +10,12 @@ RailCamera::RailCamera(){
 //初期化
 void RailCamera::Initialize(Vector3 worldPosition,Vector3 radius){
 	
-	worldTransform_.scale_ = {1.0f,1.0f,1.0f};
 	worldTransform_.rotate_ = radius;
 	worldTransform_.translate_ = worldPosition;
 
 
 	camera_.Initialize();
-
+	//camera_.farClip_ = 1200.0f;
 }
 
 
@@ -24,7 +23,7 @@ void RailCamera::Initialize(Vector3 worldPosition,Vector3 radius){
 //更新
 void RailCamera::Update(){
 	//移動
-	Vector3 velocity = { 0.0f,0.0f,0.02f };
+	Vector3 velocity = { 0.0f,0.0f,0.05f };
 	worldTransform_.translate_ = Add(worldTransform_.translate_, velocity);
 
 	//回転
@@ -37,7 +36,7 @@ void RailCamera::Update(){
 	//カメラへ
 
 	worldTransform_.Update();
-
+	//camera_.Update();
 	camera_.viewMatrix_ = Inverse(worldTransform_.worldMatrix_);
 
 

@@ -42,7 +42,6 @@ void RailCamera::Update(){
 
 
 
-
 	ImGui::Begin("RailCamera");
 	ImGui::SliderFloat3("translation", &worldTransform_.translate_.x, -10.0f, 10.0f);
 	ImGui::SliderFloat3("rotation", &worldTransform_.rotate_.x, -10.0f, 10.0f);

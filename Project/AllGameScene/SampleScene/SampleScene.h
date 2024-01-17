@@ -49,7 +49,6 @@ private:
 	Vector3 cameraTranslate_ = {};
 	Vector3 cameraRotate_ = {};
 
-	PlayerBullet* playerBullet_ = nullptr;
 
 	std::unique_ptr < CollisionManager> collisionManager_ = nullptr;
 

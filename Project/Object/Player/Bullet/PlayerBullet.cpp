@@ -62,7 +62,9 @@ void PlayerBullet::Update(){
 }
 
 void PlayerBullet::Draw(Camera& camera){
-	model_->Draw(worldTransform_,camera);
+	if (isDead_ == false) {
+		model_->Draw(worldTransform_, camera);
+	}
 }
 
 PlayerBullet::~PlayerBullet(){

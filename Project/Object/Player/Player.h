@@ -26,7 +26,7 @@ public:
 	void Update();
 
 	//描画
-	void Draw(Camera camera);
+	void Draw(Camera& camera);
 
 
 	//デストラクタ
@@ -86,7 +86,6 @@ private:
 	//弾
 	std::list<PlayerBullet*>bullets_;
 
-	Camera camera_ = {};
 
 };
 

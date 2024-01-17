@@ -51,7 +51,6 @@ private:
 	//デスフラグ
 	bool isDead_ = false;
 
-	Camera camera_ = {};
 
 };
 

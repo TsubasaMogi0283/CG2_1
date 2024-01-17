@@ -88,7 +88,7 @@ void Player::Attack() {
 		velocity = TransformNormal(velocity,worldTransform_.worldMatrix_);
 
 		PlayerBullet* newBullet = new PlayerBullet();
-		newBullet->Initialize({1.0f,0.0f,0.0f}, velocity);
+		newBullet->Initialize(GetWorldPosition(), velocity);
 		
 		bullets_.push_back(newBullet);
 	}
@@ -144,12 +144,12 @@ void Player::Update() {
 }
 
 //描画
-void Player::Draw(Camera camera) {
+void Player::Draw(Camera& camera) {
 	
 	model_->Draw(worldTransform_, camera);
 	
 	for (PlayerBullet* bullet : bullets_) {
-		bullet->Draw(camera_);
+		bullet->Draw(camera);
 	}
 	
 }

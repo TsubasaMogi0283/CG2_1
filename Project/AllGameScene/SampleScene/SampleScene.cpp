@@ -20,9 +20,6 @@ void SampleScene::Initialize() {
 	Vector3 playerPosition = { 0.0f, 0.0f, 0.0f };
 	player_->Initialize(playerPosition);
 
-	playerBullet_ = new PlayerBullet();
-	playerBullet_->Initialize({ 0.0f,0.0f,0.0f }, {0.0f,0.0f,0.0f});
-
 	enemy_ = new Enemy();
 	enemy_->SetPlayer(player_);
 	enemy_->Initialize();
@@ -35,7 +32,7 @@ void SampleScene::Initialize() {
 
 	railCamera_ = new RailCamera();
 	railCamera_->Initialize(player_->GetWorldPosition(), { 0.0f,0.0f,0.0f });
-	player_->SetParent(&railCamera_->GetWorldTransform());
+	//player_->SetParent(&railCamera_->GetWorldTransform());
 
 	cameraTranslate_ = { 0.0f,20.0f,-40.0f };
 	cameraRotate_ = { 0.4f,0.0f,0.0f };
@@ -117,7 +114,6 @@ void SampleScene::Update(GameManager* gameManager) {
 	CheckAllCollisions();
 
 	player_->Update();
-	playerBullet_->Update();
 	enemy_->Update();
 
 	skydome_->Update();
@@ -138,7 +134,6 @@ void SampleScene::Draw() {
 
 	enemy_->Draw(camera_);
 
-	playerBullet_->Draw(camera_);
 	
 }
 
@@ -153,5 +148,4 @@ SampleScene::~SampleScene() {
 	delete player_;
 	delete enemy_;
 	delete railCamera_;
-	delete playerBullet_;
 }

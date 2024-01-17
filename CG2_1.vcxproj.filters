@@ -151,6 +151,15 @@
     <Filter Include="Project\Object\Player">
       <UniqueIdentifier>{bdeccc0e-4f5a-40a8-84cb-fbd526da42cf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Ellysia\Header File\Line">
+      <UniqueIdentifier>{82a0d1dd-7e9f-4494-92ab-b8a189abd62c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Ellysia\Source File\Line">
+      <UniqueIdentifier>{703cb5e8-011b-4889-92bc-99d17926371a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Ellysia\Resource File\Line3D">
+      <UniqueIdentifier>{60a23486-51de-4135-a8ac-cc8cbe8e86ca}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Ellysia\Math\Matrix\Calculation\Matrix4x4Calculation.cpp">
@@ -237,6 +246,9 @@
     <ClCompile Include="Project\Object\Player\Player.cpp">
       <Filter>Project\Object\Player</Filter>
     </ClCompile>
+    <ClCompile Include="Ellysia\Line\Line.cpp">
+      <Filter>Ellysia\Source File\Line</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\Particle3D\Particle3d.PS.hlsl">
@@ -256,6 +268,12 @@
     </FxCompile>
     <FxCompile Include="Resources\Shader\Object3D\Object3d.VS.hlsl">
       <Filter>Ellysia\Resource File\Object3d</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\Line3D\Line3D.PS.hlsl">
+      <Filter>Ellysia\Resource File\Line3D</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\Shader\Line3D\Line3D.VS.hlsl">
+      <Filter>Ellysia\Resource File\Line3D</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
@@ -403,6 +421,9 @@
     <ClInclude Include="Project\Object\Player\Player.h">
       <Filter>Project\Object\Player</Filter>
     </ClInclude>
+    <ClInclude Include="Ellysia\Line\Line.h">
+      <Filter>Ellysia\Header File\Line</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shader\Particle3D\Particle3D.hlsli">
@@ -413,6 +434,9 @@
     </None>
     <None Include="Resources\Shader\Object3D\Object3d.hlsli">
       <Filter>Ellysia\Resource File\Object3d</Filter>
+    </None>
+    <None Include="Resources\Shader\Line3D\Line3D.hlsli">
+      <Filter>Ellysia\Resource File\Line3D</Filter>
     </None>
   </ItemGroup>
 </Project>

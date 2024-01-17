@@ -89,8 +89,7 @@ void Triangle::Draw(Transform transform, Vector4 color) {
 	materialData_->enableLighting = false;
 	materialData_->uvTransform = MakeIdentity4x4();
 	
-	//materialResource_ = CreateBufferResource(directXSetup_->GetDevice(), sizeof(Vector4));
-	
+
 	
 	//サイズに注意を払ってね！！！！！
 	//どれだけのサイズが必要なのか考えよう
@@ -144,7 +143,7 @@ void Triangle::Draw(Transform transform, Vector4 color) {
 	//directXSetup_->GetCommandList()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU_);
 	
 
-	//描画(DrawCall)３頂点で１つのインスタンス。
+	//描画(DrawCall)2頂点で１つのインスタンス。
 	DirectXSetup::GetInstance()->GetCommandList()->DrawInstanced(6, 1, 0, 0);
 
 }

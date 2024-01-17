@@ -188,6 +188,7 @@ Model* Model::Create(const std::string& directoryPath, const std::string& fileNa
 	PipelineManager::GetInstance()->SetModelBlendMode(1);
 	PipelineManager::GetInstance()->GenerateModelPSO();
 
+
 	//すでにある場合はリストから取り出す
 	for (ModelData modelData : modelInformationList_) {
 		if (modelData.name == fileName) {

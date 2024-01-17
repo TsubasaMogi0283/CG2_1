@@ -4,15 +4,32 @@
 #include "Vector3.h"
 #include "DirectXSetup.h"
 
+struct CameraMatrixData {
+	//アフィン行列はいらないかも
+
+	//必要なのはこの3つ
+	//ビュー行列
+	Matrix4x4 viewMatrix_;
+	//射影行列
+	Matrix4x4 projectionMatrix_;
+	//正射影行列
+	Matrix4x4 orthographicMatrix_;
+};
+
+
 struct Camera {
 public:
 	//初期化
 	void Initialize();
 
-	//行列を計算・転送する
+	//行列を計算
 	void Update();
 
 
+private:
+	//転送する
+	//Updateの中に入れる
+	void Transfer();
 
 public:
 	//リソース
@@ -46,6 +63,8 @@ public:
 	Matrix4x4 projectionMatrix_ = {};
 	//正射影行列
 	Matrix4x4 orthographicMatrix_{};
+
+	CameraMatrixData* cameraMatrixData_=nullptr;
 
 private:
 	//スケールはっきり言って意味ない

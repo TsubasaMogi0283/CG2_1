@@ -23,6 +23,7 @@ void WorldTransform::Update() {
 		worldMatrix_ = Multiply(worldMatrix_, parent_->worldMatrix_);
 	}
 
+	Transfer();
 }
 
 
@@ -31,7 +32,8 @@ void WorldTransform::Transfer() {
 	//今までTransformationに書いていたものをこっちに引っ越す
 	bufferResource_->Map(0, nullptr, reinterpret_cast<void**>(&tranceformationData_));
 
-	tranceformationData_->WVP = worldMatrix_;
+	//GPU側でWVP計算してくれるようにする
 	tranceformationData_->world = worldMatrix_;
+	tranceformationData_->normal = MakeIdentity4x4();
 	bufferResource_->Unmap(0, nullptr);
 }

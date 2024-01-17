@@ -7,6 +7,7 @@
 //初期化
 void Camera::Initialize() {
 	//Resource作成
+	bufferResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(CameraMatrixData)).Get();
 
 	aspectRatio_ = float(WindowsSetup::GetInstance()->GetClientWidth()) / float(WindowsSetup::GetInstance()->GetClientHeight());
 
@@ -30,6 +31,14 @@ void Camera::Update() {
 	orthographicMatrix_ = MakeOrthographicMatrix(0, 0, float(WindowsSetup::GetInstance()->GetClientWidth()), float(WindowsSetup::GetInstance()->GetClientHeight()), 0.0f, 100.0f);
 
 	//転送
-	//Camera::Transfer();
+	Transfer();
+}
+
+void Camera::Transfer(){
+	bufferResource_->Map(0, nullptr, reinterpret_cast<void**>(&cameraMatrixData_));
+	cameraMatrixData_->viewMatrix_ = viewMatrix_;
+	cameraMatrixData_->projectionMatrix_ = projectionMatrix_;
+	cameraMatrixData_->orthographicMatrix_ = orthographicMatrix_;
+	bufferResource_->Unmap(0, nullptr);
 }
 

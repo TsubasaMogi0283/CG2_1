@@ -5,12 +5,11 @@
 
 #include "DirectXSetup.h"
 
-//KAMATA ENGINE参考
-//TransformationMatrixだといらないもののWVPがあるかかなと思った。
-//一つだけなの意味あるの？
+//Wvpいらないかも
+//代わりに法線追加
 struct WorldTransformData {
-	Matrix4x4 WVP;
 	Matrix4x4 world;
+	Matrix4x4 normal;
 };
 
 

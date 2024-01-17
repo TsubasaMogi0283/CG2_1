@@ -10,9 +10,12 @@ RailCamera::RailCamera(){
 //初期化
 void RailCamera::Initialize(Vector3 worldPosition,Vector3 radius){
 	
-	transform_.scale = {1.0f,1.0f,1.0f};
-	transform_.rotate = radius;
-	transform_.translate = worldPosition;
+	worldTransform_.scale_ = {1.0f,1.0f,1.0f};
+	worldTransform_.rotate_ = radius;
+	worldTransform_.translate_ = worldPosition;
+
+
+	camera_.Initialize();
 
 }
 
@@ -21,38 +24,29 @@ void RailCamera::Initialize(Vector3 worldPosition,Vector3 radius){
 //更新
 void RailCamera::Update(){
 	//移動
-	Vector3 velocity = { 0.0f,0.0f,-0.02f };
-	transform_.translate = Add(transform_.translate, velocity);
+	Vector3 velocity = { 0.0f,0.0f,0.02f };
+	worldTransform_.translate_ = Add(worldTransform_.translate_, velocity);
 
 	//回転
 	Vector3 rotate = {0.0f, 0.0f, 0.0f};
-	transform_.rotate = Add(transform_.rotate, rotate);
+	worldTransform_.rotate_ = Add(worldTransform_.rotate_, rotate);
 
 
 	
 
 	//カメラへ
-	Camera::GetInstance()->SetTranslate(transform_.translate);
-	Camera::GetInstance()->SetRotate(transform_.rotate);
+
+	worldTransform_.Update();
+
+	camera_.viewMatrix_ = Inverse(worldTransform_.worldMatrix_);
 
 
 
-
-
-	worldMatrix_ = MakeAffineMatrix(
-		transform_.scale,
-		Camera::GetInstance()->GetRotate(), 
-		Camera::GetInstance()->GetTranslate());
-
-
-
-	Matrix4x4 viewMatrix = Inverse(worldMatrix_);
-	Camera::GetInstance()->Camera::SetViewMatrix(viewMatrix);
 
 
 	ImGui::Begin("RailCamera");
-	ImGui::SliderFloat3("translation", &transform_.translate.x, -10.0f, 10.0f);
-	ImGui::SliderFloat3("rotation", &transform_.rotate.x, -10.0f, 10.0f);
+	ImGui::SliderFloat3("translation", &worldTransform_.translate_.x, -10.0f, 10.0f);
+	ImGui::SliderFloat3("rotation", &worldTransform_.rotate_.x, -10.0f, 10.0f);
 	ImGui::End();
 }
 

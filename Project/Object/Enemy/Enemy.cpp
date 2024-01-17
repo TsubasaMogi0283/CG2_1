@@ -53,7 +53,7 @@ void Enemy::Fire() {
 	worldTranslate = MakeTranslateMatrix(GetTranslate());
 
 	//速度ベクトルを自機の向きに合わせて回転させる
-	afterVelocity = TransformNormal(afterVelocity,worldTransform_.matWorld_ );
+	afterVelocity = TransformNormal(afterVelocity,worldTransform_.worldMatrix_);
 
 	//弾
 	//EnemyBullet* bullet_ = new EnemyBullet();
@@ -90,9 +90,9 @@ Vector3 Enemy::GetWorldPosition() {
 	Vector3 result = {};
 	//移動成分を取り出してね
 	//一番下の行ね
-	result.x = worldTransform_.matWorld_.m[3][0];
-	result.y = worldTransform_.matWorld_.m[3][1];
-	result.z = worldTransform_.matWorld_.m[3][2];
+	result.x = worldTransform_.worldMatrix_.m[3][0];
+	result.y = worldTransform_.worldMatrix_.m[3][1];
+	result.z = worldTransform_.worldMatrix_.m[3][2];
 
 	return result;
 }
@@ -138,7 +138,7 @@ void Enemy::Update(){
 	
 
 	//終了したタイマーを削除
-	//リストを削除するなら「remove_if」だよ！
+	//リストの中身を削除するなら「remove_if」だよ！
 	timedCalls_.remove_if([](TimeCall* timedCall) {
         if (timedCall->IsFinished()) {
             delete timedCall;
@@ -151,8 +151,8 @@ void Enemy::Update(){
 
 }
 
-void Enemy::Draw(){
-	model_->Draw(worldTransform_);
+void Enemy::Draw(Camera&camera){
+	model_->Draw(worldTransform_, camera);
 	
 	//for (EnemyBullet* bullet : bullets_) {
 	//	bullet->Draw();

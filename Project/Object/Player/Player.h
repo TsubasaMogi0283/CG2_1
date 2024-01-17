@@ -3,10 +3,10 @@
 #include "Input.h"
 #include "TextureManager.h"
 #include "Matrix4x4.h"
-#include "Player/Bullet/PlayerBullet.h"
+#include "Object/Player/Bullet/PlayerBullet.h"
 
 #include <list>
-#include "Collider/Collider.h"
+#include "Object/Collider/Collider.h"
 #include "WorldTransform.h"
 
 
@@ -26,7 +26,7 @@ public:
 	void Update();
 
 	//描画
-	void Draw();
+	void Draw(Camera camera);
 
 
 	//デストラクタ
@@ -87,7 +87,7 @@ private:
 	//弾
 	std::list<PlayerBullet*>bullets_;
 
-
+	Camera camera_ = {};
 
 };
 

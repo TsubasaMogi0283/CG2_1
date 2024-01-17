@@ -1,6 +1,6 @@
 #include "EnemyApproach.h"
-#include "Enemy/Enemy.h"
-#include "Enemy/State/EnemyLeave/EnemyLeave.h"
+#include "Object/Enemy/Enemy.h"
+#include "Object/Enemy/State/EnemyLeave/EnemyLeave.h"
 
 //接近の時だけ弾が発射されるよ
 #include "VectorCalculation.h"

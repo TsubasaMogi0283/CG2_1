@@ -1,8 +1,8 @@
 #pragma once
 #include "Transform.h"
 #include "Model.h"
-#include "Collider/Collider.h"
-
+#include "Object/Collider/Collider.h"
+#include "Camera.h"
 #include <memory>
 #include "WorldTransform.h"
 
@@ -23,7 +23,7 @@ public:
 	void Update();
 
 	//描画
-	void Draw();
+	void Draw(Camera&camera);
 
 	//デストラクタ
 	~EnemyBullet();
@@ -65,6 +65,8 @@ private:
 
 	int deathTimer_ = 120;
 
+
+	Camera camera_ = {};
 	Player* player_ = nullptr;
 };
 

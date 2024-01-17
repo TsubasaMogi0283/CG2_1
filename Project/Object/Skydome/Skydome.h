@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <WorldTransform.h>
+#include "Camera.h"
 
 class Skydome{
 public:
@@ -16,7 +17,7 @@ public:
 	void Update();
 
 	//描画
-	void Draw();
+	void Draw(Camera& camera);
 
 	//デストラクタ
 	~Skydome();

@@ -1,9 +1,9 @@
 #include "EnemyBullet.h"
 #include <VectorCalculation.h>
-#include <Player/Player.h>
+#include <Object/Player/Player.h>
 
 #include <cmath>
-#include <Collider/CollisionConfig.h>
+#include <Object/Collider/CollisionConfig.h>
 
 
 EnemyBullet::EnemyBullet(){
@@ -58,9 +58,9 @@ Vector3 EnemyBullet::GetWorldPosition() {
 	Vector3 result = {};
 	//移動成分を取り出してね
 	//一番下の行ね
-	result.x = worldTransform_.matWorld_.m[3][0];
-	result.y = worldTransform_.matWorld_.m[3][1];
-	result.z = worldTransform_.matWorld_.m[3][2];
+	result.x = worldTransform_.worldMatrix_.m[3][0];
+	result.y = worldTransform_.worldMatrix_.m[3][1];
+	result.z = worldTransform_.worldMatrix_.m[3][2];
 
 	return result;
 }
@@ -108,8 +108,8 @@ void EnemyBullet::Update(){
 
 }
 
-void EnemyBullet::Draw(){
-	model_->Draw(worldTransform_);
+void EnemyBullet::Draw(Camera&camera){
+	model_->Draw(worldTransform_,camera);
 }
 
 EnemyBullet::~EnemyBullet(){

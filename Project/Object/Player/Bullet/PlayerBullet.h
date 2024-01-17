@@ -1,6 +1,6 @@
 #pragma once
 #include "Model.h"
-#include "Collider/Collider.h"
+#include "Object/Collider/Collider.h"
 #include "WorldTransform.h"
 #include <memory>
 
@@ -22,7 +22,7 @@ public:
 	void Update();
 
 	//描画
-	void Draw();
+	void Draw(Camera& camera);
 
 	//デストラクタ
 	~PlayerBullet();
@@ -50,6 +50,8 @@ private:
 	int32_t deathTimer_ = LIFE_TIME_;
 	//デスフラグ
 	bool isDead_ = false;
+
+	Camera camera_ = {};
 
 };
 

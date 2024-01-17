@@ -28,8 +28,8 @@ void Skydome::Update(){
 }
 
 //描画
-void Skydome::Draw(){
-	model_->Draw(worldTransform_);
+void Skydome::Draw(Camera& camera){
+	model_->Draw(worldTransform_, camera);
 }
 
 //デストラクタ

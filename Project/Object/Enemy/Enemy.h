@@ -7,6 +7,7 @@
 #include "Object/Enemy/TimeCall/TimeCall.h"
 #include "Object/Collider/Collider.h"
 #include "WorldTransform.h"
+#include "Camera.h"
 
 #include <memory>
 enum class Phase {
@@ -35,7 +36,7 @@ public:
 	void Update();
 
 	//描画
-	void Draw();
+	void Draw(Camera& camera);
 
 
 	//デストラクタ
@@ -108,7 +109,7 @@ private:
 	TimeCall* timeCall_ = nullptr;
 	std::list<TimeCall*> timedCalls_;
 
-
+	Camera camera_ = {};
 
 
 	Player* player_ = nullptr;

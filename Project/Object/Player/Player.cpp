@@ -1,5 +1,5 @@
 #include "Player.h"
-#include <Collider/CollisionConfig.h>
+#include <Object/Collider/CollisionConfig.h>
 #include <VectorCalculation.h>
 
 //コンストラクタ
@@ -85,7 +85,7 @@ void Player::Attack() {
 		//Matrix4x4 worldmatrix = MakeAffineMatrix(transform_.scale, transform_.rotate, transform_.translate);
 
 		//プレイヤーの向きに合わせて回転させる
-		velocity = TransformNormal(velocity,worldTransform_.matWorld_ );
+		velocity = TransformNormal(velocity,worldTransform_.worldMatrix_);
 
 		PlayerBullet* newBullet = new PlayerBullet();
 		newBullet->Initialize(worldTransform_.translate_,velocity);
@@ -100,9 +100,9 @@ Vector3 Player::GetWorldPosition() {
 	Vector3 result = {};
 	//移動成分を取り出してね
 	//一番下の行ね
-	result.x = worldTransform_.matWorld_.m[3][0];
-	result.y = worldTransform_.matWorld_.m[3][1];
-	result.z = worldTransform_.matWorld_.m[3][2];
+	result.x = worldTransform_.worldMatrix_.m[3][0];
+	result.y = worldTransform_.worldMatrix_.m[3][1];
+	result.z = worldTransform_.worldMatrix_.m[3][2];
 
 	return result;
 }
@@ -144,12 +144,12 @@ void Player::Update() {
 }
 
 //描画
-void Player::Draw() {
+void Player::Draw(Camera camera) {
 	
-	model_->Draw(worldTransform_);
+	model_->Draw(worldTransform_, camera);
 	
 	for (PlayerBullet* bullet : bullets_) {
-		bullet->Draw();
+		bullet->Draw(camera_);
 	}
 	
 }

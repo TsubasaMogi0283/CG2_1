@@ -1,4 +1,4 @@
-#include "Enemy/TimeCall/TimeCall.h"
+#include "Object/Enemy/TimeCall/TimeCall.h"
 
 //コンストラクタ
 TimeCall::TimeCall(std::function<void()> fire, uint32_t time){

@@ -5,12 +5,15 @@
 #include "GameManager.h"
 #include "Model.h"
 #include "TextureManager.h"
-
+#include "Camera.h"
 
 #include <Object/Player/Player.h>
 #include <Object/Enemy/Enemy.h>
 #include <Object/Skydome/Skydome.h>
 #include <Object/Collider/CollisionManager.h>
+#include <Object/RailCamera/RailCamera.h>
+
+#include <memory>
 
 //StatePatternを使う時は必ず前方宣言をするように
 class Gamemanager;
@@ -41,13 +44,16 @@ private:
 private:
 	Player* player_ = nullptr;
 	Enemy* enemy_ = nullptr;
-	Skydome* skydome_ = nullptr;
+	std::unique_ptr<Skydome> skydome_ = nullptr;
 
 	Vector3 cameraTranslate_ = {};
 	Vector3 cameraRotate_ = {};
 
 
-	CollisionManager* collisionManager_ = nullptr;
+	std::unique_ptr < CollisionManager> collisionManager_ = nullptr;
 
+	//カメラ
+	Camera camera_ = {};
+	RailCamera* railCamera_ = nullptr;
 };
 

@@ -26,15 +26,20 @@ void SampleScene::Initialize() {
 	enemy_->Initialize();
 
 
-	skydome_ = new Skydome();
+	skydome_ = std::make_unique<Skydome>();
 	skydome_->Initialize();
 
-	collisionManager_ = new CollisionManager();
+	collisionManager_ = std::make_unique < CollisionManager>();
 
-	uint32_t textureHandle_ = TextureManager::LoadTexture("Resources/uvChecker.png");
+	railCamera_ = new RailCamera();
+	railCamera_->Initialize(player_->GetWorldPosition(), { 0.0f,0.0f,0.0f });
+	player_->SetParent(&railCamera_->GetWorldTransform());
+
 	cameraTranslate_ = { 0.0f,20.0f,-40.0f };
 	cameraRotate_ = { 0.4f,0.0f,0.0f };
-
+	camera_.Initialize();
+	camera_.translate_ = cameraTranslate_;
+	camera_.rotate_ = cameraRotate_;
 }
 
 
@@ -97,8 +102,6 @@ void SampleScene::CheckAllCollisions() {
 /// </summary>
 void SampleScene::Update(GameManager* gameManager) {
 
-	Camera::GetInstance()->Camera::SetTranslate(cameraTranslate_);
-	Camera::GetInstance()->Camera::SetRotate(cameraRotate_);
 
 
 	ImGui::Begin("Camera");
@@ -106,6 +109,7 @@ void SampleScene::Update(GameManager* gameManager) {
 	ImGui::SliderFloat3("Rotate", &cameraRotate_.x, -7.0f, 7.0f);
 
 	ImGui::End();
+
 
 	//当たり判定
 	CheckAllCollisions();
@@ -115,6 +119,11 @@ void SampleScene::Update(GameManager* gameManager) {
 	enemy_->Update();
 
 	skydome_->Update();
+
+	camera_.Update();
+
+	camera_.viewMatrix_ = railCamera_->GetViewProjection().viewMatrix_;
+	camera_.projectionMatrix_ = railCamera_->GetViewProjection().projectionMatrix_;
 }
 
 /// <summary>
@@ -122,12 +131,13 @@ void SampleScene::Update(GameManager* gameManager) {
 /// </summary>
 void SampleScene::Draw() {
 
-	skydome_->Draw();
-	player_->Draw();
+	skydome_->Draw(camera_);
+	player_->Draw(camera_);
 
-	enemy_->Draw();
+	enemy_->Draw(camera_);
 
 
+	
 }
 
 
@@ -137,9 +147,8 @@ void SampleScene::Draw() {
 /// デストラクタ
 /// </summary>
 SampleScene::~SampleScene() {
+
 	delete player_;
 	delete enemy_;
-
-	delete skydome_;
-	delete collisionManager_;
+	delete railCamera_;
 }

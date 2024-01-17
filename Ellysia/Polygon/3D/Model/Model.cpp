@@ -317,35 +317,12 @@ void Model::Draw(WorldTransform& worldTransform, Camera& camera) {
 	material_->GraphicsCommand();
 
 
-	//Resourceに書き込む
-	//worldTransform.bufferResource_->Map(0, nullptr, reinterpret_cast<void**>(&worldTransform.tranceformationData_));
-
-	//Matrix4x4 worldMatrix = worldTransform.worldMatrix_;
-
-	//Matrix4x4 viewMatrix = camera.viewMatrix_;
-
-	////基本これは変わらない
-	//Matrix4x4 projectionMatrix_ = MakePerspectiveFovMatrix(0.45f,
-	//	float(WindowsSetup::GetInstance()->GetClientWidth()) /
-	//	float(WindowsSetup::GetInstance()->GetClientHeight()), 0.1f, 100.0f);
-
-	////WVP行列を作成
-	//Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, 
-	//	Multiply(viewMatrix,projectionMatrix_));
-
-	//worldTransform.tranceformationData_->world = worldMatrix;
-	//worldTransform.bufferResource_->Unmap(0, nullptr);
-
-	
-	//カメラ
-
-
-	//cameraResource_->Unmap(0, nullptr);
 
 	//資料見返してみたがhlsl(GPU)に計算を任せているわけだった
 	//コマンド送ってGPUで計算
 	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(1, worldTransform.bufferResource_->GetGPUVirtualAddress());
 	//rootParameters[4]
+	//カメラ
 	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(4, camera.bufferResource_->GetGPUVirtualAddress());
 
 

@@ -26,9 +26,7 @@ public:
 	void Update();
 
 
-private:
 	//転送する
-	//Updateの中に入れる
 	void Transfer();
 
 public:

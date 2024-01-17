@@ -9,7 +9,7 @@ PlayerBullet::PlayerBullet(){
 void PlayerBullet::Initialize(Vector3 position,Vector3 velocity){
 	//良い感じなの無かったからとりあえずこれで
 	//真っ黒
-   	model_ = std::make_unique<Model>();
+   //	model_ = std::make_unique<Model>();
    	model_.reset(Model::Create("Resources/Sample/cube", "cube.obj"));
 	//worldTransform_ = { {0.5f,0.5f,0.5f},{0.0f,0.0f,0.0f},position };
 	worldTransform_.Initialize();
@@ -43,12 +43,6 @@ Vector3 PlayerBullet::GetWorldPosition() {
 }
 
 void PlayerBullet::Update(){
-	ImGui::Begin("Bullet");
-	ImGui::SliderFloat3("Scale", &worldTransform_.scale_.x, 1.0f, 10.0f);
-	ImGui::SliderFloat3("Rotate", &worldTransform_.rotate_.x, 0.0f, 10.0f);
-	ImGui::SliderFloat3("Translate", &worldTransform_.translate_.x, -10.0f, 10.0f);
-
-	ImGui::End();
 
 	worldTransform_.translate_ = Add(worldTransform_.translate_, velocity_);
 	
@@ -62,9 +56,7 @@ void PlayerBullet::Update(){
 }
 
 void PlayerBullet::Draw(Camera& camera){
-	if (isDead_ == false) {
-		model_->Draw(worldTransform_, camera);
-	}
+	model_->Draw(worldTransform_, camera);
 }
 
 PlayerBullet::~PlayerBullet(){

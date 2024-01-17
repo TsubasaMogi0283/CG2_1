@@ -32,7 +32,7 @@ void SampleScene::Initialize() {
 
 	railCamera_ = new RailCamera();
 	railCamera_->Initialize(player_->GetWorldPosition(), { 0.0f,0.0f,0.0f });
-	//player_->SetParent(&railCamera_->GetWorldTransform());
+	player_->SetParent(&railCamera_->GetWorldTransform());
 
 	cameraTranslate_ = { 0.0f,20.0f,-40.0f };
 	cameraRotate_ = { 0.4f,0.0f,0.0f };
@@ -117,12 +117,12 @@ void SampleScene::Update(GameManager* gameManager) {
 	enemy_->Update();
 
 	skydome_->Update();
+	railCamera_->Update();
 
-	camera_.Update();
+	camera_.viewMatrix_ = railCamera_->GetViewProjection().viewMatrix_;
+	camera_.projectionMatrix_ = railCamera_->GetViewProjection().projectionMatrix_;
 
-	/*camera_.viewMatrix_ = railCamera_->GetViewProjection().viewMatrix_;
-	camera_.projectionMatrix_ = railCamera_->GetViewProjection().projectionMatrix_;*/
-
+	camera_.Transfer();
 }
 
 /// <summary>

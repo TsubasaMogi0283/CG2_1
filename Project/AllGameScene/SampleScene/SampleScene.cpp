@@ -20,14 +20,14 @@ void SampleScene::Initialize() {
 	for (int i = 0; i < MODEL_AMOUNT_; i++) {
 		model_[i] = Model::Create("Resources/CG3/Sphere", "Sphere.obj");
 
-		enemyModel_[i] = Model::Create("Resources/Sample/Enemy", "enemy.obj");;
+		enemyModel_[i] = Model::Create("Resources/Sample/Enemy","enemy.obj");
 	}
 	modelWorldTransform_.Initialize();
 	modelWorldTransform_.scale_ = { 0.5f,0.5f,0.5f };
 	
 	enemyWorldTransform_.Initialize();
-	enemyWorldTransform_.scale_ = { 2.0f,2.0f,2.0f };
-	enemyWorldTransform_.translate_ = { 2.0f,2.0f,0.0f };
+	enemyWorldTransform_.scale_ = { 1.0f,1.0f,1.0f };
+	enemyWorldTransform_.translate_ = { 0.0f,1.0f,0.0f };
 
 
 	//
@@ -74,7 +74,7 @@ void SampleScene::Initialize() {
 
 	audio_ = Audio::GetInstance();
 	audioHandle_ = Audio::LoadWave("Resources/Audio/Sample/Win.wav");
-	audio_->PlayWave(audioHandle_, true);
+	//audio_->PlayWave(audioHandle_, true);
 
 	audio2_ = Audio::GetInstance();;
 	audioHandle2_ = Audio::LoadWave("Resources/Audio/Sample/Win.wav");
@@ -107,7 +107,7 @@ void SampleScene::Update(GameManager* gameManager) {
 	camera_.Update();
 
 	model_[0]->SetDirection(lightDirectional_);
-	model_[0]->SetIsEnablePhongReflection(true);
+	model_[0]->SetIsEnablePhongReflection(false);
 	model_[0]->SetColor(modelColor_);
 
 	//particle_->SetField(isSetField_);
@@ -146,7 +146,7 @@ void SampleScene::Update(GameManager* gameManager) {
 void SampleScene::Draw() {
 	for (int i = 0; i < MODEL_AMOUNT_; i++) {
 		model_[i]->Draw(modelWorldTransform_,camera_);
-		//enemyModel_[i]->Draw(enemyWorldTransform_, camera_);
+		enemyModel_[i]->Draw(enemyWorldTransform_, camera_);
 	}
 
 	//particle_->Draw(camera_,particleTextureHandle_);

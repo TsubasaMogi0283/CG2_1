@@ -24,7 +24,7 @@ void RailCamera::Initialize(Vector3 worldPosition,Vector3 radius){
 //更新
 void RailCamera::Update(){
 	//移動
-	Vector3 velocity = { 0.0f,0.0f,0.05f };
+	Vector3 velocity = { 0.0f,0.0f,0.01f };
 	worldTransform_.translate_ = Add(worldTransform_.translate_, velocity);
 
 	//回転

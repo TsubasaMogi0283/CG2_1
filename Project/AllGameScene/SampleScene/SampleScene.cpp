@@ -17,7 +17,7 @@ SampleScene::SampleScene() {
 /// </summary>
 void SampleScene::Initialize() {
 	player_ = new Player();
-	Vector3 playerPosition = { 0.0f, 0.0f, 0.0f };
+	Vector3 playerPosition = { 0.0f, 0.0f, 15.0f };
 	player_->Initialize(playerPosition);
 
 	enemy_ = new Enemy();

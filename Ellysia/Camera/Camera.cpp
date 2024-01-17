@@ -16,7 +16,16 @@ void Camera::Initialize() {
 	rotate_ = { 0.0f, 0.0f, 0.0f };
 	translate_ = { 0.0f, 0.0f, 0.0f };
 
+	//メインはUpdateの方
+	//アフィン行列を計算
+	affineMatrix_ = MakeAffineMatrix(scale_, rotate_, translate_);
+	//カメラと言えば逆行列
+	viewMatrix_ = Inverse(affineMatrix_);
+	//射影を計算
 	projectionMatrix_ = MakePerspectiveFovMatrix(fov_, aspectRatio_, nearClip_, farClip_);
+	//正射影行列(正規化)を計算
+	orthographicMatrix_ = MakeOrthographicMatrix(0, 0, float(WindowsSetup::GetInstance()->GetClientWidth()), float(WindowsSetup::GetInstance()->GetClientHeight()), 0.0f, 100.0f);
+
 }
 
 //行列を計算・転送する

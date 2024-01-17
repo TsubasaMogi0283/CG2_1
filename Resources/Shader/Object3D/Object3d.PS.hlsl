@@ -21,10 +21,6 @@ struct Material {
 	float32_t4 color;
 	//通常
 	int32_t enableLighting;///
-	//フォンの反射モデル
-    int32_t enablePhongReflection;
-	//光沢度
-    float32_t shininess;
 	float32_t4x4 uvTransform;
 };
 
@@ -39,12 +35,6 @@ struct DirectionalLight {
 };
 
 
-//カメラ
-struct Camera{
-	//ワールド座標
-    float32_t3 worldPosition;
-	
-};
 
 //
 ////ConstantBuffer<構造体>変数名:register(b0);
@@ -57,7 +47,6 @@ ConstantBuffer<DirectionalLight> gDirectionalLight : register(b1);
 Texture2D<float32_t4> gTexture : register(t0);
 SamplerState gSampler : register(s0);
 //後でrootparameterで追加してあげる
-ConstantBuffer<Camera> gCamera : register(b3);
 
 
 //Textureは基本的にそのまま読まずSamplerを介して読む

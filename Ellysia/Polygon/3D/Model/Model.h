@@ -153,7 +153,7 @@ private:
 	//フォンの反射
 	bool isEnablePhongReflection_ = false;
 	//光沢度
-	float shiness_ = 40.0f;
+	float shiness_ = 1.0f;
 
 	//方向
 	Vector3 lightingDirection_ = { 0.0f,-1.0f,0.0f };

@@ -105,8 +105,8 @@ void SampleScene::Update(GameManager* gameManager) {
 
 
 	ImGui::Begin("Camera");
-	ImGui::SliderFloat3("Tranlate", &cameraTranslate_.x, -20.0f, 10.0f);
-	ImGui::SliderFloat3("Rotate", &cameraRotate_.x, -7.0f, 7.0f);
+	ImGui::SliderFloat3("Tranlate", &camera_.translate_.x, -40.0f, 40.0f);
+	ImGui::SliderFloat3("Rotate", &camera_.rotate_.x, -7.0f, 7.0f);
 
 	ImGui::End();
 
@@ -122,8 +122,8 @@ void SampleScene::Update(GameManager* gameManager) {
 
 	camera_.Update();
 
-	camera_.viewMatrix_ = railCamera_->GetViewProjection().viewMatrix_;
-	camera_.projectionMatrix_ = railCamera_->GetViewProjection().projectionMatrix_;
+	/*camera_.viewMatrix_ = railCamera_->GetViewProjection().viewMatrix_;
+	camera_.projectionMatrix_ = railCamera_->GetViewProjection().projectionMatrix_;*/
 }
 
 /// <summary>

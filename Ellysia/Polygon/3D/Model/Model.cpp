@@ -195,6 +195,8 @@ Model* Model::Create(const std::string& directoryPath, const std::string& fileNa
 			model->material_ = std::make_unique<CreateMaterial>();
 			model->material_->Initialize();
 
+			//カメラ
+			model->cameraResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(CameraForGPU)).Get();
 
 			//テクスチャの読み込み
 			model->textureHandle_ = TextureManager::GetInstance()->LoadTexture(modelData.material.textureFilePath);
@@ -236,6 +238,8 @@ Model* Model::Create(const std::string& directoryPath, const std::string& fileNa
 	modelInformationList_.push_back(modelDataNew);
 
 
+	//カメラ
+	model->cameraResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(CameraForGPU)).Get();
 
 	////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
 	model->material_ = std::make_unique<CreateMaterial>();
@@ -298,7 +302,7 @@ void Model::Draw(WorldTransform& worldTransform, Camera& camera) {
 	//	material_->SetInformation(color_, isEnableLighting_, isEnablePhongReflection_, shiness_);
 
 	//}
-	material_->SetInformation(color_, true,  shiness_);
+	material_->SetInformation(color_, true, false, shiness_);
 	
 	
 
@@ -337,11 +341,25 @@ void Model::Draw(WorldTransform& worldTransform, Camera& camera) {
 	worldTransform.bufferResource_->Unmap(0, nullptr);
 
 	
+	//カメラ
+
+	cameraResource_->Map(0, nullptr, reinterpret_cast<void**>(&cameraForGPU_));
+	Vector3 cameraWorldPosition = { 
+		camera.affineMatrix_.m[3][0] , 
+		camera.affineMatrix_.m[3][1] , 
+		camera.affineMatrix_.m[3][2] };
+
+	//カメラのワールド座標を送る
+	cameraForGPU_->worldPosition =  cameraWorldPosition ;
+
+	//cameraResource_->Unmap(0, nullptr);
 
 	//資料見返してみたがhlsl(GPU)に計算を任せているわけだった
 	//コマンド送ってGPUで計算
 	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(1, worldTransform.bufferResource_->GetGPUVirtualAddress());
 
+	//rootParameters[4]
+	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(4, cameraResource_->GetGPUVirtualAddress());
 
 
 	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である

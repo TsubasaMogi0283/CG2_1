@@ -43,7 +43,10 @@ void PipelineManager::GenaratedLinePSO(){
 	//レジスタ番号とバインド
 	//register...Shader上のResource配置情報
 	rootParameters[0].Descriptor.ShaderRegister = 0;
-
+	//ルートパラメータ配列へのポイント
+	descriptionRootSignature_.pParameters = rootParameters;
+	//配列の長さ
+	descriptionRootSignature_.NumParameters = _countof(rootParameters);
 
 	//CBVを使う
 	rootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
@@ -51,10 +54,7 @@ void PipelineManager::GenaratedLinePSO(){
 	rootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
 	//register...Shader上のResource配置情報
 	rootParameters[1].Descriptor.ShaderRegister = 0;
-	//ルートパラメータ配列へのポイント
-	descriptionRootSignature_.pParameters = rootParameters;
-	//配列の長さ
-	descriptionRootSignature_.NumParameters = _countof(rootParameters);
+	
 
 	//rootParameterは今後必要あるたびに追加していく
 
@@ -87,6 +87,11 @@ void PipelineManager::GenaratedLinePSO(){
 	rootParameters[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 	//レジスタ番号1を使う
 	rootParameters[3].Descriptor.ShaderRegister = 1;
+
+
+
+
+
 
 
 	D3D12_STATIC_SAMPLER_DESC staticSamplers[1] = {};

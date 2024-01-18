@@ -11,6 +11,9 @@
 #include "Material.h"
 #include "TransformationMatrix.h"
 
+struct LineMaterial {
+	Vector4 color;
+};
 
 class Line {
 public:
@@ -41,7 +44,7 @@ private:
 
 	//マテリアル用のリソースを作る
 	ComPtr<ID3D12Resource> materialResource_ = nullptr;
-	Material* materialData_ = nullptr;
+	LineMaterial* materialData_ = nullptr;
 
 	//TransformationMatrix用のResource
 	ComPtr<ID3D12Resource> wvpResource_ = nullptr;

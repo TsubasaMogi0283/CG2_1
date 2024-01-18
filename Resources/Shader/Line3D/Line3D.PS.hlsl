@@ -2,8 +2,8 @@
 
 
 //Material...色など三角形の表面の材質をけっていするもの
-struct LineMaterial
-{
+struct LineMaterial{
+    
     float4 color;
 };
 

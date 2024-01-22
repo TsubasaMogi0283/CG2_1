@@ -15,6 +15,24 @@ void RailCamera::Initialize(Vector3 worldPosition,Vector3 radius){
 	worldTransform_.translate_ = worldPosition;
 
 
+	for (size_t i = 0; i < SEGMENT_COUNT; i++) {
+		line_[i] = new Line();
+		line_[i]->Initialize();
+
+	}
+
+	
+
+	controlPoints_ = {
+		{0.0f,0.0f,0.0f},
+		{10.0f,15.0f,0.0f},
+		{10.0f,15.0f,0.0f},
+		{20.0f,15.0f,0.0f},
+		{20.0f,0.0f,0.0f},
+		{30.0f,0.0f,0.0f},
+	};
+
+
 	camera_.Initialize();
 	camera_.farClip_ = 1200.0f;
 }
@@ -42,14 +60,32 @@ void RailCamera::Update(){
 
 
 
+	
+
 	ImGui::Begin("RailCamera");
 	ImGui::SliderFloat3("translation", &worldTransform_.translate_.x, -10.0f, 10.0f);
 	ImGui::SliderFloat3("rotation", &worldTransform_.rotate_.x, -10.0f, 10.0f);
 	ImGui::End();
 }
 
+void RailCamera::Draw(Camera camera) {
+	for (size_t i = 0; i < SEGMENT_COUNT + 1; i++) {
+		float t = 1.0f / SEGMENT_COUNT * 1;
+		Vector3 pos = CatmullRom3D(controlPoints_, t);
+		//描画用頂点リストに追加
+		pointsDrawing.push_back(pos);
+	}
+
+	for (int i = 0; i < SEGMENT_COUNT - 1; i++) {
+		line_[i]->Draw(pointsDrawing[i], pointsDrawing[i + 1], camera);
+
+	}
+}
+
 
 //デストラクタ
 RailCamera::~RailCamera(){
-
+	for (int i = 0; i < SEGMENT_COUNT; i++) {
+		delete line_[i];
+	}
 }

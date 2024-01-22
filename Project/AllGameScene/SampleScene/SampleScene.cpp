@@ -31,25 +31,13 @@ void SampleScene::Initialize() {
 
 	collisionManager_ = std::make_unique < CollisionManager>();
 
-
-	line_ = new Line();
-	line_->Initialize();
-
-	controlPoints_ = {
-		{0.0f,0.0f,0.0f},
-		{10.0f,15.0f,0.0f},
-		{10.0f,15.0f,0.0f},
-		{20.0f,15.0f,0.0f},
-		{20.0f,0.0f,0.0f},
-		{30.0f,0.0f,0.0f},
-	};
-
+	
 
 	railCamera_ = new RailCamera();
 	railCamera_->Initialize(player_->GetWorldPosition(), { 0.0f,0.0f,0.0f });
 	player_->SetParent(&railCamera_->GetWorldTransform());
 
-	cameraTranslate_ = { 0.0f,20.0f,-40.0f };
+	cameraTranslate_ = { 0.0f,0.0f,-10.0f };
 	cameraRotate_ = { 0.4f,0.0f,0.0f };
 	camera_.Initialize();
 	camera_.translate_ = cameraTranslate_;
@@ -135,16 +123,7 @@ void SampleScene::Update(GameManager* gameManager) {
 	railCamera_->Update();
 
 
-	//線分の数
-	const size_t SEGMENT_COUNT = 100;
-	for (size_t i = 0; i < SEGMENT_COUNT + 1; i++) {
-		float t = 1.0f/SEGMENT_COUNT*1;
-		Vector3 pos = CatmullRom3D(controlPoints_, t);
-		//描画用頂点リストに追加
-		pointsDrawing.push_back(pos);
-
-
-	}
+	
 
 
 
@@ -159,13 +138,16 @@ void SampleScene::Update(GameManager* gameManager) {
 /// </summary>
 void SampleScene::Draw() {
 
-	skydome_->Draw(camera_);
-	player_->Draw(camera_);
-	
-	enemy_->Draw(camera_);
+	//skydome_->Draw(camera_);
+	//player_->Draw(camera_);
+	//
+	//enemy_->Draw(camera_);
 
-	//line_->Draw({ 0.0f,0.0f,0.0f }, { 2.0f,2.0f,20.0f }, camera_);
+	//線分の数
 	
+	railCamera_->Draw(camera_);
+
+	lineSample_->Draw({ 0.0f,0.0f,0.0f }, { 3.0f,3.0f,0.0f }, camera_);
 }
 
 
@@ -180,5 +162,7 @@ SampleScene::~SampleScene() {
 	delete enemy_;
 	delete railCamera_;
 
-	delete line_;
+	
+
+	delete lineSample_;
 }

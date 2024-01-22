@@ -60,7 +60,7 @@ void SampleScene::Update(GameManager* gameManager) {
 void SampleScene::Draw() {
 
 	//player_->Draw(camera_);
-	line_->Draw({ 0.0f,1.0f,0.0f }, { 0.0f,10.0f,0.0f },camera_);
+	line_->Draw({ 0.0f,0.0f,0.0f }, { 0.0f,1.0f,0.0f },camera_);
 
 	
 }

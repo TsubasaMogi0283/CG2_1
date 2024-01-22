@@ -78,9 +78,9 @@ void Line::Draw(Vector3 start, Vector3 end, Camera& camera) {
 	vertexResouce_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
 
 	//左下
-	vertexData_[0].position = { -0.5f,-0.5f,0.0f,1.0f };
+	vertexData_[0].position = { start.x,start.y,0.0f,1.0f };
 	//上
-	vertexData_[1].position = { 0.0f,10.5f,0.0f,1.0f };
+	vertexData_[1].position = { end.x,end.y,0.0f,1.0f };
 
 	//マテリアルにデータを書き込む
 

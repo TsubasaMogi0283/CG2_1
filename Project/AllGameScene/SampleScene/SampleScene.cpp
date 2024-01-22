@@ -120,7 +120,7 @@ void SampleScene::Update(GameManager* gameManager) {
 	enemy_->Update();
 
 	skydome_->Update();
-	//railCamera_->Update();
+	railCamera_->Update();
 
 
 	

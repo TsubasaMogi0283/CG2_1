@@ -41,16 +41,16 @@ void RailCamera::Initialize(Vector3 worldPosition,Vector3 radius){
 
 //更新
 void RailCamera::Update(){
-	//移動
-	Vector3 velocity = { 0.0f,0.0f,0.01f };
-	worldTransform_.translate_ = Add(worldTransform_.translate_, velocity);
 
-	//回転
-	Vector3 rotate = {0.0f, 0.0f, 0.0f};
-	worldTransform_.rotate_ = Add(worldTransform_.rotate_, rotate);
+	//eyeをワールドトランスフォームの座標に入れる
+	worldTransform_.translate_ = eyePosition_;
+
+	//targetとeyeの差分ベクトル(forward)から02_09_ex1より
+	//回転角を求めてワールドトランスフォームの角度に入れる
+	Vector3 target = Subtract(targetPosition_, eyePosition_);
 
 
-	
+	worldTransform_.rotate_;
 
 	//カメラへ
 

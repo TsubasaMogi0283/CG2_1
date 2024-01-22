@@ -40,6 +40,13 @@ private:
 	std::vector<Vector3> pointsDrawing = {};
 
 
+	int eyePoint = 0;
+	int targetPoint = 1;
+	int forwardPoint = 2;
+	float t = 0;
+	Vector3 eyePosition_ = { 0, 0, 0 };
+	Vector3 targetPosition_ = { 0, 0, 0 };
+
 	Camera camera_ = {};
 };
 

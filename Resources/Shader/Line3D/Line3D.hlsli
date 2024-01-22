@@ -1,6 +1,9 @@
 struct VertexShaderOutput
 {
     float4 position : SV_POSITION;
-    float3 normal : NORMAL0;
+    
+    //float4 endPosition : SV_POSITION;
+    //float3 endNormal : NORMAL0;
+    
 };
 

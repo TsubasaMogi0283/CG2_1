@@ -21,6 +21,9 @@ void SampleScene::Initialize() {
 	player_->Initialize(playerPosition);
 
 
+	line_ = new Line();
+	line_->Initialize();
+
 	camera_.Initialize();
 	camera_.translate_ = {0.0f, 0.0f, -20.0f};
 	camera_.rotate_ = cameraRotate_;
@@ -56,8 +59,8 @@ void SampleScene::Update(GameManager* gameManager) {
 /// </summary>
 void SampleScene::Draw() {
 
-	player_->Draw(camera_);
-
+	//player_->Draw(camera_);
+	line_->Draw({ 0.0f,0.0f,0.0f }, { 0.0f,1.0f,0.0f },camera_);
 
 	
 }

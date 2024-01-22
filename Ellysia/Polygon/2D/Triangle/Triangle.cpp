@@ -143,7 +143,7 @@ void Triangle::Draw(Transform transform, Vector4 color) {
 	//directXSetup_->GetCommandList()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU_);
 	
 
-	//描画(DrawCall)2頂点で１つのインスタンス。
+	//描画(DrawCall)6頂点で１つのインスタンス。
 	DirectXSetup::GetInstance()->GetCommandList()->DrawInstanced(6, 1, 0, 0);
 
 }

@@ -14,6 +14,7 @@
 #include <Object/RailCamera/RailCamera.h>
 
 #include <memory>
+#include <Line/Line.h>
 
 
 //StatePatternを使う時は必ず前方宣言をするように
@@ -44,6 +45,8 @@ private:
 
 	Vector3 cameraTranslate_ = {};
 	Vector3 cameraRotate_ = {};
+
+	Line* line_ = nullptr;
 
 	Camera camera_ = {};
 };

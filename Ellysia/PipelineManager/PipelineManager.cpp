@@ -35,58 +35,38 @@ void PipelineManager::GenaratedLinePSO(){
 	//今回は結果一つだけなので長さ１の配列
 
 	//VSでもCBufferを利用することになったので設定を追加
-	D3D12_ROOT_PARAMETER rootParameters[4] = {};
+	D3D12_ROOT_PARAMETER rootParameters[2] = {};
 	//CBVを使う
-	rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-	////PixelShaderで使う
-	rootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	//レジスタ番号とバインド
-	//register...Shader上のResource配置情報
-	rootParameters[0].Descriptor.ShaderRegister = 0;
+	//マテリアル用
+	//rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	//////PixelShaderで使う
+	//rootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	////レジスタ番号とバインド
+	////register...Shader上のResource配置情報
+	//rootParameters[0].Descriptor.ShaderRegister = 0;
 	//ルートパラメータ配列へのポイント
 	descriptionRootSignature_.pParameters = rootParameters;
 	//配列の長さ
 	descriptionRootSignature_.NumParameters = _countof(rootParameters);
 
 	//CBVを使う
-	rootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	//座標用
+	rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	//VertwxShaderで使う
-	rootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
+	rootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
 	//register...Shader上のResource配置情報
-	rootParameters[1].Descriptor.ShaderRegister = 0;
+	rootParameters[0].Descriptor.ShaderRegister = 0;
 	
 
 	//rootParameterは今後必要あるたびに追加していく
 
-	//DescriptorRangle
-	//複数枚のTexture(SRV)を扱う場合1つづつ設定すると効率低下に繋がる
-	//利用する範囲を指定して一括で設定を行う機能のこと
-	D3D12_DESCRIPTOR_RANGE descriptorRange[1] = {};
-	//0から始まる
-	descriptorRange[0].BaseShaderRegister = 0;
-	//数は1つ
-	descriptorRange[0].NumDescriptors = 1;
-	//SRVを使う
-	descriptorRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-	//Offsetを自動計算
-	descriptorRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-
-
-	//DescriptorTableを使う
-	rootParameters[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	//PixelShaderを使う
-	rootParameters[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	//Tableの中身の配列を指定
-	rootParameters[2].DescriptorTable.pDescriptorRanges = descriptorRange;
-	//Tableで利用する数
-	rootParameters[2].DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);
-
 	//CBVを使う
-	rootParameters[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	//カメラ用
+	rootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	//PixelShaderで使う
-	rootParameters[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	rootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
 	//レジスタ番号1を使う
-	rootParameters[3].Descriptor.ShaderRegister = 1;
+	rootParameters[1].Descriptor.ShaderRegister = 1;
 
 
 
@@ -243,7 +223,6 @@ void PipelineManager::GenaratedLinePSO(){
 	graphicsPipelineStateDesc.DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
 
 	//実際に生成
-	//ID3D12PipelineState* graphicsPipelineState_ = nullptr;
 	hr_ = DirectXSetup::GetInstance()->GetDevice()->CreateGraphicsPipelineState(&graphicsPipelineStateDesc,
 		IID_PPV_ARGS(&PipelineManager::GetInstance()->linePSO_.graphicsPipelineState_));
 	assert(SUCCEEDED(hr_));

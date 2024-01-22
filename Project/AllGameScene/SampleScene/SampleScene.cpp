@@ -30,6 +30,10 @@ void SampleScene::Initialize() {
 
 	collisionManager_ = std::make_unique < CollisionManager>();
 
+
+	line_ = new Line();
+
+
 	railCamera_ = new RailCamera();
 	railCamera_->Initialize(player_->GetWorldPosition(), { 0.0f,0.0f,0.0f });
 	player_->SetParent(&railCamera_->GetWorldTransform());
@@ -135,6 +139,7 @@ void SampleScene::Draw() {
 
 	enemy_->Draw(camera_);
 
+	line_->Draw({ 0.0f,0.0f,0.0f }, { 0.0f,3.0f,0.0f }, camera_);
 	
 }
 

@@ -14,6 +14,7 @@
 #include <Object/RailCamera/RailCamera.h>
 
 #include <memory>
+#include <Line/Line.h>
 
 //StatePatternを使う時は必ず前方宣言をするように
 class Gamemanager;
@@ -51,6 +52,9 @@ private:
 
 
 	std::unique_ptr < CollisionManager> collisionManager_ = nullptr;
+
+
+	Line* line_ = nullptr;
 
 	//カメラ
 	Camera camera_ = {};

@@ -32,6 +32,7 @@ void SampleScene::Initialize() {
 
 
 	line_ = new Line();
+	line_->Initialize();
 
 
 	railCamera_ = new RailCamera();
@@ -125,7 +126,7 @@ void SampleScene::Update(GameManager* gameManager) {
 
 	camera_.viewMatrix_ = railCamera_->GetViewProjection().viewMatrix_;
 	camera_.projectionMatrix_ = railCamera_->GetViewProjection().projectionMatrix_;
-
+	//camera_.Update();
 	camera_.Transfer();
 }
 
@@ -136,10 +137,10 @@ void SampleScene::Draw() {
 
 	skydome_->Draw(camera_);
 	player_->Draw(camera_);
-
+	
 	enemy_->Draw(camera_);
 
-	line_->Draw({ 0.0f,0.0f,0.0f }, { 0.0f,3.0f,0.0f }, camera_);
+	//line_->Draw({ 0.0f,0.0f,0.0f }, { 2.0f,2.0f,20.0f }, camera_);
 	
 }
 
@@ -154,4 +155,6 @@ SampleScene::~SampleScene() {
 	delete player_;
 	delete enemy_;
 	delete railCamera_;
+
+	delete line_;
 }

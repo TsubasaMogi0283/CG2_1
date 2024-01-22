@@ -26,6 +26,7 @@ enum MouseInformation{
 class Input {
 private:
 
+
 	//コンストラクタ
 	Input();
 	

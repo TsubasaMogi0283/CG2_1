@@ -1,6 +1,7 @@
 #include "SampleScene.h"
 
 #include <list>
+#include <VectorCalculation.h>
 
 
 /// <summary>
@@ -33,6 +34,15 @@ void SampleScene::Initialize() {
 
 	line_ = new Line();
 	line_->Initialize();
+
+	controlPoints_ = {
+		{0.0f,0.0f,0.0f},
+		{10.0f,15.0f,0.0f},
+		{10.0f,15.0f,0.0f},
+		{20.0f,15.0f,0.0f},
+		{20.0f,0.0f,0.0f},
+		{30.0f,0.0f,0.0f},
+	};
 
 
 	railCamera_ = new RailCamera();
@@ -124,10 +134,24 @@ void SampleScene::Update(GameManager* gameManager) {
 	skydome_->Update();
 	railCamera_->Update();
 
-	camera_.viewMatrix_ = railCamera_->GetViewProjection().viewMatrix_;
-	camera_.projectionMatrix_ = railCamera_->GetViewProjection().projectionMatrix_;
-	//camera_.Update();
-	camera_.Transfer();
+
+	//線分の数
+	const size_t SEGMENT_COUNT = 100;
+	for (size_t i = 0; i < SEGMENT_COUNT + 1; i++) {
+		float t = 1.0f/SEGMENT_COUNT*1;
+		Vector3 pos = CatmullRom3D(controlPoints_, t);
+		//描画用頂点リストに追加
+		pointsDrawing.push_back(pos);
+
+
+	}
+
+
+
+	//camera_.viewMatrix_ = railCamera_->GetViewProjection().viewMatrix_;
+	//camera_.projectionMatrix_ = railCamera_->GetViewProjection().projectionMatrix_;
+	camera_.Update();
+	//camera_.Transfer();
 }
 
 /// <summary>

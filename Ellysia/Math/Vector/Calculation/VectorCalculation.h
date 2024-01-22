@@ -4,6 +4,7 @@
 //Vector3
 
 #include <Matrix4x4.h>
+#include <vector>
 
 //Vector3
 
@@ -33,4 +34,5 @@ float DotVector2(const Vector3 v1, const Vector3 v2);
 //球面線形補間
 Vector3 Slerp(const Vector3& v1, const Vector3& v2, float t);
 
-
+//Catmull-romスプライン曲線
+Vector3 CatmullRom3D(std::vector<Vector3> controlPoint, float t);

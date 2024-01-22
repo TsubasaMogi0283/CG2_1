@@ -4,6 +4,7 @@
 #include <corecrt_math.h>
 #include <cmath>
 #include <iostream>
+#include <numbers>
 
 Vector3 Add(Vector3 v1, Vector3 v2) {
 	Vector3 result = {};
@@ -120,6 +121,28 @@ Vector3 Slerp(const Vector3& v1, const Vector3& v2, float t) {
 		v1.y * std::cos(theta) + relativeVector.y * std::sin(theta),
 		v1.z * std::cos(theta) + relativeVector.z * std::sin(theta)
 	};
+
+	return result;
+}
+
+//Catmull-romスプライン曲線
+Vector3 CatmullRom3D(std::vector<Vector3> controlPoint, float t) {
+	Vector3 result = {};
+
+	float half = 1.0f / 2.0f;
+	for (int i = 0; i < 3; i++) {
+		Vector3 p0 = controlPoint[i];
+		Vector3 p1 = controlPoint[i + 3];
+		Vector3 p2 = controlPoint[i + 6];
+		Vector3 p3 = controlPoint[i + 9];
+
+
+
+		result.x = half * ((-p0.x+3.0f*p1.x-3.0f*p2.x+p3.x)*std::pow(t))
+
+	}
+	
+
 
 	return result;
 }

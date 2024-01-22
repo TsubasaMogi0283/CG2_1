@@ -56,6 +56,10 @@ private:
 
 	Line* line_ = nullptr;
 
+	//スプライン曲線
+	std::vector<Vector3> controlPoints_ = {};
+	std::vector<Vector3> pointsDrawing = {};
+
 	//カメラ
 	Camera camera_ = {};
 	RailCamera* railCamera_ = nullptr;

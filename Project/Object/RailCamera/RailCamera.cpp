@@ -70,7 +70,7 @@ void RailCamera::Update(){
 
 void RailCamera::Draw(Camera camera) {
 	for (size_t i = 0; i < SEGMENT_COUNT + 1; i++) {
-		float t = 1.0f / SEGMENT_COUNT * 1;
+		float t = 1.0f / SEGMENT_COUNT * i;
 		Vector3 pos = CatmullRom3D(controlPoints_, t);
 		//描画用頂点リストに追加
 		pointsDrawing.push_back(pos);

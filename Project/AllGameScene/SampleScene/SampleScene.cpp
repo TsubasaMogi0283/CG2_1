@@ -37,7 +37,7 @@ void SampleScene::Initialize() {
 	railCamera_->Initialize(player_->GetWorldPosition(), { 0.0f,0.0f,0.0f });
 	player_->SetParent(&railCamera_->GetWorldTransform());
 
-	cameraTranslate_ = { 0.0f,0.0f,-10.0f };
+	cameraTranslate_ = { 0.0f,0.0f,-100.0f };
 	cameraRotate_ = { 0.4f,0.0f,0.0f };
 	camera_.Initialize();
 	camera_.translate_ = cameraTranslate_;
@@ -120,7 +120,7 @@ void SampleScene::Update(GameManager* gameManager) {
 	enemy_->Update();
 
 	skydome_->Update();
-	railCamera_->Update();
+	//railCamera_->Update();
 
 
 	
@@ -147,7 +147,7 @@ void SampleScene::Draw() {
 	
 	railCamera_->Draw(camera_);
 
-	lineSample_->Draw({ 0.0f,0.0f,0.0f }, { 3.0f,3.0f,0.0f }, camera_);
+	//lineSample_->Draw({ 0.0f,0.0f,0.0f }, { 3.0f,3.0f,0.0f }, camera_);
 }
 
 

@@ -12,8 +12,8 @@
 struct LineTransformMatrix
 {
 	//始点
-    float4x4 WVP;
-    float4x4 World;
+    float32_t4x4 WVP;
+    float32_t4x4 World;
 
 	//終点
     //float4x4 endWVP;
@@ -24,7 +24,7 @@ struct LineTransformMatrix
 
 struct VertexShaderInput
 {
-    float4 position : SV_POSITION;
+    float32_t4 position : POSITION0;
     
     //float4 endPosition : SV_POSITION;
     //float3 endNormal : NORMAL0;
@@ -34,28 +34,28 @@ struct VertexShaderInput
 struct CamerTransformationMatrix
 {
 	
-    float4x4 View;
-    float4x4 Projection;
-    float4x4 Orthographic;
+    float32_t4x4 View;
+    float32_t4x4 Projection;
+    float32_t4x4 Orthographic;
 };
 
 //CBuffer
-ConstantBuffer<LineTransformMatrix> gTransformationMatrix : register(b1);
-ConstantBuffer<CamerTransformationMatrix> gCamerTransformationMatrix : register(b2);
+ConstantBuffer<LineTransformMatrix> gTransformationMatrix : register(b0);
+ConstantBuffer<CamerTransformationMatrix> gCamerTransformationMatrix : register(b1);
 
 
 VertexShaderOutput main(VertexShaderInput input){
     
     //VP
-    float4x4 viewProjection = mul(gCamerTransformationMatrix.View, gCamerTransformationMatrix.Projection);
+    float32_t4x4 viewProjection = mul(gCamerTransformationMatrix.View, gCamerTransformationMatrix.Projection);
     
     //World
-    float4x4 startWorld = gTransformationMatrix.World;
+    float32_t4x4 startWorld = gTransformationMatrix.World;
     //float4x4 endWorld = gTransformationMatrix.endWorld;
     
     
     //WVP
-    float4x4 startWVP = mul(startWorld, viewProjection);
+    float32_t4x4 startWVP = mul(startWorld, viewProjection);
     //float4x4 endWVP = mul(endWorld, viewProjection);
 	
     

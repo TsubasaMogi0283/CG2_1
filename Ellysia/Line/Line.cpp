@@ -11,7 +11,7 @@ void Line::Initialize() {
 	//頂点を6に増やす
 	vertexResouce_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(LineVertexData) * 2);
 	////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
-	//materialResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(LineMaterial));
+	materialResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(LineMaterial));
 
 	color_ = { 1.0f,1.0f,1.0f,1.0f };
 
@@ -80,19 +80,19 @@ void Line::Draw(Vector3 start, Vector3 end, Camera& camera) {
 	//左下
 	vertexData_[0].position = { -0.5f,-0.5f,0.0f,1.0f };
 	//上
-	vertexData_[1].position = { 0.0f,0.5f,0.0f,1.0f };
+	vertexData_[1].position = { 0.0f,10.5f,0.0f,1.0f };
 
 	//マテリアルにデータを書き込む
 
 
 	//書き込むためのアドレスを取得
 	//reinterpret_cast...char* から int* へ、One_class* から Unrelated_class* へなどの変換に使用
-	//LineMaterial* materialData_ = nullptr;
-	//materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
-	//
-	//materialData_->color = color_;
-	//
-	//materialResource_->Unmap(0, nullptr);
+	LineMaterial* materialData_ = nullptr;
+	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
+	
+	materialData_->color = color_;
+	
+	materialResource_->Unmap(0, nullptr);
 
 	//サイズに注意を払ってね！！！！！
 	//どれだけのサイズが必要なのか考えよう
@@ -127,17 +127,19 @@ void Line::Draw(Vector3 start, Vector3 end, Camera& camera) {
 	//RootSignatureを設定。PSOに設定しているけど別途設定が必要
 	DirectXSetup::GetInstance()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);
 	//形状を設定。PSOに設定しているものとはまた別。同じものを設定すると考えよう
-	DirectXSetup::GetInstance()->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	DirectXSetup::GetInstance()->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINELIST);
 
 	//マテリアルCBufferの場所を設定
-	//ここでの[0]はregisterの0ではないよ。rootParameter配列の0番目
-	//DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+	
 	//CBVを設定する
 	//wvp用のCBufferの場所を指定
 	//今回はRootParameter[1]に対してCBVの設定を行っている
 	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(0, wvpResource_->GetGPUVirtualAddress());
 
 	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(1, camera.bufferResource_->GetGPUVirtualAddress());
+
+	//マテリアル
+	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(2, materialResource_->GetGPUVirtualAddress());
 
 	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である
 
@@ -149,7 +151,7 @@ void Line::Draw(Vector3 start, Vector3 end, Camera& camera) {
 
 
 	//描画(DrawCall)6頂点で１つのインスタンス。
-	DirectXSetup::GetInstance()->GetCommandList()->DrawInstanced(6, 1, 0, 0);
+	DirectXSetup::GetInstance()->GetCommandList()->DrawInstanced(2, 1, 0, 0);
 
 }
 

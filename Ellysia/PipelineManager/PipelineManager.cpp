@@ -35,15 +35,8 @@ void PipelineManager::GenaratedLinePSO(){
 	//今回は結果一つだけなので長さ１の配列
 
 	//VSでもCBufferを利用することになったので設定を追加
-	D3D12_ROOT_PARAMETER rootParameters[2] = {};
-	//CBVを使う
-	//マテリアル用
-	//rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-	//////PixelShaderで使う
-	//rootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	////レジスタ番号とバインド
-	////register...Shader上のResource配置情報
-	//rootParameters[0].Descriptor.ShaderRegister = 0;
+	D3D12_ROOT_PARAMETER rootParameters[3] = {};
+	
 	//ルートパラメータ配列へのポイント
 	descriptionRootSignature_.pParameters = rootParameters;
 	//配列の長さ
@@ -69,7 +62,14 @@ void PipelineManager::GenaratedLinePSO(){
 	rootParameters[1].Descriptor.ShaderRegister = 1;
 
 
-
+	//CBVを使う
+	//マテリアル用
+	rootParameters[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	////PixelShaderで使う
+	rootParameters[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	//レジスタ番号とバインド
+	//register...Shader上のResource配置情報
+	rootParameters[2].Descriptor.ShaderRegister = 0;
 
 
 

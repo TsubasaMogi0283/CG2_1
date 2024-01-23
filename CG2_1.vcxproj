@@ -187,6 +187,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Ellysia\Ellysia.h" />
     <ClInclude Include="Ellysia\ImGuiManager\ImGuiManager.h" />
     <ClInclude Include="Ellysia\Input\Input.h" />
+    <ClInclude Include="Ellysia\Light\PointLight.h" />
     <ClInclude Include="Ellysia\Line\Line.h" />
     <ClInclude Include="Ellysia\Math\BPMCalculation\BPMSetting.h" />
     <ClInclude Include="Ellysia\Math\Collision\Collision.h" />

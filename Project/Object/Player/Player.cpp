@@ -94,12 +94,17 @@ void Player::Update() {
 	ImGui::SliderFloat3("Rotate", &worldTransform_.rotate_.x, 0.0f, 10.0f);
 	ImGui::SliderFloat3("Translate", &worldTransform_.translate_.x, -10.0f, 10.0f);
 	ImGui::SliderFloat3("DirectionalLight", &directionalLight_.x, -1.0f, 1.0f);
+	ImGui::SliderFloat("Shininess", &shininess_, 0.0f, 100.0f);
 	ImGui::End();
 
 	model_->SetScale(worldTransform_.scale_);
 	model_->SetRotate(worldTransform_.rotate_);
 	model_->SetTranslate(worldTransform_.translate_);
+
+
 	model_->SetDirection(directionalLight_);
+	//Shininessは出来るだけ大きい値にした方が良いよ
+	model_->SetShiness(shininess_);
 
 	worldTransform_.Update();
 

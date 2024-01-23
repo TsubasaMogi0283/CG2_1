@@ -14,10 +14,13 @@
 //		↓PixelShadeOutput
 //	 出力結合
 
+//float32...32bit=4バイト
+//int32_t...4バイト
 
 
 //Material...色など三角形の表面の材質を決定するもの
 struct Material {
+	
 	float32_t4 color;
 	//通常
 	int32_t enableLighting;///
@@ -42,6 +45,17 @@ struct Camera{
 };
 
 
+
+struct PointLight{
+	//ライトの色
+    float32_t4 color;
+	//ライトの位置
+    float32_t3 position;
+	//輝度
+    float intensity;
+};
+
+
 //
 ////ConstantBuffer<構造体>変数名:register(b0);
 //ConstantBuffer<Material>gMaterial:register(b0);
@@ -54,6 +68,8 @@ Texture2D<float32_t4> gTexture : register(t0);
 SamplerState gSampler : register(s0);
 //後でrootparameterで追加してあげる
 ConstantBuffer<Camera> gCamera : register(b2);
+ConstantBuffer<PointLight> gPointLIght : register(b3);
+
 
 //Textureは基本的にそのまま読まずSamplerを介して読む
 //処理方法を記述している

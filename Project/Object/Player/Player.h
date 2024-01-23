@@ -73,7 +73,7 @@ private:
 	float radius_;
 
 	Vector3 directionalLight_ = {};
-
+	float shininess_ = 70.0f;
 	uint32_t textureHandle_ = 0u;
 };
 

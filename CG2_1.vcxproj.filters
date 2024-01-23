@@ -424,6 +424,9 @@
     <ClInclude Include="Ellysia\Line\Line.h">
       <Filter>Ellysia\Header File\Line</Filter>
     </ClInclude>
+    <ClInclude Include="Ellysia\Light\PointLight.h">
+      <Filter>Ellysia\Header File\Polygone\3D\Light</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shader\Particle3D\Particle3D.hlsli">

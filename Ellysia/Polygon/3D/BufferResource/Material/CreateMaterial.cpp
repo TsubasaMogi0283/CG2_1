@@ -9,7 +9,7 @@ void CreateMaterial::Initialize(){
 	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 	materialData_->color = {1.0f,1.0f,1.0f,1.0f};
 	materialData_->enableLighting=false;
-
+	materialData_->shininess = 5.0f;
 	materialData_->uvTransform = MakeIdentity4x4();
 
 	materialResource_->Unmap(0, nullptr);
@@ -21,6 +21,7 @@ void CreateMaterial::SetInformation(Vector4 setColor, bool enableLighting,float 
 	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 	materialData_->color = setColor;
 	materialData_->enableLighting=enableLighting;
+	materialData_->shininess = shiness;
 	materialData_->uvTransform = MakeIdentity4x4();
 	materialResource_->Unmap(0, nullptr);
 }

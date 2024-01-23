@@ -50,8 +50,12 @@ private:
 #pragma endregion
 
 public:
-	//WorldTransformつき
+	//通常
 	void Draw(WorldTransform& worldTransform, Camera& camera);
+
+	//テクスチャ上書き用
+	void Draw(WorldTransform& worldTransform, Camera& camera,uint32_t textureHandle);
+
 
 	//デストラクタ
 	~Model();
@@ -111,10 +115,6 @@ public:
 	void SetDirection(Vector3 direction) {
 		this->lightingDirection_ = direction;
 	}
-	//PhongReflection
-	void SetIsEnablePhongReflection(bool isEnablePhongReflection) {
-		this->isEnablePhongReflection_ = isEnablePhongReflection;
-	}
 	//光沢
 	void SetShiness(float shiness) {
 		this->shiness_ = shiness;
@@ -150,14 +150,11 @@ private:
 	//カメラ
 	ComPtr<ID3D12Resource> cameraResource_ = nullptr;
 	CameraForGPU* cameraForGPU_ = {};
-	//フォンの反射
-	bool isEnablePhongReflection_ = false;
 	//光沢度
-	float shiness_ = 1.0f;
+	float shiness_ = 40.0f;
 
 	//方向
 	Vector3 lightingDirection_ = { 0.0f,-1.0f,0.0f };
-
 
 
 

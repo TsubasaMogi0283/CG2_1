@@ -41,5 +41,7 @@ VertexShaderOutput main(VertexShaderInput input) {
 	//左上3x3だけを取り出す
 	//法線と言えば正規化をなのでそれを忘れないようにする
 	output.normal = normalize(mul(input.normal, (float32_t3x3)gTransformationMatrix.Normal));
+	
+    output.worldPosition = mul(input.position, gTransformationMatrix.World).xyz;
 	return output;
 }

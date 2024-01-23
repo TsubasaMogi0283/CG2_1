@@ -208,6 +208,8 @@ Model* Model::Create(const std::string& directoryPath, const std::string& fileNa
 			model->directionalLight_ = std::make_unique<CreateDirectionalLight>();
 			model->directionalLight_->Initialize();
 
+			//Pixel用のカメラ
+			model->cameraResource_= DirectXSetup::GetInstance()->CreateBufferResource(sizeof(CameraForGPU)).Get();
 
 			//初期は白色
 			//モデル個別に色を変更できるようにこれは外に出しておく
@@ -251,6 +253,9 @@ Model* Model::Create(const std::string& directoryPath, const std::string& fileNa
 	model->directionalLight_ = std::make_unique<CreateDirectionalLight>();
 	model->directionalLight_->Initialize();
 
+	//Pixel用のカメラ
+	model->cameraResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(CameraForGPU)).Get();
+
 
 	//初期は白色
 	//モデル個別に色を変更できるようにこれは外に出しておく
@@ -271,23 +276,19 @@ void Model::Draw(WorldTransform& worldTransform, Camera& camera) {
 	////書き込むためのアドレスを取得
 	////reinterpret_cast...char* から int* へ、One_class* から Unrelated_class* へなどの変換に使用
 
-	////通常のLighting
-	//if ((isEnableLighting_ == true)|| (isEnableLighting_ == false&& isEnablePhongReflection_ == false)) {
-	//	isEnablePhongReflection_ = false;
-	//	isEnableLighting_ = true;
-	//	
-
-	//}
-
-	////PhongReflection
-	//if (isEnablePhongReflection_ == true) {
-	//	isEnableLighting_ = true;
-	//	material_->SetInformation(color_, isEnableLighting_, isEnablePhongReflection_, shiness_);
-
-	//}
 	material_->SetInformation(color_, true,  shiness_);
 	
+	cameraResource_->Map(0, nullptr, reinterpret_cast<void**>(&cameraForGPU_));
 	
+	Vector3 cameraWorldPosition = {};
+	cameraWorldPosition.x = camera.worldMatrix_.m[3][0];
+	cameraWorldPosition.y = camera.worldMatrix_.m[3][1];
+	cameraWorldPosition.z = camera.worldMatrix_.m[3][2];
+
+
+	cameraForGPU_->worldPosition = cameraWorldPosition;
+	//cameraResource_->Unmap(0, nullptr);
+
 
 	//コマンドを積む
 
@@ -308,14 +309,10 @@ void Model::Draw(WorldTransform& worldTransform, Camera& camera) {
 	//資料見返してみたがhlsl(GPU)に計算を任せているわけだった
 	//コマンド送ってGPUで計算
 	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(1, worldTransform.bufferResource_->GetGPUVirtualAddress());
-	//rootParameters[4]
-	//カメラ
-	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(4, camera.bufferResource_->GetGPUVirtualAddress());
-
+	
 
 
 	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である
-
 	if (textureHandle_ != 0) {
 		TextureManager::GraphicsCommand(textureHandle_);
 
@@ -323,10 +320,89 @@ void Model::Draw(WorldTransform& worldTransform, Camera& camera) {
 
 
 	//Light
+	//3
 	directionalLight_->SetDirection(lightingDirection_);
 	directionalLight_->GraphicsCommand();
 
 
+	//rootParameters[4]
+	//カメラ
+	//worldTransformと一緒に計算するもの
+	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(4, camera.bufferResource_->GetGPUVirtualAddress());
+
+	//PhongReflectionはこっち
+	//rootParameters[5]
+	//Pixel用
+	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(5, cameraResource_->GetGPUVirtualAddress());
+
+	//DrawCall
+	mesh_->DrawCall(1);
+}
+
+//テクスチャ上書き用
+void Model::Draw(WorldTransform& worldTransform, Camera& camera, uint32_t textureHandle) {
+	////マテリアルにデータを書き込む
+	////書き込むためのアドレスを取得
+	////reinterpret_cast...char* から int* へ、One_class* から Unrelated_class* へなどの変換に使用
+
+	material_->SetInformation(color_, true, shiness_);
+
+	cameraResource_->Map(0, nullptr, reinterpret_cast<void**>(&cameraForGPU_));
+
+	Vector3 cameraWorldPosition = {};
+	cameraWorldPosition.x = camera.worldMatrix_.m[3][0];
+	cameraWorldPosition.y = camera.worldMatrix_.m[3][1];
+	cameraWorldPosition.z = camera.worldMatrix_.m[3][2];
+
+
+	cameraForGPU_->worldPosition = cameraWorldPosition;
+	//cameraResource_->Unmap(0, nullptr);
+
+
+	//コマンドを積む
+
+	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootSignature(PipelineManager::GetInstance()->GetModelRootSignature().Get());
+	DirectXSetup::GetInstance()->GetCommandList()->SetPipelineState(PipelineManager::GetInstance()->GetModelGraphicsPipelineState().Get());
+
+
+	////RootSignatureを設定。PSOに設定しているけど別途設定が必要
+	////形状を設定。PSOに設定しているものとはまた別。同じものを設定すると考えよう
+	mesh_->GraphicsCommand();
+
+
+	//CBVを設定する
+	material_->GraphicsCommand();
+
+
+
+	//資料見返してみたがhlsl(GPU)に計算を任せているわけだった
+	//コマンド送ってGPUで計算
+	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(1, worldTransform.bufferResource_->GetGPUVirtualAddress());
+
+
+
+	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である
+	if (textureHandle != 0) {
+		TextureManager::GraphicsCommand(textureHandle);
+
+	}
+
+
+	//Light
+	//3
+	directionalLight_->SetDirection(lightingDirection_);
+	directionalLight_->GraphicsCommand();
+
+
+	//rootParameters[4]
+	//カメラ
+	//worldTransformと一緒に計算するもの
+	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(4, camera.bufferResource_->GetGPUVirtualAddress());
+
+	//PhongReflectionはこっち
+	//rootParameters[5]
+	//Pixel用
+	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(5, cameraResource_->GetGPUVirtualAddress());
 
 	//DrawCall
 	mesh_->DrawCall(1);

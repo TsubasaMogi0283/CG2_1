@@ -18,9 +18,9 @@ void Camera::Initialize() {
 
 	//メインはUpdateの方
 	//アフィン行列を計算
-	affineMatrix_ = MakeAffineMatrix(scale_, rotate_, translate_);
+	worldMatrix_ = MakeAffineMatrix(scale_, rotate_, translate_);
 	//カメラと言えば逆行列
-	viewMatrix_ = Inverse(affineMatrix_);
+	viewMatrix_ = Inverse(worldMatrix_);
 	//射影を計算
 	projectionMatrix_ = MakePerspectiveFovMatrix(fov_, aspectRatio_, nearClip_, farClip_);
 	//正射影行列(正規化)を計算
@@ -32,10 +32,10 @@ void Camera::Initialize() {
 void Camera::Update() {
 	
 	//アフィン行列を計算
-	affineMatrix_ = MakeAffineMatrix(scale_, rotate_, translate_);
+	worldMatrix_ = MakeAffineMatrix(scale_, rotate_, translate_);
 	
 	//カメラと言えば逆行列
-	viewMatrix_ = Inverse(affineMatrix_);
+	viewMatrix_ = Inverse(worldMatrix_);
 	//射影を計算
 	projectionMatrix_ = MakePerspectiveFovMatrix(fov_, aspectRatio_, nearClip_, farClip_);
 	//正射影行列(正規化)を計算

@@ -563,7 +563,8 @@ void PipelineManager::GenerateModelPSO() {
 	//今回は結果一つだけなので長さ１の配列
 
 	//VSでもCBufferを利用することになったので設定を追加
-	D3D12_ROOT_PARAMETER rootParameters[5] = {};
+	D3D12_ROOT_PARAMETER rootParameters[6] = {};
+	//マテリアル用
 	//CBVを使う
 	rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	////PixelShaderで使う
@@ -574,6 +575,7 @@ void PipelineManager::GenerateModelPSO() {
 
 
 	//CBVを使う
+	//座標用
 	rootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	//VertwxShaderで使う
 	rootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
@@ -601,6 +603,7 @@ void PipelineManager::GenerateModelPSO() {
 
 
 	//DescriptorTableを使う
+	//texture用
 	rootParameters[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	
 	//PixelShaderを使う
 	rootParameters[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;				
@@ -624,6 +627,17 @@ void PipelineManager::GenerateModelPSO() {
 	rootParameters[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
 	//レジスタ番号1を使う
 	rootParameters[4].Descriptor.ShaderRegister = 1;
+
+
+
+
+	//PixelShaderに送る方のカメラ
+	rootParameters[5].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	//PixelShaderで使う
+	rootParameters[5].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	//レジスタ番号2を使う
+	rootParameters[5].Descriptor.ShaderRegister = 2;
+
 
 
 

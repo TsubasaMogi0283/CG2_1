@@ -72,8 +72,8 @@ private:
 
 	float radius_;
 
+	Vector3 directionalLight_ = {};
 
-
-
+	uint32_t textureHandle_ = 0u;
 };
 

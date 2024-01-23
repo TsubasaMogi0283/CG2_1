@@ -40,7 +40,6 @@ void SampleScene::Initialize() {
 void SampleScene::Update(GameManager* gameManager) {
 
 
-
 	ImGui::Begin("Camera");
 	ImGui::SliderFloat3("Tranlate", &camera_.translate_.x, -40.0f, 40.0f);
 	ImGui::SliderFloat3("Rotate", &camera_.rotate_.x, -7.0f, 7.0f);

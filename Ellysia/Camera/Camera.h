@@ -54,7 +54,7 @@ public:
 
 
 	//アフィン行列
-	Matrix4x4 affineMatrix_ = {};
+	Matrix4x4 worldMatrix_ = {};
 	//ビュー行列
 	Matrix4x4 viewMatrix_ = {};
 	//射影行列

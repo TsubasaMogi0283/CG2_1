@@ -11,14 +11,17 @@ Player::Player() {
 void Player::Initialize(Vector3 position) {
 
 	model_ = std::unique_ptr<Model>();
-	model_.reset(Model::Create("Resources/Sample/Player", "playre.obj"));
+	model_.reset(Model::Create("Resources/CG3/Sphere", "Sphere.obj"));
+
+	//textureHandle_ = TextureManager::GetInstance()->LoadTexture("Resources/monsterBall.png");
 
 	worldTransform_.Initialize();
-	worldTransform_.scale_ = { 1.0f,1.0f,1.0f };
+	const float SCALE = 3.0f;
+	worldTransform_.scale_ = { SCALE,SCALE,SCALE };
 	worldTransform_.rotate_ = { 0.0f,0.0f,0.0f };
 	worldTransform_.translate_ = position;
 
-	
+	directionalLight_.y = -1.0f;
 
 	radius_ = 1.0f;
 
@@ -83,17 +86,20 @@ Vector3 Player::GetWorldPosition() {
 
 //更新
 void Player::Update() {
+
+
+	
 	ImGui::Begin("Model");
 	ImGui::SliderFloat3("Scale", &worldTransform_.scale_.x, 1.0f, 10.0f);
 	ImGui::SliderFloat3("Rotate", &worldTransform_.rotate_.x, 0.0f, 10.0f);
 	ImGui::SliderFloat3("Translate", &worldTransform_.translate_.x, -10.0f, 10.0f);
-
+	ImGui::SliderFloat3("DirectionalLight", &directionalLight_.x, -1.0f, 1.0f);
 	ImGui::End();
 
 	model_->SetScale(worldTransform_.scale_);
 	model_->SetRotate(worldTransform_.rotate_);
 	model_->SetTranslate(worldTransform_.translate_);
-
+	model_->SetDirection(directionalLight_);
 
 	worldTransform_.Update();
 

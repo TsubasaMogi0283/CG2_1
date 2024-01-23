@@ -40,8 +40,6 @@ void SampleScene::Initialize() {
 	cameraTranslate_ = { 0.0f,0.0f,-100.0f };
 	cameraRotate_ = { 0.4f,0.0f,0.0f };
 	camera_.Initialize();
-	camera_.translate_ = cameraTranslate_;
-	camera_.rotate_ = cameraRotate_;
 }
 
 
@@ -116,11 +114,17 @@ void SampleScene::Update(GameManager* gameManager) {
 	//当たり判定
 	CheckAllCollisions();
 
+	//先にビュー行列から計算する
+	railCamera_->Update();
+	camera_.viewMatrix_ = railCamera_->GetViewProjection().viewMatrix_;
+	camera_.projectionMatrix_ = railCamera_->GetViewProjection().projectionMatrix_;
+	camera_.Transfer();
+
 	player_->Update();
 	enemy_->Update();
 
 	skydome_->Update();
-	railCamera_->Update();
+	
 
 
 	
@@ -129,8 +133,7 @@ void SampleScene::Update(GameManager* gameManager) {
 
 	//camera_.viewMatrix_ = railCamera_->GetViewProjection().viewMatrix_;
 	//camera_.projectionMatrix_ = railCamera_->GetViewProjection().projectionMatrix_;
-	camera_.Update();
-	//camera_.Transfer();
+	//camera_.Update();
 }
 
 /// <summary>
@@ -138,10 +141,10 @@ void SampleScene::Update(GameManager* gameManager) {
 /// </summary>
 void SampleScene::Draw() {
 
-	//skydome_->Draw(camera_);
-	//player_->Draw(camera_);
-	//
-	//enemy_->Draw(camera_);
+	skydome_->Draw(camera_);
+	player_->Draw(camera_);
+	
+	enemy_->Draw(camera_);
 
 	//線分の数
 	

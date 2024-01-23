@@ -70,6 +70,13 @@ float Length(Vector3 v1) {
 Vector3 Leap(const Vector3& v1, const Vector3& v2, float t) {
 	Vector3 result = {};
 
+	if (t < 0.0f) {
+		t = 0.0f;
+	}
+	if (t > 1.0) {
+		t = 1.0f;
+	}
+
 	result.x = v1.x + t * (v2.x - v1.x);
 	result.y = v1.x + t * (v2.y - v1.y);
 	result.z = v1.z + t * (v2.z - v1.z);

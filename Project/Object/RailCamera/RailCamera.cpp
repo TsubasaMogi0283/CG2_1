@@ -25,16 +25,31 @@ void RailCamera::Initialize(Vector3 worldPosition,Vector3 radius){
 
 	controlPoints_ = {
 		{0.0f,0.0f,0.0f},
-		{10.0f,15.0f,0.0f},
-		{10.0f,15.0f,0.0f},
-		{20.0f,15.0f,0.0f},
-		{20.0f,0.0f,0.0f},
-		{30.0f,0.0f,0.0f},
+		{10.0f,10.0f,5.0f},
+		{15.0f,15.0f,10.0f},
+		{20.0f,10.0f,20.0f},
+		{25.0f,5.0f,30.0f},
+		{30.0f,0.0f,20.0f},
+		{25.0f,10.0f,15.0f},
+		{30.0f,15.0f,10.0f},
+		{40.0f,10.0f,10.0f},
+		{30.0f,5.0f,8.0f},
+		{20.0f,0.0f,5.0f},
+		{10.0f,5.0f,0.0f},
+		{0.0f,0.0f,0.0f},
+
+
 	};
 
+	// 線分の数+1個分の頂点座標を計算
+	for (size_t i = 0; i < SEGMENT_COUNT + 1; i++) {
+		t = 1.0f / SEGMENT_COUNT * i;
+		Vector3 pos = CatmullRom3D(controlPoints_, t);
+		// 描画用頂点リストに追加
+		pointsDrawing.push_back(pos);
+	}
 
 	camera_.Initialize();
-	camera_.farClip_ = 1200.0f;
 }
 
 
@@ -45,16 +60,40 @@ void RailCamera::Update(){
 	//eyeをワールドトランスフォームの座標に入れる
 	worldTransform_.translate_ = eyePosition_;
 
+
+	if (eyePoint < SEGMENT_COUNT) {
+
+		if (t > 1.0f) {
+			t = 0.0f;
+			eyePoint++;
+			if (targetPoint < SEGMENT_COUNT) {
+				targetPoint++;
+			}
+			if (forwardPoint < SEGMENT_COUNT) {
+				forwardPoint++;
+			}
+		}
+		if (t <= 1.0f) {
+			eyePosition_ = Leap(pointsDrawing[eyePoint], pointsDrawing[targetPoint], t);
+			worldTransform_.translate_ = eyePosition_;
+			targetPosition_ = Leap(pointsDrawing[targetPoint], pointsDrawing[forwardPoint], t);
+			t += 0.03f;
+		}
+	}
+
 	//targetとeyeの差分ベクトル(forward)から02_09_ex1より
 	//回転角を求めてワールドトランスフォームの角度に入れる
-	Vector3 target = Subtract(targetPosition_, eyePosition_);
+	Vector3 forward = Subtract(targetPosition_, eyePosition_);
 
-
-	worldTransform_.rotate_;
+	//atan(高さ,底辺)
+	//ここは09aとだいたい同じ
+	worldTransform_.rotate_.y=std::atan2(forward.x, forward.z);
+	//三角比
+	float velocityXZ = sqrt((forward.x * forward.x) + (forward.z * forward.z));
+	worldTransform_.rotate_.x = std::atan2(-forward.y, velocityXZ);
 
 	//カメラへ
-
-	worldTransform_.Update();
+	worldTransform_.worldMatrix_ = MakeAffineMatrix(worldTransform_.scale_, worldTransform_.rotate_, worldTransform_.translate_);
 	//camera_.Update();
 	camera_.viewMatrix_ = Inverse(worldTransform_.worldMatrix_);
 

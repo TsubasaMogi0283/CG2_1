@@ -20,7 +20,8 @@ void WorldTransform::Update() {
 	//逆転置行列
 	//ワールド行列を逆転置にする
 	Matrix4x4 worldInverseMatrix = Inverse(worldMatrix_);
-	worldInverseTransposeMatrix_ = Transpose(worldInverseMatrix);
+	//転置にした
+	worldInverseTransposeMatrix_ = MakeTransposeMatrix(worldInverseMatrix);
 
 	//親があれば親のワールド行列を掛ける
 	if (parent_) {

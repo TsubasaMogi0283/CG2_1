@@ -1,7 +1,6 @@
 #include "Object3d.hlsli"
 
 
-
 //座標返還を行うVS
 struct TransformationMatrix
 {
@@ -24,8 +23,6 @@ struct CamerTransformationMatrix{
 //CBuffer
 ConstantBuffer<TransformationMatrix> gTransformationMatrix : register(b0);
 ConstantBuffer<CamerTransformationMatrix> gCamerTransformationMatrix : register(b1);
-
-
 
 
 VertexShaderOutput main(VertexShaderInput input) {

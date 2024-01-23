@@ -92,7 +92,7 @@ PixelShaderOutput main(VertexShaderOutput input) {
 	
 
 		//Half Lambert
-        float NdotL = dot(normalize(input.normal), -gDirectionalLight.direction);
+        float NdotL = dot(normalize(input.normal), -normalize(gDirectionalLight.direction));
         float cos = pow(NdotL * 0.5f + 0.5f, 2.0f);
 
         if (textureColor.a == 0.0f)
@@ -108,13 +108,20 @@ PixelShaderOutput main(VertexShaderOutput input) {
         
 		//入射光の反射ベクトルを求める
 		//r
-        float32_t3 reflectionLight = reflect(gDirectionalLight.direction, normalize(input.normal));
+        float32_t3 reflectionLight = reflect(normalize(gDirectionalLight.direction), normalize(input.normal));
+		
+		
+        //HalfVectorを求めて計算
+		float32_t3 halfVector = normalize(-gDirectionalLight.direction + toEye);
+        float NDotH = dot(normalize(input.normal), halfVector);
+        float specularPow = pow(saturate(NDotH), gMaterial.shininess);
+		
 		
 		//内積をとりsaturate
 		//shininessを階乗すると鏡面反射の強度が求まる
-        float RdotE = dot(reflectionLight, toEye);
+       // float RdotE = dot(reflectionLight, toEye);
 		//反射強度
-        float specularPow = pow(saturate(RdotE), gMaterial.shininess);
+		//float specularPow = pow(saturate(RdotE), gMaterial.shininess);
 		
 		//拡散反射
         //今までのやつ

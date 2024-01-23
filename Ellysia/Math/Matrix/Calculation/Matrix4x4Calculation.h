@@ -50,6 +50,9 @@ Matrix4x4 MakeAffineMatrix(const Vector3 scale, const Vector3 rotate, const Vect
 //逆行列
 Matrix4x4 Inverse(const Matrix4x4 m);
 
+//転置行列
+Matrix4x4 MakeTransposeMatrix(const Matrix4x4 m);
+
 //遠視投影行列
 Matrix4x4 MakePerspectiveFovMatrix(float fovY, float aspectRatio, float nearClip, float farClip);
 

@@ -94,9 +94,6 @@ float DotVector3(Vector3 v1, Vector3 v2) {
 	return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
 }
 
-float DotVector2(Vector3 v1, Vector3 v2) {
-	return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
-}
 
 Vector3 Slerp(const Vector3& v1, const Vector3& v2, float t) {
 	float newT = Clamp(t, 0.0f, 1.0f);

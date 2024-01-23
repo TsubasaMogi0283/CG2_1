@@ -17,6 +17,10 @@ void WorldTransform::Initialize() {
 void WorldTransform::Update() {
 	//SRT合成
 	worldMatrix_ = MakeAffineMatrix(scale_, rotate_, translate_);
+	//逆転置行列
+	//ワールド行列を逆転置にする
+	Matrix4x4 worldInverseMatrix = Inverse(worldMatrix_);
+	worldInverseTransposeMatrix_ = Transpose(worldInverseMatrix);
 
 	//親があれば親のワールド行列を掛ける
 	if (parent_) {
@@ -35,5 +39,6 @@ void WorldTransform::Transfer() {
 	//GPU側でWVP計算してくれるようにする
 	tranceformationData_->world = worldMatrix_;
 	tranceformationData_->normal = MakeIdentity4x4();
+	tranceformationData_->worldInverseTranspose = worldInverseTransposeMatrix_;
 	bufferResource_->Unmap(0, nullptr);
 }

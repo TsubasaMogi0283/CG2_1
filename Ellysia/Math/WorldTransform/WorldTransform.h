@@ -10,6 +10,7 @@
 struct WorldTransformData {
 	Matrix4x4 world;
 	Matrix4x4 normal;
+	Matrix4x4 worldInverseTranspose;
 };
 
 
@@ -54,6 +55,8 @@ public:
 
 	//ワールド行列へ
 	Matrix4x4 worldMatrix_ = {};
+	//逆転置行列
+	Matrix4x4 worldInverseTransposeMatrix_ = {};
 
 	//親となるワールド変換へのポインタ
 	const WorldTransform* parent_ = nullptr;

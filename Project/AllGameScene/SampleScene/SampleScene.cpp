@@ -121,8 +121,10 @@ void SampleScene::Update(GameManager* gameManager) {
 
 
 
+	player_->SetParent(&railCamera_->GetWorldTransform());
 
 	player_->Update();
+	
 	enemy_->Update();
 
 	skydome_->Update();

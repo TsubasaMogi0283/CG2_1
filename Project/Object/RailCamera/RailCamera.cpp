@@ -26,7 +26,7 @@ void RailCamera::Initialize(Camera& camera,Vector3 worldPosition,Vector3 radius)
 	controlPoints_ = {
 		{0,  0,  0 },
 		{0,  10, 20},
-		{10, 20, 30},
+		/*{10, 20, 30},
 		{10, 30, 40},
 		{10, 30, 50},
 		{20, 30, 60},
@@ -35,11 +35,11 @@ void RailCamera::Initialize(Camera& camera,Vector3 worldPosition,Vector3 radius)
 		{20, 20, 30},
 		{10, 10, 20},
 		{0,  0,  10},
-		{0,  0,  0 },
+		{0,  0,  0 },*/
 	};
 
 	// 線分の数+1個分の頂点座標を計算
-	for (size_t i = 0; i < SEGMENT_COUNT + 1; i++) {
+	for (size_t i = 1; i < SEGMENT_COUNT + 1; i++) {
 		t = 1.0f / SEGMENT_COUNT * i;
 		Vector3 pos = CatmullRom3D(controlPoints_, t);
 		// 描画用頂点リストに追加

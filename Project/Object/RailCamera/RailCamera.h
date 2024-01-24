@@ -10,12 +10,12 @@ public:
 	RailCamera();
 
 	//初期化
-	void Initialize(Vector3 worldPosition,Vector3 radius);
+	void Initialize(Camera& camera, Vector3 worldPosition,Vector3 radius);
 
 	//更新
 	void Update();
 
-	void Draw(Camera camera);
+	void Draw(Camera& camera);
 
 
 	WorldTransform& GetWorldTransform() {

@@ -10,7 +10,7 @@ void Skydome::Initialize(){
 	model_ = std::make_unique<Model>();
 	model_.reset(Model::Create("Resources/Sample/CelestialSphere", "CelestialSphere.obj"));
 	
-	const float SCALE_SIZE = 50.0f;
+	const float SCALE_SIZE = 500.0f;
 	//worldTransform_ = { {SCALE_SIZE,SCALE_SIZE,SCALE_SIZE},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
 	worldTransform_.Initialize();
 	worldTransform_.scale_ = { SCALE_SIZE, SCALE_SIZE, SCALE_SIZE };

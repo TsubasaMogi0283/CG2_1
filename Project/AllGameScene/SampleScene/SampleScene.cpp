@@ -31,15 +31,13 @@ void SampleScene::Initialize() {
 
 	collisionManager_ = std::make_unique < CollisionManager>();
 
-	
+	camera_.Initialize();
 
 	railCamera_ = new RailCamera();
-	railCamera_->Initialize(player_->GetWorldPosition(), { 0.0f,0.0f,0.0f });
+	railCamera_->Initialize(camera_,player_->GetWorldPosition(), { 0.0f,0.0f,0.0f });
 	player_->SetParent(&railCamera_->GetWorldTransform());
 
-	cameraTranslate_ = { 0.0f,0.0f,-100.0f };
-	cameraRotate_ = { 0.4f,0.0f,0.0f };
-	camera_.Initialize();
+	
 }
 
 
@@ -119,6 +117,10 @@ void SampleScene::Update(GameManager* gameManager) {
 	camera_.viewMatrix_ = railCamera_->GetViewProjection().viewMatrix_;
 	camera_.projectionMatrix_ = railCamera_->GetViewProjection().projectionMatrix_;
 	camera_.Transfer();
+
+
+
+
 
 	player_->Update();
 	enemy_->Update();

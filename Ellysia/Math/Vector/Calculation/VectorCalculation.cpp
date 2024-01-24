@@ -166,6 +166,10 @@ Vector3 CatmullRom3D(std::vector<Vector3> controlPoint, float t) {
 
 	return result;*/
 
+
+	//クラモト君の参考にさせてもらった
+	//いずれ自分なりに変えるつもりではある 
+	
 	//要素数を取得する
 	//size関数は要素数を返す　例　std::vector<int>sanple = {1, 2, 3, } の時 sanple.size() = 3
 	int elements = static_cast<int> (controlPoint.size());

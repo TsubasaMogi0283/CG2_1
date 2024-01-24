@@ -2,6 +2,7 @@
 #include <VectorCalculation.h>
 #include "Matrix4x4Calculation.h"
 #include <imgui.h>
+
 //コンストラクタ
 RailCamera::RailCamera(){
 
@@ -24,9 +25,15 @@ void RailCamera::Initialize(Camera& camera,Vector3 worldPosition,Vector3 radius)
 	
 
 	controlPoints_ = {
-		{0,  0,  0 },
-		{0,  10, 20},
-		{10, 10, 10},
+		{0.0f,  0.0f,  0.0f },
+		{0.0f,  10.0f, 10.0f},
+		{0.0f,  20.0f, 15.0f},
+		{0.0f,  25.0f, 10.0f},
+		{0.0f,  20.0f, 5.0f},
+		{0.0f,  15.0f, 5.0f},
+		{10.0f, 10.0f, 10.0f},
+		{5.0f, 0.0f, 5.0f},
+		{0.0f, 0.0f, 0.0f},
 	};
 
 
@@ -46,22 +53,17 @@ void RailCamera::Initialize(Camera& camera,Vector3 worldPosition,Vector3 radius)
 	pointWorldTransform_[2].translate_ = controlPoints_[2];
 
 
-	// 線分の数+1個分の頂点座標を計算
-	for (size_t i = 0; i < SEGMENT_COUNT + 1; i++) {
-		t = 1.0f / SEGMENT_COUNT * i;
-		Vector3 pos = CatmullRom3D(controlPoints_, t);
-		// 描画用頂点リストに追加
-		pointsDrawing.push_back(pos);
-	}
 
 	camera_.Initialize();
 	camera_ = camera;
 }
 
 Vector3 RailCamera::CatmullRomPosition(const std::vector<Vector3>& points, float t){
-	assert(points.size() >= 4 && "静ぢょてんは4点以上必要です");
+
+	assert(points.size() >= 4 && "制御点は4点以上必要です");
 
 	//区間数は制御点の数-1
+	//初期化処理の所のcontrolPointに入っている数を参照してあげる
 	size_t division = points.size() - 1;
 	//1区間の長さ(全体を1.0とした割合)
 	float areaWidth = 1.0f / division;
@@ -73,7 +75,10 @@ Vector3 RailCamera::CatmullRomPosition(const std::vector<Vector3>& points, float
 
 	size_t index = static_cast<size_t>(t / areaWidth);
 	//区間番号が上限を超えないための計算
-	//index
+	index = max(index, 4);
+
+
+
 
 	size_t index0 = index - 1;
 	size_t index1 = index;
@@ -83,46 +88,44 @@ Vector3 RailCamera::CatmullRomPosition(const std::vector<Vector3>& points, float
 
 
 
-	return CatmullRom3D();
+
+	//始点&終点だった場合制御点を設定し直すよ
+	//最初の区間のp0はp1を重複使用する
+	if (index == 0) {
+		index0 = index1;
+	}
+
+	//最後の区間のp3はp2を重複使用する
+	if (index3 >= points.size()) {
+		index3 = index2;
+	}
+
+
+
+
+	//4点の座標
+	const Vector3& p0 = points[index0];
+	const Vector3& p1 = points[index1];
+	const Vector3& p2 = points[index2];
+	const Vector3& p3 = points[index3];
+
+
+
+
+	return CatmullRom3D(p0,p1,p2,p3,t_2);
 }
 
 //更新
 void RailCamera::Update(){
 
-	if (eyePoint < SEGMENT_COUNT) {
+	//controlPointの上限数に達したとき
+	//また最初から
 
-
-		//点から点へ移動
-		//次の点についたときに次の点に向かう
-		//つまりeyePointとtargetPointが1ずつ増えていく
-
-
-		if (t > 1.0f) {
-			t = 0.0f;
-			eyePoint++;
-			if (targetPoint < SEGMENT_COUNT) {
-				targetPoint++;
-			}
-			if (forwardPoint < SEGMENT_COUNT) {
-				forwardPoint++;
-			}
-		}
-		if (t>=0.0f && t <= 1.0f) {
-			eyePosition_ = Leap(controlPoints_[eyePoint], controlPoints_[targetPoint], t);
-			worldTransform_.translate_ = eyePosition_;
-			targetPosition_ = Leap(controlPoints_[targetPoint], controlPoints_[forwardPoint], t);
-			t += 0.01f;
-		}
-
-
-		
-
-	}
 
 
 
 	//targetとeyeの差分ベクトル(forward)から02_09_ex1より
-		//回転角を求めてワールドトランスフォームの角度に入れる
+	//回転角を求めてワールドトランスフォームの角度に入れる
 	Vector3 toTarget = Subtract(targetPosition_, eyePosition_);
 
 	//atan(高さ,底辺)
@@ -132,7 +135,10 @@ void RailCamera::Update(){
 	float velocityXZ = sqrtf((toTarget.x * toTarget.x) + (toTarget.z * toTarget.z));
 	worldTransform_.rotate_.x = std::atan2(-toTarget.y, velocityXZ);
 
+	t_ += 0.005f;
+	worldTransform_.translate_ = CatmullRomPosition(controlPoints_, t_);
 	//カメラへ
+
 	worldTransform_.worldMatrix_ = MakeAffineMatrix(worldTransform_.scale_, worldTransform_.rotate_, worldTransform_.translate_);
 	//camera_.Update();
 	camera_.viewMatrix_ = Inverse(worldTransform_.worldMatrix_);
@@ -161,10 +167,10 @@ void RailCamera::Draw(Camera& camera) {
 	//	pointsDrawing.push_back(pos);
 	//}
 
-	for (int i = 0; i < SEGMENT_COUNT - 1; i++) {
-		line_[i]->Draw(pointsDrawing[i], pointsDrawing[i + 1], camera);
-
-	}
+	//for (int i = 0; i < SEGMENT_COUNT - 1; i++) {
+	//	line_[i]->Draw(pointsDrawing[i], pointsDrawing[i + 1], camera);
+	//
+	//}
 
 
 

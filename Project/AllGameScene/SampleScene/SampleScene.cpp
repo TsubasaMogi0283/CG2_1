@@ -18,7 +18,7 @@ SampleScene::SampleScene() {
 /// </summary>
 void SampleScene::Initialize() {
 	player_ = new Player();
-	Vector3 playerPosition = { 0.0f, 0.0f, 15.0f };
+	Vector3 playerPosition = { 0.0f, 0.0f, 30.0f };
 	player_->Initialize(playerPosition);
 
 	enemy_ = new Enemy();
@@ -116,13 +116,16 @@ void SampleScene::Update(GameManager* gameManager) {
 	railCamera_->Update();
 	camera_.viewMatrix_ = railCamera_->GetViewProjection().viewMatrix_;
 	camera_.projectionMatrix_ = railCamera_->GetViewProjection().projectionMatrix_;
+
+
+	player_->SetParent(&railCamera_->GetWorldTransform());
+
 	camera_.Transfer();
 
 
 
 
-	player_->SetParent(&railCamera_->GetWorldTransform());
-
+	
 	player_->Update();
 	
 	enemy_->Update();

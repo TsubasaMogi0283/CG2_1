@@ -133,88 +133,95 @@ Vector3 Slerp(const Vector3& v1, const Vector3& v2, float t) {
 }
 
 //Catmull-romスプライン曲線
-Vector3 CatmullRom3D(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3, float t) {
-	Vector3 result = {};
+Vector3 CatmullRom3D(std::vector<Vector3> controlPoint, float t) {
+	/*Vector3 result = {};
 
 	float half = 1.0f / 2.0f;
-
-	result.x = half * (
-		(-1.0f * -p0.x + 3.0f * p1.x - 3.0f * p2.x + p3.x) *( t*t*t) +
-		(2.0f * p0.x - 5.0f * p1.x + 4.0f * p2.x - p3.x) * (t*t) +
-		(-1.0f * p0.x + p2.x) * t +
-		2.0f * p1.x);
-
-	result.y = half * (
-		(-1.0f * -p0.y + 3.0f * p1.y - 3.0f * p2.y + p3.y) * (t * t * t) +
-		(2.0f * p0.y - 5.0f * p1.y + 4.0f * p2.y - p3.y) * (t * t) +
-		(-1.0f * p0.y + p2.y) * t +
-		2.0f * p1.y);
-
-	result.z = half * (
-		(-1.0f * -p0.z + 3.0f * p1.z - 3.0f * p2.z + p3.z) * (t * t * t) +
-		(2.0f * p0.z - 5.0f * p1.z + 4.0f * p2.z - p3.z) * (t * t) +
-		(-1.0f * p0.z + p2.z) * t +
-		2.0f * p1.z);
+	for (int i = 0; i < 3; i++) {
+		Vector3 p0 = controlPoint[i];
+		Vector3 p1 = controlPoint[i + 3];
+		Vector3 p2 = controlPoint[i + 6];
+		Vector3 p3 = controlPoint[i + 9];
 
 
+
+		result.x = float(half * (
+			(-1.0f * -p0.x + 3.0f * p1.x - 3.0f * p2.x + p3.x) * std::pow(t, 3) +
+			(2.0f * p0.x - 5.0f * p1.x - 4.0f * p2.x - p3.x) * std::pow(t, 2) +
+			(-1.0f * p0.x + p2.x * t) + 2.0f * p0.x));
+
+		result.y = float(half * (
+			(-1.0f * -p0.y + 3.0f * p1.y - 3.0f * p2.y + p3.y) * std::pow(t, 3) +
+			(2.0f * p0.y - 5.0f * p1.y - 4.0f * p2.y - p3.y) * std::pow(t, 2) +
+			(-1.0f * p0.y + p2.y * t) + 2.0f * p0.y));
+
+		result.z = float(half * (
+			(-1.0f * -p0.z + 3.0f * p1.z - 3.0f * p2.z + p3.z) * std::pow(t, 3) +
+			(2.0f * p0.z - 5.0f * p1.z - 4.0f * p2.z - p3.z) * std::pow(t, 2) +
+			(-1.0f * p0.z + p2.z * t) + 2.0f * p0.z));
+
+	}
+
+
+
+	return result;*/
+
+
+	//クラモト君の参考にさせてもらった
+	//いずれ自分なりに変えるつもりではある 
+
+	//要素数を取得する
+	//size関数は要素数を返す　例　std::vector<int>sanple = {1, 2, 3, } の時 sanple.size() = 3
+	int elements = static_cast<int> (controlPoint.size());
+	//tの値x(要素数-1) 0からスタートにしたいので、-1する
+	//少数点以下を切り捨てるためにint型にする
+	//線分の位置を特定する
+	int segment = static_cast<int> (t * (elements - 1));
+	//小数点以下を取り出すためにfloat型segment-int型segmentをする
+	//線分の位置からtを0~1の範囲に収める
+	float tSegment = t * (elements - 1) - segment;
+	//始点
+	//線分の位置が1以上なら線分の現在地からひとつ前を代入　線分の位置が0以下なら0を代入
+	Vector3 p0;
+	if (segment > 0) {
+		p0 = controlPoint[segment - 1];
+	}
+	else {
+		p0 = controlPoint[0];
+	}
+	//始点から伸びるベクトル
+	//要素数-1より線分が大きくなったら、制御点から飛び出てしまうので要素数-1を代入
+	Vector3 v0;
+	if (segment < elements - 1) {
+		v0 = controlPoint[segment + 1];
+	}
+	else {
+		v0 = controlPoint[elements - 1];
+	}
+	//始点の一つ先の制御点
+	Vector3 p1 = controlPoint[segment];
+	//始点の一つ先の制御点から伸びるベクトル
+	//要素数-2より線分が大きくなったら、制御点から飛び出てしまうので要素数-1を代入
+	Vector3 v1;
+	if (segment < elements - 2) {
+		v1 = controlPoint[segment + 2];
+	}
+	else {
+		v1 = controlPoint[elements - 1];
+	}
+	Vector3 result;
+	//エルミート曲線の式に、全ての制御点を通るように変更を加えた式
+	result.x = 0.5f *
+		(((-p0.x + 3.0f * p1.x - 3.0f * v0.x + v1.x) * (tSegment * tSegment * tSegment)) +
+			((2.0f * p0.x - 5.0f * p1.x + 4.0f * v0.x - v1.x) * (tSegment * tSegment)) +
+			((2.0f * p1.x) + (-p0.x + v0.x) * tSegment));
+	result.y = 0.5f *
+		(((-p0.y + 3.0f * p1.y - 3.0f * v0.y + v1.y) * (tSegment * tSegment * tSegment)) +
+			((2.0f * p0.y - 5.0f * p1.y + 4.0f * v0.y - v1.y) * (tSegment * tSegment)) +
+			((2.0f * p1.y) + (-p0.y + v0.y) * tSegment));
+	result.z = 0.5f *
+		(((-p0.z + 3.0f * p1.z - 3.0f * v0.z + v1.z) * (tSegment * tSegment * tSegment)) +
+			((2.0f * p0.z - 5.0f * p1.z + 4.0f * v0.z - v1.z) * (tSegment * tSegment)) +
+			((2.0f * p1.z) + (-p0.z + v0.z) * tSegment));
 	return result;
-
-
-	////クラモト君の参考にさせてもらった
-	////いずれ自分なりに変えるつもりではある 
-	//
-	////要素数を取得する
-	////size関数は要素数を返す　例　std::vector<int>sanple = {1, 2, 3, } の時 sanple.size() = 3
-	//int elements = static_cast<int> (controlPoint.size());
-	////tの値x(要素数-1) 0からスタートにしたいので、-1する
-	////少数点以下を切り捨てるためにint型にする
-	////線分の位置を特定する
-	//int segment = static_cast<int> (t * (elements - 1));
-	////小数点以下を取り出すためにfloat型segment-int型segmentをする
-	////線分の位置からtを0~1の範囲に収める
-	//float tSegment = t * (elements - 1) - segment;
-	////始点
-	////線分の位置が1以上なら線分の現在地からひとつ前を代入　線分の位置が0以下なら0を代入
-	//Vector3 p0;
-	//if (segment > 0) {
-	//	p0 = controlPoint[segment - 1];
-	//}
-	//else {
-	//	p0 = controlPoint[0];
-	//}
-	////始点から伸びるベクトル
-	////要素数-1より線分が大きくなったら、制御点から飛び出てしまうので要素数-1を代入
-	//Vector3 v0;
-	//if (segment < elements - 1) {
-	//	v0 = controlPoint[segment + 1];
-	//}
-	//else {
-	//	v0 = controlPoint[elements - 1];
-	//}
-	////始点の一つ先の制御点
-	//Vector3 p1 = controlPoint[segment];
-	////始点の一つ先の制御点から伸びるベクトル
-	////要素数-2より線分が大きくなったら、制御点から飛び出てしまうので要素数-1を代入
-	//Vector3 v1;
-	//if (segment < elements - 2) {
-	//	v1 = controlPoint[segment + 2];
-	//}
-	//else {
-	//	v1 = controlPoint[elements - 1];
-	//}
-	//Vector3 result;
-	////エルミート曲線の式に、全ての制御点を通るように変更を加えた式
-	//result.x = 0.5f *
-	//	(((-p0.x + 3.0f * p1.x - 3.0f * v0.x + v1.x) * (tSegment * tSegment * tSegment)) +
-	//		((2.0f * p0.x - 5.0f * p1.x + 4.0f * v0.x - v1.x) * (tSegment * tSegment)) +
-	//		((2.0f * p1.x) + (-p0.x + v0.x) * tSegment));
-	//result.y = 0.5f *
-	//	(((-p0.y + 3.0f * p1.y - 3.0f * v0.y + v1.y) * (tSegment * tSegment * tSegment)) +
-	//		((2.0f * p0.y - 5.0f * p1.y + 4.0f * v0.y - v1.y) * (tSegment * tSegment)) +
-	//		((2.0f * p1.y) + (-p0.y + v0.y) * tSegment));
-	//result.z = 0.5f *
-	//	(((-p0.z + 3.0f * p1.z - 3.0f * v0.z + v1.z) * (tSegment * tSegment * tSegment)) +
-	//		((2.0f * p0.z - 5.0f * p1.z + 4.0f * v0.z - v1.z) * (tSegment * tSegment)) +
-	//		((2.0f * p1.z) + (-p0.z + v0.z) * tSegment));
-	//return result;
 }

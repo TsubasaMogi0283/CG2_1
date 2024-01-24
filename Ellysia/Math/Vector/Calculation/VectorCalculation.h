@@ -35,4 +35,4 @@ float DotVector2(const Vector3 v1, const Vector3 v2);
 Vector3 Slerp(const Vector3& v1, const Vector3& v2, float t);
 
 //Catmull-romスプライン曲線
-Vector3 CatmullRom3D(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3, float t);
+Vector3 CatmullRom3D(std::vector<Vector3> controlPoint, float t);

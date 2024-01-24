@@ -211,6 +211,10 @@ Model* Model::Create(const std::string& directoryPath, const std::string& fileNa
 			//Pixel用のカメラ
 			model->cameraResource_= DirectXSetup::GetInstance()->CreateBufferResource(sizeof(CameraForGPU)).Get();
 
+			//PointLight
+			model->pointLightResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(PointLight)).Get();
+			
+
 			//初期は白色
 			//モデル個別に色を変更できるようにこれは外に出しておく
 			model->color_ = { 1.0f,1.0f,1.0f,1.0f };
@@ -256,6 +260,9 @@ Model* Model::Create(const std::string& directoryPath, const std::string& fileNa
 	//Pixel用のカメラ
 	model->cameraResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(CameraForGPU)).Get();
 
+	//PointLight
+	model->pointLightResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(PointLight)).Get();
+
 
 	//初期は白色
 	//モデル個別に色を変更できるようにこれは外に出しておく
@@ -287,7 +294,7 @@ void Model::Draw(WorldTransform& worldTransform, Camera& camera) {
 
 
 	cameraForGPU_->worldPosition = cameraWorldPosition;
-	//cameraResource_->Unmap(0, nullptr);
+	cameraResource_->Unmap(0, nullptr);
 
 
 	//コマンドを積む
@@ -334,6 +341,11 @@ void Model::Draw(WorldTransform& worldTransform, Camera& camera) {
 	//rootParameters[5]
 	//Pixel用
 	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(5, cameraResource_->GetGPUVirtualAddress());
+
+	//PointLight
+	//rootParameters[6]
+	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(6, cameraResource_->GetGPUVirtualAddress());
+
 
 	//DrawCall
 	mesh_->DrawCall(1);

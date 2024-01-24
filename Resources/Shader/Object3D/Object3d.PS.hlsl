@@ -146,6 +146,12 @@ PixelShaderOutput main(VertexShaderOutput input) {
 		
 		//鏡面反射
         float32_t3 specular = gDirectionalLight.color.rgb * gDirectionalLight.intensity * specularPow * float32_t3(1.0f, 1.0f, 1.0f);
+		
+		//入射光の計算
+		//物体表面の特定の点に対する入射光を計算する
+        flot32_t3 pointLightDirection = normalize(input.worldPosition - gPointLIght.position);
+		
+		
 		//拡散反射+鏡面反射
         output.color.rgb = diffuse + specular;
 		//アルファは今まで通り

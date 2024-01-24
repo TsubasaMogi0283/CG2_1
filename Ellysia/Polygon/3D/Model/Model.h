@@ -28,6 +28,7 @@
 #include <WorldTransform.h>
 #include "Camera.h"
 #include <CameraForGPU.h>
+#include <Light/PointLight.h>
 
 class Model {
 public:
@@ -122,12 +123,6 @@ public:
 
 #pragma endregion
 
-private:
-
-
-
-
-
 
 
 private:
@@ -152,6 +147,13 @@ private:
 	CameraForGPU* cameraForGPU_ = {};
 	//光沢度
 	float shiness_ = 80.0f;
+
+
+	//PointLight
+	ComPtr<ID3D12Resource> pointLightResource_ = nullptr;
+	PointLight* pointLight_ = {};
+
+
 
 	//方向
 	Vector3 lightingDirection_ = { 0.0f,-1.0f,0.0f };

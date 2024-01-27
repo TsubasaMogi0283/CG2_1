@@ -36,8 +36,7 @@ private:
 	WorldTransform worldTransform_ = {};
 
 	static const int POINT_AMOUNT_ = 3;
-	std::unique_ptr<Model> pointModel_[POINT_AMOUNT_] = { nullptr };
-	WorldTransform pointWorldTransform_[POINT_AMOUNT_] = {};
+	
 
 	static const size_t SEGMENT_COUNT = 4;
 	Line* line_[SEGMENT_COUNT] = { nullptr };
@@ -47,13 +46,22 @@ private:
 	std::vector<Vector3> pointsDrawing = {};
 
 
+
+	//とりあえずLerpで練習しよう
+	static const int LERP_POINT_AMOUNT_ = 9;
+
+	/*std::unique_ptr<Model> pointModel_[LERP_POINT_AMOUNT_] = { nullptr };
+	WorldTransform pointWorldTransform_[LERP_POINT_AMOUNT_] = {};*/
+	Vector3 lerpPoints_[LERP_POINT_AMOUNT_] = {};
+
+
 	int eyePoint = 0;
 	int targetPoint = 1;
 	int forwardPoint = 2;
-	float t = 0;
 	Vector3 eyePosition_ = { 0, 0, 0 };
 	Vector3 targetPosition_ = { 0, 0, 0 };
 
+	int index_ = 0;
 
 	float t_ = 0.0f;
 

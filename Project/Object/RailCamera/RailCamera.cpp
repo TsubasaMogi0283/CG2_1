@@ -37,7 +37,24 @@ void RailCamera::Initialize(Camera& camera,Vector3 worldPosition,Vector3 radius)
 	};
 
 
-	for (int i = 0; i < POINT_AMOUNT_; i++) {
+	lerpPoints_[0] = { 0.0f,  0.0f,  0.0f };
+	lerpPoints_[1] = { 0.0f,  10.0f, 10.0f };
+	lerpPoints_[2] = { 0.0f,  20.0f, 15.0f };
+	lerpPoints_[3] = { 0.0f,  25.0f, 10.0f };
+	lerpPoints_[4] = { 0.0f,  20.0f, 5.0f };
+	lerpPoints_[5] = { 0.0f,  15.0f, 5.0f };
+	lerpPoints_[6] = { 10.0f, 10.0f, 10.0f };
+	lerpPoints_[7] = { 5.0f, 0.0f, 5.0f };
+	lerpPoints_[8] = { 0.0f, 0.0f, 0.0f };
+		
+		
+		
+		
+		
+		
+
+
+	/*for (int i = 0; i < LERP_POINT_AMOUNT_; i++) {
 		pointModel_[i] = std::make_unique<Model>();
 		pointModel_[i].reset(Model::Create("Resources/Sample/Player", "playre.obj"));
 
@@ -50,7 +67,7 @@ void RailCamera::Initialize(Camera& camera,Vector3 worldPosition,Vector3 radius)
 	}
 	pointWorldTransform_[0].translate_ = controlPoints_[0];
 	pointWorldTransform_[1].translate_ = controlPoints_[1];
-	pointWorldTransform_[2].translate_ = controlPoints_[2];
+	pointWorldTransform_[2].translate_ = controlPoints_[2];*/
 
 
 
@@ -120,26 +137,71 @@ void RailCamera::Update(){
 
 	//controlPointの上限数に達したとき
 	//また最初から
+	//for (int i = 0; i < LERP_POINT_AMOUNT_;++i) {
+		
+	t_ += 0.05f;
+	if (index_ > LERP_POINT_AMOUNT_ - 1) {
+		index_ = LERP_POINT_AMOUNT_ - 1;
+	}
+
+
+	////targetとeyeの差分ベクトル(forward)から02_09_ex1より
+	////回転角を求めてワールドトランスフォームの角度に入れる
+	//Vector3 toTarget = Subtract(targetPosition_, eyePosition_);
+
+	////atan(高さ,底辺)
+	////ここは09aとだいたい同じ
+	//worldTransform_.rotate_.y = std::atan2(toTarget.x, toTarget.z);
+	////三角比
+	//float velocityXZ = sqrtf((toTarget.x * toTarget.x) + (toTarget.z * toTarget.z));
+	//worldTransform_.rotate_.x = std::atan2(-toTarget.y, velocityXZ);
 
 
 
+	if (t_ <= 1.0f) {
+		worldTransform_.translate_ = Leap(lerpPoints_[index_], lerpPoints_[index_ + 1], t_);
+	}
 
-	//targetとeyeの差分ベクトル(forward)から02_09_ex1より
-	//回転角を求めてワールドトランスフォームの角度に入れる
-	Vector3 toTarget = Subtract(targetPosition_, eyePosition_);
+	if (t_ > 1.0f) {
+		t_ = 0.0f;
+		index_++;
+	}
+	
 
-	//atan(高さ,底辺)
-	//ここは09aとだいたい同じ
-	worldTransform_.rotate_.y = std::atan2(toTarget.x, toTarget.z);
-	//三角比
-	float velocityXZ = sqrtf((toTarget.x * toTarget.x) + (toTarget.z * toTarget.z));
-	worldTransform_.rotate_.x = std::atan2(-toTarget.y, velocityXZ);
 
-	t_ += 0.005f;
-	worldTransform_.translate_ = CatmullRomPosition(controlPoints_, t_);
+
+	////次の点に移動し終わった時にまた次の点に行くようにする
+	//if (t_ > 1.0f && t_<=2.0f) {
+	//	worldTransform_.translate_ = Leap(lerpPoints_[1], lerpPoints_[2], t_);
+	//}
+
 	//カメラへ
-
 	worldTransform_.worldMatrix_ = MakeAffineMatrix(worldTransform_.scale_, worldTransform_.rotate_, worldTransform_.translate_);
+
+
+	/*if (index_ > LERP_POINT_AMOUNT_ - 1) {
+		index_ = LERP_POINT_AMOUNT_ - 1;
+		break;
+	}*/
+		
+	ImGui::Begin("index");
+	ImGui::InputInt("index", &index_);
+	ImGui::End();
+
+
+	
+
+
+	ImGui::Begin("RailCamera");
+	
+	ImGui::SliderFloat3("translation", &worldTransform_.translate_.x, -10.0f, 10.0f);
+	ImGui::SliderFloat3("rotation", &worldTransform_.rotate_.x, -10.0f, 10.0f);
+	ImGui::InputInt("targetPoint", &targetPoint);
+	ImGui::InputInt("forwardPoint", &forwardPoint);
+	ImGui::InputFloat("T", &t_);
+
+	ImGui::End();
+
 	//camera_.Update();
 	camera_.viewMatrix_ = Inverse(worldTransform_.worldMatrix_);
 
@@ -149,14 +211,7 @@ void RailCamera::Update(){
 	
 	
 
-	ImGui::Begin("RailCamera");
-	ImGui::SliderFloat3("translation", &worldTransform_.translate_.x, -10.0f, 10.0f);
-	ImGui::SliderFloat3("rotation", &worldTransform_.rotate_.x, -10.0f, 10.0f);
-	ImGui::InputInt("targetPoint", &targetPoint);
-	ImGui::InputInt("forwardPoint", &forwardPoint);
-	ImGui::InputFloat("T", &t);
 	
-	ImGui::End();
 }
 
 void RailCamera::Draw(Camera& camera) {
@@ -176,13 +231,13 @@ void RailCamera::Draw(Camera& camera) {
 
 
 
-	for (int i = 0; i < POINT_AMOUNT_; i++) {
-		pointWorldTransform_[i].Update();
-	}
-	//ポイントにモデル入れてみる
-	for (int i = 0; i < POINT_AMOUNT_; i++) {
-		pointModel_[i]->Draw(pointWorldTransform_[i], camera);
-	}
+	//for (int i = 0; i < LERP_POINT_AMOUNT_; i++) {
+	//	pointWorldTransform_[i].Update();
+	//}
+	////ポイントにモデル入れてみる
+	//for (int i = 0; i < LERP_POINT_AMOUNT_; i++) {
+	//	pointModel_[i]->Draw(pointWorldTransform_[i], camera);
+	//}
 
 }
 

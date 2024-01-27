@@ -139,7 +139,9 @@ void RailCamera::Update(){
 	//また最初から
 	//for (int i = 0; i < LERP_POINT_AMOUNT_;++i) {
 		
-	t_ += 0.05f;
+	//t_ += 0.05f;
+	theta += 0.01f;
+	t_ = std::sinf(theta) + 0.0001f;;
 	if (index_ > LERP_POINT_AMOUNT_ - 1) {
 		index_ = LERP_POINT_AMOUNT_ - 1;
 	}
@@ -158,12 +160,14 @@ void RailCamera::Update(){
 
 
 
-	if (t_ <= 1.0f) {
+	if (t_ < 1.0f) {
 		worldTransform_.translate_ = Leap(lerpPoints_[index_], lerpPoints_[index_ + 1], t_);
 	}
 
 	if (t_ > 1.0f) {
 		t_ = 0.0f;
+		
+		theta = 0.0f;
 		index_++;
 	}
 	

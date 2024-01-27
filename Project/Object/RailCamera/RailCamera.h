@@ -53,7 +53,7 @@ private:
 	/*std::unique_ptr<Model> pointModel_[LERP_POINT_AMOUNT_] = { nullptr };
 	WorldTransform pointWorldTransform_[LERP_POINT_AMOUNT_] = {};*/
 	Vector3 lerpPoints_[LERP_POINT_AMOUNT_] = {};
-
+	float theta = 0.01f;
 
 	int eyePoint = 0;
 	int targetPoint = 1;

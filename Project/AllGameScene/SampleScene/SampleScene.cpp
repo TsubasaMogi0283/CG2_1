@@ -36,6 +36,7 @@ void SampleScene::Initialize() {
 	
 
 
+
 	//0.5秒ごとに発生
 	float frequency = 0.5f;
 	//発生頻度用の時刻。0.0で初期化

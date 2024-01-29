@@ -344,7 +344,7 @@ void Model::Draw(WorldTransform& worldTransform, Camera& camera) {
 
 	//PointLight
 	//rootParameters[6]
-	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(6, cameraResource_->GetGPUVirtualAddress());
+	//DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(6, cameraResource_->GetGPUVirtualAddress());
 
 
 	//DrawCall

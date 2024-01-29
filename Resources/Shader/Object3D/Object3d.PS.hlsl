@@ -149,7 +149,7 @@ PixelShaderOutput main(VertexShaderOutput input) {
 		
 		//入射光の計算
 		//物体表面の特定の点に対する入射光を計算する
-        flot32_t3 pointLightDirection = normalize(input.worldPosition - gPointLIght.position);
+       // flot32_t3 pointLightDirection = normalize(input.worldPosition - gPointLIght.position);
 		
 		
 		//拡散反射+鏡面反射

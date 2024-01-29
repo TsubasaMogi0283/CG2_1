@@ -317,7 +317,6 @@ std::list<Particle> Particle3D::Emission(const Emitter& emmitter, std::mt19937& 
 
 //更新
 void Particle3D::Update(Camera& camera){
-	
 
 	//C++でいうsrandみたいなやつ
 	std::random_device seedGenerator;
@@ -390,7 +389,7 @@ void Particle3D::Update(Camera& camera){
 
 			//最大値を超えて描画しないようにする
 			if (numInstance_ < MAX_INSTANCE_NUMBER_) {
-				instancingData_[numInstance_].WVP = worldViewProjectionMatrix;
+				//instancingData_[numInstance_].WVP = worldViewProjectionMatrix;
 				instancingData_[numInstance_].World = worldMatrix;
 				instancingData_[numInstance_].color = particleIterator->color;
 
@@ -479,13 +478,15 @@ void Particle3D::Draw(Camera& camera, uint32_t textureHandle){
 	}
 	
 
+	//camera_
+
 	//Light
 	directionalLight_->GraphicsCommand();
 	
 	//インスタンシング
 	instancingResource_->Map(0, nullptr, reinterpret_cast<void**>(&instancingData_));
-
-	
+	//rootParameters[4].Descriptor.ShaderRegister = 1;
+	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(4, camera.bufferResource_->GetGPUVirtualAddress());
 	
 	
 	mesh_->GraphicsCommand();

@@ -61,7 +61,7 @@ void SampleScene::Update(GameManager* gameManager) {
 /// </summary>
 void SampleScene::Draw() {
 
-	player_->Draw(camera_);
+	//player_->Draw(camera_);
 	//line_->Draw({ 0.0f,0.0f,0.0f }, { 0.0f,1.0f,0.0f },camera_);
 	particle3D_->Draw(camera_, textureHandle_);
 	

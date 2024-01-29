@@ -25,14 +25,19 @@ void RailCamera::Initialize(Camera& camera,Vector3 worldPosition,Vector3 radius)
 	
 
 	controlPoints_ = {
-		{0.0f,  0.0f,  0.0f },
-		{0.0f,  10.0f, 10.0f},
-		{0.0f,  20.0f, 15.0f},
-		{0.0f,  25.0f, 10.0f},
-		{0.0f,  20.0f, 5.0f},
-		{0.0f,  15.0f, 5.0f},
-		{10.0f, 10.0f, 10.0f},
-		{5.0f, 5.0f, 5.0f},
+		{0.0f, 0.0f,  0.0f },
+		{0.0f, 10.0f, 10.0f},
+		{0.0f, 20.0f, 15.0f},
+		{0.0f, 25.0f, 15.0f},
+		{0.0f, 25.0f, 15.0f},
+		{0.0f, 20.0f, 15.0f},
+		{0.0f, 15.0f, 15.0f},
+		{0.0f, 15.0f, 10.0f},
+		{0.0f, 15.0f, 10.0f},
+		{0.0f, 10.0f, 10.0f},
+		{0.0f, 10.0f, 5.0f},
+		{0.0f, 5.0f, 5.0f},
+		{0.0f, 5.0f, 0.0f},
 		{0.0f, 0.0f, 0.0f},
 	};
 
@@ -151,8 +156,8 @@ void RailCamera::Update(){
 	//float velocityXZ = sqrtf((toTarget.x * toTarget.x) + (toTarget.z * toTarget.z));
 	//worldTransform_.rotate_.x = std::atan2(-toTarget.y, velocityXZ);
 
-	
-	t_ += 0.0005f;
+	//
+	t_ += 0.001f;
 	worldTransform_.translate_ = CatmullRomPosition(controlPoints_, t_);
 	
 	

@@ -35,7 +35,7 @@ public:
 private:
 	WorldTransform worldTransform_ = {};
 
-	static const int POINT_AMOUNT_ = 3;
+	static const int POINT_AMOUNT_ = 7;
 	std::unique_ptr<Model> pointModel_[POINT_AMOUNT_] = { nullptr };
 	WorldTransform pointWorldTransform_[POINT_AMOUNT_] = {};
 

@@ -91,7 +91,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <AdditionalIncludeDirectories>$(ProjectDir)\Ellysia;$(ProjectDir)\Project;$(ProjectDir)\Ellysia\Common\DirectX;$(ProjectDir)\Ellysia\Common\Windows;$(ProjectDir)\Ellysia\Input;$(ProjectDir)\Ellysia\Audio;$(ProjectDir)\Ellysia\TextureManager;$(ProjectDir)\Ellysia\Math\Matrix;$(ProjectDir)\Ellysia\Math\Vector;$(ProjectDir)\Project\AllGameScene\GameManager;$(ProjectDir)\Ellysia\Camera;$(ProjectDir)\Project\AllGameScene;$(ProjectDir)\Ellysia\ImGuiManager;$(ProjectDir)\Ellysia\PipelineManager;$(ProjectDir)\Ellysia\Polygon\3D\Model;$(ProjectDir)\Ellysia\Math\Matrix\Calculation;$(ProjectDir)\Ellysia\Math\Vector\Calculation;$(ProjectDir)\Ellysia\ConvertFunction\ConvertLog;$(ProjectDir)\Ellysia\ConvertFunction\ConvertColor;$(ProjectDir)\Ellysia\Polygon\3D\BufferResource\Mesh;$(ProjectDir)\Ellysia\Polygon\3D\BufferResource\MaterialData;$(ProjectDir)\Ellysia\Polygon\3D\BufferResource\Material;$(ProjectDir)\Ellysia\Polygon\3D\BufferResource\Transformation;$(ProjectDir)\Ellysia\Polygon\3D\BufferResource\ModelData;$(ProjectDir)\Ellysia\Polygon\3D\BufferResource\DirectionalLight;$(ProjectDir)\Ellysia\Polygon\2D\Sprite;$(ProjectDir)\Ellysia\Polygon\3D\Particle3D;$(ProjectDir)\Ellysia\ConvertFunction\CompileShader;$(ProjectDir)\Ellysia\Math\Shape;$(ProjectDir)\Ellysia\Math\Collision;$(SolutionDir)\Ellysia\External\ImGui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <Optimization>MinSpace</Optimization>
+      <Optimization>MaxSpeed</Optimization>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

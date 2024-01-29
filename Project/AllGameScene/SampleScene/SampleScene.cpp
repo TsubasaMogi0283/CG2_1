@@ -1,7 +1,6 @@
 #include "SampleScene.h"
 
 #include <list>
-#include <VectorCalculation.h>
 
 
 /// <summary>
@@ -31,13 +30,15 @@ void SampleScene::Initialize() {
 
 	collisionManager_ = std::make_unique < CollisionManager>();
 
-	camera_.Initialize();
-
 	railCamera_ = new RailCamera();
-	railCamera_->Initialize(camera_,player_->GetWorldPosition(), { 0.0f,0.0f,0.0f });
+	railCamera_->Initialize(player_->GetWorldPosition(), { 0.0f,0.0f,0.0f });
 	player_->SetParent(&railCamera_->GetWorldTransform());
 
-	
+	cameraTranslate_ = { 0.0f,20.0f,-40.0f };
+	cameraRotate_ = { 0.4f,0.0f,0.0f };
+	camera_.Initialize();
+	camera_.translate_ = cameraTranslate_;
+	camera_.rotate_ = cameraRotate_;
 }
 
 
@@ -100,6 +101,8 @@ void SampleScene::CheckAllCollisions() {
 /// </summary>
 void SampleScene::Update(GameManager* gameManager) {
 
+
+
 	ImGui::Begin("Camera");
 	ImGui::SliderFloat3("Tranlate", &camera_.translate_.x, -40.0f, 40.0f);
 	ImGui::SliderFloat3("Rotate", &camera_.rotate_.x, -7.0f, 7.0f);
@@ -129,13 +132,10 @@ void SampleScene::Draw() {
 
 	skydome_->Draw(camera_);
 	player_->Draw(camera_);
-	
+
 	enemy_->Draw(camera_);
 
-	//線分の数
-	
 
-	//lineSample_->Draw({ 0.0f,0.0f,0.0f }, { 3.0f,3.0f,0.0f }, camera_);
 }
 
 
@@ -149,8 +149,4 @@ SampleScene::~SampleScene() {
 	delete player_;
 	delete enemy_;
 	delete railCamera_;
-
-	
-
-	delete lineSample_;
 }

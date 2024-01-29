@@ -20,6 +20,9 @@ void SampleScene::Initialize() {
 	Vector3 playerPosition = { 0.0f, 0.0f, 0.0f };
 	player_->Initialize(playerPosition);
 
+	particle3D_ = new Particle3D();
+	particle3D_->Create("Resources/05_02", "plane.obj");
+	textureHandle_ = TextureManager::GetInstance()->LoadTexture("Resources/CG3/circle.png");
 
 	line_ = new Line();
 	line_->Initialize();
@@ -49,7 +52,7 @@ void SampleScene::Update(GameManager* gameManager) {
 
 	player_->Update();
 
-
+	particle3D_->Update(camera_);
 	camera_.Update();
 }
 
@@ -60,7 +63,7 @@ void SampleScene::Draw() {
 
 	player_->Draw(camera_);
 	//line_->Draw({ 0.0f,0.0f,0.0f }, { 0.0f,1.0f,0.0f },camera_);
-
+	particle3D_->Draw(camera_, textureHandle_);
 	
 }
 

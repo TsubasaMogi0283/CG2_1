@@ -80,11 +80,11 @@ private:
 
 #pragma endregion
 
-	void Update(Camera& camera);
+	
 
 public:
 
-	
+	void Update(Camera& camera);
 
 	//通常の描画
 	//void Draw();

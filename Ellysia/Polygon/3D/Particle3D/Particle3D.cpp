@@ -372,7 +372,7 @@ void Particle3D::Update(Camera& camera){
 			Matrix4x4 backToFrontMatrix = MakeRotateYMatrix(std::numbers::pi_v<float>);
 
 			//カメラの回転を適用する
-			Matrix4x4 billBoardMatrix = Multiply(backToFrontMatrix, camera.affineMatrix_);
+			Matrix4x4 billBoardMatrix = Multiply(backToFrontMatrix, camera.worldMatrix_);
 			//平行成分はいらないよ
 			billBoardMatrix.m[3][0] = 0.0f;
 			billBoardMatrix.m[3][1] = 0.0f;
@@ -445,7 +445,7 @@ void Particle3D::Draw(Camera& camera, uint32_t textureHandle){
 	//書き込むためのアドレスを取得
 	//reinterpret_cast...char* から int* へ、One_class* から Unrelated_class* へなどの変換に使用
 
-	material_->SetInformation(color_,isEnableLighting_);
+	material_->SetInformation(color_,isEnableLighting_,100.0f);
 
 	//書き込むためのデータを書き込む
 	//頂点データをリソースにコピー

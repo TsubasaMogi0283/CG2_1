@@ -15,6 +15,7 @@
 
 #include <memory>
 #include <Line/Line.h>
+#include <Particle3D.h>
 
 
 //StatePatternを使う時は必ず前方宣言をするように
@@ -42,6 +43,9 @@ public:
 
 private:
 	Player* player_ = nullptr;
+
+	Particle3D* particle3D_ = nullptr;
+	uint32_t textureHandle_ = 0u;
 
 	Vector3 cameraTranslate_ = {};
 	Vector3 cameraRotate_ = {};

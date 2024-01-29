@@ -249,6 +249,9 @@
     <ClCompile Include="Ellysia\Line\Line.cpp">
       <Filter>Ellysia\Source File\Line</Filter>
     </ClCompile>
+    <ClCompile Include="Ellysia\Polygon\3D\Particle3D\Particle3D.cpp">
+      <Filter>Ellysia\Source File\Polygone\3D\Particle</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\Particle3D\Particle3d.PS.hlsl">
@@ -426,6 +429,9 @@
     </ClInclude>
     <ClInclude Include="Ellysia\Light\PointLight.h">
       <Filter>Ellysia\Header File\Polygone\3D\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Polygon\3D\Particle3D\Particle3D.h">
+      <Filter>Ellysia\Header File\Polygone\3D\Particle</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

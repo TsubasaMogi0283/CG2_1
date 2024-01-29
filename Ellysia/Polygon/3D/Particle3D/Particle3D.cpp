@@ -416,7 +416,7 @@ void Particle3D::Update(Camera& camera){
 
 			//最大値を超えて描画しないようにする
 			if (numInstance_ < MAX_INSTANCE_NUMBER_) {
-				instancingData_[numInstance_].WVP = worldViewProjectionMatrix;
+				//instancingData_[numInstance_].WVP = worldViewProjectionMatrix;
 				instancingData_[numInstance_].World = worldMatrix;
 				instancingData_[numInstance_].color = particleIterator->color;
 

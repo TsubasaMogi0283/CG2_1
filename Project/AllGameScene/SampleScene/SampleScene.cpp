@@ -52,7 +52,7 @@ void SampleScene::Update(GameManager* gameManager) {
 
 	player_->Update();
 
-	particle3D_->Update(camera_);
+	//article3D_->Update(camera_);
 	camera_.Update();
 }
 

@@ -911,7 +911,7 @@ void PipelineManager::GenerateParticle3DPSO() {
 	//今回は結果一つだけなので長さ１の配列
 
 	//VSでもCBufferを利用することになったので設定を追加
-	D3D12_ROOT_PARAMETER rootParameters[4] = {};
+	D3D12_ROOT_PARAMETER rootParameters[5] = {};
 	//CBVを使う
 	//Material
 	rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;

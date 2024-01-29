@@ -58,7 +58,7 @@ void SampleScene::Initialize() {
 	particle_->SetFrequencyTime(frequencyTime);
 	particleTranslate_ = { 0.0f,0.0f,0.0f };
 
-	cameraTranslate_ = { 0.0f,0.0f,0.0f };
+	cameraTranslate_ = { 0.0f,0.0f,-20.0f };
 	Camera::GetInstance()->SetTranslate(cameraTranslate_);
 
 
@@ -113,11 +113,20 @@ void SampleScene::Update(GameManager* gameManager) {
 	}
 
 
-	const float CAMERA_VELOCITY = 0.5f;
+	const float CAMERA_VELOCITY = 0.05f;
 	if (Input::GetInstance()->IsPushKey(DIK_RIGHT) == true) {
-		spritePosition_.y += MOVE_AMOUNT * CAMERA_VELOCITY;
+		cameraTranslate_.x += MOVE_AMOUNT * CAMERA_VELOCITY;
 	}
-	cameraTranslate_.x += MOVE_AMOUNT;
+	if (Input::GetInstance()->IsPushKey(DIK_LEFT) == true) {
+		cameraTranslate_.x -= MOVE_AMOUNT * CAMERA_VELOCITY;
+	}
+	if (Input::GetInstance()->IsPushKey(DIK_UP) == true) {
+		cameraTranslate_.y += MOVE_AMOUNT * CAMERA_VELOCITY;
+	}
+	if (Input::GetInstance()->IsPushKey(DIK_DOWN) == true) {
+		cameraTranslate_.y -= MOVE_AMOUNT * CAMERA_VELOCITY;
+	}
+
 	Camera::GetInstance()->SetTranslate(cameraTranslate_);
 
 

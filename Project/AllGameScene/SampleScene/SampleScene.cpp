@@ -3,6 +3,7 @@
 #include "TextureManager.h"
 #include <imgui.h>
 #include <Input.h>
+#include <Camera.h>
 
 /// <summary>
 	/// コンストラクタ
@@ -57,6 +58,10 @@ void SampleScene::Initialize() {
 	particle_->SetFrequencyTime(frequencyTime);
 	particleTranslate_ = { 0.0f,0.0f,0.0f };
 
+	cameraTranslate_ = { 0.0f,0.0f,0.0f };
+	Camera::GetInstance()->SetTranslate(cameraTranslate_);
+
+
 	audio_ = Audio::GetInstance();
 	uint32_t audioHandle_ = audio_->LoadWave("Resources/Audio/Sample/Win.wav");
 	audio_->PlayWave(audioHandle_, true);
@@ -106,6 +111,17 @@ void SampleScene::Update(GameManager* gameManager) {
 	if (Input::GetInstance()->IsPushKey(DIK_S) == true) {
 		spritePosition_.y += MOVE_AMOUNT * VELOCITY;
 	}
+
+
+	const float CAMERA_VELOCITY = 0.5f;
+	if (Input::GetInstance()->IsPushKey(DIK_RIGHT) == true) {
+		spritePosition_.y += MOVE_AMOUNT * CAMERA_VELOCITY;
+	}
+	cameraTranslate_.x += MOVE_AMOUNT;
+	Camera::GetInstance()->SetTranslate(cameraTranslate_);
+
+
+
 	//ウィンドウサイズの設定は↓でやるよ
 #ifdef _DEBUG
 	ImGui::SetNextWindowSize(ImVec2(500, 100));

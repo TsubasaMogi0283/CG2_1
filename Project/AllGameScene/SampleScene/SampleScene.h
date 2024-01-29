@@ -52,6 +52,9 @@ private:
 	AccelerationField accelerationField_ = {};
 	bool isSetField_ = false;
 
+	Vector3 cameraTranslate_ = {0.0f,0.0f,0.0f};
+	
+
 	Audio* audio_ = nullptr;
 	uint32_t audioHandle_ = 0u;
 };

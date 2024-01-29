@@ -16,30 +16,26 @@ void RailCamera::Initialize(Camera& camera,Vector3 worldPosition,Vector3 radius)
 	worldTransform_.translate_ = worldPosition;
 
 
-	for (size_t i = 0; i < SEGMENT_COUNT; i++) {
-		line_[i] = new Line();
-		line_[i]->Initialize();
-
-	}
+	
 
 	
 
-	controlPoints_ = {
-		{0.0f, 0.0f,  0.0f },
-		{0.0f, 10.0f, 10.0f},
-		{0.0f, 20.0f, 15.0f},
-		{0.0f, 25.0f, 15.0f},
-		{0.0f, 30.0f, 15.0f},
-		//{5.0f, 30.0f, 15.0f},
-		//{5.0f, 15.0f, 15.0f},
-		//{10.0f, 15.0f, 10.0f},
-		//{10.0f, 15.0f, 10.0f},
-		//{10.0f, 10.0f, 10.0f},
-		//{10.0f, 10.0f, 5.0f},
-		//{5.0f, 5.0f, 5.0f},
-		//{5.0f, 5.0f, 0.0f},
-		//{0.0f, 0.0f, 0.0f},
-	};
+	//controlPoints_ = {
+	//	{0.0f, 0.0f,  0.0f },
+	//	{0.0f, 10.0f, 10.0f},
+	//	{0.0f, 20.0f, 15.0f},
+	//	{0.0f, 25.0f, 15.0f},
+	//	{0.0f, 30.0f, 15.0f},
+	//	//{5.0f, 30.0f, 15.0f},
+	//	//{5.0f, 15.0f, 15.0f},
+	//	//{10.0f, 15.0f, 10.0f},
+	//	//{10.0f, 15.0f, 10.0f},
+	//	//{10.0f, 10.0f, 10.0f},
+	//	//{10.0f, 10.0f, 5.0f},
+	//	//{5.0f, 5.0f, 5.0f},
+	//	//{5.0f, 5.0f, 0.0f},
+	//	//{0.0f, 0.0f, 0.0f},
+	//};
 
 	//デバッグ用
 	for (int i = 0; i < POINT_AMOUNT_; i++) {
@@ -53,14 +49,8 @@ void RailCamera::Initialize(Camera& camera,Vector3 worldPosition,Vector3 radius)
 		
 
 	}
-	pointWorldTransform_[0].translate_ = controlPoints_[0];
-	pointWorldTransform_[1].translate_ = controlPoints_[1];
-	pointWorldTransform_[2].translate_ = controlPoints_[2];
+	
 
-
-
-	camera_.Initialize();
-	camera_ = camera;
 }
 
 Vector3 RailCamera::CatmullRomPosition(const std::vector<Vector3>& points, float t){
@@ -113,15 +103,15 @@ Vector3 RailCamera::CatmullRomPosition(const std::vector<Vector3>& points, float
 	if (index3 >= points.size()) {
 		index3 = index2;
 
-		//また最初に戻る
-		if (t_ > 1.0f) {
-			t_ = 0.0f;
-			index = 0;
-			index0 = index;
-			index1 = index;
-			index2 = index + 1;
-			index3 = index + 2;
-		}
+		////また最初に戻る
+		//if (t_ > 1.0f) {
+		//	t_ = 0.0f;
+		//	index = 0;
+		//	index0 = index;
+		//	index1 = index;
+		//	index2 = index + 1;
+		//	index3 = index + 2;
+		//}
 		
 	}
 
@@ -150,62 +140,40 @@ Vector3 RailCamera::CatmullRomPosition(const std::vector<Vector3>& points, float
 
 //更新
 void RailCamera::Update(){
+	//移動
+	Vector3 velocity = { 0.0f,0.0f,0.01f };
+	worldTransform_.translate_ = Add(worldTransform_.translate_, velocity);
 
-	//controlPointの上限数に達したとき
-	//また最初から
-
-
-
-
-
-	
-	//
-	t_ += 0.001f;
-	worldTransform_.translate_ = CatmullRomPosition(controlPoints_, t_);
-	
-	
+	//回転
+	Vector3 rotate = { 0.0f, 0.0f, 0.0f };
+	worldTransform_.rotate_ = Add(worldTransform_.rotate_, rotate);
 
 
-	worldTransform_.worldMatrix_ = MakeAffineMatrix(worldTransform_.scale_, worldTransform_.rotate_, worldTransform_.translate_);
+
+
+	//カメラへ
+
+	worldTransform_.Update();
 	//camera_.Update();
 	camera_.viewMatrix_ = Inverse(worldTransform_.worldMatrix_);
-
-
-
-
 	
 	
 
 	ImGui::Begin("RailCamera");
-	ImGui::InputFloat("t", &t_);
 	ImGui::SliderFloat3("translation", &worldTransform_.translate_.x, -10.0f, 10.0f);
 	ImGui::SliderFloat3("rotation", &worldTransform_.rotate_.x, -10.0f, 10.0f);
-	ImGui::InputInt("targetPoint", &targetPoint);
-	ImGui::InputInt("forwardPoint", &forwardPoint);
-	ImGui::InputFloat("T", &t);
-	
+
 	ImGui::End();
 }
 
 void RailCamera::Draw(Camera& camera) {
 
 
-	for (int i = 0; i < POINT_AMOUNT_; i++) {
-		pointWorldTransform_[i].Update();
-	}
-	//ポイントにモデル入れてみる
-	for (int i = 0; i < POINT_AMOUNT_; i++) {
-		pointModel_[i]->Draw(pointWorldTransform_[i], camera);
-	}
-
 }
-
 
 
 
 //デストラクタ
 RailCamera::~RailCamera(){
-	for (int i = 0; i < SEGMENT_COUNT; i++) {
-		delete line_[i];
-	}
+
 }

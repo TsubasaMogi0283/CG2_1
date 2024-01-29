@@ -39,25 +39,6 @@ private:
 	std::unique_ptr<Model> pointModel_[POINT_AMOUNT_] = { nullptr };
 	WorldTransform pointWorldTransform_[POINT_AMOUNT_] = {};
 
-	static const size_t SEGMENT_COUNT = 4;
-	Line* line_[SEGMENT_COUNT] = { nullptr };
-
-	//スプライン曲線
-	std::vector<Vector3> controlPoints_ = {};
-	std::vector<Vector3> pointsDrawing = {};
-
-
-	int eyePoint = 0;
-	int targetPoint = 1;
-	int forwardPoint = 2;
-	float t = 0;
-	Vector3 eyePosition_ = { 0, 0, 0 };
-	Vector3 targetPosition_ = { 0, 0, 0 };
-
-
-	Vector3 cameraPosition_ = {};
-	int currentIndex_ = 0;
-	float t_ = 0.0f;
 
 
 	Camera camera_ = {};

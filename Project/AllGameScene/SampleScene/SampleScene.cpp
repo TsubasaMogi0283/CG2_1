@@ -2,6 +2,7 @@
 #include "GameManager.h"
 #include "TextureManager.h"
 #include <imgui.h>
+#include <Input.h>
 
 /// <summary>
 	/// コンストラクタ
@@ -91,6 +92,20 @@ void SampleScene::Update(GameManager* gameManager) {
 
 	sprite->SetPosition(spritePosition_);
 
+	const float MOVE_AMOUNT=1.0f;
+	const float VELOCITY = 3.0f;
+	if (Input::GetInstance()->IsPushKey(DIK_D) == true) {
+		spritePosition_.x += MOVE_AMOUNT * VELOCITY;
+	}
+	if (Input::GetInstance()->IsPushKey(DIK_A) == true) {
+		spritePosition_.x -= MOVE_AMOUNT * VELOCITY;
+	}
+	if (Input::GetInstance()->IsPushKey(DIK_W) == true) {
+		spritePosition_.y -= MOVE_AMOUNT * VELOCITY;
+	}
+	if (Input::GetInstance()->IsPushKey(DIK_S) == true) {
+		spritePosition_.y += MOVE_AMOUNT * VELOCITY;
+	}
 	//ウィンドウサイズの設定は↓でやるよ
 #ifdef _DEBUG
 	ImGui::SetNextWindowSize(ImVec2(500, 100));

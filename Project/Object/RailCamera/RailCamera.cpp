@@ -29,16 +29,16 @@ void RailCamera::Initialize(Camera& camera,Vector3 worldPosition,Vector3 radius)
 		{0.0f, 10.0f, 10.0f},
 		{0.0f, 20.0f, 15.0f},
 		{0.0f, 25.0f, 15.0f},
-		{0.0f, 25.0f, 15.0f},
-		{0.0f, 20.0f, 15.0f},
-		{0.0f, 15.0f, 15.0f},
-		{0.0f, 15.0f, 10.0f},
-		{0.0f, 15.0f, 10.0f},
-		{0.0f, 10.0f, 10.0f},
-		{0.0f, 10.0f, 5.0f},
-		{0.0f, 5.0f, 5.0f},
-		{0.0f, 5.0f, 0.0f},
-		{0.0f, 0.0f, 0.0f},
+		{0.0f, 30.0f, 15.0f},
+		//{5.0f, 30.0f, 15.0f},
+		//{5.0f, 15.0f, 15.0f},
+		//{10.0f, 15.0f, 10.0f},
+		//{10.0f, 15.0f, 10.0f},
+		//{10.0f, 10.0f, 10.0f},
+		//{10.0f, 10.0f, 5.0f},
+		//{5.0f, 5.0f, 5.0f},
+		//{5.0f, 5.0f, 0.0f},
+		//{0.0f, 0.0f, 0.0f},
 	};
 
 	//デバッグ用
@@ -82,7 +82,11 @@ Vector3 RailCamera::CatmullRomPosition(const std::vector<Vector3>& points, float
 	//区間番号が上限を超えないための計算
 	//index = max(index, 4);
 
-
+	if (index == 3)
+	{
+		static int a = 0;
+		a++;
+	}
 
 
 	int index0 = index - 1;
@@ -97,6 +101,13 @@ Vector3 RailCamera::CatmullRomPosition(const std::vector<Vector3>& points, float
 	if (index == 0) {
 		index0 = index1;
 	}
+
+	/*if (index > 0 && index < points.size()) {
+		index0 = index - 1;
+		index1 = index;
+		index2 = index + 1;
+		index3 = index + 2;
+	}*/
 
 	//最後の区間のp3はp2を重複使用する
 	if (index3 >= points.size()) {
@@ -116,7 +127,6 @@ Vector3 RailCamera::CatmullRomPosition(const std::vector<Vector3>& points, float
 
 
 
-
 	//4点の座標
 	const Vector3& p0 = points[index0];
 	const Vector3& p1 = points[index1];
@@ -124,8 +134,10 @@ Vector3 RailCamera::CatmullRomPosition(const std::vector<Vector3>& points, float
 	const Vector3& p3 = points[index3];
 
 
+
 	ImGui::Begin("Index");
 	ImGui::InputFloat("t2", &t_2);
+	ImGui::InputInt("Index", &index);
 	ImGui::InputInt("Index0", &index0);
 	ImGui::InputInt("Index1", &index1);
 	ImGui::InputInt("Index2", &index2);
@@ -145,17 +157,7 @@ void RailCamera::Update(){
 
 
 
-	//targetとeyeの差分ベクトル(forward)から02_09_ex1より
-	//回転角を求めてワールドトランスフォームの角度に入れる
-	//Vector3 toTarget = Subtract(targetPosition_, eyePosition_);
-
-	////atan(高さ,底辺)
-	////ここは09aとだいたい同じ
-	//worldTransform_.rotate_.y = std::atan2(toTarget.x, toTarget.z);
-	////三角比
-	//float velocityXZ = sqrtf((toTarget.x * toTarget.x) + (toTarget.z * toTarget.z));
-	//worldTransform_.rotate_.x = std::atan2(-toTarget.y, velocityXZ);
-
+	
 	//
 	t_ += 0.001f;
 	worldTransform_.translate_ = CatmullRomPosition(controlPoints_, t_);
@@ -185,20 +187,6 @@ void RailCamera::Update(){
 }
 
 void RailCamera::Draw(Camera& camera) {
-	//for (size_t i = 0; i < SEGMENT_COUNT + 1; i++) {
-	//	float t = 1.0f / SEGMENT_COUNT * i;
-	//	Vector3 pos = CatmullRom3D(controlPoints_, t);
-	//	//描画用頂点リストに追加
-	//	pointsDrawing.push_back(pos);
-	//}
-
-	//for (int i = 0; i < SEGMENT_COUNT - 1; i++) {
-	//	line_[i]->Draw(pointsDrawing[i], pointsDrawing[i + 1], camera);
-	//
-	//}
-
-
-
 
 
 	for (int i = 0; i < POINT_AMOUNT_; i++) {

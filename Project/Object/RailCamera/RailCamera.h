@@ -59,6 +59,7 @@ private:
 	int currentIndex_ = 0;
 	float t_ = 0.0f;
 
+
 	Camera camera_ = {};
 };
 

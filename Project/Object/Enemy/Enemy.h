@@ -18,6 +18,7 @@ enum class Phase {
 //前方宣言
 class Player;
 
+class SampleScene;
 
 class Enemy:public Collider{
 public:
@@ -69,6 +70,11 @@ public:
 		player_ = player;
 	}
 
+	void SetSampleScene(SampleScene* sampleScene) {
+		this->sampleScene_ = sampleScene;
+	}
+
+
 
 	//ワールド座標
 	Vector3 GetWorldPosition()override;
@@ -78,9 +84,9 @@ public:
 	}
 
 	//弾リストを取得
-	const std::list<EnemyBullet*> GetBullets() const {
+	/*const std::list<EnemyBullet*> GetBullets() const {
 		return bullets_;
-	}
+	}*/
 
 private:
 	std::unique_ptr<Model> model_ = nullptr;
@@ -97,7 +103,7 @@ private:
 
 
 	
-	std::list<EnemyBullet*> bullets_;
+	//std::list<EnemyBullet*> bullets_;
 
 	const int FIRE_INTERVAL_ = 60;
 	int shotTime_ = FIRE_INTERVAL_;
@@ -113,6 +119,6 @@ private:
 
 
 	Player* player_ = nullptr;
-
+	SampleScene* sampleScene_ = nullptr;
 };
 

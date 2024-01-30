@@ -87,7 +87,6 @@ void Player::Attack() {
 		PlayerBullet* newBullet = new PlayerBullet();
 		newBullet->Initialize(GetWorldPosition(), velocity);
 		sampleScene_->AddPlayerBullet(newBullet);
-		//bullets_.push_back(newBullet);
 	}
 }
 
@@ -126,17 +125,6 @@ void Player::Update() {
 	Rotate();
 	Move();
 	Attack();
-	////デスフラグの立った玉を削除
-	//bullets_.remove_if([](PlayerBullet* bullet) {
-	//	if (bullet->IsDead()) {
-	//		delete bullet;
-	//		return true;
-	//	}
-	//	return false;
-	//	});
-	//for (PlayerBullet* bullet : bullets_) {
-	//	bullet->Update();
-	//}
 	
 }
 
@@ -145,17 +133,10 @@ void Player::Draw(Camera& camera) {
 	
 	model_->Draw(worldTransform_, camera);
 	
-	/*for (PlayerBullet* bullet : bullets_) {
-		bullet->Draw(camera);
-	}
-	*/
 }
 
 
 //デストラクタ
 Player::~Player() {
-	/*for (PlayerBullet* bullet : bullets_) {
-		delete bullet;
-	}*/
 }
 

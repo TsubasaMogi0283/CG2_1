@@ -10,6 +10,7 @@
 #include <Object/Player/Player.h>
 #include "Object/Player/Bullet/PlayerBullet.h"
 #include <Object/Enemy/Enemy.h>
+#include "Object/Enemy/Bullet/EnemyBullet.h"
 #include <Object/Skydome/Skydome.h>
 #include <Object/Collider/CollisionManager.h>
 #include <Object/RailCamera/RailCamera.h>
@@ -41,7 +42,7 @@ public:
 
 public:
 	void AddPlayerBullet(PlayerBullet* playerBullet);
-
+	void AddEnemyBullet(EnemyBullet* enemyBullet);
 
 private:
 	//衝突判定と応答
@@ -53,6 +54,8 @@ private:
 	std::list<PlayerBullet*>playerBullets_;
 
 	Enemy* enemy_ = nullptr;
+	std::list<EnemyBullet*>enemyBullets_;
+
 	std::unique_ptr<Skydome> skydome_ = nullptr;
 
 	Vector3 cameraTranslate_ = {};

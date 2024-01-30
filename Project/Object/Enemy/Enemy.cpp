@@ -4,7 +4,7 @@
 #include "Matrix4x4.h"
 #include "VectorCalculation.h"
 #include <Object/Collider/CollisionConfig.h>
-
+#include "SampleScene/SampleScene.h"
 
 
 Enemy::Enemy(){
@@ -56,9 +56,10 @@ void Enemy::Fire() {
 	afterVelocity = TransformNormal(afterVelocity,worldTransform_.worldMatrix_);
 
 	//弾
-	//EnemyBullet* bullet_ = new EnemyBullet();
-	//bullet_->Initialzie(transform_.translate_,velocity);
-	//bullet_->SetPlayer(player_);
+	EnemyBullet* bullet_ = new EnemyBullet();
+	bullet_->Initialzie(GetWorldPosition(), velocity);
+	bullet_->SetPlayer(player_);
+	sampleScene_->AddEnemyBullet(bullet_);
 	////リストへ
 	//bullets_.push_back(bullet_);
 	shotTime_ = FIRE_INTERVAL_;
@@ -117,14 +118,7 @@ void Enemy::Update(){
 		}
 		
 
-		//デスフラグの立った玉を削除
-		bullets_.remove_if([](EnemyBullet* bullet) {
-			if (bullet->IsDead()) {
-				delete bullet;
-				return true;
-			}
-			return false;
-		});
+		
 	}
 
 
@@ -163,9 +157,9 @@ void Enemy::Draw(Camera&camera){
 }
 
 Enemy::~Enemy(){
-	for (EnemyBullet* bullet : bullets_) {
+	/*for (EnemyBullet* bullet : bullets_) {
 		delete bullet;
-	}
+	}*/
 
 	delete state_;
 	

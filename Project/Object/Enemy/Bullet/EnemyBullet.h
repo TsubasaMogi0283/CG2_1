@@ -59,7 +59,7 @@ private:
 
 	WorldTransform worldTransform_;
 	Vector3 velocity_ = {};
-	float radius_;
+	float radius_ = 1.0f;;
 
 	bool isDead_ = false;
 

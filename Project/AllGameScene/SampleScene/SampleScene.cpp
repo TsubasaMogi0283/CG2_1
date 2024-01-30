@@ -15,6 +15,10 @@ void SampleScene::AddPlayerBullet(PlayerBullet* playerBullet) {
 	playerBullets_.push_back(playerBullet);
 }
 
+void SampleScene::AddEnemyBullet(EnemyBullet* enemyBullet){
+	enemyBullets_.push_back(enemyBullet);
+}
+
 
 /// <summary>
 /// 初期化
@@ -22,11 +26,15 @@ void SampleScene::AddPlayerBullet(PlayerBullet* playerBullet) {
 void SampleScene::Initialize() {
 	player_ = new Player();
 	Vector3 playerPosition = { 0.0f, 0.0f, 30.0f };
+
+	//前方宣言したものは初期化より先に置いてね
+	//そうじゃないとリストでエラーが起きるよ
 	player_->SetSampleScene(this);
 	player_->Initialize(playerPosition);
 
 	enemy_ = new Enemy();
 	enemy_->SetPlayer(player_);
+	enemy_->SetSampleScene(this);
 	enemy_->Initialize();
 
 
@@ -63,7 +71,7 @@ void SampleScene::CheckAllCollisions() {
 	//const std::list<PlayerBullet*>& playerBullets = player_->GetBullets();
 
 	//敵弾リストの取得
-	const std::list<EnemyBullet*>& enemyBullets = enemy_->GetBullets();
+	//const std::list<EnemyBullet*>& enemyBullets = enemy_->GetBullets();
 
 	//コライダー
 	std::list<Collider*> colliders;
@@ -83,7 +91,7 @@ void SampleScene::CheckAllCollisions() {
 		collisionManager_->RegisterList(bullet);
 	}
 	//敵弾全てについて
-	for (EnemyBullet* bullet : enemyBullets) {
+	for (EnemyBullet* bullet : enemyBullets_) {
 		//colliders.push_back(bullet);
 		collisionManager_->RegisterList(bullet);
 	}
@@ -122,6 +130,8 @@ void SampleScene::Update(GameManager* gameManager) {
 	camera_.projectionMatrix_ = railCamera_->GetViewProjection().projectionMatrix_;
 
 
+#pragma region プレイヤー
+
 	player_->SetParent(&railCamera_->GetWorldTransform());
 	player_->Update();
 	
@@ -133,13 +143,32 @@ void SampleScene::Update(GameManager* gameManager) {
 			return true;
 		}
 		return false;
-		});
+	});
 	for (PlayerBullet* bullet : playerBullets_) {
 		bullet->Update();
 	}
 
+#pragma endregion
+
+
 	enemy_->Update();
 
+
+	for (EnemyBullet* bullet : enemyBullets_) {
+		bullet->Update();
+
+	}
+
+	//デスフラグの立った玉を削除
+	enemyBullets_.remove_if([](EnemyBullet* bullet) {
+		if (bullet->IsDead()) {
+			delete bullet;
+			return true;
+		}
+		return false;
+	});
+	
+	
 	skydome_->Update();
 	
 
@@ -166,12 +195,14 @@ void SampleScene::Draw() {
 
 
 	enemy_->Draw(camera_);
+	for (EnemyBullet* bullet : enemyBullets_) {
+		bullet->Draw(camera_);
 
+	}
 	//線分の数
 	
 	railCamera_->Draw(camera_);
 
-	//lineSample_->Draw({ 0.0f,0.0f,0.0f }, { 3.0f,3.0f,0.0f }, camera_);
 }
 
 
@@ -187,6 +218,11 @@ SampleScene::~SampleScene() {
 	}
 	delete player_;
 	
+
+	for (EnemyBullet* bullet : enemyBullets_) {
+		delete bullet;
+
+	}
 	delete enemy_;
 	delete railCamera_;
 

@@ -109,7 +109,6 @@ private:
 	TimeCall* timeCall_ = nullptr;
 	std::list<TimeCall*> timedCalls_;
 
-	Camera camera_ = {};
 
 
 	Player* player_ = nullptr;

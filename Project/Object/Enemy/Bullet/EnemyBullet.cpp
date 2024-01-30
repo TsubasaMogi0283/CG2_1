@@ -18,6 +18,7 @@ void EnemyBullet::Initialzie(Vector3 position, Vector3 velocity){
 	model_.reset(Model::Create("Resources/Sample/cube", "cube.obj"));
 
 	const float SCALE_ = 0.3f;
+	worldTransform_.Initialize();
 	worldTransform_.scale_ = {SCALE_,SCALE_,SCALE_};
 	worldTransform_.rotate_ = { 0.0f,0.0f,0.0f };
 	worldTransform_.translate_ = position;
@@ -101,6 +102,8 @@ void EnemyBullet::Update(){
 
 	model_->SetTranslate(worldTransform_.translate_);
 	model_->SetScale(worldTransform_.scale_);
+
+	worldTransform_.Update();
 
 	ImGui::Begin("EnemyBullet");
 	ImGui::InputFloat3("Translate", &worldTransform_.translate_.x);

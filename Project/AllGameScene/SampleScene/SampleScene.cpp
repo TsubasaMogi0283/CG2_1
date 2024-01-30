@@ -93,7 +93,15 @@ void SampleScene::CheckAllCollisions() {
 
 }
 
+//Playerの弾を追加
+void SampleScene::AddPlayerBullet(PlayerBullet* playerBullet) {
 
+}
+
+//Enemyの弾を追加
+void SampleScene::AddEnemyBullet(EnemyBullet* enemyBullet) {
+
+}
 
 
 /// <summary>

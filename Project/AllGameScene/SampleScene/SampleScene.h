@@ -8,6 +8,7 @@
 #include "Camera.h"
 
 #include <Object/Player/Player.h>
+#include "Object/Player/Bullet/PlayerBullet.h"
 #include <Object/Enemy/Enemy.h>
 #include <Object/Skydome/Skydome.h>
 #include <Object/Collider/CollisionManager.h>
@@ -40,6 +41,11 @@ private:
 	//衝突判定と応答
 	void CheckAllCollisions();
 
+	//Playerの弾を追加
+	void AddPlayerBullet(PlayerBullet* playerBullet);
+
+	//Enemyの弾を追加
+	void AddEnemyBullet(EnemyBullet* enemyBullet);
 
 private:
 	Player* player_ = nullptr;

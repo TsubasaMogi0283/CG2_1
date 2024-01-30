@@ -11,14 +11,14 @@ Enemy::Enemy(){
 	
 }
 
-void Enemy::Initialize(){
+void Enemy::Initialize(Vector3 position){
 	model_ = std::make_unique<Model>();
 	model_.reset(Model::Create("Resources/Sample/Enemy", "enemy.obj"));
 
 	worldTransform_.Initialize();
 	worldTransform_.scale_ = { 0.5f,0.5f,0.5f };
 	worldTransform_.rotate_ = { 0.0f,0.0f,0.0f };
-	worldTransform_.translate_ = { 0.0f,0.0f,100.0f };
+	worldTransform_.translate_ = position;
 
 
 	state_ = new EnemyApproach();

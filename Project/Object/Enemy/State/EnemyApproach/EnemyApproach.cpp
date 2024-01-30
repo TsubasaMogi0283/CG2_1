@@ -11,7 +11,7 @@ void EnemyApproach::Update(Enemy* enemy){
 	enemy->SetTranslate(Add(enemy->GetTranslate(), velocity_));
 
 	//離脱へ
-	if (enemy->GetTranslate().z < 0.0f) {
+	if (enemy->GetTranslate().z <10.0f) {
 		enemy->ChangeState(new EnemyLeave());
 	}
 

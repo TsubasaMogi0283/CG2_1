@@ -19,6 +19,14 @@ void SampleScene::AddEnemyBullet(EnemyBullet* enemyBullet){
 	enemyBullets_.push_back(enemyBullet);
 }
 
+void SampleScene::GenerateEnemy(Vector3 position) {
+	Enemy* enemy_ = new Enemy();
+	enemy_->SetPlayer(player_);
+	enemy_->SetSampleScene(this);
+	enemy_->Initialize(position);
+
+	enemyes_.push_back(enemy_);
+}
 
 /// <summary>
 /// 初期化
@@ -32,11 +40,12 @@ void SampleScene::Initialize() {
 	player_->SetSampleScene(this);
 	player_->Initialize(playerPosition);
 
-	enemy_ = new Enemy();
-	enemy_->SetPlayer(player_);
-	enemy_->SetSampleScene(this);
-	enemy_->Initialize();
-
+	//enemy_ = new Enemy();
+	//enemy_->SetPlayer(player_);
+	//enemy_->SetSampleScene(this);
+	//enemy_->Initialize();
+	Vector3 enemyPosition= { 0.0f,0.0f,100.0f };
+	GenerateEnemy(enemyPosition);
 
 	skydome_ = std::make_unique<Skydome>();
 	skydome_->Initialize();
@@ -82,8 +91,12 @@ void SampleScene::CheckAllCollisions() {
 	collisionManager_->ClearList();
 	//コライダーを全て衝突マネージャに登録する
 	collisionManager_->RegisterList(player_);
-	collisionManager_->RegisterList(enemy_);
 
+	for (Enemy* enemy : enemyes_) {
+		collisionManager_->RegisterList(enemy);
+
+	}
+	
 
 	//自弾全てについて
 	for (PlayerBullet* bullet : playerBullets_) {
@@ -150,9 +163,11 @@ void SampleScene::Update(GameManager* gameManager) {
 
 #pragma endregion
 
+	for (Enemy* enemy : enemyes_) {
+		enemy->Update();
 
-	enemy_->Update();
-
+	}
+	
 
 	for (EnemyBullet* bullet : enemyBullets_) {
 		bullet->Update();
@@ -193,8 +208,11 @@ void SampleScene::Draw() {
 		bullet->Draw(camera_);
 	}
 
+	for (Enemy* enemy : enemyes_) {
+		enemy->Draw(camera_);
 
-	enemy_->Draw(camera_);
+	}
+	
 	for (EnemyBullet* bullet : enemyBullets_) {
 		bullet->Draw(camera_);
 
@@ -223,7 +241,10 @@ SampleScene::~SampleScene() {
 		delete bullet;
 
 	}
-	delete enemy_;
+	for (Enemy* enemy : enemyes_) {
+		delete enemy;
+
+	}
 	delete railCamera_;
 
 	

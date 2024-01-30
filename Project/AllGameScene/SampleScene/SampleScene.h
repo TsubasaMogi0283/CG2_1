@@ -44,6 +44,8 @@ public:
 	void AddPlayerBullet(PlayerBullet* playerBullet);
 	void AddEnemyBullet(EnemyBullet* enemyBullet);
 
+	void GenerateEnemy(Vector3 position);
+
 private:
 	//衝突判定と応答
 	void CheckAllCollisions();
@@ -53,7 +55,8 @@ private:
 	Player* player_ = nullptr;
 	std::list<PlayerBullet*>playerBullets_;
 
-	Enemy* enemy_ = nullptr;
+	
+	std::list<Enemy*> enemyes_;
 	std::list<EnemyBullet*>enemyBullets_;
 
 	std::unique_ptr<Skydome> skydome_ = nullptr;

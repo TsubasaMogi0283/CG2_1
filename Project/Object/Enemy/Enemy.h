@@ -8,6 +8,7 @@
 #include "Object/Collider/Collider.h"
 #include "WorldTransform.h"
 #include "Camera.h"
+#include "Vector3.h"
 
 #include <memory>
 enum class Phase {
@@ -27,7 +28,7 @@ public:
 	Enemy();
 
 	//初期化
-	void Initialize();
+	void Initialize(Vector3 position);
 	void ChangeState(IEnemy* newState);
 	
 	//コールバック

@@ -9,8 +9,8 @@ PlayerBullet::PlayerBullet(){
 void PlayerBullet::Initialize(Vector3 position,Vector3 velocity){
 	//良い感じなの無かったからとりあえずこれで
 	//真っ黒
-   //	model_ = std::make_unique<Model>();
-   	model_.reset(Model::Create("Resources/Sample/cube", "cube.obj"));
+	model_ = std::make_unique<Model>();
+	model_->CreateObj("Resources/Sample/cube", "cube.obj");
 	//worldTransform_ = { {0.5f,0.5f,0.5f},{0.0f,0.0f,0.0f},position };
 	worldTransform_.Initialize();
 	worldTransform_.scale_ = { 0.5f,0.5f,0.5f };

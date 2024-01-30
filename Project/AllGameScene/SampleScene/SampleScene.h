@@ -17,7 +17,8 @@
 
 #include <memory>
 #include <list>
-#include <Line/Line.h>
+
+#include <sstream>
 
 //StatePatternを使う時は必ず前方宣言をするように
 class Gamemanager;
@@ -50,26 +51,35 @@ private:
 	//衝突判定と応答
 	void CheckAllCollisions();
 
+	void LoadEnemyPopData();
+	
+	//敵発生コマンドの更新
+	void UpdateEnemyPopCommands();
 
 private:
+	//Player
 	Player* player_ = nullptr;
 	std::list<PlayerBullet*>playerBullets_;
 
-	
+#pragma region Enemy
 	std::list<Enemy*> enemyes_;
 	std::list<EnemyBullet*>enemyBullets_;
 
+	//発生制御スクリプト
+	std::stringstream enemyPopCommands_;
+	//待機中フラグ
+	bool isWait_;
+	//待機タイマー
+	int32_t waitingTimer_ = 0;
+
+#pragma endregion
+
+	//Skydome
 	std::unique_ptr<Skydome> skydome_ = nullptr;
-
-	Vector3 cameraTranslate_ = {};
-	Vector3 cameraRotate_ = {};
-
-
+	//CollisionManager
 	std::unique_ptr < CollisionManager> collisionManager_ = nullptr;
 
 	
-
-	Line* lineSample_ = { nullptr };
 
 	//カメラ
 	Camera camera_ = {};

@@ -537,5 +537,8 @@
     <None Include="Resources\Shader\Line3D\Line3D.hlsli">
       <Filter>Ellysia\Resource File\Line3D</Filter>
     </None>
+    <None Include="Resources\enemyPop.csv">
+      <Filter>Ellysia\Resource File</Filter>
+    </None>
   </ItemGroup>
 </Project>

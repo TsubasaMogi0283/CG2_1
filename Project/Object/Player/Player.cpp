@@ -68,35 +68,56 @@ void Player::Rotate() {
 }
 
 void Player::Move() {
+
+	Vector3 move = { 0.0f,0.0f,0.0f };
+
+	//左スティック
+	if (Input::GetInstance()->GetJoystickState(joyState)) {
+		move.x += (float)joyState.Gamepad.sThumbLX / SHRT_MAX * MOVE_AMOUNT_;
+		move.y += (float)joyState.Gamepad.sThumbLY / SHRT_MAX * MOVE_AMOUNT_;
+
+	}
+
 	if (Input::GetInstance()->IsPushKey(DIK_UP) == true) {
-		worldTransform_.translate_.y += MOVE_AMOUNT_;
+		move.y += MOVE_AMOUNT_;
 	}
 	if (Input::GetInstance()->IsPushKey(DIK_DOWN) == true) {
-		worldTransform_.translate_.y -= MOVE_AMOUNT_;
+		move.y -= MOVE_AMOUNT_;
 	}
 	if (Input::GetInstance()->IsPushKey(DIK_RIGHT) == true) {
-		worldTransform_.translate_.x += MOVE_AMOUNT_;
+		move.x += MOVE_AMOUNT_;
 	}
 	if (Input::GetInstance()->IsPushKey(DIK_LEFT) == true) {
-		worldTransform_.translate_.x -= MOVE_AMOUNT_;
+		move.x -= MOVE_AMOUNT_;
 	}
 
 	const float MOVE_LIMIT_X = 17.0f;
 	const float MOVE_LIMIT_Y = 7.0f;
+
+	worldTransform_.translate_ = Add(worldTransform_.translate_, move);
+
 
 	worldTransform_.translate_.x = max(worldTransform_.translate_.x, -MOVE_LIMIT_X);
 	worldTransform_.translate_.x = min(worldTransform_.translate_.x, MOVE_LIMIT_X);
 	worldTransform_.translate_.y = max(worldTransform_.translate_.y, -MOVE_LIMIT_Y);
 	worldTransform_.translate_.y = min(worldTransform_.translate_.y, MOVE_LIMIT_Y);
 
-	//資料にはMatrix沢山あるけど
-	//Modelで勝手に計算してくれるようにしているから気にしないでね
-
 }
 
 
 void Player::Attack() {
-	if (Input::GetInstance()->IsTriggerKey(DIK_SPACE)) {
+
+	//Bボタン
+	if (Input::GetInstance()->GetJoystickState(joyState)){
+		if (joyState.Gamepad.wButtons & XINPUT_GAMEPAD_B) {
+			triggerButtonBTime += 1;
+
+		}
+		if ((joyState.Gamepad.wButtons & XINPUT_GAMEPAD_B) == 0) {
+			triggerButtonBTime = 0;
+		}
+	}
+	if (Input::GetInstance()->IsTriggerKey(DIK_SPACE)|| (triggerButtonBTime == 1)) {
 		
 
 		Vector3 velocity = { 0.0f,0.0f,0.8f };
@@ -151,6 +172,9 @@ void Player::Update(Camera& camera) {
 
 	ImGui::End();
 
+
+
+	
 	
 	//自機のワールド座標から3Dレティクルのワールド座標を計算
 
@@ -171,19 +195,28 @@ void Player::Update(Camera& camera) {
 	worldTransform_.Update();
 
 	//3Dレティクルの座標を設定
-	Vector3 position = GetWorldPosition();
-	worldTransform3DReticle_.translate_ = Add(position, offset);
+	worldTransform3DReticle_.translate_ = Add(GetWorldPosition(), offset);
 	worldTransform3DReticle_.Update();
 
 
 
 
+	//右スティック
+	if (Input::GetInstance()->GetJoystickState(joyState)) {
+		spritePosition_.x += (float)joyState.Gamepad.sThumbRX / SHRT_MAX * 5.0f;
+		spritePosition_.y -= (float)joyState.Gamepad.sThumbRY / SHRT_MAX * 5.0f;
+
+		//スプライトの座標変更を反映
+		reticleSprite_->SetPosition(spritePosition_);
+
+	}
+
 	//2Dレティクル
-	Vector3 positionReticle = Get3DReticleWorldPosition();
+	positionReticle = Get3DReticleWorldPosition();
 
 
 	Matrix4x4 worldPositionMatrix =
-		MakeAffineMatrix({ 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, positionReticle);
+		MakeAffineMatrix({ 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, Get3DReticleWorldPosition());
 
 	//3Dレティクルのホ－ルド座標から2Dレティクルのスクリーン座標を計算
 	//ビューポート
@@ -208,6 +241,65 @@ void Player::Update(Camera& camera) {
 
 
 
+	POINT mousePosition;
+
+	//マウス座標(スクリーン座標)を取得
+	GetCursorPos(&mousePosition);
+
+	//クライアントエリア座標に変換する
+	HWND hwnd = WindowsSetup::GetInstance()->GetHwnd();
+	ScreenToClient(hwnd, &mousePosition);
+
+
+	//マウス座標を2Dレティクルのスプライトに入れる
+	reticleSprite_->SetPosition(Vector2(float(spritePosition_.x), float(spritePosition_.y)));
+
+
+	//合成行列の逆行列
+	//ビュープロジェクションビューポート合成行列
+	Matrix4x4 matVPV =
+		Multiply(camera.viewMatrix_, Multiply(camera.projectionMatrix_, matViewport));
+	//合成行列の逆行列を計算する
+	Matrix4x4 matInverseVPV = Inverse(matVPV);
+
+	//2点のワールド行列
+	//スクリーン座標
+	Vector3 posNear = Vector3(float(spritePosition_.x), float(spritePosition_.y), 0);
+	Vector3 posFar = Vector3(float(spritePosition_.x), float(spritePosition_.y), 1);
+
+	//スクリーン座標系からワールド座標系へ
+	posNear = TransformScreen(posNear, matInverseVPV);
+	posFar = TransformScreen(posFar, matInverseVPV);
+
+
+	//3Dレティクルの座標計算
+	//マウスレイの方向
+	Vector3 mouseDirection = Subtract(posFar, posNear);
+	mouseDirection = Normalize(mouseDirection);
+	//スプライトの現在座標を取得
+	//Vector2 spritePosition = sprite2DReticle_->GetPosition();
+
+	////右スティック
+	//if (Input::GetInstance()->GetJoystickState(0, joyState)) {
+	//	spritePosition.x += (float)joyState.Gamepad.sThumbRX / SHRT_MAX * 5.0f;
+	//	spritePosition.y -= (float)joyState.Gamepad.sThumbRY / SHRT_MAX * 5.0f;
+	//	
+	//	//スプライトの座標変更を反映
+	//	sprite2DReticle_->SetPosition(spritePosition);
+	//
+	//}
+
+
+	//カメラから照準オブジェクトの距離
+	const float DISTANCE_TEST_OBJECT = 50.0f;
+	worldTransform3DReticle_.translate_.x = posNear.x + mouseDirection.x * DISTANCE_TEST_OBJECT;
+	worldTransform3DReticle_.translate_.y = posNear.y + mouseDirection.y * DISTANCE_TEST_OBJECT;
+	worldTransform3DReticle_.translate_.z = posNear.z + mouseDirection.z * DISTANCE_TEST_OBJECT;
+
+
+
+	worldTransform3DReticle_.Update();
+	
 
 
 

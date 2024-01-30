@@ -26,10 +26,10 @@ void RailCamera::Initialize(Camera& camera,Vector3 worldPosition,Vector3 radius)
 
 	controlPoints_ = {
 		{0.0f,0.0f,0.0f},
-		{0.0f,0.0f,0.0f},
-		{0.0f,0.0f,0.0f},
-		{0.0f,0.0f,0.0f},
-		{0.0f,0.0f,0.0f},
+		{0.01f,0.0f,2.0f},
+		{0.03f,0.05f,5.0f},
+		{0.02f,0.1f,7.0f},
+		{0.01f,0.1f,8.0f},
 
 
 	};

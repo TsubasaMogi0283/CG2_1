@@ -95,5 +95,14 @@ private:
 	std::unique_ptr<Model> reticleModel_ = nullptr;
 	std::unique_ptr<Sprite> reticleSprite_ = nullptr;
 	Vector2 reticlePosition_ = {};
+
+
+	XINPUT_STATE joyState;
+	int triggerButtonBTime = 0;
+	//マウス
+	//初期は適当でいいっしょ
+	Vector2 spritePosition_ = { 640.0f,360.0f };
+	Vector3 positionReticle = {};
+
 };
 

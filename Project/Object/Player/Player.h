@@ -3,12 +3,13 @@
 #include "Input.h"
 #include "TextureManager.h"
 #include "Matrix4x4.h"
-#include "Object/Player/Bullet/PlayerBullet.h"
+
 
 #include <list>
 #include "Object/Collider/Collider.h"
 #include "WorldTransform.h"
 
+class SampleScene;
 
 //Colliderを継承
 class Player:public Collider{
@@ -45,7 +46,9 @@ public:
 		return worldTransform_.translate_;
 	}
 	
-
+	void SetGameScene(SampleScene* gameScene) {
+		gameScene_ = gameScene;
+	}
 
 	void SetParent(const WorldTransform* parent) {
 		this->worldTransform_.parent_ = parent;
@@ -56,9 +59,9 @@ public:
 	Vector3 GetWorldPosition()override;
 
 	//弾リストを取得
-	const std::list<PlayerBullet*> GetBullets()  {
+	/*const std::list<PlayerBullet*> GetBullets()  {
 		return bullets_;
-	}
+	}*/
 
 #pragma endregion
 
@@ -81,8 +84,9 @@ private:
 
 
 	//弾
-	std::list<PlayerBullet*>bullets_;
+	//std::list<PlayerBullet*>bullets_;
 
+	SampleScene* gameScene_ = nullptr;
 
 };
 

@@ -8,7 +8,7 @@
 #include "Object/Collider/Collider.h"
 #include "WorldTransform.h"
 #include "Camera.h"
-
+#include "Vector3.h"
 #include <memory>
 enum class Phase {
 	Approach,
@@ -18,6 +18,7 @@ enum class Phase {
 //前方宣言
 class Player;
 
+class SampleScene;
 
 class Enemy:public Collider{
 public:
@@ -26,7 +27,7 @@ public:
 	Enemy();
 
 	//初期化
-	void Initialize();
+	void Initialize(Vector3 position);
 	void ChangeState(IEnemy* newState);
 	
 	//コールバック
@@ -78,8 +79,12 @@ public:
 	}
 
 	//弾リストを取得
-	const std::list<EnemyBullet*> GetBullets() const {
+	/*const std::list<EnemyBullet*> GetBullets() const {
 		return bullets_;
+	}*/
+
+	void SetGameScene(SampleScene* gameScene) {
+		this->gameScene_ = gameScene;
 	}
 
 private:
@@ -97,7 +102,7 @@ private:
 
 
 	
-	std::list<EnemyBullet*> bullets_;
+	//std::list<EnemyBullet*> bullets_;
 
 	const int FIRE_INTERVAL_ = 60;
 	int shotTime_ = FIRE_INTERVAL_;
@@ -112,6 +117,6 @@ private:
 
 
 	Player* player_ = nullptr;
-
+	SampleScene* gameScene_ = nullptr;
 };
 

@@ -5,20 +5,20 @@
 #include "VectorCalculation.h"
 #include <Object/Collider/CollisionConfig.h>
 
-
+#include "SampleScene/SampleScene.h"
 
 Enemy::Enemy(){
 	
 }
 
-void Enemy::Initialize(){
+void Enemy::Initialize(Vector3 position){
 	model_ = std::make_unique<Model>();
 	model_.reset(Model::Create("Resources/Sample/Enemy", "enemy.obj"));
 
 	worldTransform_.Initialize();
 	worldTransform_.scale_ = { 0.5f,0.5f,0.5f };
 	worldTransform_.rotate_ = { 0.0f,0.0f,0.0f };
-	worldTransform_.translate_ = { 0.0f,0.0f,100.0f };
+	worldTransform_.translate_ = position;
 
 
 	state_ = new EnemyApproach();
@@ -55,12 +55,16 @@ void Enemy::Fire() {
 	//速度ベクトルを自機の向きに合わせて回転させる
 	afterVelocity = TransformNormal(afterVelocity,worldTransform_.worldMatrix_);
 
+
+
+
 	//弾
-	EnemyBullet* bullet_ = new EnemyBullet();
-	bullet_->Initialzie(worldTransform_.translate_,velocity);
-	bullet_->SetPlayer(player_);
+	/*EnemyBullet* bullet = new EnemyBullet();
+	bullet->Initialzie(worldTransform_.translate_,velocity);
+	bullet->SetPlayer(player_);
+	gameScene_->AddEnemyBullet(bullet);*/
 	//リストへ
-	bullets_.push_back(bullet_);
+	//bullets_.push_back(bullet_);
 	shotTime_ = FIRE_INTERVAL_;
 
 }
@@ -118,21 +122,21 @@ void Enemy::Update(){
 		
 
 		//デスフラグの立った玉を削除
-		bullets_.remove_if([](EnemyBullet* bullet) {
+		/*bullets_.remove_if([](EnemyBullet* bullet) {
 			if (bullet->IsDead()) {
 				delete bullet;
 				return true;
 			}
 			return false;
-		});
+		});*/
 	}
 
 
 
 	//更新
-	for (EnemyBullet* bullet : bullets_) {
+	/*for (EnemyBullet* bullet : bullets_) {
 		bullet->Update();
-	}
+	}*/
 	
 	worldTransform_.Update();
 	
@@ -154,18 +158,18 @@ void Enemy::Update(){
 void Enemy::Draw(Camera&camera){
 	model_->Draw(worldTransform_, camera);
 	
-	for (EnemyBullet* bullet : bullets_) {
+	/*for (EnemyBullet* bullet : bullets_) {
 		bullet->Draw(camera);
-	}
+	}*/
 
 	//弾も
 	state_->Draw(this);
 }
 
 Enemy::~Enemy(){
-	for (EnemyBullet* bullet : bullets_) {
+	/*for (EnemyBullet* bullet : bullets_) {
 		delete bullet;
-	}
+	}*/
 
 	delete state_;
 	

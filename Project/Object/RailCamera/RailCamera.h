@@ -35,7 +35,7 @@ public:
 private:
 	WorldTransform worldTransform_ = {};
 
-	static const int POINT_AMOUNT_ = 7;
+	static const int POINT_AMOUNT_ = 4;
 	std::unique_ptr<Model> pointModel_[POINT_AMOUNT_] = { nullptr };
 	WorldTransform pointWorldTransform_[POINT_AMOUNT_] = {};
 
@@ -58,7 +58,12 @@ private:
 	Vector3 cameraPosition_ = {};
 	int currentIndex_ = 0;
 	float t_ = 0.0f;
+	float t_2 = 0.0f;
 
+	Vector3 p0;
+	Vector3 p1;
+	Vector3 p2;
+	Vector3 p3;
 
 	Camera camera_ = {};
 };

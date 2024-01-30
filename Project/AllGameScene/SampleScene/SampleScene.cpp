@@ -120,7 +120,7 @@ void SampleScene::Update(GameManager* gameManager) {
 
 	player_->SetParent(&railCamera_->GetWorldTransform());
 
-	camera_.Transfer();
+	
 
 
 
@@ -135,7 +135,7 @@ void SampleScene::Update(GameManager* gameManager) {
 
 
 	
-
+	camera_.Transfer();
 
 
 	//camera_.viewMatrix_ = railCamera_->GetViewProjection().viewMatrix_;

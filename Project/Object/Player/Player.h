@@ -90,5 +90,10 @@ private:
 	//std::list<PlayerBullet*>bullets_;
 	SampleScene* sampleScene_ = nullptr;
 
+
+	//3Dレティクル
+	WorldTransform worldTransform3DReticle_;
+
+
 };
 

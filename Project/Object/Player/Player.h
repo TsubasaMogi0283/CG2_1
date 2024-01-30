@@ -10,6 +10,8 @@
 #include "WorldTransform.h"
 
 
+class SampleScene;
+
 //Colliderを継承
 class Player:public Collider{
 public:
@@ -34,6 +36,10 @@ public:
 
 #pragma region アクセッサ
 
+	void SetSampleScene(SampleScene* sampleScene) {
+		this->sampleScene_ = sampleScene;
+	}
+
 	float GetRadius() {
 		return radius_;
 	}
@@ -56,9 +62,9 @@ public:
 	Vector3 GetWorldPosition()override;
 
 	//弾リストを取得
-	const std::list<PlayerBullet*> GetBullets()  {
+	/*const std::list<PlayerBullet*> GetBullets()  {
 		return bullets_;
-	}
+	}*/
 
 #pragma endregion
 
@@ -81,8 +87,8 @@ private:
 
 
 	//弾
-	std::list<PlayerBullet*>bullets_;
-
+	//std::list<PlayerBullet*>bullets_;
+	SampleScene* sampleScene_ = nullptr;
 
 };
 

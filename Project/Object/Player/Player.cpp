@@ -1,6 +1,7 @@
 #include "Player.h"
 #include <Object/Collider/CollisionConfig.h>
 #include <VectorCalculation.h>
+#include "SampleScene/SampleScene.h"
 
 //コンストラクタ
 Player::Player() {
@@ -85,8 +86,8 @@ void Player::Attack() {
 
 		PlayerBullet* newBullet = new PlayerBullet();
 		newBullet->Initialize(GetWorldPosition(), velocity);
-		
-		bullets_.push_back(newBullet);
+		sampleScene_->AddPlayerBullet(newBullet);
+		//bullets_.push_back(newBullet);
 	}
 }
 
@@ -120,22 +121,22 @@ void Player::Update() {
 	worldTransform_.Update();
 
 
-	//デスフラグの立った玉を削除
-	bullets_.remove_if([](PlayerBullet* bullet) {
-		if (bullet->IsDead()) {
-			delete bullet;
-			return true;
-		}
-		return false;
-	});
+	
 
 	Rotate();
 	Move();
 	Attack();
-
-	for (PlayerBullet* bullet : bullets_) {
-		bullet->Update();
-	}
+	////デスフラグの立った玉を削除
+	//bullets_.remove_if([](PlayerBullet* bullet) {
+	//	if (bullet->IsDead()) {
+	//		delete bullet;
+	//		return true;
+	//	}
+	//	return false;
+	//	});
+	//for (PlayerBullet* bullet : bullets_) {
+	//	bullet->Update();
+	//}
 	
 }
 
@@ -144,17 +145,17 @@ void Player::Draw(Camera& camera) {
 	
 	model_->Draw(worldTransform_, camera);
 	
-	for (PlayerBullet* bullet : bullets_) {
+	/*for (PlayerBullet* bullet : bullets_) {
 		bullet->Draw(camera);
 	}
-	
+	*/
 }
 
 
 //デストラクタ
 Player::~Player() {
-	for (PlayerBullet* bullet : bullets_) {
+	/*for (PlayerBullet* bullet : bullets_) {
 		delete bullet;
-	}
+	}*/
 }
 

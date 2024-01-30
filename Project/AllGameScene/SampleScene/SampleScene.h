@@ -8,12 +8,14 @@
 #include "Camera.h"
 
 #include <Object/Player/Player.h>
+#include "Object/Player/Bullet/PlayerBullet.h"
 #include <Object/Enemy/Enemy.h>
 #include <Object/Skydome/Skydome.h>
 #include <Object/Collider/CollisionManager.h>
 #include <Object/RailCamera/RailCamera.h>
 
 #include <memory>
+#include <list>
 #include <Line/Line.h>
 
 //StatePatternを使う時は必ず前方宣言をするように
@@ -37,6 +39,10 @@ public:
 	/// 描画
 	void Draw()override;
 
+public:
+	void AddPlayerBullet(PlayerBullet* playerBullet);
+
+
 private:
 	//衝突判定と応答
 	void CheckAllCollisions();
@@ -44,6 +50,8 @@ private:
 
 private:
 	Player* player_ = nullptr;
+	std::list<PlayerBullet*>playerBullets_;
+
 	Enemy* enemy_ = nullptr;
 	std::unique_ptr<Skydome> skydome_ = nullptr;
 

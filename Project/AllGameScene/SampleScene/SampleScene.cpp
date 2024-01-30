@@ -11,6 +11,9 @@ SampleScene::SampleScene() {
 
 }
 
+void SampleScene::AddPlayerBullet(PlayerBullet* playerBullet) {
+	playerBullets_.push_back(playerBullet);
+}
 
 
 /// <summary>
@@ -19,6 +22,7 @@ SampleScene::SampleScene() {
 void SampleScene::Initialize() {
 	player_ = new Player();
 	Vector3 playerPosition = { 0.0f, 0.0f, 30.0f };
+	player_->SetSampleScene(this);
 	player_->Initialize(playerPosition);
 
 	enemy_ = new Enemy();
@@ -56,7 +60,7 @@ void SampleScene::CheckAllCollisions() {
 	Vector3 playerBulletPos = {};
 
 	//自弾リストの取得
-	const std::list<PlayerBullet*>& playerBullets = player_->GetBullets();
+	//const std::list<PlayerBullet*>& playerBullets = player_->GetBullets();
 
 	//敵弾リストの取得
 	const std::list<EnemyBullet*>& enemyBullets = enemy_->GetBullets();
@@ -74,7 +78,7 @@ void SampleScene::CheckAllCollisions() {
 
 
 	//自弾全てについて
-	for (PlayerBullet* bullet : playerBullets) {
+	for (PlayerBullet* bullet : playerBullets_) {
 		//colliders.push_back(bullet);
 		collisionManager_->RegisterList(bullet);
 	}
@@ -119,15 +123,21 @@ void SampleScene::Update(GameManager* gameManager) {
 
 
 	player_->SetParent(&railCamera_->GetWorldTransform());
-
-	
-
-
-
-
-	
 	player_->Update();
 	
+
+	//デスフラグの立った玉を削除
+	playerBullets_.remove_if([](PlayerBullet* bullet) {
+		if (bullet->IsDead()) {
+			delete bullet;
+			return true;
+		}
+		return false;
+		});
+	for (PlayerBullet* bullet : playerBullets_) {
+		bullet->Update();
+	}
+
 	enemy_->Update();
 
 	skydome_->Update();
@@ -150,7 +160,11 @@ void SampleScene::Draw() {
 
 	skydome_->Draw(camera_);
 	player_->Draw(camera_);
-	
+	for (PlayerBullet* bullet : playerBullets_) {
+		bullet->Draw(camera_);
+	}
+
+
 	enemy_->Draw(camera_);
 
 	//線分の数
@@ -168,7 +182,11 @@ void SampleScene::Draw() {
 /// </summary>
 SampleScene::~SampleScene() {
 
+	for (PlayerBullet* bullet : playerBullets_) {
+		delete bullet;
+	}
 	delete player_;
+	
 	delete enemy_;
 	delete railCamera_;
 

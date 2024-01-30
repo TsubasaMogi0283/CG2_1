@@ -61,10 +61,8 @@ public:
 	//ワールド座標
 	Vector3 GetWorldPosition()override;
 
-	//弾リストを取得
-	/*const std::list<PlayerBullet*> GetBullets()  {
-		return bullets_;
-	}*/
+	Vector3 Get3DReticleWorldPosition();
+
 
 #pragma endregion
 
@@ -93,7 +91,7 @@ private:
 
 	//3Dレティクル
 	WorldTransform worldTransform3DReticle_;
-
+	std::unique_ptr<Model> reticleModel_ = nullptr;
 
 };
 

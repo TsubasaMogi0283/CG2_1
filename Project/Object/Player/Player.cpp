@@ -25,6 +25,16 @@ void Player::Initialize(Vector3 position) {
 
 	SetCollisionAttribute(COLLISION_ATTRIBUTE_PLAYER);
 	SetCollisionMask(COLLISION_ATTRIBUTE_ENEMY);
+
+
+#pragma region レティクル
+	reticleModel_ = std::unique_ptr<Model>();
+	reticleModel_.reset(Model::Create("Resources/Sample/cube","cube.obj"));
+
+
+	worldTransform3DReticle_.Initialize();
+	worldTransform3DReticle_.translate_ = Add(position, { 0.0f,0.0f,5.0f });
+#pragma endregion
 }
 
 void Player::OnCollision(){
@@ -81,6 +91,14 @@ void Player::Attack() {
 
 		Vector3 velocity = { 0.0f,0.0f,0.8f };
 
+
+		//自機から照準オブジェクトへのベクトル
+		velocity = Subtract(Get3DReticleWorldPosition(), GetWorldPosition());
+
+		const float BULLET_SPEED = 0.8f;
+		velocity.x = Normalize(velocity).x * BULLET_SPEED;
+		velocity.y = Normalize(velocity).y * BULLET_SPEED;
+		velocity.z = Normalize(velocity).z * BULLET_SPEED;
 		//プレイヤーの向きに合わせて回転させる
 		velocity = TransformNormal(velocity,worldTransform_.worldMatrix_);
 
@@ -103,6 +121,17 @@ Vector3 Player::GetWorldPosition() {
 	return result;
 }
 
+Vector3 Player::Get3DReticleWorldPosition(){
+	Vector3 result = {};
+
+	result.x = worldTransform3DReticle_.worldMatrix_.m[3][0];
+	result.y = worldTransform3DReticle_.worldMatrix_.m[3][1];
+	result.z = worldTransform3DReticle_.worldMatrix_.m[3][2];
+
+
+	return result;
+}
+
 //更新
 void Player::Update() {
 	ImGui::Begin("Model");
@@ -112,9 +141,39 @@ void Player::Update() {
 
 	ImGui::End();
 
-	model_->SetScale(worldTransform_.scale_);
-	model_->SetRotate(worldTransform_.rotate_);
-	model_->SetTranslate(worldTransform_.translate_);
+	
+	//自機のワールド座標から3Dレティクルのワールド座標を計算
+
+	//自機から3Dレティクルへの距離
+	const float DISTANCE_PLAYER_TO_3D_RETICLE = 50.0f;
+
+	//自機から3Dレティクルへのオフセット(Z向き)
+	Vector3 offset = { 0.0f, 0.0f, 1.0f };
+
+	//自機のワールド行列の回復を反映
+	offset = TransformNormal(offset, worldTransform_.worldMatrix_);
+
+	//ベクトルの長さを整える
+	offset.x = Normalize(offset).x * DISTANCE_PLAYER_TO_3D_RETICLE;
+	offset.y = Normalize(offset).y * DISTANCE_PLAYER_TO_3D_RETICLE;
+	offset.z = Normalize(offset).z * DISTANCE_PLAYER_TO_3D_RETICLE;
+
+	//3Dレティクルの座標を設定
+	worldTransform3DReticle_.translate_ = Add(GetWorldPosition(), offset);
+	worldTransform3DReticle_.Update();
+
+
+
+
+
+
+
+
+
+
+	Rotate();
+	Move();
+	Attack();
 
 
 	worldTransform_.Update();
@@ -122,17 +181,18 @@ void Player::Update() {
 
 	
 
-	Rotate();
-	Move();
-	Attack();
+	
 	
 }
 
 //描画
 void Player::Draw(Camera& camera) {
 	
+	//本体
 	model_->Draw(worldTransform_, camera);
-	
+
+	//レティクル
+	reticleModel_->Draw(worldTransform3DReticle_, camera);
 }
 
 

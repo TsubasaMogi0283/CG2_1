@@ -254,11 +254,14 @@ void SampleScene::Update(GameManager* gameManager) {
 #pragma endregion
 
 
-	UpdateEnemyPopCommands();
+
+
 	for (Enemy* enemy : enemyes_) {
 		enemy->Update();
 
 	}
+	UpdateEnemyPopCommands();
+	
 	
 
 	for (EnemyBullet* bullet : enemyBullets_) {

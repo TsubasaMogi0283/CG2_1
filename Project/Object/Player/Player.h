@@ -1,5 +1,6 @@
 #pragma once
 #include "Model.h"
+#include "Sprite.h"
 #include "Input.h"
 #include "TextureManager.h"
 #include "Matrix4x4.h"
@@ -8,7 +9,7 @@
 #include <list>
 #include "Object/Collider/Collider.h"
 #include "WorldTransform.h"
-
+#include "Camera.h"
 
 class SampleScene;
 
@@ -25,7 +26,7 @@ public:
 	void OnCollision()override;
 
 	//更新
-	void Update();
+	void Update(Camera& camera);
 
 	//描画
 	void Draw(Camera& camera);
@@ -92,6 +93,7 @@ private:
 	//3Dレティクル
 	WorldTransform worldTransform3DReticle_;
 	std::unique_ptr<Model> reticleModel_ = nullptr;
-
+	std::unique_ptr<Sprite> reticleSprite_ = nullptr;
+	Vector2 reticlePosition_ = {};
 };
 

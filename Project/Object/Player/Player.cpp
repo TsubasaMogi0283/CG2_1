@@ -2,6 +2,7 @@
 #include <Object/Collider/CollisionConfig.h>
 #include <VectorCalculation.h>
 #include "SampleScene/SampleScene.h"
+#include "WindowsSetup.h"
 
 //コンストラクタ
 Player::Player() {
@@ -34,6 +35,15 @@ void Player::Initialize(Vector3 position) {
 
 	worldTransform3DReticle_.Initialize();
 	worldTransform3DReticle_.translate_ = Add(position, { 0.0f,0.0f,5.0f });
+
+	//スプライト版
+	reticleSprite_ = std::unique_ptr<Sprite>();
+	uint32_t texturehandle = TextureManager::GetInstance()->LoadTexture("Resources/Sample/3DReticle/Sign.png");
+
+	reticleSprite_.reset(Sprite::Create(texturehandle, reticlePosition_));
+	Vector2 anchorPoint = { 0.5f,0.5f };
+	reticleSprite_->SetAnchorPoint(anchorPoint);
+
 #pragma endregion
 }
 
@@ -133,7 +143,7 @@ Vector3 Player::Get3DReticleWorldPosition(){
 }
 
 //更新
-void Player::Update() {
+void Player::Update(Camera& camera) {
 	ImGui::Begin("Model");
 	ImGui::SliderFloat3("Scale", &worldTransform_.scale_.x, 1.0f, 10.0f);
 	ImGui::SliderFloat3("Rotate", &worldTransform_.rotate_.x, 0.0f, 10.0f);
@@ -158,10 +168,40 @@ void Player::Update() {
 	offset.y = Normalize(offset).y * DISTANCE_PLAYER_TO_3D_RETICLE;
 	offset.z = Normalize(offset).z * DISTANCE_PLAYER_TO_3D_RETICLE;
 
+	worldTransform_.Update();
+
 	//3Dレティクルの座標を設定
-	worldTransform3DReticle_.translate_ = Add(GetWorldPosition(), offset);
+	Vector3 position = GetWorldPosition();
+	worldTransform3DReticle_.translate_ = Add(position, offset);
 	worldTransform3DReticle_.Update();
 
+
+
+
+	//2Dレティクル
+	Vector3 positionReticle = Get3DReticleWorldPosition();
+
+
+	Matrix4x4 worldPositionMatrix =
+		MakeAffineMatrix({ 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, positionReticle);
+
+	//3Dレティクルのホ－ルド座標から2Dレティクルのスクリーン座標を計算
+	//ビューポート
+	Matrix4x4 matViewport =
+		MakeViewportMatrix(0, 0,
+			float( WindowsSetup::GetInstance()->WindowsSetup::GetClientWidth()), 
+			float(WindowsSetup::GetInstance()->WindowsSetup::GetClientHeight()), 0, 1);
+
+
+	//ビュー行列
+	Matrix4x4 matViewProjectionViewport =
+		Multiply(camera.viewMatrix_, Multiply(camera.projectionMatrix_, matViewport));
+
+	//ワールド→スクリーン座標変換(3Dから2Dへ)
+	positionReticle = TransformScreen(positionReticle, matViewProjectionViewport);
+
+	//スプライトのレティクルに座標設定
+	reticleSprite_->SetPosition(Vector2(positionReticle.x, positionReticle.y));
 
 
 
@@ -176,7 +216,7 @@ void Player::Update() {
 	Attack();
 
 
-	worldTransform_.Update();
+	
 
 
 	
@@ -193,6 +233,10 @@ void Player::Draw(Camera& camera) {
 
 	//レティクル
 	reticleModel_->Draw(worldTransform3DReticle_, camera);
+
+
+	reticleSprite_->Draw();
+
 }
 
 

@@ -236,7 +236,7 @@ void SampleScene::Update(GameManager* gameManager) {
 #pragma region プレイヤー
 
 	player_->SetParent(&railCamera_->GetWorldTransform());
-	player_->Update();
+	player_->Update(camera_);
 	
 
 	//デスフラグの立った玉を削除

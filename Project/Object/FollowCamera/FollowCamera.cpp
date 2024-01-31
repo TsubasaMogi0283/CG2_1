@@ -26,7 +26,7 @@ void FollowCamera::Update() {
 	if (target_) {
 		//追従対象からカメラまでのオフセット
 		//ちょっと上から見下ろす感じだね
-		Vector3 offset = { 0.0f,2.0f,-10.0f };
+		Vector3 offset = { 0.0f,2.0f,-20.0f };
 
 		//座標をコピーしてオフセット分ずらす
 		camera_.translate_ = Add(target_->translate_, offset);

@@ -20,7 +20,7 @@ void Player::Initialize() {
 	worldTransform_.rotate_ = { 0.0f,0.0f,0.0f };
 	//高さのオフセット
 	const float HEIGHT_OFFSET = 1.0f;
-	worldTransform_.translate_ = {0.0f,HEIGHT_OFFSET,30.0f};
+	worldTransform_.translate_ = {0.0f,HEIGHT_OFFSET,0.0f};
 
 	
 

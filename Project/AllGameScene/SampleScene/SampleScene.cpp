@@ -35,8 +35,6 @@ void SampleScene::Initialize() {
 	followCamera_->SetTraget(&player_->GetWorldTransform());
 
 	camera_.Initialize();
-	camera_.rotate_ = { 0.37f,0.0f,0.0f };
-	camera_.translate_ = { 0.0f,25.0f,-40.0f };
 	
 }
 
@@ -69,11 +67,15 @@ void SampleScene::Update(GameManager* gameManager) {
 	
 
 	//追従カメラ
+	//「現在」の座標を参照したいのでfollowCameraは後かな
 	followCamera_->Update();
 
-	//camera_.viewMatrix_ = railCamera_->GetViewProjection().viewMatrix_;
-	//camera_.projectionMatrix_ = railCamera_->GetViewProjection().projectionMatrix_;
-	camera_.Update();
+	//追従カメラクラスで計算したものをコピーしてくる
+	camera_.viewMatrix_ = followCamera_->GetCamera().viewMatrix_;
+	camera_.projectionMatrix_ = followCamera_->GetCamera().projectionMatrix_;
+	
+	//転送
+	camera_.Transfer();
 }
 
 /// <summary>

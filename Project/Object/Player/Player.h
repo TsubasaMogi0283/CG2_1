@@ -51,7 +51,7 @@ public:
 		this->worldTransform_.parent_ = parent;
 	}
 
-	const WorldTransform GetWorldTransform() {
+	const WorldTransform& GetWorldTransform() {
 		return worldTransform_;
 	}
 

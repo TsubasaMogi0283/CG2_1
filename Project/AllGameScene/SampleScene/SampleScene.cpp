@@ -16,7 +16,7 @@ SampleScene::SampleScene() {
 /// 初期化
 /// </summary>
 void SampleScene::Initialize() {
-	player_ = new Player();
+	player_ = std::make_unique<Player>();
 	Vector3 playerPosition = { 0.0f, 0.0f, 0.0f };
 	player_->Initialize(playerPosition);
 
@@ -52,7 +52,6 @@ void SampleScene::Update(GameManager* gameManager) {
 
 	player_->Update();
 
-	//article3D_->Update(camera_);
 	camera_.Update();
 }
 
@@ -61,9 +60,9 @@ void SampleScene::Update(GameManager* gameManager) {
 /// </summary>
 void SampleScene::Draw() {
 
-	//player_->Draw(camera_);
+	player_->Draw(camera_);
 	//line_->Draw({ 0.0f,0.0f,0.0f }, { 0.0f,1.0f,0.0f },camera_);
-	particle3D_->Draw(camera_, textureHandle_);
+	//particle3D_->Draw(camera_, textureHandle_);
 	
 }
 
@@ -75,5 +74,5 @@ void SampleScene::Draw() {
 /// </summary>
 SampleScene::~SampleScene() {
 	delete line_;
-	delete player_;
+	delete particle3D_;
 }

@@ -491,6 +491,9 @@ void Particle3D::Draw(Camera& camera, uint32_t textureHandle) {
 	mesh_->GraphicsCommand();
 	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(1, instancingSrvHandleGPU_);
 
+	//カメラ
+	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(1, instancingSrvHandleGPU_);
+
 	//DrawCall
 	mesh_->DrawCall(numInstance_);
 }

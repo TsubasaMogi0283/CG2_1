@@ -42,7 +42,7 @@ public:
 
 
 private:
-	Player* player_ = nullptr;
+	std::unique_ptr<Player> player_ = nullptr;
 
 	Particle3D* particle3D_ = nullptr;
 	uint32_t textureHandle_ = 0u;

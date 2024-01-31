@@ -224,72 +224,16 @@ void SampleScene::Update(GameManager* gameManager) {
 	ImGui::End();
 
 
-	//当たり判定
-	CheckAllCollisions();
 
-	//先にビュー行列から計算する
-	railCamera_->Update();
-	camera_.viewMatrix_ = railCamera_->GetViewProjection().viewMatrix_;
-	camera_.projectionMatrix_ = railCamera_->GetViewProjection().projectionMatrix_;
-
-
-#pragma region プレイヤー
-
-	player_->SetParent(&railCamera_->GetWorldTransform());
 	player_->Update(camera_);
 	
 
-	//デスフラグの立った玉を削除
-	playerBullets_.remove_if([](PlayerBullet* bullet) {
-		if (bullet->IsDead()) {
-			delete bullet;
-			return true;
-		}
-		return false;
-	});
-	for (PlayerBullet* bullet : playerBullets_) {
-		bullet->Update();
-	}
 
-#pragma endregion
-
-
-
-
-	for (Enemy* enemy : enemyes_) {
-		enemy->Update();
-
-	}
-	UpdateEnemyPopCommands();
-	
-	
-
-	for (EnemyBullet* bullet : enemyBullets_) {
-		bullet->Update();
-
-	}
-
-	//デスフラグの立った玉を削除
-	enemyBullets_.remove_if([](EnemyBullet* bullet) {
-		if (bullet->IsDead()) {
-			delete bullet;
-			return true;
-		}
-		return false;
-	});
-	
-	
-	skydome_->Update();
-	
-
-
-	
-	camera_.Transfer();
 
 
 	//camera_.viewMatrix_ = railCamera_->GetViewProjection().viewMatrix_;
 	//camera_.projectionMatrix_ = railCamera_->GetViewProjection().projectionMatrix_;
-	//camera_.Update();
+	camera_.Update();
 }
 
 /// <summary>
@@ -297,24 +241,8 @@ void SampleScene::Update(GameManager* gameManager) {
 /// </summary>
 void SampleScene::Draw() {
 
-	skydome_->Draw(camera_);
 	player_->Draw(camera_);
-	for (PlayerBullet* bullet : playerBullets_) {
-		bullet->Draw(camera_);
-	}
-
-	for (Enemy* enemy : enemyes_) {
-		enemy->Draw(camera_);
-
-	}
 	
-	for (EnemyBullet* bullet : enemyBullets_) {
-		bullet->Draw(camera_);
-
-	}
-	//線分の数
-	
-	railCamera_->Draw(camera_);
 
 }
 
@@ -325,22 +253,6 @@ void SampleScene::Draw() {
 /// デストラクタ
 /// </summary>
 SampleScene::~SampleScene() {
-
-	for (PlayerBullet* bullet : playerBullets_) {
-		delete bullet;
-	}
-	delete player_;
-	
-
-	for (EnemyBullet* bullet : enemyBullets_) {
-		delete bullet;
-
-	}
-	for (Enemy* enemy : enemyes_) {
-		delete enemy;
-
-	}
-	delete railCamera_;
 
 	
 

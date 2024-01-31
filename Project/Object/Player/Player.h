@@ -14,16 +14,13 @@
 class SampleScene;
 
 //Colliderを継承
-class Player:public Collider{
+class Player{
 public:
 	//コンストラクタ
 	Player();
 
 	//初期化
 	void Initialize(Vector3 position);
-
-	//コールバック関数
-	void OnCollision()override;
 
 	//更新
 	void Update(Camera& camera);
@@ -36,10 +33,6 @@ public:
 	~Player();
 
 #pragma region アクセッサ
-
-	void SetSampleScene(SampleScene* sampleScene) {
-		this->sampleScene_ = sampleScene;
-	}
 
 	float GetRadius() {
 		return radius_;
@@ -60,10 +53,7 @@ public:
 
 
 	//ワールド座標
-	Vector3 GetWorldPosition()override;
-
-	Vector3 Get3DReticleWorldPosition();
-
+	Vector3 GetWorldPosition();
 
 #pragma endregion
 
@@ -85,24 +75,6 @@ private:
 	float radius_;
 
 
-	//弾
-	//std::list<PlayerBullet*>bullets_;
-	SampleScene* sampleScene_ = nullptr;
-
-
-	//3Dレティクル
-	WorldTransform worldTransform3DReticle_;
-	std::unique_ptr<Model> reticleModel_ = nullptr;
-	std::unique_ptr<Sprite> reticleSprite_ = nullptr;
-	Vector2 reticlePosition_ = {};
-
-
-	XINPUT_STATE joyState;
-	int triggerButtonBTime = 0;
-	//マウス
-	//初期は適当でいいっしょ
-	Vector2 spritePosition_ = { 640.0f,360.0f };
-	Vector3 positionReticle = {};
 
 };
 

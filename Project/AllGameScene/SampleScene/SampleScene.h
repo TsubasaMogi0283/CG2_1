@@ -44,5 +44,9 @@ public:
 private:
 	//Player
 	std::unique_ptr<Player> player_ = nullptr;
+
+
+	Camera camera_ = {};
+
 };
 

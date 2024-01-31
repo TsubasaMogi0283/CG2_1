@@ -59,7 +59,6 @@ void Enemy::Fire() {
 	EnemyBullet* bullet_ = new EnemyBullet();
 	bullet_->Initialzie(GetWorldPosition(), velocity);
 	bullet_->SetPlayer(player_);
-	sampleScene_->AddEnemyBullet(bullet_);
 	////リストへ
 	//bullets_.push_back(bullet_);
 	shotTime_ = FIRE_INTERVAL_;

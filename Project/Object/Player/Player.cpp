@@ -49,7 +49,11 @@ void Player::Move() {
 	Vector3 move = { 0.0f,0.0f,0.0f };
 
 	//左スティック
-	
+	if (Input::GetInstance()->GetJoystickState(joyState_)) {
+		move.x += (float)joyState_.Gamepad.sThumbLX / SHRT_MAX * MOVE_AMOUNT_;
+		move.z += (float)joyState_.Gamepad.sThumbLY / SHRT_MAX * MOVE_AMOUNT_;
+
+	}
 
 	if (Input::GetInstance()->IsPushKey(DIK_UP) == true) {
 		move.z += MOVE_AMOUNT_;

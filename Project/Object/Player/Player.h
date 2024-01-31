@@ -60,8 +60,6 @@ public:
 private:
 	void Rotate();
 	void Move();
-	void Attack();
-
 private:
 	
 
@@ -74,7 +72,9 @@ private:
 
 	float radius_;
 
-
-
+	//コントローラー
+	XINPUT_STATE joyState_;
+	//Bボタンのトリガー
+	int triggerButtonBTime_ = 0;
 };
 

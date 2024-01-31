@@ -20,6 +20,7 @@
 
 #include <sstream>
 #include <Object/Ground/Ground.h>
+#include <Object/FollowCamera/FollowCamera.h>
 
 //StatePatternを使う時は必ず前方宣言をするように
 class Gamemanager;
@@ -43,14 +44,17 @@ public:
 	~SampleScene();
 
 private:
-	//Player
+	//プレイヤー
 	std::unique_ptr<Player> player_ = nullptr;
 
-	//Skydome
-	std::unique_ptr<Skydome>skydome_ = nullptr;
+	//天球
+	std::unique_ptr<Skydome> skydome_ = nullptr;
 
-	//Ground
-	std::unique_ptr<Ground>ground_ = nullptr;
+	//地面
+	std::unique_ptr<Ground> ground_ = nullptr;
+
+	//追従カメラ
+	std::unique_ptr<FollowCamera> followCamera_ = nullptr;
 
 
 	Camera camera_ = {};

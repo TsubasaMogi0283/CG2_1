@@ -51,6 +51,9 @@ public:
 		this->worldTransform_.parent_ = parent;
 	}
 
+	const WorldTransform GetWorldTransform() {
+		return worldTransform_;
+	}
 
 	//ワールド座標
 	Vector3 GetWorldPosition();

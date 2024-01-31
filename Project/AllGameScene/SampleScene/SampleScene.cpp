@@ -16,15 +16,23 @@ SampleScene::SampleScene() {
 /// 初期化
 /// </summary>
 void SampleScene::Initialize() {
+	//プレイヤー
 	player_ = std::make_unique<Player>();
 	player_->Initialize();
 
-
+	//天球
 	skydome_ = std::make_unique<Skydome>();
 	skydome_->Initialize();
 
+	//天球
 	ground_ = std::make_unique<Ground>();
 	ground_->Initialize();
+
+	//追従カメラ
+	followCamera_ = std::make_unique<FollowCamera>();
+	followCamera_->Initialize();
+	//自キャラのワールドトランスフォームを追従カメラにセット
+	followCamera_->SetTraget(&player_->GetWorldTransform());
 
 	camera_.Initialize();
 	camera_.rotate_ = { 0.37f,0.0f,0.0f };
@@ -60,8 +68,8 @@ void SampleScene::Update(GameManager* gameManager) {
 	player_->Update(camera_);
 	
 
-
-
+	//追従カメラ
+	followCamera_->Update();
 
 	//camera_.viewMatrix_ = railCamera_->GetViewProjection().viewMatrix_;
 	//camera_.projectionMatrix_ = railCamera_->GetViewProjection().projectionMatrix_;

@@ -19,6 +19,7 @@
 #include <list>
 
 #include <sstream>
+#include <Object/Ground/Ground.h>
 
 //StatePatternを使う時は必ず前方宣言をするように
 class Gamemanager;
@@ -47,6 +48,10 @@ private:
 
 	//Skydome
 	std::unique_ptr<Skydome>skydome_ = nullptr;
+
+	//Ground
+	std::unique_ptr<Ground>ground_ = nullptr;
+
 
 	Camera camera_ = {};
 

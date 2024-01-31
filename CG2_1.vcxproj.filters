@@ -190,6 +190,9 @@
     <Filter Include="Ellysia\Source File\Line3D">
       <UniqueIdentifier>{6df6ad17-1021-4344-83c8-4d50fcb9412b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Project\Object\Ground">
+      <UniqueIdentifier>{af3d3277-fcd5-471f-a25c-6ab16e645f8b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Ellysia\Math\Matrix\Calculation\Matrix4x4Calculation.cpp">
@@ -311,6 +314,9 @@
     </ClCompile>
     <ClCompile Include="Ellysia\Line\Line.cpp">
       <Filter>Ellysia\Source File\Line3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Object\Ground\Ground.cpp">
+      <Filter>Project\Object\Ground</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -522,6 +528,9 @@
     </ClInclude>
     <ClInclude Include="Ellysia\Line\Line.h">
       <Filter>Ellysia\Line3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Object\Ground\Ground.h">
+      <Filter>Project\Object\Ground</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

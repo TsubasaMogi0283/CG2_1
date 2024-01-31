@@ -25,8 +25,12 @@ void SampleScene::Initialize() {
 	skydome_ = std::make_unique<Skydome>();
 	skydome_->Initialize();
 
+	ground_ = std::make_unique<Ground>();
+	ground_->Initialize();
+
 	camera_.Initialize();
-	camera_.translate_ = { 0.0f,0.0f,-20.0f };
+	camera_.rotate_ = { 0.37f,0.0f,0.0f };
+	camera_.translate_ = { 0.0f,25.0f,-40.0f };
 	
 }
 
@@ -48,7 +52,13 @@ void SampleScene::Update(GameManager* gameManager) {
 	ImGui::End();
 
 
+	//天球
 	skydome_->Update();
+
+	//地面
+	ground_->Update();
+
+	//プレイヤー
 	player_->Update(camera_);
 	
 
@@ -65,9 +75,14 @@ void SampleScene::Update(GameManager* gameManager) {
 /// </summary>
 void SampleScene::Draw() {
 
+	//プレイヤー
 	player_->Draw(camera_);
+	
+	//天球
 	skydome_->Draw(camera_);
-
+	
+	//地面
+	ground_->Draw(camera_);
 }
 
 

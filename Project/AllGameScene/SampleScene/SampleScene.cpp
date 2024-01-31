@@ -17,9 +17,7 @@ SampleScene::SampleScene() {
 /// </summary>
 void SampleScene::Initialize() {
 	player_ = std::make_unique<Player>();
-	Vector3 playerPosition = { 0.0f, 0.0f, 30.0f };
-
-	player_->Initialize(playerPosition);
+	player_->Initialize();
 
 
 	skydome_ = std::make_unique<Skydome>();

@@ -10,7 +10,7 @@ Player::Player() {
 }
 
 //初期化
-void Player::Initialize(Vector3 position) {
+void Player::Initialize() {
 
 	model_ = std::unique_ptr<Model>();
 	model_.reset(Model::Create("Resources/Sample/Player", "playre.obj"));
@@ -18,7 +18,9 @@ void Player::Initialize(Vector3 position) {
 	worldTransform_.Initialize();
 	worldTransform_.scale_ = { 1.0f,1.0f,1.0f };
 	worldTransform_.rotate_ = { 0.0f,0.0f,0.0f };
-	worldTransform_.translate_ = position;
+	//高さのオフセット
+	const float HEIGHT_OFFSET = 1.0f;
+	worldTransform_.translate_ = {0.0f,HEIGHT_OFFSET,30.0f};
 
 	
 
@@ -50,10 +52,10 @@ void Player::Move() {
 	
 
 	if (Input::GetInstance()->IsPushKey(DIK_UP) == true) {
-		move.y += MOVE_AMOUNT_;
+		move.z += MOVE_AMOUNT_;
 	}
 	if (Input::GetInstance()->IsPushKey(DIK_DOWN) == true) {
-		move.y -= MOVE_AMOUNT_;
+		move.z -= MOVE_AMOUNT_;
 	}
 	if (Input::GetInstance()->IsPushKey(DIK_RIGHT) == true) {
 		move.x += MOVE_AMOUNT_;
@@ -62,16 +64,16 @@ void Player::Move() {
 		move.x -= MOVE_AMOUNT_;
 	}
 
-	const float MOVE_LIMIT_X = 17.0f;
-	const float MOVE_LIMIT_Y = 7.0f;
+	const float MOVE_LIMIT_X = 50.0f;
+	const float MOVE_LIMIT_Z = 50.0f;
 
 	worldTransform_.translate_ = Add(worldTransform_.translate_, move);
 
 
 	worldTransform_.translate_.x = max(worldTransform_.translate_.x, -MOVE_LIMIT_X);
 	worldTransform_.translate_.x = min(worldTransform_.translate_.x, MOVE_LIMIT_X);
-	worldTransform_.translate_.y = max(worldTransform_.translate_.y, -MOVE_LIMIT_Y);
-	worldTransform_.translate_.y = min(worldTransform_.translate_.y, MOVE_LIMIT_Y);
+	worldTransform_.translate_.z = max(worldTransform_.translate_.z, -MOVE_LIMIT_Z);
+	worldTransform_.translate_.z = min(worldTransform_.translate_.z, MOVE_LIMIT_Z);
 
 }
 

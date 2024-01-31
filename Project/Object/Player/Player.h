@@ -20,7 +20,7 @@ public:
 	Player();
 
 	//初期化
-	void Initialize(Vector3 position);
+	void Initialize();
 
 	//更新
 	void Update(Camera& camera);

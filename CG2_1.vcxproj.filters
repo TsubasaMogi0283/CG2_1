@@ -193,6 +193,9 @@
     <Filter Include="Project\Object\Ground">
       <UniqueIdentifier>{af3d3277-fcd5-471f-a25c-6ab16e645f8b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Project\Object\FollowCamera">
+      <UniqueIdentifier>{f67cc499-cebf-42e8-8800-d8fc918fe435}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Ellysia\Math\Matrix\Calculation\Matrix4x4Calculation.cpp">
@@ -317,6 +320,9 @@
     </ClCompile>
     <ClCompile Include="Project\Object\Ground\Ground.cpp">
       <Filter>Project\Object\Ground</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Object\FollowCamera\FollowCamera.cpp">
+      <Filter>Ellysia\Source File</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -531,6 +537,9 @@
     </ClInclude>
     <ClInclude Include="Project\Object\Ground\Ground.h">
       <Filter>Project\Object\Ground</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Object\FollowCamera\FollowCamera.h">
+      <Filter>Ellysia\Header File</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

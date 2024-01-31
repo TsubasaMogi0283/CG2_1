@@ -40,6 +40,9 @@ public:
 	//Initializeも兼ねているよ
 	//通常
 	static Model* Create(const std::string& directoryPath, const std::string& fileName);
+
+	void CreateObj(const std::string& directoryPath, const std::string& fileName);
+
 private:
 #pragma region モデルの読み込み関係の関数
 	//モデルデータの読み込み

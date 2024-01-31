@@ -97,6 +97,9 @@ void Player::Update(Camera& camera) {
 
 	ImGui::End();
 
+	Rotate();
+	Move();
+
 
 	worldTransform_.Update();
 	

@@ -21,6 +21,10 @@ void SampleScene::Initialize() {
 
 	player_->Initialize(playerPosition);
 
+
+	skydome_ = std::make_unique<Skydome>();
+	skydome_->Initialize();
+
 	camera_.Initialize();
 	camera_.translate_ = { 0.0f,0.0f,-20.0f };
 	
@@ -44,7 +48,7 @@ void SampleScene::Update(GameManager* gameManager) {
 	ImGui::End();
 
 
-
+	skydome_->Update();
 	player_->Update(camera_);
 	
 
@@ -62,7 +66,7 @@ void SampleScene::Update(GameManager* gameManager) {
 void SampleScene::Draw() {
 
 	player_->Draw(camera_);
-	
+	skydome_->Draw(camera_);
 
 }
 

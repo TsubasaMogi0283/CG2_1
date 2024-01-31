@@ -45,6 +45,8 @@ private:
 	//Player
 	std::unique_ptr<Player> player_ = nullptr;
 
+	//Skydome
+	std::unique_ptr<Skydome>skydome_ = nullptr;
 
 	Camera camera_ = {};
 

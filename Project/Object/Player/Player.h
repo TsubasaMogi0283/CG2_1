@@ -9,7 +9,7 @@
 #include "Object/Collider/Collider.h"
 #include "WorldTransform.h"
 
-
+#include <memory>
 //Colliderを継承
 class Player{
 public:
@@ -63,7 +63,7 @@ private:
 private:
 	
 
-	std::unique_ptr<Model> model_ = nullptr;
+	Model* model_ = nullptr;
 
 	//Transform transform_ = {};
 	WorldTransform worldTransform_ = {};

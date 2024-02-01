@@ -183,96 +183,96 @@ MaterialData Model::LoadMaterialTemplateFile(const std::string& directoryPath, c
 
 
 //生成
-Model* Model::Create(const std::string& directoryPath, const std::string& fileName) {
-	//新たなModel型のインスタンスのメモリを確保
-	Model* model = new Model();
-	PipelineManager::GetInstance()->SetModelBlendMode(1);
-	PipelineManager::GetInstance()->GenerateModelPSO();
-
-	//すでにある場合はリストから取り出す
-	for (ModelData modelData : modelInformationList_) {
-		if (modelData.name == fileName) {
-			////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
-			model->material_ = std::make_unique<CreateMaterial>();
-			model->material_->Initialize();
-
-			//テクスチャの読み込み
-			model->textureHandle_ = TextureManager::GetInstance()->LoadTexture(modelData.material.textureFilePath);
-
-			//頂点リソースを作る
-			model->mesh_ = std::make_unique<Mesh>();
-			model->mesh_->Initialize(modelData.vertices);
-
-
-			//Lighting
-			model->directionalLight_ = std::make_unique<CreateDirectionalLight>();
-			model->directionalLight_->Initialize();
-
-			//Pixel用のカメラ
-			model->cameraResource_= DirectXSetup::GetInstance()->CreateBufferResource(sizeof(CameraForGPU)).Get();
-
-			//PointLight
-			model->pointLightResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(PointLight)).Get();
-			
-
-			//初期は白色
-			//モデル個別に色を変更できるようにこれは外に出しておく
-			model->color_ = { 1.0f,1.0f,1.0f,1.0f };
-
-			return model;
-		}
-	}
-
-	//モデルの読み込み
-	ModelData modelDataNew = model->LoadObjectFile(directoryPath, fileName);
-	modelDataNew.name = fileName;
-	modelInformationList_.push_back(modelDataNew);
-
-
-
-	////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
-	model->material_ = std::make_unique<CreateMaterial>();
-	model->material_->Initialize();
-
-
-
-	//テクスチャの読み込み
-	model->textureHandle_ = TextureManager::GetInstance()->LoadTexture(modelDataNew.material.textureFilePath);
-
-
-	//頂点リソースを作る
-	model->mesh_ = std::make_unique<Mesh>();
-	model->mesh_->Initialize(modelDataNew.vertices);
-
-
-
-
-
-	//Sprite用のTransformationMatrix用のリソースを作る。
-	//Matrix4x4 1つ分サイズを用意する
-	//model->transformation_=std::make_unique<Transformation>();
-	//model->transformation_->Initialize();
-
-	//Lighting
-	model->directionalLight_ = std::make_unique<CreateDirectionalLight>();
-	model->directionalLight_->Initialize();
-
-	//Pixel用のカメラ
-	model->cameraResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(CameraForGPU)).Get();
-
-	//PointLight
-	model->pointLightResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(PointLight)).Get();
-
-
-	//初期は白色
-	//モデル個別に色を変更できるようにこれは外に出しておく
-	model->color_ = { 1.0f,1.0f,1.0f,1.0f };
-
-
-
-	return model;
-
-}
+//Model* Model::Create(const std::string& directoryPath, const std::string& fileName) {
+//	//新たなModel型のインスタンスのメモリを確保
+//	Model* model = new Model();
+//	PipelineManager::GetInstance()->SetModelBlendMode(1);
+//	PipelineManager::GetInstance()->GenerateModelPSO();
+//
+//	//すでにある場合はリストから取り出す
+//	for (ModelData modelData : modelInformationList_) {
+//		if (modelData.name == fileName) {
+//			////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
+//			model->material_ = std::make_unique<CreateMaterial>();
+//			model->material_->Initialize();
+//
+//			//テクスチャの読み込み
+//			model->textureHandle_ = TextureManager::GetInstance()->LoadTexture(modelData.material.textureFilePath);
+//
+//			//頂点リソースを作る
+//			model->mesh_ = std::make_unique<Mesh>();
+//			model->mesh_->Initialize(modelData.vertices);
+//
+//
+//			//Lighting
+//			model->directionalLight_ = std::make_unique<CreateDirectionalLight>();
+//			model->directionalLight_->Initialize();
+//
+//			//Pixel用のカメラ
+//			model->cameraResource_= DirectXSetup::GetInstance()->CreateBufferResource(sizeof(CameraForGPU)).Get();
+//
+//			//PointLight
+//			model->pointLightResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(PointLight)).Get();
+//			
+//
+//			//初期は白色
+//			//モデル個別に色を変更できるようにこれは外に出しておく
+//			model->color_ = { 1.0f,1.0f,1.0f,1.0f };
+//
+//			return model;
+//		}
+//	}
+//
+//	//モデルの読み込み
+//	ModelData modelDataNew = model->LoadObjectFile(directoryPath, fileName);
+//	modelDataNew.name = fileName;
+//	modelInformationList_.push_back(modelDataNew);
+//
+//
+//
+//	////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
+//	model->material_ = std::make_unique<CreateMaterial>();
+//	model->material_->Initialize();
+//
+//
+//
+//	//テクスチャの読み込み
+//	model->textureHandle_ = TextureManager::GetInstance()->LoadTexture(modelDataNew.material.textureFilePath);
+//
+//
+//	//頂点リソースを作る
+//	model->mesh_ = std::make_unique<Mesh>();
+//	model->mesh_->Initialize(modelDataNew.vertices);
+//
+//
+//
+//
+//
+//	//Sprite用のTransformationMatrix用のリソースを作る。
+//	//Matrix4x4 1つ分サイズを用意する
+//	//model->transformation_=std::make_unique<Transformation>();
+//	//model->transformation_->Initialize();
+//
+//	//Lighting
+//	model->directionalLight_ = std::make_unique<CreateDirectionalLight>();
+//	model->directionalLight_->Initialize();
+//
+//	//Pixel用のカメラ
+//	model->cameraResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(CameraForGPU)).Get();
+//
+//	//PointLight
+//	model->pointLightResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(PointLight)).Get();
+//
+//
+//	//初期は白色
+//	//モデル個別に色を変更できるようにこれは外に出しておく
+//	model->color_ = { 1.0f,1.0f,1.0f,1.0f };
+//
+//
+//
+//	return model;
+//
+//}
 
 
 void Model::CreateObj(const std::string& directoryPath, const std::string& fileName) {
@@ -280,39 +280,39 @@ void Model::CreateObj(const std::string& directoryPath, const std::string& fileN
 	PipelineManager::GetInstance()->GenerateModelPSO();
 
 	//すでにある場合はリストから取り出す
-	for (ModelData modelData : modelInformationList_) {
-		if (modelData.name == fileName) {
-			////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
-			material_ = std::make_unique<CreateMaterial>();
-			material_->Initialize();
+	//for (ModelData modelData : modelInformationList_) {
+	//	if (modelData.name == fileName) {
+	//		////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
+	//		material_ = std::make_unique<CreateMaterial>();
+	//		material_->Initialize();
 
-			//テクスチャの読み込み
-			textureHandle_ = TextureManager::GetInstance()->LoadTexture(modelData.material.textureFilePath);
+	//		//テクスチャの読み込み
+	//		textureHandle_ = TextureManager::GetInstance()->LoadTexture(modelData.material.textureFilePath);
 
-			//頂点リソースを作る
-			mesh_ = std::make_unique<Mesh>();
-			mesh_->Initialize(modelData.vertices);
-
-
-			//Lighting
-			directionalLight_ = std::make_unique<CreateDirectionalLight>();
-			directionalLight_->Initialize();
-
-			//Pixel用のカメラ
-			cameraResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(CameraForGPU)).Get();
-
-			//PointLight
-			pointLightResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(PointLight)).Get();
+	//		//頂点リソースを作る
+	//		mesh_ = std::make_unique<Mesh>();
+	//		mesh_->Initialize(modelData.vertices);
 
 
-			//初期は白色
-			//モデル個別に色を変更できるようにこれは外に出しておく
-			color_ = { 1.0f,1.0f,1.0f,1.0f };
+	//		//Lighting
+	//		directionalLight_ = std::make_unique<CreateDirectionalLight>();
+	//		directionalLight_->Initialize();
 
-			return;
+	//		//Pixel用のカメラ
+	//		cameraResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(CameraForGPU)).Get();
 
-		}
-	}
+	//		//PointLight
+	//		pointLightResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(PointLight)).Get();
+
+
+	//		//初期は白色
+	//		//モデル個別に色を変更できるようにこれは外に出しておく
+	//		color_ = { 1.0f,1.0f,1.0f,1.0f };
+
+	//		return;
+
+	//	}
+	//}
 
 	//モデルの読み込み
 	ModelData modelDataNew = LoadObjectFile(directoryPath, fileName);
@@ -322,9 +322,18 @@ void Model::CreateObj(const std::string& directoryPath, const std::string& fileN
 
 
 	////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
-	material_ = std::make_unique<CreateMaterial>();
-	material_->Initialize();
+	//material_ = std::make_unique<CreateMaterial>();
+	//material_->Initialize();
 
+	materialResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(Material)).Get();
+	Material* materialData_ = nullptr;
+	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
+	materialData_->color = { 1.0f,1.0f,1.0f,1.0f };
+	materialData_->enableLighting = false;
+	materialData_->shininess = 5.0f;
+	materialData_->uvTransform = MakeIdentity4x4();
+
+	materialResource_->Unmap(0, nullptr);
 
 
 	//テクスチャの読み込み
@@ -367,8 +376,18 @@ void Model::Draw(WorldTransform& worldTransform, Camera& camera) {
 	////書き込むためのアドレスを取得
 	////reinterpret_cast...char* から int* へ、One_class* から Unrelated_class* へなどの変換に使用
 
-	material_->SetInformation(color_, true,  shiness_);
-	
+	//material_->SetInformation(color_, true,  shiness_);
+	Material* materialData_ = nullptr;
+	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
+	materialData_->color = color_;
+	materialData_->enableLighting = true;
+	materialData_->shininess = shiness_;
+	materialData_->uvTransform = MakeIdentity4x4();
+	materialResource_->Unmap(0, nullptr);
+
+
+#pragma region GPUに送る方のカメラ
+
 	cameraResource_->Map(0, nullptr, reinterpret_cast<void**>(&cameraForGPU_));
 	
 	Vector3 cameraWorldPosition = {};
@@ -379,6 +398,9 @@ void Model::Draw(WorldTransform& worldTransform, Camera& camera) {
 
 	cameraForGPU_->worldPosition = cameraWorldPosition;
 	cameraResource_->Unmap(0, nullptr);
+
+
+
 
 
 	//コマンドを積む
@@ -393,7 +415,8 @@ void Model::Draw(WorldTransform& worldTransform, Camera& camera) {
 
 
 	//CBVを設定する
-	material_->GraphicsCommand();
+	//material_->GraphicsCommand();
+	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
 
 
 
@@ -436,73 +459,73 @@ void Model::Draw(WorldTransform& worldTransform, Camera& camera) {
 }
 
 //テクスチャ上書き用
-void Model::Draw(WorldTransform& worldTransform, Camera& camera, uint32_t textureHandle) {
-	////マテリアルにデータを書き込む
-	////書き込むためのアドレスを取得
-	////reinterpret_cast...char* から int* へ、One_class* から Unrelated_class* へなどの変換に使用
-
-	material_->SetInformation(color_, true, shiness_);
-
-	cameraResource_->Map(0, nullptr, reinterpret_cast<void**>(&cameraForGPU_));
-
-	Vector3 cameraWorldPosition = {};
-	cameraWorldPosition.x = camera.worldMatrix_.m[3][0];
-	cameraWorldPosition.y = camera.worldMatrix_.m[3][1];
-	cameraWorldPosition.z = camera.worldMatrix_.m[3][2];
-
-
-	cameraForGPU_->worldPosition = cameraWorldPosition;
-	//cameraResource_->Unmap(0, nullptr);
-
-
-	//コマンドを積む
-
-	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootSignature(PipelineManager::GetInstance()->GetModelRootSignature().Get());
-	DirectXSetup::GetInstance()->GetCommandList()->SetPipelineState(PipelineManager::GetInstance()->GetModelGraphicsPipelineState().Get());
-
-
-	////RootSignatureを設定。PSOに設定しているけど別途設定が必要
-	////形状を設定。PSOに設定しているものとはまた別。同じものを設定すると考えよう
-	mesh_->GraphicsCommand();
-
-
-	//CBVを設定する
-	material_->GraphicsCommand();
-
-
-
-	//資料見返してみたがhlsl(GPU)に計算を任せているわけだった
-	//コマンド送ってGPUで計算
-	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(1, worldTransform.bufferResource_->GetGPUVirtualAddress());
-
-
-
-	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である
-	if (textureHandle != 0) {
-		TextureManager::GraphicsCommand(textureHandle);
-
-	}
-
-
-	//Light
-	//3
-	directionalLight_->SetDirection(lightingDirection_);
-	directionalLight_->GraphicsCommand();
-
-
-	//rootParameters[4]
-	//カメラ
-	//worldTransformと一緒に計算するもの
-	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(4, camera.bufferResource_->GetGPUVirtualAddress());
-
-	//PhongReflectionはこっち
-	//rootParameters[5]
-	//Pixel用
-	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(5, cameraResource_->GetGPUVirtualAddress());
-
-	//DrawCall
-	mesh_->DrawCall(1);
-}
+//void Model::Draw(WorldTransform& worldTransform, Camera& camera, uint32_t textureHandle) {
+//	////マテリアルにデータを書き込む
+//	////書き込むためのアドレスを取得
+//	////reinterpret_cast...char* から int* へ、One_class* から Unrelated_class* へなどの変換に使用
+//
+//	material_->SetInformation(color_, true, shiness_);
+//
+//	cameraResource_->Map(0, nullptr, reinterpret_cast<void**>(&cameraForGPU_));
+//
+//	Vector3 cameraWorldPosition = {};
+//	cameraWorldPosition.x = camera.worldMatrix_.m[3][0];
+//	cameraWorldPosition.y = camera.worldMatrix_.m[3][1];
+//	cameraWorldPosition.z = camera.worldMatrix_.m[3][2];
+//
+//
+//	cameraForGPU_->worldPosition = cameraWorldPosition;
+//	//cameraResource_->Unmap(0, nullptr);
+//
+//
+//	//コマンドを積む
+//
+//	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootSignature(PipelineManager::GetInstance()->GetModelRootSignature().Get());
+//	DirectXSetup::GetInstance()->GetCommandList()->SetPipelineState(PipelineManager::GetInstance()->GetModelGraphicsPipelineState().Get());
+//
+//
+//	////RootSignatureを設定。PSOに設定しているけど別途設定が必要
+//	////形状を設定。PSOに設定しているものとはまた別。同じものを設定すると考えよう
+//	mesh_->GraphicsCommand();
+//
+//
+//	//CBVを設定する
+//	material_->GraphicsCommand();
+//
+//
+//
+//	//資料見返してみたがhlsl(GPU)に計算を任せているわけだった
+//	//コマンド送ってGPUで計算
+//	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(1, worldTransform.bufferResource_->GetGPUVirtualAddress());
+//
+//
+//
+//	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である
+//	if (textureHandle != 0) {
+//		TextureManager::GraphicsCommand(textureHandle);
+//
+//	}
+//
+//
+//	//Light
+//	//3
+//	directionalLight_->SetDirection(lightingDirection_);
+//	directionalLight_->GraphicsCommand();
+//
+//
+//	//rootParameters[4]
+//	//カメラ
+//	//worldTransformと一緒に計算するもの
+//	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(4, camera.bufferResource_->GetGPUVirtualAddress());
+//
+//	//PhongReflectionはこっち
+//	//rootParameters[5]
+//	//Pixel用
+//	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(5, cameraResource_->GetGPUVirtualAddress());
+//
+//	//DrawCall
+//	mesh_->DrawCall(1);
+//}
 
 
 //デストラクタ

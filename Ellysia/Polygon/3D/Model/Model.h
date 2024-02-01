@@ -39,7 +39,7 @@ public:
 	//初期化
 	//Initializeも兼ねているよ
 	//通常
-	static Model* Create(const std::string& directoryPath, const std::string& fileName);
+	//static Model* Create(const std::string& directoryPath, const std::string& fileName);
 
 	void CreateObj(const std::string& directoryPath, const std::string& fileName);
 
@@ -58,7 +58,7 @@ public:
 	void Draw(WorldTransform& worldTransform, Camera& camera);
 
 	//テクスチャ上書き用
-	void Draw(WorldTransform& worldTransform, Camera& camera,uint32_t textureHandle);
+	//void Draw(WorldTransform& worldTransform, Camera& camera,uint32_t textureHandle);
 
 
 	//デストラクタ
@@ -137,7 +137,9 @@ private:
 	std::unique_ptr<Mesh> mesh_ = nullptr;
 
 	//マテリアル用のリソースを作る
-	std::unique_ptr<CreateMaterial> material_ = nullptr;
+	//std::unique_ptr<CreateMaterial> material_ = nullptr;
+	ComPtr<ID3D12Resource> materialResource_ = nullptr;
+
 
 
 	//Lighting用

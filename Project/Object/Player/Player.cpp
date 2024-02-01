@@ -10,8 +10,8 @@ Player::Player() {
 //初期化
 void Player::Initialize(Vector3 position) {
 
-	model_ = std::unique_ptr<Model>();
-	model_.reset(Model::Create("Resources/CG3/Sphere", "Sphere.obj"));
+	model_ = new Model();
+	model_->CreateObj("Resources/CG3/Sphere", "Sphere.obj");
 
 	//textureHandle_ = TextureManager::GetInstance()->LoadTexture("Resources/monsterBall.png");
 
@@ -125,6 +125,6 @@ void Player::Draw(Camera& camera) {
 
 //デストラクタ
 Player::~Player() {
-
+	delete model_;
 }
 

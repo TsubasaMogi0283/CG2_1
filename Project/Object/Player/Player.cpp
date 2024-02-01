@@ -97,11 +97,6 @@ void Player::Update() {
 	ImGui::SliderFloat("Shininess", &shininess_, 0.0f, 100.0f);
 	ImGui::End();
 
-	model_->SetScale(worldTransform_.scale_);
-	model_->SetRotate(worldTransform_.rotate_);
-	model_->SetTranslate(worldTransform_.translate_);
-
-
 	model_->SetDirection(directionalLight_);
 	//Shininessは出来るだけ大きい値にした方が良いよ
 	model_->SetShiness(shininess_);

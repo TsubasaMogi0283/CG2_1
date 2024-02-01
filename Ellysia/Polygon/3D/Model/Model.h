@@ -70,28 +70,6 @@ public:
 public:
 	//アクセッサのまとめ
 
-	//SRT
-	//Scale
-	void SetScale(Vector3 scale) {
-		this->scale_ = scale;
-	}
-	const Vector3 GetScale() {
-		return scale_;
-	}
-	//Rotate
-	void SetRotate(Vector3 rotate) {
-		this->rotate_ = rotate;
-	}
-	const Vector3 GetRotate() {
-		return rotate_;
-	}
-	//Translate
-	void SetTranslate(Vector3 translate) {
-		this->translate_ = translate;
-	}
-	const Vector3 GetTranslate() {
-		return translate_;
-	}
 
 
 
@@ -137,13 +115,20 @@ private:
 	std::unique_ptr<Mesh> mesh_ = nullptr;
 
 	//マテリアル用のリソースを作る
-	//std::unique_ptr<CreateMaterial> material_ = nullptr;
 	ComPtr<ID3D12Resource> materialResource_ = nullptr;
 
 
 
 	//Lighting用
-	std::unique_ptr<CreateDirectionalLight> directionalLight_ = nullptr;
+	//std::unique_ptr<CreateDirectionalLight> directionalLight_ = nullptr;
+	ComPtr<ID3D12Resource> directionalLightResource_ = nullptr;
+	DirectionalLight* directionalLightData_ = nullptr;
+
+	Vector4 lightColor_ = { 1.0f,1.0f,1.0f,1.0f };
+	Vector3 direction_ = { 0.0f,-1.0f,0.0f };
+	float intensity_ = 3.0f;
+
+
 	//基本はtrueで
 	bool isEnableLighting_ = true;
 	

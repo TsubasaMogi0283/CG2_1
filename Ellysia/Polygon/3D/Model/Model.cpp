@@ -322,18 +322,7 @@ void Model::CreateObj(const std::string& directoryPath, const std::string& fileN
 
 
 	////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
-	//material_ = std::make_unique<CreateMaterial>();
-	//material_->Initialize();
-
 	materialResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(Material)).Get();
-	Material* materialData_ = nullptr;
-	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
-	materialData_->color = { 1.0f,1.0f,1.0f,1.0f };
-	materialData_->enableLighting = false;
-	materialData_->shininess = 5.0f;
-	materialData_->uvTransform = MakeIdentity4x4();
-
-	materialResource_->Unmap(0, nullptr);
 
 
 	//テクスチャの読み込み
@@ -347,14 +336,12 @@ void Model::CreateObj(const std::string& directoryPath, const std::string& fileN
 
 
 
-	//Sprite用のTransformationMatrix用のリソースを作る。
-	//Matrix4x4 1つ分サイズを用意する
-	//model->transformation_=std::make_unique<Transformation>();
-	//model->transformation_->Initialize();
-
 	//Lighting
-	directionalLight_ = std::make_unique<CreateDirectionalLight>();
-	directionalLight_->Initialize();
+	//directionalLight_ = std::make_unique<CreateDirectionalLight>();
+	//directionalLight_->Initialize();
+
+
+	directionalLightResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(DirectionalLight)).Get();
 
 	//Pixel用のカメラ
 	cameraResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(CameraForGPU)).Get();
@@ -372,11 +359,13 @@ void Model::CreateObj(const std::string& directoryPath, const std::string& fileN
 
 //描画
 void Model::Draw(WorldTransform& worldTransform, Camera& camera) {
-	////マテリアルにデータを書き込む
-	////書き込むためのアドレスを取得
-	////reinterpret_cast...char* から int* へ、One_class* から Unrelated_class* へなどの変換に使用
 
-	//material_->SetInformation(color_, true,  shiness_);
+
+
+#pragma region マテリアルにデータを書き込む
+	//書き込むためのアドレスを取得
+	//reinterpret_cast...char* から int* へ、One_class* から Unrelated_class* へなどの変換に使用
+
 	Material* materialData_ = nullptr;
 	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 	materialData_->color = color_;
@@ -384,6 +373,9 @@ void Model::Draw(WorldTransform& worldTransform, Camera& camera) {
 	materialData_->shininess = shiness_;
 	materialData_->uvTransform = MakeIdentity4x4();
 	materialResource_->Unmap(0, nullptr);
+
+#pragma endregion
+
 
 
 #pragma region GPUに送る方のカメラ
@@ -418,8 +410,6 @@ void Model::Draw(WorldTransform& worldTransform, Camera& camera) {
 	//material_->GraphicsCommand();
 	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
 
-
-
 	//資料見返してみたがhlsl(GPU)に計算を任せているわけだった
 	//コマンド送ってGPUで計算
 	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(1, worldTransform.bufferResource_->GetGPUVirtualAddress());
@@ -435,8 +425,17 @@ void Model::Draw(WorldTransform& worldTransform, Camera& camera) {
 
 	//Light
 	//3
-	directionalLight_->SetDirection(lightingDirection_);
-	directionalLight_->GraphicsCommand();
+	//directionalLight_->SetDirection(lightingDirection_);
+	//directionalLight_->GraphicsCommand();
+
+	directionalLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightData_));
+	directionalLightData_->color = lightColor_;
+	directionalLightData_->direction = direction_;
+	directionalLightData_->intensity = intensity_;
+	directionalLightResource_->Unmap(0, nullptr);
+
+
+	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
 
 
 	//rootParameters[4]

@@ -108,8 +108,6 @@ private:
 	//頂点リソースを作る
 	//頂点バッファビューを作成する
 	//頂点リソースにデータを書き込む
-
-	//頂点リソースを作る
 	ComPtr<ID3D12Resource> vertexResource_ = nullptr;
 	//頂点バッファビューを作成する
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_;

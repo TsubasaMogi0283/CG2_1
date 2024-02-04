@@ -19,11 +19,9 @@
 
 
 #include "Mesh.h"
-#include "CreateMaterial.h"
 #include "MaterialData.h"
 #include "ModelData.h"
 #include "DirectionalLight.h"
-#include "CreateDirectionalLight.h"
 #include "Transformation.h"
 #include <WorldTransform.h>
 #include "Camera.h"

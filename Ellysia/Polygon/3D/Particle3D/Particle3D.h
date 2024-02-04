@@ -87,7 +87,7 @@ public:
 
 
 	//通常の描画
-	void Draw(Camera& camera);
+	//void Draw(Camera& camera);
 
 	//テクスチャを上書きをする描画
 	void Draw(Camera& camera, uint32_t textureHandle);

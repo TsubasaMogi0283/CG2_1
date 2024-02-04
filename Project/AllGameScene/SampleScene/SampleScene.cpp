@@ -59,7 +59,7 @@ void SampleScene::Update(GameManager* gameManager) {
 void SampleScene::Draw() {
 
 	player_->Draw(camera_);
-	//particle3D_->Draw(camera_, textureHandle_);
+	particle3D_->Draw(camera_, textureHandle_);
 	
 }
 

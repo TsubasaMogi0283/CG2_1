@@ -329,8 +329,35 @@ void Model::CreateObj(const std::string& directoryPath, const std::string& fileN
 	textureHandle_ = TextureManager::GetInstance()->LoadTexture(modelDataNew.material.textureFilePath);
 
 	//頂点リソースを作る
-	mesh_ = std::make_unique<Mesh>();
-	mesh_->Initialize(modelDataNew.vertices);
+	//mesh_ = std::make_unique<Mesh>();
+	//mesh_->Initialize(modelDataNew.vertices);
+
+
+	vertices_ = modelDataNew.vertices;
+
+	vertexResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(VertexData) * vertices_.size());
+
+	//読み込みのところでバッファインデックスを作った方がよさそう
+	//vertexResourceがnullらしい
+	//リソースの先頭のアドレスから使う
+	vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
+	//使用するリソースは頂点のサイズ
+	vertexBufferView_.SizeInBytes = UINT(sizeof(VertexData) * vertices_.size());
+	//１頂点あたりのサイズ
+	vertexBufferView_.StrideInBytes = sizeof(VertexData);
+
+
+
+
+
+
+	//頂点バッファにデータを書き込む
+	VertexData* vertexData = nullptr;
+	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));//書き込むためのアドレスを取得
+	std::memcpy(vertexData, vertices_.data(), sizeof(VertexData) * vertices_.size());
+
+
+
 
 
 
@@ -404,9 +431,11 @@ void Model::Draw(WorldTransform& worldTransform, Camera& camera) {
 	DirectXSetup::GetInstance()->GetCommandList()->SetPipelineState(PipelineManager::GetInstance()->GetModelGraphicsPipelineState().Get());
 
 
-	////RootSignatureを設定。PSOに設定しているけど別途設定が必要
-	////形状を設定。PSOに設定しているものとはまた別。同じものを設定すると考えよう
-	mesh_->GraphicsCommand();
+	//RootSignatureを設定。PSOに設定しているけど別途設定が必要
+	DirectXSetup::GetInstance()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);
+	//形状を設定。PSOに設定しているものとはまた別。同じものを設定すると考えよう
+	DirectXSetup::GetInstance()->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
 
 
 	//CBVを設定する
@@ -421,7 +450,6 @@ void Model::Draw(WorldTransform& worldTransform, Camera& camera) {
 	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である
 	if (textureHandle_ != 0) {
 		TextureManager::GraphicsCommand(textureHandle_);
-
 	}
 
 
@@ -446,7 +474,9 @@ void Model::Draw(WorldTransform& worldTransform, Camera& camera) {
 
 
 	//DrawCall
-	mesh_->DrawCall(1);
+	//mesh_->DrawCall(1);
+	
+	DirectXSetup::GetInstance()->GetCommandList()->DrawInstanced(UINT(vertices_.size()), 1, 0, 0);
 }
 
 

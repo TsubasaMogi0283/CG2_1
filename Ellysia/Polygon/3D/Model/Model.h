@@ -109,8 +109,17 @@ private:
 	//頂点バッファビューを作成する
 	//頂点リソースにデータを書き込む
 
-	//頂点データ
-	std::unique_ptr<Mesh> mesh_ = nullptr;
+	//頂点リソースを作る
+	ComPtr<ID3D12Resource> vertexResource_ = nullptr;
+	//頂点バッファビューを作成する
+	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_;
+
+	std::vector<VertexData> vertices_{};
+
+
+
+
+
 
 	//マテリアル用のリソースを作る
 	ComPtr<ID3D12Resource> materialResource_ = nullptr;

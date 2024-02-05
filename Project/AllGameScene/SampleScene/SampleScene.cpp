@@ -83,18 +83,6 @@ void SampleScene::Update(GameManager* gameManager) {
 	particle_->SetField(isSetField_);
 	particle_->Update();
 
-	/*ImGui::Begin("Plane");
-	ImGui::SliderFloat3("Translate", &modelTranslate_.x, -10.0f, 10.0f);
-	ImGui::SliderFloat4("Color", &modelColor_.x, 0.0f, 1.0f);
-	ImGui::Checkbox("isSetField;", &isSetField_);
-
-	ImGui::End();
-	
-
-	ImGui::Begin("Particle");
-	ImGui::SliderFloat3("Translate", &particleTranslate_.x, -3.0f, 3.0f);
-	ImGui::End();
-	*/
 
 	sprite->SetPosition(spritePosition_);
 
@@ -133,7 +121,7 @@ void SampleScene::Update(GameManager* gameManager) {
 
 
 	//ウィンドウサイズの設定は↓でやるよ
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	ImGui::SetNextWindowSize(ImVec2(500, 100));
 	ImGui::Begin("Sprite");
 	ImGui::SliderFloat2("Position", &spritePosition_.x, 0.0f, 500.0f,"%.1f");

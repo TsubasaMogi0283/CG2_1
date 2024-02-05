@@ -10,7 +10,7 @@
 #include <Model.h>
 
 //StatePatternを使う時は必ず前方宣言をするように
-class Gamemanager;
+class GameManager;
 
 class SampleScene : public IGameScene{
 public:
@@ -56,7 +56,8 @@ private:
 	
 
 	Audio* audio_ = nullptr;
-	uint32_t audioHandle_ = 0u;
+	uint32_t audioHandle2_ = 0u;
+	bool isEnd_ = false;
 };
 
 

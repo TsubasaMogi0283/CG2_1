@@ -11,6 +11,9 @@ Audio* Audio::GetInstance() {
 	return &instance;
 }
 
+
+
+
 //初期化
 //これはDirecX初期化の後に入れてね
 void Audio::Initialize() {
@@ -21,16 +24,15 @@ void Audio::Initialize() {
 
 	//マスターボイスを生成
 	hr = xAudio2_->CreateMasteringVoice(&masterVoice_);
-	
+
 
 }
 
-#pragma region 実際に使う関数
 //読み込み
 uint32_t Audio::LoadWave(const char* fileName) {
 	audioHandle_++;
 
-	#pragma region １,ファイルオープン
+#pragma region １,ファイルオープン
 	//ファイル入力ストリームのインスタンス
 	std::ifstream file;
 	//.wavファイルをバイナリモードで開く
@@ -38,9 +40,9 @@ uint32_t Audio::LoadWave(const char* fileName) {
 	//ファイルオープン失敗を検出する
 	assert(file.is_open());
 
-	#pragma endregion
+#pragma endregion
 
-	#pragma region ２,wavデータ読み込み
+#pragma region ２,wavデータ読み込み
 
 	//RIFFヘッダーの読み込み
 	RiffHeader riff;
@@ -89,40 +91,40 @@ uint32_t Audio::LoadWave(const char* fileName) {
 	//Dataチャンクのデータ部(波形データ)の読み込み
 	char* pBuffer = new char[data.size];
 	file.read(pBuffer, data.size);
-	#pragma endregion
+#pragma endregion
 
-	#pragma region ３,Waveファイルを閉じる
+#pragma region ３,Waveファイルを閉じる
 	file.close();
 
 
-	#pragma endregion
+#pragma endregion
 
-	#pragma region 読み込んだ音声データを返す
-	
+#pragma region 読み込んだ音声データを返す
+
 	soundData[audioHandle_].wfex = format.fmt;
 	soundData[audioHandle_].pBuffer = reinterpret_cast<BYTE*>(pBuffer);
 	soundData[audioHandle_].bufferSize = data.size;
 
 	return audioHandle_;
 
-	#pragma endregion
+#pragma endregion
 
-	
+
 
 }
 
 //音声再生
-void Audio::PlayWave(uint32_t audioHandle,bool isLoop) {
+void Audio::PlayWave(uint32_t audioHandle, bool isLoop) {
 	HRESULT hr{};
-	
-	
+
+
 	//波形フォーマットを基にSourceVoiceの生成
 	//IXAudio2SourceVoice* pSourceVoice = nullptr;
 	hr = xAudio2_->CreateSourceVoice(&pSourceVoice_[audioHandle], &soundData[audioHandle].wfex);
 	assert(SUCCEEDED(hr));
 
 	//再生する波形データの設定
-	
+
 	buf_.pAudioData = soundData[audioHandle].pBuffer;
 	buf_.AudioBytes = soundData[audioHandle].bufferSize;
 	buf_.Flags = XAUDIO2_END_OF_STREAM;
@@ -135,14 +137,14 @@ void Audio::PlayWave(uint32_t audioHandle,bool isLoop) {
 	}
 
 	//波形データの再生
+	
 	hr = pSourceVoice_[audioHandle]->SubmitSourceBuffer(&buf_);
 	hr = pSourceVoice_[audioHandle]->Start();
 
 
-	
+
 }
 
-//音量を変える
 void Audio::ChangeVolume(uint32_t audiohandle, float volume) {
 	HRESULT hr = {};
 	hr = pSourceVoice_[audiohandle]->SetVolume(volume);
@@ -154,20 +156,16 @@ void Audio::StopWave(uint32_t audioHandle) {
 	hr = pSourceVoice_[audioHandle]->Stop();
 }
 
-#pragma endregion
-
 
 //音声データの開放
-//後ろにあるReleaseで使っているよ
 void Audio::SoundUnload(uint32_t soundDataHandle) {
 	//バッファのメモリを解放
-
 	delete[] soundData[soundDataHandle].pBuffer;
 	soundData[soundDataHandle].pBuffer = 0;
 	soundData[soundDataHandle].bufferSize = 0;
 	soundData[soundDataHandle].wfex = {};
 
-	
+
 }
 
 //解放

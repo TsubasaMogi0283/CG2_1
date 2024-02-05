@@ -5,6 +5,9 @@
 #include <Input.h>
 #include <Camera.h>
 
+
+#include "SampleScene2/SampleScene2.h"
+
 /// <summary>
 	/// コンストラクタ
 	/// </summary>
@@ -119,9 +122,20 @@ void SampleScene::Update(GameManager* gameManager) {
 	Camera::GetInstance()->SetTranslate(cameraTranslate_);
 
 
+	if (Input::GetInstance()->IsTriggerKey(DIK_SPACE) == true) {
+		
+		audio_->StopWave(audioHandle2_);
+		isEnd_ = true;
+	}
+
+	if (isEnd_ == true) {
+		audio_->StopWave(audioHandle2_);
+		gameManager->ChangeScene(new SampleScene2());
+	}
+
 
 	//ウィンドウサイズの設定は↓でやるよ
-#ifdef USE_IMGUI
+#ifdef _DEBUG
 	ImGui::SetNextWindowSize(ImVec2(500, 100));
 	ImGui::Begin("Sprite");
 	ImGui::SliderFloat2("Position", &spritePosition_.x, 0.0f, 500.0f,"%.1f");

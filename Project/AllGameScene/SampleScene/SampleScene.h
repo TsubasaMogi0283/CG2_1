@@ -42,13 +42,18 @@ public:
 
 
 private:
-	std::unique_ptr<Player> player_ = nullptr;
+	std::unique_ptr <Model> sphere = nullptr;
+	WorldTransform sphereWorldTransform_ = {};
+
+	std::unique_ptr<Model> terrain_ = nullptr;
+	WorldTransform terrainWorldTransform_ = {};
+
+	Vector3 lightPosition_ = {0.0f,2.0f,0.0f};
+	float pointLightIntencity_ = 1.0f;
 
 	Particle3D* particle3D_ = nullptr;
 	uint32_t textureHandle_ = 0u;
 
-	Vector3 cameraTranslate_ = {};
-	Vector3 cameraRotate_ = {};
 
 	Camera camera_ = {};
 };

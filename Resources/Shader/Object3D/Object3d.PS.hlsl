@@ -121,6 +121,9 @@ PixelShaderOutput main(VertexShaderOutput input) {
 		//v
         float32_t3 toEye = normalize(gCamera.worldPosition - input.worldPosition);
 		
+		//DiffuseReflection...拡散反射
+		//SpecularReflection...鏡面反射
+		
        
         //HalfVectorを求めて計算
 		float32_t3 halfVector = normalize(-gDirectionalLight.direction + toEye);
@@ -140,11 +143,11 @@ PixelShaderOutput main(VertexShaderOutput input) {
 		
 		
 		//DirectionalLight
-		//拡散反射
-		float32_t3 diffuseDirectionalLight = gMaterial.color.rgb * textureColor.rgb * gDirectionalLight.color.rgb * cos * gDirectionalLight.intensity;
+		////拡散反射
+		//float32_t3 diffuseDirectionalLight = gMaterial.color.rgb * textureColor.rgb * gDirectionalLight.color.rgb * cos * gDirectionalLight.intensity;
 		
-		//鏡面反射
-        float32_t3 specularDirectionalLight = gDirectionalLight.color.rgb * gDirectionalLight.intensity * specularPow * float32_t3(1.0f, 1.0f, 1.0f);
+		////鏡面反射
+  //      float32_t3 specularDirectionalLight = gDirectionalLight.color.rgb * gDirectionalLight.intensity * specularPow * float32_t3(1.0f, 1.0f, 1.0f);
 		
 		//入射光の計算
 		//物体表面の特定の点に対する入射光を計算する
@@ -155,13 +158,13 @@ PixelShaderOutput main(VertexShaderOutput input) {
 		
 		
         
-		
+		// output.color.rgb = diffuseDirectionalLight + specularDirectionalLight
 		
 		//拡散反射+鏡面反射
-        output.color.rgb = diffuseDirectionalLight + specularDirectionalLight;
-		
 		//Pointも
-       // output.color.rgb
+        output.color.rgb = diffusePointLight + specularPointLight;
+		
+		
 		//アルファは今まで通り
         output.color.a = gMaterial.color.a * textureColor.a;
 

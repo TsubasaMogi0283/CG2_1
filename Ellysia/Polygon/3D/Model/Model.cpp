@@ -4,7 +4,7 @@
 #include <PipelineManager.h>
 #include "DirectXSetup.h"
 
-
+#include <imgui.h>
 static uint32_t modelIndex;
 std::list<ModelData> Model::modelInformationList_{};
 
@@ -380,6 +380,20 @@ void Model::CreateObj(const std::string& directoryPath, const std::string& fileN
 
 }
 
+
+void Model::Update() {
+
+
+
+
+	ImGui::Begin("PointLight");
+	ImGui::SliderFloat("Intensity", &pointLightIntensity_, 0.0f, 3.0f);
+	ImGui::SliderFloat3("Position", &pointLightPosition_.x, -3.0f, 3.0f);
+
+
+	ImGui::End();
+}
+
 //描画
 void Model::Draw(WorldTransform& worldTransform, Camera& camera) {
 
@@ -414,15 +428,21 @@ void Model::Draw(WorldTransform& worldTransform, Camera& camera) {
 
 #pragma endregion
 
+
 #pragma region DirectionalLightの書き込み
 
 	directionalLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightData_));
 	directionalLightData_->color = lightColor_;
-	directionalLightData_->direction = lightingDirection_;
-	directionalLightData_->intensity = intensity_;
+	directionalLightData_->direction = pointLightPosition_;
+	directionalLightData_->intensity = 0.0f;
 	directionalLightResource_->Unmap(0, nullptr);
 
 #pragma endregion
+	pointLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&pointLightData_));
+	pointLightData_->color = { 1.0f,1.0f,1.0f };
+	pointLightData_->intensity = pointLightIntensity_;
+	pointLightData_->position = pointLightPosition_;
+	pointLightResource_->Unmap(0, nullptr);
 
 
 	//コマンドを積む
@@ -470,7 +490,7 @@ void Model::Draw(WorldTransform& worldTransform, Camera& camera) {
 
 	//PointLight
 	//rootParameters[6]
-	//DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(6, cameraResource_->GetGPUVirtualAddress());
+	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(6, pointLightResource_->GetGPUVirtualAddress());
 
 
 	//DrawCall

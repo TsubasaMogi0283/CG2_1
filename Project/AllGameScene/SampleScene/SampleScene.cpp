@@ -16,9 +16,22 @@ SampleScene::SampleScene() {
 /// 初期化
 /// </summary>
 void SampleScene::Initialize() {
-	player_ = std::make_unique<Player>();
-	Vector3 playerPosition = { 0.0f, 0.0f, 0.0f };
-	player_->Initialize(playerPosition);
+
+	sphere = std::make_unique<Model>();
+	sphere->CreateObj("Resources/CG3/Sphere", "Sphere.obj");
+
+
+	sphereWorldTransform_.Initialize();
+	const float SCALE = 3.0f;
+	sphereWorldTransform_.scale_ = { SCALE,SCALE,SCALE };
+
+
+	
+	terrain_ = std::make_unique<Model>();
+	terrain_->CreateObj("Resources/CG3/terrain", "terrain.obj");
+
+
+	terrainWorldTransform_.Initialize();
 
 	particle3D_ = new Particle3D();
 	particle3D_->Create("Resources/05_02", "plane.obj");
@@ -26,8 +39,9 @@ void SampleScene::Initialize() {
 
 
 	camera_.Initialize();
-	camera_.translate_ = {0.0f, 0.0f, -20.0f};
-	camera_.rotate_ = cameraRotate_;
+	camera_.translate_ = {0.0f, 15.0f, -20.0f};
+	camera_.rotate_ = { -5.75f,0.0f,0.0f };
+	
 }
 
 
@@ -44,12 +58,10 @@ void SampleScene::Update(GameManager* gameManager) {
 	ImGui::Begin("Camera");
 	ImGui::SliderFloat3("Tranlate", &camera_.translate_.x, -40.0f, 40.0f);
 	ImGui::SliderFloat3("Rotate", &camera_.rotate_.x, -7.0f, 7.0f);
-
 	ImGui::End();
 
-
-	player_->Update();
-
+	sphere->Update();
+	terrain_->Update();
 
 
 	/*particle3D_->SetCameraAffineMatrix(camera_.worldMatrix_);
@@ -57,7 +69,8 @@ void SampleScene::Update(GameManager* gameManager) {
 	particle3D_->SetViewMatrix(camera_.viewMatrix_);
 	particle3D_->SetProjectionMatrix(camera_.projectionMatrix_);
 	particle3D_->Update();*/
-
+	sphereWorldTransform_.Update();
+	terrainWorldTransform_.Update();
 	camera_.Update();
 }
 
@@ -65,8 +78,8 @@ void SampleScene::Update(GameManager* gameManager) {
 /// 描画
 /// </summary>
 void SampleScene::Draw() {
-
-	player_->Draw(camera_);
+	terrain_->Draw(terrainWorldTransform_, camera_);
+	sphere->Draw(sphereWorldTransform_,camera_);
 	//particle3D_->Draw(textureHandle_);
 	
 }

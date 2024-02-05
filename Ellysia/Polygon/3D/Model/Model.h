@@ -52,6 +52,9 @@ private:
 #pragma endregion
 
 public:
+
+	void Update();
+
 	//通常
 	void Draw(WorldTransform& worldTransform, Camera& camera);
 
@@ -93,14 +96,24 @@ public:
 	}
 	//方向
 	void SetDirection(Vector3 direction) {
-		this->lightingDirection_ = direction;
+		this->direction_ = direction;
 	}
+	void SetDirectionalLightIntensity(float intensity) {
+		this->directionalLightIntensity_ = intensity;
+	}
+
 	//光沢
 	void SetShiness(float shiness) {
 		this->shiness_ = shiness;
 	}
 
 #pragma endregion
+
+
+	//PointLight
+	void SetPointLightPosition(Vector3 position) {
+		this->pointLightPosition_ = position;
+	}
 
 
 
@@ -131,7 +144,7 @@ private:
 
 	Vector4 lightColor_ = { 1.0f,1.0f,1.0f,1.0f };
 	Vector3 direction_ = { 0.0f,-1.0f,0.0f };
-	float intensity_ = 3.0f;
+	float directionalLightIntensity_ = 0.0f;
 
 
 
@@ -148,12 +161,16 @@ private:
 
 	//PointLight
 	ComPtr<ID3D12Resource> pointLightResource_ = nullptr;
-	PointLight* pointLight_ = {};
+	PointLight* pointLightData_ = {};
+
+	Vector3 pointLightPosition_ = { 0.0f,2.0f,0.0f };
+	float pointLightIntensity_ = 1.0f;
 
 
+	Vector3 debugPointLightPosition_ = { 0.0f,2.0f,0.0f };
+	float debugPointLightIntensity_ = 1.0f;
 
-	//方向
-	Vector3 lightingDirection_ = { 0.0f,-1.0f,0.0f };
+	
 
 
 

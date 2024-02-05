@@ -68,7 +68,7 @@ Texture2D<float32_t4> gTexture : register(t0);
 SamplerState gSampler : register(s0);
 //後でrootparameterで追加してあげる
 ConstantBuffer<Camera> gCamera : register(b2);
-ConstantBuffer<PointLight> gPointLIght : register(b3);
+ConstantBuffer<PointLight> gPointLight : register(b3);
 
 
 //Textureは基本的にそのまま読まずSamplerを介して読む
@@ -93,7 +93,7 @@ PixelShaderOutput main(VertexShaderOutput input) {
 	float32_t4 textureColor = gTexture.Sample(gSampler, transformedUV.xy);
 
 	
-    if (textureColor.a <= 0.5f)
+    if (textureColor.a == 0.0f)
     {
         discard;
     }
@@ -121,39 +121,47 @@ PixelShaderOutput main(VertexShaderOutput input) {
 		//v
         float32_t3 toEye = normalize(gCamera.worldPosition - input.worldPosition);
 		
-        
-		//入射光の反射ベクトルを求める
-		//r
-        float32_t3 reflectionLight = reflect(normalize(gDirectionalLight.direction), normalize(input.normal));
-		
-		
+       
         //HalfVectorを求めて計算
 		float32_t3 halfVector = normalize(-gDirectionalLight.direction + toEye);
         float NDotH = dot(normalize(input.normal), halfVector);
         float specularPow = pow(saturate(NDotH), gMaterial.shininess);
 		
+		 //入射光の反射ベクトルを求める
+		//r
+        float32_t3 reflectionLight = reflect(normalize(gDirectionalLight.direction), normalize(input.normal));
 		
 		//内積をとりsaturate
 		//shininessを階乗すると鏡面反射の強度が求まる
-       // float RdotE = dot(reflectionLight, toEye);
+		//float RdotE = dot(reflectionLight, toEye);
 		//反射強度
 		//float specularPow = pow(saturate(RdotE), gMaterial.shininess);
 		
+		
+		
+		//DirectionalLight
 		//拡散反射
-        //今までのやつ
-        //output.color.rgb = gMaterial.color.rgb * textureColor.rgb * gDirectionalLight.color.rgb * cos * gDirectionalLight.intensity;
-		float32_t3 diffuse = gMaterial.color.rgb * textureColor.rgb * gDirectionalLight.color.rgb * cos * gDirectionalLight.intensity;
+		float32_t3 diffuseDirectionalLight = gMaterial.color.rgb * textureColor.rgb * gDirectionalLight.color.rgb * cos * gDirectionalLight.intensity;
 		
 		//鏡面反射
-        float32_t3 specular = gDirectionalLight.color.rgb * gDirectionalLight.intensity * specularPow * float32_t3(1.0f, 1.0f, 1.0f);
+        float32_t3 specularDirectionalLight = gDirectionalLight.color.rgb * gDirectionalLight.intensity * specularPow * float32_t3(1.0f, 1.0f, 1.0f);
 		
 		//入射光の計算
 		//物体表面の特定の点に対する入射光を計算する
-       // flot32_t3 pointLightDirection = normalize(input.worldPosition - gPointLIght.position);
+		float32_t3 pointLightDirection = normalize(input.worldPosition - gPointLight.position);
+		
+        float32_t3 diffusePointLight = gMaterial.color.rgb * textureColor.rgb * gPointLight.color.rgb * cos * gPointLight.intensity;
+        float32_t3 specularPointLight = gPointLight.color.rgb * gPointLight.intensity * specularPow * float32_t3(1.0f, 1.0f, 1.0f);
+		
+		
+        
 		
 		
 		//拡散反射+鏡面反射
-        output.color.rgb = diffuse + specular;
+        output.color.rgb = diffuseDirectionalLight + specularDirectionalLight;
+		
+		//Pointも
+       // output.color.rgb
 		//アルファは今まで通り
         output.color.a = gMaterial.color.a * textureColor.a;
 

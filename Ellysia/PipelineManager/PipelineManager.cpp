@@ -230,6 +230,7 @@ void PipelineManager::GenaratedLinePSO(){
 
 }
 
+
 //スプライト用
 void PipelineManager::GenerateSpritePSO() {
 	
@@ -545,7 +546,6 @@ void PipelineManager::GenerateSpritePSO() {
 	
 
 }
-
 
 
 //モデル用
@@ -895,8 +895,6 @@ void PipelineManager::GenerateModelPSO() {
 
 }
 
-
-//3Dパーティクル用
 
 //3Dパーティクル用
 void PipelineManager::GenerateParticle3DPSO() {

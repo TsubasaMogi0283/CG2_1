@@ -418,7 +418,7 @@ void Model::Draw(WorldTransform& worldTransform, Camera& camera) {
 
 	directionalLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightData_));
 	directionalLightData_->color = lightColor_;
-	directionalLightData_->direction = direction_;
+	directionalLightData_->direction = lightingDirection_;
 	directionalLightData_->intensity = intensity_;
 	directionalLightResource_->Unmap(0, nullptr);
 

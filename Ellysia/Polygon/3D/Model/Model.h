@@ -134,6 +134,8 @@ private:
 	float intensity_ = 3.0f;
 
 
+
+
 	//基本はtrueで
 	bool isEnableLighting_ = true;
 	
@@ -156,11 +158,6 @@ private:
 
 
 	uint32_t textureHandle_ = 0;
-
-	//SRT
-	Vector3 scale_ = { 1.0f,1.0f,1.0f };
-	Vector3 rotate_ = { 0.0f,0.0f,0.0f };
-	Vector3 translate_ = { 0.0f,0.0f,0.0f };
 
 
 

@@ -52,11 +52,11 @@ void SampleScene::Update(GameManager* gameManager) {
 
 
 
-	particle3D_->SetCameraAffineMatrix(camera_.worldMatrix_);
+	/*particle3D_->SetCameraAffineMatrix(camera_.worldMatrix_);
 
 	particle3D_->SetViewMatrix(camera_.viewMatrix_);
 	particle3D_->SetProjectionMatrix(camera_.projectionMatrix_);
-	particle3D_->Update();
+	particle3D_->Update();*/
 
 	camera_.Update();
 }
@@ -67,7 +67,7 @@ void SampleScene::Update(GameManager* gameManager) {
 void SampleScene::Draw() {
 
 	player_->Draw(camera_);
-	particle3D_->Draw(textureHandle_);
+	//particle3D_->Draw(textureHandle_);
 	
 }
 

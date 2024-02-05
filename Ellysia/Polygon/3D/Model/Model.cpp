@@ -384,14 +384,6 @@ void Model::CreateObj(const std::string& directoryPath, const std::string& fileN
 void Model::Update() {
 
 
-
-
-	ImGui::Begin("PointLight");
-	ImGui::SliderFloat("Intensity", &pointLightIntensity_, 0.0f, 1.0f);
-	ImGui::SliderFloat3("Position", &pointLightPosition_.x, -3.0f, 3.0f);
-
-
-	ImGui::End();
 }
 
 //描画
@@ -443,7 +435,6 @@ void Model::Draw(WorldTransform& worldTransform, Camera& camera) {
 	pointLightData_->intensity = pointLightIntensity_;
 	pointLightData_->position = pointLightPosition_;
 	pointLightResource_->Unmap(0, nullptr);
-
 
 	//コマンドを積む
 

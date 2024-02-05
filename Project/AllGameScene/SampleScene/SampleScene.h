@@ -51,6 +51,10 @@ private:
 	Vector3 lightPosition_ = {0.0f,2.0f,0.0f};
 	float pointLightIntencity_ = 1.0f;
 
+	Vector3 pointLightPosition_ = { 0.0f,2.0f,0.0f };
+	float pointLightIntensity_ = 1.0f;
+
+
 	Particle3D* particle3D_ = nullptr;
 	uint32_t textureHandle_ = 0u;
 

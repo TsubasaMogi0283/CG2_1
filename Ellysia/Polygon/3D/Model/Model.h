@@ -114,7 +114,9 @@ public:
 	void SetPointLightPosition(Vector3 position) {
 		this->pointLightPosition_ = position;
 	}
-
+	void SetPointLightIntensity(float intensity) {
+		this->pointLightIntensity_ = intensity;
+	}
 
 
 private:
@@ -166,9 +168,6 @@ private:
 	Vector3 pointLightPosition_ = { 0.0f,2.0f,0.0f };
 	float pointLightIntensity_ = 1.0f;
 
-
-	Vector3 debugPointLightPosition_ = { 0.0f,2.0f,0.0f };
-	float debugPointLightIntensity_ = 1.0f;
 
 	
 

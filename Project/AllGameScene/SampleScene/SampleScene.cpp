@@ -58,14 +58,20 @@ void SampleScene::Update(GameManager* gameManager) {
 	ImGui::Begin("Camera");
 	ImGui::SliderFloat3("Tranlate", &camera_.translate_.x, -40.0f, 40.0f);
 	ImGui::SliderFloat3("Rotate", &camera_.rotate_.x, -7.0f, 7.0f);
+	ImGui::SliderFloat("Intensity", &pointLightIntensity_, 0.0f, 1.0f);
+	ImGui::SliderFloat3("Position", &pointLightPosition_.x, -7.0f, 7.0f);
+
 	ImGui::End();
 
-	sphere->Update();
-	terrain_->Update();
+	sphere->SetPointLightPosition(pointLightPosition_);
+	sphere->SetPointLightIntensity(pointLightIntensity_);
+	
+	terrain_->SetPointLightPosition(pointLightPosition_);
+	terrain_->SetPointLightIntensity(pointLightIntensity_);
+
 
 
 	/*particle3D_->SetCameraAffineMatrix(camera_.worldMatrix_);
-
 	particle3D_->SetViewMatrix(camera_.viewMatrix_);
 	particle3D_->SetProjectionMatrix(camera_.projectionMatrix_);
 	particle3D_->Update();*/

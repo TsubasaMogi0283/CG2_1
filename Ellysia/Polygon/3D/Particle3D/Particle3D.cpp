@@ -1,4 +1,5 @@
 #include "Particle3D.h"
+#include <Camera.h>
 #include <TextureManager.h>
 #include <PipelineManager.h>
 #include "DirectXSetup.h"
@@ -316,7 +317,7 @@ std::list<Particle> Particle3D::Emission(const Emitter& emmitter, std::mt19937& 
 
 
 //更新
-void Particle3D::Update(Camera& camera) {
+void Particle3D::Update() {
 
 
 	//C++でいうsrandみたいなやつ
@@ -329,7 +330,7 @@ void Particle3D::Update(Camera& camera) {
 	if (emitter_.frequency <= emitter_.frequencyTime) {
 		//パーティクルを作る
 		particles_.splice(particles_.end(), Emission(emitter_, randomEngine));
-		//余計に過ぎた時間も加味して頻度計算する
+		//余計に杉田時間も神して頻度計算する
 		emitter_.frequencyTime -= emitter_.frequency;
 	}
 
@@ -372,7 +373,7 @@ void Particle3D::Update(Camera& camera) {
 			Matrix4x4 backToFrontMatrix = MakeRotateYMatrix(std::numbers::pi_v<float>);
 
 			//カメラの回転を適用する
-			Matrix4x4 billBoardMatrix = Multiply(backToFrontMatrix, camera.worldMatrix_);
+			Matrix4x4 billBoardMatrix = Multiply(backToFrontMatrix, Camera::GetInstance()->GetAffineMatrix());
 			//平行成分はいらないよ
 			billBoardMatrix.m[3][0] = 0.0f;
 			billBoardMatrix.m[3][1] = 0.0f;
@@ -386,7 +387,7 @@ void Particle3D::Update(Camera& camera) {
 			Matrix4x4 worldMatrix = Multiply(scaleMatrix, Multiply(billBoardMatrix, translateMatrix));
 
 			//WVP行列を作成
-			Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(camera.viewMatrix_, camera.projectionMatrix_));
+			Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(Camera::GetInstance()->GetViewMatrix(), Camera::GetInstance()->GetProjectionMatrix_()));
 
 			//最大値を超えて描画しないようにする
 			if (numInstance_ < MAX_INSTANCE_NUMBER_) {
@@ -413,7 +414,7 @@ void Particle3D::Update(Camera& camera) {
 				particleIterator->transform.translate);
 
 			//WVP行列を作成
-			Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(camera.viewMatrix_, camera.projectionMatrix_));
+			Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(Camera::GetInstance()->GetViewMatrix(), Camera::GetInstance()->GetProjectionMatrix_()));
 
 			//最大値を超えて描画しないようにする
 			if (numInstance_ < MAX_INSTANCE_NUMBER_) {
@@ -430,23 +431,20 @@ void Particle3D::Update(Camera& camera) {
 		}
 
 
+
+
 	}
 
 
 }
 
-
 //描画
-void Particle3D::Draw(Camera& camera, uint32_t textureHandle) {
-
-	//更新
-	Update(camera);
-
+void Particle3D::Draw(uint32_t textureHandle) {
 	//マテリアルにデータを書き込む
 	//書き込むためのアドレスを取得
 	//reinterpret_cast...char* から int* へ、One_class* から Unrelated_class* へなどの変換に使用
 
-	material_->SetInformation(color_, isEnableLighting_,100.0f);
+	material_->SetInformation(color_, isEnableLighting_);
 
 	//書き込むためのデータを書き込む
 	//頂点データをリソースにコピー
@@ -492,9 +490,6 @@ void Particle3D::Draw(Camera& camera, uint32_t textureHandle) {
 	mesh_->GraphicsCommand();
 	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(1, instancingSrvHandleGPU_);
 
-	//カメラ
-	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(4, camera.bufferResource_->GetGPUVirtualAddress());
-
 	//DrawCall
 	mesh_->DrawCall(numInstance_);
 }
@@ -507,5 +502,3 @@ Particle3D::~Particle3D() {
 
 
 
-
-	

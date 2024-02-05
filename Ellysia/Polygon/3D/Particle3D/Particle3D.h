@@ -15,12 +15,11 @@
 #include <DirectionalLight.h>
 #include "MaterialData.h"
 #include "ModelData.h"
-#include "Camera.h"
+
 
 #include "Vector4.h"
 #include "Matrix4x4Calculation.h"
 #include <VertexData.h>
-#include "WorldTransform.h"
 
 #include <VectorCalculation.h>
 #include <d3dx12.h>
@@ -80,17 +79,15 @@ private:
 
 #pragma endregion
 
-	void Update(Camera& camera);
-
 public:
 
-
+	void Update();
 
 	//通常の描画
-	//void Draw(Camera& camera);
+	//void Draw();
 
 	//テクスチャを上書きをする描画
-	void Draw(Camera& camera, uint32_t textureHandle);
+	void Draw(uint32_t textureHandle);
 
 
 	//デストラクタ
@@ -102,12 +99,11 @@ public:
 public:
 	//アクセッサのまとめ
 
-	
+	//透明度の変更
 	void SetColor(Vector4 color) {
 		this->color_ = color;
 	}
 
-	//透明度の変更
 	void SetTransparency(float transparency) {
 		this->color_.w = transparency;
 	}
@@ -203,9 +199,6 @@ private:
 	Vector3 lightingDirection_ = { 0.0f,-1.0f,0.0f };
 
 
-
-#pragma region インスタンシング関係の変数
-
 	D3D12_CPU_DESCRIPTOR_HANDLE instancingSrvHandleCPU_ = {};
 	D3D12_GPU_DESCRIPTOR_HANDLE instancingSrvHandleGPU_ = {};
 
@@ -223,7 +216,7 @@ private:
 	//ビルボード
 	bool isBillBordMode_ = true;
 
-#pragma endregion
+
 
 	//テクスチャハンドル
 	uint32_t textureHandle_ = 0;

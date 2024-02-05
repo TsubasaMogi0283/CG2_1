@@ -897,8 +897,10 @@ void PipelineManager::GenerateModelPSO() {
 
 
 //3Dパーティクル用
+
+//3Dパーティクル用
 void PipelineManager::GenerateParticle3DPSO() {
-	
+
 	//PSO
 	////RootSignatureを作成
 	//RootSignature・・ShaderとResourceをどのように間レンズけるかを示したオブジェクトである
@@ -911,9 +913,8 @@ void PipelineManager::GenerateParticle3DPSO() {
 	//今回は結果一つだけなので長さ１の配列
 
 	//VSでもCBufferを利用することになったので設定を追加
-	D3D12_ROOT_PARAMETER rootParameters[5] = {};
+	D3D12_ROOT_PARAMETER rootParameters[4] = {};
 	//CBVを使う
-	//Material
 	rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	////PixelShaderで使う
 	rootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
@@ -930,7 +931,7 @@ void PipelineManager::GenerateParticle3DPSO() {
 	descriptorRangeForInstancing[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 	descriptorRangeForInstancing[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
-	
+
 
 	//今回はDescriptorTableを使う
 	rootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
@@ -942,7 +943,7 @@ void PipelineManager::GenerateParticle3DPSO() {
 	rootParameters[1].DescriptorTable.pDescriptorRanges = descriptorRangeForInstancing;
 	//Tableで利用する数
 	rootParameters[1].DescriptorTable.NumDescriptorRanges = _countof(descriptorRangeForInstancing);
-	
+
 
 	//ルートパラメータ配列へのポイント
 	descriptionRootSignature_.pParameters = rootParameters;
@@ -956,39 +957,30 @@ void PipelineManager::GenerateParticle3DPSO() {
 	//利用する範囲を指定して一括で設定を行う機能のこと
 	D3D12_DESCRIPTOR_RANGE descriptorRange[1] = {};
 	//0から始まる
-	descriptorRange[0].BaseShaderRegister = 0;	
+	descriptorRange[0].BaseShaderRegister = 0;
 	//数は1つ
-	descriptorRange[0].NumDescriptors = 1;	
+	descriptorRange[0].NumDescriptors = 1;
 	//SRVを使う
-	descriptorRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;	
-	 //Offsetを自動計算
-	descriptorRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND; 
+	descriptorRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	//Offsetを自動計算
+	descriptorRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
 
 	//DescriptorTableを使う
-	rootParameters[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	
+	rootParameters[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	//PixelShaderを使う
-	rootParameters[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;				
+	rootParameters[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 	//Tableの中身の配列を指定
 	rootParameters[2].DescriptorTable.pDescriptorRanges = descriptorRange;
 	//Tableで利用する数
 	rootParameters[2].DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);
 
 	//CBVを使う
-	//DirectionalLight
 	rootParameters[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	//PixelShaderで使う
 	rootParameters[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 	//レジスタ番号1を使う
 	rootParameters[3].Descriptor.ShaderRegister = 1;
-	
-	//CBVを使う
-	//Camera
-	rootParameters[4].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-	//PixelShaderで使う
-	rootParameters[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
-	//レジスタ番号1を使う
-	rootParameters[4].Descriptor.ShaderRegister = 1;
 
 
 	D3D12_STATIC_SAMPLER_DESC staticSamplers[1] = {};
@@ -1021,7 +1013,7 @@ void PipelineManager::GenerateParticle3DPSO() {
 
 	//バイナリを元に生成
 	//ID3D12RootSignature* rootSignature_ = nullptr;
-	hr = DirectXSetup::GetInstance()->GetDevice()->CreateRootSignature(0,PipelineManager::GetInstance()->particle3DPSO_.signatureBlob_->GetBufferPointer(),
+	hr = DirectXSetup::GetInstance()->GetDevice()->CreateRootSignature(0, PipelineManager::GetInstance()->particle3DPSO_.signatureBlob_->GetBufferPointer(),
 		PipelineManager::GetInstance()->particle3DPSO_.signatureBlob_->GetBufferSize(), IID_PPV_ARGS(&PipelineManager::GetInstance()->particle3DPSO_.rootSignature_));
 	assert(SUCCEEDED(hr));
 
@@ -1057,7 +1049,7 @@ void PipelineManager::GenerateParticle3DPSO() {
 	inputLayoutDesc.pInputElementDescs = inputElementDescs;
 	inputLayoutDesc.NumElements = _countof(inputElementDescs);
 
-	
+
 
 
 
@@ -1066,23 +1058,23 @@ void PipelineManager::GenerateParticle3DPSO() {
 	//BlendStateの設定
 	D3D12_BLEND_DESC blendDesc{};
 	//全ての色要素を書き込む
-	blendDesc.RenderTarget[0].RenderTargetWriteMask =D3D12_COLOR_WRITE_ENABLE_ALL;
+	blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
 	//加算ブレンド
 	blendDesc.RenderTarget[0].BlendEnable = TRUE;
 	blendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
 	blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
-	blendDesc.RenderTarget[0].DestBlend=D3D12_BLEND_ONE;
-		
+	blendDesc.RenderTarget[0].DestBlend = D3D12_BLEND_ONE;
+
 	blendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
 	blendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
 	blendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
-	
-
-	
 
 
-	
-	
+
+
+
+
+
 
 
 
@@ -1111,7 +1103,7 @@ void PipelineManager::GenerateParticle3DPSO() {
 
 
 
-	
+
 
 	////PSO生成
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC graphicsPipelineStateDesc{};
@@ -1154,7 +1146,7 @@ void PipelineManager::GenerateParticle3DPSO() {
 	assert(SUCCEEDED(hr));
 
 
-	
+
 
 }
 

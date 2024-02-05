@@ -373,7 +373,7 @@ void Particle3D::Update() {
 			Matrix4x4 backToFrontMatrix = MakeRotateYMatrix(std::numbers::pi_v<float>);
 
 			//カメラの回転を適用する
-			Matrix4x4 billBoardMatrix = Multiply(backToFrontMatrix, Camera::GetInstance()->GetAffineMatrix());
+			Matrix4x4 billBoardMatrix = Multiply(backToFrontMatrix, affineMatrix_);
 			//平行成分はいらないよ
 			billBoardMatrix.m[3][0] = 0.0f;
 			billBoardMatrix.m[3][1] = 0.0f;
@@ -387,7 +387,7 @@ void Particle3D::Update() {
 			Matrix4x4 worldMatrix = Multiply(scaleMatrix, Multiply(billBoardMatrix, translateMatrix));
 
 			//WVP行列を作成
-			Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(Camera::GetInstance()->GetViewMatrix(), Camera::GetInstance()->GetProjectionMatrix_()));
+			Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(viewMatrix_, projectionMatrix_));
 
 			//最大値を超えて描画しないようにする
 			if (numInstance_ < MAX_INSTANCE_NUMBER_) {
@@ -414,7 +414,7 @@ void Particle3D::Update() {
 				particleIterator->transform.translate);
 
 			//WVP行列を作成
-			Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(Camera::GetInstance()->GetViewMatrix(), Camera::GetInstance()->GetProjectionMatrix_()));
+			Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(viewMatrix_, projectionMatrix_));
 
 			//最大値を超えて描画しないようにする
 			if (numInstance_ < MAX_INSTANCE_NUMBER_) {
@@ -444,7 +444,7 @@ void Particle3D::Draw(uint32_t textureHandle) {
 	//書き込むためのアドレスを取得
 	//reinterpret_cast...char* から int* へ、One_class* から Unrelated_class* へなどの変換に使用
 
-	material_->SetInformation(color_, isEnableLighting_);
+	material_->SetInformation(color_, isEnableLighting_,60.0f);
 
 	//書き込むためのデータを書き込む
 	//頂点データをリソースにコピー

@@ -114,6 +114,19 @@ public:
 		this->isBillBordMode_ = isBillBordMode;
 	}
 
+	//一時的に使う関数
+	//後で消すかも
+	void SetCameraAffineMatrix(Matrix4x4 affineMatrix) {
+		this->affineMatrix_ = affineMatrix;
+	}
+	void SetViewMatrix(Matrix4x4 viewMatrix) {
+		this->viewMatrix_ = viewMatrix;
+	}
+
+	void SetProjectionMatrix(Matrix4x4 projectionMatrix) {
+		this->projectionMatrix_ = projectionMatrix;
+	}
+
 
 #pragma region エミッタの中の設定
 
@@ -178,6 +191,13 @@ public:
 #pragma endregion
 
 private:
+
+	Matrix4x4 affineMatrix_ = {};
+	Matrix4x4 viewMatrix_ = {};
+	Matrix4x4 projectionMatrix_ = {};
+
+
+
 	//TextureManagerを参考にする
 	std::list<ModelData> modelInformationList_;
 

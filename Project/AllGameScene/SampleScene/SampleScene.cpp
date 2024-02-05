@@ -20,7 +20,7 @@ void SampleScene::Initialize() {
 	Vector3 playerPosition = { 0.0f, 0.0f, 0.0f };
 	player_->Initialize(playerPosition);
 
-	particle3D_ = std::make_unique <Particle3D>();
+	particle3D_ = new Particle3D();
 	particle3D_->Create("Resources/05_02", "plane.obj");
 	textureHandle_ = TextureManager::GetInstance()->LoadTexture("Resources/CG3/circle.png");
 
@@ -50,6 +50,14 @@ void SampleScene::Update(GameManager* gameManager) {
 
 	player_->Update();
 
+
+
+	particle3D_->SetCameraAffineMatrix(camera_.worldMatrix_);
+
+	particle3D_->SetViewMatrix(camera_.viewMatrix_);
+	particle3D_->SetProjectionMatrix(camera_.projectionMatrix_);
+	particle3D_->Update();
+
 	camera_.Update();
 }
 
@@ -59,7 +67,7 @@ void SampleScene::Update(GameManager* gameManager) {
 void SampleScene::Draw() {
 
 	player_->Draw(camera_);
-	particle3D_->Draw(camera_, textureHandle_);
+	particle3D_->Draw(textureHandle_);
 	
 }
 
@@ -70,4 +78,5 @@ void SampleScene::Draw() {
 /// デストラクタ
 /// </summary>
 SampleScene::~SampleScene() {
+	delete particle3D_;
 }

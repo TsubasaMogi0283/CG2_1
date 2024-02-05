@@ -1,4 +1,4 @@
-//#include "Particle3d.hlsli"
+#include "Particle3d.hlsli"
 
 
 ////座標返還を行うVS

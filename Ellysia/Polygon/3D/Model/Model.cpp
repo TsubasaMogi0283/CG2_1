@@ -387,7 +387,7 @@ void Model::Update() {
 
 
 	ImGui::Begin("PointLight");
-	ImGui::SliderFloat("Intensity", &pointLightIntensity_, 0.0f, 3.0f);
+	ImGui::SliderFloat("Intensity", &pointLightIntensity_, 0.0f, 1.0f);
 	ImGui::SliderFloat3("Position", &pointLightPosition_.x, -3.0f, 3.0f);
 
 

@@ -144,10 +144,10 @@ PixelShaderOutput main(VertexShaderOutput input) {
 		
 		//DirectionalLight
 		////拡散反射
-		//float32_t3 diffuseDirectionalLight = gMaterial.color.rgb * textureColor.rgb * gDirectionalLight.color.rgb * cos * gDirectionalLight.intensity;
+		float32_t3 diffuseDirectionalLight = gMaterial.color.rgb * textureColor.rgb * gDirectionalLight.color.rgb * cos * gDirectionalLight.intensity;
 		
 		////鏡面反射
-  //      float32_t3 specularDirectionalLight = gDirectionalLight.color.rgb * gDirectionalLight.intensity * specularPow * float32_t3(1.0f, 1.0f, 1.0f);
+        float32_t3 specularDirectionalLight = gDirectionalLight.color.rgb * gDirectionalLight.intensity * specularPow * float32_t3(1.0f, 1.0f, 1.0f);
 		
 		//入射光の計算
 		//物体表面の特定の点に対する入射光を計算する
@@ -162,7 +162,8 @@ PixelShaderOutput main(VertexShaderOutput input) {
 		
 		//拡散反射+鏡面反射
 		//Pointも
-        output.color.rgb = diffusePointLight + specularPointLight;
+        output.color.rgb = diffuseDirectionalLight
+        + specularDirectionalLight+diffusePointLight + specularPointLight;
 		
 		
 		//アルファは今まで通り

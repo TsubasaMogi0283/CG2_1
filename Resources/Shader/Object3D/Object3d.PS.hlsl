@@ -149,6 +149,16 @@ PixelShaderOutput main(VertexShaderOutput input) {
 		////鏡面反射
         float32_t3 specularDirectionalLight = gDirectionalLight.color.rgb * gDirectionalLight.intensity * specularPow * float32_t3(1.0f, 1.0f, 1.0f);
 		
+		
+		//逆二乗則による減衰係数の計算を行う
+		//ポイントライトへの距離
+        float32_t distance = length(gPointLight.position - input.worldPosition);
+		//逆二乗則による減衰係数
+        float32_t factor = 1.0f / (distance * distance);
+		
+		
+		
+		
 		//入射光の計算
 		//物体表面の特定の点に対する入射光を計算する
 		float32_t3 pointLightDirection = normalize(input.worldPosition - gPointLight.position);
@@ -157,13 +167,10 @@ PixelShaderOutput main(VertexShaderOutput input) {
         float32_t3 specularPointLight = gPointLight.color.rgb * gPointLight.intensity * specularPow * float32_t3(1.0f, 1.0f, 1.0f);
 		
 		
-        
-		// output.color.rgb = diffuseDirectionalLight + specularDirectionalLight
 		
 		//拡散反射+鏡面反射
 		//Pointも
-        output.color.rgb = diffuseDirectionalLight
-        + specularDirectionalLight+diffusePointLight + specularPointLight;
+        output.color.rgb = gPointLight.intensity*factor;
 		
 		
 		//アルファは今まで通り

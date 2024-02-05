@@ -59,7 +59,7 @@ void SampleScene::Update(GameManager* gameManager) {
 	ImGui::SliderFloat3("Tranlate", &camera_.translate_.x, -40.0f, 40.0f);
 	ImGui::SliderFloat3("Rotate", &camera_.rotate_.x, -7.0f, 7.0f);
 	ImGui::SliderFloat("Intensity", &pointLightIntensity_, 0.0f, 1.0f);
-	ImGui::SliderFloat3("Position", &pointLightPosition_.x, -7.0f, 7.0f);
+	ImGui::SliderFloat3("Position", &pointLightPosition_.x, -10.0f, 10.0f);
 
 	ImGui::End();
 

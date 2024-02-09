@@ -16,6 +16,7 @@
 #include <memory>
 #include <Line/Line.h>
 #include <Particle3D.h>
+#include <Audio.h>
 
 
 //StatePatternを使う時は必ず前方宣言をするように
@@ -42,22 +43,9 @@ public:
 
 
 private:
-	std::unique_ptr <Model> sphere = nullptr;
-	WorldTransform sphereWorldTransform_ = {};
+	
+	Audio* audio_ = nullptr;
+	uint32_t audioHandle_ = 0u;
 
-	std::unique_ptr<Model> terrain_ = nullptr;
-	WorldTransform terrainWorldTransform_ = {};
-
-	Vector3 lightPosition_ = {0.0f,2.0f,0.0f};
-	float pointLightIntencity_ = 1.0f;
-
-	Vector3 pointLightPosition_ = { 0.0f,2.0f,0.0f };
-	float pointLightIntensity_ = 1.0f;
-
-
-	Particle3D* particle3D_ = nullptr;
-	uint32_t textureHandle_ = 0u;
-
-
-	Camera camera_ = {};
+	float pitch_ = 1.0f;
 };

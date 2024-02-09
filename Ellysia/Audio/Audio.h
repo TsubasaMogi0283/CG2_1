@@ -1,5 +1,10 @@
 #pragma once
+
+
+#define XAUDIO2_HELPER_FUNCTIONS
 #include <xaudio2.h>
+
+
 #include <fstream>
 
 #include<x3daudio.h>
@@ -55,7 +60,8 @@ public:
 	//音量調節
 	void ChangeVolume(uint32_t audioHandle,float volume);
 
-
+	//ピッチの変更
+	void ChangePitch(uint32_t audioHandle,float ratio);
 	
 	//解放
 	void Release();
@@ -90,6 +96,8 @@ private:
 	//Texturemanagerとだいたい同じ感じにした
 	//音声データの最大数
 	static const int SOUND_DATE_MAX_ = 256;
-
 	std::array<AudioInformation, SOUND_DATE_MAX_> audioInformation_{};
+
+	float frequencyRatio_ = 0.0f;
+
 };

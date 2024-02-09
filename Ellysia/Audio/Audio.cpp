@@ -162,11 +162,31 @@ void Audio::PlayWave(uint32_t audioHandle,bool isLoop) {
 	assert(SUCCEEDED(hr));
 }
 
+//一応マイナスにも出来るらしい
+//移送の反転するために使うらしい。使い道は分からない。
 //音量を変える
 void Audio::ChangeVolume(uint32_t audioHandle, float volume) {
 
 	HRESULT hr = {};
 	hr = audioInformation_[audioHandle].pSourceVoice_->SetVolume(volume);
+	assert(SUCCEEDED(hr));
+}
+
+
+//ピッチの変更
+void Audio::ChangePitch(uint32_t audioHandle,float ratio) {
+	HRESULT hr{};
+
+	//これ以上上がらなかった
+	if (ratio > 2.0f) {
+		ratio = 2.0f;
+	}
+	//これ以下下がらなかった
+	else if (ratio < 0.0f) {
+		ratio = 0.0f;
+	}
+
+	hr= audioInformation_[audioHandle].pSourceVoice_->SetFrequencyRatio(ratio);
 	assert(SUCCEEDED(hr));
 }
 

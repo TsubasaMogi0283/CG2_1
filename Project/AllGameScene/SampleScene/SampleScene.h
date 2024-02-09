@@ -61,4 +61,3 @@ private:
 
 	Camera camera_ = {};
 };
-

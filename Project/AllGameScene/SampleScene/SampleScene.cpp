@@ -85,7 +85,7 @@ void SampleScene::Update(GameManager* gameManager) {
 /// </summary>
 void SampleScene::Draw() {
 	terrain_->Draw(terrainWorldTransform_, camera_);
-	sphere->Draw(sphereWorldTransform_,camera_);
+	//sphere->Draw(sphereWorldTransform_,camera_);
 	//particle3D_->Draw(textureHandle_);
 	
 }

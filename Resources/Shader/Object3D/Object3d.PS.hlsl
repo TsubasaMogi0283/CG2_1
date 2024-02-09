@@ -152,9 +152,9 @@ PixelShaderOutput main(VertexShaderOutput input) {
 		
 		//逆二乗則による減衰係数の計算を行う
 		//ポイントライトへの距離
-        float32_t distance = length(gPointLight.position - input.worldPosition);
+        //float32_t distance = length(gPointLight.position - input.worldPosition);
 		//逆二乗則による減衰係数
-        float32_t factor = 1.0f / (distance * distance);
+        //float32_t factor = 1.0f / (distance * distance);
 		
 		
 		
@@ -170,7 +170,7 @@ PixelShaderOutput main(VertexShaderOutput input) {
 		
 		//拡散反射+鏡面反射
 		//Pointも
-        output.color.rgb = gPointLight.intensity*factor;
+        output.color.rgb = diffuseDirectionalLight + specularPointLight;
 		
 		
 		//アルファは今まで通り

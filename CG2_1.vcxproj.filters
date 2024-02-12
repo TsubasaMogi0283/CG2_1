@@ -448,4 +448,9 @@
       <Filter>Ellysia\Resource File\Line3D</Filter>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="Ellysia\Audio\AudioMemo.txt">
+      <Filter>Ellysia\Header File\Audio</Filter>
+    </Text>
+  </ItemGroup>
 </Project>

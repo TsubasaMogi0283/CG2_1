@@ -1,4 +1,5 @@
 #include "Audio.h"
+#include <imgui.h>
 
 
 
@@ -194,23 +195,62 @@ void Audio::ChangeFrequency(uint32_t audioHandle,float ratio) {
 
 //ピッチの変更
 //シンセとかのように段階的に出来るよ
-void Audio::ChangePitch(uint32_t audioHandle, uint32_t scale) {
+void Audio::ChangePitch(uint32_t audioHandle, int32_t scale) {
 
 	HRESULT hr{};
 	float ratio = 1.0f;
-	for (uint32_t i = 0; i < SCALE_AMOUNT_; i++) {
+	/*for (uint32_t i = 0; i < SCALE_AMOUNT_; i++) {
 		if (scale == i) {
 			ratio = SEMITONE_RATIO_[i];
 			break;
 		}
 		
+	}*/
+	float currentPitchRatio = 1.0f; // 現在のピッチ比率（1.0f は変更なしを表します）
+	if (audioInformation_[audioHandle].pSourceVoice_) {
+		audioInformation_[audioHandle].pSourceVoice_->GetFrequencyRatio(&currentPitchRatio);
 	}
-
 	
-	hr = audioInformation_[audioHandle].pSourceVoice_->SetFrequencyRatio(ratio);
+	// 半音の変更量に基づいて新しいピッチ比率を計算
+	int index = (scale + 12) % 12; // ピアノの音階に従ってインデックスを計算
+	float newPitchRatio = currentPitchRatio * SEMITONE_RATIO_[index];
+
+	// 新しいピッチ比率を設定
+	hr = audioInformation_[audioHandle].pSourceVoice_->SetFrequencyRatio(newPitchRatio);
+
+	//hr = audioInformation_[audioHandle].pSourceVoice_->SetFrequencyRatio(ratio);
 	assert(SUCCEEDED(hr));
 }
 
+void Audio::Debug() {
+	////const float SEMITONE_RATIO_[SCALE_AMOUNT_] = {
+	//	1.00000f, //C
+	//	1.05946f, //C#
+	//	1.12246f, //D
+	//	1.18921f, //D#
+	//	1.25992f, //E
+	//	1.33483f, //F
+	//	1.41421f, //F#
+	//	1.49831f, //G
+	//	1.58740f, //G#
+	//	1.68179f, //A
+	//	1.78180f, //A#
+	//	1.88775f, //B
+	//	2.00000f  //C(High)
+	float cC = SEMITONE_RATIO_[1] - SEMITONE_RATIO_[0];
+	float Cd = SEMITONE_RATIO_[2] - SEMITONE_RATIO_[1];
+	float dD = SEMITONE_RATIO_[3] - SEMITONE_RATIO_[2];
+	float De = SEMITONE_RATIO_[4] - SEMITONE_RATIO_[3];
+
+
+
+	ImGui::Begin("Audio");
+	ImGui::InputFloat("C~C#", &cC);
+	ImGui::InputFloat("C#~D", &Cd);
+	ImGui::InputFloat("D~D#", &dD);
+	ImGui::InputFloat("D#~E", &De);
+	ImGui::End();
+}
 
 //音声停止
 void Audio::StopWave(uint32_t audioHandle) {

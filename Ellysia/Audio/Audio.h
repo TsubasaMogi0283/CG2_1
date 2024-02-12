@@ -22,7 +22,7 @@ using Microsoft::WRL::ComPtr;
 #include "Audio/AudioStruct.h"
 
 
-class Audio {
+class Audio final {
 private:
 	//コンストラクタ
 	Audio();
@@ -65,10 +65,14 @@ public:
 	
 	//ピッチの変更
 	//シンセとかのように段階的に出来るよ
-	void ChangePitch(uint32_t audioHandle, uint32_t scale);
+	void ChangePitch(uint32_t audioHandle, int32_t scale);
 
 	//解放
 	void Release();
+
+
+
+	void Debug();
 
 private:
 	//音声データの開放
@@ -93,6 +97,7 @@ private:
 	static const int SOUND_DATE_MAX_ = 256;
 	std::array<AudioInformation, SOUND_DATE_MAX_> audioInformation_{};
 
+	//Aは440Hzだね常識知識
 	//もちろん12段階で1オクターブ
 	static const int SCALE_AMOUNT_ = 13;
 	const float SEMITONE_RATIO_[SCALE_AMOUNT_] = {
@@ -109,5 +114,10 @@ private:
 		1.78180f, //A#
 		1.88775f, //B
 		2.00000f  //C(High)
+	};
+
+	//低い方
+	const float MINUS_SEMITONE_RATION[SCALE_AMOUNT_] = {
+		
 	};
 };

@@ -60,9 +60,13 @@ public:
 	//音量調節
 	void ChangeVolume(uint32_t audioHandle,float volume);
 
-	//ピッチの変更
-	void ChangePitch(uint32_t audioHandle,float ratio);
+	//ピッチの変更(滑らか版)
+	void ChangeFrequency(uint32_t audioHandle,float ratio);
 	
+	//ピッチの変更
+	//シンセとかのように段階的に出来るよ
+	void ChangePitch(uint32_t audioHandle, uint32_t scale);
+
 	//解放
 	void Release();
 
@@ -78,18 +82,9 @@ private:
 	//IXAudio2はCOMオブジェクトなのでComPtr管理
 	ComPtr<IXAudio2> xAudio2_=nullptr;
 	IXAudio2MasteringVoice* masterVoice_=nullptr;
-
-	//波形フォーマットを基にSourceVoiceの生成
-	//IXAudio2SourceVoice* pSourceVoice_[SOUND_DATE_MAX_] = {nullptr};
-
+	
 
 	XAUDIO2_BUFFER buf_{};
-
-	//SoundData soundData[SOUND_DATE_MAX_] = {};
-	////ハンドル
-	//static uint32_t audioHandle_;
-
-	
 
 
 	//構造体版
@@ -98,6 +93,21 @@ private:
 	static const int SOUND_DATE_MAX_ = 256;
 	std::array<AudioInformation, SOUND_DATE_MAX_> audioInformation_{};
 
-	float frequencyRatio_ = 0.0f;
-
+	//もちろん12段階で1オクターブ
+	static const int SCALE_AMOUNT_ = 13;
+	const float SEMITONE_RATIO_[SCALE_AMOUNT_] = {
+		1.00000f, //C
+		1.05946f, //C#
+		1.12246f, //D
+		1.18921f, //D#
+		1.25992f, //E
+		1.33483f, //F
+		1.41421f, //F#
+		1.49831f, //G
+		1.58740f, //G#
+		1.68179f, //A
+		1.78180f, //A#
+		1.88775f, //B
+		2.00000f  //C(High)
+	};
 };

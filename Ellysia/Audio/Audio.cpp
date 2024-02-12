@@ -173,8 +173,9 @@ void Audio::ChangeVolume(uint32_t audioHandle, float volume) {
 }
 
 
-//ピッチの変更
-void Audio::ChangePitch(uint32_t audioHandle,float ratio) {
+
+//ピッチの変更(滑らか)
+void Audio::ChangeFrequency(uint32_t audioHandle,float ratio) {
 	HRESULT hr{};
 
 	//これ以上上がらなかった
@@ -189,6 +190,27 @@ void Audio::ChangePitch(uint32_t audioHandle,float ratio) {
 	hr= audioInformation_[audioHandle].pSourceVoice_->SetFrequencyRatio(ratio);
 	assert(SUCCEEDED(hr));
 }
+
+
+//ピッチの変更
+//シンセとかのように段階的に出来るよ
+void Audio::ChangePitch(uint32_t audioHandle, uint32_t scale) {
+
+	HRESULT hr{};
+	float ratio = 1.0f;
+	for (uint32_t i = 0; i < SCALE_AMOUNT_; i++) {
+		if (scale == i) {
+			ratio = SEMITONE_RATIO_[i];
+			break;
+		}
+		
+	}
+
+	
+	hr = audioInformation_[audioHandle].pSourceVoice_->SetFrequencyRatio(ratio);
+	assert(SUCCEEDED(hr));
+}
+
 
 //音声停止
 void Audio::StopWave(uint32_t audioHandle) {

@@ -17,7 +17,7 @@ SampleScene::SampleScene() {
 /// </summary>
 void SampleScene::Initialize() {
 	audio_ = Audio::GetInstance();
-	audioHandle_ = audio_->LoadWave("Resources/Audio/Sample/Win.wav");
+	audioHandle_ = audio_->LoadWave("Resources/Audio/Sample/TestC4.wav");
 	audio_->PlayWave(audioHandle_, true);
 }
 
@@ -32,16 +32,17 @@ void SampleScene::Initialize() {
 void SampleScene::Update(GameManager* gameManager) {
 	
 
-	if (Input::GetInstance()->IsPushKey(DIK_UP) == true) {
-		pitch_ += 0.005f;
+	if (Input::GetInstance()->IsTriggerKey(DIK_UP) == true) {
+		pitch_ += 1;
 	}
-	else if (Input::GetInstance()->IsPushKey(DIK_DOWN) == true) {
-		pitch_ -= 0.005f;
+	else if (Input::GetInstance()->IsTriggerKey(DIK_DOWN) == true) {
+		pitch_ -= 1;
 	}
-	audio_->ChangePitch(audioHandle_,pitch_);
+	audio_->ChangePitch(audioHandle_, pitch_);
+	//audio_->ChangeSpeed(audioHandle_, pitch_);
 
 	ImGui::Begin("Audio");
-	ImGui::InputFloat("Pitch", &pitch_);
+	ImGui::InputInt("Pitch", &pitch_);
 	ImGui::End();
 }
 

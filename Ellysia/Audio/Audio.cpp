@@ -177,11 +177,11 @@ void Audio::ChangeVolume(uint32_t audioHandle, float volume) {
 void Audio::ChangeFrequency(uint32_t audioHandle,float ratio) {
 	HRESULT hr{};
 
-	//これ以上上がらなかった
+	//これより上がらなかった
 	if (ratio > 2.0f) {
 		ratio = 2.0f;
 	}
-	//これ以下下がらなかった
+	//これより下がらなかった
 	else if (ratio < 0.0f) {
 		ratio = 0.0f;
 	}
@@ -198,8 +198,9 @@ void Audio::ChangePitch(uint32_t audioHandle, int32_t scale) {
 	HRESULT hr{};
 	float ratio = 1.0f;
 
+	//入力された値がプラスだった場合
 	if (scale >= 0) {
-		//＋のピッチの方を探す
+		//プラスのピッチの方を探す
 		for (uint32_t i = 0; i < SCALE_AMOUNT_; i++) {
 			if (scale == i) {
 				ratio = SEMITONE_RATIO_[i];
@@ -208,6 +209,18 @@ void Audio::ChangePitch(uint32_t audioHandle, int32_t scale) {
 
 		}
 	}
+	//入力された値がマイナスだった場合
+	else if (scale < 0) {
+		//マイナスのピッチの方を探す
+		for (int32_t i = 0; i < SCALE_AMOUNT_; i++) {
+			if (scale == -i) {
+				ratio = MINUS_SEMITONE_RATION[i];
+				break;
+			}
+
+		}
+	}
+
 	
 	hr = audioInformation_[audioHandle].pSourceVoice_->SetFrequencyRatio(ratio);
 	assert(SUCCEEDED(hr));
@@ -230,13 +243,28 @@ void Audio::RatioCalculationDebug() {
 		525.630f    //C5
 	};
 
+	const float FREQUENCY_4To3[SCALE_AMOUNT_] = {
+		262.815f,	//C4	1.0000f
+		248.064f,	//B3
+		234.141f,	//A#3
+		221.000f,	//A3
+		208.596f,	//G#3
+		196.889f,	//G3
+		185.838f,	//F#3
+		175.408f,	//F3
+		165.563f,	//E3
+		156.271f,	//D#3
+		147.500f,	//D3
+		139.221f,	//C#3
+		131.407f	//C3
+	};
+
 	float c = FREQUENCY_4To5[0] / FREQUENCY_4To5[0];
 	float C = FREQUENCY_4To5[1] / FREQUENCY_4To5[0];
 	float d = FREQUENCY_4To5[2] / FREQUENCY_4To5[0];
 	float D = FREQUENCY_4To5[3] / FREQUENCY_4To5[0];
 	float e = FREQUENCY_4To5[4] / FREQUENCY_4To5[0];
 	float f = FREQUENCY_4To5[5] / FREQUENCY_4To5[0];
-
 	float F = FREQUENCY_4To5[6] / FREQUENCY_4To5[0];
 	float g = FREQUENCY_4To5[7] / FREQUENCY_4To5[0];
 	float G = FREQUENCY_4To5[8] / FREQUENCY_4To5[0];
@@ -246,22 +274,57 @@ void Audio::RatioCalculationDebug() {
 	float CHigh = FREQUENCY_4To5[12] / FREQUENCY_4To5[0];
 
 
-	ImGui::Begin("Audio");
-	ImGui::InputFloat("C4", &c);
-	ImGui::InputFloat("C#4", &C);
-	ImGui::InputFloat("D4", &d);
-	ImGui::InputFloat("D#4", &D);
-	ImGui::InputFloat("E4", &e);
-	ImGui::InputFloat("F4", &f);
-	ImGui::InputFloat("F#4", &F);
-	ImGui::InputFloat("G4", &g);
-	ImGui::InputFloat("G#4", &G);
-	ImGui::InputFloat("A4", &a);
-	ImGui::InputFloat("A#4", &A);
-	ImGui::InputFloat("B4", &B);
-	ImGui::InputFloat("C5", &CHigh);
+
+	float b3 = FREQUENCY_4To3[1] / FREQUENCY_4To3[0];
+	float A3 = FREQUENCY_4To3[2] / FREQUENCY_4To3[0];
+	float a3 = FREQUENCY_4To3[3] / FREQUENCY_4To3[0];
+	float G3 = FREQUENCY_4To3[4] / FREQUENCY_4To3[0];
+	float g3 = FREQUENCY_4To3[5] / FREQUENCY_4To3[0];
+	float F3 = FREQUENCY_4To3[6] / FREQUENCY_4To3[0];
+	float f3 = FREQUENCY_4To3[7] / FREQUENCY_4To3[0];
+	float e3 = FREQUENCY_4To3[8] / FREQUENCY_4To3[0];
+	float D3 = FREQUENCY_4To3[9] / FREQUENCY_4To3[0];
+	float d3 = FREQUENCY_4To3[10] / FREQUENCY_4To3[0];
+	float C3 = FREQUENCY_4To3[11] / FREQUENCY_4To3[0];
+	float c3 = FREQUENCY_4To3[12] / FREQUENCY_4To3[0];
+
+	
+
+	ImGui::Begin("PlusScale");
+	ImGui::InputFloat("C4", &c,0.0f,0.0f,"%.5f");
+	ImGui::InputFloat("C#4", &C, 0.0f, 0.0f, "%.5f");
+	ImGui::InputFloat("D4", &d, 0.0f, 0.0f, "%.5f");
+	ImGui::InputFloat("D#4", &D, 0.0f, 0.0f, "%.5f");
+	ImGui::InputFloat("E4", &e, 0.0f, 0.0f, "%.5f");
+	ImGui::InputFloat("F4", &f, 0.0f, 0.0f, "%.5f");
+	ImGui::InputFloat("F#4", &F, 0.0f, 0.0f, "%.5f");
+	ImGui::InputFloat("G4", &g, 0.0f, 0.0f, "%.5f");
+	ImGui::InputFloat("G#4", &G, 0.0f, 0.0f, "%.5f");
+	ImGui::InputFloat("A4", &a, 0.0f, 0.0f, "%.5f");
+	ImGui::InputFloat("A#4", &A, 0.0f, 0.0f, "%.5f");
+	ImGui::InputFloat("B4", &B, 0.0f, 0.0f, "%.5f");
+	ImGui::InputFloat("C5", &CHigh, 0.0f, 0.0f, "%.5f");
 
 	ImGui::End();
+
+
+
+	ImGui::Begin("MinusScale");
+	ImGui::InputFloat("B3", &b3, 0.0f, 0.0f, "%.5f");
+	ImGui::InputFloat("A#3", &A3, 0.0f, 0.0f, "%.5f");
+	ImGui::InputFloat("A", &a3, 0.0f, 0.0f, "%.5f");
+	ImGui::InputFloat("G#3", &G3, 0.0f, 0.0f, "%.5f");
+	ImGui::InputFloat("G3", &g3, 0.0f, 0.0f, "%.5f");
+	ImGui::InputFloat("F#3", &F3, 0.0f, 0.0f, "%.5f");
+	ImGui::InputFloat("F3", &f3, 0.0f, 0.0f, "%.5f");
+	ImGui::InputFloat("E3", &e3, 0.0f, 0.0f, "%.5f");
+	ImGui::InputFloat("D#3", &D3, 0.0f, 0.0f, "%.5f");
+	ImGui::InputFloat("D3", &d3, 0.0f, 0.0f, "%.5f");
+	ImGui::InputFloat("C#3", &C3, 0.0f, 0.0f, "%.5f");
+	ImGui::InputFloat("C3", &c3, 0.0f, 0.0f, "%.5f");
+
+	ImGui::End();
+
 }
 
 //音声停止

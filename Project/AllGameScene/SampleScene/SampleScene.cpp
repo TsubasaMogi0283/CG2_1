@@ -40,7 +40,7 @@ void SampleScene::Update(GameManager* gameManager) {
 		pitch_ -= 1;
 	}*/
 	audio_->ChangePitch(audioHandle_, pitch_);
-	audio_->Debug();
+	audio_->RatioCalculationDebug();
 	//audio_->ChangeSpeed(audioHandle_, pitch_);
 
 	ImGui::Begin("Audio");

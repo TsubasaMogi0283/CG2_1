@@ -136,8 +136,6 @@ void Audio::PlayWave(uint32_t audioHandle,bool isLoop) {
 	HRESULT hr{};
 	
 	//波形フォーマットを基にSourceVoiceの生成
-	//IXAudio2SourceVoice* pSourceVoice = nullptr;
-	//hr = xAudio2_->CreateSourceVoice(&pSourceVoice_[audioHandle], &soundData[audioHandle].wfex);
 	hr = xAudio2_->CreateSourceVoice(&audioInformation_[audioHandle].pSourceVoice_, &audioInformation_[audioHandle].soundData_.wfex);
 
 	assert(SUCCEEDED(hr));
@@ -199,56 +197,70 @@ void Audio::ChangePitch(uint32_t audioHandle, int32_t scale) {
 
 	HRESULT hr{};
 	float ratio = 1.0f;
-	/*for (uint32_t i = 0; i < SCALE_AMOUNT_; i++) {
-		if (scale == i) {
-			ratio = SEMITONE_RATIO_[i];
-			break;
+
+	if (scale >= 0) {
+		//＋のピッチの方を探す
+		for (uint32_t i = 0; i < SCALE_AMOUNT_; i++) {
+			if (scale == i) {
+				ratio = SEMITONE_RATIO_[i];
+				break;
+			}
+
 		}
-		
-	}*/
-	float currentPitchRatio = 1.0f; // 現在のピッチ比率（1.0f は変更なしを表します）
-	if (audioInformation_[audioHandle].pSourceVoice_) {
-		audioInformation_[audioHandle].pSourceVoice_->GetFrequencyRatio(&currentPitchRatio);
 	}
 	
-	// 半音の変更量に基づいて新しいピッチ比率を計算
-	int index = (scale + 12) % 12; // ピアノの音階に従ってインデックスを計算
-	float newPitchRatio = currentPitchRatio * SEMITONE_RATIO_[index];
-
-	// 新しいピッチ比率を設定
-	hr = audioInformation_[audioHandle].pSourceVoice_->SetFrequencyRatio(newPitchRatio);
-
-	//hr = audioInformation_[audioHandle].pSourceVoice_->SetFrequencyRatio(ratio);
+	hr = audioInformation_[audioHandle].pSourceVoice_->SetFrequencyRatio(ratio);
 	assert(SUCCEEDED(hr));
 }
 
-void Audio::Debug() {
-	////const float SEMITONE_RATIO_[SCALE_AMOUNT_] = {
-	//	1.00000f, //C
-	//	1.05946f, //C#
-	//	1.12246f, //D
-	//	1.18921f, //D#
-	//	1.25992f, //E
-	//	1.33483f, //F
-	//	1.41421f, //F#
-	//	1.49831f, //G
-	//	1.58740f, //G#
-	//	1.68179f, //A
-	//	1.78180f, //A#
-	//	1.88775f, //B
-	//	2.00000f  //C(High)
-	float cC = SEMITONE_RATIO_[1] - SEMITONE_RATIO_[0];
-	float Cd = SEMITONE_RATIO_[2] - SEMITONE_RATIO_[1];
-	float dD = SEMITONE_RATIO_[3] - SEMITONE_RATIO_[2];
-	float De = SEMITONE_RATIO_[4] - SEMITONE_RATIO_[3];
+void Audio::RatioCalculationDebug() {
+	const float FREQUENCY_4To5[SCALE_AMOUNT_] = {
+		262.815f,	//C4	1.0000f
+		278.443f,	//C#4
+		295.000f,	//D4
+		312.541f,	//D#4
+		331.126f,	//E4
+		350.816f,	//F4
+		371.676f,	//F#4
+		393.777f,	//G4
+		417.192f,	//G#4
+		442.000f,	//A4
+		468.283f,	//A#4
+		496.128f,	//B4
+		525.630f    //C5
+	};
 
+	float c = FREQUENCY_4To5[0] / FREQUENCY_4To5[0];
+	float C = FREQUENCY_4To5[1] / FREQUENCY_4To5[0];
+	float d = FREQUENCY_4To5[2] / FREQUENCY_4To5[0];
+	float D = FREQUENCY_4To5[3] / FREQUENCY_4To5[0];
+	float e = FREQUENCY_4To5[4] / FREQUENCY_4To5[0];
+	float f = FREQUENCY_4To5[5] / FREQUENCY_4To5[0];
+
+	float F = FREQUENCY_4To5[6] / FREQUENCY_4To5[0];
+	float g = FREQUENCY_4To5[7] / FREQUENCY_4To5[0];
+	float G = FREQUENCY_4To5[8] / FREQUENCY_4To5[0];
+	float a = FREQUENCY_4To5[9] / FREQUENCY_4To5[0];
+	float A = FREQUENCY_4To5[10] / FREQUENCY_4To5[0];
+	float B = FREQUENCY_4To5[11] / FREQUENCY_4To5[0];
+	float CHigh = FREQUENCY_4To5[12] / FREQUENCY_4To5[0];
 
 
 	ImGui::Begin("Audio");
-	ImGui::InputFloat("C~C#", &cC);
-	ImGui::InputFloat("C#~D", &Cd);
-	ImGui::InputFloat("D~D#", &dD);
-	ImGui::InputFloat("D#~E", &De);
+	ImGui::InputFloat("C4", &c);
+	ImGui::InputFloat("C#4", &C);
+	ImGui::InputFloat("D4", &d);
+	ImGui::InputFloat("D#4", &D);
+	ImGui::InputFloat("E4", &e);
+	ImGui::InputFloat("F4", &f);
+	ImGui::InputFloat("F#4", &F);
+	ImGui::InputFloat("G4", &g);
+	ImGui::InputFloat("G#4", &G);
+	ImGui::InputFloat("A4", &a);
+	ImGui::InputFloat("A#4", &A);
+	ImGui::InputFloat("B4", &B);
+	ImGui::InputFloat("C5", &CHigh);
+
 	ImGui::End();
 }
 

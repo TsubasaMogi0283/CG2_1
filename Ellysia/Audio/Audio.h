@@ -72,7 +72,7 @@ public:
 
 
 
-	void Debug();
+	void RatioCalculationDebug();
 
 private:
 	//音声データの開放
@@ -115,6 +115,12 @@ private:
 		1.88775f, //B
 		2.00000f  //C(High)
 	};
+
+
+
+
+
+
 
 	//低い方
 	const float MINUS_SEMITONE_RATION[SCALE_AMOUNT_] = {

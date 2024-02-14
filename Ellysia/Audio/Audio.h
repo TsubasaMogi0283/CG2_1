@@ -3,13 +3,10 @@
 
 #define XAUDIO2_HELPER_FUNCTIONS
 #include <xaudio2.h>
-
-
 #include <fstream>
-
-#include<x3daudio.h>
+#include <x3daudio.h>
 #include <mmsystem.h>
-#include<cassert>
+#include <cassert>
 #include <array>
 
 #pragma comment(lib, "winmm.lib")
@@ -67,6 +64,9 @@ public:
 	//シンセとかのように段階的に出来るよ
 	void ChangePitch(uint32_t audioHandle, int32_t scale);
 
+	//Pan振り
+	void SetPan(uint32_t audioHandle, float_t pan);
+
 	//解放
 	void Release();
 
@@ -80,22 +80,27 @@ private:
 
 
 private:
-
-	
-
 	//IXAudio2はCOMオブジェクトなのでComPtr管理
 	ComPtr<IXAudio2> xAudio2_=nullptr;
+	//マスターボイス
 	IXAudio2MasteringVoice* masterVoice_=nullptr;
 	
-
 	XAUDIO2_BUFFER buf_{};
 
+	DWORD dwChannelMask_ = {};
+	float outputMatrix_[8] = {};
+	float left_ = 0.0f;
+	float right_ = 0.0f;
 
 	//構造体版
 	//Texturemanagerとだいたい同じ感じにした
 	//音声データの最大数
 	static const int SOUND_DATE_MAX_ = 256;
 	std::array<AudioInformation, SOUND_DATE_MAX_> audioInformation_{};
+
+
+
+private:
 
 	//自分のエンジンではA4は442Hz基準にする
 	//もちろん12段階で1オクターブ
@@ -115,8 +120,6 @@ private:
 		1.88775f, //B4
 		2.00000f  //C5
 	};
-
-
 
 	//低い方
 	const float MINUS_SEMITONE_RATION[SCALE_AMOUNT_] = {

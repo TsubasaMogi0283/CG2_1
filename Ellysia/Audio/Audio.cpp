@@ -26,7 +26,14 @@ void Audio::Initialize() {
 	//マスターボイスを生成
 	hr = xAudio2_->CreateMasteringVoice(&masterVoice_);
 	
+	//スピーカ構成を取得
+	dwChannelMask_ = 2;
+	masterVoice_->GetChannelMask(&dwChannelMask_);
 
+	for (int i = 0; i < 8; i++) {
+		outputMatrix_[i] = 0;
+	}
+	
 }
 
 #pragma region 実際に使う関数
@@ -178,13 +185,11 @@ void Audio::ChangeFrequency(uint32_t audioHandle,float ratio) {
 	HRESULT hr{};
 
 	//これより上がらなかった
-	if (ratio > 2.0f) {
-		ratio = 2.0f;
-	}
+	ratio = max(ratio,2.0f);
+	
 	//これより下がらなかった
-	else if (ratio < 0.0f) {
-		ratio = 0.0f;
-	}
+	ratio = min(ratio,0.0f);
+	
 
 	hr= audioInformation_[audioHandle].pSourceVoice_->SetFrequencyRatio(ratio);
 	assert(SUCCEEDED(hr));
@@ -224,6 +229,83 @@ void Audio::ChangePitch(uint32_t audioHandle, int32_t scale) {
 	
 	hr = audioInformation_[audioHandle].pSourceVoice_->SetFrequencyRatio(ratio);
 	assert(SUCCEEDED(hr));
+}
+
+
+//Pan振り
+void Audio::SetPan(uint32_t audioHandle, float_t pan) {
+	
+	//左右のスピーカー間の目的のパンに基づき送信レベルを計算
+	left_ = 0.5f - pan / 2.0f;
+	right_ = 0.5f + pan / 2.0f;
+	switch (dwChannelMask_)
+	{
+	case SPEAKER_MONO:
+		outputMatrix_[0] = 1.0f;
+		break;
+	case SPEAKER_STEREO:
+	case SPEAKER_2POINT1:
+	case SPEAKER_SURROUND:
+		outputMatrix_[1] = left_;
+		outputMatrix_[2] = right_;
+
+		break;
+	case SPEAKER_QUAD:
+		outputMatrix_[0] = left_;
+		outputMatrix_[1] = right_;
+		outputMatrix_[2] = left_;
+		outputMatrix_[3] = right_;
+		break;
+	case SPEAKER_4POINT1:
+		outputMatrix_[0] = left_;
+		outputMatrix_[1] = right_;
+		outputMatrix_[3] = left_;
+		outputMatrix_[4] = right_;
+		break;
+	case SPEAKER_5POINT1:
+	case SPEAKER_7POINT1:
+	case SPEAKER_5POINT1_SURROUND:
+		outputMatrix_[0] = left_;
+		outputMatrix_[1] = right_;
+		outputMatrix_[4] = left_;
+		outputMatrix_[5] = right_;
+		break;
+	case SPEAKER_7POINT1_SURROUND:
+		outputMatrix_[0] = left_;
+		outputMatrix_[1] = right_;
+		outputMatrix_[4] = left_;
+		outputMatrix_[5] = right_;
+		outputMatrix_[6] = left_;
+		outputMatrix_[7] = right_;
+		break;
+	}
+
+
+#pragma region 解説
+
+	//outputMatrix_[0]: 主にモノラル音声の場合に使用され、すべての音声を単一のスピーカーに送信します。
+	//outputMatrix_[1] : ステレオ音声の場合、左側のスピーカーに対する音声の振幅を指定します。
+	//outputMatrix_[2] : ステレオ音声の場合、右側のスピーカーに対する音声の振幅を指定します。
+	//outputMatrix_[3] : クアッドフォニックスシステムの場合、左前のスピーカーに対する音声の振幅を指定します。
+	//outputMatrix_[4] : クアッドフォニックスシステムの場合、右前のスピーカーに対する音声の振幅を指定します。
+	//outputMatrix_[5] : クアッドフォニックスシステムの場合、左後ろのスピーカーに対する音声の振幅を指定します。
+	//outputMatrix_[6] : クアッドフォニックスシステムの場合、右後ろのスピーカーに対する音声の振幅を指定します。
+	//outputMatrix_[7] : 7.1サラウンドシステムなどのように、サラウンドサウンドをサポートするシステムにおいて、
+	//	追加のサラウンドスピーカーに対する音声の振幅を指定するためのものです。
+	//	通常、これはセンターバックスピーカーに対する音声の振幅を制御するために使用されます。
+#pragma endregion
+
+	XAUDIO2_VOICE_DETAILS voiceDetails;
+	audioInformation_[audioHandle].pSourceVoice_->GetVoiceDetails(&voiceDetails);
+
+	XAUDIO2_VOICE_DETAILS masterVoiiceDetails;
+	masterVoice_->GetVoiceDetails(&masterVoiiceDetails);
+
+	audioInformation_[audioHandle].pSourceVoice_->SetOutputMatrix(
+		NULL,voiceDetails.InputChannels, 
+		masterVoiiceDetails.InputChannels,
+		outputMatrix_);
+
 }
 
 void Audio::RatioCalculationDebug() {

@@ -87,7 +87,7 @@ private:
 	
 	XAUDIO2_BUFFER buf_{};
 
-	DWORD dwChannelMask_;
+	DWORD dwChannelMask_ = {};
 	float outputMatrix_[8] = {};
 	float left_ = 0.0f;
 	float right_ = 0.0f;

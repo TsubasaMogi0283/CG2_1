@@ -26,7 +26,13 @@ void Audio::Initialize() {
 	//マスターボイスを生成
 	hr = xAudio2_->CreateMasteringVoice(&masterVoice_);
 	
+	//スピーカ構成を取得
+	masterVoice_->GetChannelMask(&dwChannelMask_);
 
+	for (int i = 0; i < 8; i++) {
+		outputMatrix_[i] = 0;
+	}
+	
 }
 
 #pragma region 実際に使う関数
@@ -178,13 +184,11 @@ void Audio::ChangeFrequency(uint32_t audioHandle,float ratio) {
 	HRESULT hr{};
 
 	//これより上がらなかった
-	if (ratio > 2.0f) {
-		ratio = 2.0f;
-	}
+	ratio = max(ratio,2.0f);
+	
 	//これより下がらなかった
-	else if (ratio < 0.0f) {
-		ratio = 0.0f;
-	}
+	ratio = min(ratio,0.0f);
+	
 
 	hr= audioInformation_[audioHandle].pSourceVoice_->SetFrequencyRatio(ratio);
 	assert(SUCCEEDED(hr));
@@ -224,6 +228,54 @@ void Audio::ChangePitch(uint32_t audioHandle, int32_t scale) {
 	
 	hr = audioInformation_[audioHandle].pSourceVoice_->SetFrequencyRatio(ratio);
 	assert(SUCCEEDED(hr));
+}
+
+
+//Pan振り
+void Audio::SetPan(uint32_t audioHandle, float_t pan) {
+	
+	//左右のスピーカー間の目的のパンに基づき送信レベルを計算
+	left_ = 0.5f - pan / 2.0f;
+	right_ = 0.5f + pan / 2.0f;
+	switch (dwChannelMask_)
+	{
+	case SPEAKER_MONO:
+		outputMatrix_[0] = 1.0;
+		break;
+	case SPEAKER_STEREO:
+	case SPEAKER_2POINT1:
+	case SPEAKER_SURROUND:
+		outputMatrix_[0] = left_;
+		outputMatrix_[1] = right_;
+		break;
+	case SPEAKER_QUAD:
+		outputMatrix_[0] = outputMatrix_[2] = left_;
+		outputMatrix_[1] = outputMatrix_[3] = right_;
+		break;
+	case SPEAKER_4POINT1:
+		outputMatrix_[0] = outputMatrix_[3] = left_;
+		outputMatrix_[1] = outputMatrix_[4] = right_;
+		break;
+	case SPEAKER_5POINT1:
+	case SPEAKER_7POINT1:
+	case SPEAKER_5POINT1_SURROUND:
+		outputMatrix_[0] = outputMatrix_[4] = left_;
+		outputMatrix_[1] = outputMatrix_[5] = right_;
+		break;
+	case SPEAKER_7POINT1_SURROUND:
+		outputMatrix_[0] = outputMatrix_[4] = outputMatrix_[6] = left_;
+		outputMatrix_[1] = outputMatrix_[5] = outputMatrix_[7] = right_;
+		break;
+	}
+
+	XAUDIO2_VOICE_DETAILS voiceDetails;
+	audioInformation_[audioHandle].pSourceVoice_->GetVoiceDetails(&voiceDetails);
+
+	XAUDIO2_VOICE_DETAILS masterVoiiceDetails;
+	masterVoice_->GetVoiceDetails(&masterVoiiceDetails);
+
+	audioInformation_[audioHandle].pSourceVoice_->SetOutputMatrix(NULL,voiceDetails.InputChannels, masterVoiiceDetails.InputChannels,outputMatrix_);
+
 }
 
 void Audio::RatioCalculationDebug() {

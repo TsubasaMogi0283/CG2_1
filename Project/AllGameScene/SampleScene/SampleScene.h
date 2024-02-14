@@ -47,5 +47,5 @@ private:
 	Audio* audio_ = nullptr;
 	uint32_t audioHandle_ = 0u;
 
-	float_t pitch_ = 0;
+	float_t pitch_ = 0.0f;
 };

@@ -250,6 +250,11 @@ void Audio::ChangePitch(uint32_t audioHandle, int32_t scale) {
 			}
 
 		}
+		//12以上は上がらなかった
+		if (scale > 12) {
+			ratio= SEMITONE_RATIO_[12];
+		}
+
 	}
 	//入力された値がマイナスだった場合
 	else if (scale < 0) {

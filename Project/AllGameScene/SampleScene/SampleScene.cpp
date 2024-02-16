@@ -19,8 +19,8 @@ void SampleScene::Initialize() {
 	audio_ = Audio::GetInstance();
 	audioHandle_ = audio_->LoadWave("Resources/Audio/Sample/Win.wav");
 	audio_->PlayWave(audioHandle_, true);
-	audio_->SetPan(audioHandle_, pitch_);
-	//audio_->ChangePitch(audioHandle_, pitch_);
+	audio_->SetPan(audioHandle_, pan_);
+	audio_->ChangePitch(audioHandle_, pitch_);
 }
 
 
@@ -34,13 +34,17 @@ void SampleScene::Initialize() {
 void SampleScene::Update(GameManager* gameManager) {
 	
 
-	//audio_->ChangePitch(audioHandle_, pitch_);
-	//audio_->RatioCalculationDebug();
-	audio_->SetPan(audioHandle_, pitch_);
-	audio_->CreateReverb(audioHandle_);
+	audio_->ChangePitch(audioHandle_, pitch_);
+	audio_->SetPan(audioHandle_, pan_);
+
+
+#ifdef _DEBUG
 	ImGui::Begin("Audio");
-	ImGui::SliderFloat("Pitch", &pitch_,-1.0f,1.0f);
+	ImGui::SliderFloat("Pan", &pan_,-1.0f,1.0f);
+	ImGui::InputInt("Pitch", &pitch_);
 	ImGui::End();
+#endif
+
 }
 
 /// <summary>

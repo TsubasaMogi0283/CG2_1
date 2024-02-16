@@ -66,9 +66,7 @@ void SampleScene::Update(GameManager* gameManager) {
 
 	model_[0]->SetColor(modelColor_);
 	model_[0]->SetTranslate(modelTranslate_);
-
 	particle_->SetTranslate(particleTranslate_);
-
 	particle_->SetField(isSetField_);
 	particle_->Update();
 
@@ -76,16 +74,12 @@ void SampleScene::Update(GameManager* gameManager) {
 	ImGui::SliderFloat3("Translate", &modelTranslate_.x, -10.0f, 10.0f);
 	ImGui::SliderFloat4("Color", &modelColor_.x, 0.0f, 1.0f);
 	ImGui::Checkbox("isSetField;", &isSetField_);
-
 	ImGui::End();
 	
 
 	ImGui::Begin("Particle");
 	ImGui::SliderFloat3("Translate", &particleTranslate_.x, -3.0f, 3.0f);
 	ImGui::End();
-	
-
-
 }
 
 /// <summary>

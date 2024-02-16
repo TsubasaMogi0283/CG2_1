@@ -37,7 +37,7 @@ void SampleScene::Update(GameManager* gameManager) {
 	//audio_->ChangePitch(audioHandle_, pitch_);
 	//audio_->RatioCalculationDebug();
 	audio_->SetPan(audioHandle_, pitch_);
-
+	audio_->CreateReverb(audioHandle_);
 	ImGui::Begin("Audio");
 	ImGui::SliderFloat("Pitch", &pitch_,-1.0f,1.0f);
 	ImGui::End();

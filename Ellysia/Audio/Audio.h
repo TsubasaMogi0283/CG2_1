@@ -3,6 +3,7 @@
 
 #define XAUDIO2_HELPER_FUNCTIONS
 #include <xaudio2.h>
+#include "xaudio2fx.h"
 #include <fstream>
 #include <x3daudio.h>
 #include <mmsystem.h>
@@ -14,7 +15,6 @@
 
 #include <wrl.h>
 using Microsoft::WRL::ComPtr;
-
 
 #include "Audio/AudioStruct.h"
 
@@ -30,7 +30,6 @@ public:
 	//インスタンスの取得
 	static Audio* GetInstance();
 
-
 	//コピーコンストラクタ禁止
 	Audio(const Audio& obj) = delete;
 
@@ -38,8 +37,6 @@ public:
 	Audio& operator=(const Audio& obj) = delete;
 
 public:
-
-	
 
 	//初期化
 	void Initialize();
@@ -53,7 +50,6 @@ public:
 	//音声停止
 	void StopWave(uint32_t audioHandle);
 
-	
 	//音量調節
 	void ChangeVolume(uint32_t audioHandle,float volume);
 
@@ -67,11 +63,19 @@ public:
 	//Pan振り
 	void SetPan(uint32_t audioHandle, float_t pan);
 
+	//リバーブ
+	void CreateReverb(uint32_t audioHandle);
+
+	//エフェクトの効果を無効にする
+	void OffEffect(uint32_t audioHandle);
+
+	//エフェクトの効果を有効にする
+	void OnEffect(uint32_t audioHandle);
+
+
 	//解放
 	void Release();
-
-
-
+	//デバッグ用
 	void RatioCalculationDebug();
 
 private:
@@ -87,10 +91,26 @@ private:
 	
 	XAUDIO2_BUFFER buf_{};
 
+	//Panに必要な変数
 	DWORD dwChannelMask_ = {};
 	float outputMatrix_[8] = {};
 	float left_ = 0.0f;
 	float right_ = 0.0f;
+
+	//エフェクト
+	IUnknown* pXAPO_ = nullptr;
+
+
+	//XAUDIO2_EFFECT_DESCRIPTORにデータを設定
+	XAUDIO2_EFFECT_DESCRIPTOR descriptor_;
+
+	//XAUDIO2_EFFECT_CHAINにデータを設定
+	XAUDIO2_EFFECT_CHAIN chain_;
+
+	//リバーブエフェクト
+	XAUDIO2FX_REVERB_PARAMETERS reverbParameters_;
+
+
 
 	//構造体版
 	//Texturemanagerとだいたい同じ感じにした

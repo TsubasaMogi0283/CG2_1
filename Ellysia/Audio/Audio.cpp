@@ -27,14 +27,55 @@ void Audio::Initialize() {
 	hr = xAudio2_->CreateMasteringVoice(&masterVoice_);
 	
 	//スピーカ構成を取得
-	dwChannelMask_ = 2;
 	masterVoice_->GetChannelMask(&dwChannelMask_);
 
 	for (int i = 0; i < 8; i++) {
 		outputMatrix_[i] = 0;
 	}
+
+	//基本
+	hr = XAudio2CreateReverb(&pXAPO_);
+
 	
+	
+
+
+	//XAUDIO2_EFFECT_DESCRIPTORにデータを設定
+	descriptor_.InitialState = true;
+	descriptor_.OutputChannels = 1;
+	descriptor_.pEffect = pXAPO_;
+
+	//XAUDIO2_EFFECT_CHAINにデータを設定
+	chain_.EffectCount = 1;
+	chain_.pEffectDescriptors = &descriptor_;
+
+
+	//リバーブエフェクト
+	reverbParameters_.ReflectionsDelay = XAUDIO2FX_REVERB_DEFAULT_REFLECTIONS_DELAY;
+	reverbParameters_.ReverbDelay = XAUDIO2FX_REVERB_DEFAULT_REVERB_DELAY;
+	reverbParameters_.RearDelay = XAUDIO2FX_REVERB_DEFAULT_REAR_DELAY;
+	reverbParameters_.PositionLeft = XAUDIO2FX_REVERB_DEFAULT_POSITION;
+	reverbParameters_.PositionRight = XAUDIO2FX_REVERB_DEFAULT_POSITION;
+	reverbParameters_.PositionMatrixLeft = XAUDIO2FX_REVERB_DEFAULT_POSITION_MATRIX;
+	reverbParameters_.PositionMatrixRight = XAUDIO2FX_REVERB_DEFAULT_POSITION_MATRIX;
+	reverbParameters_.EarlyDiffusion = XAUDIO2FX_REVERB_DEFAULT_EARLY_DIFFUSION;
+	reverbParameters_.LateDiffusion = XAUDIO2FX_REVERB_DEFAULT_LATE_DIFFUSION;
+	reverbParameters_.LowEQGain = XAUDIO2FX_REVERB_DEFAULT_LOW_EQ_GAIN;
+	reverbParameters_.LowEQCutoff = XAUDIO2FX_REVERB_DEFAULT_LOW_EQ_CUTOFF;
+	reverbParameters_.HighEQGain = XAUDIO2FX_REVERB_DEFAULT_HIGH_EQ_GAIN;
+	reverbParameters_.HighEQCutoff = XAUDIO2FX_REVERB_DEFAULT_HIGH_EQ_CUTOFF;
+	reverbParameters_.RoomFilterFreq = XAUDIO2FX_REVERB_DEFAULT_ROOM_FILTER_FREQ;
+	reverbParameters_.RoomFilterMain = XAUDIO2FX_REVERB_DEFAULT_ROOM_FILTER_MAIN;
+	reverbParameters_.RoomFilterHF = XAUDIO2FX_REVERB_DEFAULT_ROOM_FILTER_HF;
+	reverbParameters_.ReflectionsGain = XAUDIO2FX_REVERB_DEFAULT_REFLECTIONS_GAIN;
+	reverbParameters_.ReverbGain = XAUDIO2FX_REVERB_DEFAULT_REVERB_GAIN;
+	reverbParameters_.DecayTime = XAUDIO2FX_REVERB_DEFAULT_DECAY_TIME;
+	reverbParameters_.Density = XAUDIO2FX_REVERB_DEFAULT_DENSITY;
+	reverbParameters_.RoomSize = XAUDIO2FX_REVERB_DEFAULT_ROOM_SIZE;
+	reverbParameters_.WetDryMix = XAUDIO2FX_REVERB_DEFAULT_WET_DRY_MIX;
 }
+
+
 
 #pragma region 実際に使う関数
 //読み込み
@@ -137,7 +178,6 @@ uint32_t Audio::LoadWave(const char* fileName) {
 
 }
 
-
 //音声再生
 void Audio::PlayWave(uint32_t audioHandle,bool isLoop) {
 	HRESULT hr{};
@@ -178,8 +218,6 @@ void Audio::ChangeVolume(uint32_t audioHandle, float volume) {
 	assert(SUCCEEDED(hr));
 }
 
-
-
 //ピッチの変更(滑らか)
 void Audio::ChangeFrequency(uint32_t audioHandle,float ratio) {
 	HRESULT hr{};
@@ -194,7 +232,6 @@ void Audio::ChangeFrequency(uint32_t audioHandle,float ratio) {
 	hr= audioInformation_[audioHandle].pSourceVoice_->SetFrequencyRatio(ratio);
 	assert(SUCCEEDED(hr));
 }
-
 
 //ピッチの変更
 //シンセとかのように段階的に出来るよ
@@ -230,7 +267,6 @@ void Audio::ChangePitch(uint32_t audioHandle, int32_t scale) {
 	hr = audioInformation_[audioHandle].pSourceVoice_->SetFrequencyRatio(ratio);
 	assert(SUCCEEDED(hr));
 }
-
 
 //Pan振り
 void Audio::SetPan(uint32_t audioHandle, float_t pan) {
@@ -306,6 +342,32 @@ void Audio::SetPan(uint32_t audioHandle, float_t pan) {
 		masterVoiiceDetails.InputChannels,
 		outputMatrix_);
 
+}
+
+void Audio::CreateReverb(uint32_t audioHandle){
+	
+	HRESULT hr{};
+	//エフェクトチェーンを音声に適用
+	hr = audioInformation_[audioHandle].pSourceVoice_->SetEffectChain(&chain_);
+	assert(SUCCEEDED(hr));
+	hr = audioInformation_[audioHandle].pSourceVoice_->SetEffectParameters(0, &reverbParameters_, sizeof(reverbParameters_));
+	
+	assert(SUCCEEDED(hr));
+}
+
+
+//エフェクトの効果を無効にする
+void Audio::OffEffect(uint32_t audioHandle) {
+	HRESULT hr{};
+	hr = audioInformation_[audioHandle].pSourceVoice_->DisableEffect(0);
+	assert(SUCCEEDED(hr));
+}
+
+//エフェクトの効果を有効にする
+void Audio::OnEffect(uint32_t audioHandle) {
+	HRESULT hr{};
+	hr = audioInformation_[audioHandle].pSourceVoice_->EnableEffect(0);
+	assert(SUCCEEDED(hr));
 }
 
 void Audio::RatioCalculationDebug() {
@@ -423,17 +485,17 @@ void Audio::StopWave(uint32_t audioHandle) {
 //後ろにあるReleaseで使っているよ
 void Audio::SoundUnload(uint32_t soundDataHandle) {
 	//バッファのメモリを解放
-
 	delete[] Audio::GetInstance()->audioInformation_[soundDataHandle].soundData_.pBuffer;
 	Audio::GetInstance()->audioInformation_[soundDataHandle].soundData_.pBuffer = 0;
 	Audio::GetInstance()->audioInformation_[soundDataHandle].soundData_.bufferSize = 0;
 	Audio::GetInstance()->audioInformation_[soundDataHandle].soundData_.wfex = {};
 
-	
 }
 
 //解放
 void Audio::Release() {
+	
+	pXAPO_->Release();
 	for (int i = 0; i < SOUND_DATE_MAX_; i++) {
 		if (audioInformation_[i].pSourceVoice_ != nullptr) {
 			audioInformation_[i].pSourceVoice_->DestroyVoice();

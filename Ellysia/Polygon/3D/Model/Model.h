@@ -117,18 +117,6 @@ public:
 #pragma endregion
 
 private:
-
-	
-
-	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(ComPtr<ID3D12DescriptorHeap> descriptorHeap, uint32_t descriptorSize, uint32_t index);
-	D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(ComPtr<ID3D12DescriptorHeap> descriptorHeap, uint32_t descriptorSize, uint32_t index);
-
-
-
-	
-
-
-private:
 	//頂点リソースを作る
 	//頂点バッファビューを作成する
 	//頂点リソースにデータを書き込む

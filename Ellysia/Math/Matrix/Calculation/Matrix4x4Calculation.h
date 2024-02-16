@@ -54,3 +54,6 @@ Matrix4x4 Inverse(const Matrix4x4 m);
 Matrix4x4 MakePerspectiveFovMatrix(float fovY, float aspectRatio, float nearClip, float farClip);
 
 Matrix4x4 MakeOrthographicMatrix(float left, float top, float right, float bottom, float neaClip, float farClip);
+
+//転置行列
+Matrix4x4 MakeTransposeMatrix(const Matrix4x4 m);

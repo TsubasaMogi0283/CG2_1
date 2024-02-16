@@ -25,7 +25,8 @@
 #include "DirectionalLight.h"
 #include "CreateDirectionalLight.h"
 #include "Transformation.h"
-
+#include "WorldTransform.h"
+#include "Camera.h"
 
 class Model {
 public:
@@ -37,9 +38,6 @@ public:
 	//Initializeも兼ねているよ
 	//通常
 	static Model* Create(const std::string& directoryPath,const std::string& fileName);
-	//ブレンドあり
-	static Model* Create(const std::string& directoryPath,const std::string& fileName ,int32_t blendModeNumber );
-
 private:
 #pragma region モデルの読み込み関係の関数
 	//モデルデータの読み込み
@@ -52,8 +50,8 @@ private:
 
 public:
 	//描画
-	void Draw();
-
+	//void Draw();
+	void Draw(WorldTransform& worldTransform, Camera& camera);
 
 	//デストラクタ
 	~Model();
@@ -62,30 +60,6 @@ public:
 
 
 public:
-	//アクセッサのまとめ
-
-	//SRT
-	//Scale
-	void SetScale(Vector3 scale) {
-		this->scale_ = scale;
-	}
-	const Vector3 GetScale() {
-		return scale_;
-	}
-	//Rotate
-	void SetRotate(Vector3 rotate) {
-		this->rotate_ = rotate;
-	}
-	const Vector3 GetRotate() {
-		return rotate_;
-	}
-	//Translate
-	void SetTranslate(Vector3 translate) {
-		this->translate_ = translate;
-	}
-	const Vector3 GetTranslate() {
-		return translate_;
-	}
 
 
 
@@ -110,8 +84,12 @@ public:
 		this->isEnableLighting_ = enableLighting;
 	}
 	//方向
-	void SetDirection(Vector3 direction) {
+	void SetDirectionalLightDirection(Vector3 direction) {
 		this->lightingDirection_ = direction;
+	}
+	//Intensity
+	void SetDirectionalLightIntensity(float intensity) {
+		this->directionalLightIntensity_ = intensity;
 	}
 
 #pragma endregion
@@ -125,35 +103,33 @@ private:
 	std::unique_ptr<Mesh> mesh_ = nullptr;
 
 
-	//Model用のTransformationMatrix用のリソースを作る。
-	std::unique_ptr<Transformation> transformation_ = nullptr;
 
 	//マテリアル用のリソースを作る
-	std::unique_ptr<CreateMaterial> material_ = nullptr;
-	
+	//std::unique_ptr<CreateMaterial> material_ = nullptr;
+	//頂点リソースを作る
+	ComPtr<ID3D12Resource> materialResource_ = nullptr;
+	Material* materialData_ = nullptr;
+	//色関係のメンバ変数
+	Vector4 color_ = { 1.0f,1.0f,1.0f,1.0f };
 
 	//Lighting用
-	std::unique_ptr<CreateDirectionalLight> directionalLight_ = nullptr;
+	//std::unique_ptr<CreateDirectionalLight> directionalLight_ = nullptr;
+	ComPtr<ID3D12Resource> directionalLightResource_ = nullptr;
+	DirectionalLight* directionalLightData_ = nullptr;
+
 	//基本はtrueで
 	bool isEnableLighting_ = true;
 
 	//方向
 	Vector3 lightingDirection_ = {0.0f,-1.0f,0.0f};
-
+	float directionalLightIntensity_ = 2.0f;
 
 
 
 	uint32_t textureHandle_ = 0;
 
-	//SRT
-	Vector3 scale_ = { 1.0f,1.0f,1.0f };
-	Vector3 rotate_ = { 0.0f,0.0f,0.0f };
-	Vector3 translate_ = { 0.0f,0.0f,0.0f };
 
-
-
-	//色関係のメンバ変数
-	Vector4 color_ = {1.0f,1.0f,1.0f,1.0f};
+	
 
 
 	
@@ -163,6 +139,6 @@ private:
 
 
 	//デフォルトはα加算
-	int32_t blendModeNumber_ ;
+	int32_t blendModeNumber_ = 1;;
 
 };

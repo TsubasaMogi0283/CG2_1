@@ -35,10 +35,12 @@ private:
 
 	Model* model_[MODEL_AMOUNT_] = { nullptr };
 	Vector3 modelTranslate_ = {};
+	WorldTransform modelWorldTransform_ = {};
 
 	Vector2 position_ = { 0.0f,0.0f };
 	Vector2 scale_ = { 1.0f,1.0f };
 	float rotate = 0.0f;
+	float intensity_ = 3.0f;
 
 	std::unique_ptr<Sprite> sprite = nullptr;
 	Vector4 color_ = { 1.0f,1.0f,1.0f,1.0f };
@@ -52,6 +54,7 @@ private:
 	AccelerationField accelerationField_ = {};
 	bool isSetField_ = false;
 
+	Camera camera_ = {};
 	Vector3 cameraTranslate_ = {0.0f,0.0f,0.0f};
 	
 

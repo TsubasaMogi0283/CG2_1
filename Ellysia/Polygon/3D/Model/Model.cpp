@@ -186,144 +186,52 @@ Model* Model::Create(const std::string& directoryPath, const std::string& fileNa
 	//新たなModel型のインスタンスのメモリを確保
 	Model* model = new Model();
 
-	//すでにある場合はリストから取り出す
-	for (ModelData modelData : modelInformationList_) {
-		if (modelData.name == fileName) {
-			////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
-			model->material_= std::make_unique<CreateMaterial>();
-			model->material_->Initialize();
-
-
-
-			//テクスチャの読み込み
-			model->textureHandle_ = TextureManager::GetInstance()->LoadTexture(modelData.material.textureFilePath);
-
-
-			//頂点リソースを作る
-			model->mesh_ = std::make_unique<Mesh>();
-			model->mesh_->Initialize(modelData.vertices);
-
-
-
-
-
-			//Sprite用のTransformationMatrix用のリソースを作る。
-			//Matrix4x4 1つ分サイズを用意する
-			model->transformation_=std::make_unique<Transformation>();
-			model->transformation_->Initialize();
-
-			//Lighting
-			model->directionalLight_=std::make_unique<CreateDirectionalLight>();
-			model->directionalLight_->Initialize();
-
-
-			//初期は白色
-			//モデル個別に色を変更できるようにこれは外に出しておく
-			model->color_ = { 1.0f,1.0f,1.0f,1.0f };
-			//初期化の所でやってね、Update,Drawでやるのが好ましいけど凄く重くなった。
-			//ブレンドモードの設定
-			PipelineManager::GetInstance()->SetModelBlendMode(1);
-			PipelineManager::GetInstance()->GenerateModelPSO();	
-
-			return model;
-		}
-	}
-
-	//モデルの読み込み
-	ModelData modelDataNew = model->LoadObjectFile(directoryPath, fileName);
-	modelDataNew.name = fileName;
-	modelInformationList_.push_back(modelDataNew);
-	
-
-
-
-
-	////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
-	model->material_= std::make_unique<CreateMaterial>();
-	model->material_->Initialize();
-
-
-
-	//テクスチャの読み込み
-	model->textureHandle_ = TextureManager::GetInstance()->LoadTexture(modelDataNew.material.textureFilePath);
-
-
-	//頂点リソースを作る
-	model->mesh_ = std::make_unique<Mesh>();
-	model->mesh_->Initialize(modelDataNew.vertices);
-
-
-
-
-
-	//Sprite用のTransformationMatrix用のリソースを作る。
-	//Matrix4x4 1つ分サイズを用意する
-	model->transformation_=std::make_unique<Transformation>();
-	model->transformation_->Initialize();
-
-	//Lighting
-	model->directionalLight_=std::make_unique<CreateDirectionalLight>();
-	model->directionalLight_->Initialize();
-
-
-	//初期は白色
-	//モデル個別に色を変更できるようにこれは外に出しておく
-	model->color_ = { 1.0f,1.0f,1.0f,1.0f };
 
 	PipelineManager::GetInstance()->SetModelBlendMode(1);
-	PipelineManager::GetInstance()->GenerateModelPSO();		
+	PipelineManager::GetInstance()->GenerateModelPSO();
 
-	return model;
-
-}
-
-//ブレンドあり
-Model* Model::Create(const std::string& directoryPath, const std::string& fileName, int32_t blendModeNumber) {
-	//新たなModel型のインスタンスのメモリを確保
-	Model* model = new Model();
-
-	//すでにある場合はリストから取り出す
-	for (ModelData modelData : modelInformationList_) {
-		if (modelData.name == fileName) {
-			////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
-			model->material_= std::make_unique<CreateMaterial>();
-			model->material_->Initialize();
+	////すでにある場合はリストから取り出す
+	//for (ModelData modelData : modelInformationList_) {
+	//	if (modelData.name == fileName) {
+	//		////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
+	//		model->material_= std::make_unique<CreateMaterial>();
+	//		model->material_->Initialize();
 
 
 
-			//テクスチャの読み込み
-			model->textureHandle_ = TextureManager::GetInstance()->LoadTexture(modelData.material.textureFilePath);
+	//		//テクスチャの読み込み
+	//		model->textureHandle_ = TextureManager::GetInstance()->LoadTexture(modelData.material.textureFilePath);
 
 
-			//頂点リソースを作る
-			model->mesh_ = std::make_unique<Mesh>();
-			model->mesh_->Initialize(modelData.vertices);
+	//		//頂点リソースを作る
+	//		model->mesh_ = std::make_unique<Mesh>();
+	//		model->mesh_->Initialize(modelData.vertices);
 
 
 
 
 
-			//Sprite用のTransformationMatrix用のリソースを作る。
-			//Matrix4x4 1つ分サイズを用意する
-			model->transformation_=std::make_unique<Transformation>();
-			model->transformation_->Initialize();
+	//		//Sprite用のTransformationMatrix用のリソースを作る。
+	//		//Matrix4x4 1つ分サイズを用意する
+	//		model->transformation_=std::make_unique<Transformation>();
+	//		model->transformation_->Initialize();
 
-			//Lighting
-			model->directionalLight_=std::make_unique<CreateDirectionalLight>();
-			model->directionalLight_->Initialize();
+	//		//Lighting
+	//		model->directionalLight_=std::make_unique<CreateDirectionalLight>();
+	//		model->directionalLight_->Initialize();
 
 
-			//初期は白色
-			//モデル個別に色を変更できるようにこれは外に出しておく
-			model->color_ = { 1.0f,1.0f,1.0f,1.0f };
-			//初期化の所でやってね、Update,Drawでやるのが好ましいけど凄く重くなった。
-			//ブレンドモードの設定
-			PipelineManager::GetInstance()->SetModelBlendMode(blendModeNumber);
-			PipelineManager::GetInstance()->GenerateModelPSO();
+	//		//初期は白色
+	//		//モデル個別に色を変更できるようにこれは外に出しておく
+	//		model->color_ = { 1.0f,1.0f,1.0f,1.0f };
+	//		//初期化の所でやってね、Update,Drawでやるのが好ましいけど凄く重くなった。
+	//		//ブレンドモードの設定
+	//		PipelineManager::GetInstance()->SetModelBlendMode(1);
+	//		PipelineManager::GetInstance()->GenerateModelPSO();	
 
-			return model;
-		}
-	}
+	//		return model;
+	//	}
+	//}
 
 	//モデルの読み込み
 	ModelData modelDataNew = model->LoadObjectFile(directoryPath, fileName);
@@ -335,9 +243,9 @@ Model* Model::Create(const std::string& directoryPath, const std::string& fileNa
 
 
 	////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
-	model->material_= std::make_unique<CreateMaterial>();
-	model->material_->Initialize();
-
+	//model->material_= std::make_unique<CreateMaterial>();
+	//model->material_->Initialize();
+	model->materialResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(Material)).Get();
 
 
 	//テクスチャの読み込み
@@ -352,56 +260,53 @@ Model* Model::Create(const std::string& directoryPath, const std::string& fileNa
 
 
 
-	//Sprite用のTransformationMatrix用のリソースを作る。
-	//Matrix4x4 1つ分サイズを用意する
-	model->transformation_=std::make_unique<Transformation>();
-	model->transformation_->Initialize();
-
 	//Lighting
-	model->directionalLight_=std::make_unique<CreateDirectionalLight>();
-	model->directionalLight_->Initialize();
+	//model->directionalLight_=std::make_unique<CreateDirectionalLight>();
+	//model->directionalLight_->Initialize();
+	model->directionalLightResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(DirectionalLight)).Get();
 
 
 	//初期は白色
 	//モデル個別に色を変更できるようにこれは外に出しておく
 	model->color_ = { 1.0f,1.0f,1.0f,1.0f };
 
-	PipelineManager::GetInstance()->SetModelBlendMode(blendModeNumber);
-	PipelineManager::GetInstance()->GenerateModelPSO();
+		
 
 	return model;
-}
 
+}
 
 
 
 
 //描画
-void Model::Draw() {
-	
+void Model::Draw(WorldTransform& worldTransform,Camera& camera) {
 	
 
-	
-	////マテリアルにデータを書き込む
+#pragma region マテリアル
 	////書き込むためのアドレスを取得
 	////reinterpret_cast...char* から int* へ、One_class* から Unrelated_class* へなどの変換に使用
+	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
+	materialData_->color = color_;
+	materialData_->enableLighting = isEnableLighting_;
 
-	material_->SetInformation(color_,isEnableLighting_);
+	materialData_->uvTransform = MakeIdentity4x4();
 
+	materialResource_->Unmap(0, nullptr);
 
-
-
-
-
-	//書き込むためのデータを書き込む
-	//頂点データをリソースにコピー
-	Transform transform = {scale_,rotate_,translate_};
-	transformation_->SetInformation(transform);
+#pragma endregion
 
 
+#pragma region DirectionalLight
 
+	//Light
+	directionalLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightData_));
+	directionalLightData_->color = color_;
+	directionalLightData_->direction = lightingDirection_;
+	directionalLightData_->intensity = directionalLightIntensity_;
+	directionalLightResource_->Unmap(0, nullptr);
 
-
+#pragma endregion
 
 	//コマンドを積む
 
@@ -416,26 +321,26 @@ void Model::Draw() {
 	mesh_->GraphicsCommand();
 
 
-	//CBVを設定する
-	material_->GraphicsCommand();
+	//Material
+	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
 
-	transformation_->SetGraphicCommand();
 
+	//資料見返してみたがhlsl(GPU)に計算を任せているわけだった
+	//コマンド送ってGPUで計算
+	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(1, worldTransform.bufferResource_->GetGPUVirtualAddress());
 
 
 	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である
-	
 	if (textureHandle_!= 0) {
 		TextureManager::GraphicsCommand(textureHandle_ );
-
 	}
 	
+	//DirectionalLight
+	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
 
-	//Light
-	directionalLight_->SetDirection(lightingDirection_);
-	directionalLight_->GraphicsCommand();
+	//カメラ
+	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(4, camera.bufferResource_->GetGPUVirtualAddress());
 	
-
 
 	//DrawCall
 	mesh_->DrawCall(1);

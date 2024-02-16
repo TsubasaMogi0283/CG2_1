@@ -177,9 +177,6 @@
     <ClCompile Include="Project\AllGameScene\SampleScene\SampleScene.cpp">
       <Filter>Project\GameScene\Sample</Filter>
     </ClCompile>
-    <ClCompile Include="Ellysia\WorldTransform\WorldTransform.cpp">
-      <Filter>Ellysia\Source File\Math</Filter>
-    </ClCompile>
     <ClCompile Include="Ellysia\Camera\Camera.cpp">
       <Filter>Ellysia\Source File\Camera</Filter>
     </ClCompile>
@@ -230,6 +227,9 @@
     </ClCompile>
     <ClCompile Include="Project\AllGameScene\SampleScene2\SampleScene2.cpp">
       <Filter>Project\GameScene\Sample2</Filter>
+    </ClCompile>
+    <ClCompile Include="Ellysia\Math\WorldTransform\WorldTransform.cpp">
+      <Filter>Ellysia\Source File\Math</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -306,9 +306,6 @@
     </ClInclude>
     <ClInclude Include="Ellysia\TextureManager\TextureManager.h">
       <Filter>Ellysia\Header File\TextureManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Ellysia\WorldTransform\WorldTransform.h">
-      <Filter>Ellysia\Header File</Filter>
     </ClInclude>
     <ClInclude Include="Ellysia\Math\BPMCalculation\BPMSetting.h">
       <Filter>Ellysia\Header File\Math</Filter>
@@ -393,6 +390,9 @@
     </ClInclude>
     <ClInclude Include="Project\AllGameScene\SampleScene2\SampleScene2.h">
       <Filter>Project\GameScene\Sample2</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Math\WorldTransform\WorldTransform.h">
+      <Filter>Ellysia\Header File</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -317,7 +317,7 @@ std::list<Particle> Particle3D::Emission(const Emitter& emmitter, std::mt19937& 
 
 
 //更新
-void Particle3D::Update(){
+void Particle3D::Update(Camera& camera){
 	
 
 	//C++でいうsrandみたいなやつ
@@ -373,7 +373,7 @@ void Particle3D::Update(){
 			Matrix4x4 backToFrontMatrix = MakeRotateYMatrix(std::numbers::pi_v<float>);
 
 			//カメラの回転を適用する
-			Matrix4x4 billBoardMatrix = Multiply(backToFrontMatrix, Camera::GetInstance()->GetAffineMatrix());
+			Matrix4x4 billBoardMatrix = Multiply(backToFrontMatrix, camera.worldMatrix_);
 			//平行成分はいらないよ
 			billBoardMatrix.m[3][0] = 0.0f;
 			billBoardMatrix.m[3][1] = 0.0f;
@@ -387,7 +387,7 @@ void Particle3D::Update(){
 			Matrix4x4 worldMatrix = Multiply(scaleMatrix,Multiply(billBoardMatrix,translateMatrix));
 			
 			//WVP行列を作成
-			Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(Camera::GetInstance()->GetViewMatrix(), Camera::GetInstance()->GetProjectionMatrix_()));
+			Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(camera.viewMatrix_, camera.projectionMatrix_));
 
 			//最大値を超えて描画しないようにする
 			if (numInstance_ < MAX_INSTANCE_NUMBER_) {
@@ -414,7 +414,7 @@ void Particle3D::Update(){
 				particleIterator->transform.translate);
 			
 			//WVP行列を作成
-			Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(Camera::GetInstance()->GetViewMatrix(), Camera::GetInstance()->GetProjectionMatrix_()));
+			Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(camera.viewMatrix_, camera.projectionMatrix_));
 
 			//最大値を超えて描画しないようにする
 			if (numInstance_ < MAX_INSTANCE_NUMBER_) {
@@ -439,7 +439,12 @@ void Particle3D::Update(){
 }
 
 //描画
-void Particle3D::Draw(uint32_t textureHandle){
+void Particle3D::Draw(uint32_t textureHandle,Camera& camera){
+	
+	
+	
+	Update(camera);
+	
 	//マテリアルにデータを書き込む
 	//書き込むためのアドレスを取得
 	//reinterpret_cast...char* から int* へ、One_class* から Unrelated_class* へなどの変換に使用

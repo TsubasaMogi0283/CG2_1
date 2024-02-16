@@ -24,6 +24,10 @@ void SampleScene::Initialize() {
 	for (int i = 0; i < MODEL_AMOUNT_; i++) {
 		model_[i] = Model::Create("Resources/CG3/fence", "fence.obj");
 	}
+
+	modelWorldTransform_.Initialize();
+
+
 	modelTranslate_ = {0.0f,0.0f,0.0f};
 
 	sprite = std::make_unique<Sprite>();
@@ -63,12 +67,13 @@ void SampleScene::Initialize() {
 	particleTranslate_ = { 0.0f,0.0f,0.0f };
 
 	cameraTranslate_ = { 0.0f,0.0f,-20.0f };
-	Camera::GetInstance()->SetTranslate(cameraTranslate_);
-
+	//Camera::GetInstance()->SetTranslate(cameraTranslate_);
+	camera_.Initialize();
+	camera_.translate_ = cameraTranslate_;
 
 	audio_ = Audio::GetInstance();
 	uint32_t audioHandle_ = audio_->LoadWave("Resources/Audio/Sample/Win.wav");
-	audio_->PlayWave(audioHandle_, true);
+	//audio_->PlayWave(audioHandle_, true);
 
 }
 
@@ -79,47 +84,34 @@ void SampleScene::Update(GameManager* gameManager) {
 
 
 	model_[0]->SetColor(modelColor_);
-	model_[0]->SetTranslate(modelTranslate_);
+	model_[0]->SetDirectionalLightIntensity(intensity_);
 
 	particle_->SetTranslate(particleTranslate_);
 
 	particle_->SetField(isSetField_);
-	particle_->Update();
+	//particle_->Update();
 
 
 	sprite->SetPosition(spritePosition_);
 
 	const float MOVE_AMOUNT=1.0f;
-	const float VELOCITY = 3.0f;
-	if (Input::GetInstance()->IsPushKey(DIK_D) == true) {
-		spritePosition_.x += MOVE_AMOUNT * VELOCITY;
-	}
-	if (Input::GetInstance()->IsPushKey(DIK_A) == true) {
-		spritePosition_.x -= MOVE_AMOUNT * VELOCITY;
-	}
-	if (Input::GetInstance()->IsPushKey(DIK_W) == true) {
-		spritePosition_.y -= MOVE_AMOUNT * VELOCITY;
-	}
-	if (Input::GetInstance()->IsPushKey(DIK_S) == true) {
-		spritePosition_.y += MOVE_AMOUNT * VELOCITY;
-	}
 
 
 	const float CAMERA_VELOCITY = 0.05f;
 	if (Input::GetInstance()->IsPushKey(DIK_RIGHT) == true) {
-		cameraTranslate_.x += MOVE_AMOUNT * CAMERA_VELOCITY;
+		camera_.translate_.x += MOVE_AMOUNT * CAMERA_VELOCITY;
 	}
 	if (Input::GetInstance()->IsPushKey(DIK_LEFT) == true) {
-		cameraTranslate_.x -= MOVE_AMOUNT * CAMERA_VELOCITY;
+		camera_.translate_.x -= MOVE_AMOUNT * CAMERA_VELOCITY;
 	}
 	if (Input::GetInstance()->IsPushKey(DIK_UP) == true) {
-		cameraTranslate_.y += MOVE_AMOUNT * CAMERA_VELOCITY;
+		camera_.translate_.y += MOVE_AMOUNT * CAMERA_VELOCITY;
 	}
 	if (Input::GetInstance()->IsPushKey(DIK_DOWN) == true) {
-		cameraTranslate_.y -= MOVE_AMOUNT * CAMERA_VELOCITY;
+		camera_.translate_.y -= MOVE_AMOUNT * CAMERA_VELOCITY;
 	}
 
-	Camera::GetInstance()->SetTranslate(cameraTranslate_);
+	//Camera::GetInstance()->SetTranslate(cameraTranslate_);
 
 
 	if (Input::GetInstance()->IsTriggerKey(DIK_SPACE) == true) {
@@ -136,6 +128,12 @@ void SampleScene::Update(GameManager* gameManager) {
 
 	//ウィンドウサイズの設定は↓でやるよ
 #ifdef _DEBUG
+	ImGui::Begin("Model");
+	ImGui::SliderFloat("Intensity", &intensity_, 0.0f, 10.0f);
+	ImGui::End();
+
+
+
 	ImGui::SetNextWindowSize(ImVec2(500, 100));
 	ImGui::Begin("Sprite");
 	ImGui::SliderFloat2("Position", &spritePosition_.x, 0.0f, 500.0f,"%.1f");
@@ -143,6 +141,9 @@ void SampleScene::Update(GameManager* gameManager) {
 
 #endif
 
+
+	modelWorldTransform_.Update();
+	camera_.Update();
 }
 
 /// <summary>
@@ -150,11 +151,11 @@ void SampleScene::Update(GameManager* gameManager) {
 /// </summary>
 void SampleScene::Draw() {
 	for (int i = 0; i < MODEL_AMOUNT_; i++) {
-		model_[i]->Draw();
+		model_[i]->Draw(modelWorldTransform_,camera_);
 	
 	}
-	particle_->Draw(particleTextureHandle_);
-	sprite->Draw();
+	particle_->Draw(particleTextureHandle_,camera_);
+	//sprite->Draw();
 }
 
 /// <summary>

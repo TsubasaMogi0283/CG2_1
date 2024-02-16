@@ -24,7 +24,8 @@ void Transformation::SetInformation(Transform transform){
 	Matrix4x4 projectionMatrix = MakeOrthographicMatrix(0.0f, 0.0f, float(WindowsSetup::GetInstance()->GetClientWidth()), float(WindowsSetup::GetInstance()->GetClientHeight()), 0.0f, 100.0f);
 	
 	//WVP行列を作成
-	Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(Camera::GetInstance()->GetViewMatrix(), Camera::GetInstance()->GetProjectionMatrix_()));
+	Matrix4x4 view = MakeIdentity4x4();
+	Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(view, view));
 
 
 	transformationMatrixData_->WVP = worldViewProjectionMatrix;

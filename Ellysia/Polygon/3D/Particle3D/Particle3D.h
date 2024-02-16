@@ -26,7 +26,7 @@
 
 
 
-
+#include "Camera.h"
 #include "Mesh.h"
 #include "CreateMaterial.h"
 #include "CreateDirectionalLight.h"
@@ -81,13 +81,13 @@ private:
 
 public:
 
-	void Update();
+	void Update(Camera& camera);
 
 	//通常の描画
 	//void Draw();
 
 	//テクスチャを上書きをする描画
-	void Draw(uint32_t textureHandle);
+	void Draw(uint32_t textureHandle,Camera& camera);
 
 
 	//デストラクタ

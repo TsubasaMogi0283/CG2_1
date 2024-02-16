@@ -1,4 +1,5 @@
 #include "DirectXSetup.h"
+#include <thread>
 
 //インスタンス
 DirectXSetup* DirectXSetup::GetInstance() {

@@ -67,7 +67,6 @@ void SampleScene::Initialize() {
 	particleTranslate_ = { 0.0f,0.0f,0.0f };
 
 	cameraTranslate_ = { 0.0f,0.0f,-20.0f };
-	//Camera::GetInstance()->SetTranslate(cameraTranslate_);
 	camera_.Initialize();
 	camera_.translate_ = cameraTranslate_;
 

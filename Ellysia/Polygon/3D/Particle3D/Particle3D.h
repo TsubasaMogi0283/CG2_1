@@ -185,14 +185,22 @@ private:
 	std::unique_ptr<Mesh> mesh_ = nullptr;
 	std::unique_ptr<Transformation> transformation_= nullptr ;
 	std::vector<VertexData> vertices;
+
 	//マテリアル用のリソースを作る
-	std::unique_ptr<CreateMaterial> material_ = nullptr;
+	ComPtr<ID3D12Resource> materialResource_ = nullptr;
+
 	//色関係のメンバ変数
 	Vector4 color_ = {};
 
 
 	//Lighting用
-	std::unique_ptr<CreateDirectionalLight> directionalLight_ = nullptr;
+	//std::unique_ptr<CreateDirectionalLight> directionalLight_ = nullptr;
+	ComPtr<ID3D12Resource> directionalLightResource_ = nullptr;
+	DirectionalLight* directionalLightData_ = nullptr;
+	Vector4 directionalLightColor_ = { 1.0f,1.0f,1.0f,1.0f };
+	//Vector3 direction_ = { 0.0f,-1.0f,0.0f };
+	float directionalLightIntensity_ = 3.0f;
+
 	//基本はtrueで
 	bool isEnableLighting_ = true;
 	//方向

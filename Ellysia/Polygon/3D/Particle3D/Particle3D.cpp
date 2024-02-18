@@ -216,8 +216,8 @@ void Particle3D::Create(const std::string& directoryPath, const std::string& fil
 
 
 	////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
-	material_= std::make_unique<CreateMaterial>();
-	material_->Initialize();
+
+	materialResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(Material)).Get();
 
 
 	//テクスチャの読み込み
@@ -256,10 +256,10 @@ void Particle3D::Create(const std::string& directoryPath, const std::string& fil
 	isBillBordMode_ = true;
 
 	//Lighting
-	directionalLight_=std::make_unique<CreateDirectionalLight>();
-	directionalLight_->Initialize();
+	//directionalLight_=std::make_unique<CreateDirectionalLight>();
+	//directionalLight_->Initialize();
 
-	
+	directionalLightResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(DirectionalLight)).Get();
 	
 
 
@@ -345,15 +345,12 @@ void Particle3D::Update(Camera& camera){
 		}
 		
 		//フィールド設定すると風の影響を受ける
-		//
 		if (isSetField_ == true) {
 			if (IsCollisionAABBAndPoint(accelerationField_.area,(*particleIterator).transform.translate)) {
 				(*particleIterator).velocity.x += accelerationField_.acceleration.x * DELTA_TIME;
 				(*particleIterator).velocity.y += accelerationField_.acceleration.y * DELTA_TIME;
 				(*particleIterator).velocity.z += accelerationField_.acceleration.z * DELTA_TIME;
 			}
-
-
 		}
 
 		
@@ -362,9 +359,6 @@ void Particle3D::Update(Camera& camera){
 		particleIterator->transform.translate.y += particleIterator->velocity.y * DELTA_TIME;
 		particleIterator->transform.translate.z += particleIterator->velocity.z * DELTA_TIME;
 		
-
-		
-
 
 		//ビルボード有り
 		if (isBillBordMode_ == true) {
@@ -401,9 +395,6 @@ void Particle3D::Update(Camera& camera){
 
 				++numInstance_;
 			}
-
-			
-
 		}
 		//ビルボード無し
 		else if (isBillBordMode_ == false) {
@@ -429,74 +420,79 @@ void Particle3D::Update(Camera& camera){
 				++numInstance_;
 			}
 		}
-		
-
-		
-		
 	}
-
-
 }
 
 //描画
 void Particle3D::Draw(uint32_t textureHandle,Camera& camera){
 	
-	
-	
+	//更新
 	Update(camera);
 	
-	//マテリアルにデータを書き込む
+#pragma region マテリアルにデータを書き込む
 	//書き込むためのアドレスを取得
 	//reinterpret_cast...char* から int* へ、One_class* から Unrelated_class* へなどの変換に使用
+	Material* materialData_ = nullptr;
+	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
+	materialData_->color = color_;
+	materialData_->enableLighting = isEnableLighting_;
 
-	material_->SetInformation(color_,isEnableLighting_);
+	materialData_->uvTransform = MakeIdentity4x4();
 
-	//書き込むためのデータを書き込む
-	//頂点データをリソースにコピー
-	
+	materialResource_->Unmap(0, nullptr);
+
+#pragma endregion
+
+#pragma region DirectionalLight
+
+	//Light
+	directionalLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightData_));
+	directionalLightData_->color = directionalLightColor_;                                                                                                                                                                                          
+	directionalLightData_->direction = lightingDirection_;
+	directionalLightData_->intensity = directionalLightIntensity_;
+	directionalLightResource_->Unmap(0, nullptr);
+
+
+#pragma endregion
+
 	//コマンドを積む
 	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootSignature(PipelineManager::GetInstance()->GetParticle3DRootSignature().Get());
 	DirectXSetup::GetInstance()->GetCommandList()->SetPipelineState(PipelineManager::GetInstance()->GetParticle3DGraphicsPipelineState().Get());
 
 
-	//mesh_->GraphicsCommand();
 	
 	////RootSignatureを設定。PSOに設定しているけど別途設定が必要
 	//DirectXSetup::GetInstance()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);
 	////形状を設定。PSOに設定しているものとはまた別。同じものを設定すると考えよう
 	//DirectXSetup::GetInstance()->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	mesh_->GraphicsCommand();
+
 
 	//CBVを設定する
-	material_->GraphicsCommand();
-	
-	//Transformationいらなかったっす
-	//その代わりにInstancing
-	
-	
-	//DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(1, instancingSrvHandleGPU_);
+	//マテリアル
+	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+
+	//インスタンシング
+	instancingResource_->Map(0, nullptr, reinterpret_cast<void**>(&instancingData_));
+	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(1, instancingSrvHandleGPU_);
+
 
 	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である
-	
 	if (textureHandle_!= 0) {
 		TextureManager::GraphicsCommand(textureHandle );
-
 	}
 	
 
-	//Light
-	directionalLight_->GraphicsCommand();
+	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
+
+
 	
-	//インスタンシング
-	instancingResource_->Map(0, nullptr, reinterpret_cast<void**>(&instancingData_));
 
 	
 	
-	
-	mesh_->GraphicsCommand();
-	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(1, instancingSrvHandleGPU_);
-	
 	//DrawCall
 	mesh_->DrawCall(numInstance_);
+	//DirectXSetup::GetInstance()->GetCommandList()->DrawInstanced(UINT(vertices_.size()), numInstance_, 0, 0);
 }
 
 

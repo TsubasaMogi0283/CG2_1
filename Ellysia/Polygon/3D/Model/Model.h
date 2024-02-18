@@ -11,20 +11,16 @@
 #include "Matrix4x4.h"
 #include "Vector4.h"
 #include "Transform.h"
-#include "Material.h"
+//#include "Material.h"
 #include "TransformationMatrix.h"
 
 #include "Matrix4x4Calculation.h"
 #include "VertexData.h"
 
 
-#include "Mesh.h"
-#include "CreateMaterial.h"
 #include "MaterialData.h"
 #include "ModelData.h"
 #include "DirectionalLight.h"
-#include "CreateDirectionalLight.h"
-#include "Transformation.h"
 #include "WorldTransform.h"
 #include "Camera.h"
 
@@ -66,11 +62,11 @@ public:
 	
 	//透明度の変更
 	void SetColor(Vector4 color) {
-		this->color_ = color;
+		this->materialColor_ = color;
 	}
 
 	void SetTransparency(float transparency) {
-		this->color_.w = transparency;
+		this->materialColor_.w = transparency;
 	}
 
 
@@ -95,25 +91,35 @@ public:
 #pragma endregion
 
 private:
+	struct Material {
+		Vector4 color;
+		//boolの代わりにint32_t
+		int32_t enableLighting;
+		float padding[3];
+		Matrix4x4 uvTransform;
+	};
+
+
+private:
 	//頂点リソースを作る
 	//頂点バッファビューを作成する
 	//頂点リソースにデータを書き込む
+	ComPtr<ID3D12Resource> vertexResource_ = nullptr;
 
-	//頂点データ
-	std::unique_ptr<Mesh> mesh_ = nullptr;
+	//頂点バッファビューを作成する
+	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_;
+
+	std::vector<VertexData> vertices_{};
 
 
 
 	//マテリアル用のリソースを作る
-	//std::unique_ptr<CreateMaterial> material_ = nullptr;
-	//頂点リソースを作る
 	ComPtr<ID3D12Resource> materialResource_ = nullptr;
 	Material* materialData_ = nullptr;
 	//色関係のメンバ変数
-	Vector4 color_ = { 1.0f,1.0f,1.0f,1.0f };
+	Vector4 materialColor_ = { 1.0f,1.0f,1.0f,1.0f };
 
 	//Lighting用
-	//std::unique_ptr<CreateDirectionalLight> directionalLight_ = nullptr;
 	ComPtr<ID3D12Resource> directionalLightResource_ = nullptr;
 	DirectionalLight* directionalLightData_ = nullptr;
 

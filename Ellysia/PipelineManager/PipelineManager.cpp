@@ -701,6 +701,7 @@ void PipelineManager::GenerateParticle3DPSO() {
 	
 
 	//今回はDescriptorTableを使う
+	//Instancing
 	rootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	//VertwxShaderで使う
 	rootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
@@ -734,6 +735,7 @@ void PipelineManager::GenerateParticle3DPSO() {
 
 
 	//DescriptorTableを使う
+	//Texture
 	rootParameters[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;	
 	//PixelShaderを使う
 	rootParameters[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;				
@@ -743,6 +745,7 @@ void PipelineManager::GenerateParticle3DPSO() {
 	rootParameters[2].DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);
 
 	//CBVを使う
+	//DirectionalLight
 	rootParameters[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	//PixelShaderで使う
 	rootParameters[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;

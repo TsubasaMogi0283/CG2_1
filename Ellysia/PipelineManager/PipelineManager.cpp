@@ -355,7 +355,7 @@ void PipelineManager::GenerateModelPSO() {
 	//今回は結果一つだけなので長さ１の配列
 
 	//VSでもCBufferを利用することになったので設定を追加
-	D3D12_ROOT_PARAMETER rootParameters[5] = {};
+	D3D12_ROOT_PARAMETER rootParameters[6] = {};
 	//CBVを使う
 	rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	////PixelShaderで使う
@@ -417,6 +417,17 @@ void PipelineManager::GenerateModelPSO() {
 	rootParameters[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
 	//register...Shader上のResource配置情報
 	rootParameters[4].Descriptor.ShaderRegister = 1;
+
+
+
+	//PixelShaderに送る方のカメラ
+	rootParameters[5].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	//PixelShaderで使う
+	rootParameters[5].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	//レジスタ番号2を使う
+	rootParameters[5].Descriptor.ShaderRegister = 2;
+
+
 
 	D3D12_STATIC_SAMPLER_DESC staticSamplers[1] = {};
 	//バイリニアフィルタ
@@ -761,7 +772,7 @@ void PipelineManager::GenerateParticle3DPSO() {
 	//register...Shader上のResource配置情報
 	rootParameters[4].Descriptor.ShaderRegister = 1;
 
-
+	
 
 	D3D12_STATIC_SAMPLER_DESC staticSamplers[1] = {};
 	//バイリニアフィルタ

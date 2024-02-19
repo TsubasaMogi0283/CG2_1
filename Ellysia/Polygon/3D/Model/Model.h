@@ -39,7 +39,6 @@ private:
 
 public:
 	//描画
-	//void Draw();
 	void Draw(WorldTransform& worldTransform, Camera& camera);
 
 	//デストラクタ
@@ -96,12 +95,9 @@ private:
 private:
 	//頂点リソースを作る
 	//頂点バッファビューを作成する
-	//頂点リソースにデータを書き込む
 	ComPtr<ID3D12Resource> vertexResource_ = nullptr;
-
 	//頂点バッファビューを作成する
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_{};
-
 	std::vector<VertexData> vertices_{};
 
 
@@ -111,6 +107,7 @@ private:
 	Material* materialData_ = nullptr;
 	//色関係のメンバ変数
 	Vector4 materialColor_ = { 1.0f,1.0f,1.0f,1.0f };
+
 
 	//Lighting用
 	ComPtr<ID3D12Resource> directionalLightResource_ = nullptr;
@@ -124,6 +121,9 @@ private:
 	float directionalLightIntensity_ = 2.0f;
 
 
+	//PixelShaderにカメラの座標を送る為の変数
+	ComPtr<ID3D12Resource> cameraResource_ = nullptr;
+	CameraForGPU* cameraForGPU_ = {};
 
 	uint32_t textureHandle_ = 0;
 

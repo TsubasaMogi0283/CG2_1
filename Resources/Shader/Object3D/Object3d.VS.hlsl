@@ -45,5 +45,8 @@ VertexShaderOutput main(VertexShaderInput input) {
 	//法線と言えば正規化をなのでそれを忘れないようにする
 	//これを入れると何かだめになる
     output.normal = normalize(mul(input.normal, (float32_t3x3) gTransformationMatrix.normal));
+	
+	//CameraWorldPosition
+    output.worldPosition = mul(input.position, gTransformationMatrix.world).xyz;
 	return output;
 }

@@ -24,7 +24,6 @@ void SampleScene::Initialize() {
 	for (int i = 0; i < MODEL_AMOUNT_; i++) {
 		model_[i] = Model::Create("Resources/CG3/Sphere", "Sphere.obj");
 		modelWorldTransform_[i].Initialize();
-
 	}
 
 	
@@ -113,6 +112,28 @@ void SampleScene::Update(GameManager* gameManager) {
 
 
 
+	//ウィンドウサイズの設定は↓でやるよ
+#ifdef _DEBUG
+	ImGui::Begin("Model");
+	ImGui::SliderFloat("Intensity", &intensity_, 0.0f, 10.0f);
+	ImGui::End();
+
+
+
+	ImGui::SetNextWindowSize(ImVec2(500, 100));
+	ImGui::Begin("Sprite");
+	ImGui::SliderFloat2("Position", &spritePosition_.x, 0.0f, 500.0f, "%.1f");
+	ImGui::End();
+
+#endif
+
+	for (int i = 0; i < MODEL_AMOUNT_; i++) {
+		modelWorldTransform_[i].Update();
+	}
+	camera_.Update();
+
+
+
 	if (Input::GetInstance()->IsTriggerKey(DIK_SPACE) == true) {
 		
 		audio_->StopWave(audioHandle2_);
@@ -125,25 +146,7 @@ void SampleScene::Update(GameManager* gameManager) {
 	}
 
 
-	//ウィンドウサイズの設定は↓でやるよ
-#ifdef _DEBUG
-	ImGui::Begin("Model");
-	ImGui::SliderFloat("Intensity", &intensity_, 0.0f, 10.0f);
-	ImGui::End();
 
-
-
-	ImGui::SetNextWindowSize(ImVec2(500, 100));
-	ImGui::Begin("Sprite");
-	ImGui::SliderFloat2("Position", &spritePosition_.x, 0.0f, 500.0f,"%.1f");
-	ImGui::End();
-
-#endif
-
-	for (int i = 0; i < MODEL_AMOUNT_; i++) {
-		modelWorldTransform_[i].Update();
-	}
-	camera_.Update();
 }
 
 /// <summary>

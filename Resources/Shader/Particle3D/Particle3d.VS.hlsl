@@ -1,13 +1,6 @@
 #include "Particle3d.hlsli"
 
 
-//座標返還を行うVS
-struct TransformationMatrix
-{
-	//32bitのfloatが4x4個
-    float32_t4x4 WVP;
-    float32_t4x4 World;
-};
 
 struct ParticleForGPU{
     float32_t4x4 WVP;
@@ -18,7 +11,6 @@ struct ParticleForGPU{
 
 //CBuffer
 //StructuredBuffer...簡単に言えば配列みたいなやつ
-//StructuredBuffer<TransformationMatrix>gTransformationMatrices:register(t0);
 StructuredBuffer<ParticleForGPU> gParticle : register(t0);
 
 

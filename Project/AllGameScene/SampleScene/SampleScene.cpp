@@ -23,13 +23,13 @@ SampleScene::SampleScene() {
 void SampleScene::Initialize() {
 	for (int i = 0; i < MODEL_AMOUNT_; i++) {
 		model_[i] = Model::Create("Resources/CG3/fence", "fence.obj");
+		modelWorldTransform_[i].Initialize();
+
 	}
 
-	modelWorldTransform_.Initialize();
+	
 
-
-	modelTranslate_ = {0.0f,0.0f,0.0f};
-
+	modelWorldTransform_[1].translate_ = { -2.0f,2.0f,0.0f };
 	sprite = std::make_unique<Sprite>();
 	uint32_t textureHandle = TextureManager::LoadTexture("Resources/uvChecker.png");
 	spritePosition_ = { 100.0f,100.0f };
@@ -70,6 +70,9 @@ void SampleScene::Initialize() {
 	camera_.Initialize();
 	camera_.translate_ = cameraTranslate_;
 
+
+
+
 	audio_ = Audio::GetInstance();
 	uint32_t audioHandle_ = audio_->LoadWave("Resources/Audio/Sample/Win.wav");
 	//audio_->PlayWave(audioHandle_, true);
@@ -88,7 +91,6 @@ void SampleScene::Update(GameManager* gameManager) {
 	particle_->SetTranslate(particleTranslate_);
 
 	particle_->SetField(isSetField_);
-	//particle_->Update();
 
 
 	sprite->SetPosition(spritePosition_);
@@ -110,7 +112,6 @@ void SampleScene::Update(GameManager* gameManager) {
 		camera_.translate_.y -= MOVE_AMOUNT * CAMERA_VELOCITY;
 	}
 
-	//Camera::GetInstance()->SetTranslate(cameraTranslate_);
 
 
 	if (Input::GetInstance()->IsTriggerKey(DIK_SPACE) == true) {
@@ -140,8 +141,9 @@ void SampleScene::Update(GameManager* gameManager) {
 
 #endif
 
-
-	modelWorldTransform_.Update();
+	for (int i = 0; i < MODEL_AMOUNT_; i++) {
+		modelWorldTransform_[i].Update();
+	}
 	camera_.Update();
 }
 
@@ -150,7 +152,7 @@ void SampleScene::Update(GameManager* gameManager) {
 /// </summary>
 void SampleScene::Draw() {
 	for (int i = 0; i < MODEL_AMOUNT_; i++) {
-		model_[i]->Draw(modelWorldTransform_,camera_);
+		model_[i]->Draw(modelWorldTransform_[i], camera_);
 	
 	}
 	particle_->Draw(particleTextureHandle_,camera_);

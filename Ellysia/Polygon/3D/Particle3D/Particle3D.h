@@ -101,11 +101,11 @@ public:
 
 	//透明度の変更
 	void SetColor(Vector4 color) {
-		this->color_ = color;
+		this->materialColor_ = color;
 	}
 
 	void SetTransparency(float transparency) {
-		this->color_.w = transparency;
+		this->materialColor_.w = transparency;
 	}
 	
 	//ビルボードにするかどうか
@@ -181,24 +181,29 @@ private:
 	//TextureManagerを参考にする
 	std::list<ModelData> modelInformationList_;
 
-	//頂点データ
-	std::unique_ptr<Mesh> mesh_ = nullptr;
-	std::unique_ptr<Transformation> transformation_= nullptr ;
+	//頂点リソースを作る
+	ComPtr<ID3D12Resource> vertexResource_ = nullptr;
+	//頂点バッファビューを作成する
+	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_;
+	std::vector<VertexData> vertices_{};
+
+	//表示する数
+	int32_t instanceCount_ = 1;
+
+
 	std::vector<VertexData> vertices;
 
 	//マテリアル用のリソースを作る
 	ComPtr<ID3D12Resource> materialResource_ = nullptr;
-
 	//色関係のメンバ変数
-	Vector4 color_ = {};
+	Vector4 materialColor_ = {};
 
 
 	//Lighting用
-	//std::unique_ptr<CreateDirectionalLight> directionalLight_ = nullptr;
 	ComPtr<ID3D12Resource> directionalLightResource_ = nullptr;
 	DirectionalLight* directionalLightData_ = nullptr;
+	//色
 	Vector4 directionalLightColor_ = { 1.0f,1.0f,1.0f,1.0f };
-	//Vector3 direction_ = { 0.0f,-1.0f,0.0f };
 	float directionalLightIntensity_ = 3.0f;
 
 	//基本はtrueで
@@ -216,15 +221,15 @@ private:
 	static const int32_t MAX_INSTANCE_NUMBER_ = 100;
 	//描画すべきインスタンス数
 	uint32_t numInstance_ = 0;
+
+
+
 	//パーティクル
-	//Particle particles_[MAX_INSTANCE_NUMBER_] = {};
 	std::list<Particle>particles_;
 	ParticleForGPU* instancingData_ = nullptr;
 
 	//ビルボード
 	bool isBillBordMode_ = true;
-
-
 
 	//テクスチャハンドル
 	uint32_t textureHandle_ = 0;

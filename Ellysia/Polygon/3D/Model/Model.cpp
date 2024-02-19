@@ -302,10 +302,9 @@ void Model::Draw(WorldTransform& worldTransform,Camera& camera) {
 #pragma endregion
 
 #pragma region DirectionalLight
-
-	//Light
+	
 	directionalLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightData_));
-	directionalLightData_->color = materialColor_;
+	directionalLightData_->color = lightColor_;
 	directionalLightData_->direction = lightingDirection_;
 	directionalLightData_->intensity = directionalLightIntensity_;
 	directionalLightResource_->Unmap(0, nullptr);

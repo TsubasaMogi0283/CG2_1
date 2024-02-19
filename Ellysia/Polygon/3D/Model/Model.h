@@ -107,7 +107,7 @@ private:
 	ComPtr<ID3D12Resource> vertexResource_ = nullptr;
 
 	//頂点バッファビューを作成する
-	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_;
+	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_{};
 
 	std::vector<VertexData> vertices_{};
 
@@ -122,23 +122,18 @@ private:
 	//Lighting用
 	ComPtr<ID3D12Resource> directionalLightResource_ = nullptr;
 	DirectionalLight* directionalLightData_ = nullptr;
-
 	//基本はtrueで
 	bool isEnableLighting_ = true;
-
 	//方向
 	Vector3 lightingDirection_ = {0.0f,-1.0f,0.0f};
+	//Lightの色
+	Vector4 lightColor_ = { 1.0f,1.0f,1.0f,1.0f };
 	float directionalLightIntensity_ = 2.0f;
 
 
 
 	uint32_t textureHandle_ = 0;
 
-
-	
-
-
-	
 
 	//TextureManagerを参考にする
 	static std::list<ModelData> modelInformationList_;

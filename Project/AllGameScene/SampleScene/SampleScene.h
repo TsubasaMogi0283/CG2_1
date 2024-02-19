@@ -31,11 +31,10 @@ public:
 	void Draw()override;
 
 private:
-	static const int MODEL_AMOUNT_ = 1;
+	static const int MODEL_AMOUNT_ = 2;
 
 	Model* model_[MODEL_AMOUNT_] = { nullptr };
-	Vector3 modelTranslate_ = {};
-	WorldTransform modelWorldTransform_ = {};
+	WorldTransform modelWorldTransform_[MODEL_AMOUNT_] = {};
 
 	Vector2 position_ = { 0.0f,0.0f };
 	Vector2 scale_ = { 1.0f,1.0f };

@@ -216,7 +216,6 @@ void Particle3D::Create(const std::string& directoryPath, const std::string& fil
 
 
 	////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
-
 	materialResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(Material)).Get();
 
 
@@ -225,12 +224,28 @@ void Particle3D::Create(const std::string& directoryPath, const std::string& fil
 
 
 	//頂点リソースを作る
-	mesh_ = std::make_unique<Mesh>();
-	mesh_->Initialize(modelDataNew.vertices);
+	//mesh_ = std::make_unique<Mesh>();
+	//mesh_->Initialize(modelDataNew.vertices);
+	vertices_ = modelDataNew.vertices;
+
+	vertexResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(VertexData) * vertices_.size());
+
+	//読み込みのところでバッファインデックスを作った方がよさそう
+	//vertexResourceがnullらしい
+	//リソースの先頭のアドレスから使う
+	vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
+	//使用するリソースは頂点のサイズ
+	vertexBufferView_.SizeInBytes = UINT(sizeof(VertexData) * vertices_.size());
+	//１頂点あたりのサイズ
+	vertexBufferView_.StrideInBytes = sizeof(VertexData);
+
+
+	
+
+
 
 	//インスタンシング
 	instancingResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(ParticleForGPU) * MAX_INSTANCE_NUMBER_);
-	
 	descriptorSizeSRV_ =  DirectXSetup::GetInstance()->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	
 
@@ -256,16 +271,13 @@ void Particle3D::Create(const std::string& directoryPath, const std::string& fil
 	isBillBordMode_ = true;
 
 	//Lighting
-	//directionalLight_=std::make_unique<CreateDirectionalLight>();
-	//directionalLight_->Initialize();
-
 	directionalLightResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(DirectionalLight)).Get();
 	
 
 
 	//初期は白色
 	//モデル個別に色を変更できるようにこれは外に出しておく
-	color_ = { 1.0f,1.0f,1.0f,1.0f };
+	materialColor_ = { 1.0f,1.0f,1.0f,1.0f };
 
 
 }
@@ -428,13 +440,22 @@ void Particle3D::Draw(uint32_t textureHandle,Camera& camera){
 	
 	//更新
 	Update(camera);
-	
+
+#pragma region 頂点データ
+	//頂点バッファにデータを書き込む
+	VertexData* vertexData = nullptr;
+	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));//書き込むためのアドレスを取得
+	std::memcpy(vertexData, vertices_.data(), sizeof(VertexData) * vertices_.size());
+	vertexResource_->Unmap(0, nullptr);
+
+#pragma endregion
+
 #pragma region マテリアルにデータを書き込む
 	//書き込むためのアドレスを取得
 	//reinterpret_cast...char* から int* へ、One_class* から Unrelated_class* へなどの変換に使用
 	Material* materialData_ = nullptr;
 	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
-	materialData_->color = color_;
+	materialData_->color = materialColor_;
 	materialData_->enableLighting = isEnableLighting_;
 
 	materialData_->uvTransform = MakeIdentity4x4();
@@ -444,14 +465,12 @@ void Particle3D::Draw(uint32_t textureHandle,Camera& camera){
 #pragma endregion
 
 #pragma region DirectionalLight
-
-	//Light
+	
 	directionalLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightData_));
 	directionalLightData_->color = directionalLightColor_;                                                                                                                                                                                          
 	directionalLightData_->direction = lightingDirection_;
 	directionalLightData_->intensity = directionalLightIntensity_;
 	directionalLightResource_->Unmap(0, nullptr);
-
 
 #pragma endregion
 
@@ -461,11 +480,10 @@ void Particle3D::Draw(uint32_t textureHandle,Camera& camera){
 
 
 	
-	////RootSignatureを設定。PSOに設定しているけど別途設定が必要
-	//DirectXSetup::GetInstance()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);
-	////形状を設定。PSOに設定しているものとはまた別。同じものを設定すると考えよう
-	//DirectXSetup::GetInstance()->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	mesh_->GraphicsCommand();
+	//RootSignatureを設定。PSOに設定しているけど別途設定が必要
+	DirectXSetup::GetInstance()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);
+	//形状を設定。PSOに設定しているものとはまた別。同じものを設定すると考えよう
+	DirectXSetup::GetInstance()->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 
 	//CBVを設定する
@@ -482,17 +500,17 @@ void Particle3D::Draw(uint32_t textureHandle,Camera& camera){
 		TextureManager::GraphicsCommand(textureHandle );
 	}
 	
-
+	//DirectionalLight
 	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
 
-
+	//カメラ
+	//DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(4, camera.bufferResource_->GetGPUVirtualAddress());
 	
 
 	
 	
 	//DrawCall
-	mesh_->DrawCall(numInstance_);
-	//DirectXSetup::GetInstance()->GetCommandList()->DrawInstanced(UINT(vertices_.size()), numInstance_, 0, 0);
+	DirectXSetup::GetInstance()->GetCommandList()->DrawInstanced(UINT(vertices_.size()), numInstance_, 0, 0);
 }
 
 

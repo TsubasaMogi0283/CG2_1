@@ -22,7 +22,7 @@ SampleScene::SampleScene() {
 /// </summary>
 void SampleScene::Initialize() {
 	for (int i = 0; i < MODEL_AMOUNT_; i++) {
-		model_[i] = Model::Create("Resources/CG3/Sphere", "Sphere.obj");
+		model_[i] = Model::Create("Resources/CG3/terrain", "terrain.obj");
 		modelWorldTransform_[i].Initialize();
 	}
 	const float SCALE_SIZE = 3.0f;
@@ -64,8 +64,10 @@ void SampleScene::Initialize() {
 	particle_->SetFrequencyTime(frequencyTime);
 	particleTranslate_ = { 0.0f,0.0f,0.0f };
 
-	cameraTranslate_ = { 0.0f,0.0f,-20.0f };
+
+	cameraTranslate_ = { 0.0f,10.0f,-30.0f };
 	camera_.Initialize();
+	camera_.rotate_ = { 0.2f,0.0f,0.0f };
 	camera_.translate_ = cameraTranslate_;
 
 
@@ -120,6 +122,10 @@ void SampleScene::Update(GameManager* gameManager) {
 	ImGui::SliderFloat3("Scale", &modelWorldTransform_[0].scale_.x, 0.0f, 8.0f);
 	ImGui::End();
 
+	ImGui::Begin("Camera");
+	ImGui::SliderFloat3("Rotate", &camera_.rotate_.x, -3.0f, 3.0f);
+	ImGui::SliderFloat3("Position", &camera_.translate_.x, -10.0f, 10.0f);
+	ImGui::End();
 
 
 	ImGui::SetNextWindowSize(ImVec2(500, 100));

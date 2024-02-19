@@ -39,8 +39,8 @@ private:
 	Vector2 position_ = { 0.0f,0.0f };
 	Vector2 scale_ = { 1.0f,1.0f };
 	float rotate = 0.0f;
-	float intensity_ = 3.0f;
-	Vector3 lightingDirection_ = { 0.0f,1.0f,0.0f };
+	float intensity_ = 1.0f;
+	Vector3 lightingDirection_ = { 0.0f,-1.0f,0.0f };
 	Vector3 modelScale_ = { 3.0f,3.0f,3.0f };
 
 

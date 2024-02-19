@@ -240,6 +240,9 @@
     <ClCompile Include="Ellysia\Polygon\3D\LoadModelData\LoadModelData.cpp">
       <Filter>Ellysia\Source File\Polygone\3D\LoadModelData</Filter>
     </ClCompile>
+    <ClCompile Include="Ellysia\Line\Line.cpp">
+      <Filter>Ellysia</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\Particle3D\Particle3d.PS.hlsl">
@@ -405,6 +408,9 @@
     </ClInclude>
     <ClInclude Include="Ellysia\Math\WorldTransform\WorldTransform.h">
       <Filter>Ellysia\Header File\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Line\Line.h">
+      <Filter>Ellysia</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

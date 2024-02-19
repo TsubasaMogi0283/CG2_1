@@ -27,14 +27,10 @@
 
 
 #include "Camera.h"
-#include "Mesh.h"
-#include "CreateMaterial.h"
-#include "CreateDirectionalLight.h"
-#include "Transformation.h"
 #include "Transform.h"
 #include "Particle.h"
 #include <AccelerationField.h>
-
+#include "LoadModelData.h"
 
 struct Emitter {
 	//エミッタのTransform;
@@ -58,16 +54,6 @@ public:
 
 
 private:
-#pragma region モデルの読み込み関係の関数
-	//モデルデータの読み込み
-	ModelData LoadObjectFile(const std::string& directoryPath, const std::string& fileName);
-
-	//mtlファイルの読み込み
-	MaterialData LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& fileName);
-
-	
-
-#pragma endregion
 
 #pragma region パーティクルの設定で使う関数
 
@@ -184,7 +170,7 @@ private:
 	//頂点リソースを作る
 	ComPtr<ID3D12Resource> vertexResource_ = nullptr;
 	//頂点バッファビューを作成する
-	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_;
+	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_{};
 	std::vector<VertexData> vertices_{};
 
 	//表示する数

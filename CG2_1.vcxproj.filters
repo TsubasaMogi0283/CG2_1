@@ -139,6 +139,12 @@
     <Filter Include="Project\GameScene\Sample2">
       <UniqueIdentifier>{c0575fdd-b572-4e5a-8413-fa3cf96d3880}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Ellysia\Header File\LoadModelData">
+      <UniqueIdentifier>{87453876-514c-49f9-89a4-a9bb890de4b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Ellysia\Source File\Polygone\3D\LoadModelData">
+      <UniqueIdentifier>{2747883a-dcbe-4951-b835-e69a4e599a81}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Ellysia\Math\Matrix\Calculation\Matrix4x4Calculation.cpp">
@@ -230,6 +236,9 @@
     </ClCompile>
     <ClCompile Include="Ellysia\Math\WorldTransform\WorldTransform.cpp">
       <Filter>Ellysia\Source File\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Ellysia\Polygon\3D\LoadModelData\LoadModelData.cpp">
+      <Filter>Ellysia\Source File\Polygone\3D\LoadModelData</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -391,8 +400,11 @@
     <ClInclude Include="Project\AllGameScene\SampleScene2\SampleScene2.h">
       <Filter>Project\GameScene\Sample2</Filter>
     </ClInclude>
+    <ClInclude Include="Ellysia\Polygon\3D\LoadModelData\LoadModelData.h">
+      <Filter>Ellysia\Header File\LoadModelData</Filter>
+    </ClInclude>
     <ClInclude Include="Ellysia\Math\WorldTransform\WorldTransform.h">
-      <Filter>Ellysia\Header File</Filter>
+      <Filter>Ellysia\Header File\Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

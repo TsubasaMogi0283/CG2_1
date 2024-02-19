@@ -10,10 +10,7 @@
 
 #include "Matrix4x4.h"
 #include "Vector4.h"
-#include "Transform.h"
-//#include "Material.h"
 #include "TransformationMatrix.h"
-
 #include "Matrix4x4Calculation.h"
 #include "VertexData.h"
 
@@ -23,6 +20,7 @@
 #include "DirectionalLight.h"
 #include "WorldTransform.h"
 #include "Camera.h"
+#include "LoadModelData.h"
 
 class Model {
 public:
@@ -36,12 +34,7 @@ public:
 	static Model* Create(const std::string& directoryPath,const std::string& fileName);
 private:
 #pragma region モデルの読み込み関係の関数
-	//モデルデータの読み込み
-	ModelData LoadObjectFile(const std::string& directoryPath, const std::string& fileName);
-
-	//mtlファイルの読み込み
-	MaterialData LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& fileName);
-
+	
 #pragma endregion
 
 public:

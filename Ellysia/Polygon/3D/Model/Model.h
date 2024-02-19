@@ -22,6 +22,12 @@
 #include "Camera.h"
 #include "LoadModelData.h"
 
+enum LightingKinds {
+	None,
+	Directional,
+
+};
+
 class Model {
 public:
 
@@ -86,7 +92,7 @@ private:
 	struct Material {
 		Vector4 color;
 		//boolの代わりにint32_t
-		int32_t enableLighting;
+		int32_t lighting;
 		float padding[3];
 		Matrix4x4 uvTransform;
 	};
@@ -113,7 +119,7 @@ private:
 	ComPtr<ID3D12Resource> directionalLightResource_ = nullptr;
 	DirectionalLight* directionalLightData_ = nullptr;
 	//基本はtrueで
-	bool isEnableLighting_ = true;
+	int32_t isEnableLighting_ = Directional;
 	//方向
 	Vector3 lightingDirection_ = {0.0f,-1.0f,0.0f};
 	//Lightの色

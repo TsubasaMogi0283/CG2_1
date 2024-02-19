@@ -129,7 +129,7 @@ void Model::Draw(WorldTransform& worldTransform,Camera& camera) {
 	////reinterpret_cast...char* から int* へ、One_class* から Unrelated_class* へなどの変換に使用
 	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 	materialData_->color = materialColor_;
-	materialData_->enableLighting = isEnableLighting_;
+	materialData_->lighting = isEnableLighting_;
 
 	materialData_->uvTransform = MakeIdentity4x4();
 

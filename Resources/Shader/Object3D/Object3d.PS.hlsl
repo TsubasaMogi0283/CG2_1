@@ -75,7 +75,7 @@ PixelShaderOutput main(VertexShaderOutput input) {
     }
 	
 	//Lightingする場合
-    if (gMaterial.enableLighting != 0){
+    if (gMaterial.enableLighting == 1){
 	
 		//このままdotだと[-1,1]になる。
 		//光が当たらないところは「当たらない」のでもっと暗くなるわけではない。そこでsaturate関数を使う

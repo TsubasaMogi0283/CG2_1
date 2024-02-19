@@ -219,9 +219,6 @@
     <ClCompile Include="Ellysia\Polygon\3D\BufferResource\Material\CreateMaterial.cpp">
       <Filter>Ellysia\Source File\Polygone\3D</Filter>
     </ClCompile>
-    <ClCompile Include="Ellysia\Polygon\3D\BufferResource\Transformation\Transformation.cpp">
-      <Filter>Ellysia\Source File\Polygone\3D</Filter>
-    </ClCompile>
     <ClCompile Include="Ellysia\Polygon\3D\BufferResource\Mesh\Mesh.cpp">
       <Filter>Ellysia\Source File\Polygone\3D</Filter>
     </ClCompile>
@@ -383,9 +380,6 @@
       <Filter>Ellysia\Header File\Polygone\3D</Filter>
     </ClInclude>
     <ClInclude Include="Ellysia\Polygon\3D\BufferResource\ModelData\ModelData.h">
-      <Filter>Ellysia\Header File\Polygone\3D</Filter>
-    </ClInclude>
-    <ClInclude Include="Ellysia\Polygon\3D\BufferResource\Transformation\Transformation.h">
       <Filter>Ellysia\Header File\Polygone\3D</Filter>
     </ClInclude>
     <ClInclude Include="Ellysia\Polygon\3D\Model\Model.h">

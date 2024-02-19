@@ -63,6 +63,13 @@ public:
 
 #pragma region アクセッサ
 
+	ComPtr<ID3D12RootSignature> GetLineRootSignature() {
+		return linePSO_.rootSignature_;
+	}
+	ComPtr<ID3D12PipelineState> GetLineGraphicsPipelineState() {
+		return linePSO_.graphicsPipelineState_;
+	}
+
 	//コマンドに積む専用のGetter(Sprite)
 	ComPtr<ID3D12RootSignature> GetSpriteRootSignature() {
 		return spritePSO_.rootSignature_;
@@ -100,6 +107,8 @@ public:
 
 public:
 	//アロー演算子の時邪魔になってしまうからここにいれよう
+	//ライン用
+	static void GenaratedLinePSO();
 
 	//スプライト用
 	static void GenerateSpritePSO();
@@ -122,6 +131,8 @@ private:
 
 	};
 
+	//ライン用
+	PSOInformation linePSO_ = {};
 	//スプライト用
 	PSOInformation spritePSO_ = {};
 	//モデル用の変数

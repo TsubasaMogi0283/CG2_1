@@ -142,7 +142,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Ellysia\Polygon\3D\BufferResource\DirectionalLight\CreateDirectionalLight.cpp" />
     <ClCompile Include="Ellysia\Polygon\3D\BufferResource\Material\CreateMaterial.cpp" />
     <ClCompile Include="Ellysia\Polygon\3D\BufferResource\Mesh\Mesh.cpp" />
-    <ClCompile Include="Ellysia\Polygon\3D\BufferResource\Transformation\Transformation.cpp" />
     <ClCompile Include="Ellysia\Polygon\3D\LoadModelData\LoadModelData.cpp" />
     <ClCompile Include="Ellysia\Polygon\3D\Model\Model.cpp" />
     <ClCompile Include="Ellysia\Polygon\3D\Particle3D\Particle3D.cpp" />
@@ -216,7 +215,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Ellysia\Polygon\3D\BufferResource\Material\CreateMaterial.h" />
     <ClInclude Include="Ellysia\Polygon\3D\BufferResource\Mesh\Mesh.h" />
     <ClInclude Include="Ellysia\Polygon\3D\BufferResource\ModelData\ModelData.h" />
-    <ClInclude Include="Ellysia\Polygon\3D\BufferResource\Transformation\Transformation.h" />
     <ClInclude Include="Ellysia\Polygon\3D\LoadModelData\LoadModelData.h" />
     <ClInclude Include="Ellysia\Polygon\3D\Model\Model.h" />
     <ClInclude Include="Ellysia\Polygon\3D\Particle3D\AccelerationField.h" />

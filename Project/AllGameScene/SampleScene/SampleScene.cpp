@@ -25,8 +25,8 @@ void SampleScene::Initialize() {
 		model_[i] = Model::Create("Resources/CG3/Sphere", "Sphere.obj");
 		modelWorldTransform_[i].Initialize();
 	}
-
-	
+	const float SCALE_SIZE = 3.0f;
+	modelWorldTransform_[0].scale_ = { SCALE_SIZE,SCALE_SIZE ,SCALE_SIZE };
 
 	sprite = std::make_unique<Sprite>();
 	uint32_t textureHandle = TextureManager::LoadTexture("Resources/uvChecker.png");

@@ -21,6 +21,8 @@ struct Material {
 	float32_t4 color;
 	int32_t enableLighting;
 	float32_t4x4 uvTransform;
+    //光沢度
+	float32_t shininess;
 };
 
 
@@ -83,14 +85,34 @@ PixelShaderOutput main(VertexShaderOutput input) {
 	
 
 		//Half Lambert
-		float NdotL = dot(normalize(input.normal), -gDirectionalLight.direction);
+        float NdotL = dot(normalize(input.normal), -normalize(gDirectionalLight.direction));
 		float cos = pow(NdotL * 0.5f + 0.5f, 2.0f);
 
+		
+		//Cameraへの方向を算出
+        float32_t3 toEye = normalize(gCamera.worldPosition - input.worldPosition);
+		
+		//入射光の反射ベクトルを求める
+        float32_t3 reflectLight = reflect(normalize(gDirectionalLight.direction), normalize(input.normal));
+		
+		//内積
+        float RdotE = dot(reflectLight, toEye);
+		//反射強度
+        float specularPow = pow(saturate(RdotE), gMaterial.shininess);
+		
+		
+		//拡散反射
+        float32_t3 diffuse = gMaterial.color.rgb * textureColor.rgb * gDirectionalLight.color.rgb * cos * gDirectionalLight.intensity;
+		//鏡面反射
+		//1.0f,1.0f,1.0fの所は反射色。
+        float32_t3 specular = gDirectionalLight.color.rgb * gDirectionalLight.intensity * specularPow * float32_t3(1.0f, 1.0f, 1.0f);
+		
+		
 		if (textureColor.a == 0){
 			discard;
 		}
 		
-        output.color.rgb = gMaterial.color.rgb * textureColor.rgb * gDirectionalLight.color.rgb * cos * gDirectionalLight.intensity;
+        output.color.rgb = diffuse + specular;
         output.color.a = gMaterial.color.a * textureColor.a;
 
 	}

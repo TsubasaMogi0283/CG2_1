@@ -85,7 +85,7 @@ void SampleScene::Update(GameManager* gameManager) {
 
 	model_[0]->SetColor(modelColor_);
 	model_[0]->SetDirectionalLightIntensity(intensity_);
-
+	model_[0]->SetDirectionalLightDirection(lightingDirection_);
 	particle_->SetTranslate(particleTranslate_);
 
 	particle_->SetField(isSetField_);
@@ -116,6 +116,7 @@ void SampleScene::Update(GameManager* gameManager) {
 #ifdef _DEBUG
 	ImGui::Begin("Model");
 	ImGui::SliderFloat("Intensity", &intensity_, 0.0f, 10.0f);
+	ImGui::SliderFloat3("DirectionalLight", &lightingDirection_.x, -3.0f, 3.0f);
 	ImGui::End();
 
 

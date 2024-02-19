@@ -91,10 +91,10 @@ public:
 private:
 	struct Material {
 		Vector4 color;
-		//boolの代わりにint32_t
-		int32_t lighting;
+		int32_t lightingKinds;
 		float padding[3];
 		Matrix4x4 uvTransform;
+		float shininess;
 	};
 
 
@@ -125,7 +125,7 @@ private:
 	//Lightの色
 	Vector4 lightColor_ = { 1.0f,1.0f,1.0f,1.0f };
 	float directionalLightIntensity_ = 2.0f;
-
+	float shininess_ = 80.0f;
 
 	//PixelShaderにカメラの座標を送る為の変数
 	ComPtr<ID3D12Resource> cameraResource_ = nullptr;

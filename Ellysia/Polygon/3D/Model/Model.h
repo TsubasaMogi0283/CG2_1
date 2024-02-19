@@ -125,7 +125,7 @@ private:
 	//Lightの色
 	Vector4 lightColor_ = { 1.0f,1.0f,1.0f,1.0f };
 	float directionalLightIntensity_ = 2.0f;
-	float shininess_ = 80.0f;
+	float shininess_ = 100.0f;
 
 	//PixelShaderにカメラの座標を送る為の変数
 	ComPtr<ID3D12Resource> cameraResource_ = nullptr;

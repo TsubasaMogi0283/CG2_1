@@ -116,7 +116,7 @@ void SampleScene::Update(GameManager* gameManager) {
 #ifdef _DEBUG
 	ImGui::Begin("Model");
 	ImGui::SliderFloat("Intensity", &intensity_, 0.0f, 10.0f);
-	ImGui::SliderFloat3("DirectionalLight", &lightingDirection_.x, -3.0f, 3.0f);
+	ImGui::SliderFloat3("DirectionalLight", &lightingDirection_.x, -1.0f, 1.0f);
 	ImGui::End();
 
 

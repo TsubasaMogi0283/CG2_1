@@ -43,7 +43,7 @@ VertexShaderOutput main(VertexShaderInput input) {
 	//法線の変換にはWorldMatrixの平衡移動は不要。拡縮回転情報が必要
 	//左上3x3だけを取り出す
 	//法線と言えば正規化をなのでそれを忘れないようにする
-    output.normal = normalize(mul(input.normal, (float32_t3x3) gTransformationMatrix.normal));
+    output.normal = normalize(mul(input.normal, (float32_t3x3)gTransformationMatrix.world));
 	
 	//CameraWorldPosition
     output.worldPosition = mul(input.position, gTransformationMatrix.world).xyz;

@@ -22,14 +22,13 @@ SampleScene::SampleScene() {
 /// </summary>
 void SampleScene::Initialize() {
 	for (int i = 0; i < MODEL_AMOUNT_; i++) {
-		model_[i] = Model::Create("Resources/CG3/fence", "fence.obj");
+		model_[i] = Model::Create("Resources/CG3/Sphere", "Sphere.obj");
 		modelWorldTransform_[i].Initialize();
 
 	}
 
 	
 
-	modelWorldTransform_[1].translate_ = { -2.0f,2.0f,0.0f };
 	sprite = std::make_unique<Sprite>();
 	uint32_t textureHandle = TextureManager::LoadTexture("Resources/uvChecker.png");
 	spritePosition_ = { 100.0f,100.0f };

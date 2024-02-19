@@ -31,7 +31,7 @@ public:
 	void Draw()override;
 
 private:
-	static const int MODEL_AMOUNT_ = 2;
+	static const int MODEL_AMOUNT_ = 1;
 
 	Model* model_[MODEL_AMOUNT_] = { nullptr };
 	WorldTransform modelWorldTransform_[MODEL_AMOUNT_] = {};

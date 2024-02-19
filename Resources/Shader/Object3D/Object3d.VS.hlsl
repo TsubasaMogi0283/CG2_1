@@ -5,6 +5,7 @@ struct TransformationMatrix {
 	//32bitのfloatが4x4個
     float32_t4x4 world;
     float32_t4x4 normal;
+    float32_t4x4 worldInverseTranspose;
 };
 
 struct Camera{
@@ -43,7 +44,7 @@ VertexShaderOutput main(VertexShaderInput input) {
 	//法線の変換にはWorldMatrixの平衡移動は不要。拡縮回転情報が必要
 	//左上3x3だけを取り出す
 	//法線と言えば正規化をなのでそれを忘れないようにする
-    output.normal = normalize(mul(input.normal, (float32_t3x3)gTransformationMatrix.world));
+    output.normal = normalize(mul(input.normal, (float32_t3x3)gTransformationMatrix.worldInverseTranspose));
 	
 	//CameraWorldPosition
     output.worldPosition = mul(input.position, gTransformationMatrix.world).xyz;

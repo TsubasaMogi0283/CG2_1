@@ -39,7 +39,7 @@ void WorldTransform::Transfer() {
 
 	//GPU側でWVP計算してくれるようにする
 	tranceformationData_->world = worldMatrix_;
-	tranceformationData_->normal = MakeIdentity4x4();
+	tranceformationData_->normal = worldMatrix_;
 	tranceformationData_->worldInverseTranspose = worldInverseTransposeMatrix_;
 	bufferResource_->Unmap(0, nullptr);
 }

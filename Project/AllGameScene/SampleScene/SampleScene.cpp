@@ -26,7 +26,7 @@ void SampleScene::Initialize() {
 		modelWorldTransform_[i].Initialize();
 	}
 	const float SCALE_SIZE = 3.0f;
-	modelWorldTransform_[0].scale_ = { SCALE_SIZE,SCALE_SIZE ,SCALE_SIZE };
+	modelWorldTransform_[0].scale_ = modelScale_;
 
 	sprite = std::make_unique<Sprite>();
 	uint32_t textureHandle = TextureManager::LoadTexture("Resources/uvChecker.png");
@@ -117,6 +117,7 @@ void SampleScene::Update(GameManager* gameManager) {
 	ImGui::Begin("Model");
 	ImGui::SliderFloat("Intensity", &intensity_, 0.0f, 10.0f);
 	ImGui::SliderFloat3("DirectionalLight", &lightingDirection_.x, -1.0f, 1.0f);
+	ImGui::SliderFloat3("Scale", &modelWorldTransform_[0].scale_.x, 0.0f, 8.0f);
 	ImGui::End();
 
 

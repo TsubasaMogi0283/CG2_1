@@ -41,6 +41,8 @@ private:
 	float rotate = 0.0f;
 	float intensity_ = 3.0f;
 	Vector3 lightingDirection_ = { 0.0f,1.0f,0.0f };
+	Vector3 modelScale_ = { 3.0f,3.0f,3.0f };
+
 
 	std::unique_ptr<Sprite> sprite = nullptr;
 	Vector4 color_ = { 1.0f,1.0f,1.0f,1.0f };

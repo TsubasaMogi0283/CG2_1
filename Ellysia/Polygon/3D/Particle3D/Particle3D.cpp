@@ -222,12 +222,8 @@ void Particle3D::Update(Camera& camera){
 			//パーティクル個別のRotateは関係ないよ
 			Matrix4x4 worldMatrix = Multiply(scaleMatrix,Multiply(billBoardMatrix,translateMatrix));
 			
-			//WVP行列を作成
-			Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(camera.viewMatrix_, camera.projectionMatrix_));
-
 			//最大値を超えて描画しないようにする
 			if (numInstance_ < MAX_INSTANCE_NUMBER_) {
-				instancingData_[numInstance_].WVP = worldViewProjectionMatrix;
 				instancingData_[numInstance_].World = worldMatrix;
 				instancingData_[numInstance_].color = particleIterator->color;
 
@@ -247,11 +243,9 @@ void Particle3D::Update(Camera& camera){
 				particleIterator->transform.translate);
 			
 			//WVP行列を作成
-			Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(camera.viewMatrix_, camera.projectionMatrix_));
-
+			
 			//最大値を超えて描画しないようにする
 			if (numInstance_ < MAX_INSTANCE_NUMBER_) {
-				instancingData_[numInstance_].WVP = worldViewProjectionMatrix;
 				instancingData_[numInstance_].World = worldMatrix;
 				instancingData_[numInstance_].color = particleIterator->color;
 
@@ -334,7 +328,7 @@ void Particle3D::Draw(uint32_t textureHandle,Camera& camera){
 	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
 
 	//カメラ
-	//DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(4, camera.bufferResource_->GetGPUVirtualAddress());
+	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(4, camera.bufferResource_->GetGPUVirtualAddress());
 	
 
 	

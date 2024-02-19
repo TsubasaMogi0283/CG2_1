@@ -14,9 +14,6 @@ Model::Model() {
 }
 
 
-
-
-
 Model* Model::Create(const std::string& directoryPath, const std::string& fileName) {
 	//新たなModel型のインスタンスのメモリを確保
 	Model* model = new Model();

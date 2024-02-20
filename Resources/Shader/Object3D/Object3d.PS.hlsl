@@ -35,6 +35,17 @@ struct DirectionalLight {
 	float intensity;
 };
 
+struct PointLight{
+	//ライトの色
+    float32_t4 color;
+	//ライトの位置
+    float32_t3 position;
+	//ライトの輝度
+    float intensity;
+	
+};
+
+
 //カメラの位置を送る
 struct Camera{
     float32_t3 worldPosition;
@@ -48,6 +59,7 @@ ConstantBuffer<DirectionalLight> gDirectionalLight : register(b1);
 Texture2D<float32_t4> gTexture : register(t0);
 SamplerState gSampler : register(s0);
 ConstantBuffer<Camera> gCamera : register(b2);
+ConstantBuffer<PointLight> gPointLight : register(b3);
 
 //Textureは基本的にそのまま読まずSamplerを介して読む
 //処理方法を記述している
@@ -112,14 +124,63 @@ PixelShaderOutput main(VertexShaderOutput input) {
         float32_t3 specular = gDirectionalLight.color.rgb * gDirectionalLight.intensity * specularPow * float32_t3(1.0f, 1.0f, 1.0f);
 		
 		
+		
 		if (textureColor.a == 0){
 			discard;
 		}
-		
+		//diffuse + specular +
         output.color.rgb = diffuse + specular;
         output.color.a = gMaterial.color.a * textureColor.a;
 
 	}
+    else if(gMaterial.enableLighting == 2){
+		//このままdotだと[-1,1]になる。
+		//光が当たらないところは「当たらない」のでもっと暗くなるわけではない。そこでsaturate関数を使う
+		//saturate関数は値を[0,1]にclampするもの。エフェクターにもSaturationってあるよね。
+	
+		//点光源
+        float32_t3 pointLightDirection = normalize(input.worldPosition - gPointLight.position);
+		
+		
+		//Half Lambert
+        float NdotL = dot(normalize(input.normal), -normalize(gPointLight.position));
+        float cos = pow(NdotL * 0.5f + 0.5f, 2.0f);
+
+		
+		//Cameraへの方向を算出
+        float32_t3 toEye = normalize(gCamera.worldPosition - input.worldPosition);
+		
+		
+		//入射光の反射ベクトルを求める
+        float32_t3 reflectLight = reflect(normalize(gPointLight.position), normalize(input.normal));
+		
+		
+		//HalfVector
+        float32_t3 halfVector = normalize(-gPointLight.position + toEye);
+        float NDotH = dot(normalize(input.normal), halfVector);
+        float specularPow = pow(saturate(NDotH), gMaterial.shininess);
+		
+		//拡散反射
+        //float32_t3 diffuse = gMaterial.color.rgb * textureColor.rgb * gDirectionalLight.color.rgb * cos * gDirectionalLight.intensity;
+		//鏡面反射
+		//1.0f,1.0f,1.0fの所は反射色。
+        //float32_t3 specular = gDirectionalLight.color.rgb * gDirectionalLight.intensity * specularPow * float32_t3(1.0f, 1.0f, 1.0f);
+		
+		
+		
+		
+        //gPointLight.color.rgb + gPointLight.intensity;
+        float32_t3 diffusePointLight = gMaterial.color.rgb * textureColor.rgb * gPointLight.color.rgb * cos * gPointLight.intensity;
+        float32_t3 specularPointLight = gPointLight.color.rgb * gPointLight.intensity * specularPow * float32_t3(1.0f, 1.0f, 1.0f);
+		
+        if (textureColor.a == 0)
+        {
+            discard;
+        }
+		//diffuse + specular +
+        output.color.rgb = diffusePointLight + specularPointLight;
+        output.color.a = gMaterial.color.a * textureColor.a;
+    }
     else{
 	//Lightingしない場合
        output.color = gMaterial.color * textureColor;

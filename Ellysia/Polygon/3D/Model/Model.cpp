@@ -99,6 +99,11 @@ Model* Model::Create(const std::string& directoryPath, const std::string& fileNa
 	model->cameraResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(CameraForGPU)).Get();
 	
 
+	//PointLight
+	model->pointLightResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(PointLight)).Get();
+	
+
+
 	//初期は白色
 	//モデル個別に色を変更できるようにこれは外に出しておく
 	model->materialColor_ = { 1.0f,1.0f,1.0f,1.0f };
@@ -115,6 +120,12 @@ Model* Model::Create(const std::string& directoryPath, const std::string& fileNa
 //描画
 void Model::Draw(WorldTransform& worldTransform,Camera& camera) {
 	
+
+	
+	//資料にはなかったけどUnMapはあった方がいいらしい
+	//Unmapを行うことで、リソースの変更が完了し、GPUとの同期が取られる。
+	//プログラムが安定するらしいとのこと
+
 #pragma region 頂点バッファ
 	//頂点バッファにデータを書き込む
 	VertexData* vertexData = nullptr;
@@ -155,6 +166,17 @@ void Model::Draw(WorldTransform& worldTransform,Camera& camera) {
 	cameraWorldPosition.z = camera.worldMatrix_.m[3][2];
 
 	cameraForGPU_->worldPosition = cameraWorldPosition;
+	cameraResource_->Unmap(0, nullptr);
+#pragma endregion
+
+#pragma region 点光源
+	//PointLight
+	pointLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&pointLightData_));
+	pointLightData_->color = pointLightColor_;
+	pointLightData_->position = pointLightPosition_;
+	pointLightData_->intensity = pointLightIntensity_;
+	pointLightResource_->Unmap(0, nullptr);
+
 #pragma endregion
 
 	//コマンドを積む
@@ -190,6 +212,9 @@ void Model::Draw(WorldTransform& worldTransform,Camera& camera) {
 	
 	//PixelShaderに送る方のカメラ
 	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(5, cameraResource_->GetGPUVirtualAddress());
+
+	//PointLight
+	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(6, pointLightResource_->GetGPUVirtualAddress());
 
 
 	//DrawCall

@@ -22,11 +22,14 @@ SampleScene::SampleScene() {
 /// </summary>
 void SampleScene::Initialize() {
 	for (int i = 0; i < MODEL_AMOUNT_; i++) {
-		model_[i] = Model::Create("Resources/CG3/terrain", "terrain.obj");
+		model_[0].reset(Model::Create("Resources/CG3/terrain", "terrain.obj"));
+		model_[1].reset(Model::Create("Resources/CG3/Sphere", "Sphere.obj"));
 		modelWorldTransform_[i].Initialize();
 	}
-	const float SCALE_SIZE = 3.0f;
+	const float SCALE_SIZE = 1.0f;
 	modelWorldTransform_[0].scale_ = modelScale_;
+	modelWorldTransform_[1].scale_ = modelScale_;
+
 
 	sprite = std::make_unique<Sprite>();
 	uint32_t textureHandle = TextureManager::LoadTexture("Resources/uvChecker.png");
@@ -86,8 +89,20 @@ void SampleScene::Update(GameManager* gameManager) {
 
 
 	model_[0]->SetColor(modelColor_);
-	model_[0]->SetDirectionalLightIntensity(intensity_);
-	model_[0]->SetDirectionalLightDirection(lightingDirection_);
+	//model_[0]->SetDirectionalLightIntensity(intensity_);
+	//model_[1]->SetDirectionalLightIntensity(intensity_);
+	//model_[0]->SetDirectionalLightDirection(lightingDirection_);
+	//model_[1]->SetDirectionalLightDirection(lightingDirection_);
+
+
+
+
+	model_[0]->SetPointLightPosition(pointLightPosition_);
+	model_[0]->SetPointLightIntensity(intensity_);
+	model_[1]->SetPointLightPosition(pointLightPosition_);
+	model_[1]->SetPointLightIntensity(intensity_);
+
+
 	particle_->SetTranslate(particleTranslate_);
 
 	particle_->SetField(isSetField_);
@@ -117,14 +132,13 @@ void SampleScene::Update(GameManager* gameManager) {
 	//ウィンドウサイズの設定は↓でやるよ
 #ifdef _DEBUG
 	ImGui::Begin("Model");
-	ImGui::SliderFloat("Intensity", &intensity_, 0.0f, 10.0f);
-	ImGui::SliderFloat3("DirectionalLight", &lightingDirection_.x, -1.0f, 1.0f);
-	ImGui::SliderFloat3("Scale", &modelWorldTransform_[0].scale_.x, 0.0f, 8.0f);
+	ImGui::SliderFloat("Intensity", &intensity_, 0.0f, 3.0f);
+	ImGui::SliderFloat3("pointLightPosition6", &pointLightPosition_.x, -2.0f, 2.0f);
 	ImGui::End();
 
 	ImGui::Begin("Camera");
 	ImGui::SliderFloat3("Rotate", &camera_.rotate_.x, -3.0f, 3.0f);
-	ImGui::SliderFloat3("Position", &camera_.translate_.x, -10.0f, 10.0f);
+	ImGui::SliderFloat3("Position", &camera_.translate_.x, -40.0f, 40.0f);
 	ImGui::End();
 
 
@@ -173,7 +187,4 @@ void SampleScene::Draw() {
 /// デストラクタ
 /// </summary>
 SampleScene::~SampleScene() {
-	for (int i = 0; i < MODEL_AMOUNT_; i++) {
-		delete model_[i];
-	}
 }

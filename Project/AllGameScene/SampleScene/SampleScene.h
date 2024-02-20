@@ -31,9 +31,9 @@ public:
 	void Draw()override;
 
 private:
-	static const int MODEL_AMOUNT_ = 1;
+	static const int MODEL_AMOUNT_ = 2;
 
-	Model* model_[MODEL_AMOUNT_] = { nullptr };
+	std::unique_ptr<Model> model_[MODEL_AMOUNT_] = { nullptr };
 	WorldTransform modelWorldTransform_[MODEL_AMOUNT_] = {};
 
 	Vector2 position_ = { 0.0f,0.0f };
@@ -42,7 +42,7 @@ private:
 	float intensity_ = 1.0f;
 	Vector3 lightingDirection_ = { 0.0f,-1.0f,0.0f };
 	Vector3 modelScale_ = { 3.0f,3.0f,3.0f };
-
+	Vector3 pointLightPosition_ = { 0.0f,1.0f,0.0f };
 
 	std::unique_ptr<Sprite> sprite = nullptr;
 	Vector4 color_ = { 1.0f,1.0f,1.0f,1.0f };

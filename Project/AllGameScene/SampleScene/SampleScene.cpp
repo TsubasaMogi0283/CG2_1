@@ -133,7 +133,7 @@ void SampleScene::Update(GameManager* gameManager) {
 #ifdef _DEBUG
 	ImGui::Begin("Model");
 	ImGui::SliderFloat("Intensity", &intensity_, 0.0f, 3.0f);
-	ImGui::SliderFloat3("pointLightPosition6", &pointLightPosition_.x, -2.0f, 2.0f);
+	ImGui::SliderFloat3("pointLightPosition6", &pointLightPosition_.x, -6.0f, 6.0f);
 	ImGui::End();
 
 	ImGui::Begin("Camera");

@@ -173,7 +173,7 @@ PixelShaderOutput main(VertexShaderOutput input) {
             discard;
         }
 		//diffuse + specular +
-        output.color.rgb = diffusePointLight + specularPointLight;
+        output.color.rgb = (diffusePointLight + specularPointLight) * factor;
         output.color.a = gMaterial.color.a * textureColor.a;
     }
     else{

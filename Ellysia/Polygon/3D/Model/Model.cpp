@@ -175,6 +175,9 @@ void Model::Draw(WorldTransform& worldTransform,Camera& camera) {
 	pointLightData_->color = pointLightColor_;
 	pointLightData_->position = pointLightPosition_;
 	pointLightData_->intensity = pointLightIntensity_;
+	pointLightData_->radius = pointLightRadius_;
+	pointLightData_->decay = pointLightDecay_;
+
 	pointLightResource_->Unmap(0, nullptr);
 
 #pragma endregion

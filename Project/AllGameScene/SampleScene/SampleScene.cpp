@@ -103,8 +103,10 @@ void SampleScene::Update(GameManager* gameManager) {
 	for (int i = 0; i < MODEL_AMOUNT_; i++) {
 		model_[i]->SetPointLightPosition(pointLightPosition_);
 		model_[i]->SetPointLightIntensity(intensity_);
-		model_[i]->SetpointLightColor(pointLightColor_);
-		
+		model_[i]->SetPointLightColor(pointLightColor_);
+		model_[i]->SetPointLightRadius(pointLightRadius_);
+		model_[i]->SetPointLightDecay(pointLightDecay_);
+
 	}
 
 	particle_->SetTranslate(particleTranslate_);
@@ -138,6 +140,9 @@ void SampleScene::Update(GameManager* gameManager) {
 	ImGui::Begin("Model");
 	ImGui::SliderFloat("Intensity", &intensity_, 0.0f, 3.0f);
 	ImGui::SliderFloat3("pointLightPosition6", &pointLightPosition_.x, -6.0f, 6.0f);
+	ImGui::SliderFloat("pointLightRadius",&pointLightRadius_,0.0f,30.0f);
+	ImGui::SliderFloat("pointLightDecay_",&pointLightDecay_,0.0f,30.0f);
+
 	ImGui::End();
 
 	ImGui::Begin("Camera");

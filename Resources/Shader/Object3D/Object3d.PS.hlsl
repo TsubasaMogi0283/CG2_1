@@ -43,6 +43,11 @@ struct PointLight{
 	//ライトの輝度
     float intensity;
 	
+	//ライトに届く最大距離
+    float radius;
+	//減衰率
+    float decay;
+
 };
 
 
@@ -73,7 +78,6 @@ struct PixelShaderOutput {
 };
 
 
-
  
 PixelShaderOutput main(VertexShaderOutput input) {
 	PixelShaderOutput output;
@@ -88,7 +92,7 @@ PixelShaderOutput main(VertexShaderOutput input) {
         discard;
     }
 	
-	//Lightingする場合
+	//DirectionalLightingする場合
     if (gMaterial.enableLighting == 1){
 	
 		//このままdotだと[-1,1]になる。
@@ -133,6 +137,7 @@ PixelShaderOutput main(VertexShaderOutput input) {
         output.color.a = gMaterial.color.a * textureColor.a;
 
 	}
+	//PointLight
     else if(gMaterial.enableLighting == 2){
 		//このままdotだと[-1,1]になる。
 		//光が当たらないところは「当たらない」のでもっと暗くなるわけではない。そこでsaturate関数を使う
@@ -153,8 +158,8 @@ PixelShaderOutput main(VertexShaderOutput input) {
 		
 		//ポイントライトへの距離
         float32_t distance = length(gPointLight.position - input.worldPosition);
-		//逆二乗則による減衰係数
-        float32_t factor = 1.0f / (distance * distance);
+		//指数によるコントロール
+        float32_t factor = pow(saturate(-distance / gPointLight.radius + 1.0f), gPointLight.decay);
 		
 		//HalfVector
         float32_t3 halfVector = normalize(-gPointLight.position + toEye);

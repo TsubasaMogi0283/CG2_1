@@ -89,7 +89,7 @@ public:
 
 #pragma endregion
 
-	void SetpointLightColor(Vector4 color) {
+	void SetPointLightColor(Vector4 color) {
 		this->pointLightColor_ = color;
 	}
 	void SetPointLightPosition(Vector3 position) {
@@ -98,8 +98,13 @@ public:
 	void SetPointLightIntensity(float intensity) {
 		this->pointLightIntensity_ = intensity;
 	}
+	void SetPointLightRadius(float radius) {
+		this->pointLightRadius_ = radius;
+	}
+	void SetPointLightDecay(float decay) {
+		this->pointLightDecay_ = decay;
+	}
 
-	
 
 private:
 	struct Material {
@@ -150,7 +155,8 @@ private:
 	Vector4 pointLightColor_ = { 1.0f,1.0f,1.0f,1.0f };
 	Vector3 pointLightPosition_ = { 0.0f,0.0f,0.0f };
 	float pointLightIntensity_ = 40.0f;
-
+	float pointLightRadius_ = 5.0f;
+	float pointLightDecay_ = 5.0f;
 
 
 

@@ -559,7 +559,7 @@ void PipelineManager::GenerateModelPSO() {
 	//今回は結果一つだけなので長さ１の配列
 
 	//VSでもCBufferを利用することになったので設定を追加
-	D3D12_ROOT_PARAMETER rootParameters[7] = {};
+	D3D12_ROOT_PARAMETER rootParameters[8] = {};
 	//CBVを使う
 	rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	////PixelShaderで使う
@@ -638,6 +638,14 @@ void PipelineManager::GenerateModelPSO() {
 	rootParameters[6].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 	//レジスタ番号2を使う
 	rootParameters[6].Descriptor.ShaderRegister = 3;
+
+
+	//SpotLight
+	rootParameters[7].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	//PixelShaderで使う
+	rootParameters[7].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	//レジスタ番号2を使う
+	rootParameters[7].Descriptor.ShaderRegister = 4;
 
 
 

@@ -100,14 +100,35 @@ void SampleScene::Update(GameManager* gameManager) {
 
 
 
+
+	const float SPEED = 1.0f;
+	
+
+	/*pointLightPosition_.x += move.x;
+	pointLightPosition_.z += move.y;
+	if (pointLightPosition_.x > 15.0f ||
+		pointLightPosition_.x < -15.0f){
+		move.x *= -1.0f;
+	}
+	if (pointLightPosition_.z > 10.0f ||
+		pointLightPosition_.z < -10.0f) {
+		move.y *= -1.0f;
+	}*/
+
+
 	for (int i = 0; i < MODEL_AMOUNT_; i++) {
-		model_[i]->SetPointLightPosition(pointLightPosition_);
-		model_[i]->SetPointLightIntensity(intensity_);
-		model_[i]->SetPointLightColor(pointLightColor_);
-		model_[i]->SetPointLightRadius(pointLightRadius_);
-		model_[i]->SetPointLightDecay(pointLightDecay_);
+		model_[i]->SetSpotLightPosition(spotLightPosition_);
+		model_[i]->SetSpotLightIntensity(spotLightIntensity_);
+		model_[i]->SetSpotLightColor(spotLightColor_);
+		model_[i]->SetSpotLightDecay(spotLightDecay_);
+		model_[i]->SetSpotLightDistance(spotLightDistance_);
+		model_[i]->SetSpotLightDirection(spotLightDirection_);
+		model_[i]->SetSpotLightCosAngle(cosAngle_);
+		model_[i]->SetCosFalloffStart(cosFalloffStart_);
 
 	}
+
+
 
 	particle_->SetTranslate(particleTranslate_);
 
@@ -134,14 +155,21 @@ void SampleScene::Update(GameManager* gameManager) {
 	}
 
 
-
+	
 	//ウィンドウサイズの設定は↓でやるよ
 #ifdef _DEBUG
 	ImGui::Begin("Model");
-	ImGui::SliderFloat("Intensity", &intensity_, 0.0f, 3.0f);
-	ImGui::SliderFloat3("pointLightPosition6", &pointLightPosition_.x, -6.0f, 6.0f);
-	ImGui::SliderFloat("pointLightRadius",&pointLightRadius_,0.0f,30.0f);
-	ImGui::SliderFloat("pointLightDecay_",&pointLightDecay_,0.0f,30.0f);
+	ImGui::SliderFloat("Intensity", &spotLightIntensity_, 0.0f, 3.0f);
+	ImGui::SliderFloat3("spotLightPosition_", &spotLightPosition_.x, -10.0f, 10.0f);
+	ImGui::SliderFloat3("spotLightDirection_",&spotLightDirection_.x,-1.0f,1.0f);
+	ImGui::SliderFloat("spotLightDecay_",&spotLightDecay_,0.0f,30.0f);
+	ImGui::SliderFloat("spotLightDistance_", &spotLightDistance_, 0.0f, 30.0f);
+	ImGui::SliderFloat("cosFalloffStart_", &cosFalloffStart_, 0.0f, 1.0f);
+	ImGui::SliderFloat("cosAngle_", &cosAngle_, 0.0f, 1.0f);
+
+
+
+
 
 	ImGui::End();
 

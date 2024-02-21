@@ -8,6 +8,7 @@
 #include "Audio.h"
 #include <memory>
 #include <Model.h>
+#include <numbers>
 
 //StatePatternを使う時は必ず前方宣言をするように
 class GameManager;
@@ -44,9 +45,22 @@ private:
 	Vector3 modelScale_ = { 3.0f,3.0f,3.0f };
 	Vector3 pointLightPosition_ = { 0.0f,3.0f,0.0f };
 	Vector4 pointLightColor_ = { 1.0f,1.0f,1.0f,1.0f };
-	float pointLightRadius_ = 10.0f;
-	float pointLightDecay_ = 10.0f;
+	float pointLightRadius_ = 6.0f;
+	float pointLightDecay_ = 0.0f;
 
+	Vector2 move = {1.0f,1.0f};
+
+
+
+	//
+	Vector4 spotLightColor_ = { 1.0f,1.0f,1.0f,1.0f };
+	Vector3 spotLightPosition_ = { 2.0f,1.25f,0.0f };
+	float spotLightDistance_ = 7.0f;
+	Vector3 spotLightDirection_ = { -1.0f,1.0f,0.0f };
+	float spotLightIntensity_ = 4.0f;
+	float spotLightDecay_ = 2.0f;
+	float cosAngle_ = std::cos(std::numbers::pi_v<float> / 3.0f);
+	float cosFalloffStart_ = 0.2f;
 
 	std::unique_ptr<Sprite> sprite = nullptr;
 	Vector4 color_ = { 1.0f,1.0f,1.0f,1.0f };

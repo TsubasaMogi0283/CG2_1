@@ -22,11 +22,14 @@
 #include "Camera.h"
 #include "LoadModelData.h"
 #include <PointLight.h>
+#include <SpotLight.h>
 
+//ライトの種類
 enum LightingKinds {
 	None,
 	Directional,
 	Point,
+	Spot,
 };
 
 class Model {
@@ -89,21 +92,66 @@ public:
 
 #pragma endregion
 
+#pragma region PointLightの設定
 	void SetPointLightColor(Vector4 color) {
-		this->pointLightColor_ = color;
+		this->pointLightData_.color = color;
 	}
 	void SetPointLightPosition(Vector3 position) {
-		this->pointLightPosition_ = position;
+		this->pointLightData_.position = position;
 	}
 	void SetPointLightIntensity(float intensity) {
-		this->pointLightIntensity_ = intensity;
+		this->pointLightData_.intensity = intensity;
 	}
 	void SetPointLightRadius(float radius) {
-		this->pointLightRadius_ = radius;
+		this->pointLightData_.radius = radius;
 	}
 	void SetPointLightDecay(float decay) {
-		this->pointLightDecay_ = decay;
+		this->pointLightData_.decay = decay;
 	}
+
+#pragma endregion
+
+
+#pragma region SpotLightの設定
+	//色
+	void SetSpotLightColor(Vector4 color) {
+		this->spotLightData_.color = color;
+	}
+
+	//位置
+	void SetSpotLightPosition(Vector3 position) {
+		this->spotLightData_.position = position;
+	}
+
+	//輝度
+	void SetSpotLightIntensity(float intensity) {
+		this->spotLightData_.intensity = intensity;
+	}
+	
+	//方向
+	void SetSpotLightDirection(Vector3 direction) {
+		this->spotLightData_.direction = direction;
+	}
+
+	//届く距離
+	void SetSpotLightDistance(float distance) {
+		this->spotLightData_.distance = distance;
+	}
+
+	//減衰率
+	void SetSpotLightDecay(float decay) {
+		this->spotLightData_.decay = decay;
+	}
+	//Falloffの開始の角度の設定
+	void SetCosFalloffStart(float cos) {
+		this->spotLightData_.cosFallowoffStart = cos;
+	}
+	//余弦
+	void SetSpotLightCosAngle(float cosAngle) {
+		this->spotLightData_.cosAngle = cosAngle;
+	}
+
+
 
 
 private:
@@ -131,13 +179,13 @@ private:
 	Material* materialData_ = nullptr;
 	//色関係のメンバ変数
 	Vector4 materialColor_ = { 1.0f,1.0f,1.0f,1.0f };
+	//Ligtingをするかどうか
+	//基本はtrueで
+	int32_t isEnableLighting_ = Spot;
 
-
-	//Lighting用
+	//DirectionalLight
 	ComPtr<ID3D12Resource> directionalLightResource_ = nullptr;
 	DirectionalLight* directionalLightData_ = nullptr;
-	//基本はtrueで
-	int32_t isEnableLighting_ = Point;
 	//方向
 	Vector3 lightingDirection_ = {0.0f,-1.0f,0.0f};
 	//Lightの色
@@ -145,18 +193,26 @@ private:
 	float directionalLightIntensity_ = 2.0f;
 	float shininess_ = 100.0f;
 
+
+
+
 	//PixelShaderにカメラの座標を送る為の変数
 	ComPtr<ID3D12Resource> cameraResource_ = nullptr;
 	CameraForGPU* cameraForGPU_ = {};
 
+
+
 	//PointLight
 	ComPtr<ID3D12Resource> pointLightResource_ = nullptr;
-	PointLight* pointLightData_ = {};
-	Vector4 pointLightColor_ = { 1.0f,1.0f,1.0f,1.0f };
-	Vector3 pointLightPosition_ = { 0.0f,0.0f,0.0f };
-	float pointLightIntensity_ = 40.0f;
-	float pointLightRadius_ = 5.0f;
-	float pointLightDecay_ = 5.0f;
+	PointLight* pointLightMapData_ = {};
+	PointLight pointLightData_ = {};
+
+
+	//SpotLight
+	ComPtr<ID3D12Resource> spotLightResource_ = nullptr;
+	SpotLight* spotLightMapData_ = {};
+	SpotLight spotLightData_ = {};
+
 
 
 

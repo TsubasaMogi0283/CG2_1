@@ -56,6 +56,28 @@ struct Camera{
     float32_t3 worldPosition;
 };
 
+//
+struct SpotLight{
+	//ライトの色
+    float32_t4 color;
+	//ライトの位置
+    float32_t3 position;
+	//輝度
+    float intensity;
+
+	//スポットライトの方向
+    float32_t3 direction;
+	//ライトの届く最大距離
+    float distance;
+	//減衰率
+    float decay;
+	//Fallowoffを制御する
+    float cosFallowoffStart;
+	//スポットライトの余弦
+    float cosAngle;
+
+
+};
 
 //
 ////ConstantBuffer<構造体>変数名:register(b0);
@@ -65,6 +87,8 @@ Texture2D<float32_t4> gTexture : register(t0);
 SamplerState gSampler : register(s0);
 ConstantBuffer<Camera> gCamera : register(b2);
 ConstantBuffer<PointLight> gPointLight : register(b3);
+ConstantBuffer<SpotLight> gSpotLight : register(b4);
+
 
 //Textureは基本的にそのまま読まずSamplerを介して読む
 //処理方法を記述している
@@ -129,9 +153,10 @@ PixelShaderOutput main(VertexShaderOutput input) {
 		
 		
 		
-		if (textureColor.a == 0){
-			discard;
-		}
+        if (textureColor.a <= 0.5f)
+        {
+            discard;
+        }
 		//diffuse + specular +
         output.color.rgb = diffuse + specular;
         output.color.a = gMaterial.color.a * textureColor.a;
@@ -171,22 +196,65 @@ PixelShaderOutput main(VertexShaderOutput input) {
         //float specularPow = pow(saturate(RdotE), gMaterial.shininess);
 		
 		
-		
-        //gPointLight.color.rgb + gPointLight.intensity;
         float32_t3 diffusePointLight = gMaterial.color.rgb * textureColor.rgb * gPointLight.color.rgb * cos * gPointLight.intensity;
         float32_t3 specularPointLight = gPointLight.color.rgb * gPointLight.intensity * specularPow * float32_t3(1.0f, 1.0f, 1.0f);
 		
-        if (textureColor.a == 0)
+        if (textureColor.a <= 0.5f)
         {
             discard;
         }
-		//diffuse + specular +
         output.color.rgb = (diffusePointLight + specularPointLight) * factor;
         output.color.a = gMaterial.color.a * textureColor.a;
     }
+	//SpotLight
+    else if (gMaterial.enableLighting == 3){
+		//このままdotだと[-1,1]になる。
+		//光が当たらないところは「当たらない」のでもっと暗くなるわけではない。そこでsaturate関数を使う
+		//saturate関数は値を[0,1]にclampするもの。エフェクターにもSaturationってあるよね。
+	
+		//入射光の計算
+        float32_t3 spotLightDirectionOnSurface = normalize(input.worldPosition - gSpotLight.position);
+		
+		
+		//Half Lambert
+        float32_t NdotL = dot(normalize(input.normal), -spotLightDirectionOnSurface);
+        float32_t cos = pow(NdotL * 0.5f + 0.5f, 2.0f);
+		
+		//Cameraへの方向を算出
+        float32_t3 toEye = normalize(gCamera.worldPosition - normalize(input.worldPosition));
+		//入射光の反射ベクトルを求める
+        float32_t3 reflectLight = reflect(gSpotLight.position, normalize(input.normal));
+		
+		//ポイントライトへの距離
+        float32_t distance = length(gSpotLight.position - input.worldPosition);
+		//指数によるコントロール
+        float32_t attenuationFactor = pow(saturate(-distance / gSpotLight.distance + 1.0f), gSpotLight.decay);
+		
+		//HalfVector
+        float32_t3 halfVector = normalize(-gSpotLight.position + toEye);
+        float NDotH = dot(normalize(input.normal), halfVector);
+        float specularPow = pow(saturate(NDotH), gMaterial.shininess);
+		
+		
+		//角度が大きくなるほど光の強さは弱くなるよ
+		//こういった指向性のある光源の、角度に応じた光の減衰はFalloffと呼ばれるよ
+        float32_t cosAngle = dot(spotLightDirectionOnSurface, gSpotLight.direction);
+        float32_t falloffFactor = saturate((cosAngle - gSpotLight.cosAngle) / (gSpotLight.cosFallowoffStart - gSpotLight.cosAngle));
+		
+		
+        float32_t3 diffuseSpotLight = gMaterial.color.rgb * textureColor.rgb * gSpotLight.color.rgb * cos * gSpotLight.intensity;
+        float32_t3 specularSpotLight = gSpotLight.color.rgb * gSpotLight.intensity * specularPow * float32_t3(1.0f, 1.0f, 1.0f);
+		
+        if (textureColor.a <= 0.5f)
+        {
+            discard;
+        }
+        output.color.rgb = (diffuseSpotLight + specularSpotLight) * attenuationFactor * falloffFactor;
+        output.color.a = gMaterial.color.a * textureColor.a;
+    }
     else{
-	//Lightingしない場合
-       output.color = gMaterial.color * textureColor;
+		//Lightingしない場合
+        output.color = gMaterial.color * textureColor;
     }
 
 	

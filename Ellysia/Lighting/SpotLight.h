@@ -16,6 +16,8 @@ struct SpotLight {
 	float distance;
 	//減衰率
 	float decay;
+	//Fallowoffを制御する
+	float cosFallowoffStart;
 	//スポットライトの余弦
 	float cosAngle;
 	float padding[2];

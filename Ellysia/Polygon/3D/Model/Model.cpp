@@ -3,6 +3,7 @@
 #include <TextureManager.h>
 #include <PipelineManager.h>
 #include "DirectXSetup.h"
+#include <numbers>
 
 
 static uint32_t modelIndex;
@@ -101,8 +102,23 @@ Model* Model::Create(const std::string& directoryPath, const std::string& fileNa
 
 	//PointLight
 	model->pointLightResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(PointLight)).Get();
-	
+	model->pointLightData_.color= { 1.0f,1.0f,1.0f,1.0f };
+	model->pointLightData_.position = { 0.0f,0.0f,0.0f };
+	model->pointLightData_.intensity = 4.0f;
+	model->pointLightData_.radius = 5.0f;
+	model->pointLightData_.decay = 5.0f;
 
+
+	//SpotLight
+	model->spotLightResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(SpotLight)).Get();
+	model->spotLightData_.color = { 1.0f,1.0f,1.0f,1.0f };
+	model->spotLightData_.position = { 2.0f,1.25f,0.0f };
+	model->spotLightData_.intensity = 4.0f;
+	model->spotLightData_.direction = { -1.0f,1.0f,0.0f };
+	model->spotLightData_.distance = 7.0f;
+	model->spotLightData_.decay = 2.0f;
+	model->spotLightData_.cosFallowoffStart = 0.3f;
+	model->spotLightData_.cosAngle = std::cos(std::numbers::pi_v<float> / 3.0f);
 
 	//初期は白色
 	//モデル個別に色を変更できるようにこれは外に出しておく
@@ -171,15 +187,29 @@ void Model::Draw(WorldTransform& worldTransform,Camera& camera) {
 
 #pragma region 点光源
 	//PointLight
-	pointLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&pointLightData_));
-	pointLightData_->color = pointLightColor_;
-	pointLightData_->position = pointLightPosition_;
-	pointLightData_->intensity = pointLightIntensity_;
-	pointLightData_->radius = pointLightRadius_;
-	pointLightData_->decay = pointLightDecay_;
+	pointLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&pointLightMapData_));
+	pointLightMapData_->color = pointLightData_.color;
+	pointLightMapData_->position = pointLightData_.position;
+	pointLightMapData_->intensity = pointLightData_.intensity;
+	pointLightMapData_->radius = pointLightData_.radius;
+	pointLightMapData_->decay = pointLightData_.decay;
 
 	pointLightResource_->Unmap(0, nullptr);
 
+#pragma endregion
+
+#pragma region スポットライト
+	spotLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&spotLightMapData_));
+	spotLightMapData_->color = spotLightData_.color;
+	spotLightMapData_->position = spotLightData_.position;
+	spotLightMapData_->intensity = spotLightData_.intensity;
+	spotLightMapData_->direction = spotLightData_.direction;
+	spotLightMapData_->distance = spotLightData_.distance;
+	spotLightMapData_->decay = spotLightData_.decay;
+	spotLightMapData_->cosFallowoffStart = spotLightData_.cosFallowoffStart;
+	spotLightMapData_->cosAngle = spotLightData_.cosAngle;
+	spotLightResource_->Unmap(0, nullptr);
+	
 #pragma endregion
 
 	//コマンドを積む
@@ -218,6 +248,10 @@ void Model::Draw(WorldTransform& worldTransform,Camera& camera) {
 
 	//PointLight
 	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(6, pointLightResource_->GetGPUVirtualAddress());
+	
+	//SpotLight
+	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(7, spotLightResource_->GetGPUVirtualAddress());
+
 
 
 	//DrawCall

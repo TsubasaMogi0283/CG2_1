@@ -143,15 +143,13 @@ PixelShaderOutput main(VertexShaderOutput input) {
 		
 		
 		//Half Lambert
-        float NdotL = dot(normalize(input.normal), -normalize(gPointLight.position));
-        float cos = pow(NdotL * 0.5f + 0.5f, 2.0f);
-
+        float32_t NdotL = dot(normalize(input.normal), -pointLightDirection);
+        float32_t cos = pow(NdotL * 0.5f + 0.5f, 2.0f);
 		
 		//Cameraへの方向を算出
-        float32_t3 toEye = normalize(gCamera.worldPosition - input.worldPosition);
+        float32_t3 toEye = normalize(gCamera.worldPosition - normalize(input.worldPosition));
 		//入射光の反射ベクトルを求める
-        float32_t3 reflectLight = reflect(normalize(gPointLight.position), normalize(input.normal));
-		
+        float32_t3 reflectLight = reflect(gPointLight.position, normalize(input.normal));
 		
 		//ポイントライトへの距離
         float32_t distance = length(gPointLight.position - input.worldPosition);
@@ -162,6 +160,11 @@ PixelShaderOutput main(VertexShaderOutput input) {
         float32_t3 halfVector = normalize(-gPointLight.position + toEye);
         float NDotH = dot(normalize(input.normal), halfVector);
         float specularPow = pow(saturate(NDotH), gMaterial.shininess);
+		////内積
+        //float RdotE = dot(reflectLight, toEye);
+		////反射強度
+        //float specularPow = pow(saturate(RdotE), gMaterial.shininess);
+		
 		
 		
         //gPointLight.color.rgb + gPointLight.intensity;

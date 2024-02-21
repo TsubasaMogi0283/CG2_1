@@ -31,6 +31,10 @@ void SampleScene::Initialize() {
 	modelWorldTransform_[1].scale_ = modelScale_;
 
 
+
+	modelWorldTransform_[1].translate_ = { 0.0f,-1.0f,0.0f };
+
+
 	sprite = std::make_unique<Sprite>();
 	uint32_t textureHandle = TextureManager::LoadTexture("Resources/uvChecker.png");
 	spritePosition_ = { 100.0f,100.0f };
@@ -96,12 +100,12 @@ void SampleScene::Update(GameManager* gameManager) {
 
 
 
-
-	model_[0]->SetPointLightPosition(pointLightPosition_);
-	model_[0]->SetPointLightIntensity(intensity_);
-	model_[1]->SetPointLightPosition(pointLightPosition_);
-	model_[1]->SetPointLightIntensity(intensity_);
-
+	for (int i = 0; i < MODEL_AMOUNT_; i++) {
+		model_[i]->SetPointLightPosition(pointLightPosition_);
+		model_[i]->SetPointLightIntensity(intensity_);
+		model_[i]->SetpointLightColor(pointLightColor_);
+		
+	}
 
 	particle_->SetTranslate(particleTranslate_);
 

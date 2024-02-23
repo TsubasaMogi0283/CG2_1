@@ -72,14 +72,15 @@ public:
 	//まとめたのが下の「Initialize」
 	//他の所では使わないからprivateにしても良さそう
 	//アロー演算子を使ったとき邪魔になるから
-private:
-
 
 	//DescriptorHeapの作成関数
 	static ComPtr<ID3D12DescriptorHeap> GenarateDescriptorHeap(
 		D3D12_DESCRIPTOR_HEAP_TYPE heapType,
 		UINT numDescriptors, bool shaderVisible);
 
+
+
+private:
 	//DepthStencilTexture...奥行の根幹をなすものであり、非常に大量の読み書きを高速に行う必要がある
 	//						Textureの中でも特に例外的な扱いが必要となっている
 	static ComPtr<ID3D12Resource> CreateDepthStencilTextureResource(const int32_t width,const int32_t height);
@@ -262,8 +263,6 @@ private:
 	D3D12_RECT scissorRect_{};
 
 
-
-	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_{};
 
 
 

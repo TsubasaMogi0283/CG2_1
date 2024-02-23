@@ -24,11 +24,6 @@ TextureManager* TextureManager::GetInstance() {
 
 
 
-D3D12_CPU_DESCRIPTOR_HANDLE TextureManager::GetCPUDescriptorHandle(ComPtr<ID3D12DescriptorHeap> descriptorHeap, uint32_t descriptorSize, uint32_t index) {
-	D3D12_CPU_DESCRIPTOR_HANDLE handleCPU = descriptorHeap->GetCPUDescriptorHandleForHeapStart();
-	handleCPU.ptr += (descriptorSize * index);
-	return handleCPU;
-}
 
 const D3D12_RESOURCE_DESC TextureManager::GetResourceDesc(uint32_t textureHandle) {
 	//テクスチャの情報を取得
@@ -58,12 +53,6 @@ void TextureManager::Initilalize() {
 
 
 
-D3D12_GPU_DESCRIPTOR_HANDLE TextureManager::GetGPUDescriptorHandle(ComPtr<ID3D12DescriptorHeap> descriptorHeap, uint32_t descriptorSize, uint32_t index) {
-	D3D12_GPU_DESCRIPTOR_HANDLE handleGPU = descriptorHeap->GetGPUDescriptorHandleForHeapStart();
-	handleGPU.ptr += (descriptorSize * index);
-	return handleGPU;
-}
-
 
 //統合させた関数
 uint32_t TextureManager::LoadTexture(const std::string& filePath) {
@@ -84,7 +73,6 @@ uint32_t TextureManager::LoadTexture(const std::string& filePath) {
 	++textureIndex;
 
 
-	//index128ぐらいからだとエラー吐いた
 	if (textureIndex > 127) {
 		textureIndex = 0;
 	}
@@ -128,16 +116,10 @@ uint32_t TextureManager::LoadTexture(const std::string& filePath) {
 
 	//SRVを作成するDescriptorHeapの場所を決める
 	//後ろが1固定だったのでindex
-	//TextureManager::GetInstance()->textureSrvHandleCPU_[textureIndex] = TextureManager::GetInstance()->GetCPUDescriptorHandle(DirectXSetup::GetInstance()->GetSrvDescriptorHeap(), descriptorSizeSRV_, textureIndex);
-	//TextureManager::GetInstance()->textureSrvHandleGPU_[textureIndex] = TextureManager::GetInstance()->GetGPUDescriptorHandle(DirectXSetup::GetInstance()->GetSrvDescriptorHeap(), descriptorSizeSRV_, textureIndex);
-
-
-	TextureManager::GetInstance()->textureInformation_[textureIndex].srvHandleCPU_ = TextureManager::GetInstance()->GetCPUDescriptorHandle(DirectXSetup::GetInstance()->GetSrvDescriptorHeap(), descriptorSizeSRV_, textureIndex);
-	TextureManager::GetInstance()->textureInformation_[textureIndex].srvHandleGPU_ = TextureManager::GetInstance()->GetGPUDescriptorHandle(DirectXSetup::GetInstance()->GetSrvDescriptorHeap(), descriptorSizeSRV_, textureIndex);
+	TextureManager::GetInstance()->textureInformation_[textureIndex].srvHandleCPU_ = DirectXSetup::GetInstance()->GetCPUDescriptorHandle(DirectXSetup::GetInstance()->GetSrvDescriptorHeap(), descriptorSizeSRV_, textureIndex);
+	TextureManager::GetInstance()->textureInformation_[textureIndex].srvHandleGPU_ = DirectXSetup::GetInstance()->GetGPUDescriptorHandle(DirectXSetup::GetInstance()->GetSrvDescriptorHeap(), descriptorSizeSRV_, textureIndex);
 
 	//SRVの生成
-	//DirectXSetup::GetInstance()->GetDevice()->CreateShaderResourceView(TextureManager::GetInstance()->textureResource_[textureIndex].Get(), &srvDesc[textureIndex], TextureManager::GetInstance()->textureSrvHandleCPU_[textureIndex]);
-	
 	DirectXSetup::GetInstance()->GetDevice()->CreateShaderResourceView(
 		TextureManager::GetInstance()->textureInformation_[textureIndex].resource_.Get(), 
 		&srvDesc[textureIndex], TextureManager::GetInstance()->textureInformation_[textureIndex].srvHandleCPU_);

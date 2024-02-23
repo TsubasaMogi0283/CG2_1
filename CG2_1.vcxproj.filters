@@ -243,6 +243,9 @@
     <ClCompile Include="Ellysia\Polygon\3D\ModelManager\ModelManager.cpp">
       <Filter>Ellysia\Source File\ModelManager</Filter>
     </ClCompile>
+    <ClCompile Include="Ellysia\SrvHeapManager\SrvHeapManager.cpp">
+      <Filter>Ellysia\Source File</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\Particle3D\Particle3d.PS.hlsl">
@@ -414,6 +417,9 @@
     </ClInclude>
     <ClInclude Include="Ellysia\Polygon\3D\ModelManager\ModelManager.h">
       <Filter>Ellysia\Header File\ModelManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\SrvHeapManager\SrvHeapManager.h">
+      <Filter>Ellysia\Header File</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

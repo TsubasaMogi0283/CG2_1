@@ -360,13 +360,27 @@ void DirectXSetup::MakeDescriptorHeap() {
 	rtvDescriptorHeap = GenarateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_RTV, 2, false);
 
 
-
 	ComPtr<ID3D12DescriptorHeap> srvDescriptorHeap_ = nullptr;
+
+
+
+
+
+
 	ComPtr<ID3D12DescriptorHeap> dsvDescriptorHeap_ = nullptr;
 	ComPtr<ID3D12Resource> depthStencilResource_ = nullptr;
 	//ImGuiを使うにはSRV用のDescriptorが必要となる
+	// 
+	// 
+	// 
+	// 
+	// 
 	//SRV...ShaderResourceView
 	srvDescriptorHeap_ = GenarateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 128, true);
+
+
+
+
 
 	depthStencilResource_ = CreateDepthStencilTextureResource( 
 		WindowsSetup::GetInstance()->GetClientWidth(),
@@ -681,8 +695,20 @@ void DirectXSetup::BeginFrame() {
 	float clearColor[] = { 0.1f,0.25f,0.5f,1.0f };	//青っぽい色,RGBA
 	DirectXSetup::GetInstance()->m_commandList_->ClearRenderTargetView(rtvHandles_[backBufferIndex_], clearColor, 0, nullptr);
 
+
+
+
+
+
+
 	////コマンドを積む
 	ID3D12DescriptorHeap* descriptorHeaps[] = { DirectXSetup::GetInstance()->m_srvDescriptorHeap_.Get()};
+
+
+
+
+
+
 
 	//描画先のRTVとDSVを設定する
 	D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = DirectXSetup::GetInstance()->m_dsvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart();

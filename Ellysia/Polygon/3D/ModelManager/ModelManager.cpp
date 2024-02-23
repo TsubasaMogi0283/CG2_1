@@ -7,8 +7,27 @@
 #include <assimp/postprocess.h>
 
 
+static uint32_t modelhandle;
+
+//コンストラクタ
+ModelManager::ModelManager() {
+
+}
+
+
+
+ModelManager* ModelManager::GetInstance() {
+	//関数内static変数として宣言する
+	static ModelManager instance;
+
+	return &instance;
+}
+
+
+
+
 //モデルデータの読み込み
-ModelData LoadObjectFile(const std::string& directoryPath, const std::string& fileName) {
+ModelData ModelManager::LoadObjectFile(const std::string& directoryPath, const std::string& fileName) {
 	//1.中で必要となる変数の宣言
 	ModelData modelData;
 
@@ -81,4 +100,41 @@ ModelData LoadObjectFile(const std::string& directoryPath, const std::string& fi
 
 	//ModelDataを返す
 	return modelData;
+}
+
+uint32_t ModelManager::LoadObject(const std::string& directoryPath, const std::string& fileName) {
+
+	//一度読み込んだものはその値を返す
+	//新規は勿論読み込みをする
+	for (uint32_t i = 0; i < MODEL_MAX_AMOUNT_; i++) {
+		//同じモデルを探す
+		if (ModelManager::GetInstance()->modelInfromtion_[i].directoryPath == directoryPath &&
+			ModelManager::GetInstance()->modelInfromtion_[i].filePath == fileName) {
+			return ModelManager::GetInstance()->modelInfromtion_[i].handle;
+		}
+	}
+
+	modelhandle++;
+
+	//モデルの読み込み
+	ModelData newModelData = ModelManager::GetInstance()->LoadObjectFile(directoryPath, fileName);
+	//新規登録
+	ModelManager::GetInstance()->modelInfromtion_[modelhandle].data = newModelData;
+	ModelManager::GetInstance()->modelInfromtion_[modelhandle].directoryPath = directoryPath;
+	ModelManager::GetInstance()->modelInfromtion_[modelhandle].filePath = fileName;
+	ModelManager::GetInstance()->modelInfromtion_[modelhandle].handle = modelhandle;
+	ModelManager::GetInstance()->modelInfromtion_[modelhandle].data.name = fileName;
+
+
+
+
+	//値を返す
+	return modelhandle;
+}
+
+/// <summary>
+/// デストラクタ
+/// </summary>
+ModelManager::~ModelManager() {
+
 }

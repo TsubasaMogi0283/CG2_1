@@ -30,7 +30,7 @@
 #include "Transform.h"
 #include "Particle.h"
 #include <AccelerationField.h>
-#include "LoadModelData.h"
+#include "ModelManager.h"
 
 struct Emitter {
 	//エミッタのTransform;

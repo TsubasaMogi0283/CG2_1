@@ -20,7 +20,7 @@
 #include "DirectionalLight.h"
 #include "WorldTransform.h"
 #include "Camera.h"
-#include "LoadModelData.h"
+#include "ModelManager.h"
 #include <PointLight.h>
 #include <SpotLight.h>
 
@@ -41,7 +41,10 @@ public:
 	//初期化
 	//Initializeも兼ねているよ
 	//通常
-	static Model* Create(const std::string& directoryPath,const std::string& fileName);
+	static Model* Create(uint32_t modelHandle);
+
+	static Model* Create(const std::string& directoryPath, const std::string& fileName);
+
 private:
 #pragma region モデルの読み込み関係の関数
 	
@@ -79,7 +82,7 @@ public:
 
 #pragma region Lightingの設定
 	void SetLighting(bool enableLighting) {
-		this->isEnableLighting_ = enableLighting;
+		this->selectLighting_ = enableLighting;
 	}
 	//方向
 	void SetDirectionalLightDirection(Vector3 direction) {
@@ -181,7 +184,7 @@ private:
 	Vector4 materialColor_ = { 1.0f,1.0f,1.0f,1.0f };
 	//Ligtingをするかどうか
 	//基本はtrueで
-	int32_t isEnableLighting_ = Spot;
+	int32_t selectLighting_ = Spot;
 
 	//DirectionalLight
 	ComPtr<ID3D12Resource> directionalLightResource_ = nullptr;

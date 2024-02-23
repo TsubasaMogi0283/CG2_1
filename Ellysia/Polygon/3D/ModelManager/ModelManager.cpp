@@ -1,4 +1,4 @@
-#include "LoadModelData.h"
+#include "Modelmanager.h"
 #include <cassert>
 
 
@@ -81,57 +81,4 @@ ModelData LoadObjectFile(const std::string& directoryPath, const std::string& fi
 
 	//ModelDataを返す
 	return modelData;
-}
-
-//mtlファイルを読む関数
-MaterialData LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& fileName) {
-
-#pragma region 1.中で必要となる変数の宣言
-	//構築するMaterialData
-	MaterialData materialData;
-	//ファイルから読んだ1行を格納するもの
-	std::string line;
-
-#pragma endregion
-
-
-
-#pragma region 2.ファイルを開く
-	std::ifstream file(directoryPath + "/" + fileName);
-	//開かなかったら止める
-	assert(file.is_open());
-
-#pragma endregion
-
-
-
-
-#pragma region  実際にファイルを読みMaterialDataを構築していく
-	while (std::getline(file, line)) {
-		std::string identifier;
-		std::istringstream s(line);
-		s >> identifier;
-
-		//identifierに応じた処理
-		//map_Kdにはtextureのファイル名が記載されているよ
-		if (identifier == "map_Kd") {
-			std::string textureFileName;
-			s >> textureFileName;
-			//連結してファイルパスにする
-			materialData.textureFilePath = directoryPath + "/" + textureFileName;
-
-		}
-
-
-
-	}
-
-#pragma endregion
-
-	//4.MaterialDataを返す
-
-	return materialData;
-
-
-
 }

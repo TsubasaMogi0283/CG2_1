@@ -142,6 +142,12 @@
     <Filter Include="Ellysia\Source File\ModelManager">
       <UniqueIdentifier>{2747883a-dcbe-4951-b835-e69a4e599a81}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Ellysia\Header File\Lighting">
+      <UniqueIdentifier>{6894304a-98cd-4168-b852-c62f99047467}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Ellysia\Header File\ModelManager">
+      <UniqueIdentifier>{3d3be091-044e-42b8-93ea-7d8380a25a1b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Ellysia\Math\Matrix\Calculation\Matrix4x4Calculation.cpp">
@@ -235,7 +241,7 @@
       <Filter>Ellysia\Source File</Filter>
     </ClCompile>
     <ClCompile Include="Ellysia\Polygon\3D\ModelManager\ModelManager.cpp">
-      <Filter>Ellysia\Source File</Filter>
+      <Filter>Ellysia\Source File\ModelManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -397,17 +403,17 @@
     <ClInclude Include="Ellysia\Math\WorldTransform\WorldTransform.h">
       <Filter>Ellysia\Header File\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Ellysia\Lighting\PointLight.h">
-      <Filter>Ellysia\Header File</Filter>
-    </ClInclude>
-    <ClInclude Include="Ellysia\Lighting\SpotLight.h">
-      <Filter>Ellysia\Header File</Filter>
-    </ClInclude>
     <ClInclude Include="Ellysia\Line\Line.h">
       <Filter>Ellysia\Header File</Filter>
     </ClInclude>
+    <ClInclude Include="Ellysia\Lighting\PointLight.h">
+      <Filter>Ellysia\Header File\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Lighting\SpotLight.h">
+      <Filter>Ellysia\Header File\Lighting</Filter>
+    </ClInclude>
     <ClInclude Include="Ellysia\Polygon\3D\ModelManager\ModelManager.h">
-      <Filter>Ellysia\Header File</Filter>
+      <Filter>Ellysia\Header File\ModelManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

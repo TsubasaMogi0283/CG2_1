@@ -23,48 +23,6 @@ Model* Model::Create(uint32_t modelHandle) {
 	PipelineManager::GetInstance()->SetModelBlendMode(1);
 	PipelineManager::GetInstance()->GenerateModelPSO();
 
-	////すでにある場合はリストから取り出す
-	//for (ModelData modelData : modelInformationList_) {
-	//	if (modelData.name == fileName) {
-	//		////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
-	//		model->material_= std::make_unique<CreateMaterial>();
-	//		model->material_->Initialize();
-
-
-
-	//		//テクスチャの読み込み
-	//		model->textureHandle_ = TextureManager::GetInstance()->LoadTexture(modelData.material.textureFilePath);
-
-
-	//		//頂点リソースを作る
-	//		model->mesh_ = std::make_unique<Mesh>();
-	//		model->mesh_->Initialize(modelData.vertices);
-
-
-
-
-
-	//		//Sprite用のTransformationMatrix用のリソースを作る。
-	//		//Matrix4x4 1つ分サイズを用意する
-	//		model->transformation_=std::make_unique<Transformation>();
-	//		model->transformation_->Initialize();
-
-	//		//Lighting
-	//		model->directionalLight_=std::make_unique<CreateDirectionalLight>();
-	//		model->directionalLight_->Initialize();
-
-
-	//		//初期は白色
-	//		//モデル個別に色を変更できるようにこれは外に出しておく
-	//		model->color_ = { 1.0f,1.0f,1.0f,1.0f };
-	//		//初期化の所でやってね、Update,Drawでやるのが好ましいけど凄く重くなった。
-	//		//ブレンドモードの設定
-	//		PipelineManager::GetInstance()->SetModelBlendMode(1);
-	//		PipelineManager::GetInstance()->GenerateModelPSO();	
-	//		return model;
-	//	}
-	//}
-
 
 
 	////マテリアル用のリソースを作る。

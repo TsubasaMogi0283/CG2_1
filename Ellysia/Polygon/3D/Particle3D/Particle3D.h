@@ -50,7 +50,7 @@ public:
 	Particle3D();
 
 	//初期化
-	void Create(const std::string& directoryPath, const std::string& fileName);
+	static Particle3D* Create(uint32_t modelHandle);
 
 
 private:
@@ -182,7 +182,7 @@ private:
 	//マテリアル用のリソースを作る
 	ComPtr<ID3D12Resource> materialResource_ = nullptr;
 	//色関係のメンバ変数
-	Vector4 materialColor_ = {};
+	Vector4 materialColor_ = { 1.0f,1.0f,1.0f,1.0f };
 
 
 	//Lighting用

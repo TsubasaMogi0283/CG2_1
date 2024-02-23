@@ -50,8 +50,8 @@ void SampleScene::Initialize() {
 
 	
 
-	particle_ = std::make_unique<Particle3D>();
-	particle_->Create("Resources/05_02", "plane.obj");
+	uint32_t particleModel= ModelManager::GetInstance()->LoadObject("Resources/05_02", "plane.obj");
+	particle_.reset(Particle3D::Create(particleModel));
 	int count = 3;
 	
 

@@ -17,10 +17,10 @@ Particle3D::Particle3D() {
 
 //RandomParticle用
 ///パーティクルだけはvoid型で初期化する
-void Particle3D::Create(const std::string& directoryPath, const std::string& fileName) {
-	
+Particle3D* Particle3D::Create(uint32_t modelHandle) {
+	Particle3D* particle3D = new Particle3D();
+
 	//初期化の所でやってね、Update,Drawでやるのが好ましいけど凄く重くなった。
-	//ブレンドだけに仕様と思う
 	//ブレンドモードの設定
 	//Addでやるべきとのこと
 	PipelineManager::GetInstance()->GenerateParticle3DPSO();
@@ -28,46 +28,42 @@ void Particle3D::Create(const std::string& directoryPath, const std::string& fil
 
 	//デフォルトの設定
 	//Setterで変えてね
-	emitter_.count = 100;
+	particle3D->emitter_.count = 100;
 	//0.5秒ごとに発生
-	emitter_.frequency = 0.5f;
+	particle3D->emitter_.frequency = 0.5f;
 	//発生頻度用の時刻。0.0で初期化
-	emitter_.frequencyTime = 0.0f;
+	particle3D->emitter_.frequencyTime = 0.0f;
 	//SRT
-	emitter_.transform.scale = { 1.0f,1.0f,1.0f };
-	emitter_.transform.rotate = { 0.0f,0.0f,0.0f };
-	emitter_.transform.translate = { 0.0f,0.0f,0.0f };
+	particle3D->emitter_.transform.scale = { 1.0f,1.0f,1.0f };
+	particle3D->emitter_.transform.rotate = { 0.0f,0.0f,0.0f };
+	particle3D->emitter_.transform.translate = { 0.0f,0.0f,0.0f };
 
 
 
-	//モデルの読み込み
-	ModelData modelDataNew = ModelManager::GetInstance()->LoadFile(directoryPath, fileName);
-	modelDataNew.name = fileName;
-	modelInformationList_.push_back(modelDataNew);
 	
 
 
 	////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
-	materialResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(Material)).Get();
+	particle3D->materialResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(Material)).Get();
 
 
 	//テクスチャの読み込み
-	textureHandle_ = TextureManager::GetInstance()->LoadTexture(modelDataNew.material.textureFilePath);
+	particle3D->textureHandle_ = TextureManager::GetInstance()->LoadTexture(ModelManager::GetInstance()->GetModelData(modelHandle).material.textureFilePath);
 
 
 	//頂点リソースを作る
-	vertices_ = modelDataNew.vertices;
+	particle3D->vertices_ = ModelManager::GetInstance()->GetModelData(modelHandle).vertices;
 
-	vertexResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(VertexData) * vertices_.size());
+	particle3D->vertexResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(VertexData) * particle3D->vertices_.size());
 
 	//読み込みのところでバッファインデックスを作った方がよさそう
 	//vertexResourceがnullらしい
 	//リソースの先頭のアドレスから使う
-	vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
+	particle3D->vertexBufferView_.BufferLocation = particle3D->vertexResource_->GetGPUVirtualAddress();
 	//使用するリソースは頂点のサイズ
-	vertexBufferView_.SizeInBytes = UINT(sizeof(VertexData) * vertices_.size());
+	particle3D->vertexBufferView_.SizeInBytes = UINT(sizeof(VertexData) * particle3D->vertices_.size());
 	//１頂点あたりのサイズ
-	vertexBufferView_.StrideInBytes = sizeof(VertexData);
+	particle3D->vertexBufferView_.StrideInBytes = sizeof(VertexData);
 
 
 	
@@ -75,7 +71,7 @@ void Particle3D::Create(const std::string& directoryPath, const std::string& fil
 
 
 	//インスタンシング
-	instancingResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(ParticleForGPU) * MAX_INSTANCE_NUMBER_);
+	particle3D->instancingResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(ParticleForGPU) * MAX_INSTANCE_NUMBER_);
 	descriptorSizeSRV_ =  DirectXSetup::GetInstance()->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	
 
@@ -88,27 +84,21 @@ void Particle3D::Create(const std::string& directoryPath, const std::string& fil
 	instancingSrvDesc.Buffer.NumElements = MAX_INSTANCE_NUMBER_;
 	instancingSrvDesc.Buffer.StructureByteStride = sizeof(ParticleForGPU);
 
-	instancingSrvHandleCPU_ = DirectXSetup::GetInstance()->GetCPUDescriptorHandle(
+	particle3D->instancingSrvHandleCPU_ = DirectXSetup::GetInstance()->GetCPUDescriptorHandle(
 		DirectXSetup::GetInstance()->GetSrvDescriptorHeap(), descriptorSizeSRV_, 3);
-	instancingSrvHandleGPU_ = DirectXSetup::GetGPUDescriptorHandle(
+	particle3D->instancingSrvHandleGPU_ = DirectXSetup::GetGPUDescriptorHandle(
 		DirectXSetup::GetInstance()->GetSrvDescriptorHeap(), descriptorSizeSRV_, 3);
 
 	DirectXSetup::GetInstance()->GetDevice()->CreateShaderResourceView(
-		instancingResource_.Get(), &instancingSrvDesc, instancingSrvHandleCPU_);
+		particle3D->instancingResource_.Get(), &instancingSrvDesc, particle3D->instancingSrvHandleCPU_);
 
 	
-	//ビルボードをするかどうか
-	isBillBordMode_ = true;
-
 	//Lighting
-	directionalLightResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(DirectionalLight)).Get();
+	particle3D->directionalLightResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(DirectionalLight)).Get();
 	
 
 
-	//初期は白色
-	//モデル個別に色を変更できるようにこれは外に出しておく
-	materialColor_ = { 1.0f,1.0f,1.0f,1.0f };
-
+	return particle3D;
 
 }
 

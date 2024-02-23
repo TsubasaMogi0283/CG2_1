@@ -37,6 +37,9 @@ public:
 	//本体はここで使う
 	static uint32_t LoadObject(const std::string& directoryPath, const std::string& fileName);
 
+
+
+
 	//モデルデータの読み込み(本体)
 	static ModelData LoadFile(const std::string& directoryPath, const std::string& fileName);
 

@@ -41,7 +41,7 @@ void Particle3D::Create(const std::string& directoryPath, const std::string& fil
 
 
 	//モデルの読み込み
-	ModelData modelDataNew = ModelManager::GetInstance()->LoadObjectFile(directoryPath, fileName);
+	ModelData modelDataNew = ModelManager::GetInstance()->LoadFile(directoryPath, fileName);
 	modelDataNew.name = fileName;
 	modelInformationList_.push_back(modelDataNew);
 	

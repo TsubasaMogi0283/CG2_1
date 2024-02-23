@@ -24,10 +24,8 @@ ModelManager* ModelManager::GetInstance() {
 }
 
 
-
-
 //モデルデータの読み込み
-ModelData ModelManager::LoadObjectFile(const std::string& directoryPath, const std::string& fileName) {
+ModelData ModelManager::LoadFile(const std::string& directoryPath, const std::string& fileName) {
 	//1.中で必要となる変数の宣言
 	ModelData modelData;
 
@@ -117,13 +115,12 @@ uint32_t ModelManager::LoadObject(const std::string& directoryPath, const std::s
 	modelhandle++;
 
 	//モデルの読み込み
-	ModelData newModelData = ModelManager::GetInstance()->LoadObjectFile(directoryPath, fileName);
+	ModelData newModelData = ModelManager::GetInstance()->LoadFile(directoryPath, fileName);
 	//新規登録
 	ModelManager::GetInstance()->modelInfromtion_[modelhandle].data = newModelData;
 	ModelManager::GetInstance()->modelInfromtion_[modelhandle].directoryPath = directoryPath;
 	ModelManager::GetInstance()->modelInfromtion_[modelhandle].filePath = fileName;
 	ModelManager::GetInstance()->modelInfromtion_[modelhandle].handle = modelhandle;
-	ModelManager::GetInstance()->modelInfromtion_[modelhandle].data.name = fileName;
 
 
 

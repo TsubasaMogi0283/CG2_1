@@ -43,7 +43,6 @@ public:
 	//通常
 	static Model* Create(uint32_t modelHandle);
 
-	static Model* Create(const std::string& directoryPath, const std::string& fileName);
 
 private:
 #pragma region モデルの読み込み関係の関数

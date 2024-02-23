@@ -38,7 +38,7 @@ public:
 	static uint32_t LoadObject(const std::string& directoryPath, const std::string& fileName);
 
 	//モデルデータの読み込み(本体)
-	static ModelData LoadObjectFile(const std::string& directoryPath, const std::string& fileName);
+	static ModelData LoadFile(const std::string& directoryPath, const std::string& fileName);
 
 
 
@@ -64,6 +64,3 @@ private:
 	std::array<ModelInformation, MODEL_MAX_AMOUNT_> modelInfromtion_{};
 
 };
-
-//モデルデータの読み込み
-//ModelData LoadObjectFile(const std::string& directoryPath, const std::string& fileName);

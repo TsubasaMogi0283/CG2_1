@@ -28,18 +28,6 @@ void SampleScene::Initialize() {
 	uint32_t model1 = ModelManager::GetInstance()->LoadObject("Resources/CG3/terrain", "terrain.obj");
 	uint32_t model2 = ModelManager::GetInstance()->LoadObject("Resources/CG3/Sphere", "Sphere.obj");
 
-	//for (int i = 0; i < MODEL_AMOUNT_; i++) {
-	//	model_[0].reset(Model::Create("Resources/CG3/terrain", "terrain.obj"));
-	//	model_[1].reset(Model::Create("Resources/CG3/Sphere", "Sphere.obj"));
-	//	modelWorldTransform_[i].Initialize();
-	//}
-
-	//uint32_t modelData = ModelManager::GetInstance()->LoadObject("Resources/CG3/terrain", "terrain.obj");
-	//
-	//
-	//uint32_t model1 = ModelManager::GetInstance()->LoadObject("Resources/CG3/terrain", "terrain.obj");
-	//uint32_t model2 = ModelManager::GetInstance()->LoadObject("Resources/CG3/Sphere", "Sphere.obj");
-	//
 	for (int i = 0; i < MODEL_AMOUNT_; i++) {
 		model_[0].reset(Model::Create(model1));
 		model_[1].reset(Model::Create(model2));

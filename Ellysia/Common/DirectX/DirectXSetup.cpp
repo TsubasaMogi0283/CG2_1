@@ -116,18 +116,18 @@ ComPtr<ID3D12Resource> DirectXSetup::CreateDepthStencilTextureResource(const int
 	return resource;
 
 }
-
-D3D12_CPU_DESCRIPTOR_HANDLE DirectXSetup::GetCPUDescriptorHandle(ComPtr<ID3D12DescriptorHeap> descriptorHeap, uint32_t descriptorSize, uint32_t index) {
-	D3D12_CPU_DESCRIPTOR_HANDLE handleCPU = descriptorHeap->GetCPUDescriptorHandleForHeapStart();
-	handleCPU.ptr += (descriptorSize * index);
-	return handleCPU;
-}
-
-D3D12_GPU_DESCRIPTOR_HANDLE DirectXSetup::GetGPUDescriptorHandle(ComPtr<ID3D12DescriptorHeap> descriptorHeap, uint32_t descriptorSize, uint32_t index) {
-	D3D12_GPU_DESCRIPTOR_HANDLE handleGPU = descriptorHeap->GetGPUDescriptorHandleForHeapStart();
-	handleGPU.ptr += (descriptorSize * index);
-	return handleGPU;
-}
+//
+//D3D12_CPU_DESCRIPTOR_HANDLE DirectXSetup::GetCPUDescriptorHandle(ComPtr<ID3D12DescriptorHeap> descriptorHeap, uint32_t descriptorSize, uint32_t index) {
+//	D3D12_CPU_DESCRIPTOR_HANDLE handleCPU = descriptorHeap->GetCPUDescriptorHandleForHeapStart();
+//	handleCPU.ptr += (descriptorSize * index);
+//	return handleCPU;
+//}
+//
+//D3D12_GPU_DESCRIPTOR_HANDLE DirectXSetup::GetGPUDescriptorHandle(ComPtr<ID3D12DescriptorHeap> descriptorHeap, uint32_t descriptorSize, uint32_t index) {
+//	D3D12_GPU_DESCRIPTOR_HANDLE handleGPU = descriptorHeap->GetGPUDescriptorHandleForHeapStart();
+//	handleGPU.ptr += (descriptorSize * index);
+//	return handleGPU;
+//}
 
 
 
@@ -333,7 +333,6 @@ void DirectXSetup::GenerateSwapChain() {
 
 
 	//コマンドキュー、ウィンドウハンドル、設定を渡して生成する
-	//ComPtr<ID3D12CommandQueue>  commandQueue = DirectXSetup::GetInstance()->m_commandQueue_;
 	
 	HRESULT hr = {};
 	hr = DirectXSetup::GetInstance()->m_dxgiFactory_->CreateSwapChainForHwnd(
@@ -352,41 +351,20 @@ void DirectXSetup::GenerateSwapChain() {
 void DirectXSetup::MakeDescriptorHeap() {
 	
 	
-	//復習
 	//Resourceに対して作業を行うにはViewが必要
 	//Viewは作業方法
-	ComPtr<ID3D12DescriptorHeap> rtvDescriptorHeap = nullptr;
 	//作った関数をここで使う
-	rtvDescriptorHeap = GenarateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_RTV, 2, false);
-
-
-	ComPtr<ID3D12DescriptorHeap> srvDescriptorHeap_ = nullptr;
+	ComPtr<ID3D12DescriptorHeap> rtvDescriptorHeap = GenarateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_RTV, 2, false);
 
 
 
 
-
-
-	ComPtr<ID3D12DescriptorHeap> dsvDescriptorHeap_ = nullptr;
-	ComPtr<ID3D12Resource> depthStencilResource_ = nullptr;
 	//ImGuiを使うにはSRV用のDescriptorが必要となる
-	// 
-	// 
-	// 
-	// 
-	// 
-	//SRV...ShaderResourceView
-	srvDescriptorHeap_ = GenarateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 128, true);
-
-
-
-
-
-	depthStencilResource_ = CreateDepthStencilTextureResource( 
+	 ComPtr<ID3D12Resource>depthStencilResource_ = CreateDepthStencilTextureResource(
 		WindowsSetup::GetInstance()->GetClientWidth(),
 		WindowsSetup::GetInstance()->GetClientHeight());
 
-	dsvDescriptorHeap_ = GenarateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_DSV, 1, false);
+	ComPtr<ID3D12DescriptorHeap> dsvDescriptorHeap_ = GenarateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_DSV, 1, false);
 
 
 
@@ -403,7 +381,6 @@ void DirectXSetup::MakeDescriptorHeap() {
 		dsvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart());
 
 	DirectXSetup::GetInstance()->m_rtvDescriptorHeap_ = rtvDescriptorHeap;
-	DirectXSetup::GetInstance()->m_srvDescriptorHeap_ = srvDescriptorHeap_;
 	DirectXSetup::GetInstance()->m_dsvDescriptorHeap_ = dsvDescriptorHeap_;
 	DirectXSetup::GetInstance()->m_depthStencilResource_ = depthStencilResource_;
 }
@@ -699,33 +676,18 @@ void DirectXSetup::BeginFrame() {
 
 
 
-
-
-	////コマンドを積む
-	ID3D12DescriptorHeap* descriptorHeaps[] = { DirectXSetup::GetInstance()->m_srvDescriptorHeap_.Get()};
-
-
-
-
-
-
-
 	//描画先のRTVとDSVを設定する
 	D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = DirectXSetup::GetInstance()->m_dsvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart();
 
 	DirectXSetup::GetInstance()->m_commandList_->OMSetRenderTargets(1, &rtvHandles_[backBufferIndex_], false, &dsvHandle);
 	DirectXSetup::GetInstance()->m_commandList_->ClearDepthStencilView(dsvHandle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 	
-	DirectXSetup::GetInstance()->m_commandList_->SetDescriptorHeaps(1, descriptorHeaps);
+
+
 
 	DirectXSetup::GetInstance()->m_commandList_->RSSetViewports(1, &viewport_);
 	DirectXSetup::GetInstance()->m_commandList_->RSSetScissorRects(1, &scissorRect_);
 
-
-	//これをそれぞれに入れたい
-	//commandList_->SetGraphicsRootSignature(rootSignature_);
-	//commandList_->SetPipelineState(graphicsPipelineState_);
-	
 }
 
 
@@ -793,16 +755,6 @@ void DirectXSetup::EndFrame() {
 void DirectXSetup::Release() {
 	//////解放処理
 	CloseHandle(fenceEvent_);
-	//DirectXSetup::GetInstance()->infoQueue->Release();
-}
-
-
-void DirectXSetup::CheckRelease() {
-	////ReportLiveObjects
-	//DirectX12より低レベルのDXGIに問い合わせをする
-	//リソースリークチェック
-	
-	
 }
 
 

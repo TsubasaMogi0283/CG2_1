@@ -243,7 +243,7 @@
     <ClCompile Include="Ellysia\Polygon\3D\ModelManager\ModelManager.cpp">
       <Filter>Ellysia\Source File\ModelManager</Filter>
     </ClCompile>
-    <ClCompile Include="Ellysia\SrvHeapManager\SrvHeapManager.cpp">
+    <ClCompile Include="Ellysia\SrvManager\SrvManager.cpp">
       <Filter>Ellysia\Source File</Filter>
     </ClCompile>
   </ItemGroup>
@@ -418,7 +418,7 @@
     <ClInclude Include="Ellysia\Polygon\3D\ModelManager\ModelManager.h">
       <Filter>Ellysia\Header File\ModelManager</Filter>
     </ClInclude>
-    <ClInclude Include="Ellysia\SrvHeapManager\SrvHeapManager.h">
+    <ClInclude Include="Ellysia\SrvManager\SrvManager.h">
       <Filter>Ellysia\Header File</Filter>
     </ClInclude>
   </ItemGroup>

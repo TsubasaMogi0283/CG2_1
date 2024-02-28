@@ -63,7 +63,6 @@ private:
 	static ComPtr<ID3D12Resource> CreateTextureResource(const DirectX::TexMetadata& metadata);
 
 	//3.TextureResourceに1で読んだデータを転送する
-	//void UploadTextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages,ID3D12Device* device,ID3D12GraphicsCommandList* commandList);
 	static void UploadTextureData(ComPtr<ID3D12Resource> texture, const DirectX::ScratchImage& mipImages);
 
 
@@ -71,7 +70,7 @@ private:
 	
 
 public:
-		static const int TEXTURE_MAX_AMOUNT_ = 128;
+	static const int TEXTURE_MAX_AMOUNT_ = 128;
 
 
 
@@ -92,23 +91,9 @@ public:
 	};
 
 private:
-
-	//新しく構造体を作った方がよさそう
-
-	ComPtr<ID3D12Resource> textureResource_[TEXTURE_MAX_AMOUNT_] = {nullptr};
-
-	//画像読み込み
-	
-	D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU_[TEXTURE_MAX_AMOUNT_] = {};
-	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU_[TEXTURE_MAX_AMOUNT_] = {};
-
-
-
-
-
 	//構造体版
 	//array...stdの配列版。その名前の通り配列だよね
-	std::array<TextureInformation, TEXTURE_MAX_AMOUNT_> textureInformation_{};
+	static std::array<TextureInformation, TEXTURE_MAX_AMOUNT_> textureInformation_;
 
 
 

@@ -1,4 +1,5 @@
 #include "TextureManager.h"
+#include <SrvManager/SrvManager.h>
 
 
 
@@ -6,6 +7,9 @@ static uint32_t descriptorSizeSRV_ = 0u;
 static uint32_t descriptorSizeRTV_ = 0u;
 static uint32_t descriptorSizeDSV_ = 0u;
 static uint32_t textureIndex;
+
+std::array<TextureManager::TextureInformation, TextureManager::TEXTURE_MAX_AMOUNT_> TextureManager::textureInformation_{};
+
 
 
 static DirectX::ScratchImage mipImages_[TextureManager::TEXTURE_MAX_AMOUNT_];
@@ -94,6 +98,10 @@ uint32_t TextureManager::LoadTexture(const std::string& filePath) {
 	UploadTextureData(TextureManager::GetInstance()->textureInformation_[textureIndex].resource_.Get(), mipImages_[textureIndex]);
 
 
+
+
+	
+
 	//ShaderResourceView
 	//metadataを基にSRVの設定
 	
@@ -103,6 +111,10 @@ uint32_t TextureManager::LoadTexture(const std::string& filePath) {
 	srvDesc[textureIndex].ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
 	srvDesc[textureIndex].Texture2D.MipLevels = UINT(metadata.mipLevels);
 	
+	
+
+	
+
 	//今のDescriptorHeapには
 	//0...ImGui
 	//1...uvChecker
@@ -116,14 +128,35 @@ uint32_t TextureManager::LoadTexture(const std::string& filePath) {
 
 	//SRVを作成するDescriptorHeapの場所を決める
 	//後ろが1固定だったのでindex
-	TextureManager::GetInstance()->textureInformation_[textureIndex].srvHandleCPU_ = DirectXSetup::GetInstance()->GetCPUDescriptorHandle(DirectXSetup::GetInstance()->GetSrvDescriptorHeap(), descriptorSizeSRV_, textureIndex);
-	TextureManager::GetInstance()->textureInformation_[textureIndex].srvHandleGPU_ = DirectXSetup::GetInstance()->GetGPUDescriptorHandle(DirectXSetup::GetInstance()->GetSrvDescriptorHeap(), descriptorSizeSRV_, textureIndex);
+	TextureManager::GetInstance()->textureInformation_[textureIndex].srvHandleCPU_ = SrvManager::GetInstance()->GetCPUDescriptorHandle(textureIndex);
+	TextureManager::GetInstance()->textureInformation_[textureIndex].srvHandleGPU_ = SrvManager::GetInstance()->GetGPUDescriptorHandle(textureIndex);
+
+	//TextureManager::GetInstance()->textureInformation_[textureIndex].srvHandleCPU_ = DirectXSetup::GetInstance()->GetCPUDescriptorHandle(DirectXSetup::GetInstance()->GetSrvDescriptorHeap(), descriptorSizeSRV_, textureIndex);
+	//TextureManager::GetInstance()->textureInformation_[textureIndex].srvHandleGPU_ = DirectXSetup::GetInstance()->GetGPUDescriptorHandle(DirectXSetup::GetInstance()->GetSrvDescriptorHeap(), descriptorSizeSRV_, textureIndex);
+
 
 	//SRVの生成
 	DirectXSetup::GetInstance()->GetDevice()->CreateShaderResourceView(
 		TextureManager::GetInstance()->textureInformation_[textureIndex].resource_.Get(), 
 		&srvDesc[textureIndex], TextureManager::GetInstance()->textureInformation_[textureIndex].srvHandleCPU_);
 	
+	SrvManager::GetInstance()->CreateSRVForTexture2D(
+		textureIndex, TextureManager::GetInstance()->textureInformation_[textureIndex].resource_.Get(),
+		metadata.format, metadata.mipLevels);
+
+	//SrvManager::GetInstance()->CreateSRVForTexture2D(uint32_t srvIndex, ID3D12Resource* pResource, DXGI_FORMAT format, UINT mipLevels )
+	//
+		//D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
+		//srvDesc.Format = format;
+		//srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+		////2Dテクスチャ
+		//srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
+		//srvDesc.Texture2D.MipLevels = UINT(mipLevels);
+		//
+		//DirectXSetup::GetInstance()->GetDevice()->CreateShaderResourceView(pResource, &srvDesc, GetCPUDescriptorHandle(srvIndex));
+
+
+
 
 
 

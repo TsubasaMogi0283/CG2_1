@@ -29,8 +29,8 @@ struct SwapChain{
 };
 
 ////ReportLiveObjects
-	//DirectX12より低レベルのDXGIに問い合わせをする
-	//リソースリークチェック
+//DirectX12より低レベルのDXGIに問い合わせをする
+//リソースリークチェック
 struct D3DResourceLeakChecker{
 	~D3DResourceLeakChecker() {
 		ComPtr<IDXGIDebug1>debug;
@@ -131,9 +131,6 @@ public:
 	//Resource作成の関数化
 	ComPtr<ID3D12Resource> CreateBufferResource(size_t sizeInBytes);
 
-	static D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(ComPtr<ID3D12DescriptorHeap> descriptorHeap, uint32_t descriptorSize, uint32_t index);
-	static D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(ComPtr<ID3D12DescriptorHeap> descriptorHeap, uint32_t descriptorSize, uint32_t index);
-
 
 #pragma region whileの中身
 	//whileの中身
@@ -150,7 +147,6 @@ public:
 	//解放
 	void Release();
 
-	void CheckRelease();
 
 	
 
@@ -180,9 +176,7 @@ public:
 	ComPtr<ID3D12DescriptorHeap> GetRtvDescriptorHeap() {
 		return  m_rtvDescriptorHeap_;
 	}
-	ComPtr<ID3D12DescriptorHeap> GetSrvDescriptorHeap() {
-		return  m_srvDescriptorHeap_;
-	}
+	
 	ComPtr<ID3D12DescriptorHeap> GetDsvDescriptorHeap() {
 		return  m_dsvDescriptorHeap_;
 	}
@@ -230,12 +224,10 @@ private:
 
 	//ディスクリプタ
 	ComPtr<ID3D12DescriptorHeap> m_rtvDescriptorHeap_ = nullptr;
-	ComPtr<ID3D12DescriptorHeap> m_srvDescriptorHeap_ = nullptr;
 	ComPtr<ID3D12DescriptorHeap> m_dsvDescriptorHeap_ = nullptr;
 
 	ComPtr<ID3D12Resource> m_depthStencilResource_ = nullptr;
 
-	
 	SwapChain swapChain = {};
 	
 

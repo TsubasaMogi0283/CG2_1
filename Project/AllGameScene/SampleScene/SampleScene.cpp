@@ -43,17 +43,17 @@ void SampleScene::Initialize() {
 	modelWorldTransform_[1].translate_ = { 0.0f,-1.0f,0.0f };
 
 
-	sprite = std::make_unique<Sprite>();
-	uint32_t textureHandle = TextureManager::LoadTexture("Resources/uvChecker.png");
-	spritePosition_ = { 100.0f,100.0f };
-	sprite.reset(Sprite::Create(textureHandle, spritePosition_));
+	//sprite = std::make_unique<Sprite>();
+	//uint32_t textureHandle = TextureManager::LoadTexture("Resources/uvChecker.png");
+	//spritePosition_ = { 100.0f,100.0f };
+	//sprite.reset(Sprite::Create(textureHandle, spritePosition_));
 
 	
 
 	uint32_t particleModel= ModelManager::GetInstance()->LoadObject("Resources/05_02", "plane.obj");
-	particle_.reset(Particle3D::Create(particleModel));
-	int count = 3;
-	
+	//particle_.reset(Particle3D::Create(particleModel));
+	//int count = 3;
+	//
 
 
 
@@ -66,19 +66,19 @@ void SampleScene::Initialize() {
 
 	particleTextureHandle_ = TextureManager::GetInstance()->LoadTexture("Resources/CG3/circle.png");
 
-	accelerationField_.acceleration = { 5.0f,0.0f,0.0, };
-	accelerationField_.area.min = { -1.0f,-1.0f,-1.0f };
-	accelerationField_.area.max = { 1.0f,1.0f,1.0f };
-
-	isSetField_ = true;
-	particle_->SetField(isSetField_);
-	particle_->SetAccelerationField(accelerationField_);
-
-	particle_->SetCount(count);
-	particle_->SetFrequency(frequency);
-	particle_->SetFrequencyTime(frequencyTime);
-	particleTranslate_ = { 0.0f,0.0f,0.0f };
-
+	//accelerationField_.acceleration = { 5.0f,0.0f,0.0, };
+	//accelerationField_.area.min = { -1.0f,-1.0f,-1.0f };
+	//accelerationField_.area.max = { 1.0f,1.0f,1.0f };
+	//
+	//isSetField_ = true;
+	//particle_->SetField(isSetField_);
+	//particle_->SetAccelerationField(accelerationField_);
+	//
+	//particle_->SetCount(count);
+	//particle_->SetFrequency(frequency);
+	//particle_->SetFrequencyTime(frequencyTime);
+	//particleTranslate_ = { 0.0f,0.0f,0.0f };
+	//
 
 	cameraTranslate_ = { 0.0f,10.0f,-30.0f };
 	camera_.Initialize();
@@ -138,12 +138,12 @@ void SampleScene::Update(GameManager* gameManager) {
 
 
 
-	particle_->SetTranslate(particleTranslate_);
+	//particle_->SetTranslate(particleTranslate_);
 
-	particle_->SetField(isSetField_);
+	//particle_->SetField(isSetField_);
 
 
-	sprite->SetPosition(spritePosition_);
+	//sprite->SetPosition(spritePosition_);
 
 	const float MOVE_AMOUNT=1.0f;
 
@@ -224,7 +224,7 @@ void SampleScene::Draw() {
 		model_[i]->Draw(modelWorldTransform_[i], camera_);
 	
 	}
-	particle_->Draw(particleTextureHandle_,camera_);
+	//particle_->Draw(particleTextureHandle_,camera_);
 	//sprite->Draw();
 }
 

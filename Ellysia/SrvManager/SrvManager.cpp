@@ -68,9 +68,6 @@ void SrvManager::CreateSRVForTexture2D(uint32_t srvIndex, ID3D12Resource* pResou
 	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
 	srvDesc.Texture2D.MipLevels = UINT(mipLevels);
 
-	//ハンドル取得
-	handleCPU_ = GetCPUDescriptorHandle(srvIndex);
-	handleGPU_ = GetGPUDescriptorHandle(srvIndex);
 
 	//SRVを作る
 	DirectXSetup::GetInstance()->GetDevice()->CreateShaderResourceView(pResource, &srvDesc, GetCPUDescriptorHandle(srvIndex));
@@ -79,7 +76,7 @@ void SrvManager::CreateSRVForTexture2D(uint32_t srvIndex, ID3D12Resource* pResou
 void SrvManager::CreateSRVForStructuredBuffer(uint32_t srvIndex, ID3D12Resource* pResource, UINT numElements, UINT structureByteStride) {
 	
 
-	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
+	/*D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
 	srvDesc.Format = DXGI_FORMAT_UNKNOWN;
 	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
@@ -92,10 +89,17 @@ void SrvManager::CreateSRVForStructuredBuffer(uint32_t srvIndex, ID3D12Resource*
 	instancingSrvHandleGPU_ = GetGPUDescriptorHandle(3);
 
 	DirectXSetup::GetInstance()->GetDevice()->CreateShaderResourceView(
-		pResource, &srvDesc, GetCPUDescriptorHandle(srvIndex));
+		pResource, &srvDesc, GetCPUDescriptorHandle(srvIndex));*/
 
 
 
 
 
+}
+
+
+void SrvManager::SetGraphicsRootDescriptorTable(UINT rootParameterIndex, uint32_t srvIndex) {
+	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(
+		rootParameterIndex, 
+		GetGPUDescriptorHandle(srvIndex));
 }

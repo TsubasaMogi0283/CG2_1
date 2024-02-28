@@ -46,6 +46,7 @@ public:
 	void CreateSRVForTexture2D(uint32_t srvIndex, ID3D12Resource* pResource, DXGI_FORMAT format, UINT mipLevels);
 	void CreateSRVForStructuredBuffer(uint32_t srvIndex, ID3D12Resource* pResource, UINT numElements, UINT structureByteStride);
 
+	void SetGraphicsRootDescriptorTable(UINT rootParameterIndex, uint32_t srvIndex);
 private:
 	//最大SRV数(最大テクスチャ数)
 	static const uint32_t MAX_SRV_COUNT_;
@@ -62,7 +63,7 @@ private:
 	D3D12_GPU_DESCRIPTOR_HANDLE handleGPU_ = {};
 
 	//次に使用するSRVインデックス
-	uint32_t useIndex_ = 0;
+	uint32_t useIndex_ = 1;
 	
 
 

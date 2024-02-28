@@ -77,9 +77,6 @@ uint32_t TextureManager::LoadTexture(const std::string& filePath) {
 	++textureIndex;
 
 
-	if (textureIndex > 127) {
-		textureIndex = 0;
-	}
 
 	//読み込んだデータを配列に保存
 	//テクスチャの名前
@@ -115,54 +112,21 @@ uint32_t TextureManager::LoadTexture(const std::string& filePath) {
 	//後ろのindexに対応させる
 
 	//SRVの確保
-	uint32_t testHandle= SrvManager::GetInstance()->Allocate();
+	//uint32_t testHandle= SrvManager::GetInstance()->Allocate();
+	//0番目はImGuiが使っているからダメだった
 	//TextureManager::GetInstance()->textureInformation_[textureIndex].handle_ = SrvManager::GetInstance()->Allocate();
 	TextureManager::GetInstance()->textureInformation_[textureIndex].handle_ = SrvManager::GetInstance()->Allocate();
 
-
-	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
-	srvDesc.Format = metadata.format;
-	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-	//2Dテクスチャ
-	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
-	srvDesc.Texture2D.MipLevels = UINT(metadata.mipLevels);
-
-
-	//srvDesc[textureIndex].Format = metadata.format;
-	//srvDesc[textureIndex].Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-	////2Dテクスチャ
-	//srvDesc[textureIndex].ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
-	//srvDesc[textureIndex].Texture2D.MipLevels = UINT(metadata.mipLevels);
-
-
-	
 	//SRVを作成するDescriptorHeapの場所を決める
 	//後ろが1固定だったのでindex
-	TextureManager::GetInstance()->textureInformation_[textureIndex].srvHandleCPU_ = SrvManager::GetInstance()->GetCPUDescriptorHandle(textureIndex);
-	TextureManager::GetInstance()->textureInformation_[textureIndex].srvHandleGPU_ = SrvManager::GetInstance()->GetGPUDescriptorHandle(textureIndex);
-
-	D3D12_GPU_DESCRIPTOR_HANDLE test = TextureManager::GetInstance()->textureInformation_[textureIndex].srvHandleGPU_;
-
-	//TextureManager::GetInstance()->textureInformation_[textureIndex].srvHandleCPU_ = DirectXSetup::GetInstance()->GetCPUDescriptorHandle(
-	// DirectXSetup::GetInstance()->GetSrvDescriptorHeap(), descriptorSizeSRV_, textureIndex);
-	//TextureManager::GetInstance()->textureInformation_[textureIndex].srvHandleGPU_ = DirectXSetup::GetInstance()->GetGPUDescriptorHandle(
-	// DirectXSetup::GetInstance()->GetSrvDescriptorHeap(), descriptorSizeSRV_, textureIndex);
+	TextureManager::GetInstance()->textureInformation_[textureIndex].srvHandleCPU_ = SrvManager::GetInstance()->GetCPUDescriptorHandle(TextureManager::GetInstance()->textureInformation_[textureIndex].handle_);
+	TextureManager::GetInstance()->textureInformation_[textureIndex].srvHandleGPU_ = SrvManager::GetInstance()->GetGPUDescriptorHandle(TextureManager::GetInstance()->textureInformation_[textureIndex].handle_);
 
 
-	//SRVの生成
-	//DirectXSetup::GetInstance()->GetDevice()->CreateShaderResourceView(
-	//	TextureManager::GetInstance()->textureInformation_[textureIndex].resource_.Get(), 
-	//	&srvDesc[textureIndex], TextureManager::GetInstance()->textureInformation_[textureIndex].srvHandleCPU_);
-	//SRVを作る
-	DirectXSetup::GetInstance()->GetDevice()->CreateShaderResourceView(
-		TextureManager::GetInstance()->textureInformation_[textureIndex].resource_.Get(), 
-		&srvDesc,
-		TextureManager::GetInstance()->textureInformation_[textureIndex].srvHandleCPU_);
-
-
-	//SrvManager::GetInstance()->CreateSRVForTexture2D(
-	//	textureIndex, TextureManager::GetInstance()->textureInformation_[textureIndex].resource_.Get(),
-	//	metadata.format, UINT(metadata.mipLevels));
+	SrvManager::GetInstance()->CreateSRVForTexture2D(
+		TextureManager::GetInstance()->textureInformation_[textureIndex].handle_, 
+		TextureManager::GetInstance()->textureInformation_[textureIndex].resource_.Get(),
+		metadata.format, UINT(metadata.mipLevels));
 
 
 
@@ -292,9 +256,7 @@ void TextureManager::UploadTextureData(
 
 
 void TextureManager::GraphicsCommand(UINT rootParameter, uint32_t texHandle) {
-	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(
-		rootParameter, TextureManager::GetInstance()->textureInformation_[texHandle].srvHandleGPU_);
-	//SrvManager::GetInstance()->SetGraphicsRootDescriptorTable(2, texHandle);
+	SrvManager::GetInstance()->SetGraphicsRootDescriptorTable(2, texHandle);
 }
 
 

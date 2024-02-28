@@ -43,17 +43,17 @@ void SampleScene::Initialize() {
 	modelWorldTransform_[1].translate_ = { 0.0f,-1.0f,0.0f };
 
 
-	//sprite = std::make_unique<Sprite>();
-	//uint32_t textureHandle = TextureManager::LoadTexture("Resources/uvChecker.png");
-	//spritePosition_ = { 100.0f,100.0f };
-	//sprite.reset(Sprite::Create(textureHandle, spritePosition_));
+	sprite = std::make_unique<Sprite>();
+	uint32_t textureHandle = TextureManager::LoadTexture("Resources/uvChecker.png");
+	spritePosition_ = { 100.0f,100.0f };
+	sprite.reset(Sprite::Create(textureHandle, spritePosition_));
 
 	
 
-	uint32_t particleModel= ModelManager::GetInstance()->LoadObject("Resources/05_02", "plane.obj");
+	//uint32_t particleModel= ModelManager::GetInstance()->LoadObject("Resources/05_02", "plane.obj");
 	//particle_.reset(Particle3D::Create(particleModel));
 	//int count = 3;
-	//
+	
 
 
 
@@ -143,7 +143,7 @@ void SampleScene::Update(GameManager* gameManager) {
 	//particle_->SetField(isSetField_);
 
 
-	//sprite->SetPosition(spritePosition_);
+	sprite->SetPosition(spritePosition_);
 
 	const float MOVE_AMOUNT=1.0f;
 
@@ -225,7 +225,7 @@ void SampleScene::Draw() {
 	
 	}
 	//particle_->Draw(particleTextureHandle_,camera_);
-	//sprite->Draw();
+	sprite->Draw();
 }
 
 /// <summary>

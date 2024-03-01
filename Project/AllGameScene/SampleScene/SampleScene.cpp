@@ -48,7 +48,10 @@ void SampleScene::Initialize() {
 	spritePosition_ = { 100.0f,100.0f };
 	sprite.reset(Sprite::Create(textureHandle, spritePosition_));
 
+	uint32_t textureHandle2 = TextureManager::LoadTexture("Resources/uvChecker.png");
 	
+	uint32_t textureHandle3 = TextureManager::LoadTexture("Resources/monsterBall.png");
+	uint32_t textureHandle4 = TextureManager::LoadTexture("Resources/bullet.png");
 
 	//uint32_t particleModel= ModelManager::GetInstance()->LoadObject("Resources/05_02", "plane.obj");
 	//particle_.reset(Particle3D::Create(particleModel));

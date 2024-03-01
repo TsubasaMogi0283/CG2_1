@@ -76,7 +76,7 @@ void SrvManager::CreateSRVForTexture2D(uint32_t srvIndex, ID3D12Resource* pResou
 void SrvManager::CreateSRVForStructuredBuffer(uint32_t srvIndex, ID3D12Resource* pResource, UINT numElements, UINT structureByteStride) {
 	
 
-	/*D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
+	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
 	srvDesc.Format = DXGI_FORMAT_UNKNOWN;
 	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
@@ -85,11 +85,9 @@ void SrvManager::CreateSRVForStructuredBuffer(uint32_t srvIndex, ID3D12Resource*
 	srvDesc.Buffer.NumElements = numElements;
 	srvDesc.Buffer.StructureByteStride = structureByteStride;
 
-	instancingSrvHandleCPU_ = GetCPUDescriptorHandle(3);
-	instancingSrvHandleGPU_ = GetGPUDescriptorHandle(3);
-
+	
 	DirectXSetup::GetInstance()->GetDevice()->CreateShaderResourceView(
-		pResource, &srvDesc, GetCPUDescriptorHandle(srvIndex));*/
+		pResource, &srvDesc, GetCPUDescriptorHandle(srvIndex));
 
 
 

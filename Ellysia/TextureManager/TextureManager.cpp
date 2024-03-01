@@ -74,7 +74,7 @@ uint32_t TextureManager::LoadTexture(const std::string& filePath) {
 
 	//読み込むたびにインデックスが増やし重複を防ごう
 	//同じ画像しか貼れなかったのはこれが原因
-	++textureIndex;
+	textureIndex=SrvManager::GetInstance()->Allocate();
 
 
 
@@ -115,7 +115,7 @@ uint32_t TextureManager::LoadTexture(const std::string& filePath) {
 	//uint32_t testHandle= SrvManager::GetInstance()->Allocate();
 	//0番目はImGuiが使っているからダメだった
 	//TextureManager::GetInstance()->textureInformation_[textureIndex].handle_ = SrvManager::GetInstance()->Allocate();
-	TextureManager::GetInstance()->textureInformation_[textureIndex].handle_ = SrvManager::GetInstance()->Allocate();
+	TextureManager::GetInstance()->textureInformation_[textureIndex].handle_ = textureIndex;
 
 	//SRVを作成するDescriptorHeapの場所を決める
 	//後ろが1固定だったのでindex

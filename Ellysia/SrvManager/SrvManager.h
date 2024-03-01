@@ -52,10 +52,10 @@ private:
 	static const uint32_t MAX_SRV_COUNT_;
 
 	//SRV用のデスクリプタサイズ
-	uint32_t descriptorSize_;
+	uint32_t descriptorSize_=0;
 
 	//SRV用デスクリプタヒープ
-	ComPtr<ID3D12DescriptorHeap> descriptorHeap_;
+	ComPtr<ID3D12DescriptorHeap> descriptorHeap_=nullptr;
 
 
 	//画像読み込み

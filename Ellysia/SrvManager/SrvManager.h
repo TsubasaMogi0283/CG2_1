@@ -3,7 +3,7 @@
 
 
 class SrvManager final{
-public:
+private:
 	//コンストラクタ
 	SrvManager() = default;
 

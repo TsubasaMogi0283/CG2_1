@@ -4,7 +4,7 @@
 #include <ImGuiManager.h>
 #include <Input.h>
 #include <TextureManager.h>
-#include 
+#include "SrvManager/SrvManager.h"
 #include <Audio.h>
 
 Ellysia::Ellysia() {
@@ -22,7 +22,7 @@ void Ellysia::Initialize(){
 	//DirectX
 	DirectXSetup::GetInstance()->Initialize();
 	
-	SrvManager
+	SrvManager::GetInstance()->Initialize();
 
 	//ImGuiManager
 	ImGuiManager::GetInstance()->Initialize();
@@ -48,6 +48,7 @@ void Ellysia::Initialize(){
 
 void Ellysia::BeginFrame(){
 	DirectXSetup::GetInstance()->BeginFrame();
+	SrvManager::GetInstance()->PreDraw();
 	ImGuiManager::GetInstance()->BeginFrame();
 }
 

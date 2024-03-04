@@ -1,6 +1,7 @@
 #include "ImGuiManager.h"
 #include "WindowsSetup.h"
 #include "DirectXSetup.h"
+#include <SrvManager/SrvManager.h>
 
 //コンストラクタ
 ImGuiManager::ImGuiManager() {
@@ -29,9 +30,9 @@ void ImGuiManager::Initialize() {
 		DirectXSetup::GetInstance()->GetDevice().Get(),
 		DirectXSetup::GetInstance()->GetswapChain().swapChainDesc.BufferCount,
 		DirectXSetup::GetInstance()->GetRtvDesc().Format,
-		DirectXSetup::GetInstance()->GetSrvDescriptorHeap().Get(),
-		DirectXSetup::GetInstance()->GetSrvDescriptorHeap()->GetCPUDescriptorHandleForHeapStart(),
-		DirectXSetup::GetInstance()->GetSrvDescriptorHeap()->GetGPUDescriptorHandleForHeapStart());
+		SrvManager::GetInstance()->GetSrvDescriptorHeap().Get(),
+		SrvManager::GetInstance()->GetSrvDescriptorHeap()->GetCPUDescriptorHandleForHeapStart(),
+		SrvManager::GetInstance()->GetSrvDescriptorHeap()->GetGPUDescriptorHandleForHeapStart());
 
 }
 
@@ -61,7 +62,7 @@ void ImGuiManager::PreDraw() {
 //描画
 void ImGuiManager::Draw() {
 	//描画用のDescriptorの設定
-	ID3D12DescriptorHeap* descriptorHeaps[] = { DirectXSetup::GetInstance()->GetSrvDescriptorHeap().Get()};
+	ID3D12DescriptorHeap* descriptorHeaps[] = { SrvManager::GetInstance()->GetSrvDescriptorHeap().Get() };
 	DirectXSetup::GetInstance()->GetCommandList()->SetDescriptorHeaps(1, descriptorHeaps);
 }
 

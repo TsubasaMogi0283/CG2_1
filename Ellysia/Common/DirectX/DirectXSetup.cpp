@@ -117,17 +117,6 @@ ComPtr<ID3D12Resource> DirectXSetup::CreateDepthStencilTextureResource(const int
 
 }
 
-D3D12_CPU_DESCRIPTOR_HANDLE DirectXSetup::GetCPUDescriptorHandle(ComPtr<ID3D12DescriptorHeap> descriptorHeap, uint32_t descriptorSize, uint32_t index) {
-	D3D12_CPU_DESCRIPTOR_HANDLE handleCPU = descriptorHeap->GetCPUDescriptorHandleForHeapStart();
-	handleCPU.ptr += (descriptorSize * index);
-	return handleCPU;
-}
-
-D3D12_GPU_DESCRIPTOR_HANDLE DirectXSetup::GetGPUDescriptorHandle(ComPtr<ID3D12DescriptorHeap> descriptorHeap, uint32_t descriptorSize, uint32_t index) {
-	D3D12_GPU_DESCRIPTOR_HANDLE handleGPU = descriptorHeap->GetGPUDescriptorHandleForHeapStart();
-	handleGPU.ptr += (descriptorSize * index);
-	return handleGPU;
-}
 
 
 
@@ -360,25 +349,13 @@ void DirectXSetup::MakeDescriptorHeap() {
 	rtvDescriptorHeap = GenarateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_RTV, 2, false);
 
 
-	ComPtr<ID3D12DescriptorHeap> srvDescriptorHeap_ = nullptr;
-
-
-
 
 
 
 	ComPtr<ID3D12DescriptorHeap> dsvDescriptorHeap_ = nullptr;
 	ComPtr<ID3D12Resource> depthStencilResource_ = nullptr;
 	//ImGuiを使うにはSRV用のDescriptorが必要となる
-	// 
-	// 
-	// 
-	// 
-	// 
-	//SRV...ShaderResourceView
-	srvDescriptorHeap_ = GenarateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 128, true);
-
-
+	
 
 
 
@@ -403,7 +380,6 @@ void DirectXSetup::MakeDescriptorHeap() {
 		dsvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart());
 
 	DirectXSetup::GetInstance()->m_rtvDescriptorHeap_ = rtvDescriptorHeap;
-	DirectXSetup::GetInstance()->m_srvDescriptorHeap_ = srvDescriptorHeap_;
 	DirectXSetup::GetInstance()->m_dsvDescriptorHeap_ = dsvDescriptorHeap_;
 	DirectXSetup::GetInstance()->m_depthStencilResource_ = depthStencilResource_;
 }
@@ -701,12 +677,6 @@ void DirectXSetup::BeginFrame() {
 
 
 
-	////コマンドを積む
-	ID3D12DescriptorHeap* descriptorHeaps[] = { DirectXSetup::GetInstance()->m_srvDescriptorHeap_.Get()};
-
-
-
-
 
 
 
@@ -716,7 +686,6 @@ void DirectXSetup::BeginFrame() {
 	DirectXSetup::GetInstance()->m_commandList_->OMSetRenderTargets(1, &rtvHandles_[backBufferIndex_], false, &dsvHandle);
 	DirectXSetup::GetInstance()->m_commandList_->ClearDepthStencilView(dsvHandle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 	
-	DirectXSetup::GetInstance()->m_commandList_->SetDescriptorHeaps(1, descriptorHeaps);
 
 	DirectXSetup::GetInstance()->m_commandList_->RSSetViewports(1, &viewport_);
 	DirectXSetup::GetInstance()->m_commandList_->RSSetScissorRects(1, &scissorRect_);

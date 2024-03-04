@@ -7,6 +7,7 @@
 
 #include <numbers>
 #include <Collision.h>
+#include <SrvManager/SrvManager.h>
 static uint32_t modelIndex;
 static uint32_t descriptorSizeSRV_ = 0u;
 
@@ -84,10 +85,8 @@ Particle3D* Particle3D::Create(uint32_t modelHandle) {
 	instancingSrvDesc.Buffer.NumElements = MAX_INSTANCE_NUMBER_;
 	instancingSrvDesc.Buffer.StructureByteStride = sizeof(ParticleForGPU);
 
-	particle3D->instancingSrvHandleCPU_ = DirectXSetup::GetInstance()->GetCPUDescriptorHandle(
-		DirectXSetup::GetInstance()->GetSrvDescriptorHeap(), descriptorSizeSRV_, 3);
-	particle3D->instancingSrvHandleGPU_ = DirectXSetup::GetGPUDescriptorHandle(
-		DirectXSetup::GetInstance()->GetSrvDescriptorHeap(), descriptorSizeSRV_, 3);
+	particle3D->instancingSrvHandleCPU_ = SrvManager::GetInstance()->GetCPUDescriptorHandle( 3);
+	particle3D->instancingSrvHandleGPU_ = SrvManager::GetInstance()->GetGPUDescriptorHandle(3);
 
 	DirectXSetup::GetInstance()->GetDevice()->CreateShaderResourceView(
 		particle3D->instancingResource_.Get(), &instancingSrvDesc, particle3D->instancingSrvHandleCPU_);

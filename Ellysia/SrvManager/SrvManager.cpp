@@ -16,6 +16,7 @@ void SrvManager::Initialize(){
 	SrvManager::GetInstance()->descriptorHeap_ = DirectXSetup::GetInstance()->GenarateDescriptorHeap(
 		D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, MAX_SRV_COUNT_, true);
 
+	//SRV...ShaderResourceView
 	//デスクリプタ1個分のサイズを取得して記録
 	SrvManager::GetInstance()->descriptorSize_ = DirectXSetup::GetInstance()->GetDevice()->
 		GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
@@ -89,6 +90,15 @@ void SrvManager::CreateSRVForStructuredBuffer(uint32_t srvIndex, ID3D12Resource*
 
 
 }
+
+void SrvManager::PreDraw() {
+	////コマンドを積む
+	ID3D12DescriptorHeap* descriptorHeaps[] = { descriptorHeap_.Get() };
+	DirectXSetup::GetInstance()->GetCommandList()->SetDescriptorHeaps(1, descriptorHeaps);
+
+}
+
+
 
 void SrvManager::SetGraphicsRootDescriptorTable(UINT rootParameterIndex, uint32_t srvIndex){
 	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(

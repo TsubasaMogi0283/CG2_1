@@ -91,14 +91,6 @@ uint32_t TextureManager::LoadTexture(const std::string& filePath) {
 
 
 	//ShaderResourceView
-	//metadataを基にSRVの設定
-	
-	srvDesc[textureIndex].Format = metadata.format;
-	srvDesc[textureIndex].Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-	//2Dテクスチャ
-	srvDesc[textureIndex].ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
-	srvDesc[textureIndex].Texture2D.MipLevels = UINT(metadata.mipLevels);
-	
 	//今のDescriptorHeapには
 	//0...ImGui
 	//1...uvChecker
@@ -114,17 +106,11 @@ uint32_t TextureManager::LoadTexture(const std::string& filePath) {
 	//0番目はImGuiが使っているからダメだった
 	TextureManager::GetInstance()->textureInformation_[textureIndex].handle_ = textureIndex;
 
-	//SRVを作成するDescriptorHeapの場所を決める
-	//後ろが1固定だったのでindex
-	TextureManager::GetInstance()->textureInformation_[textureIndex].srvHandleCPU_ = SrvManager::GetInstance()->GetCPUDescriptorHandle(textureIndex);
-	TextureManager::GetInstance()->textureInformation_[textureIndex].srvHandleGPU_ = SrvManager::GetInstance()->GetGPUDescriptorHandle(textureIndex);
-
 	//SRVの生成
-	DirectXSetup::GetInstance()->GetDevice()->CreateShaderResourceView(
-		TextureManager::GetInstance()->textureInformation_[textureIndex].resource_.Get(), 
-		&srvDesc[textureIndex], TextureManager::GetInstance()->textureInformation_[textureIndex].srvHandleCPU_);
-	
-
+	SrvManager::GetInstance()->CreateSRVForTexture2D(
+		TextureManager::GetInstance()->textureInformation_[textureIndex].handle_,
+		TextureManager::GetInstance()->textureInformation_[textureIndex].resource_.Get(),
+		metadata.format, UINT(metadata.mipLevels));
 
 
 	return textureIndex;
@@ -252,8 +238,6 @@ void TextureManager::UploadTextureData(
 
 
 void TextureManager::GraphicsCommand(uint32_t texHandle) {
-	//DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(
-	//	2, TextureManager::GetInstance()->textureInformation_[texHandle].srvHandleGPU_);
 	SrvManager::GetInstance()->SetGraphicsRootDescriptorTable(2, texHandle);
 }
 

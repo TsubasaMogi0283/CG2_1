@@ -76,22 +76,12 @@ Particle3D* Particle3D::Create(uint32_t modelHandle) {
 	descriptorSizeSRV_ =  DirectXSetup::GetInstance()->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	
 
-	D3D12_SHADER_RESOURCE_VIEW_DESC instancingSrvDesc{};
-	instancingSrvDesc.Format = DXGI_FORMAT_UNKNOWN;
-	instancingSrvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-	instancingSrvDesc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
-	instancingSrvDesc.Buffer.FirstElement = 0;
-	instancingSrvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
-	instancingSrvDesc.Buffer.NumElements = MAX_INSTANCE_NUMBER_;
-	instancingSrvDesc.Buffer.StructureByteStride = sizeof(ParticleForGPU);
-
-	particle3D->instancingSrvHandleCPU_ = SrvManager::GetInstance()->GetCPUDescriptorHandle( 3);
 	particle3D->instancingSrvHandleGPU_ = SrvManager::GetInstance()->GetGPUDescriptorHandle(3);
 
-	DirectXSetup::GetInstance()->GetDevice()->CreateShaderResourceView(
-		particle3D->instancingResource_.Get(), &instancingSrvDesc, particle3D->instancingSrvHandleCPU_);
+	SrvManager::GetInstance()->CreateSRVForStructuredBuffer(3, particle3D->instancingResource_.Get(), MAX_INSTANCE_NUMBER_, sizeof(ParticleForGPU));
 
-	
+
+
 	//Lighting
 	particle3D->directionalLightResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(DirectionalLight)).Get();
 	

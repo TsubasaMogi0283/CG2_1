@@ -177,8 +177,6 @@ private:
 	int32_t instanceCount_ = 1;
 
 
-	std::vector<VertexData> vertices;
-
 	//マテリアル用のリソースを作る
 	ComPtr<ID3D12Resource> materialResource_ = nullptr;
 	//色関係のメンバ変数

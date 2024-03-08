@@ -25,10 +25,9 @@ Particle3D* Particle3D::Create(uint32_t modelHandle) {
 	//ブレンドモードの設定
 	//Addでやるべきとのこと
 	PipelineManager::GetInstance()->GenerateParticle3DPSO();
-	
+	//INDEX_++;
 
-	//デフォルトの設定
-	//Setterで変えてね
+#pragma region デフォルトの設定 
 	particle3D->emitter_.count = 100;
 	//0.5秒ごとに発生
 	particle3D->emitter_.frequency = 0.5f;
@@ -39,10 +38,7 @@ Particle3D* Particle3D::Create(uint32_t modelHandle) {
 	particle3D->emitter_.transform.rotate = { 0.0f,0.0f,0.0f };
 	particle3D->emitter_.transform.translate = { 0.0f,0.0f,0.0f };
 
-
-
-	
-
+#pragma endregion
 
 	////マテリアル用のリソースを作る。今回はcolor1つ分のサイズを用意する
 	particle3D->materialResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(Material)).Get();
@@ -50,6 +46,11 @@ Particle3D* Particle3D::Create(uint32_t modelHandle) {
 
 	//テクスチャの読み込み
 	particle3D->textureHandle_ = TextureManager::GetInstance()->LoadTexture(ModelManager::GetInstance()->GetModelData(modelHandle).material.textureFilePath);
+
+
+
+	particle3D->INDEX_ = SrvManager::GetInstance()->Allocate();
+
 
 
 	//頂点リソースを作る
@@ -68,19 +69,20 @@ Particle3D* Particle3D::Create(uint32_t modelHandle) {
 
 
 	
-
+	
 
 
 	//インスタンシング
 	particle3D->instancingResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(ParticleForGPU) * MAX_INSTANCE_NUMBER_);
 	descriptorSizeSRV_ =  DirectXSetup::GetInstance()->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	
+	particle3D->instancingSrvHandleCPU_= SrvManager::GetInstance()->GetCPUDescriptorHandle(particle3D->INDEX_);
+	particle3D->instancingSrvHandleGPU_ = SrvManager::GetInstance()->GetGPUDescriptorHandle(particle3D->INDEX_);
+	
 
-	particle3D->instancingSrvHandleGPU_ = SrvManager::GetInstance()->GetGPUDescriptorHandle(3);
-
-	SrvManager::GetInstance()->CreateSRVForStructuredBuffer(3, particle3D->instancingResource_.Get(), MAX_INSTANCE_NUMBER_, sizeof(ParticleForGPU));
-
-
+	SrvManager::GetInstance()->CreateSRVForStructuredBuffer(particle3D->INDEX_, particle3D->instancingResource_.Get(), MAX_INSTANCE_NUMBER_, sizeof(ParticleForGPU));
+	
+	particle3D->instancingResource_->Map(0, nullptr, reinterpret_cast<void**>(&particle3D->instancingData_));
 
 	//Lighting
 	particle3D->directionalLightResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(DirectionalLight)).Get();
@@ -294,8 +296,10 @@ void Particle3D::Draw(uint32_t textureHandle,Camera& camera){
 	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
 
 	//インスタンシング
-	instancingResource_->Map(0, nullptr, reinterpret_cast<void**>(&instancingData_));
-	DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(1, instancingSrvHandleGPU_);
+
+	//DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(1, instancingSrvHandleGPU_);
+
+	SrvManager::GetInstance()->SetGraphicsRootDescriptorTable(1, INDEX_);
 
 
 	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である

@@ -80,6 +80,19 @@ void SampleScene::Initialize() {
 	particleTranslate_ = { 0.0f,0.0f,0.0f };
 
 
+
+
+
+	particle2_.reset(Particle3D::Create(particleModel));
+	particleTextureHandle2_ = TextureManager::GetInstance()->LoadTexture("Resources/uvChecker.png");
+	particleTranslate2_ = { 0.0f,9.0f,0.0f };
+	accelerationField2_.acceleration = { 5.0f,0.0f,0.0, };
+	accelerationField2_.area.min = { -1.0f,-1.0f,-1.0f };
+	accelerationField2_.area.max = { 1.0f,1.0f,1.0f };
+	isSetField2_ = false;
+
+
+
 	cameraTranslate_ = { 0.0f,10.0f,-30.0f };
 	camera_.Initialize();
 	camera_.rotate_ = { 0.2f,0.0f,0.0f };
@@ -139,6 +152,8 @@ void SampleScene::Update(GameManager* gameManager) {
 
 
 	particle_->SetTranslate(particleTranslate_);
+	particle2_->SetTranslate(particleTranslate2_);
+
 
 	particle_->SetField(isSetField_);
 
@@ -225,6 +240,8 @@ void SampleScene::Draw() {
 	
 	}
 	particle_->Draw(particleTextureHandle_,camera_);
+	particle2_->Draw(particleTextureHandle2_, camera_);
+
 	//sprite->Draw();
 }
 

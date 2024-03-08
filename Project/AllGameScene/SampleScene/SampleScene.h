@@ -74,6 +74,16 @@ private:
 	AccelerationField accelerationField_ = {};
 	bool isSetField_ = false;
 
+
+	std::unique_ptr<Particle3D> particle2_ = nullptr;
+	uint32_t particleTextureHandle2_ = 0u;
+	Vector3 particleTranslate2_ = {};
+	AccelerationField accelerationField2_ = {};
+	bool isSetField2_ = false;
+
+
+
+
 	Camera camera_ = {};
 	Vector3 cameraTranslate_ = {0.0f,0.0f,0.0f};
 	

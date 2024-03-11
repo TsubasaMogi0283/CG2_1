@@ -206,7 +206,7 @@ private:
 	//描画すべきインスタンス数
 	uint32_t numInstance_ = 0;
 
-	int INDEX_;
+	int InstancingIndex_;
 
 	//パーティクル
 	std::list<Particle>particles_;

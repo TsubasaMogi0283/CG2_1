@@ -62,7 +62,7 @@ public:
 
 
 public:
-	void Initialize(uint32_t modelHandle);
+	void Initialize();
 
 
 
@@ -74,15 +74,23 @@ public:
 
 
 private:
+	void Update(Camera& camera);
+	//生成関数
 	Particle MakeNewParticle(std::mt19937& randomEngine);
 
+	//エミッタ
 	std::list<Particle> Emission(const Emitter& emmitter, std::mt19937& randomEngine);
 
-	void Update(Camera& camera);
 
 private:
 	//ユーザーが付けるグループ名をキーとしてグループを持てるようにする
 	std::unordered_map<std::string, ParticleGrounp>particleGroup_;
+
+
+	//ランダムエンジンの初期化
+	 //C++でいうsrandみたいなやつ
+	std::random_device seedGenerator;
+	std::mt19937 rand_ = {};
 
 	ComPtr<ID3D12Resource> vertexResource_ = nullptr;
 	std::vector<VertexData> vertices_{};
@@ -124,7 +132,6 @@ private:
 
 
 	//パーティクル
-	std::list<Particle>particles_;
 	ParticleForGPU* instancingData_ = nullptr;
 };
 

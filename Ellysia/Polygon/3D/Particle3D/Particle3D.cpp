@@ -25,7 +25,6 @@ Particle3D* Particle3D::Create(uint32_t modelHandle) {
 	//ブレンドモードの設定
 	//Addでやるべきとのこと
 	PipelineManager::GetInstance()->GenerateParticle3DPSO();
-	//INDEX_++;
 
 #pragma region デフォルトの設定 
 	particle3D->emitter_.count = 100;
@@ -49,7 +48,7 @@ Particle3D* Particle3D::Create(uint32_t modelHandle) {
 
 
 
-	particle3D->INDEX_ = SrvManager::GetInstance()->Allocate();
+	particle3D->InstancingIndex_ = SrvManager::GetInstance()->Allocate();
 
 
 
@@ -68,19 +67,17 @@ Particle3D* Particle3D::Create(uint32_t modelHandle) {
 	particle3D->vertexBufferView_.StrideInBytes = sizeof(VertexData);
 
 
-	
-	
 
 
 	//インスタンシング
 	particle3D->instancingResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(ParticleForGPU) * MAX_INSTANCE_NUMBER_);
 	descriptorSizeSRV_ =  DirectXSetup::GetInstance()->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	
-	particle3D->instancingSrvHandleCPU_= SrvManager::GetInstance()->GetCPUDescriptorHandle(particle3D->INDEX_);
-	particle3D->instancingSrvHandleGPU_ = SrvManager::GetInstance()->GetGPUDescriptorHandle(particle3D->INDEX_);
+	particle3D->instancingSrvHandleCPU_= SrvManager::GetInstance()->GetCPUDescriptorHandle(particle3D->InstancingIndex_);
+	particle3D->instancingSrvHandleGPU_ = SrvManager::GetInstance()->GetGPUDescriptorHandle(particle3D->InstancingIndex_);
 	
 
-	SrvManager::GetInstance()->CreateSRVForStructuredBuffer(particle3D->INDEX_, particle3D->instancingResource_.Get(), MAX_INSTANCE_NUMBER_, sizeof(ParticleForGPU));
+	SrvManager::GetInstance()->CreateSRVForStructuredBuffer(particle3D->InstancingIndex_, particle3D->instancingResource_.Get(), MAX_INSTANCE_NUMBER_, sizeof(ParticleForGPU));
 	
 	particle3D->instancingResource_->Map(0, nullptr, reinterpret_cast<void**>(&particle3D->instancingData_));
 
@@ -153,7 +150,7 @@ void Particle3D::Update(Camera& camera){
 	if (emitter_.frequency <= emitter_.frequencyTime) {
 		//パーティクルを作る
 		particles_.splice(particles_.end(), Emission(emitter_, randomEngine));
-		//余計に杉田時間も神して頻度計算する
+		//余計に過ぎた時間も加味して頻度計算する
 		emitter_.frequencyTime -= emitter_.frequency;
 	}
 
@@ -246,14 +243,7 @@ void Particle3D::Draw(uint32_t textureHandle,Camera& camera){
 	//更新
 	Update(camera);
 
-#pragma region 頂点データ
-	//頂点バッファにデータを書き込む
-	VertexData* vertexData = nullptr;
-	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));//書き込むためのアドレスを取得
-	std::memcpy(vertexData, vertices_.data(), sizeof(VertexData) * vertices_.size());
-	vertexResource_->Unmap(0, nullptr);
 
-#pragma endregion
 
 #pragma region マテリアルにデータを書き込む
 	//書き込むためのアドレスを取得
@@ -299,7 +289,7 @@ void Particle3D::Draw(uint32_t textureHandle,Camera& camera){
 
 	//DirectXSetup::GetInstance()->GetCommandList()->SetGraphicsRootDescriptorTable(1, instancingSrvHandleGPU_);
 
-	SrvManager::GetInstance()->SetGraphicsRootDescriptorTable(1, INDEX_);
+	SrvManager::GetInstance()->SetGraphicsRootDescriptorTable(1, InstancingIndex_);
 
 
 	//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である

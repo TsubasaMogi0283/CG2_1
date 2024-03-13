@@ -75,6 +75,7 @@ void Particle3DManager::Initialize(){
 	accelerationField_.area.max = { 1.0f,1.0f,1.0f };
 
 
+
 }
 
 void Particle3DManager::CreateParticleGroup(const std::string name, uint32_t textureHandle, Vector3 position, uint32_t count){

@@ -106,11 +106,12 @@ void SampleScene::Initialize() {
 
 
 	//これEmitterクラス作らなくて良くない？
-	Particle3DManager::GetInstance()->Emit("sample", particleTextureHandle_, { 4.0f,4.0f,0.0f }, 10);
-	Particle3DManager::GetInstance()->Emit("sample2", particleTextureHandle2_, { 0.0f,7.0f,0.0f }, 10);
+	Particle3DManager::GetInstance()->Emit("sample", particleTextureHandle_, { 4.0f,4.0f,0.0f }, 5);
+	Particle3DManager::GetInstance()->Emit("sample2", particleTextureHandle2_, { 0.0f,7.0f,0.0f }, 2);
 
-	Particle3DManager::GetInstance()->Emit("sample3", particleTextureHandle_, { 0.0f,0.0f,0.0f }, 10);
-	Particle3DManager::GetInstance()->Emit("sample4", particleTextureHandle2_, { 0.0f,0.0f,0.0f }, 10);
+	//同じ場所
+	Particle3DManager::GetInstance()->Emit("sample3", particleTextureHandle_, { 0.0f,0.0f,0.0f }, 20);
+	Particle3DManager::GetInstance()->Emit("sample4", particleTextureHandle2_, { 0.0f,0.0f,0.0f }, 5);
 
 
 

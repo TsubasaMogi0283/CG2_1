@@ -69,9 +69,15 @@ void Particle3DManager::Initialize(){
 
 #pragma endregion
 
+
+	accelerationField_.acceleration = { 5.0f,0.0f,0.0f };
+	accelerationField_.area.min = { -1.0f,-1.0f,-1.0f };
+	accelerationField_.area.max = { 1.0f,1.0f,1.0f };
+
+
 }
 
-void Particle3DManager::CreateParticleGroup(const std::string name, uint32_t textureHandle, Vector3 position){
+void Particle3DManager::CreateParticleGroup(const std::string name, uint32_t textureHandle, Vector3 position, uint32_t count){
     
 
     //空のグループを生成
@@ -98,7 +104,7 @@ void Particle3DManager::CreateParticleGroup(const std::string name, uint32_t tex
 
 	particles.emitter_.frequency = 1.0f;
 	particles.emitter_.frequencyTime = 0.0f;
-	particles.emitter_.count = 6;
+	particles.emitter_.count = count;
 	particles.emitter_.transform.scale = {1.0f,1.0f,1.0f};
 	particles.emitter_.transform.rotate = { 0.0f,0.0f,0.0f };
 	particles.emitter_.transform.translate = position;
@@ -156,7 +162,7 @@ std::list<Particle> Particle3DManager::Emission(Vector3 position,uint32_t count,
 //作り方が分からない
 void Particle3DManager::Emit(const std::string name, uint32_t textureHandle, const Vector3& position, uint32_t count) {
 	//とりあえず登録用にしておく
-	CreateParticleGroup(name, textureHandle,position);
+	CreateParticleGroup(name, textureHandle,position,count);
 }
 
 
@@ -200,6 +206,7 @@ void Particle3DManager::Update(Camera& camera) {
 			}
 			//フィールド設定すると風の影響を受ける
 			if (isSetField_ == true) {
+
 				if (IsCollisionAABBAndPoint(accelerationField_.area, (*particleIterator).transform.translate)) {
 					(*particleIterator).velocity.x += accelerationField_.acceleration.x * DELTA_TIME;
 					(*particleIterator).velocity.y += accelerationField_.acceleration.y * DELTA_TIME;

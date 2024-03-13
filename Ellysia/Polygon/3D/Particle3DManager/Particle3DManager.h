@@ -76,7 +76,7 @@ public:
 private:
 	void Update(Camera& camera);
 
-	void CreateParticleGroup(const std::string name, uint32_t textureHandle, Vector3 position);
+	void CreateParticleGroup(const std::string name, uint32_t textureHandle, Vector3 position,uint32_t count);
 
 
 	//生成関数
@@ -132,7 +132,7 @@ private:
 	const float DELTA_TIME = 1.0f / 60.0f;
 
 	//フィールド
-	bool isSetField_ = false;
+	bool isSetField_ = true;
 	AccelerationField accelerationField_ = {};
 
 

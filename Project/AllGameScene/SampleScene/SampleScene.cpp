@@ -7,6 +7,7 @@
 
 
 #include "SampleScene2/SampleScene2.h"
+#include <Polygon/3D/Particle3DManager/Particle3DManager.h>
 
 /// <summary>
 	/// コンストラクタ
@@ -99,7 +100,10 @@ void SampleScene::Initialize() {
 	camera_.translate_ = cameraTranslate_;
 
 
+	Particle3DManager::GetInstance()->GetInstance()->Initialize();
+	
 
+	Particle3DManager::GetInstance()->Emit("sample", { 0.0f,5.0f,0.0f }, 10);
 
 	audio_ = Audio::GetInstance();
 	uint32_t audioHandle_ = audio_->LoadWave("Resources/Audio/Sample/Win.wav");
@@ -120,7 +124,7 @@ void SampleScene::Update(GameManager* gameManager) {
 	//model_[1]->SetDirectionalLightDirection(lightingDirection_);
 
 
-
+	
 
 	const float SPEED = 1.0f;
 	
@@ -236,12 +240,15 @@ void SampleScene::Update(GameManager* gameManager) {
 /// </summary>
 void SampleScene::Draw() {
 	for (int i = 0; i < MODEL_AMOUNT_; i++) {
-		model_[i]->Draw(modelWorldTransform_[i], camera_);
+		//model_[i]->Draw(modelWorldTransform_[i], camera_);
 	
 	}
-	particle_->Draw(particleTextureHandle_,camera_);
-	particle2_->Draw(particleTextureHandle2_, camera_);
+	//particle_->Draw(particleTextureHandle_,camera_);
+	//particle2_->Draw(particleTextureHandle2_, camera_);
 
+
+
+	Particle3DManager::GetInstance()->Draw(camera_, particleTextureHandle2_);
 	//sprite->Draw();
 }
 

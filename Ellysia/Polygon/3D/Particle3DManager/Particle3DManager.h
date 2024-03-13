@@ -11,6 +11,7 @@
 #include <Camera.h>
 #include <AccelerationField.h>
 #include <DirectionalLight.h>
+#include "Particle3D.h"
 
 struct ParticleGrounp {
 	//マテリアルデータ
@@ -31,18 +32,8 @@ struct ParticleGrounp {
 	ParticleForGPU* instancingData;
 };
 
-struct Emitter {
-	//エミッタのTransform;
-	Transform transform;
-	//発生数
-	uint32_t count;
-	//発生頻度
-	float frequency;
-	//頻度用時刻
-	float frequencyTime;
-};
 
-class Particle3DManager final{
+class Particle3DManager final {
 private:
 	//コンストラクタ
 	Particle3DManager() = default;
@@ -99,6 +90,8 @@ private:
 	ComPtr<ID3D12Resource> materialResource_ = nullptr;
 	//色関係のメンバ変数
 	Vector4 materialColor_ = { 1.0f,1.0f,1.0f,1.0f };
+	//基本はtrueで
+	bool isEnableLighting_ = true;
 
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_{};
 
@@ -110,12 +103,11 @@ private:
 	Vector4 directionalLightColor_ = { 1.0f,1.0f,1.0f,1.0f };
 	float directionalLightIntensity_ = 3.0f;
 
-	//基本はtrueで
-	bool isEnableLighting_ = true;
+	
 	//方向
 	Vector3 lightingDirection_ = { 0.0f,-1.0f,0.0f };
 
-	
+
 	const uint32_t  MAX_INSTANCE_NUMBER_ = 100;
 
 	//描画すべきインスタンス数

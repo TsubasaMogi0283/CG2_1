@@ -30,6 +30,19 @@ void Particle3DManager::Initialize(){
     //パイプラインの生成
     PipelineManager::GetInstance()->GenerateParticle3DPSO();
      
+
+
+	//emitter_.count = 10;
+	////0.5秒ごとに発生
+	//emitter_.frequency = 0.5f;
+	////発生頻度用の時刻。0.0で初期化
+	//emitter_.frequencyTime = 0.0f;
+	////SRT
+	//emitter_.transform.scale = { 1.0f,1.0f,1.0f };
+	//emitter_.transform.rotate = { 0.0f,0.0f,0.0f };
+	//emitter_.transform.translate = { 0.0f,0.0f,0.0f };
+
+
     
     //頂点データの初期化
     //頂点リソースの生成
@@ -40,7 +53,8 @@ void Particle3DManager::Initialize(){
     vertices_ = ModelManager::GetInstance()->GetModelData(particleModel).vertices;
 
     
-    vertexResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(VertexData) * vertices_.size());
+    vertexResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(VertexData) * vertices_.size()).Get();
+	materialResource_= DirectXSetup::GetInstance()->CreateBufferResource(sizeof(Material)).Get();
 
     //読み込みのところでバッファインデックスを作った方がよさそう
     //vertexResourceがnullらしい
@@ -51,6 +65,10 @@ void Particle3DManager::Initialize(){
     vertexBufferView_.SizeInBytes = UINT(sizeof(VertexData) * vertices_.size());
     //１頂点あたりのサイズ
     vertexBufferView_.StrideInBytes = sizeof(VertexData);
+
+
+
+	directionalLightResource_ = DirectXSetup::GetInstance()->CreateBufferResource(sizeof(DirectionalLight)).Get();
 
 
 #pragma region 頂点データ
@@ -91,8 +109,65 @@ void Particle3DManager::CreateParticleGroup(const std::string name, uint32_t tex
 
 
     //登録
-    particleGroup_.at(name) = particles;
+    particleGroup_[name] = particles;
 
+
+
+}
+
+
+//生成関数
+Particle Particle3DManager::MakeNewParticle(std::mt19937& randomEngine) {
+	std::uniform_real_distribution<float> distribute(-1.0f, 1.0f);
+	Particle particle;
+	particle.transform.scale = { 1.0f,1.0f,1.0f };
+	particle.transform.rotate = { 0.0f,0.0f,0.0f };
+	//ランダムの値
+	Vector3 randomTranslate = { distribute(randomEngine),distribute(randomEngine),distribute(randomEngine) };
+	particle.transform.translate = Add(emitter_.transform.translate, randomTranslate);
+
+	//速度
+	std::uniform_real_distribution<float>distVelocity(-1.0f, 1.0f);
+	particle.velocity = { distVelocity(randomEngine),distVelocity(randomEngine),distVelocity(randomEngine) };
+
+	//Color
+	std::uniform_real_distribution<float> distColor(0.0f, 1.0f);
+	particle.color = { distColor(randomEngine),distColor(randomEngine),distColor(randomEngine),1.0f };
+
+
+	//時間
+	std::uniform_real_distribution<float> distTime(1.0f, 3.0f);
+	particle.lifeTime = distTime(randomEngine);
+	particle.currentTime = 0;
+
+
+
+	return particle;
+
+}
+
+//エミッタ
+std::list<Particle> Particle3DManager::Emission(const Emitter& emmitter, std::mt19937& randomEngine) {
+	std::list<Particle> particles;
+
+	for (uint32_t count = 0; count < 9; ++count) {
+		particles.push_back(MakeNewParticle(randomEngine));
+	}
+
+	return particles;
+}
+
+//作り方が分からない
+void Particle3DManager::Emit(const std::string name, const Vector3& position, uint32_t count) {
+	position;
+	count;
+
+	uint32_t particleTextureHandle_ = TextureManager::GetInstance()->LoadTexture("Resources/CG3/circle.png");
+	CreateParticleGroup(name, particleTextureHandle_);
+	for (auto& particleGroupPair : particleGroup_) {
+		//secondで中身にアクセス
+		particleGroupPair.second.particles = Emission(emitter_, rand_);
+	}
 
 
 }
@@ -202,90 +277,18 @@ void Particle3DManager::Update(Camera& camera) {
 
 		}
 
-		
-
-		
-	}
-}
-
-
-//生成関数
-Particle Particle3DManager::MakeNewParticle(std::mt19937& randomEngine) {
-	std::uniform_real_distribution<float> distribute(-1.0f, 1.0f);
-	Particle particle;
-	particle.transform.scale = { 1.0f,1.0f,1.0f };
-	particle.transform.rotate = { 0.0f,0.0f,0.0f };
-	//ランダムの値
-	Vector3 randomTranslate = { distribute(randomEngine),distribute(randomEngine),distribute(randomEngine) };
-	particle.transform.translate = Add(emitter_.transform.translate, randomTranslate);
-
-	//速度
-	std::uniform_real_distribution<float>distVelocity(-1.0f, 1.0f);
-	particle.velocity = { distVelocity(randomEngine),distVelocity(randomEngine),distVelocity(randomEngine) };
-
-	//Color
-	std::uniform_real_distribution<float> distColor(0.0f, 1.0f);
-	particle.color = { distColor(randomEngine),distColor(randomEngine),distColor(randomEngine),1.0f };
-
-
-	//時間
-	std::uniform_real_distribution<float> distTime(1.0f, 3.0f);
-	particle.lifeTime = distTime(randomEngine);
-	particle.currentTime = 0;
-
-
-
-	return particle;
-
-}
-
-//エミッタ
-std::list<Particle> Particle3DManager::Emission(const Emitter& emmitter, std::mt19937& randomEngine) {
-	std::list<Particle> particles;
-
-	for (uint32_t count = 0; count < emmitter.count; ++count) {
-
-		particles.push_back(MakeNewParticle(randomEngine));
 	}
 
-	return particles;
 }
 
-//作り方が分からない
-void Particle3DManager::Emit(const std::string name,const Vector3& position, uint32_t count){
-	position;
-	count;
 
-	uint32_t particleTextureHandle_ = TextureManager::GetInstance()->LoadTexture("Resources/CG3/circle.png");
-	CreateParticleGroup(name, particleTextureHandle_);
-	for (auto& particleGroupPair : particleGroup_) {
-		//secondで中身にアクセス
-		particleGroupPair.second.particles= Emission(emitter_, rand_);
-	}
-}
+
 
 void Particle3DManager::Draw(Camera& camera, uint32_t textureHandle) {
 	//更新
 	Update(camera);
 
 
-
-	////マテリアルデータ
-		//MaterialData materialData;
-		////テクスチャ用SRVインデックス
-		//uint32_t textureSrvindex;
-		//
-		////パーティクルのリスト
-		//std::list<Particle>particles;
-		//
-		////インスタンシングデータ用SRVインデックス
-		//uint32_t instancingSrvIndex;
-		////インスタンシングリソース
-		//ComPtr<ID3D12Resource>instancingResource;
-		////インスタンス数
-		//uint32_t instanceNumber;
-		////インスタンシングデータに書き込むためのポインタ
-		//ParticleForGPU* instancingData;
 
 
 

@@ -1,15 +1,8 @@
 #pragma once
-
-struct Emitter {
-	//エミッタのTransform;
-	Transform transform;
-	//発生数
-	uint32_t count;
-	//発生頻度
-	float frequency;
-	//頻度用時刻
-	float frequencyTime;
-};
+#include <string>
+#include "Vector3.h"
+#include "Transform.h"
+#include <Polygon/3D/Particle3DManager/Particle3DManager.h>
 
 class ParticleEmitter{
 public:
@@ -47,7 +40,7 @@ public:
 
 private:
 	//エミッタの設定
-	Emitter emitter_ = {};
+	Emitter newEmitter_ = {};
 	const float DELTA_TIME = 1.0f / 60.0f;
 
 	Vector3 transform_ = {};

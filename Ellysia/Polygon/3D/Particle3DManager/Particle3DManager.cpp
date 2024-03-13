@@ -32,17 +32,6 @@ void Particle3DManager::Initialize(){
      
 
 
-	//emitter_.count = 10;
-	////0.5秒ごとに発生
-	//emitter_.frequency = 0.5f;
-	////発生頻度用の時刻。0.0で初期化
-	//emitter_.frequencyTime = 0.0f;
-	////SRT
-	//emitter_.transform.scale = { 1.0f,1.0f,1.0f };
-	//emitter_.transform.rotate = { 0.0f,0.0f,0.0f };
-	//emitter_.transform.translate = { 0.0f,0.0f,0.0f };
-
-
     
     //頂点データの初期化
     //頂点リソースの生成
@@ -82,7 +71,7 @@ void Particle3DManager::Initialize(){
 
 }
 
-void Particle3DManager::CreateParticleGroup(const std::string name, uint32_t textureHandle){
+void Particle3DManager::CreateParticleGroup(const std::string name, uint32_t textureHandle, Vector3 position){
     
 
     //空のグループを生成
@@ -107,6 +96,12 @@ void Particle3DManager::CreateParticleGroup(const std::string name, uint32_t tex
 		particles.instancingSrvIndex, particles.instancingResource.Get(), MAX_INSTANCE_NUMBER_, sizeof(ParticleForGPU));
 
 
+	particles.emitter_.frequency = 1.0f;
+	particles.emitter_.frequencyTime = 0.0f;
+	particles.emitter_.count = 6;
+	particles.emitter_.transform.scale = {1.0f,1.0f,1.0f};
+	particles.emitter_.transform.rotate = { 0.0f,0.0f,0.0f };
+	particles.emitter_.transform.translate = position;
 
     //登録
     particleGroup_[name] = particles;
@@ -117,14 +112,15 @@ void Particle3DManager::CreateParticleGroup(const std::string name, uint32_t tex
 
 
 //生成関数
-Particle Particle3DManager::MakeNewParticle(std::mt19937& randomEngine) {
+Particle Particle3DManager::MakeNewParticle(std::mt19937& randomEngine, Vector3 position) {
 	std::uniform_real_distribution<float> distribute(-1.0f, 1.0f);
 	Particle particle;
 	particle.transform.scale = { 1.0f,1.0f,1.0f };
 	particle.transform.rotate = { 0.0f,0.0f,0.0f };
 	//ランダムの値
-	Vector3 randomTranslate = { distribute(randomEngine),distribute(randomEngine),distribute(randomEngine) };
-	particle.transform.translate = Add(emitter_.transform.translate, randomTranslate);
+	Vector3 randomTranslate = {distribute(randomEngine),distribute(randomEngine),distribute(randomEngine)};
+	//particle.transform.translate = Add(emitter_.transform.translate, randomTranslate);
+	particle.transform.translate = Add(position, randomTranslate);
 
 	//速度
 	std::uniform_real_distribution<float>distVelocity(-1.0f, 1.0f);
@@ -147,29 +143,20 @@ Particle Particle3DManager::MakeNewParticle(std::mt19937& randomEngine) {
 }
 
 //エミッタ
-std::list<Particle> Particle3DManager::Emission(const Emitter& emmitter, std::mt19937& randomEngine) {
+std::list<Particle> Particle3DManager::Emission(Vector3 position,uint32_t count, std::mt19937& randomEngine) {
 	std::list<Particle> particles;
 
-	for (uint32_t count = 0; count < 9; ++count) {
-		particles.push_back(MakeNewParticle(randomEngine));
+	for (uint32_t i = 0; i < count; ++i) {
+		particles.push_back(MakeNewParticle(randomEngine, position));
 	}
 
 	return particles;
 }
 
 //作り方が分からない
-void Particle3DManager::Emit(const std::string name, const Vector3& position, uint32_t count) {
-	position;
-	count;
-
-	uint32_t particleTextureHandle_ = TextureManager::GetInstance()->LoadTexture("Resources/CG3/circle.png");
-	CreateParticleGroup(name, particleTextureHandle_);
-	for (auto& particleGroupPair : particleGroup_) {
-		//secondで中身にアクセス
-		particleGroupPair.second.particles = Emission(emitter_, rand_);
-	}
-
-
+void Particle3DManager::Emit(const std::string name, uint32_t textureHandle, const Vector3& position, uint32_t count) {
+	//とりあえず登録用にしておく
+	CreateParticleGroup(name, textureHandle,position);
 }
 
 
@@ -177,47 +164,58 @@ void Particle3DManager::Emit(const std::string name, const Vector3& position, ui
 void Particle3DManager::Update(Camera& camera) {
 
 	//二重for文はこういうことだろうか
-	for (auto& particleGroupPair : particleGroup_){
+	for (auto& particleGroupPair : particleGroup_) {
 		//secondで中身にアクセス
 		ParticleGrounp& particleGroup = particleGroupPair.second;
+
 		
-		
+
+		//C++でいうsrandみたいなやつ
+		std::random_device seedGenerator;
+		std::mt19937 randomEngine(seedGenerator());
+
+
+		///時間経過
+		particleGroup.emitter_.frequencyTime += DELTA_TIME;
+		//頻度より大きいなら
+		if (particleGroup.emitter_.frequency <= particleGroup.emitter_.frequencyTime) {
+
+			particleGroup.particles.splice(particleGroup.particles.end(), Emission(particleGroup.emitter_.transform.translate, particleGroup.emitter_.count, randomEngine));
+
+			//余計に過ぎた時間も加味して頻度計算する
+			particleGroup.emitter_.frequencyTime -= particleGroup.emitter_.frequency;
+		}
+
 		//座標の計算など
 		particleGroup.instanceNumber = 0;
-		for (Particle& particle : particleGroup.particles) {
+		for (std::list<Particle>::iterator particleIterator = particleGroup.particles.begin();
+			particleIterator != particleGroup.particles.end(); ++particleIterator) {
+
+			
 
 
-			///時間経過
-			emitter_.frequencyTime += DELTA_TIME;
-			//頻度より大きいなら
-			if (emitter_.frequency <= emitter_.frequencyTime) {
-				//余計に過ぎた時間も加味して頻度計算する
-				emitter_.frequencyTime -= emitter_.frequency;
-			}
+			if ((*particleIterator).lifeTime <= (*particleIterator).currentTime) {
 
-
-			if (particle.lifeTime <= particle.currentTime) {
-				
 				continue;
 			}
-
 			//フィールド設定すると風の影響を受ける
 			if (isSetField_ == true) {
-				if (IsCollisionAABBAndPoint(accelerationField_.area, particle.transform.translate)) {
-					particle.velocity.x += accelerationField_.acceleration.x * DELTA_TIME;
-					particle.velocity.y += accelerationField_.acceleration.y * DELTA_TIME;
-					particle.velocity.z += accelerationField_.acceleration.z * DELTA_TIME;
+				if (IsCollisionAABBAndPoint(accelerationField_.area, (*particleIterator).transform.translate)) {
+					(*particleIterator).velocity.x += accelerationField_.acceleration.x * DELTA_TIME;
+					(*particleIterator).velocity.y += accelerationField_.acceleration.y * DELTA_TIME;
+					(*particleIterator).velocity.z += accelerationField_.acceleration.z * DELTA_TIME;
 				}
 			}
 
 
-			particle.currentTime += DELTA_TIME;
-			particle.transform.translate.x += particle.velocity.x * DELTA_TIME;
-			particle.transform.translate.y += particle.velocity.y * DELTA_TIME;
-			particle.transform.translate.z += particle.velocity.z * DELTA_TIME;
+			(*particleIterator).currentTime += DELTA_TIME;
+			(*particleIterator).transform.translate.x += (*particleIterator).velocity.x * DELTA_TIME;
+			(*particleIterator).transform.translate.y += (*particleIterator).velocity.y * DELTA_TIME;
+			(*particleIterator).transform.translate.z += (*particleIterator).velocity.z * DELTA_TIME;
 
 
 			//ビルボード有り
+			bool isBillBordMode_ = true;
 			if (isBillBordMode_ == true) {
 				//Y軸でπ/2回転
 				//これからはM_PIじゃなくてstd::numbers::pi_vを使おうね
@@ -230,8 +228,8 @@ void Particle3DManager::Update(Camera& camera) {
 				billBoardMatrix.m[3][1] = 0.0f;
 				billBoardMatrix.m[3][2] = 0.0f;
 
-				Matrix4x4 scaleMatrix = MakeScaleMatrix(particle.transform.scale);
-				Matrix4x4 translateMatrix = MakeTranslateMatrix(particle.transform.translate);
+				Matrix4x4 scaleMatrix = MakeScaleMatrix((*particleIterator).transform.scale);
+				Matrix4x4 translateMatrix = MakeTranslateMatrix((*particleIterator).transform.translate);
 
 
 				//パーティクル個別のRotateは関係ないよ
@@ -240,10 +238,10 @@ void Particle3DManager::Update(Camera& camera) {
 				//最大値を超えて描画しないようにする
 				if (particleGroup.instanceNumber < MAX_INSTANCE_NUMBER_) {
 					particleGroup.instancingData[particleGroup.instanceNumber].World = worldMatrix;
-					particleGroup.instancingData[particleGroup.instanceNumber].color = particle.color;
+					particleGroup.instancingData[particleGroup.instanceNumber].color = (*particleIterator).color;
 
 					//アルファはVector4でいうwだね
-					float alpha = 1.0f - (particle.currentTime / particle.lifeTime);
+					float alpha = 1.0f - ((*particleIterator).currentTime / (*particleIterator).lifeTime);
 					particleGroup.instancingData[particleGroup.instanceNumber].color.w = alpha;
 
 					++particleGroup.instanceNumber;
@@ -253,19 +251,19 @@ void Particle3DManager::Update(Camera& camera) {
 			else if (isBillBordMode_ == false) {
 				//ビルボードやらない版
 				Matrix4x4 worldMatrix = MakeAffineMatrix(
-					particle.transform.scale,
-					particle.transform.rotate,
-					particle.transform.translate);
+					(*particleIterator).transform.scale,
+					(*particleIterator).transform.rotate,
+					(*particleIterator).transform.translate);
 
 				//WVP行列を作成
 
 				//最大値を超えて描画しないようにする
 				if (particleGroup.instanceNumber < MAX_INSTANCE_NUMBER_) {
 					particleGroup.instancingData[particleGroup.instanceNumber].World = worldMatrix;
-					particleGroup.instancingData[particleGroup.instanceNumber].color = particle.color;
+					particleGroup.instancingData[particleGroup.instanceNumber].color = (*particleIterator).color;
 
 					//アルファはVector4でいうwだね
-					float alpha = 1.0f - (particle.currentTime / particle.lifeTime);
+					float alpha = 1.0f - ((*particleIterator).currentTime / (*particleIterator).lifeTime);
 					particleGroup.instancingData[particleGroup.instanceNumber].color.w = alpha;
 
 					++particleGroup.instanceNumber;
@@ -273,10 +271,7 @@ void Particle3DManager::Update(Camera& camera) {
 			}
 
 
-
-
 		}
-
 	}
 
 }
@@ -284,7 +279,7 @@ void Particle3DManager::Update(Camera& camera) {
 
 
 
-void Particle3DManager::Draw(Camera& camera, uint32_t textureHandle) {
+void Particle3DManager::Draw(Camera& camera) {
 	//更新
 	Update(camera);
 
@@ -343,7 +338,7 @@ void Particle3DManager::Draw(Camera& camera, uint32_t textureHandle) {
 
 
 		//SRVのDescriptorTableの先頭を設定。2はrootParameter[2]である
-		if (textureHandle != 0) {
+		if (particleGroup.textureSrvindex != 0) {
 			TextureManager::GraphicsCommand(particleGroup.textureSrvindex);
 		}
 

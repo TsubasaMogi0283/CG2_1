@@ -40,7 +40,7 @@ public:
 
 private:
 	//エミッタの設定
-	Emitter newEmitter_ = {};
+	//Emitter newEmitter_ = {};
 	const float DELTA_TIME = 1.0f / 60.0f;
 
 	Vector3 transform_ = {};

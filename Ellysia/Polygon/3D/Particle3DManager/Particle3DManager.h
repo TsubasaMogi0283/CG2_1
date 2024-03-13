@@ -11,7 +11,18 @@
 #include <Camera.h>
 #include <AccelerationField.h>
 #include <DirectionalLight.h>
-#include "Particle3D.h"
+#include "Transform.h"
+
+struct ParticleEmitterStruct {
+	//エミッタのTransform;
+	Transform transform;
+	//発生数
+	uint32_t count;
+	//発生頻度
+	float frequency;
+	//頻度用時刻
+	float frequencyTime;
+};
 
 struct ParticleGrounp {
 	//マテリアルデータ
@@ -30,6 +41,8 @@ struct ParticleGrounp {
 	uint32_t instanceNumber;
 	//インスタンシングデータに書き込むためのポインタ
 	ParticleForGPU* instancingData;
+
+	ParticleEmitterStruct emitter_ = {};
 };
 
 
@@ -55,22 +68,22 @@ public:
 public:
 	void Initialize();
 
+	void Emit(const std::string name,uint32_t textureHandle, const Vector3& position, uint32_t count);
 
-
-	void CreateParticleGroup(const std::string name, uint32_t textureHandle);
-
-	void Emit(const std::string name, const Vector3& position, uint32_t count);
-
-	void Draw(Camera& camera, uint32_t textureHandle);
+	void Draw(Camera& camera);
 
 
 private:
 	void Update(Camera& camera);
+
+	void CreateParticleGroup(const std::string name, uint32_t textureHandle, Vector3 position);
+
+
 	//生成関数
-	Particle MakeNewParticle(std::mt19937& randomEngine);
+	Particle MakeNewParticle(std::mt19937& randomEngine,Vector3 position);
 
 	//エミッタ
-	std::list<Particle> Emission(const Emitter& emmitter, std::mt19937& randomEngine);
+	std::list<Particle> Emission(Vector3 podition, uint32_t count, std::mt19937& randomEngine);
 
 
 private:
@@ -115,7 +128,7 @@ private:
 	bool isBillBordMode_ = true;
 
 	//エミッタの設定
-	Emitter emitter_ = {};
+	//Emitter emitter_ = {};
 	const float DELTA_TIME = 1.0f / 60.0f;
 
 	//フィールド

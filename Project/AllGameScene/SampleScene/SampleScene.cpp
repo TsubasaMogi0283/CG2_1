@@ -102,8 +102,17 @@ void SampleScene::Initialize() {
 
 	Particle3DManager::GetInstance()->GetInstance()->Initialize();
 	
+	particleTextureHandle_ = TextureManager::GetInstance()->LoadTexture("Resources/CG3/circle.png");
 
-	Particle3DManager::GetInstance()->Emit("sample", { 0.0f,5.0f,0.0f }, 10);
+
+	//これEmitterクラス作らなくて良くない？
+	Particle3DManager::GetInstance()->Emit("sample", particleTextureHandle_, { 4.0f,4.0f,0.0f }, 10);
+	Particle3DManager::GetInstance()->Emit("sample2", particleTextureHandle2_, { 0.0f,7.0f,0.0f }, 10);
+
+	Particle3DManager::GetInstance()->Emit("sample3", particleTextureHandle_, { 0.0f,0.0f,0.0f }, 10);
+	Particle3DManager::GetInstance()->Emit("sample4", particleTextureHandle2_, { 0.0f,0.0f,0.0f }, 10);
+
+
 
 	audio_ = Audio::GetInstance();
 	uint32_t audioHandle_ = audio_->LoadWave("Resources/Audio/Sample/Win.wav");
@@ -122,7 +131,6 @@ void SampleScene::Update(GameManager* gameManager) {
 	//model_[1]->SetDirectionalLightIntensity(intensity_);
 	//model_[0]->SetDirectionalLightDirection(lightingDirection_);
 	//model_[1]->SetDirectionalLightDirection(lightingDirection_);
-
 
 	
 
@@ -248,7 +256,7 @@ void SampleScene::Draw() {
 
 
 
-	Particle3DManager::GetInstance()->Draw(camera_, particleTextureHandle2_);
+	Particle3DManager::GetInstance()->Draw(camera_);
 	//sprite->Draw();
 }
 

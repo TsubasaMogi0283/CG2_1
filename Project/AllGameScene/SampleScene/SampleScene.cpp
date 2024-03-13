@@ -103,17 +103,19 @@ void SampleScene::Initialize() {
 	Particle3DManager::GetInstance()->GetInstance()->Initialize();
 	
 	particleTextureHandle_ = TextureManager::GetInstance()->LoadTexture("Resources/CG3/circle.png");
-
+	uint32_t bonusTextureHandle = TextureManager::GetInstance()->LoadTexture("Resources/Sample/Ellysia/Ellysia.png");
 
 	//これEmitterクラス作らなくて良くない？
 	Particle3DManager::GetInstance()->Emit("sample", particleTextureHandle_, { 4.0f,4.0f,0.0f }, 5);
 	Particle3DManager::GetInstance()->Emit("sample2", particleTextureHandle2_, { 0.0f,7.0f,0.0f }, 2);
+	
+
 
 	//同じ場所
 	Particle3DManager::GetInstance()->Emit("sample3", particleTextureHandle_, { 0.0f,0.0f,0.0f }, 20);
 	Particle3DManager::GetInstance()->Emit("sample4", particleTextureHandle2_, { 0.0f,0.0f,0.0f }, 5);
 
-
+	Particle3DManager::GetInstance()->Emit("sample5", bonusTextureHandle, { -2.0f,0.0f,0.0f }, 3);
 
 	audio_ = Audio::GetInstance();
 	uint32_t audioHandle_ = audio_->LoadWave("Resources/Audio/Sample/Win.wav");

@@ -8,7 +8,8 @@ Skydome::Skydome(){
 //初期化
 void Skydome::Initialize(){
 	model_ = std::make_unique<Model>();
-	model_.reset(Model::Create("Resources/CelestialSphere", "CelestialSphere.obj"));
+	uint32_t modelHandle = ModelManager::GetInstance()->LoadObject("Resources/CelestialSphere", "CelestialSphere.obj");
+	model_.reset(Model::Create(modelHandle));
 	
 	const float SCALE_SIZE = 200.0f;
 	worldTransform_.Initialize();
@@ -27,8 +28,8 @@ void Skydome::Update(){
 }
 
 //描画
-void Skydome::Draw(){
-	model_->Draw(worldTransform_);
+void Skydome::Draw(Camera& camera){
+	model_->Draw(worldTransform_, camera);
 }
 
 //デストラクタ

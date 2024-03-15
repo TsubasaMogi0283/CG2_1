@@ -3,10 +3,11 @@
 #include "Transform.h"
 #include "State/IEnemy/IEnemy.h"
 
-#include "Enemy/Bullet/EnemyBullet.h"
-#include "Enemy/TimeCall/TimeCall.h"
-#include "Collider/Collider.h"
+#include "Object/Enemy/Bullet/EnemyBullet.h"
+#include "Object/Enemy/TimeCall/TimeCall.h"
+#include "Object/Collider/Collider.h"
 #include "WorldTransform.h"
+#include "Camera.h"
 
 #include <memory>
 enum class Phase {
@@ -35,7 +36,7 @@ public:
 	void Update();
 
 	//描画
-	void Draw();
+	void Draw(Camera& camera);
 
 
 	//デストラクタ

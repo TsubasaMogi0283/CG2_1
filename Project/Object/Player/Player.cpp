@@ -130,7 +130,7 @@ void Player::Attack() {
 			//Matrix4x4 worldmatrix = MakeAffineMatrix(transform_.scale, transform_.rotate, transform_.translate);
 
 			//プレイヤーの向きに合わせて回転させる
-			velocity = TransformNormal(velocity, worldTransform_.matWorld_);
+			velocity = TransformNormal(velocity, worldTransform_.worldMatrix_);
 
 			PlayerBullet* newBullet = new PlayerBullet();
 			newBullet->Initialize(worldTransform_.translate_, velocity);
@@ -200,8 +200,6 @@ void Player::Update() {
 			worldTransform_.translate_.z + std::cosf(theta + i * AURA_INTERVAL) * 2.0f
 		};
 
-		playerAura_[i]->SetPosition(auraPosition_[i]);
-		playerAura_[i]->Update();
 
 	}
 	
@@ -209,21 +207,20 @@ void Player::Update() {
 }
 
 //描画
-void Player::Draw() {
+void Player::Draw(Camera& camera) {
 	
 	if (isDead_ == false) {
-		model_->Draw(worldTransform_);
+		model_->Draw(worldTransform_,camera);
 
 	}
 	
 	for (PlayerBullet* bullet : bullets_) {
-		bullet->Draw();
+		bullet->Draw(camera);
 	}
 
 
 	for (int i = 0; i < AURA_AMOUNT_; i++) {
 		if (isAura_ == true) {
-			playerAura_[i]->Draw();
 		}
 
 	}

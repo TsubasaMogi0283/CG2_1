@@ -1,7 +1,8 @@
 #pragma once
 #include "Model.h"
-#include "Collider/Collider.h"
+#include "Object/Collider/Collider.h"
 #include "WorldTransform.h"
+#include "Camera.h"
 #include <memory>
 
 class PlayerBullet:public Collider{
@@ -22,7 +23,7 @@ public:
 	void Update();
 
 	//描画
-	void Draw();
+	void Draw(Camera& camera);
 
 	//デストラクタ
 	~PlayerBullet();

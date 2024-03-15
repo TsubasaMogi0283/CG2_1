@@ -1,7 +1,7 @@
 #pragma once
 #include "Transform.h"
 #include "Model.h"
-#include "Collider/Collider.h"
+#include "Object/Collider/Collider.h"
 
 #include <memory>
 #include "WorldTransform.h"

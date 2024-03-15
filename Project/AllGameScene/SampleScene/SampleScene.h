@@ -9,6 +9,7 @@
 #include <memory>
 #include <Model.h>
 #include <numbers>
+#include <Object/Player/Player.h>
 
 //StatePatternを使う時は必ず前方宣言をするように
 class GameManager;
@@ -81,6 +82,9 @@ private:
 	AccelerationField accelerationField2_ = {};
 	bool isSetField2_ = false;
 
+
+
+	std::unique_ptr<Player> player_ = nullptr;
 
 
 

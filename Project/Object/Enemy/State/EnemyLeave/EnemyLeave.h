@@ -1,5 +1,5 @@
 #pragma once
-#include "Enemy/State/IEnemy/IEnemy.h"
+#include "Object/Enemy/State/IEnemy/IEnemy.h"
 
 class Enemy;
 

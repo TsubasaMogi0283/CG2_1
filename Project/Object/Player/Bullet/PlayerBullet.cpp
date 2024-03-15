@@ -1,5 +1,5 @@
 #include "PlayerBullet.h"
-#include <Collider/CollisionConfig.h>
+#include <Object/Collider/CollisionConfig.h>
 #include <VectorCalculation.h>
 
 PlayerBullet::PlayerBullet(){
@@ -10,7 +10,8 @@ void PlayerBullet::Initialize(Vector3 position,Vector3 velocity){
 	//良い感じなの無かったからとりあえずこれで
 	//真っ黒
    	model_ = std::make_unique<Model>();
-   	model_.reset(Model::Create("Resources/Shuriken", "Shuriken.obj"));
+	uint32_t modelHandle = ModelManager::GetInstance()->LoadObject("Resources/Shuriken", "Shuriken.obj");
+   	model_.reset(Model::Create(modelHandle));
 	//worldTransform_ = { {0.5f,0.5f,0.5f},{0.0f,0.0f,0.0f},position };
 	worldTransform_.Initialize();
 	const float scale = 0.8f;
@@ -36,9 +37,9 @@ Vector3 PlayerBullet::GetWorldPosition() {
 	Vector3 result = {};
 	//移動成分を取り出してね
 	//一番下の行ね
-	result.x = worldTransform_.matWorld_.m[3][0];
-	result.y = worldTransform_.matWorld_.m[3][1];
-	result.z = worldTransform_.matWorld_.m[3][2];
+	result.x = worldTransform_.worldMatrix_.m[3][0];
+	result.y = worldTransform_.worldMatrix_.m[3][1];
+	result.z = worldTransform_.worldMatrix_.m[3][2];
 
 	return result;
 }
@@ -58,8 +59,8 @@ void PlayerBullet::Update(){
 
 }
 
-void PlayerBullet::Draw(){
-	model_->Draw(worldTransform_);
+void PlayerBullet::Draw(Camera& camera){
+	model_->Draw(worldTransform_, camera);
 }
 
 PlayerBullet::~PlayerBullet(){

@@ -1,9 +1,9 @@
 #include "Enemy.h"
-#include "Enemy/State/EnemyApproach/EnemyApproach.h"
-#include "Player/Player.h"
+#include "Object/Enemy/State/EnemyApproach/EnemyApproach.h"
+#include "Object/Player/Player.h"
 #include "Matrix4x4.h"
 #include "VectorCalculation.h"
-#include <Collider/CollisionConfig.h>
+#include <Object/Collider/CollisionConfig.h>
 #include "ImGuiManager.h"
 #include <Particle3D.h>
 
@@ -14,7 +14,8 @@ Enemy::Enemy(){
 
 void Enemy::Initialize(const Vector3& position){
 	model_ = std::make_unique<Model>();
-	model_.reset(Model::Create("Resources/Sample/Enemy", "enemy.obj"));
+	uint32_t modelHandle = ModelManager::GetInstance()->LoadObject("Resources/Sample/Enemy", "enemy.obj");
+	model_.reset(Model::Create(modelHandle));
 
 	worldTransform_.Initialize();
 	worldTransform_.scale_ = { 0.5f,0.5f,0.5f };
@@ -54,7 +55,7 @@ void Enemy::Fire() {
 	worldTranslate = MakeTranslateMatrix(GetTranslate());
 
 	//速度ベクトルを自機の向きに合わせて回転させる
-	afterVelocity = TransformNormal(afterVelocity,worldTransform_.matWorld_ );
+	afterVelocity = TransformNormal(afterVelocity,worldTransform_.worldMatrix_ );
 
 	//弾
 	//EnemyBullet* bullet_ = new EnemyBullet();
@@ -94,9 +95,9 @@ Vector3 Enemy::GetWorldPosition() {
 	Vector3 result = {};
 	//移動成分を取り出してね
 	//一番下の行ね
-	result.x = worldTransform_.matWorld_.m[3][0];
-	result.y = worldTransform_.matWorld_.m[3][1];
-	result.z = worldTransform_.matWorld_.m[3][2];
+	result.x = worldTransform_.worldMatrix_.m[3][0];
+	result.y = worldTransform_.worldMatrix_.m[3][1];
+	result.z = worldTransform_.worldMatrix_.m[3][2];
 
 	return result;
 }
@@ -152,9 +153,9 @@ void Enemy::Update(){
 
 }
 
-void Enemy::Draw(){
+void Enemy::Draw(Camera& camera){
 	if (isDead_ == false) {
-		model_->Draw(worldTransform_);
+		model_->Draw(worldTransform_, camera);
 
 	}
 	

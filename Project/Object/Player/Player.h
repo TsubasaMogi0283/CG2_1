@@ -27,7 +27,7 @@ public:
 	void Update();
 
 	//描画
-	void Draw();
+	void Draw(Camera &camera);
 
 
 	//デストラクタ

@@ -117,6 +117,19 @@ void SampleScene::Initialize() {
 
 	Particle3DManager::GetInstance()->Emit("sample5", bonusTextureHandle, { -2.0f,0.0f,0.0f }, 3);
 
+
+
+	player_ = std::make_unique<Player>();
+	player_->Initialize();
+
+
+
+
+
+
+
+
+
 	audio_ = Audio::GetInstance();
 	uint32_t audioHandle_ = audio_->LoadWave("Resources/Audio/Sample/Win.wav");
 	//audio_->PlayWave(audioHandle_, true);
@@ -192,7 +205,7 @@ void SampleScene::Update(GameManager* gameManager) {
 		camera_.translate_.y -= MOVE_AMOUNT * CAMERA_VELOCITY;
 	}
 
-
+	player_->Update();
 	
 	//ウィンドウサイズの設定は↓でやるよ
 #ifdef _DEBUG
@@ -257,7 +270,7 @@ void SampleScene::Draw() {
 	//particle_->Draw(particleTextureHandle_,camera_);
 	//particle2_->Draw(particleTextureHandle2_, camera_);
 
-
+	player_->Draw(camera_);
 
 	Particle3DManager::GetInstance()->Draw(camera_);
 	//sprite->Draw();

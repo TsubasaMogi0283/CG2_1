@@ -7,7 +7,7 @@ EnemyParticle::EnemyParticle()
 
 void EnemyParticle::Initialize(Vector3 position){
 	model_ = std::make_unique<Particle3D>();
-	model_->Create("Resources/05_02", "plane.obj");
+	//model_->Create("Resources/05_02", "plane.obj");
 	int count = 10;
 	model_->SetCount(count);
 
@@ -29,12 +29,12 @@ void EnemyParticle::Update(){
 	if (transparency_ < 0.0f) {
 		isDead_ = true;
 	}
-	model_->Update();
+	//model_->Update();
 	worldTransform_.Update();
 }
 
 void EnemyParticle::Draw(){
-	model_->Draw(textureHandle_);
+	//model_->Draw(textureHandle_);
 
 }
 

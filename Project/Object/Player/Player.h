@@ -9,7 +9,6 @@
 #include "Object/Collider/Collider.h"
 #include "WorldTransform.h"
 #include "Audio.h"
-#include "Aura/PlayerAura.h"
 
 //Colliderを継承
 class Player:public Collider{
@@ -90,9 +89,6 @@ public:
 	}
 
 
-	void SetIsAura(bool isSetAura) {
-		this->isAura_ = isSetAura;
-	}
 
 #pragma endregion
 
@@ -139,10 +135,5 @@ private:
 	Audio* attackSE_ = nullptr;
 	uint32_t attackSEHandle_ = 0u;
 
-	static const int AURA_AMOUNT_ = 4;
-	std::unique_ptr<PlayerAura> playerAura_[AURA_AMOUNT_] = { nullptr };
-	Vector3 auraPosition_[AURA_AMOUNT_] = {};
-	bool isAura_ = false;
-	float theta = 0.0f;
 };
 

@@ -1,5 +1,5 @@
-#include "Enemy/State/EnemyLeave/EnemyLeave.h"
-#include "Enemy/Enemy.h"
+#include "Object/Enemy/State/EnemyLeave/EnemyLeave.h"
+#include "Object/Enemy/Enemy.h"
 #include "VectorCalculation.h"
 
 void EnemyLeave::Update(Enemy* enemy){

@@ -28,14 +28,6 @@ void Player::Initialize() {
 	attackSE_ = Audio::GetInstance();
 	attackSEHandle_ = attackSE_->LoadWave("Resources/Audio/Action/Attack.wav");
 
-	for (int i = 0; i < AURA_AMOUNT_; i++) {
-		playerAura_[i] = std::make_unique<PlayerAura>();
-
-		
-		auraPosition_[i] = { worldTransform_.translate_ };
-		playerAura_[i]->Initialize(worldTransform_.translate_);
-
-	}
 
 
 	SetCollisionAttribute(COLLISION_ATTRIBUTE_PLAYER);
@@ -190,19 +182,6 @@ void Player::Update() {
 	}
 	
 	
-	for (int i = 0; i < AURA_AMOUNT_; i++) {
-		theta += 0.05f;
-		const float HEIGHT_INTERVAL = 0.6f;
-		const float AURA_INTERVAL = 1.5f;
-		auraPosition_[i] = {
-			worldTransform_.translate_.x + std::sinf(theta + i * AURA_INTERVAL)*2.0f,
-			worldTransform_.translate_.y + i * HEIGHT_INTERVAL-0.7f,
-			worldTransform_.translate_.z + std::cosf(theta + i * AURA_INTERVAL) * 2.0f
-		};
-
-
-	}
-	
 
 }
 
@@ -219,11 +198,6 @@ void Player::Draw(Camera& camera) {
 	}
 
 
-	for (int i = 0; i < AURA_AMOUNT_; i++) {
-		if (isAura_ == true) {
-		}
-
-	}
 }
 
 

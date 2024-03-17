@@ -131,8 +131,8 @@ void SampleScene::Initialize() {
 
 
 	audio_ = Audio::GetInstance();
-	uint32_t audioHandle_ = audio_->LoadWave("Resources/Audio/Sample/Win.wav");
-	//audio_->PlayWave(audioHandle_, true);
+	uint32_t audioHandle_ = audio_->LoadWave("Resources/Audio/Sample/Hit.wav");
+	audio_->PlayWave(audioHandle_, true);
 
 }
 

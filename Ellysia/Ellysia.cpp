@@ -22,6 +22,14 @@ void Ellysia::Initialize(){
 	//DirectX
 	DirectXSetup::GetInstance()->Initialize();
 	
+	//COMの初期化
+	//COM...ComponentObjectModel、Microsoftの提唱する設計技術の１つ
+	//		DirectX12も簡略化されたCOM(Nano-COM)という設計で作られている
+
+	//COMを使用して開発されたソフトウェア部品をCOMコンポーネントと呼ぶ
+	//Textureを読むにあたって、COMコンポーネントの１つを利用する
+	CoInitializeEx(0, COINIT_MULTITHREADED);
+
 	SrvManager::GetInstance()->Initialize();
 
 	//ImGuiManager
@@ -123,7 +131,8 @@ void Ellysia::Operate(){
 void Ellysia::Release() {
 
 	Audio::GetInstance()->Release();
-	TextureManager::GetInstance()->Release();
+	//ゲーム終了時にはCOMの終了処理を行っておく
+	CoUninitialize();
 	ImGuiManager::GetInstance()->Release();
 	DirectXSetup::GetInstance()->Release();
 	WindowsSetup::GetInstance()->Close();

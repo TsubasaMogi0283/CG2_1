@@ -37,14 +37,7 @@ const D3D12_RESOURCE_DESC TextureManager::GetResourceDesc(uint32_t textureHandle
 
 //初期化
 void TextureManager::Initilalize() {
-	//this->directXSetup_ = DirectXSetup::GetInstance();
-	//COMの初期化
-	//COM...ComponentObjectModel、Microsoftの提唱する設計技術の１つ
-	//		DirectX12も簡略化されたCOM(Nano-COM)という設計で作られている
 	
-	//COMを使用して開発されたソフトウェア部品をCOMコンポーネントと呼ぶ
-	//Textureを読むにあたって、COMコンポーネントの１つを利用する
-	CoInitializeEx(0, COINIT_MULTITHREADED);
 
 	descriptorSizeSRV_ =  DirectXSetup::GetInstance()->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	descriptorSizeRTV_ =  DirectXSetup::GetInstance()->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
@@ -241,12 +234,6 @@ void TextureManager::GraphicsCommand(uint32_t texHandle) {
 	SrvManager::GetInstance()->SetGraphicsRootDescriptorTable(2, texHandle);
 }
 
-void TextureManager::Release() {
-	
-	
-	//ゲーム終了時にはCOMの終了処理を行っておく
-	CoUninitialize();
-}
 
 
 //コンストラクタ

@@ -41,8 +41,6 @@ public:
 
 	static void GraphicsCommand(uint32_t texHandle);
 
-	//解放
-	void Release();
 
 
 

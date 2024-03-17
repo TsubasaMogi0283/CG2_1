@@ -4,7 +4,7 @@
 #include <imgui.h>
 #include <Input.h>
 #include <Camera.h>
-
+#include "Audio.h"
 
 #include "SampleScene2/SampleScene2.h"
 #include <Polygon/3D/Particle3DManager/Particle3DManager.h>
@@ -131,7 +131,7 @@ void SampleScene::Initialize() {
 
 
 	audio_ = Audio::GetInstance();
-	uint32_t audioHandle_ = audio_->LoadWave("Resources/Audio/Sample/Hit.wav");
+	uint32_t audioHandle_ = audio_->LoadWave("Resources/Audio/Sample/The_Land_Of_Demise_32.wav");
 	audio_->PlayWave(audioHandle_, true);
 
 }

@@ -258,6 +258,48 @@
     <ClCompile Include="Ellysia\Polygon\3D\Particle3D\ParticleEmitter.cpp">
       <Filter>Ellysia\Source File</Filter>
     </ClCompile>
+    <ClCompile Include="Project\AllGameScene\TitleScene\TitleScene.cpp">
+      <Filter>Ellysia\Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Object\Collider\Collider.cpp">
+      <Filter>Ellysia\Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Object\Collider\CollisionManager.cpp">
+      <Filter>Ellysia\Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Object\CountDown\CountDown.cpp">
+      <Filter>Ellysia\Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Object\Enemy\Bullet\EnemyBullet.cpp">
+      <Filter>Ellysia\Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Object\Enemy\Enemy.cpp">
+      <Filter>Ellysia\Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Object\Enemy\Particle\EnemyParticle.cpp">
+      <Filter>Ellysia\Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Object\Enemy\State\EnemyApproach\EnemyApproach.cpp">
+      <Filter>Ellysia\Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Object\Enemy\State\EnemyLeave\EnemyLeave.cpp">
+      <Filter>Ellysia\Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Object\Enemy\State\IEnemy\IEnemy.cpp">
+      <Filter>Ellysia\Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Object\Enemy\TimeCall\TimeCall.cpp">
+      <Filter>Ellysia\Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Object\Player\Bullet\PlayerBullet.cpp">
+      <Filter>Ellysia\Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Object\Player\Player.cpp">
+      <Filter>Ellysia\Source File</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Object\Skydome\Skydome.cpp">
+      <Filter>Ellysia\Source File</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\Particle3D\Particle3d.PS.hlsl">
@@ -439,6 +481,54 @@
     <ClInclude Include="Ellysia\Polygon\3D\Particle3D\ParticleEmitter.h">
       <Filter>Ellysia\Header File</Filter>
     </ClInclude>
+    <ClInclude Include="Project\AllGameScene\TitleScene\TitleScene.h">
+      <Filter>Ellysia\Header File</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Object\Collider\Collider.h">
+      <Filter>Ellysia\Header File</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Object\Collider\CollisionConfig.h">
+      <Filter>Ellysia\Header File</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Object\Collider\CollisionManager.h">
+      <Filter>Ellysia\Header File</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Object\CountDown\CountDown.h">
+      <Filter>Ellysia\Header File</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Object\Enemy\Bullet\EnemyBullet.h">
+      <Filter>Ellysia\Header File</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Object\Enemy\Enemy.h">
+      <Filter>Ellysia\Header File</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Object\Enemy\Particle\EnemyParticle.h">
+      <Filter>Ellysia\Header File</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Object\Enemy\State\EnemyApproach\EnemyApproach.h">
+      <Filter>Ellysia\Header File</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Object\Enemy\State\EnemyLeave\EnemyLeave.h">
+      <Filter>Ellysia\Header File</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Object\Enemy\State\IEnemy\IEnemy.h">
+      <Filter>Ellysia\Header File</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Object\Enemy\TimeCall\TimeCall.h">
+      <Filter>Ellysia\Header File</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Object\Player\Bullet\PlayerBullet.h">
+      <Filter>Ellysia\Header File</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Object\Player\Player.h">
+      <Filter>Ellysia\Header File</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Object\Skydome\Skydome.h">
+      <Filter>Ellysia\Header File</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Audio\AudioStruct.h">
+      <Filter>Ellysia\Header File\Audio</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shader\Particle3D\Particle3D.hlsli">
@@ -450,5 +540,10 @@
     <None Include="Resources\Shader\Object3D\Object3d.hlsli">
       <Filter>Ellysia\Resource File\Object3d</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\Audio\AudioMemo.txt">
+      <Filter>Ellysia\Header File\Audio</Filter>
+    </Text>
   </ItemGroup>
 </Project>

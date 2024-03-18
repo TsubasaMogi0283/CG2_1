@@ -42,7 +42,7 @@ void Audio::Initialize() {
 	//効果を作成
 	//この関数でリバーブ効果が生成される
 	//hr = XAudio2CreateReverb(&pXAPO_);
-	CreateFX(__uuidof(::FXReverb),&pXAPO_);
+	CreateFX(__uuidof(FXReverb),&pXAPO_);
 	assert(SUCCEEDED(hr));
 
 
@@ -348,7 +348,7 @@ void Audio::CreateReverb(uint32_t audioHandle) {
 	effectDescriptor_.pEffect = pXAPO_;
 
 	////チェーンに複数の効果がある場合Effectメンバーに効果の数が含まれる
-	effectChain_.EffectCount = 2;
+	effectChain_.EffectCount = 1;
 	effectChain_.pEffectDescriptors = &effectDescriptor_;
 
 	reverbParameters_.ReflectionsDelay = XAUDIO2FX_REVERB_DEFAULT_REFLECTIONS_DELAY;
@@ -379,8 +379,11 @@ void Audio::CreateReverb(uint32_t audioHandle) {
 	hr = audioInformation_[audioHandle].pSourceVoice_->SetEffectChain(&effectChain_);
 	assert(SUCCEEDED(hr));
 
+	FXREVERB_PARAMETERS XAPOParameters;
+	XAPOParameters.Diffusion = FXREVERB_DEFAULT_DIFFUSION;
+	XAPOParameters.RoomSize = FXREVERB_DEFAULT_ROOMSIZE;
 
-	hr = audioInformation_[audioHandle].pSourceVoice_->SetEffectParameters(0, &reverbParameters_, sizeof(reverbParameters_));
+	hr = audioInformation_[audioHandle].pSourceVoice_->SetEffectParameters(0, &XAPOParameters, sizeof(FXREVERB_PARAMETERS));
 	assert(SUCCEEDED(hr));
 
 

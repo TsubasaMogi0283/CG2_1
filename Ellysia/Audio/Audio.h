@@ -9,12 +9,18 @@
 #include <mmsystem.h>
 #include <cassert>
 #include <array>
-
+#include <XAPOFX.h>
 #pragma comment(lib, "winmm.lib")
 #pragma comment(lib,"xaudio2.lib")
 
+
 #include <wrl.h>
 using Microsoft::WRL::ComPtr;
+
+
+#include <complex>
+#include <vector>
+
 
 #include "Audio/AudioStruct.h"
 
@@ -78,6 +84,8 @@ public:
 	//デバッグ用
 	void RatioCalculationDebug();
 
+	void SetFilter(uint32_t audioHandle);
+
 private:
 	//音声データの開放
 	void SoundUnload(uint32_t soundDataHandle);
@@ -98,6 +106,7 @@ private:
 	float left_ = 0.0f;
 	float right_ = 0.0f;
 
+
 	//エフェクト
 	IUnknown* pXAPO_ = nullptr;
 
@@ -109,8 +118,6 @@ private:
 
 
 
-	IXAudio2SubmixVoice* pSubmixVoice_ = nullptr;
-	IXAudio2SourceVoice* pSourceVoice_ = nullptr;
 
 
 

@@ -17,7 +17,8 @@ SampleScene::SampleScene() {
 /// </summary>
 void SampleScene::Initialize() {
 	audio_ = Audio::GetInstance();
-	audioHandle_ = audio_->LoadWave("Resources/Audio/Sample/Win.wav");
+	audioHandle_ = audio_->LoadWave("Resources/Audio/Sample/Game.wav");
+	
 	audio_->PlayWave(audioHandle_, true);
 	audio_->SetPan(audioHandle_, pan_);
 	audio_->ChangePitch(audioHandle_, pitch_);
@@ -33,7 +34,7 @@ void SampleScene::Initialize() {
 /// </summary>
 void SampleScene::Update(GameManager* gameManager) {
 
-
+	audio_->CreateReverb(audioHandle_);
 	audio_->ChangePitch(audioHandle_, pitch_);
 	audio_->SetPan(audioHandle_, pan_);
 

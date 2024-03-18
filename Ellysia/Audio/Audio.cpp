@@ -20,7 +20,6 @@ Audio* Audio::GetInstance() {
 void Audio::Initialize() {
 
 
-
 	//XAudioのエンジンのインスタンスを生成
 	HRESULT hr;
 	hr = XAudio2Create(&xAudio2_, 0, XAUDIO2_DEFAULT_PROCESSOR);
@@ -42,7 +41,8 @@ void Audio::Initialize() {
 
 	//効果を作成
 	//この関数でリバーブ効果が生成される
-	hr = XAudio2CreateReverb(&pXAPO_);
+	//hr = XAudio2CreateReverb(&pXAPO_);
+	CreateFX(__uuidof(::FXReverb),&pXAPO_);
 	assert(SUCCEEDED(hr));
 
 
@@ -348,7 +348,7 @@ void Audio::CreateReverb(uint32_t audioHandle) {
 	effectDescriptor_.pEffect = pXAPO_;
 
 	////チェーンに複数の効果がある場合Effectメンバーに効果の数が含まれる
-	effectChain_.EffectCount = 1;
+	effectChain_.EffectCount = 2;
 	effectChain_.pEffectDescriptors = &effectDescriptor_;
 
 	reverbParameters_.ReflectionsDelay = XAUDIO2FX_REVERB_DEFAULT_REFLECTIONS_DELAY;
@@ -377,11 +377,11 @@ void Audio::CreateReverb(uint32_t audioHandle) {
 
 	//ここで上手くいかない
 	hr = audioInformation_[audioHandle].pSourceVoice_->SetEffectChain(&effectChain_);
-	//assert(SUCCEEDED(hr));
+	assert(SUCCEEDED(hr));
 
 
 	hr = audioInformation_[audioHandle].pSourceVoice_->SetEffectParameters(0, &reverbParameters_, sizeof(reverbParameters_));
-	//assert(SUCCEEDED(hr));
+	assert(SUCCEEDED(hr));
 
 
 
@@ -504,6 +504,11 @@ void Audio::RatioCalculationDebug() {
 
 }
 
+void Audio::SetFilter(uint32_t audioHandle){
+
+
+}
+
 //音声停止
 void Audio::StopWave(uint32_t audioHandle) {
 	HRESULT hr{};
@@ -528,7 +533,7 @@ void Audio::SoundUnload(uint32_t soundDataHandle) {
 //解放
 void Audio::Release() {
 
-	pXAPO_->Release();
+	//pXAPO_->Release();
 	for (int i = 0; i < SOUND_DATE_MAX_; i++) {
 		if (audioInformation_[i].pSourceVoice_ != nullptr) {
 			audioInformation_[i].pSourceVoice_->DestroyVoice();

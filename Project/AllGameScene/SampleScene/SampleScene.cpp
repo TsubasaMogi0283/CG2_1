@@ -42,6 +42,13 @@ void SampleScene::Update(GameManager* gameManager) {
 		audio_->ExitLoop(audioHandle_);
 	}
 
+	if (Input::GetInstance()->IsTriggerKey(DIK_1) == true) {
+		audio_->PauseWave(audioHandle_);
+	}
+	if (Input::GetInstance()->IsTriggerKey(DIK_2) == true) {
+		audio_->ResumeWave(audioHandle_);
+	}
+
 
 #ifdef _DEBUG
 	ImGui::Begin("Audio");

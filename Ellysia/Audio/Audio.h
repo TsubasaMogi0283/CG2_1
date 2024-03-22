@@ -59,6 +59,18 @@ public:
 	//ループ回数あり
 	void PlayWave(uint32_t audioHandle, int32_t loopCount);
 
+	/// <summary>
+	/// 一時停止
+	/// </summary>
+	/// <param name="ハンドル名"></param>
+	void PauseWave(uint32_t audioHandle);
+
+	/// <summary>
+	/// 再開
+	/// </summary>
+	/// <param name="ハンドル名"></param>
+	void ResumeWave(uint32_t audioHandle);
+
 	//音声停止
 	void StopWave(uint32_t audioHandle);
 

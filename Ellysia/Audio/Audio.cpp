@@ -215,11 +215,24 @@ void Audio::PlayWave(uint32_t audioHandle, int32_t loopCount){
 	assert(SUCCEEDED(hr));
 }
 
+void Audio::PauseWave(uint32_t audioHandle){
+	HRESULT hr{};
+	//いきなり停止させて残響とかのエフェクトも停止させたら違和感ある
+	//だからXAUDIO2_PLAY_TAILSを入れて余韻も残す
+	hr = audioInformation_[audioHandle].pSourceVoice_->Stop(XAUDIO2_PLAY_TAILS);
+	assert(SUCCEEDED(hr));
+}
+
+void Audio::ResumeWave(uint32_t audioHandle){
+	HRESULT hr{};
+	//波形データの再生
+	hr = audioInformation_[audioHandle].pSourceVoice_->Start(0);
+	assert(SUCCEEDED(hr));
+}
+
 //音声停止
 void Audio::StopWave(uint32_t audioHandle) {
-	HRESULT hr{};
-	hr = audioInformation_[audioHandle].pSourceVoice_->Stop();
-	assert(SUCCEEDED(hr));
+	
 }
 
 #pragma endregion

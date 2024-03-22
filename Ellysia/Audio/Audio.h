@@ -25,11 +25,6 @@ using Microsoft::WRL::ComPtr;
 #include "Audio/AudioStruct.h"
 
 
-enum LoopPartly {
-	Before,
-	After,
-};
-
 
 
 class Audio final {
@@ -71,10 +66,13 @@ public:
 #pragma endregion
 
 
+#pragma region ループ
 
 
-
-	//ループから抜ける
+	/// <summary>
+	/// ループから抜ける
+	/// </summary>
+	/// <param name="ハンドル名"></param>
 	void ExitLoop(uint32_t audioHandle);
 
 
@@ -83,15 +81,26 @@ public:
 	/// </summary>
 	/// <param name="ハンドル名"></param>
 	/// <param name="始まる位置(秒)"></param>
-	void AfterLoopPlayWave(uint32_t audioHandle, uint32_t second);
+	void AfterLoopPlayWave(uint32_t audioHandle, float second);
 
 	/// <summary>
 	/// 再生(前半ループ)
 	/// </summary>
 	/// <param name="ハンドル名"></param>
 	/// <param name="ループ間の長さ"></param>
-	void BeforeLoopPlayWave(uint32_t audioHandle, uint32_t length);
+	void BeforeLoopPlayWave(uint32_t audioHandle, float lengthSecond);
 
+
+	/// <summary>
+	/// 部分ループ
+	/// </summary>
+	/// <param name="ハンドル名"></param>
+	/// <param name="開始位置"></param>
+	/// <param name="ループの長さ"></param>
+	void PartlyLoopPlayWave(uint32_t audioHandle, float start, float lengthSecond);
+
+
+#pragma endregion
 
 	/// <summary>
 	/// 音量調節
@@ -100,12 +109,14 @@ public:
 	/// <param name="音量"></param>
 	void ChangeVolume(uint32_t audioHandle, float volume);
 
+
 	/// <summary>
 	/// 音の高さの変更(滑らか版)
 	/// </summary>
 	/// <param name="ハンドル名"></param>
 	/// <param name="値"></param>
 	void ChangeFrequency(uint32_t audioHandle, float ratio);
+
 
 	/// <summary>
 	/// ピッチの変更
@@ -114,6 +125,7 @@ public:
 	/// <param name="シンセの"></param>
 	/// <param name="値"></param>
 	void ChangePitch(uint32_t audioHandle, int32_t scale);
+
 
 	//Pan振り
 	void SetPan(uint32_t audioHandle, float_t pan);

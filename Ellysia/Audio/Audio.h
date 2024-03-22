@@ -52,9 +52,18 @@ public:
 
 	//音声再生
 	void PlayWave(uint32_t audioHandle, bool isLoop);
+	//ループ回数あり
+	void PlayWave(uint32_t audioHandle, int32_t loopCount);
+
 
 	//音声停止
 	void StopWave(uint32_t audioHandle);
+
+	//ループから抜ける
+	void ExitLoop(uint32_t audioHandle);
+
+
+
 
 	//音量調節
 	void ChangeVolume(uint32_t audioHandle, float volume);
@@ -98,23 +107,13 @@ private:
 	//最終的にここでまとめるよ(スピーカーみたいな感じだね)
 	IXAudio2MasteringVoice* masterVoice_ = nullptr;
 
-	XAUDIO2_BUFFER buf_{};
+	
 
 	//Panに必要な変数
 	DWORD dwChannelMask_ = {};
 	float outputMatrix_[8] = {};
 	float left_ = 0.0f;
 	float right_ = 0.0f;
-
-
-	//エフェクト
-	IUnknown* pXAPO_ = nullptr;
-
-
-	//XAUDIO2_EFFECT_DESCRIPTORにデータを設定
-	XAUDIO2_EFFECT_DESCRIPTOR effectDescriptor_;
-	XAUDIO2_EFFECT_CHAIN effectChain_ = {};
-	XAUDIO2FX_REVERB_PARAMETERS reverbParameters_ = {};
 
 
 

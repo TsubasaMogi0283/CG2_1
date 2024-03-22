@@ -39,12 +39,6 @@ void Audio::Initialize() {
 
 #pragma region エフェクトチェーンの作成
 
-	//効果を作成
-	//この関数でリバーブ効果が生成される
-	//hr = XAudio2CreateReverb(&pXAPO_);
-	CreateFX(__uuidof(FXReverb),&pXAPO_);
-	assert(SUCCEEDED(hr));
-
 
 #pragma endregion
 }
@@ -151,7 +145,12 @@ uint32_t Audio::LoadWave(const char* fileName) {
 	Audio::GetInstance()->audioInformation_[audioIndex].soundData_.pBuffer = reinterpret_cast<BYTE*>(pBuffer);
 	Audio::GetInstance()->audioInformation_[audioIndex].soundData_.bufferSize = data.size;
 
+	
+	//波形フォーマットを基にSourceVoiceの生成
+	HRESULT hr{};
+	hr = Audio::GetInstance()->xAudio2_->CreateSourceVoice(&Audio::GetInstance()->audioInformation_[audioIndex].pSourceVoice_, &Audio::GetInstance()->audioInformation_[audioIndex].soundData_.wfex);
 
+	assert(SUCCEEDED(hr));
 
 	return audioIndex;
 
@@ -163,28 +162,50 @@ uint32_t Audio::LoadWave(const char* fileName) {
 
 //音声再生
 void Audio::PlayWave(uint32_t audioHandle, bool isLoop) {
-	HRESULT hr{};
-
-	//波形フォーマットを基にSourceVoiceの生成
-	hr = xAudio2_->CreateSourceVoice(&audioInformation_[audioHandle].pSourceVoice_, &audioInformation_[audioHandle].soundData_.wfex);
-
-	assert(SUCCEEDED(hr));
+	
 
 	//再生する波形データの設定
-
-	buf_.pAudioData = audioInformation_[audioHandle].soundData_.pBuffer;
-	buf_.AudioBytes = audioInformation_[audioHandle].soundData_.bufferSize;
-	buf_.Flags = XAUDIO2_END_OF_STREAM;
+	XAUDIO2_BUFFER buffer{};
+	buffer.pAudioData = audioInformation_[audioHandle].soundData_.pBuffer;
+	buffer.AudioBytes = audioInformation_[audioHandle].soundData_.bufferSize;
+	buffer.Flags = XAUDIO2_END_OF_STREAM;
 	if (isLoop == true) {
 		//ずっとループさせたいならLoopCountにXAUDIO2_LOOP_INFINITEをいれよう
-		buf_.LoopCount = XAUDIO2_LOOP_INFINITE;
+		buffer.LoopCount = XAUDIO2_LOOP_INFINITE;
 	}
 	if (isLoop == false) {
-		buf_.LoopCount = XAUDIO2_NO_LOOP_REGION;
+		buffer.LoopCount = XAUDIO2_NO_LOOP_REGION;
 	}
 
+	HRESULT hr{};
+	//Buffer登録
+	hr = audioInformation_[audioHandle].pSourceVoice_->SubmitSourceBuffer(&buffer);
 	//波形データの再生
-	hr = audioInformation_[audioHandle].pSourceVoice_->SubmitSourceBuffer(&buf_);
+	hr = audioInformation_[audioHandle].pSourceVoice_->Start();
+
+
+
+	assert(SUCCEEDED(hr));
+}
+
+//ループ回数設定版
+void Audio::PlayWave(uint32_t audioHandle, int32_t loopCount){
+
+
+	//再生する波形データの設定
+	XAUDIO2_BUFFER buffer{};
+	buffer.pAudioData = audioInformation_[audioHandle].soundData_.pBuffer;
+	buffer.AudioBytes = audioInformation_[audioHandle].soundData_.bufferSize;
+	buffer.Flags = XAUDIO2_END_OF_STREAM;
+	//ここでループ回数を設定
+	//1回多くなっているので-1してあげた方が良いかも
+	buffer.LoopCount = loopCount-1;
+	
+
+	HRESULT hr{};
+	//Buffer登録
+	hr = audioInformation_[audioHandle].pSourceVoice_->SubmitSourceBuffer(&buffer);
+	//波形データの再生
 	hr = audioInformation_[audioHandle].pSourceVoice_->Start();
 
 
@@ -193,7 +214,7 @@ void Audio::PlayWave(uint32_t audioHandle, bool isLoop) {
 }
 
 //一応マイナスにも出来るらしい
-//移送の反転するために使うらしい。使い道は分からない。
+//位相の反転するために使うらしい。使い道は分からない。
 //音量を変える
 void Audio::ChangeVolume(uint32_t audioHandle, float volume) {
 
@@ -337,56 +358,7 @@ void Audio::SetPan(uint32_t audioHandle, float_t pan) {
 }
 
 void Audio::CreateReverb(uint32_t audioHandle) {
-	HRESULT hr{};
-
-
-	//データの設定
-	//チェーンに複数の効果がある場合は
-	//XAUDIO_EFFECT_DESCRIPTOR構造体が必要らしい
-	effectDescriptor_.InitialState = true;
-	effectDescriptor_.OutputChannels = 1;
-	effectDescriptor_.pEffect = pXAPO_;
-
-	////チェーンに複数の効果がある場合Effectメンバーに効果の数が含まれる
-	effectChain_.EffectCount = 1;
-	effectChain_.pEffectDescriptors = &effectDescriptor_;
-
-	reverbParameters_.ReflectionsDelay = XAUDIO2FX_REVERB_DEFAULT_REFLECTIONS_DELAY;
-	reverbParameters_.ReverbDelay = XAUDIO2FX_REVERB_DEFAULT_REVERB_DELAY;
-	reverbParameters_.RearDelay = XAUDIO2FX_REVERB_DEFAULT_REAR_DELAY;
-	reverbParameters_.PositionLeft = XAUDIO2FX_REVERB_DEFAULT_POSITION;
-	reverbParameters_.PositionRight = XAUDIO2FX_REVERB_DEFAULT_POSITION;
-	reverbParameters_.PositionMatrixLeft = XAUDIO2FX_REVERB_DEFAULT_POSITION_MATRIX;
-	reverbParameters_.PositionMatrixRight = XAUDIO2FX_REVERB_DEFAULT_POSITION_MATRIX;
-	reverbParameters_.EarlyDiffusion = XAUDIO2FX_REVERB_DEFAULT_EARLY_DIFFUSION;
-	reverbParameters_.LateDiffusion = XAUDIO2FX_REVERB_DEFAULT_LATE_DIFFUSION;
-	reverbParameters_.LowEQGain = XAUDIO2FX_REVERB_DEFAULT_LOW_EQ_GAIN;
-	reverbParameters_.LowEQCutoff = XAUDIO2FX_REVERB_DEFAULT_LOW_EQ_CUTOFF;
-	reverbParameters_.HighEQGain = XAUDIO2FX_REVERB_DEFAULT_HIGH_EQ_GAIN;
-	reverbParameters_.HighEQCutoff = XAUDIO2FX_REVERB_DEFAULT_HIGH_EQ_CUTOFF;
-	reverbParameters_.RoomFilterFreq = XAUDIO2FX_REVERB_DEFAULT_ROOM_FILTER_FREQ;
-	reverbParameters_.RoomFilterMain = XAUDIO2FX_REVERB_DEFAULT_ROOM_FILTER_MAIN;
-	reverbParameters_.RoomFilterHF = XAUDIO2FX_REVERB_DEFAULT_ROOM_FILTER_HF;
-	reverbParameters_.ReflectionsGain = XAUDIO2FX_REVERB_DEFAULT_REFLECTIONS_GAIN;
-	reverbParameters_.ReverbGain = XAUDIO2FX_REVERB_DEFAULT_REVERB_GAIN;
-	reverbParameters_.DecayTime = XAUDIO2FX_REVERB_DEFAULT_DECAY_TIME;
-	reverbParameters_.Density = XAUDIO2FX_REVERB_DEFAULT_DENSITY;
-	reverbParameters_.RoomSize = XAUDIO2FX_REVERB_DEFAULT_ROOM_SIZE;
-	reverbParameters_.WetDryMix = XAUDIO2FX_REVERB_DEFAULT_WET_DRY_MIX;
-
-
-	//ここで上手くいかない
-	hr = audioInformation_[audioHandle].pSourceVoice_->SetEffectChain(&effectChain_);
-	assert(SUCCEEDED(hr));
-
-	FXREVERB_PARAMETERS XAPOParameters;
-	XAPOParameters.Diffusion = FXREVERB_DEFAULT_DIFFUSION;
-	XAPOParameters.RoomSize = FXREVERB_DEFAULT_ROOMSIZE;
-
-	hr = audioInformation_[audioHandle].pSourceVoice_->SetEffectParameters(0, &XAPOParameters, sizeof(FXREVERB_PARAMETERS));
-	assert(SUCCEEDED(hr));
-
-
+	
 
 
 }
@@ -516,6 +488,13 @@ void Audio::SetFilter(uint32_t audioHandle){
 void Audio::StopWave(uint32_t audioHandle) {
 	HRESULT hr{};
 	hr = audioInformation_[audioHandle].pSourceVoice_->Stop();
+	assert(SUCCEEDED(hr));
+}
+
+void Audio::ExitLoop(uint32_t audioHandle){
+	HRESULT hr{};
+	//ExitLoop関数でループを抜ける
+	hr = audioInformation_[audioHandle].pSourceVoice_->ExitLoop();
 	assert(SUCCEEDED(hr));
 }
 

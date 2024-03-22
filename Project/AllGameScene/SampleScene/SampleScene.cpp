@@ -34,9 +34,13 @@ void SampleScene::Initialize() {
 /// </summary>
 void SampleScene::Update(GameManager* gameManager) {
 
-	audio_->CreateReverb(audioHandle_);
+	//audio_->CreateReverb(audioHandle_);
 	audio_->ChangePitch(audioHandle_, pitch_);
 	audio_->SetPan(audioHandle_, pan_);
+
+	if (Input::GetInstance()->IsTriggerKey(DIK_SPACE) == true) {
+		audio_->ExitLoop(audioHandle_);
+	}
 
 
 #ifdef _DEBUG

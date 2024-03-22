@@ -25,6 +25,13 @@ using Microsoft::WRL::ComPtr;
 #include "Audio/AudioStruct.h"
 
 
+enum LoopPartly {
+	Before,
+	After,
+};
+
+
+
 class Audio final {
 private:
 	//コンストラクタ
@@ -47,6 +54,8 @@ public:
 	//初期化
 	void Initialize();
 
+#pragma region 基本セット
+
 	//読み込み
 	static uint32_t LoadWave(const char* fileName);
 
@@ -55,24 +64,55 @@ public:
 	//ループ回数あり
 	void PlayWave(uint32_t audioHandle, int32_t loopCount);
 
-
 	//音声停止
 	void StopWave(uint32_t audioHandle);
+
+
+#pragma endregion
+
+
+
+
 
 	//ループから抜ける
 	void ExitLoop(uint32_t audioHandle);
 
 
+	/// <summary>
+	/// 再生(後半ループ)
+	/// </summary>
+	/// <param name="ハンドル名"></param>
+	/// <param name="始まる位置(秒)"></param>
+	void AfterLoopPlayWave(uint32_t audioHandle, uint32_t second);
+
+	/// <summary>
+	/// 再生(前半ループ)
+	/// </summary>
+	/// <param name="ハンドル名"></param>
+	/// <param name="ループ間の長さ"></param>
+	void BeforeLoopPlayWave(uint32_t audioHandle, uint32_t length);
 
 
-	//音量調節
+	/// <summary>
+	/// 音量調節
+	/// </summary>
+	/// <param name="ハンドル名"></param>
+	/// <param name="音量"></param>
 	void ChangeVolume(uint32_t audioHandle, float volume);
 
-	//ピッチの変更(滑らか版)
+	/// <summary>
+	/// 音の高さの変更(滑らか版)
+	/// </summary>
+	/// <param name="ハンドル名"></param>
+	/// <param name="値"></param>
 	void ChangeFrequency(uint32_t audioHandle, float ratio);
 
-	//ピッチの変更
-	//シンセとかのように段階的に出来るよ
+	/// <summary>
+	/// ピッチの変更
+	/// シンセのように出来るよ
+	/// </summary>
+	/// <param name="シンセの"></param>
+	/// <param name="値"></param>
 	void ChangePitch(uint32_t audioHandle, int32_t scale);
 
 	//Pan振り
@@ -129,6 +169,9 @@ private:
 
 
 private:
+
+	
+
 
 	//自分のエンジンではA4は442Hz基準にする
 	//もちろん12段階で1オクターブ

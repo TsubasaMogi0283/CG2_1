@@ -181,7 +181,7 @@ void Audio::PlayWave(uint32_t audioHandle, bool isLoop) {
 	//Buffer登録
 	hr = audioInformation_[audioHandle].pSourceVoice_->SubmitSourceBuffer(&buffer);
 	//波形データの再生
-	hr = audioInformation_[audioHandle].pSourceVoice_->Start();
+	hr = audioInformation_[audioHandle].pSourceVoice_->Start(0);
 
 
 
@@ -206,11 +206,98 @@ void Audio::PlayWave(uint32_t audioHandle, int32_t loopCount){
 	//Buffer登録
 	hr = audioInformation_[audioHandle].pSourceVoice_->SubmitSourceBuffer(&buffer);
 	//波形データの再生
-	hr = audioInformation_[audioHandle].pSourceVoice_->Start();
+	hr = audioInformation_[audioHandle].pSourceVoice_->Start(0);
 
 
 
 	assert(SUCCEEDED(hr));
+}
+
+//音声停止
+void Audio::StopWave(uint32_t audioHandle) {
+	HRESULT hr{};
+	hr = audioInformation_[audioHandle].pSourceVoice_->Stop();
+	assert(SUCCEEDED(hr));
+}
+
+
+
+void Audio::ExitLoop(uint32_t audioHandle) {
+	HRESULT hr{};
+	//ExitLoop関数でループを抜ける
+	hr = audioInformation_[audioHandle].pSourceVoice_->ExitLoop();
+	assert(SUCCEEDED(hr));
+}
+
+
+void Audio::AfterLoopPlayWave(uint32_t audioHandle, uint32_t second) {
+	//別名サスティンループというらしい
+	//シンセとかにあるサスティンと関係があるのかな
+
+	//後半ループするよ
+	//再生する波形データの設定
+	XAUDIO2_BUFFER buffer{};
+	buffer.pAudioData = audioInformation_[audioHandle].soundData_.pBuffer;
+	buffer.AudioBytes = audioInformation_[audioHandle].soundData_.bufferSize;
+	buffer.Flags = XAUDIO2_END_OF_STREAM;
+	//ここでループ回数を設定
+	buffer.LoopCount = XAUDIO2_LOOP_INFINITE;
+
+	//長いので新しく変数を作って分かりやすくする
+	int samplingRate = Audio::GetInstance()->audioInformation_[audioIndex].soundData_.wfex.nSamplesPerSec;
+
+	//ここでループしたい位置を設定してあげる
+	//ここfloatにしたいけど元々がuint32だから無理そう
+	buffer.LoopBegin = second * samplingRate;
+
+	
+
+	HRESULT hr{};
+	//Buffer登録
+	hr = audioInformation_[audioHandle].pSourceVoice_->SubmitSourceBuffer(&buffer);
+	//波形データの再生
+	hr = audioInformation_[audioHandle].pSourceVoice_->Start(0);
+
+
+
+	assert(SUCCEEDED(hr));
+
+}
+
+
+void Audio::BeforeLoopPlayWave(uint32_t audioHandle, uint32_t length){
+	//別名サスティンループというらしい
+	//シンセとかにあるサスティンと関係があるのかな
+	//こっちは前半でループ
+
+	//再生する波形データの設定
+	XAUDIO2_BUFFER buffer{};
+	buffer.pAudioData = audioInformation_[audioHandle].soundData_.pBuffer;
+	buffer.AudioBytes = audioInformation_[audioHandle].soundData_.bufferSize;
+	buffer.Flags = XAUDIO2_END_OF_STREAM;
+	//ここでループ回数を設定
+	buffer.LoopCount = XAUDIO2_LOOP_INFINITE;
+
+	//長いので新しく変数を作って分かりやすくする
+	int samplingRate = Audio::GetInstance()->audioInformation_[audioIndex].soundData_.wfex.nSamplesPerSec;
+
+	//ここでループしたい位置を設定してあげる
+	//ここfloatにしたいけど元々がuint32だから無理そう
+	buffer.LoopBegin = 0;
+	buffer.LoopLength = length * samplingRate;
+
+
+
+	HRESULT hr{};
+	//Buffer登録
+	hr = audioInformation_[audioHandle].pSourceVoice_->SubmitSourceBuffer(&buffer);
+	//波形データの再生
+	hr = audioInformation_[audioHandle].pSourceVoice_->Start(0);
+
+
+
+	assert(SUCCEEDED(hr));
+
 }
 
 //一応マイナスにも出来るらしい
@@ -484,19 +571,8 @@ void Audio::SetFilter(uint32_t audioHandle){
 
 }
 
-//音声停止
-void Audio::StopWave(uint32_t audioHandle) {
-	HRESULT hr{};
-	hr = audioInformation_[audioHandle].pSourceVoice_->Stop();
-	assert(SUCCEEDED(hr));
-}
 
-void Audio::ExitLoop(uint32_t audioHandle){
-	HRESULT hr{};
-	//ExitLoop関数でループを抜ける
-	hr = audioInformation_[audioHandle].pSourceVoice_->ExitLoop();
-	assert(SUCCEEDED(hr));
-}
+
 
 #pragma endregion
 

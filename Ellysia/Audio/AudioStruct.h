@@ -57,4 +57,5 @@ struct AudioInformation {
 
 	//テクスチャハンドル
 	uint32_t handle_ = 0;
+
 };

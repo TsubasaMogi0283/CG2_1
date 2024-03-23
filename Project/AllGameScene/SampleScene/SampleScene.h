@@ -49,6 +49,7 @@ private:
 
 	float_t pan_ = 0.0f;
 	int pitch_ = 0;
+	float cutOff_ = 1.0f;
 };
 
 

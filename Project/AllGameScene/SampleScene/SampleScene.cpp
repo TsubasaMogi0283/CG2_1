@@ -34,7 +34,9 @@ void SampleScene::Initialize() {
 /// </summary>
 void SampleScene::Update(GameManager* gameManager) {
 
-	//audio_->CreateReverb(audioHandle_);
+	
+
+	audio_->SetLowPassFilter(audioHandle_, cutOff_);
 	audio_->ChangePitch(audioHandle_, pitch_);
 	audio_->SetPan(audioHandle_, pan_);
 
@@ -53,6 +55,8 @@ void SampleScene::Update(GameManager* gameManager) {
 #ifdef _DEBUG
 	ImGui::Begin("Audio");
 	ImGui::SliderFloat("Pan", &pan_, -1.0f, 1.0f);
+	ImGui::SliderFloat("LowPassFilter", &cutOff_, 0.0f, 1.0f);
+
 	ImGui::InputInt("Pitch", &pitch_);
 	ImGui::End();
 #endif

@@ -150,7 +150,14 @@ uint32_t Audio::LoadWave(const char* fileName) {
 	
 	//波形フォーマットを基にSourceVoiceの生成
 	HRESULT hr{};
-	hr = Audio::GetInstance()->xAudio2_->CreateSourceVoice(&Audio::GetInstance()->audioInformation_[audioIndex].pSourceVoice_, &Audio::GetInstance()->audioInformation_[audioIndex].soundData_.wfex);
+	hr = Audio::GetInstance()->xAudio2_->CreateSourceVoice(
+		&Audio::GetInstance()->audioInformation_[audioIndex].pSourceVoice_, 
+		&Audio::GetInstance()->audioInformation_[audioIndex].soundData_.wfex);
+	assert(SUCCEEDED(hr));
+
+	hr = Audio::GetInstance()->xAudio2_->CreateSourceVoice(
+		&Audio::GetInstance()->audioInformation_[audioIndex].pSourceVoice_, 
+		&Audio::GetInstance()->audioInformation_[audioIndex].soundData_.wfex, XAUDIO2_VOICE_USEFILTER, 16.0f);
 
 	assert(SUCCEEDED(hr));
 
@@ -158,6 +165,120 @@ uint32_t Audio::LoadWave(const char* fileName) {
 
 #pragma endregion
 
+
+
+}
+
+uint32_t Audio::LoadWave(const char* fileName, uint32_t effectType){
+	//16,24,32bitは読み込み出来た
+	//64bitも読み込み出来るようにしたいと思ったが一般的に使われないらしい
+	//だから32が最大で良いかも。
+	//64bitを書き出せるCakewslkすご
+
+
+	//一度読み込んだものは２度読み込まず返すだけ
+	for (int i = 0; i < SOUND_DATE_MAX_; i++) {
+		if (Audio::GetInstance()->audioInformation_[i].name_ == fileName) {
+			return Audio::GetInstance()->audioInformation_[i].handle_;
+		}
+	}
+	//audioHandle_++;
+	audioIndex++;
+
+	//記録
+	Audio::GetInstance()->audioInformation_[audioIndex].name_ = fileName;
+	Audio::GetInstance()->audioInformation_[audioIndex].handle_ = audioIndex;
+
+
+#pragma region １,ファイルオープン
+	//ファイル入力ストリームのインスタンス
+	std::ifstream file;
+	//.wavファイルをバイナリモードで開く
+	file.open(fileName, std::ios_base::binary);
+	//ファイルオープン失敗を検出する
+	assert(file.is_open());
+
+#pragma endregion
+
+#pragma region ２,wavデータ読み込み
+
+	//RIFFヘッダーの読み込み
+	RiffHeader riff;
+	file.read((char*)&riff, sizeof(riff));
+	//ファイルがRIFFかチェック
+	if (strncmp(riff.chunk.id, "RIFF", 4) != 0) {
+		assert(0);
+	}
+	//タイプがWAVEかチェック
+	if (strncmp(riff.type, "WAVE", 4) != 0) {
+		assert(0);
+	}
+
+	//Formatチャンクの読み込み
+	FormatChunk format = {};
+	//チャンクヘッダーの確認
+	file.read((char*)&format, sizeof(ChunkHeader));
+	//何かここ空白入れないとダメらしい
+	//後ろが4だからかな・・
+	if (strncmp(format.chunk.id, "fmt ", 4) != 0) {
+		assert(0);
+	}
+
+	//チャンク本体の読み込み
+	assert(format.chunk.size <= sizeof(format.fmt));
+	file.read((char*)&format.fmt, format.chunk.size);
+
+
+	//Dataチャンクの読み込み
+	ChunkHeader data;
+	file.read((char*)&data, sizeof(data));
+	//JUNKチャンクを検出した場合
+	if (strncmp(data.id, "JUNK", 4) == 0) {
+		//読み込み位置をJUNKチャンクの終わりまで進める
+		file.seekg(data.size, std::ios_base::cur);
+		//再読み込み
+		file.read((char*)&data, sizeof(data));
+
+	}
+
+	//メインのデータチャンク
+	if (strncmp(data.id, "data", 4) != 0) {
+		assert(0);
+	}
+
+	//Dataチャンクのデータ部(波形データ)の読み込み
+	char* pBuffer = new char[data.size];
+	file.read(pBuffer, data.size);
+#pragma endregion
+
+#pragma region ３,Waveファイルを閉じる
+	file.close();
+
+
+#pragma endregion
+
+
+
+
+#pragma region 読み込んだ音声データを返す
+
+	Audio::GetInstance()->audioInformation_[audioIndex].soundData_.wfex = format.fmt;
+	Audio::GetInstance()->audioInformation_[audioIndex].soundData_.pBuffer = reinterpret_cast<BYTE*>(pBuffer);
+	Audio::GetInstance()->audioInformation_[audioIndex].soundData_.bufferSize = data.size;
+
+
+	//波形フォーマットを基にSourceVoiceの生成
+	HRESULT hr{};
+
+	hr = Audio::GetInstance()->xAudio2_->CreateSourceVoice(
+		&Audio::GetInstance()->audioInformation_[audioIndex].pSourceVoice_,
+		&Audio::GetInstance()->audioInformation_[audioIndex].soundData_.wfex, XAUDIO2_VOICE_USEFILTER, 16.0f);
+
+	assert(SUCCEEDED(hr));
+
+	return audioIndex;
+
+#pragma endregion
 
 
 }
@@ -232,7 +353,9 @@ void Audio::ResumeWave(uint32_t audioHandle){
 
 //音声停止
 void Audio::StopWave(uint32_t audioHandle) {
-	
+	HRESULT hr{};
+	hr = audioInformation_[audioHandle].pSourceVoice_->Stop();
+	assert(SUCCEEDED(hr));
 }
 
 #pragma endregion
@@ -264,7 +387,6 @@ void Audio::AfterLoopPlayWave(uint32_t audioHandle, float second) {
 	int samplingRate = Audio::GetInstance()->audioInformation_[audioIndex].soundData_.wfex.nSamplesPerSec;
 
 	//ここでループしたい位置を設定してあげる
-	//ここfloatにしたいけど元々がuint32だから無理そう
 	buffer.LoopBegin = uint32_t(second * samplingRate);
 
 	
@@ -413,6 +535,10 @@ void Audio::ChangePitch(uint32_t audioHandle, int32_t scale) {
 			}
 
 		}
+		//-12以上は下がらなかった
+		if (scale < -12) {
+			ratio = MINUS_SEMITONE_RATION[12];
+		}
 	}
 
 
@@ -497,6 +623,24 @@ void Audio::SetPan(uint32_t audioHandle, float_t pan) {
 		masterVoiiceDetails.InputChannels,
 		outputMatrix_);
 
+}
+
+void Audio::SetLowPassFilter(uint32_t audioHandle, float cutOff){
+
+	int newCutOff = cutOff;
+	if (cutOff>1.0f) {
+		newCutOff = 1.0f;
+	}
+	else {
+
+	}
+
+	//このままだとは7500Hzから下しか掛けられないらしい
+	XAUDIO2_FILTER_PARAMETERS FilterParams; //フィルタ指示構造体
+	FilterParams.Type = XAUDIO2_FILTER_TYPE::LowPassFilter;
+	FilterParams.Frequency = newCutOff;
+	FilterParams.OneOverQ = 1.4142f;
+	audioInformation_[audioHandle].pSourceVoice_->SetFilterParameters(&FilterParams);
 }
 
 void Audio::CreateReverb(uint32_t audioHandle) {
@@ -621,10 +765,6 @@ void Audio::RatioCalculationDebug() {
 
 }
 
-void Audio::SetFilter(uint32_t audioHandle){
-
-
-}
 
 
 

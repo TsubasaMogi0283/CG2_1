@@ -24,7 +24,11 @@ using Microsoft::WRL::ComPtr;
 
 #include "Audio/AudioStruct.h"
 
-
+//LoadAudioの時に使う
+enum EffectType {
+	Filter,
+	Reverb,
+};
 
 
 class Audio final {
@@ -53,6 +57,10 @@ public:
 
 	//読み込み
 	static uint32_t LoadWave(const char* fileName);
+
+	//エフェクト版の読み込み
+	static uint32_t LoadWave(const char* fileName,uint32_t effectType );
+
 
 	//音声再生
 	void PlayWave(uint32_t audioHandle, bool isLoop);
@@ -142,6 +150,9 @@ public:
 	//Pan振り
 	void SetPan(uint32_t audioHandle, float_t pan);
 
+	//フィルター
+	void SetLowPassFilter(uint32_t audioHandle, float cutOff);
+
 	//リバーブ
 	void CreateReverb(uint32_t audioHandle);
 
@@ -157,7 +168,6 @@ public:
 	//デバッグ用
 	void RatioCalculationDebug();
 
-	void SetFilter(uint32_t audioHandle);
 
 private:
 	//音声データの開放

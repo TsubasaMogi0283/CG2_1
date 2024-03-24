@@ -66,20 +66,48 @@ public:
 
 
 public:
+	/// <summary>
+	/// 初期化
+	/// </summary>
 	void Initialize();
 
+	/// <summary>
+	/// 放出
+	/// </summary>
+	/// <param name="名前"></param>
+	/// <param name="テクスチャハンドル"></param>
+	/// <param name="座標"></param>
+	/// <param name="数"></param>
 	void Emit(const std::string name,uint32_t textureHandle, const Vector3& position, uint32_t count);
 
+	/// <summary>
+	/// 描画
+	/// </summary>
+	/// <param name="カメラ"></param>
 	void Draw(Camera& camera);
 
+	/// <summary>
+	/// 指定したものを消す
+	/// </summary>
+	/// <param name="名前"></param>
+	void DeleteElement(const std::string name);
 
 private:
+	/// <summary>
+	/// 更新
+	/// </summary>
+	/// <param name="camera"></param>
 	void Update(Camera& camera);
 
 	void CreateParticleGroup(const std::string name, uint32_t textureHandle, Vector3 position,uint32_t count);
 
 
-	//生成関数
+	/// <summary>
+	/// 生成
+	/// </summary>
+	/// <param name="ランダムエンジン"></param>
+	/// <param name="座標"></param>
+	/// <returns></returns>
 	Particle MakeNewParticle(std::mt19937& randomEngine,Vector3 position);
 
 	//エミッタ

@@ -230,6 +230,12 @@ void SampleScene::Update(GameManager* gameManager) {
 	camera_.Update();
 
 
+	if (Input::GetInstance()->IsTriggerKey(DIK_1) == true) {
+		Particle3DManager::GetInstance()->DeleteElement("sample");
+		Particle3DManager::GetInstance()->DeleteElement("sample2");
+		Particle3DManager::GetInstance()->DeleteElement("sample3");
+	}
+
 
 	if (Input::GetInstance()->IsTriggerKey(DIK_SPACE) == true) {
 		

@@ -365,3 +365,7 @@ void Particle3DManager::Draw(Camera& camera) {
 
 
 }
+
+void Particle3DManager::DeleteElement(const std::string name){
+	particleGroup_.erase(name);
+}

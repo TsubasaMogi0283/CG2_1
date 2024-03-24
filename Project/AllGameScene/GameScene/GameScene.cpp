@@ -3,6 +3,7 @@
 #include "GameManager.h"
 
 #include "SampleScene/SampleScene.h"
+#include "TitleScene/TitleScene.h"
 #include "Input.h"
 #include "TextureManager.h"
 #include "Camera.h"
@@ -127,6 +128,7 @@ void GameScene::Initialize() {
 
 	cameraTranslate_ = { 0.0f,0.0f,-30.0f };
 	cameraRotate_ = { 0.0f,0.0f,0.0f };
+	camera_.Initialize();
 	camera_.translate_ = cameraTranslate_;
 	camera_.rotate_ = cameraRotate_;
 
@@ -604,12 +606,13 @@ void GameScene::Update(GameManager* gameManager) {
 
 	}
 
-	/*if (loseLodingTime_ > SECOND_ * 2 && isLose_==true) {
-		gameManager->ChangeScene(new LoseScene());
+	if (loseLodingTime_ > SECOND_ * 2 && isLose_==true) {
+		gameManager->ChangeScene(new TitleScene());
+		
 	}
 	if (winLoadingTime_ > SECOND_ * 2 && isWin_==true) {
-		gameManager->ChangeScene(new WinScene());
-	}*/
+		gameManager->ChangeScene(new TitleScene());
+	}
 
 
 

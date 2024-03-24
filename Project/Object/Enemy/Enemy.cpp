@@ -14,7 +14,7 @@ Enemy::Enemy(){
 
 void Enemy::Initialize(const Vector3& position){
 	model_ = std::make_unique<Model>();
-	uint32_t modelHandle = ModelManager::GetInstance()->LoadObject("Resources/Sample/Enemy", "enemy.obj");
+	uint32_t modelHandle = ModelManager::GetInstance()->LoadObject("Resources/GameResources/Player", "Player.obj");
 	model_.reset(Model::Create(modelHandle));
 
 	worldTransform_.Initialize();

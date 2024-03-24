@@ -101,6 +101,8 @@ private:
 	
 	std::unique_ptr<Model> model_ = nullptr;
 
+
+
 	WorldTransform worldTransform_ = {};
 	const float MOVE_AMOUNT_ = 0.1f;
 	const float ROTATE_AMOUNT_ = 0.02f;

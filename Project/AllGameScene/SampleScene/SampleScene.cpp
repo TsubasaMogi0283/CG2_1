@@ -129,11 +129,6 @@ void SampleScene::Initialize() {
 
 
 
-
-	audio_ = Audio::GetInstance();
-	uint32_t audioHandle_ = audio_->LoadWave("Resources/Audio/Sample/The_Land_Of_Demise_32.wav");
-	audio_->PlayWave(audioHandle_, true);
-
 }
 
 /// <summary>

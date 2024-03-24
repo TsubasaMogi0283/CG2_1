@@ -61,7 +61,13 @@ public:
 
 public:
 
-
+	/// <summary>
+	/// Lightingの設定
+	/// </summary>
+	/// <param name="lighting"></param>
+	void SelectLighting(int32_t lighting) {
+		this->selectLighting_ = lighting;
+	}
 
 	
 	//透明度の変更
@@ -183,7 +189,7 @@ private:
 	Vector4 materialColor_ = { 1.0f,1.0f,1.0f,1.0f };
 	//Ligtingをするかどうか
 	//基本はtrueで
-	int32_t selectLighting_ = Spot;
+	int32_t selectLighting_ = Directional;
 
 	//DirectionalLight
 	ComPtr<ID3D12Resource> directionalLightResource_ = nullptr;

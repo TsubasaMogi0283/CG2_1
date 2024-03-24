@@ -72,9 +72,6 @@
     <Filter Include="Ellysia\Header File\ImGui">
       <UniqueIdentifier>{14d4744c-9636-4620-8765-10b4ee6446ea}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Ellysia\Header File\ConvertFunction">
-      <UniqueIdentifier>{88525f3c-706e-4397-b214-f9c6099be35f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Ellysia\Header File\Polygone">
       <UniqueIdentifier>{7d6b79d6-b619-47a8-8605-e65a4fad754b}</UniqueIdentifier>
     </Filter>
@@ -153,6 +150,33 @@
     </Filter>
     <Filter Include="Ellysia\Source File\Polygone\3D\Particle3DManager">
       <UniqueIdentifier>{3ec739a0-2572-47d0-a8e3-2884e559d8fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Ellysia\Header File\Audio\XAudio2">
+      <UniqueIdentifier>{e16946c1-72d0-45ca-b789-4cc5973c1eac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Ellysia\Header File\Audio\DirectSound">
+      <UniqueIdentifier>{fe75ae5d-2321-47b3-843b-0ca87c756099}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Ellysia\Header File\ConvertFunction">
+      <UniqueIdentifier>{88525f3c-706e-4397-b214-f9c6099be35f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project\Object">
+      <UniqueIdentifier>{09e21a44-e195-4f41-b254-9b62eac9ec4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project\Object\Collision">
+      <UniqueIdentifier>{00f2d459-cb3c-4d09-9f04-734cbebeae27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project\Object\Player">
+      <UniqueIdentifier>{070f30a4-0f4b-44a5-b4be-3598ae441b27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project\Object\Enemy">
+      <UniqueIdentifier>{f52617c1-28ed-41d7-aefb-a5e064a9eff8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project\GameScene\Title">
+      <UniqueIdentifier>{d7497819-6afd-443b-b5cf-ad30d084816c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Project\GameScene\Audio">
+      <UniqueIdentifier>{5a43a780-1dde-46c4-8b97-50e054230911}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -234,9 +258,6 @@
     <ClCompile Include="Ellysia\main.cpp">
       <Filter>Ellysia\Source File</Filter>
     </ClCompile>
-    <ClCompile Include="Ellysia\Math\Collision\Collision.cpp">
-      <Filter>Ellysia\Source File</Filter>
-    </ClCompile>
     <ClCompile Include="Project\AllGameScene\SampleScene2\SampleScene2.cpp">
       <Filter>Project\GameScene\Sample2</Filter>
     </ClCompile>
@@ -258,47 +279,59 @@
     <ClCompile Include="Ellysia\Polygon\3D\Particle3D\ParticleEmitter.cpp">
       <Filter>Ellysia\Source File</Filter>
     </ClCompile>
+    <ClCompile Include="Project\Object\Player\Player.cpp">
+      <Filter>Project\Object\Player</Filter>
+    </ClCompile>
     <ClCompile Include="Project\AllGameScene\TitleScene\TitleScene.cpp">
-      <Filter>Ellysia\Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="Project\Object\Collider\Collider.cpp">
-      <Filter>Ellysia\Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="Project\Object\Collider\CollisionManager.cpp">
-      <Filter>Ellysia\Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="Project\Object\CountDown\CountDown.cpp">
-      <Filter>Ellysia\Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="Project\Object\Enemy\Bullet\EnemyBullet.cpp">
-      <Filter>Ellysia\Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="Project\Object\Enemy\Enemy.cpp">
-      <Filter>Ellysia\Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="Project\Object\Enemy\Particle\EnemyParticle.cpp">
-      <Filter>Ellysia\Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="Project\Object\Enemy\State\EnemyApproach\EnemyApproach.cpp">
-      <Filter>Ellysia\Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="Project\Object\Enemy\State\EnemyLeave\EnemyLeave.cpp">
-      <Filter>Ellysia\Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="Project\Object\Enemy\State\IEnemy\IEnemy.cpp">
-      <Filter>Ellysia\Source File</Filter>
+      <Filter>Project\GameScene\Title</Filter>
     </ClCompile>
     <ClCompile Include="Project\Object\Enemy\TimeCall\TimeCall.cpp">
-      <Filter>Ellysia\Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="Project\Object\Player\Bullet\PlayerBullet.cpp">
-      <Filter>Ellysia\Source File</Filter>
-    </ClCompile>
-    <ClCompile Include="Project\Object\Player\Player.cpp">
-      <Filter>Ellysia\Source File</Filter>
+      <Filter>Project</Filter>
     </ClCompile>
     <ClCompile Include="Project\Object\Skydome\Skydome.cpp">
-      <Filter>Ellysia\Source File</Filter>
+      <Filter>Project</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Object\Player\Bullet\PlayerBullet.cpp">
+      <Filter>Project</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Object\Enemy\State\IEnemy\IEnemy.cpp">
+      <Filter>Project</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Object\Enemy\Particle\EnemyParticle.cpp">
+      <Filter>Project</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Object\Enemy\State\EnemyLeave\EnemyLeave.cpp">
+      <Filter>Project</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Object\Enemy\Bullet\EnemyBullet.cpp">
+      <Filter>Project</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Object\Enemy\State\EnemyApproach\EnemyApproach.cpp">
+      <Filter>Project</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Object\Enemy\Enemy.cpp">
+      <Filter>Project</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Object\CountDown\CountDown.cpp">
+      <Filter>Project</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Object\Collider\CollisionManager.cpp">
+      <Filter>Project</Filter>
+    </ClCompile>
+    <ClCompile Include="Ellysia\Math\Collision\Collision.cpp">
+      <Filter>Project</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\Object\Collider\Collider.cpp">
+      <Filter>Project</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\AllGameScene\GameScene\GameScene.cpp">
+      <Filter>Project\GameScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\AllGameScene\GameScene\Audio\Explanation\ExplanationSceneAudio.cpp">
+      <Filter>Project\GameScene\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="Project\AllGameScene\GameScene\Audio\Play\PlaySceneAudio.cpp">
+      <Filter>Project\GameScene\Audio</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -366,9 +399,6 @@
     </ClInclude>
     <ClInclude Include="Ellysia\Math\Vector\SpritePosition.h">
       <Filter>Ellysia\Header File\Math\Vector</Filter>
-    </ClInclude>
-    <ClInclude Include="Ellysia\Audio\Audio.h">
-      <Filter>Ellysia\Header File\Audio</Filter>
     </ClInclude>
     <ClInclude Include="Project\AllGameScene\GameManager\IGameScene.h">
       <Filter>Project\GameScene</Filter>
@@ -451,9 +481,6 @@
     <ClInclude Include="Ellysia\Math\Shape\AABB.h">
       <Filter>Ellysia\Header File\Math\Shape</Filter>
     </ClInclude>
-    <ClInclude Include="Ellysia\Math\Collision\Collision.h">
-      <Filter>Ellysia\Header File</Filter>
-    </ClInclude>
     <ClInclude Include="Project\AllGameScene\SampleScene2\SampleScene2.h">
       <Filter>Project\GameScene\Sample2</Filter>
     </ClInclude>
@@ -481,53 +508,71 @@
     <ClInclude Include="Ellysia\Polygon\3D\Particle3D\ParticleEmitter.h">
       <Filter>Ellysia\Header File</Filter>
     </ClInclude>
-    <ClInclude Include="Project\AllGameScene\TitleScene\TitleScene.h">
-      <Filter>Ellysia\Header File</Filter>
-    </ClInclude>
     <ClInclude Include="Project\Object\Collider\Collider.h">
       <Filter>Ellysia\Header File</Filter>
     </ClInclude>
-    <ClInclude Include="Project\Object\Collider\CollisionConfig.h">
-      <Filter>Ellysia\Header File</Filter>
-    </ClInclude>
-    <ClInclude Include="Project\Object\Collider\CollisionManager.h">
-      <Filter>Ellysia\Header File</Filter>
-    </ClInclude>
-    <ClInclude Include="Project\Object\CountDown\CountDown.h">
-      <Filter>Ellysia\Header File</Filter>
-    </ClInclude>
-    <ClInclude Include="Project\Object\Enemy\Bullet\EnemyBullet.h">
-      <Filter>Ellysia\Header File</Filter>
-    </ClInclude>
-    <ClInclude Include="Project\Object\Enemy\Enemy.h">
-      <Filter>Ellysia\Header File</Filter>
-    </ClInclude>
-    <ClInclude Include="Project\Object\Enemy\Particle\EnemyParticle.h">
-      <Filter>Ellysia\Header File</Filter>
-    </ClInclude>
-    <ClInclude Include="Project\Object\Enemy\State\EnemyApproach\EnemyApproach.h">
-      <Filter>Ellysia\Header File</Filter>
-    </ClInclude>
-    <ClInclude Include="Project\Object\Enemy\State\EnemyLeave\EnemyLeave.h">
-      <Filter>Ellysia\Header File</Filter>
-    </ClInclude>
-    <ClInclude Include="Project\Object\Enemy\State\IEnemy\IEnemy.h">
-      <Filter>Ellysia\Header File</Filter>
-    </ClInclude>
-    <ClInclude Include="Project\Object\Enemy\TimeCall\TimeCall.h">
-      <Filter>Ellysia\Header File</Filter>
-    </ClInclude>
-    <ClInclude Include="Project\Object\Player\Bullet\PlayerBullet.h">
-      <Filter>Ellysia\Header File</Filter>
-    </ClInclude>
-    <ClInclude Include="Project\Object\Player\Player.h">
-      <Filter>Ellysia\Header File</Filter>
-    </ClInclude>
-    <ClInclude Include="Project\Object\Skydome\Skydome.h">
-      <Filter>Ellysia\Header File</Filter>
+    <ClInclude Include="Ellysia\Audio\Audio.h">
+      <Filter>Ellysia\Header File\Audio\XAudio2</Filter>
     </ClInclude>
     <ClInclude Include="..\Audio\AudioStruct.h">
-      <Filter>Ellysia\Header File\Audio</Filter>
+      <Filter>Ellysia\Header File\Audio\XAudio2</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Object\Skydome\Skydome.h">
+      <Filter>Project</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Object\CountDown\CountDown.h">
+      <Filter>Project\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Ellysia\Math\Collision\Collision.h">
+      <Filter>Project\Object\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Object\Collider\CollisionConfig.h">
+      <Filter>Project\Object\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Object\Collider\CollisionManager.h">
+      <Filter>Project\Object\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Object\Player\Player.h">
+      <Filter>Project\Object\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Object\Player\Bullet\PlayerBullet.h">
+      <Filter>Project\Object\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Object\Enemy\Enemy.h">
+      <Filter>Project\Object\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Object\Enemy\State\EnemyApproach\EnemyApproach.h">
+      <Filter>Project\Object\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Object\Enemy\Bullet\EnemyBullet.h">
+      <Filter>Project\Object\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Object\Enemy\State\EnemyLeave\EnemyLeave.h">
+      <Filter>Project\Object\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Object\Enemy\Particle\EnemyParticle.h">
+      <Filter>Project\Object\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Object\Enemy\State\IEnemy\IEnemy.h">
+      <Filter>Project\Object\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\AllGameScene\TitleScene\TitleScene.h">
+      <Filter>Project\GameScene\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Object\Enemy\TimeCall\TimeCall.h">
+      <Filter>Project\Object\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\AllGameScene\GameScene\GameScene.h">
+      <Filter>Project\GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\AllGameScene\GameScene\Audio\IGameSceneAudio.h">
+      <Filter>Project\GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\AllGameScene\GameScene\Audio\Explanation\ExplanationSceneAudio.h">
+      <Filter>Project\GameScene\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\AllGameScene\GameScene\Audio\Play\PlaySceneAudio.h">
+      <Filter>Project\GameScene\Audio</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

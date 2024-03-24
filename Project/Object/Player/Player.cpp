@@ -11,9 +11,8 @@ Player::Player() {
 void Player::Initialize() {
 
 	model_ = std::unique_ptr<Model>();
-	uint32_t model1 = ModelManager::GetInstance()->LoadObject("Resources/GameResources/Player", "playre.obj");
+	uint32_t model1 = ModelManager::GetInstance()->LoadObject("Resources/GameResources/Player", "Player.obj");
 	model_.reset(Model::Create(model1));
-
 	
 	worldTransform_.Initialize();
 	worldTransform_.scale_ = { 1.0f,1.0f,1.0f };
@@ -25,8 +24,8 @@ void Player::Initialize() {
 	radius_ = 0.8f;
 
 	//DecideSE
-	attackSE_ = Audio::GetInstance();
-	attackSEHandle_ = attackSE_->LoadWave("Resources/Audio/Action/Attack.wav");
+	//attackSE_ = Audio::GetInstance();
+	//attackSEHandle_ = attackSE_->LoadWave("Resources/Audio/Action/Attack.wav");
 
 
 
@@ -130,7 +129,7 @@ void Player::Attack() {
 			bullets_.push_back(newBullet);
 
 
-			attackSE_->PlayWave(attackSEHandle_, false);
+			//attackSE_->PlayWave(attackSEHandle_, false);
 
 
 

@@ -120,6 +120,9 @@ void GameScene::Initialize() {
 	finish_.reset(Sprite::Create(finishTextureHandle, { 0.0f,0.0f }));
 
 
+	//gamePlay_ = std::make_unique<Sprite>();
+	gamePlayTextureHandle_ = TextureManager::GetInstance()->LoadTexture("Resources/GameResources/Game.png");
+	gamePlay_.reset(Sprite::Create(gamePlayTextureHandle_, { 0.0f,0.0f }));
 
 	//railCamera_ = std::make_unique<RailCamera>();
 	//railCamera_->Initialize(player_->GetWorldPosition(), { 0.0f,0.0f,0.0f });
@@ -702,6 +705,8 @@ void GameScene::Draw() {
 
 
 	}
+
+	gamePlay_->Draw();
 }
 
 GameScene::~GameScene() {

@@ -244,5 +244,8 @@ private:
 #pragma endregion
 
 
+	std::unique_ptr<Sprite> gamePlay_ = nullptr;
+	uint32_t gamePlayTextureHandle_ = 0u;
+
 };
 

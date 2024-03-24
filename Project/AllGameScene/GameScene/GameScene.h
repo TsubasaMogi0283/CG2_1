@@ -20,6 +20,7 @@
 #include <CountDown/CountDown.h>
 #include "Audio/IGameSceneAudio.h"
 #include <Enemy/Particle/EnemyParticle.h>
+#include "Camera.h"
 
 class GameManager;
 
@@ -147,12 +148,13 @@ private:
 	float playerRotateY_ = 0.0f;
 
 	//レールカメラ
-	std::unique_ptr<RailCamera> railCamera_ = nullptr;
+	//std::unique_ptr<RailCamera> railCamera_ = nullptr;
 
 	static const int amount_ = 20;
 	//Enemy* enemy_ = nullptr;
 	Enemy* enemy_[amount_] = { nullptr };
 
+	Camera camera_ = {};
 
 	//Audio
 	IGameSceneAudio* currentGamaSceneAudio_ = nullptr;
@@ -189,11 +191,6 @@ private:
 
 	Model* enemyModel_ = nullptr;
 
-	//std::list<Enemy*> enemyes_;
-
-
-	//敵発生コマンド
-	//std::stringstream enemyPopCommands_;
 
 	//待機中フラグ
 	bool isWait_;

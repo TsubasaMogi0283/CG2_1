@@ -8,12 +8,10 @@
 #include "Camera.h"
 #include <VectorCalculation.h>
 
-#include "LoseScene/LoseScene.h"
-#include "WinScene/WinScene.h"
 #include <cmath>
 #include <fstream>
 
-#include "Explanation/ExplanationSceneAudio.h"
+#include "AllGameScene/GameScene/Audio/Explanation/ExplanationSceneAudio.h"
 #include <numbers>
 
 GameScene::GameScene() {
@@ -129,8 +127,8 @@ void GameScene::Initialize() {
 
 	cameraTranslate_ = { 0.0f,0.0f,-30.0f };
 	cameraRotate_ = { 0.0f,0.0f,0.0f };
-	Camera::GetInstance()->SetTranslate(cameraTranslate_);
-	Camera::GetInstance()->SetRotate(cameraRotate_);
+	camera_.translate_ = cameraTranslate_;
+	camera_.rotate_ = cameraRotate_;
 
 #pragma region Audio
 	sceneNo_ = 0;
@@ -222,7 +220,7 @@ void GameScene::ExplanationSceneUpdate(){
 
 void GameScene::ReadySceneUpdate(){
 
-	player_->SetIsAura(true);
+	//player_->SetIsAura(true);
 
 	countDownTime_ -= 1;
 	
@@ -486,7 +484,7 @@ void GameScene::LoseSceneUpdate() {
 
 #endif
 	player_->SetIsAnimation(false);
-	player_->SetIsAura(false);
+	//player_->SetIsAura(false);
 
 	theta_ += 1.0f;
 	cameraTranslate_.x += std::sinf(theta_) * 0.5f;
@@ -517,7 +515,7 @@ void GameScene::WinSceneUpdate() {
 #endif
 
 	player_->SetIsAnimation(false);
-	player_->SetIsAura(false);
+	//player_->SetIsAura(false);
 
 	for (int i = 0; i < amount_; i++) {
 		enemy_[i]->SetSpeedOffset(0.0f);
@@ -556,7 +554,7 @@ void GameScene::WinSceneUpdate() {
 
 	}
 
-	Camera::GetInstance()->SetTranslate(cameraTranslate_);
+	camera_.translate_=cameraTranslate_;
 
 }
 
@@ -570,7 +568,8 @@ void GameScene::Update(GameManager* gameManager) {
 	//共通部分
 	skydome_->Update();
 	player_->Update();
-	Camera::GetInstance()->SetTranslate(cameraTranslate_);
+	camera_.Update();
+	//Camera::GetInstance()->SetTranslate(cameraTranslate_);
 
 	//Audioのステートパターン
 	currentGamaSceneAudio_->Update(this);
@@ -605,12 +604,12 @@ void GameScene::Update(GameManager* gameManager) {
 
 	}
 
-	if (loseLodingTime_ > SECOND_ * 2 && isLose_==true) {
+	/*if (loseLodingTime_ > SECOND_ * 2 && isLose_==true) {
 		gameManager->ChangeScene(new LoseScene());
 	}
 	if (winLoadingTime_ > SECOND_ * 2 && isWin_==true) {
 		gameManager->ChangeScene(new WinScene());
-	}
+	}*/
 
 
 
@@ -639,7 +638,7 @@ void GameScene::ReadySceneDraw(){
 void GameScene::PlaySceneDraw(){
 	countDown_->Draw();
 	for (int i = 0; i < amount_; i++) {
-		enemy_[i]->Draw();
+		enemy_[i]->Draw(camera_);
 	}
 	/*for (EnemyParticle* particle : particle3D_) {
 		particle->Draw();
@@ -650,7 +649,7 @@ void GameScene::PlaySceneDraw(){
 void GameScene::LoseSceneDraw(){
 	black_->Draw();
 	for (int i = 0; i < amount_; i++) {
-		enemy_[i]->Draw();
+		enemy_[i]->Draw(camera_);
 	}
 }
 
@@ -667,8 +666,8 @@ void GameScene::WinSceneDraw(){
 
 void GameScene::Draw() {
 	//共通部分
-	skydome_->Draw();
-	player_->Draw();
+	skydome_->Draw(camera_);
+	player_->Draw(camera_);
 	
 
 	switch (scene_) {

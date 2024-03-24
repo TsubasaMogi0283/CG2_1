@@ -28,13 +28,6 @@ void TitleScene::Initialize() {
 	// 生成
 	skydome_ = new Skydome();
 
-	// フォルダの名前を指定してね
-	// 読み込むファイルと同じフォルダ名にしないと✕
-	/////skydomeModel_ = Model::CreateFromOBJ("CelestialSphere", true);
-
-	// テクスチャ読み込み
-	// skydomeTextureHandle_ = TextureManager::Load("CelestialSphere/SpaceSphere.png");
-
 	// 天球の初期化
 	skydome_->Initialize();
 
@@ -48,10 +41,12 @@ void TitleScene::Initialize() {
 	
 
 	playerTranslate_ = { 0.0f, 0.0f, -30.0f };
-	// cameraTranslate_ = { 0.0f,0.0f,0.0f };
 	cameraRotate_ = { 0.0f, 0.0f, 0.0f };
-	Camera::GetInstance()->SetTranslate(playerTranslate_);
-	Camera::GetInstance()->SetRotate(cameraRotate_);
+	camera_.Initialize();
+	camera_.translate_ = playerTranslate_;
+	camera_.rotate_ = cameraRotate_;
+
+
 
 	// BGM
 	bgm_ = Audio::GetInstance();
@@ -75,17 +70,10 @@ void TitleScene::Update(GameManager* gameManager) {
 	playerWorldTransform_.Update();
 
 	blackSprite_->SetTransparency(transparency_);
+	camera_.Update();
 
 	const float RADIUS = 30.0f;
 
-	/*theta_ = 0.001f;
-	cameraTranslate_.z = RADIUS*std::sinf(theta_)+ initialCamerTranslate_;
-	cameraTranslate_.x = RADIUS*std::cosf(theta_);
-	const float INITIAL_CAMERA_ROTATE = float(std::numbers::pi) / 2.0f;
-	cameraRotate_.y = -theta_;*/
-
-	Camera::GetInstance()->SetTranslate(playerTranslate_);
-	Camera::GetInstance()->SetRotate(cameraRotate_);
 
 	const float TRANSPARENCY_INTERVAL = 0.05f;
 

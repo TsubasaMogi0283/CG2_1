@@ -333,6 +333,9 @@
     <ClCompile Include="Project\AllGameScene\GameScene\Audio\Play\PlaySceneAudio.cpp">
       <Filter>Project\GameScene\Audio</Filter>
     </ClCompile>
+    <ClCompile Include="Project\Object\RailCamera\RailCamera.cpp">
+      <Filter>Project\Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\Shader\Particle3D\Particle3d.PS.hlsl">
@@ -573,6 +576,9 @@
     </ClInclude>
     <ClInclude Include="Project\AllGameScene\GameScene\Audio\Play\PlaySceneAudio.h">
       <Filter>Project\GameScene\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Project\Object\RailCamera\RailCamera.h">
+      <Filter>Project\Object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

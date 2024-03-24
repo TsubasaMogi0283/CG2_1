@@ -29,7 +29,7 @@ void RailCamera::Update(){
 	worldTransform_.Update();
 	
 
-	Camera::GetInstance()->SetMatrix(Inverse(worldTransform_.matWorld_));
+	//Camera::GetInstance()->SetMatrix(Inverse(worldTransform_.worldMatrix_));
 
 
 

@@ -86,6 +86,6 @@ private:
 
 
 	float initialCamerTranslate_ = 0.0f;
-	Camera& camera_ = {};
+	Camera camera_ = {};
 };
 

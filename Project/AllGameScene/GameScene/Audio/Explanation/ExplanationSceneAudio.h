@@ -1,6 +1,6 @@
 #pragma once
 
-#include "IGameSceneAudio.h"
+#include "AllGameScene/GameScene/Audio/IGameSceneAudio.h"
 #include "Audio.h"
 //前方宣言
 class GameScene;

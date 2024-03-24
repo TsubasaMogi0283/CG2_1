@@ -1,4 +1,5 @@
 #include "Skydome.h"
+#include <numbers>
 
 //コンストラクタ
 Skydome::Skydome(){
@@ -14,7 +15,7 @@ void Skydome::Initialize(){
 	const float SCALE_SIZE = 200.0f;
 	worldTransform_.Initialize();
 	worldTransform_.scale_ = { SCALE_SIZE, SCALE_SIZE, SCALE_SIZE };
-	worldTransform_.rotate_ = {0.0f,0.0f,3.0f};
+	worldTransform_.rotate_ = {-3.14f,0.0f,0.0f};
 	worldTransform_.translate_ = {0.0f,0.0f,0.0f};
 
 
@@ -22,6 +23,13 @@ void Skydome::Initialize(){
 
 //更新
 void Skydome::Update(){
+
+
+#ifdef _DEBUG
+	ImGui::Begin("Skydome");
+	ImGui::SliderFloat3("Rotate", &worldTransform_.rotate_.x, -4.0f, 4.0f);
+	ImGui::End();
+#endif
 
 	worldTransform_.Update();
 

@@ -4,8 +4,8 @@
 #include "SampleScene/SampleScene.h"
 #include "GameManager.h"
 
-SampleScene2::SampleScene2()
-{
+SampleScene2::SampleScene2(){
+
 }
 
 void SampleScene2::Initialize(){

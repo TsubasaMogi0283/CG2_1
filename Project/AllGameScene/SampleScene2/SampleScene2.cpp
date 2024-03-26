@@ -8,57 +8,25 @@ SampleScene2::SampleScene2(){
 
 }
 
-void SampleScene2::Initialize(){
-	sprite = std::make_unique<Sprite>();
+void SampleScene2::Initialize() {
 	uint32_t textureHandle = TextureManager::LoadTexture("Resources/monsterBall.png");
-	spritePosition_ = { 100.0f,100.0f };
-	sprite.reset(Sprite::Create(textureHandle, spritePosition_));
+	sprite_.reset(Sprite::Create(textureHandle, { .x = 500.0f,.y = 0.0f }));
+	sprite_->SetScale({0.5f, 0.5f});
 
-	audio_ = Audio::GetInstance();
-	audioHandle_ = audio_->LoadWave("Resources/Audio/Sample/Game.wav");
-	audio_->PlayWave(audioHandle_, true);
+	uint32_t textureHandle2 = TextureManager::LoadTexture("Resources/uvChecker.png");
+	spriteUV_.reset(Sprite::Create(textureHandle2, { .x = 0.0f,.y = 400.0f }));
+
+
+	uint32_t howToTexture = TextureManager::GetInstance()->LoadTexture("Resources/Sample/HowTo/NextScene.png");
+	howToSprite_.reset(Sprite::Create(howToTexture, { .x = 0.0f,.y = 0.0f }));
 }
 
 void SampleScene2::Update(GameManager* gameManager){
 
-	const float VOLUME_AMOUNT = 0.01f;
-	if (Input::GetInstance()->IsPushKey(DIK_UP) == true) {
-		volume_ += VOLUME_AMOUNT;
-	}
-	if (Input::GetInstance()->IsPushKey(DIK_DOWN) == true) {
-		volume_ -= VOLUME_AMOUNT;
-	}
+	
 
-	if (volume_ > 1.0f) {
-		volume_ = 1.0f;
-	}
-	if (volume_ < 0.0f) {
-		volume_ = 0.0f;
-	}
-
-	audio_->ChangeVolume(audioHandle_, volume_);
-
-	sprite->SetPosition(spritePosition_);
-
-	const float MOVE_AMOUNT = 1.0f;
-	const float VELOCITY = 3.0f;
-	if (Input::GetInstance()->IsPushKey(DIK_D) == true) {
-		spritePosition_.x += MOVE_AMOUNT * VELOCITY;
-	}
-	if (Input::GetInstance()->IsPushKey(DIK_A) == true) {
-		spritePosition_.x -= MOVE_AMOUNT * VELOCITY;
-	}
-	if (Input::GetInstance()->IsPushKey(DIK_W) == true) {
-		spritePosition_.y -= MOVE_AMOUNT * VELOCITY;
-	}
-	if (Input::GetInstance()->IsPushKey(DIK_S) == true) {
-		spritePosition_.y += MOVE_AMOUNT * VELOCITY;
-	}
-
-
-
+	//次のシーンへ
 	if (Input::GetInstance()->IsTriggerKey(DIK_SPACE) == true) {
-		audio_->StopWave(audioHandle_);
 		gameManager->ChangeScene(new SampleScene());
 
 	}
@@ -66,7 +34,9 @@ void SampleScene2::Update(GameManager* gameManager){
 }
 
 void SampleScene2::Draw(){
-	sprite->Draw();
+	sprite_->Draw();
+	spriteUV_->Draw();
+	howToSprite_->Draw();
 }
 
 SampleScene2::~SampleScene2()

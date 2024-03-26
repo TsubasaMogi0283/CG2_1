@@ -32,10 +32,6 @@ public:
 	void Draw()override;
 
 private:
-	static const int MODEL_AMOUNT_ = 2;
-
-	std::unique_ptr<Model> model_[MODEL_AMOUNT_] = { nullptr };
-	WorldTransform modelWorldTransform_[MODEL_AMOUNT_] = {};
 
 	Vector2 position_ = { 0.0f,0.0f };
 	Vector2 scale_ = { 1.0f,1.0f };
@@ -50,39 +46,20 @@ private:
 
 	Vector2 move = {1.0f,1.0f};
 
+#pragma region モデル
 
+	std::unique_ptr<Model> model1_ = nullptr;
+	WorldTransform worldTransform1_ = {};
 
-	//
-	Vector4 spotLightColor_ = { 1.0f,1.0f,1.0f,1.0f };
-	Vector3 spotLightPosition_ = { 2.0f,1.25f,0.0f };
-	float spotLightDistance_ = 7.0f;
-	Vector3 spotLightDirection_ = { -1.0f,1.0f,0.0f };
-	float spotLightIntensity_ = 4.0f;
-	float spotLightDecay_ = 2.0f;
-	float cosAngle_ = std::cos(std::numbers::pi_v<float> / 3.0f);
-	float cosFalloffStart_ = 0.2f;
+	std::unique_ptr<Model> model2_ = nullptr;
+	WorldTransform worldTransform2_ = {};
 
-	std::unique_ptr<Sprite> sprite = nullptr;
-	Vector4 color_ = { 1.0f,1.0f,1.0f,1.0f };
-	Vector4 modelColor_ = { 1.0f,1.0f,1.0f,1.0f };
-	Vector2 spritePosition_ = {};
+#pragma endregion
 
-	//パーティクル
-	std::unique_ptr<Particle3D> particle_ = nullptr;
-	uint32_t particleTextureHandle_ = 0u;
-	Vector3 particleTranslate_ = {};
-	AccelerationField accelerationField_ = {};
-	bool isSetField_ = false;
+#pragma region スプライト
+	std::unique_ptr<Sprite> sprite_ = nullptr;
 
-
-	std::unique_ptr<Particle3D> particle2_ = nullptr;
-	uint32_t particleTextureHandle2_ = 0u;
-	Vector3 particleTranslate2_ = {};
-	AccelerationField accelerationField2_ = {};
-	bool isSetField2_ = false;
-
-
-
+#pragma endregion
 
 	Camera camera_ = {};
 	Vector3 cameraTranslate_ = {0.0f,0.0f,0.0f};

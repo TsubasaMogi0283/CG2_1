@@ -36,14 +36,13 @@ public:
 
 
 private:
-	std::unique_ptr<Sprite> sprite = nullptr;
-	Vector4 color_ = { 1.0f,1.0f,1.0f,1.0f };
-	Vector4 modelColor_ = { 1.0f,1.0f,1.0f,1.0f };
-	Vector2 spritePosition_ = {};
+	std::unique_ptr<Sprite> sprite_ = nullptr;
+
+	std::unique_ptr<Sprite> spriteUV_ = nullptr;
+
+	std::unique_ptr<Sprite> howToSprite_ = nullptr;
 
 
-	Audio* audio_ = nullptr;
-	float volume_ = 1.0f;
-	uint32_t audioHandle_ = 0u;
+	
 };
 

@@ -183,7 +183,7 @@ private:
 	Vector4 materialColor_ = { 1.0f,1.0f,1.0f,1.0f };
 	//Ligtingをするかどうか
 	//基本はtrueで
-	int32_t selectLighting_ = Spot;
+	int32_t selectLighting_ = Directional;
 
 	//DirectionalLight
 	ComPtr<ID3D12Resource> directionalLightResource_ = nullptr;
@@ -192,7 +192,7 @@ private:
 	Vector3 lightingDirection_ = {0.0f,-1.0f,0.0f};
 	//Lightの色
 	Vector4 lightColor_ = { 1.0f,1.0f,1.0f,1.0f };
-	float directionalLightIntensity_ = 2.0f;
+	float directionalLightIntensity_ = 1.0f;
 	float shininess_ = 100.0f;
 
 

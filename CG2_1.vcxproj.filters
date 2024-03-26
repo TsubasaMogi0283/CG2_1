@@ -255,8 +255,8 @@
     <ClCompile Include="Ellysia\Line\Line.cpp">
       <Filter>Ellysia\Source File</Filter>
     </ClCompile>
-    <ClCompile Include="Ellysia\Polygon\3D\Particle3D\ParticleEmitter.cpp">
-      <Filter>Ellysia\Source File</Filter>
+    <ClCompile Include="Ellysia\Math\Quaternion\Quaternion.cpp">
+      <Filter>Ellysia\Source File\Math</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -436,8 +436,8 @@
     <ClInclude Include="Ellysia\Polygon\3D\Particle3DManager\Particle3DManager.h">
       <Filter>Ellysia\Header File\Polygone\3D\Particle3DManager</Filter>
     </ClInclude>
-    <ClInclude Include="Ellysia\Polygon\3D\Particle3D\ParticleEmitter.h">
-      <Filter>Ellysia\Header File</Filter>
+    <ClInclude Include="Ellysia\Math\Quaternion\Quaternion.h">
+      <Filter>Ellysia\Header File\Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

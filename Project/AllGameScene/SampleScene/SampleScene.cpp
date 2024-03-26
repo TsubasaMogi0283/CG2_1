@@ -113,7 +113,7 @@ void SampleScene::Initialize() {
 
 	//同じ場所
 	Particle3DManager::GetInstance()->Emit("sample3", particleTextureHandle_, { 0.0f,0.0f,0.0f }, 20);
-	Particle3DManager::GetInstance()->Emit("sample4", particleTextureHandle2_, { 0.0f,0.0f,0.0f }, 5);
+	Particle3DManager::GetInstance()->Emit("sample2", particleTextureHandle2_, { 2.0f,1.0f,0.0f }, 5);
 
 	Particle3DManager::GetInstance()->Emit("sample5", bonusTextureHandle, { -2.0f,0.0f,0.0f }, 3);
 

@@ -439,6 +439,9 @@
     <ClInclude Include="Ellysia\Math\Quaternion\Quaternion.h">
       <Filter>Ellysia\Header File\Math</Filter>
     </ClInclude>
+    <ClInclude Include="Ellysia\Audio\AudioStruct.h">
+      <Filter>Ellysia\Header File\Audio</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shader\Particle3D\Particle3D.hlsli">
@@ -450,5 +453,10 @@
     <None Include="Resources\Shader\Object3D\Object3d.hlsli">
       <Filter>Ellysia\Resource File\Object3d</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Ellysia\Audio\AudioMemo.txt">
+      <Filter>Ellysia\Header File\Audio</Filter>
+    </Text>
   </ItemGroup>
 </Project>

@@ -629,7 +629,7 @@ void Audio::SetPan(uint32_t audioHandle, float_t pan) {
 
 void Audio::SetLowPassFilter(uint32_t audioHandle, float cutOff) {
 
-	int newCutOff = cutOff;
+	float newCutOff = cutOff;
 	if (cutOff > 1.0f) {
 		newCutOff = 1.0f;
 	}
